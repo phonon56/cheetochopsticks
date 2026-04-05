@@ -1,6 +1,6 @@
 # Cheeto Chopsticks
 
-A temporary workspace for problem solving and quick fixes for Colorado Springs local government.
+A temporary workspace for problem solving and quick fixes for Colorado Springs local government and other entities who may need updates.
 
 This repo collects microsites, prototypes, and proof-of-concept tools that address real, immediate needs in city operations. The ideas here are small and scrappy on purpose — fast solutions that can be tested, iterated on, and eventually folded into something bigger when the time is right.
 
@@ -10,6 +10,7 @@ Nothing here is permanent. Think of it as a scratch pad: a place to build things
 
 - **`microsites/city/`** — Tools and prototypes aimed at City of Colorado Springs needs.
 - **`microsites/_template/`** — A minimal starter template for spinning up new microsites.
+- - **`microsites/_template/FBI`** — A landing page where the problem is the main search for the correct contact, reducing administrative costs and ADA development.
 - **`shared/`** — Reusable CSS and JS that emerges across projects.
 
 ## Adding a new microsite
