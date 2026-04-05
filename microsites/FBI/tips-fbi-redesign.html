@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Submit a Tip | FBI</title>
+<meta name="description" content="Submit a tip to the FBI. Describe what you witnessed — we handle the routing. Tips can be anonymous.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:       #0d1b2e;
+  --navy-mid:   #1a3050;
+  --navy-soft:  #243d5c;
+  --ink:        #1a1a2e;
+  --ink-mid:    #3a4a5c;
+  --ink-mute:   #4a5a6a; /* was #6b7c8f — 4.0:1 FAIL → now 6.4:1 on white PASS */
+  --on-navy:    #8ab4c8; /* accessible text on navy — 5.2:1 PASS */
+  --white:      #ffffff;
+  --off-white:  #f7f8fa;
+  --rule:       rgba(13,27,46,.1);
+  --red:        #c0392b;
+  --red-bg:     #fef2f2;
+  --gold:       #c8a84b;
+  --teal:       #0e7490;
+  --teal-bg:    #f0f9ff;
+  --green:      #065f46;
+  --green-bg:   #ecfdf5;
+  --focus:      #1d4ed8; /* was #3b82f6 — darkened for visible focus ring on white */
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--off-white);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── SKIP LINK ── */
+.skip {
+  position: absolute; left: -9999px; top: 4px;
+  background: var(--navy); color: #fff;
+  padding: 8px 16px; font-size: 13px;
+  font-family: 'IBM Plex Mono', monospace;
+  border-radius: 2px; z-index: 999; text-decoration: none;
+}
+.skip:focus { left: 8px; }
+
+/* ── EMERGENCY BAR ── */
+.emergency-bar {
+  background: var(--red);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.emergency-bar p {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: .01em;
+  font-family: 'IBM Plex Mono', monospace;
+  text-align: center;
+}
+.emergency-bar a {
+  color: #fde68a;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(253,230,138,.4);
+}
+.emergency-bar a:hover { border-color: #fde68a; }
+.emergency-bar a:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--navy);
+  padding: 0 24px;
+  border-bottom: 2px solid var(--gold);
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.logo-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+.logo-seal {
+  width: 44px; height: 44px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  color: var(--navy);
+  letter-spacing: .05em;
+  flex-shrink: 0;
+}
+.logo-text { color: #fff; }
+.logo-text strong {
+  display: block;
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: .02em;
+}
+.logo-text span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; /* raised from 9px */
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--on-navy); /* was rgba(255,255,255,.45) — FAIL; --on-navy = #8ab4c8 = 5.2:1 PASS */
+}
+.header-secure {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; /* raised from 10px */
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--on-navy); /* was rgba(255,255,255,.35) — 3.3:1 FAIL; now 5.2:1 PASS */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lock-icon {
+  width: 12px; height: 12px;
+  border: 1.5px solid var(--on-navy);
+  border-radius: 2px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.lock-icon::before {
+  content: '';
+  position: absolute;
+  top: -5px; left: 2px;
+  width: 6px; height: 5px;
+  border: 1.5px solid var(--on-navy);
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--navy);
+  padding: 56px 24px 64px;
+}
+.hero-inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::after {
+  content: '';
+  flex: 1;
+  max-width: 48px;
+  height: 1px;
+  background: var(--gold);
+  opacity: .4;
+}
+.hero h1 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 14px;
+  letter-spacing: -.01em;
+}
+.hero p {
+  font-size: 15px;
+  color: rgba(255,255,255,.78); /* was .55 — raises contrast margin on weight-300 text */
+  line-height: 1.75;
+  font-weight: 300;
+  max-width: 480px;
+}
+.hero p strong { color: #fff; font-weight: 500; }
+
+/* ── ROUTING NOTE ── */
+.routing-note {
+  background: rgba(200,168,75,.1);
+  border: 1px solid rgba(200,168,75,.25);
+  border-radius: 3px;
+  padding: 12px 16px;
+  margin-top: 24px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.routing-note-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+.routing-note p {
+  font-size: 12px;
+  color: #c8a84b;
+  font-family: 'IBM Plex Mono', monospace;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── MAIN FORM CARD ── */
+.form-section {
+  padding: 0 24px 64px;
+  margin-top: -2px;
+}
+.form-card {
+  max-width: 640px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 40px rgba(13,27,46,.1), 0 1px 4px rgba(13,27,46,.06);
+  overflow: hidden;
+  position: relative;
+  top: -32px;
+}
+
+.form-card-header {
+  padding: 28px 32px 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.form-card-header h2 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.form-card-header p {
+  font-size: 13px;
+  color: var(--ink-mute);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.form-body { padding: 28px 32px; }
+
+/* ── FIELD STYLES ── */
+.field { margin-bottom: 20px; }
+.field label {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 6px;
+}
+.field label .opt {
+  color: var(--ink-mute);
+  font-size: 11px; /* was 9px — raised for readability at AA */
+  letter-spacing: .06em;
+  margin-left: 6px;
+  text-transform: none;
+  font-style: italic;
+}
+.field label .req {
+  color: var(--red);
+  margin-left: 2px;
+}
+.field textarea, .field input, .field select {
+  width: 100%;
+  border: 1px solid rgba(13,27,46,.18);
+  border-radius: 3px;
+  padding: 12px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  background: #fff;
+  line-height: 1.6;
+  transition: border-color .15s, box-shadow .15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+.field textarea:focus, .field input:focus, .field select:focus {
+  outline: 2px solid var(--teal); /* primary focus indicator — visible in forced-colors mode */
+  outline-offset: 0;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(14,116,144,.15); /* enhancement only */
+}
+.field .hint {
+  margin-top: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-mute);
+  line-height: 1.55;
+  letter-spacing: .02em;
+}
+.field-error {
+  margin-top: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--red);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: .02em;
+  min-height: 0; /* collapses when empty */
+}
+.field-error:empty { display: none; }
+textarea[aria-invalid="true"],
+input[aria-invalid="true"] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(192,57,43,.12);
+}
+
+/* tip composer — live char count */
+.field-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.char-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: .06em;
+}
+.char-count.near { color: var(--teal); }
+
+/* ── ANON TOGGLE ── */
+.anon-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: var(--teal-bg);
+  border: 1px solid rgba(14,116,144,.15);
+  border-radius: 3px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.anon-toggle input[type="checkbox"] {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  accent-color: var(--teal);
+  cursor: pointer;
+}
+.anon-toggle input[type="checkbox"]:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.anon-toggle-label {
+  flex: 1;
+}
+.anon-toggle-label strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+.anon-desc-text {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-mute);
+  line-height: 1.55;
+  font-weight: 300;
+}
+
+/* contact fields — hidden when anon */
+.contact-fields {
+  overflow: hidden;
+  transition: max-height .25s ease, opacity .2s ease;
+  max-height: 400px;
+  opacity: 1;
+}
+.contact-fields.hidden {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 520px) {
+  .field-row { grid-template-columns: 1fr; }
+}
+
+/* ── SMART TRIAGE ── */
+.triage-section {
+  border-top: 1px solid var(--rule);
+  padding-top: 20px;
+  margin-top: 8px;
+}
+.triage-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 10px;
+  display: block;
+}
+.triage-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.chip {
+  padding: 6px 12px;
+  border: 1px solid rgba(13,27,46,.15);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-mid);
+  background: #fff;
+  cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s;
+  font-family: 'Inter', sans-serif;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.chip:hover {
+  background: var(--teal-bg);
+  border-color: rgba(14,116,144,.3);
+  color: var(--teal);
+}
+.chip.selected {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+.chip:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.triage-hint {
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-family: 'IBM Plex Mono', monospace;
+  line-height: 1.5;
+  letter-spacing: .02em;
+}
+
+/* ── REDIRECT CALLOUT ── */
+.redirect-callout {
+  display: none;
+  background: var(--green-bg);
+  border: 1px solid rgba(6,95,70,.2);
+  border-radius: 3px;
+  padding: 14px 16px;
+  margin-top: 12px;
+  gap: 10px;
+  align-items: flex-start;
+}
+.redirect-callout.visible { display: flex; }
+.redirect-callout-text p {
+  font-size: 13px;
+  color: var(--green);
+  line-height: 1.6;
+  margin: 0 0 6px;
+}
+.redirect-callout-text p:last-child { margin: 0; }
+.redirect-callout-text a {
+  color: var(--teal);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.redirect-callout-text a:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* ── SUBMIT ROW ── */
+.submit-row {
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.btn-submit {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-submit:hover { background: var(--navy-soft); }
+.btn-submit:focus {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.btn-submit:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+.submit-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-mute);
+  line-height: 1.6;
+  letter-spacing: .04em;
+}
+
+/* ── CONFIRMATION ── */
+.confirmation {
+  display: none;
+  padding: 40px 32px;
+  text-align: center;
+}
+.confirmation.visible { display: block; }
+.confirm-icon {
+  width: 52px; height: 52px;
+  background: var(--green-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 22px;
+}
+.confirmation h3 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.confirmation p {
+  font-size: 14px;
+  color: var(--ink-mute);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 380px;
+  margin: 0 auto 6px;
+}
+.confirm-ref {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--teal);
+  background: var(--teal-bg);
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 14px;
+  letter-spacing: .06em;
+}
+
+/* ── ALTERNATE PATHS ── */
+.alt-section {
+  max-width: 640px;
+  margin: -8px auto 0;
+  padding: 0 0 16px;
+}
+.alt-section h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; /* was 9px */
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+.alt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@media (max-width: 500px) {
+  .alt-grid { grid-template-columns: 1fr; }
+  .form-body { padding: 20px; }
+  .form-card-header { padding: 20px; }
+  .confirmation { padding: 28px 20px; }
+}
+
+.alt-card {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 16px;
+  text-decoration: none;
+  display: block;
+  transition: border-color .15s, box-shadow .15s;
+}
+.alt-card:hover {
+  border-color: rgba(13,27,46,.2);
+  box-shadow: 0 2px 12px rgba(13,27,46,.06);
+}
+.alt-card:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.alt-card-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; /* was 9px */
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 4px;
+}
+.alt-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+.alt-card-desc {
+  font-size: 11px;
+  color: var(--ink-mute);
+  line-height: 1.5;
+  font-weight: 300;
+}
+.alt-card-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--teal);
+  letter-spacing: .06em;
+}
+
+/* ── AUDIT SECTION ── */
+.audit-section {
+  max-width: 640px;
+  margin: 48px auto 0;
+  padding: 0 0 64px;
+}
+.audit-toggle-btn {
+  width: 100%;
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 14px 20px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  transition: border-color .15s;
+}
+.audit-toggle-btn:hover { border-color: rgba(13,27,46,.2); }
+.audit-toggle-btn:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.audit-toggle-btn[aria-expanded="true"] .toggle-arrow { transform: rotate(180deg); }
+.toggle-arrow { transition: transform .2s ease; font-size: 12px; }
+
+.audit-body {
+  border: 1px solid var(--rule);
+  border-top: none;
+  border-radius: 0 0 3px 3px;
+  background: #fff;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .3s ease;
+}
+.audit-body.open { max-height: 2000px; }
+.audit-inner { padding: 24px; }
+
+.audit-intro {
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.audit-intro strong { color: var(--ink); font-weight: 500; }
+
+.audit-finding {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.audit-finding:last-child { border-bottom: none; }
+.finding-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+.dot-critical { background: var(--red); }
+.dot-serious  { background: #d97706; }
+.dot-arch     { background: #7c3aed; }
+.finding-text {}
+.finding-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+.finding-desc {
+  font-size: 12px;
+  color: var(--ink-mute);
+  line-height: 1.6;
+  font-weight: 300;
+}
+.finding-tag {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; /* was 9px */
+  letter-spacing: .06em;
+  padding: 2px 6px;
+  border-radius: 2px;
+  margin-left: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+/* tag-wcag: #7c3200 on #fef3c7 = 8.1:1 PASS */
+/* tag-arch: #4a1787 on #ede9fe = 7.8:1 PASS */
+.tag-wcag { background: #fef3c7; color: #7c3200; }
+.tag-arch { background: #ede9fe; color: #4a1787; }
+
+/* ── FOOTER ── */
+.site-footer {
+  background: var(--navy);
+  padding: 24px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.footer-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-inner p {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; /* raised from 9px */
+  letter-spacing: .1em;
+  color: var(--on-navy); /* was rgba(255,255,255,.3) — 2.5:1 FAIL; now 5.2:1 PASS */
+  text-transform: uppercase;
+}
+.footer-inner a {
+  color: var(--on-navy); /* was rgba(255,255,255,.35) — FAIL; now 5.2:1 PASS */
+  text-decoration: underline; /* added: color alone cannot distinguish links per WCAG 1.4.1 */
+  text-underline-offset: 3px;
+}
+.footer-inner a:hover { color: #fff; }
+.footer-inner a:focus {
+  outline: 2px solid #fff; /* was 1px rgba(.4) — too thin/faint; now solid 2px white */
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* ── LIVE STATUS ── */
+[role="status"] {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  overflow: hidden;
+}
+
+/* ── SCREEN READER ONLY ── */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to main content</a>
+<div role="status" id="live-status" aria-atomic="true"></div>
+
+<!-- ── EMERGENCY BAR ── -->
+<div role="region" aria-label="Emergency notice">
+  <div class="emergency-bar">
+    <p>
+      <strong>If this is an emergency, call 911 immediately.</strong>
+      &nbsp;·&nbsp;
+      FBI tip line: <a href="tel:18002255324" aria-label="Call 1-800-CALL-FBI">1-800-CALL-FBI</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.ic3.gov" aria-label="Report internet crime at ic3.gov (opens in same window)">Internet crime → ic3.gov</a>
+    </p>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="https://www.fbi.gov" class="logo-block" aria-label="FBI homepage">
+      <div class="logo-seal" aria-hidden="true">FBI</div>
+      <div class="logo-text">
+        <strong>Federal Bureau of Investigation</strong>
+        <span>Official tip submission portal</span>
+      </div>
+    </a>
+    <div class="header-secure" aria-label="This is a secure government website">
+      <span class="lock-icon" aria-hidden="true"></span>
+      <span>secure .gov</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<div class="hero" role="region" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <p class="hero-eyebrow" aria-hidden="true">Electronic Tip Form</p>
+    <h1 id="hero-heading">Tell us what you saw.<br>We handle the rest.</h1>
+    <p>
+      Describe what happened in plain language.
+      <strong>You do not need to know which crime category applies.</strong>
+      Every submission is reviewed by FBI personnel at headquarters and routed to the right team.
+    </p>
+    <div class="routing-note" role="note" aria-label="Internal routing note">
+      <span class="routing-note-icon" aria-hidden="true">→</span>
+      <p>Every tip is reviewed by at least two FBI analysts. Categorization happens on our end — not yours. Tips can be submitted anonymously.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── FORM ── -->
+<main id="main" class="form-section" role="main">
+
+  <div class="form-card" role="region" aria-labelledby="form-heading">
+
+    <!-- Form header -->
+    <div class="form-card-header">
+      <h2 id="form-heading">Submit a tip</h2>
+      <p>Fields marked <abbr title="required">*</abbr> are required. All other fields are optional. You may submit anonymously.</p>
+    </div>
+
+    <!-- Active form -->
+    <form class="form-body" id="tip-form" action="#" method="post" aria-label="FBI tip submission form" novalidate>
+
+      <!-- TIP DESCRIPTION -->
+      <div class="field">
+        <div class="field-meta">
+          <label for="tip-text">
+            What happened?
+            <span class="req" aria-hidden="true">*</span>
+            <span class="sr-only">(required)</span>
+          </label>
+          <span class="char-count" id="char-count" aria-live="polite" aria-atomic="true">0 / 5000</span>
+        </div>
+        <textarea
+          id="tip-text"
+          name="tip_description"
+          required
+          aria-required="true"
+          aria-describedby="tip-hint char-count tip-error"
+          maxlength="5000"
+          placeholder="Describe what you witnessed, when it happened, where it happened, and anyone involved. Include as much or as little as you're comfortable sharing."
+        ></textarea>
+        <p class="hint" id="tip-hint">Be as specific as possible — location, date, names, vehicle descriptions. Do not include your own social security number or financial account numbers.</p>
+        <p class="field-error" id="tip-error" role="alert" aria-atomic="true"></p>
+      </div>
+
+      <!-- LOCATION -->
+      <div class="field">
+        <label for="tip-location">Where did this happen? <span class="opt">(optional)</span></label>
+        <input
+          type="text"
+          id="tip-location"
+          name="location"
+          autocomplete="off"
+          aria-describedby="location-hint"
+          placeholder="City, state, zip code — or address if relevant"
+        >
+        <p class="hint" id="location-hint">No Google Maps required. Plain text is fine.</p>
+      </div>
+
+      <!-- CRIME TYPE — optional triage -->
+      <div class="triage-section" role="group" aria-labelledby="triage-label">
+        <span class="triage-label" id="triage-label">
+          If you know the type of activity — select one <span style="font-weight:300;text-transform:none;letter-spacing:0;">(optional — helps routing)</span>
+        </span>
+        <div class="triage-chips" aria-label="Crime type selection">
+          <button type="button" class="chip" data-type="terrorism" aria-pressed="false">Terrorism / Threat</button>
+          <button type="button" class="chip" data-type="fraud"     aria-pressed="false">Fraud / Scam</button>
+          <button type="button" class="chip" data-type="cyber"     aria-pressed="false">Cybercrime / Hacking</button>
+          <button type="button" class="chip" data-type="civil"     aria-pressed="false">Civil Rights</button>
+          <button type="button" class="chip" data-type="drugs"     aria-pressed="false">Drugs / Trafficking</button>
+          <button type="button" class="chip" data-type="violence"  aria-pressed="false">Violent Crime</button>
+          <button type="button" class="chip" data-type="public"    aria-pressed="false">Public Corruption</button>
+          <button type="button" class="chip" data-type="other"     aria-pressed="false">Other / Unsure</button>
+        </div>
+        <p class="triage-hint">Not sure? Leave blank. Your description is enough.</p>
+
+        <!-- redirect for cyber crimes -->
+        <div class="redirect-callout" id="cyber-redirect" role="note" aria-label="Internet crime redirect">
+          <div class="redirect-callout-text">
+            <p><strong>Internet crimes have a dedicated portal.</strong> For faster processing of online scams, fraud, or hacking, you can also file at <a href="https://www.ic3.gov" target="_blank" rel="noopener noreferrer" aria-label="ic3.gov internet crime complaint center (opens in new tab)">ic3.gov</a> — run by the FBI. You can still submit here and we'll route it.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANONYMOUS TOGGLE -->
+      <div style="margin-top:24px;">
+        <label class="anon-toggle" for="anonymous-check">
+          <input type="checkbox" id="anonymous-check" name="anonymous" checked aria-describedby="anon-desc">
+          <span class="anon-toggle-label">
+            <strong>Submit anonymously</strong>
+            <span class="anon-desc-text" id="anon-desc">Your name and contact information will not be collected. You will not receive a follow-up.</span>
+          </span>
+        </label>
+
+        <!-- contact fields, shown when not anonymous -->
+        <div class="contact-fields hidden" id="contact-fields" aria-hidden="true">
+          <div class="field-row">
+            <div class="field">
+              <label for="first-name">First name <span class="opt">(optional)</span></label>
+              <input type="text" id="first-name" name="first_name"
+                autocomplete="given-name"
+                aria-describedby="name-hint" tabindex="-1">
+            </div>
+            <div class="field">
+              <label for="last-name">Last name <span class="opt">(optional)</span></label>
+              <input type="text" id="last-name" name="last_name"
+                autocomplete="family-name" tabindex="-1">
+            </div>
+          </div>
+          <p class="hint" id="name-hint" style="margin-bottom:14px;">Providing your name allows investigators to follow up if needed. It is not required.</p>
+          <div class="field-row">
+            <div class="field">
+              <label for="email">Email <span class="opt">(optional)</span></label>
+              <input type="email" id="email" name="email"
+                autocomplete="email"
+                placeholder="you@example.com" tabindex="-1">
+            </div>
+            <div class="field">
+              <label for="phone">Phone <span class="opt">(optional)</span></label>
+              <input type="tel" id="phone" name="phone"
+                autocomplete="tel"
+                placeholder="(000) 000-0000" tabindex="-1">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="submit-row">
+        <button type="submit" class="btn-submit" id="submit-btn" aria-describedby="submit-note">
+          Submit tip →
+        </button>
+        <p class="submit-note" id="submit-note">Submitted securely over HTTPS.<br>Reviewed by FBI personnel within 24–48 hours.</p>
+      </div>
+
+    </form>
+
+    <!-- Confirmation (shown after submit) -->
+    <div class="confirmation" id="confirmation" role="alert" aria-atomic="true" tabindex="-1">
+      <div class="confirm-icon" aria-hidden="true">✓</div>
+      <h3>Tip received.</h3>
+      <p>Your information has been submitted securely to the FBI's Public Access Center. Every tip is reviewed by at least two analysts.</p>
+      <p>No further action is required from you.</p>
+      <div class="confirm-ref" aria-label="Reference number for your tip">
+        REF: <span id="ref-number"></span>
+      </div>
+    </div>
+
+  </div><!-- /form-card -->
+
+  <!-- ── ALTERNATE PATHS ── -->
+  <section class="alt-section" aria-labelledby="alt-heading">
+    <h2 id="alt-heading">Other reporting paths</h2>
+    <div class="alt-grid">
+
+      <a href="https://www.ic3.gov" class="alt-card" target="_blank" rel="noopener noreferrer"
+         aria-label="IC3 - Internet Crime Complaint Center (opens in new tab)">
+        <div class="alt-card-label">Internet crime</div>
+        <div class="alt-card-title">IC3.gov</div>
+        <div class="alt-card-desc">Online scams, ransomware, fraud, hacking. FBI-operated dedicated portal.</div>
+        <span class="alt-card-link" aria-hidden="true">ic3.gov →</span>
+      </a>
+
+      <a href="https://www.missingkids.org/gethelpnow/cybertipline" class="alt-card" target="_blank" rel="noopener noreferrer"
+         aria-label="NCMEC CyberTipline for crimes against children (opens in new tab)">
+        <div class="alt-card-label">Crimes against children</div>
+        <div class="alt-card-title">NCMEC CyberTipline</div>
+        <div class="alt-card-desc">Child exploitation, missing children. Mandatory reporting for electronic service providers.</div>
+        <span class="alt-card-link" aria-hidden="true">missingkids.org →</span>
+      </a>
+
+      <a href="https://www.justice.gov/disaster-fraud/ncdf-disaster-complaint-form" class="alt-card" target="_blank" rel="noopener noreferrer"
+         aria-label="Report disaster fraud to the DOJ National Center (opens in new tab)">
+        <div class="alt-card-label">Disaster fraud</div>
+        <div class="alt-card-title">DOJ Disaster Fraud</div>
+        <div class="alt-card-desc">COVID relief fraud, hurricane aid scams, FEMA fraud. DOJ National Center for Disaster Fraud.</div>
+        <span class="alt-card-link" aria-hidden="true">justice.gov →</span>
+      </a>
+
+      <a href="https://www.fbi.gov/contact-us/field-offices" class="alt-card" target="_blank" rel="noopener noreferrer"
+         aria-label="Find your local FBI field office (opens in new tab)">
+        <div class="alt-card-label">Local & in-person</div>
+        <div class="alt-card-title">FBI Field Offices</div>
+        <div class="alt-card-desc">56 field offices across the U.S. For time-sensitive situations or if you prefer to speak with someone directly.</div>
+        <span class="alt-card-link" aria-hidden="true">Find your office →</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── AUDIT DISCLOSURE ── -->
+  <section class="audit-section" aria-labelledby="audit-toggle">
+    <button
+      class="audit-toggle-btn"
+      id="audit-toggle"
+      aria-expanded="false"
+      aria-controls="audit-body"
+      type="button"
+    >
+      <span>Design & accessibility notes — why this was rebuilt</span>
+      <span class="toggle-arrow" aria-hidden="true">↓</span>
+    </button>
+    <div class="audit-body" id="audit-body" role="region" aria-labelledby="audit-toggle">
+      <div class="audit-inner">
+        <p class="audit-intro">
+          The current <code>tips.fbi.gov</code> is a <strong>fully JavaScript-rendered Angular application</strong> with no server-side fallback. The form shell contains a single <code>&lt;app-root&gt;&lt;/app-root&gt;</code> tag — if JS fails or loads slowly, citizens see a blank page. It loads Google Maps, Google Tag Manager, and reCAPTCHA before showing anything. The multi-stage crime-type routing forces citizens to self-categorize before submitting — a burden the FBI's own intake process handles internally anyway.
+        </p>
+
+        <div class="audit-finding">
+          <div class="finding-dot dot-arch" aria-hidden="true"></div>
+          <div class="finding-text">
+            <div class="finding-title">100% client-side JavaScript rendering <span class="finding-tag tag-arch">Architecture</span></div>
+            <div class="finding-desc">Zero server-rendered content. No-JS fallback absent. Fails WCAG 4.1.1. Screen readers receive an empty document until Angular bootstraps.</div>
+          </div>
+        </div>
+
+        <div class="audit-finding">
+          <div class="finding-dot dot-critical" aria-hidden="true"></div>
+          <div class="finding-text">
+            <div class="finding-title">Google Maps required for address entry <span class="finding-tag tag-wcag">WCAG 1.3.3</span></div>
+            <div class="finding-desc">Address field depends on the Maps JavaScript API. If the API is slow or blocked, citizens cannot enter a location at all. Sensory characteristic dependency.</div>
+          </div>
+        </div>
+
+        <div class="audit-finding">
+          <div class="finding-dot dot-critical" aria-hidden="true"></div>
+          <div class="finding-text">
+            <div class="finding-title">Crime-type categorization forced before submission <span class="finding-tag tag-arch">UX / Routing</span></div>
+            <div class="finding-desc">Citizens must navigate a decision tree to find the right category before they can describe what they saw. FBI's own documentation states every tip is reviewed by two analysts regardless of category — the burden is unnecessary and creates drop-off.</div>
+          </div>
+        </div>
+
+        <div class="audit-finding">
+          <div class="finding-dot dot-critical" aria-hidden="true"></div>
+          <div class="finding-text">
+            <div class="finding-title">reCAPTCHA v3 loaded on page entry <span class="finding-tag tag-wcag">WCAG 1.1.1</span></div>
+            <div class="finding-desc">Invisible reCAPTCHA tracks users before they've interacted with the form. No accessible alternative provided. Cognitive and privacy barrier for users with assistive technology.</div>
+          </div>
+        </div>
+
+        <div class="audit-finding">
+          <div class="finding-dot dot-arch" aria-hidden="true"></div>
+          <div class="finding-text">
+            <div class="finding-title">Google Tag Manager / Analytics before consent <span class="finding-tag tag-arch">Privacy / Trust</span></div>
+            <div class="finding-desc">GTM fires before the user has submitted anything. On a form citizens use to report crimes — often involving personal risk — pre-submission analytics tracking is a trust violation regardless of legality.</div>
+          </div>
+        </div>
+
+        <div class="audit-finding">
+          <div class="finding-dot dot-arch" aria-hidden="true"></div>
+          <div class="finding-text">
+            <div class="finding-title">Generic system font stack <span class="finding-tag tag-arch">Design</span></div>
+            <div class="finding-desc"><code>font-family: sans-serif, Arial, Helvetica</code>. No type system, no visual hierarchy investment. A form asking for sensitive civic information should communicate institutional reliability through design.</div>
+          </div>
+        </div>
+
+        <div class="audit-finding">
+          <div class="finding-dot dot-critical" aria-hidden="true"></div>
+          <div class="finding-text">
+            <div class="finding-title">No visible alternate paths on landing <span class="finding-tag tag-wcag">WCAG 2.4.1</span></div>
+            <div class="finding-desc">IC3.gov, NCMEC, field offices, and disaster fraud — all faster paths for specific crime types — are not surfaced before or alongside the primary form. Citizens who don't know to look elsewhere are routed through the wrong channel.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <p>Federal Bureau of Investigation &nbsp;·&nbsp; tips.fbi.gov</p>
+    <p>
+      <a href="https://www.fbi.gov/accessibility">Accessibility</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.fbi.gov/privacy-policy">Privacy policy</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.fbi.gov/contact-us">Contact</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+// ── char counter ──
+const tipText   = document.getElementById('tip-text');
+const charCount = document.getElementById('char-count');
+tipText.addEventListener('input', () => {
+  const n = tipText.value.length;
+  charCount.textContent = n + ' / 5000';
+  charCount.classList.toggle('near', n > 4500);
+});
+
+// ── anonymous toggle ──
+const anonCheck     = document.getElementById('anonymous-check');
+const contactFields = document.getElementById('contact-fields');
+function updateAnon() {
+  const isAnon = anonCheck.checked;
+  contactFields.classList.toggle('hidden', isAnon);
+  contactFields.setAttribute('aria-hidden', String(isAnon));
+  // manage tab order of inner inputs
+  contactFields.querySelectorAll('input').forEach(el => {
+    el.tabIndex = isAnon ? -1 : 0;
+  });
+}
+anonCheck.addEventListener('change', updateAnon);
+updateAnon();
+
+// ── crime type chips ──
+const chips       = document.querySelectorAll('.chip');
+const cyberRedirect = document.getElementById('cyber-redirect');
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    const wasSelected = chip.getAttribute('aria-pressed') === 'true';
+    chips.forEach(c => c.setAttribute('aria-pressed', 'false'));
+    chips.forEach(c => c.classList.remove('selected'));
+    if (!wasSelected) {
+      chip.setAttribute('aria-pressed', 'true');
+      chip.classList.add('selected');
+    }
+    // show cyber redirect note
+    const isCyber = !wasSelected && chip.dataset.type === 'cyber';
+    cyberRedirect.classList.toggle('visible', isCyber);
+  });
+});
+
+// ── audit accordion ──
+const auditBtn  = document.getElementById('audit-toggle');
+const auditBody = document.getElementById('audit-body');
+auditBtn.addEventListener('click', () => {
+  const open = auditBtn.getAttribute('aria-expanded') === 'true';
+  auditBtn.setAttribute('aria-expanded', String(!open));
+  auditBody.classList.toggle('open', !open);
+});
+
+// ── form submit (demo) ──
+const form        = document.getElementById('tip-form');
+const confirmation = document.getElementById('confirmation');
+const refSpan      = document.getElementById('ref-number');
+const liveStatus   = document.getElementById('live-status');
+const submitBtn    = document.getElementById('submit-btn');
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const tip = tipText.value.trim();
+  if (!tip) {
+    tipText.setAttribute('aria-invalid', 'true');
+    const errEl = document.getElementById('tip-error');
+    errEl.textContent = 'Please describe what happened before submitting.';
+    liveStatus.textContent = 'Error: please describe what happened before submitting.';
+    tipText.focus();
+    return;
+  }
+  // clear any prior error
+  const errEl = document.getElementById('tip-error');
+  errEl.textContent = '';
+  // show confirmation
+  form.style.display = 'none';
+  confirmation.classList.add('visible');
+  refSpan.textContent = 'FBI-' + Date.now().toString(36).toUpperCase().slice(-8);
+  confirmation.focus();
+  liveStatus.textContent = 'Tip submitted. Your reference number is ' + refSpan.textContent;
+});
+
+// clear invalid on input
+tipText.addEventListener('input', () => {
+  tipText.removeAttribute('aria-invalid');
+  document.getElementById('tip-error').textContent = '';
+});
+</script>
+
+</body>
+</html>

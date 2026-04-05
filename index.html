@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Civic data for people who live here. Colorado Springs crash records, road funding, and local intelligence — built by residents, offered free.">
+  <meta name="theme-color" content="#0a0f1a">
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content="cheetochopsticks — Civic data for people who live here">
+  <meta property="og:description" content="Colorado Springs crash records, road funding, and local intelligence — built by residents, offered free.">
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://cheetochopsticks.com">
+
+  <title>cheetochopsticks — Civic data for people who live here</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700;1,900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="shared/css/main.css">
+</head>
+<body>
+
+<!-- Accessibility anchors -->
+<a href="#main" class="skip-link">Skip to main content</a>
+<div id="live-region" class="live-region" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     NAVIGATION
+     ═══════════════════════════════════════════════════════ -->
+<header class="site-nav" role="banner">
+  <div class="nav-inner">
+
+    <!-- Logo -->
+    <a href="/" class="nav-logo" aria-label="cheetochopsticks — home">
+      <span class="nav-logo-word">cheetochopsticks</span>
+      <span class="nav-logo-dot" aria-hidden="true">.com</span>
+    </a>
+
+    <!-- Primary links -->
+    <nav aria-label="Primary navigation">
+      <ul class="nav-links" role="list">
+        <li><a href="/stories" class="nav-link">Stories</a></li>
+        <li><a href="/data"    class="nav-link">Data</a></li>
+        <li><a href="/tools"   class="nav-link">Tools</a></li>
+        <li><a href="/about"   class="nav-link">About</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right cluster -->
+    <div class="nav-right">
+
+      <!-- Search -->
+      <button class="nav-icon-btn" aria-label="Search the site" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+
+      <!-- You+ trigger -->
+      <button class="you-plus-trigger"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="you-plus-dropdown"
+              type="button">
+        You&thinsp;+
+        <svg class="you-plus-caret" viewBox="0 0 10 10" aria-hidden="true">
+          <polyline points="2,3 5,7 8,3"/>
+        </svg>
+      </button>
+
+      <!-- Mobile hamburger -->
+      <button class="nav-hamburger"
+              aria-label="Open navigation menu"
+              aria-expanded="false"
+              aria-controls="nav-drawer"
+              type="button">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div><!-- /nav-right -->
+  </div><!-- /nav-inner -->
+</header>
+
+
+<!-- ── You+ Dropdown ─────────────────────────────────────── -->
+<div id="you-plus-dropdown"
+     class="you-plus-dropdown"
+     role="dialog"
+     aria-label="You Plus — choose your data scope"
+     aria-modal="true">
+
+  <div class="dropdown-header">
+    <p class="eyebrow">Personalize your view</p>
+    <p>Choose the geographic scope that matters to you. More views are on the way.</p>
+  </div>
+
+  <div class="dropdown-tiles" role="list">
+
+    <a href="/find" class="dropdown-tile" data-scope="find" role="listitem">
+      <span class="tile-icon" aria-hidden="true">🔍</span>
+      <span class="tile-name">Find You</span>
+      <span class="tile-desc">Enter your address or zip code to see data specific to your block and neighborhood.</span>
+    </a>
+
+    <a href="cos-traffic-hub.html#city" class="dropdown-tile" data-scope="city" role="listitem">
+      <span class="tile-icon" aria-hidden="true">🏙️</span>
+      <span class="tile-name">City</span>
+      <span class="tile-desc">Colorado Springs city limits. Crash records, road funding, and safety trends 2017–2025.</span>
+    </a>
+
+    <a href="cos-traffic-hub.html#county" class="dropdown-tile" data-scope="county" role="listitem">
+      <span class="tile-icon" aria-hidden="true">🗺️</span>
+      <span class="tile-name">County</span>
+      <span class="tile-desc">El Paso County — all jurisdictions. Data across every incorporated city and unincorporated areas.</span>
+    </a>
+
+    <a href="cos-traffic-hub.html#state" class="dropdown-tile" data-scope="state" role="listitem">
+      <span class="tile-icon" aria-hidden="true">🏔️</span>
+      <span class="tile-name">State</span>
+      <span class="tile-desc">Colorado statewide. CDOT data across all 64 counties — coming soon.</span>
+    </a>
+
+    <a href="/more" class="dropdown-tile" data-scope="more" role="listitem">
+      <span class="tile-icon" aria-hidden="true">✦</span>
+      <span class="tile-name">More</span>
+      <span class="tile-desc">Regional, national, and cross-jurisdictional data. The view from 30,000 feet. Being built now.</span>
+    </a>
+
+  </div>
+
+  <div class="dropdown-footer">
+    <p>Built in Colorado Springs &nbsp;·&nbsp; Offered free</p>
+    <a href="/about">About this project →</a>
+  </div>
+
+</div>
+
+
+<!-- ── Mobile Drawer ─────────────────────────────────────── -->
+<nav id="nav-drawer" class="nav-drawer" aria-label="Mobile navigation">
+  <a href="/stories" class="nav-drawer-link">Stories</a>
+  <a href="/data"    class="nav-drawer-link">Data</a>
+  <a href="/tools"   class="nav-drawer-link">Tools</a>
+  <a href="/about"   class="nav-drawer-link">About</a>
+  <hr class="rule" style="margin:8px 0;">
+  <a href="/find"                 class="nav-drawer-link">🔍 Find You</a>
+  <a href="cos-traffic-hub.html" class="nav-drawer-link">🏙️ City Dashboard</a>
+  <a href="/county"               class="nav-drawer-link">🗺️ County <span class="tag-coming" style="margin-left:6px;font-family:var(--font-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;background:rgba(200,168,75,.12);color:#9a7e30;padding:1px 5px;border-radius:2px;">Soon</span></a>
+  <a href="/state"                class="nav-drawer-link">🏔️ State <span class="tag-coming" style="margin-left:6px;font-family:var(--font-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;background:rgba(200,168,75,.12);color:#9a7e30;padding:1px 5px;border-radius:2px;">Soon</span></a>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN CONTENT
+     ═══════════════════════════════════════════════════════ -->
+<main id="main" tabindex="-1">
+
+
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero" aria-labelledby="hero-headline">
+
+    <div class="hero-inner">
+
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-rule" aria-hidden="true"></span>
+        <span class="eyebrow">StorySeed Studios · The Dais · Colorado Springs</span>
+      </div>
+
+      <h1 class="hero-headline" id="hero-headline">
+        Your city.<br>
+        Your data.<br>
+        <em>No spin.</em>
+      </h1>
+
+      <p class="hero-sub">
+        Crash records. Road funding. Local decisions.
+        All of it open, searchable, and explained in plain language —
+        built by two residents at a kitchen table and offered free to anyone who lives here.
+      </p>
+
+      <div class="hero-actions">
+        <a href="cos-traffic-hub.html" class="btn btn-primary">
+          View Traffic Dashboard
+          <span aria-hidden="true">→</span>
+        </a>
+        <a href="#mission" class="btn btn-outline">
+          What is this?
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Data ticker — decorative, screen readers skip it -->
+    <div class="hero-ticker" aria-hidden="true">
+      <div class="ticker-track" aria-hidden="true">
+        <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item"><strong>390</strong> fatalities over 9 years</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item"><strong>5.6×</strong> expansion vs. preservation spending</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item"><strong>$42.3M</strong> total road revenue · FY reported</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item"><strong>88%</strong> of crashes happen on dry roads</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item"><strong>31%</strong> are rear-end collisions</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item"><span class="pulse-dot" aria-hidden="true"></span> Live data · ArcGIS API · March 2026</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-item">Records request filed <strong>April 2026</strong> — LOSS danger ratings pending</span>
+        <span class="ticker-sep"></span>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ── Feature strip ─────────────────────────────────────── -->
+  <section class="feature-strip" aria-labelledby="feature-heading">
+    <div class="container">
+
+      <h2 id="feature-heading" class="sr-only">Featured tools and data</h2>
+
+      <div class="feature-strip-grid">
+
+        <!-- Primary card -->
+        <article class="feature-card primary reveal" style="--card-accent: var(--gold);">
+          <div class="feature-card-tag">Traffic · Safety · Funding</div>
+          <h2>Colorado Springs Traffic Safety &amp; Funding Dashboard</h2>
+          <p>
+            Nine years of crash records. FHWA highway finance data.
+            National comparisons. Searchable by zip code.
+            The complete picture of how crashes happen here and where the road money goes.
+          </p>
+          <div style="display:flex;gap:24px;margin-top:8px;">
+            <div>
+              <div class="feature-stat">64,434</div>
+              <div class="feature-stat-label">Crash records</div>
+            </div>
+            <div>
+              <div class="feature-stat">9 yrs</div>
+              <div class="feature-stat-label">2017 – 2025</div>
+            </div>
+            <div>
+              <div class="feature-stat">$42M</div>
+              <div class="feature-stat-label">Road revenue mapped</div>
+            </div>
+          </div>
+          <div class="feature-card-meta">
+            <span><span class="pulse-dot" aria-hidden="true"></span>Live data</span>
+            <a href="cos-traffic-hub.html" aria-label="Open Traffic Safety Dashboard">Open dashboard <span aria-hidden="true" class="arrow">→</span></a>
+          </div>
+        </article>
+
+        <!-- Search card -->
+        <article class="feature-card reveal reveal-delay-1" style="--card-accent: #4a9eff;">
+          <div class="feature-card-tag">Search</div>
+          <h2>Crash Records by Zip Code</h2>
+          <p>
+            Filter 64,434 records by location, year, severity, road condition, and impairment.
+            Export to CSV. No map required, no login.
+          </p>
+          <div class="feature-card-meta">
+            <span>25 zip codes covered</span>
+            <a href="cos-traffic-hub.html" aria-label="Open crash search tool">Search <span aria-hidden="true" class="arrow">→</span></a>
+          </div>
+        </article>
+
+        <!-- Coming soon card -->
+        <article class="feature-card reveal reveal-delay-2" style="--card-accent: #6a7f96;">
+          <div class="feature-card-tag">Coming soon</div>
+          <h2>Corridor Danger Ratings</h2>
+          <p>
+            LOSS danger ratings for every major road corridor —
+            when the public records request comes back.
+            Filed April 2026. Pending.
+          </p>
+          <div class="feature-card-meta">
+            <span>Records request: pending</span>
+            <span style="color:#6a7f96;">ETA unknown</span>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── Mission ─────────────────────────────────────────────── -->
+  <section class="mission section" id="mission" aria-labelledby="mission-heading">
+    <div class="container">
+
+      <div class="mission-rule">
+        <div class="mission-rule-line"></div>
+        <span class="eyebrow">Why this exists</span>
+        <div class="mission-rule-line"></div>
+      </div>
+
+      <h2 class="mission-headline reveal" id="mission-heading">
+        Public data should be readable<br>by the public.
+      </h2>
+
+      <p class="mission-body reveal reveal-delay-1">
+        The crash data was always public. The road funding numbers were always filed.
+        The city's own Safety Action Plan said the right things.
+        <strong>None of it was in a form that residents could actually use.</strong>
+      </p>
+
+      <p class="mission-body reveal reveal-delay-2">
+        This is the attempt to fix that. No grant funding. No consulting contract.
+        Two people, a kitchen table, USAA on hold, and a public ArcGIS endpoint
+        that turned out to contain nine years of crash records.
+        The data is the city's. We just built the door.
+      </p>
+
+      <div class="mission-aside reveal reveal-delay-3">
+        <strong>The offer on the table:</strong>
+        Everything built here — the dashboard, the search tool, the analysis —
+        is offered to the City of Colorado Springs for public use.
+        No invoice attached. If it helps someone make a safer decision
+        or ask a better question at a council meeting, that's the whole point.
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── Latest ──────────────────────────────────────────────── -->
+  <section class="feed-section" aria-labelledby="latest-heading">
+    <div class="container">
+
+      <div class="section-header">
+        <h2 id="latest-heading">Latest</h2>
+        <a href="/stories">All stories →</a>
+      </div>
+
+      <div class="feed-grid">
+
+        <article class="card reveal">
+          <div class="card-body">
+            <span class="card-tag data">Data</span>
+            <a href="cos-traffic-hub.html">
+              Traffic Safety &amp; Funding Dashboard — full release
+            </a>
+            <p>
+              64,434 crash records, 12 charts, FHWA funding analysis,
+              and a national comparison. Everything we have, searchable,
+              in one place.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span>April 2026</span>
+            <span class="badge badge-live">● Live</span>
+          </div>
+        </article>
+
+        <article class="card reveal reveal-delay-1">
+          <div class="card-body">
+            <span class="card-tag story">Analysis</span>
+            <a href="cos-traffic-hub.html#national">
+              5.6 to 1: what COS road spending says that the city won't
+            </a>
+            <p>
+              The national norm is $5 in maintenance for every $1 in expansion.
+              Colorado Springs has it backwards. What that means over the next 15 years.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span>April 2026</span>
+            <span class="badge badge-new">Analysis</span>
+          </div>
+        </article>
+
+        <article class="card reveal reveal-delay-2">
+          <div class="card-body">
+            <span class="card-tag pending">Records request</span>
+            <a href="/about#loss-request">
+              LOSS corridor danger ratings — what we asked for and why
+            </a>
+            <p>
+              The Safety Action Plan rated every major road corridor by danger level.
+              Those ratings are in internal GIS files. We asked for them April 2026.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span>April 2026</span>
+            <span class="badge badge-pending">Pending</span>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── CTA Band ─────────────────────────────────────────────── -->
+  <section class="cta-band section" aria-labelledby="cta-heading">
+    <div class="container">
+      <h2 id="cta-heading">Stay in the loop.</h2>
+      <p>
+        When new data comes in, when the records request resolves,
+        when something changes — you'll know before the press release does.
+      </p>
+      <div class="input-row">
+        <label for="email-input" class="sr-only">Email address</label>
+        <input type="email"
+               id="email-input"
+               class="input-field"
+               placeholder="your@email.com"
+               autocomplete="email"
+               aria-describedby="email-hint">
+        <button class="btn btn-primary" type="button">
+          Notify me
+        </button>
+      </div>
+      <p id="email-hint" style="margin-top:10px;font-family:var(--font-mono);font-size:.625rem;color:#4a5f74;letter-spacing:.08em;">
+        No frequency, no algorithm. Only signal.
+      </p>
+    </div>
+  </section>
+
+
+</main>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════════ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <!-- Brand column -->
+      <div class="footer-brand">
+        <a href="/" class="nav-logo" aria-label="cheetochopsticks — home">
+          <span class="nav-logo-word">cheetochopsticks</span>
+          <span class="nav-logo-dot" aria-hidden="true">.com</span>
+        </a>
+        <p>
+          Civic data for people who live here.
+          Built by StorySeed Studios and The Dais in Colorado Springs, Colorado.
+          Offered free. No invoice attached.
+        </p>
+      </div>
+
+      <!-- Data column -->
+      <div class="footer-col">
+        <h4>Data</h4>
+        <ul>
+          <li><a href="cos-traffic-hub.html">Traffic Dashboard</a></li>
+          <li><a href="cos-traffic-hub.html">Crash Search by Zip</a></li>
+          <li><a href="cos-traffic-hub.html#national">National Comparison</a></li>
+          <li>
+            <a href="/loss-ratings">
+              LOSS Corridor Ratings
+              <span class="tag-coming">Pending</span>
+            </a>
+          </li>
+          <li>
+            <a href="/county">
+              County Dashboard
+              <span class="tag-coming">Soon</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Project column -->
+      <div class="footer-col">
+        <h4>Project</h4>
+        <ul>
+          <li><a href="/about">About</a></li>
+          <li><a href="/about#methods">Methods &amp; Sources</a></li>
+          <li><a href="/about#records">Records Requests</a></li>
+          <li><a href="/about#contact">Contact</a></li>
+          <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        </ul>
+      </div>
+
+      <!-- Scope column -->
+      <div class="footer-col">
+        <h4>Scope</h4>
+        <ul>
+          <li><a href="/find">🔍 Find You</a></li>
+          <li><a href="cos-traffic-hub.html">🏙️ City — Colorado Springs</a></li>
+          <li>
+            <a href="/county">
+              🗺️ County — El Paso
+              <span class="tag-coming">Soon</span>
+            </a>
+          </li>
+          <li>
+            <a href="/state">
+              🏔️ State — Colorado
+              <span class="tag-coming">Soon</span>
+            </a>
+          </li>
+          <li>
+            <a href="/more">
+              ✦ More
+              <span class="tag-coming">Planned</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>
+        © 2026 StorySeed Studios · The Dais &nbsp;·&nbsp;
+        El Paso County, Colorado &nbsp;·&nbsp;
+        Data: City of Colorado Springs ArcGIS (live API) · FHWA Form 536 &nbsp;·&nbsp;
+        For informational purposes. Not legal advice.
+      </p>
+      <p>
+        <a href="/privacy">Privacy</a> &nbsp;·&nbsp;
+        <a href="/about#methods">Methods</a> &nbsp;·&nbsp;
+        <a href="https://www.thedais.com" target="_blank" rel="noopener noreferrer">The Dais</a>
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="shared/js/main.js"></script>
+
+</body>
+</html>
