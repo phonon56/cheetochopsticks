@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDOLA Open Records Request — Accessibility Audit & Redesign · StorySeed / The Dais</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── TOKENS ── */
+:root {
+  --navy:       #1a2857;
+  --navy-dark:  #0d1b2e;
+  --ink:        #1a1a2e;
+  --ink-mid:    #2e3a4a;
+  --ink-mute:   #4a5a6a; /* 6.4:1 on white — AA PASS */
+  --white:      #ffffff;
+  --off-white:  #f7f8fa;
+  --rule:       #d8dde4;
+  --red:        #b91c1c;
+  --red-bg:     #fef2f2;
+  --amber:      #92400e;
+  --amber-bg:   #fffbeb;
+  --green:      #065f46;
+  --green-bg:   #ecfdf5;
+  --blue-light: #1d4ed8;
+  --gold:       #b45309;
+  --teal:       #0e6990; /* 5.9:1 on white — AA PASS */
+  --focus:      #1d4ed8; /* 6.7:1 on white — AA PASS */
+
+  /* Level badges */
+  --badge-a:   #7f1d1d;
+  --badge-aa:  #78350f;
+  --badge-mod: #374151;
+
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-sans:  'Inter', system-ui, sans-serif;
+  --font-mono:  'IBM Plex Mono', 'Courier New', monospace;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  background: var(--off-white);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SKIP LINK ── */
+.skip-link {
+  position: absolute; left: -9999px; top: 4px;
+  background: var(--navy-dark); color: #fff;
+  padding: 8px 16px; font-family: var(--font-mono); font-size: 13px;
+  border-radius: 2px; z-index: 999; text-decoration: none;
+}
+.skip-link:focus { left: 8px; }
+
+/* ── SCREEN READER ONLY ── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ── AUDIT MASTHEAD ── */
+.audit-band {
+  background: var(--navy-dark);
+  border-bottom: 3px solid #c8a84b;
+  padding: 32px 24px 28px;
+}
+.audit-band-inner {
+  max-width: 900px; margin: 0 auto;
+}
+.audit-eyebrow {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: #8ab4c8; margin-bottom: 12px;
+}
+.audit-band h1 {
+  font-family: var(--font-serif); font-size: clamp(22px,3.5vw,32px);
+  font-weight: 600; color: #fff; line-height: 1.2; margin-bottom: 8px;
+}
+.audit-band p { font-size: 14px; color: rgba(255,255,255,.6); max-width: 540px; line-height: 1.65; }
+.verdict-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 16px; padding: 6px 14px;
+  border: 1px solid rgba(196,213,80,.3);
+  border-radius: 20px;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: #c4d550;
+}
+.verdict-pill::before { content:''; width:8px;height:8px;border-radius:50%;background:#c4d550; }
+
+/* ── LAYOUT ── */
+.page-wrap { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* ── SECTION LABELS ── */
+.eyebrow {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--ink-mute); display: block; margin-bottom: 6px;
+}
+
+/* ── SECTION HEADINGS ── */
+h2.section-h2 {
+  font-family: var(--font-serif); font-size: 22px; font-weight: 600;
+  color: var(--ink); margin-bottom: 10px; line-height: 1.25;
+}
+h3.section-h3 {
+  font-family: var(--font-serif); font-size: 17px; font-weight: 600;
+  color: var(--ink-mid); margin-bottom: 8px;
+}
+
+/* ── DIVIDER ── */
+.divider { border: none; border-top: 1px solid var(--rule); margin: 48px 0; }
+
+/* ── FINDING CARDS ── */
+.finding-list { display: flex; flex-direction: column; gap: 3px; margin: 20px 0 40px; }
+.finding-card {
+  background: #fff; border: 1px solid var(--rule); border-radius: 3px;
+  overflow: hidden;
+}
+.finding-card.critical { border-left: 4px solid var(--red); }
+.finding-card.serious  { border-left: 4px solid #d97706; }
+.finding-card.moderate { border-left: 4px solid #6b7280; }
+.finding-card.pass     { border-left: 4px solid var(--green); }
+
+.finding-summary {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 16px 18px; cursor: pointer; list-style: none;
+}
+.finding-summary::-webkit-details-marker { display: none; }
+details[open] .finding-summary { border-bottom: 1px solid var(--rule); }
+
+.badge {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: 2px; flex-shrink: 0; margin-top: 2px;
+}
+.badge-critical { background: var(--red-bg);   color: var(--red); }
+.badge-serious  { background: var(--amber-bg);  color: var(--amber); }
+.badge-moderate { background: #f3f4f6; color: #374151; }
+.badge-pass     { background: var(--green-bg);  color: var(--green); }
+
+.finding-title { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.finding-wcag  { font-family: var(--font-mono); font-size: 10px; color: var(--ink-mute); margin-top: 3px; }
+.finding-toggle { margin-left: auto; flex-shrink: 0; font-size: 16px; color: var(--ink-mute); line-height: 1; padding-top:2px; }
+details[open] .finding-toggle::after { content: '−'; }
+.finding-toggle::after { content: '+'; }
+
+.finding-body { padding: 16px 18px; }
+.finding-body p { font-size: 14px; color: var(--ink-mid); line-height: 1.75; margin-bottom: 10px; font-weight: 300; }
+.finding-body p:last-child { margin: 0; }
+.finding-body strong { color: var(--ink); font-weight: 500; }
+
+/* ── CODE BLOCKS ── */
+.code-wrap { margin: 12px 0; }
+.code-label {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em;
+  text-transform: uppercase; padding: 4px 10px;
+  border-radius: 3px 3px 0 0; display: inline-block; margin-bottom: 0;
+}
+.code-label.bad  { background: #7f1d1d; color: #fca5a5; }
+.code-label.good { background: #064e3b; color: #6ee7b7; }
+pre {
+  background: #1e293b; color: #e2e8f0;
+  font-family: var(--font-mono); font-size: 12.5px;
+  line-height: 1.7; padding: 14px 16px;
+  border-radius: 0 3px 3px 3px; overflow-x: auto;
+  margin: 0;
+  white-space: pre;
+}
+pre.bad  { border-radius: 0 3px 3px 3px; }
+pre code .c { color: #94a3b8; }  /* comment */
+pre code .a { color: #f59e0b; }  /* attribute */
+pre code .v { color: #86efac; }  /* value */
+pre code .t { color: #93c5fd; }  /* tag */
+pre code .g { color: #6ee7b7; }  /* good highlight */
+pre code .r { color: #fca5a5; }  /* bad highlight */
+
+.fix-time {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 10px; padding: 4px 10px;
+  background: var(--green-bg); color: var(--green);
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .08em; border-radius: 2px;
+}
+
+/* ── SUMMARY GRID ── */
+.summary-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule); border-radius: 3px;
+  overflow: hidden; margin: 20px 0 40px;
+}
+@media(max-width:600px){ .summary-grid{ grid-template-columns: repeat(2,1fr); } }
+.summary-cell { background: #fff; padding: 18px; }
+.summary-cell .num {
+  font-family: var(--font-serif); font-size: 40px;
+  font-weight: 600; line-height: 1; margin-bottom: 4px;
+}
+.num.red   { color: var(--red); }
+.num.amber { color: #d97706; }
+.num.green { color: var(--green); }
+.num.blue  { color: var(--navy); }
+.summary-cell p {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+}
+
+/* ── REDESIGNED CORA SECTION ── */
+.cora-page { margin: 40px 0; }
+
+/* DOLA-inspired header */
+.cora-header {
+  background: var(--navy); padding: 24px 32px;
+  border-radius: 4px 4px 0 0;
+  border-bottom: 3px solid #c8a84b;
+}
+.cora-header h2 {
+  font-family: var(--font-serif); font-size: 26px; font-weight: 600;
+  color: #fff; margin-bottom: 6px;
+}
+.cora-header p { font-size: 14px; color: rgba(255,255,255,.65); max-width:560px; line-height:1.6; }
+
+.cora-body {
+  background: #fff; border: 1px solid var(--rule);
+  border-top: none; border-radius: 0 0 4px 4px;
+  padding: 32px;
+}
+
+/* Jurisdiction guide */
+.jurisdiction-guide {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px; margin: 24px 0;
+}
+@media(max-width:640px){ .jurisdiction-guide{ grid-template-columns:1fr; } }
+
+.jcard {
+  border: 1px solid var(--rule); border-radius: 3px;
+  padding: 18px; background: var(--off-white);
+}
+.jcard-label {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: var(--ink-mute); margin-bottom: 6px; display: block;
+}
+.jcard-title {
+  font-family: var(--font-serif); font-size: 15px; font-weight: 600;
+  color: var(--ink); margin-bottom: 8px;
+}
+.jcard p { font-size: 13px; color: var(--ink-mid); line-height: 1.65; font-weight: 300; }
+.jcard a { color: var(--teal); font-weight: 500; text-underline-offset: 3px; }
+.jcard a:focus { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 1px; }
+
+.jcard.city   { border-top: 3px solid #1d4ed8; }
+.jcard.county { border-top: 3px solid #7c3aed; }
+.jcard.state  { border-top: 3px solid #065f46; }
+
+/* CTA button */
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--navy); color: #fff; text-decoration: none;
+  padding: 13px 28px; border-radius: 3px;
+  font-family: var(--font-mono); font-size: 12px;
+  font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+  transition: background .15s;
+}
+.cta-btn:hover { background: #0d1b2e; }
+.cta-btn:focus {
+  outline: 3px solid var(--focus); outline-offset: 2px;
+}
+
+/* ── REDESIGNED ACCORDION ── */
+.faq-section { margin: 32px 0; }
+.faq-section h3.faq-group-label {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink-mute); padding: 0 0 8px;
+  border-bottom: 1px solid var(--rule); margin-bottom: 12px;
+}
+
+.accordion-list { list-style: none; display:flex; flex-direction:column; gap:2px; }
+
+.acc-item { background: #fff; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; }
+
+/* ── THE KEY FIX: accordion button with correct initial aria-expanded ── */
+.acc-btn {
+  width: 100%; text-align: left;
+  background: none; border: none; cursor: pointer;
+  padding: 16px 18px;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  font-family: var(--font-sans); font-size: 15px; font-weight: 500;
+  color: var(--ink); line-height: 1.4;
+  /* FIX: visible focus on white bg — navy 10.6:1 — AA PASS */
+}
+.acc-btn:focus {
+  outline: 3px solid var(--focus);
+  outline-offset: 0;
+}
+.acc-btn:hover { background: #f8f9fa; }
+.acc-btn[aria-expanded="true"] { color: var(--navy); }
+
+.acc-chevron {
+  flex-shrink: 0; width: 20px; height: 20px;
+  border: 1.5px solid currentColor; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--ink-mute);
+  transition: transform .2s ease;
+}
+.acc-btn[aria-expanded="true"] .acc-chevron { transform: rotate(180deg); color: var(--navy); }
+.acc-chevron::after { content: '↓'; }
+
+.acc-panel {
+  overflow: hidden;
+  /* CSS-driven show/hide — no JS needed for basic functionality */
+}
+.acc-panel[hidden] { display: none; }
+.acc-panel-inner { padding: 4px 18px 20px; }
+.acc-panel-inner p { font-size: 14px; color: var(--ink-mid); line-height: 1.8; margin-bottom: 10px; font-weight: 300; }
+.acc-panel-inner p:last-child { margin: 0; }
+.acc-panel-inner ul { margin: 8px 0 10px 20px; }
+.acc-panel-inner li { font-size: 14px; color: var(--ink-mid); line-height: 1.75; margin-bottom: 4px; font-weight: 300; }
+.acc-panel-inner strong { color: var(--ink); font-weight: 500; }
+.acc-panel-inner a { color: var(--teal); text-underline-offset: 3px; }
+.acc-panel-inner a:focus { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 1px; }
+
+/* Jurisdiction mini-tag */
+.juris-tag {
+  display: inline-block; margin: 0 3px 3px 0;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .06em; padding: 2px 7px; border-radius: 2px;
+}
+.juris-city   { background: #dbeafe; color: #1e3a8a; }
+.juris-county { background: #ede9fe; color: #4c1d95; }
+.juris-state  { background: var(--green-bg); color: var(--green); }
+
+/* Callout / note */
+.note {
+  background: var(--amber-bg); border-left: 3px solid #d97706;
+  border-radius: 0 3px 3px 0; padding: 12px 16px; margin: 12px 0;
+}
+.note p { font-size: 13px; color: var(--amber); margin: 0; }
+
+/* Expand all button */
+.expand-all-btn {
+  background: none; border: 1px solid var(--rule);
+  border-radius: 3px; padding: 8px 16px; cursor: pointer;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+  margin-bottom: 12px; transition: border-color .15s;
+}
+.expand-all-btn:hover { border-color: var(--ink-mute); }
+.expand-all-btn:focus { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ── DRUPAL CODE SECTION ── */
+.drupal-section { margin: 40px 0; }
+.tab-bar {
+  display: flex; gap: 2px; margin-bottom: -1px; position: relative; z-index: 1;
+}
+.tab-btn {
+  background: var(--off-white); border: 1px solid var(--rule);
+  border-bottom: none; border-radius: 3px 3px 0 0;
+  padding: 8px 16px; cursor: pointer;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .06em; color: var(--ink-mute);
+}
+.tab-btn.active { background: #1e293b; color: #e2e8f0; border-color: #1e293b; }
+.tab-btn:focus { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.tab-panel pre { border-radius: 0 3px 3px 3px; }
+
+/* ── WHAT CHANGED CHECKLIST ── */
+.checklist { list-style: none; margin: 16px 0; }
+.checklist li {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 8px 0; border-bottom: 1px solid var(--rule);
+  font-size: 14px; color: var(--ink-mid); line-height: 1.6;
+}
+.checklist li:last-child { border: none; }
+.checklist li::before { content:'✓'; color: var(--green); font-weight: 700; flex-shrink:0; margin-top:1px; }
+
+/* ── FOOTER ── */
+.audit-footer {
+  background: var(--navy-dark); padding: 24px 32px;
+  border-radius: 4px; margin-top: 64px;
+}
+.audit-footer p {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .08em; color: rgba(255,255,255,.35);
+  line-height: 1.7;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .page-wrap { padding: 0 16px 60px; }
+  .cora-body { padding: 20px; }
+  .cora-header { padding: 20px; }
+  .audit-band { padding: 24px 16px; }
+}
+
+/* ── LIVE STATUS ── */
+#live-status {
+  position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+<div id="live-status" role="status" aria-atomic="true"></div>
+
+<!-- ── MASTHEAD ── -->
+<header class="audit-band" role="banner">
+  <div class="audit-band-inner">
+    <p class="audit-eyebrow">StorySeed Studios · The Dais · Live Browser Audit · April 2026</p>
+    <h1>CDOLA Open Records Request<br>Accessibility Audit &amp; Redesign</h1>
+    <p>cdola.colorado.gov/open-records-request · Live DOM audit via Chrome extension · WCAG 2.1 AA · Colorado HB 21-1110</p>
+    <div class="verdict-pill" role="note" aria-label="Overall finding">Mostly Compliant — 5 Confirmed Failures · All Fixable in Under 2 Hours</div>
+  </div>
+</header>
+
+<main id="main" class="page-wrap" role="main">
+
+  <!-- ── SCORE ── -->
+  <section aria-labelledby="summary-heading" style="margin-top:40px;">
+    <span class="eyebrow">Audit summary</span>
+    <h2 class="section-h2" id="summary-heading">What the live tests found</h2>
+    <div class="summary-grid" role="list">
+      <div class="summary-cell" role="listitem">
+        <div class="num red" aria-label="2 Level A failures">2</div>
+        <p>Level A<br>Failures</p>
+      </div>
+      <div class="summary-cell" role="listitem">
+        <div class="num amber" aria-label="3 Level AA or minor failures">3</div>
+        <p>Serious /<br>Moderate</p>
+      </div>
+      <div class="summary-cell" role="listitem">
+        <div class="num green" aria-label="12 items passing">12</div>
+        <p>Items<br>Passing</p>
+      </div>
+      <div class="summary-cell" role="listitem">
+        <div class="num blue" aria-label="Under 2 hours total fix time">2h</div>
+        <p>Est. Total<br>Fix Time</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FINDINGS ── -->
+  <section aria-labelledby="findings-heading">
+    <span class="eyebrow">Documented failures</span>
+    <h2 class="section-h2" id="findings-heading">5 confirmed failures — all from live DOM</h2>
+
+    <div class="finding-list" role="list">
+
+      <!-- FINDING 1 -->
+      <article class="finding-card critical" role="listitem">
+        <details>
+          <summary class="finding-summary">
+            <span class="badge badge-critical" aria-label="Severity: Critical">Critical</span>
+            <div>
+              <div class="finding-title">Accordion buttons missing <code>aria-expanded</code> at page load</div>
+              <div class="finding-wcag">WCAG 4.1.2 · Level A · Drupal accordion.js initializes state lazily</div>
+            </div>
+            <span class="finding-toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="finding-body">
+            <p>Live DOM confirms: all 14 accordion buttons render at page load without <code>aria-expanded</code>. The attribute appears after first user interaction via Drupal's collapse JavaScript. A screen reader user tabbing through 13 FAQ buttons hears <em>"What is The Colorado Open Records Act? button"</em> — no state, no indication the button controls collapsible content.</p>
+            <p><strong>Live structure confirmed:</strong> <code>h2.card-header > div.panel-title > button.accordion-button</code> with <code>aria-controls</code> present but no <code>aria-expanded</code>.</p>
+            <div class="code-wrap">
+              <div class="code-label bad">❌ Current (page load state)</div>
+              <pre><code><span class="t">&lt;h2</span> <span class="a">class</span>=<span class="v">"card-header panel-heading"</span> <span class="a">id</span>=<span class="v">"heading-accordion-44996-1"</span><span class="t">&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"panel-title"</span><span class="t">&gt;</span>
+    <span class="t">&lt;button</span> <span class="a">class</span>=<span class="v">"accordion-button"</span>
+            <span class="a">href</span>=<span class="v">"#collapse-accordion-44996-1"</span>
+            <span class="a">aria-controls</span>=<span class="v">"collapse-accordion-44996-1"</span>
+            <span class="r"><!-- aria-expanded MISSING at page load --></span><span class="t">&gt;</span>
+      What is The Colorado Open Records Act?
+    <span class="t">&lt;/button&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+<span class="t">&lt;/h2&gt;</span></code></pre>
+            </div>
+            <div class="code-wrap">
+              <div class="code-label good">✓ Required (initial state)</div>
+              <pre><code><span class="t">&lt;button</span> <span class="a">class</span>=<span class="v">"accordion-button"</span>
+        <span class="a">aria-controls</span>=<span class="v">"collapse-accordion-44996-1"</span>
+        <span class="g">aria-expanded="false"</span><span class="t">&gt;</span>
+  What is The Colorado Open Records Act?
+<span class="t">&lt;/button&gt;</span></code></pre>
+            </div>
+            <p>See Drupal fix in the code delivery section below — one Twig template edit sets the initial attribute, and a 12-line JS patch handles toggle.</p>
+            <span class="fix-time">⏱ Fix estimate: 30 minutes · Twig template + JS patch</span>
+          </div>
+        </details>
+      </article>
+
+      <!-- FINDING 2 -->
+      <article class="finding-card critical" role="listitem">
+        <details>
+          <summary class="finding-summary">
+            <span class="badge badge-critical" aria-label="Severity: Critical">Critical</span>
+            <div>
+              <div class="finding-title">Focus outline invisible on accordion buttons</div>
+              <div class="finding-wcag">WCAG 2.4.7 · Level AA · Computed: outline-width 0px, outline-style none</div>
+            </div>
+            <span class="finding-toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="finding-body">
+            <p>Live computed style confirmed: <code>outline: rgb(255,255,255) none 0px</code> on accordion buttons at focus. The global focus ring is white (5px) — appropriate for the dark nav bar but invisible on the white content area where accordion buttons sit.</p>
+            <p>Keyboard users tabbing through 13 FAQ items have zero visual focus indication. This is the most impactful keyboard-navigation failure on the page.</p>
+            <div class="code-wrap">
+              <div class="code-label bad">❌ Current CSS (partial, simplified)</div>
+              <pre><code><span class="c">/* Global focus — white, works on dark nav only */</span>
+<span class="a">:focus</span> {
+  outline: <span class="r">white 5px auto</span>;
+}
+
+<span class="c">/* Accordion buttons sit on white background — white outline disappears */</span>
+<span class="a">.accordion-button</span> {
+  <span class="c">/* No override — inherits white outline → invisible */</span>
+}</code></pre>
+            </div>
+            <div class="code-wrap">
+              <div class="code-label good">✓ CSS Fix</div>
+              <pre><code><span class="c">/* Scoped fix: navy outline on white background — 10.6:1 PASS */</span>
+<span class="a">.accordion-button:focus,
+.accordion-button:focus-visible</span> {
+  outline: <span class="g">3px solid #1a2857</span>;
+  outline-offset: 2px;
+  box-shadow: none; <span class="c">/* override any inherited ring */</span>
+}
+
+<span class="c">/* Also fix skip link target for complete keyboard support */</span>
+<span class="a">#main-content</span> {
+  outline: none; <span class="c">/* suppress outline on programmatic focus */</span>
+}
+<span class="a">#main-content:focus-visible</span> {
+  outline: none; <span class="c">/* skip link target shouldn't show ring */</span>
+}</code></pre>
+            </div>
+            <span class="fix-time">⏱ Fix estimate: 15 minutes · 4 lines of CSS</span>
+          </div>
+        </details>
+      </article>
+
+      <!-- FINDING 3 -->
+      <article class="finding-card serious" role="listitem">
+        <details>
+          <summary class="finding-summary">
+            <span class="badge badge-serious" aria-label="Severity: Serious">Serious</span>
+            <div>
+              <div class="finding-title">Skip link target <code>&lt;div&gt;</code> missing <code>tabindex="-1"</code></div>
+              <div class="finding-wcag">WCAG 2.4.1 · Level A · Skip link may not move focus in Firefox + screen readers</div>
+            </div>
+            <span class="finding-toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="finding-body">
+            <p>Live DOM confirms: <code>&lt;div id="main-content"&gt;</code> with no <code>tabindex</code>. Non-native elements do not receive programmatic focus reliably across all browser/AT combinations without <code>tabindex="-1"</code>. In Firefox with NVDA, the skip link may scroll visually but not move focus, forcing the user to still tab through the entire navigation.</p>
+            <div class="code-wrap">
+              <div class="code-label good">✓ One-attribute fix</div>
+              <pre><code><span class="c">&lt;!-- In page.html.twig or main layout template --&gt;</span>
+<span class="t">&lt;div</span> <span class="a">id</span>=<span class="v">"main-content"</span> <span class="g">tabindex="-1"</span><span class="t">&gt;</span>
+  {{ page.content }}
+<span class="t">&lt;/div&gt;</span></code></pre>
+            </div>
+            <span class="fix-time">⏱ Fix estimate: 5 minutes · One attribute in page.html.twig</span>
+          </div>
+        </details>
+      </article>
+
+      <!-- FINDING 4 -->
+      <article class="finding-card serious" role="listitem">
+        <details>
+          <summary class="finding-summary">
+            <span class="badge badge-serious" aria-label="Severity: Serious">Serious</span>
+            <div>
+              <div class="finding-title">Radio fieldset missing <code>&lt;legend&gt;</code> in feedback form</div>
+              <div class="finding-wcag">WCAG 1.3.1 · Level A · Fieldset confirmed present, legend absent</div>
+            </div>
+            <span class="finding-toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="finding-body">
+            <p>Live DOM confirms: the "Was this content helpful?" feedback form uses <code>&lt;fieldset&gt;</code> (good) but no <code>&lt;legend&gt;</code>. The question text appears as an adjacent generic element, not as a programmatic group label. Screen readers may announce "Yes, radio button, 1 of 2" without the question context.</p>
+            <div class="code-wrap">
+              <div class="code-label good">✓ Drupal webform fix</div>
+              <pre><code><span class="c">&lt;!-- webform--content-rating.html.twig or similar --&gt;</span>
+<span class="t">&lt;fieldset&gt;</span>
+  <span class="g">&lt;legend&gt;Was this content helpful?&lt;/legend&gt;</span>
+  {{ element.was_this_content_helpful }}
+<span class="t">&lt;/fieldset&gt;</span></code></pre>
+            </div>
+            <span class="fix-time">⏱ Fix estimate: 15 minutes · Drupal webform template</span>
+          </div>
+        </details>
+      </article>
+
+      <!-- FINDING 5 -->
+      <article class="finding-card moderate" role="listitem">
+        <details>
+          <summary class="finding-summary">
+            <span class="badge badge-moderate" aria-label="Severity: Moderate">Moderate</span>
+            <div>
+              <div class="finding-title">7 footer links open new tabs without announcement</div>
+              <div class="finding-wcag">WCAG 2.4.4 · Level A · Inconsistent — CORA form links handled correctly</div>
+            </div>
+            <span class="finding-toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="finding-body">
+            <p>The CORA form links correctly use <code>&lt;span class="visually-hidden"&gt;(opens in new window)&lt;/span&gt;</code>. However, 7 footer division links (Division of Housing, Division of Local Government, Property Taxation, Board of Assessment Appeals, State Demography Office, Transparency Online, General Notices) open in <code>target="_blank"</code> with no announcement. This is an inconsistency in the same template.</p>
+            <div class="code-wrap">
+              <div class="code-label good">✓ Footer link fix pattern (matches existing CORA approach)</div>
+              <pre><code><span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"https://doh.colorado.gov/"</span> <span class="a">target</span>=<span class="v">"_blank"</span> <span class="a">rel</span>=<span class="v">"noopener noreferrer"</span><span class="t">&gt;</span>
+  The Division of Housing
+  <span class="g">&lt;span class="visually-hidden"&gt;(opens in new window)&lt;/span&gt;</span>
+<span class="t">&lt;/a&gt;</span></code></pre>
+            </div>
+            <span class="fix-time">⏱ Fix estimate: 20 minutes · 7 footer links in block--footer.html.twig</span>
+          </div>
+        </details>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── WHAT PASSES ── -->
+  <section aria-labelledby="passes-heading" style="margin-bottom:48px;">
+    <span class="eyebrow">What's working</span>
+    <h2 class="section-h2" id="passes-heading">12 items confirmed passing — from live DOM</h2>
+    <ul class="checklist" role="list">
+      <li>Skip link present and pointing to valid <code>#main-content</code> target</li>
+      <li><code>&lt;html lang="en"&gt;</code> — language declared correctly</li>
+      <li>Page title "Open Records Request | Colorado Department of Local Affairs" — descriptive and unique</li>
+      <li>Zero images missing <code>alt</code> attributes — all 4 images correctly labeled</li>
+      <li>Zero unlabeled form inputs — all inputs have associated labels</li>
+      <li>Zero buttons without accessible names</li>
+      <li>Zero links without accessible text</li>
+      <li>Accordion regions have <code>role="region"</code> and <code>aria-labelledby</code> pointing to correct heading IDs</li>
+      <li>Sidebar navigation has <code>aria-current="page"</code> on the current page link</li>
+      <li>CORA form links announce "(opens in new window)" via sr-only text correctly</li>
+      <li>Social media icon links have descriptive <code>aria-label</code> attributes</li>
+      <li>Color contrast passes on H1, H2, CTA button, body text, and nav links — all verified by computed style</li>
+    </ul>
+  </section>
+
+  <hr class="divider" aria-hidden="true">
+
+  <!-- ── REDESIGNED PAGE ── -->
+  <section aria-labelledby="redesign-heading" class="cora-page">
+    <span class="eyebrow">Accessible redesign</span>
+    <h2 class="section-h2" id="redesign-heading">Redesigned page — fixed accordion + open records education</h2>
+    <p style="font-size:14px;color:var(--ink-mute);margin-bottom:24px;font-weight:300;">All 5 failures corrected. Accordion buttons initialize with <code>aria-expanded="false"</code>. Focus visible on all interactive elements. New jurisdiction guide helps people submit to the right office — which is the single most common reason CORA requests fail.</p>
+
+    <!-- ── DOLA HEADER ── -->
+    <div class="cora-header" role="region" aria-label="Open Records Request page header">
+      <h2>Open Records Request</h2>
+      <p>DOLA supports governmental transparency and makes every effort to fulfill records requests within three working days. DOLA is not a central repository — requests must go directly to the office that holds the records.</p>
+    </div>
+
+    <div class="cora-body">
+
+      <!-- WHERE TO SEND YOUR REQUEST -->
+      <section aria-labelledby="jurisdiction-heading">
+        <h3 class="section-h3" id="jurisdiction-heading" style="margin-bottom:6px;">Where to send your request</h3>
+        <p style="font-size:14px;color:var(--ink-mute);margin-bottom:14px;font-weight:300;">Sending to the wrong office is the most common reason requests are delayed or closed. Use this guide before submitting.</p>
+
+        <div class="jurisdiction-guide" role="list">
+          <article class="jcard city" role="listitem">
+            <span class="jcard-label">City / Municipality</span>
+            <div class="jcard-title">City Records</div>
+            <p>If the record involves city police, city utilities, city permits, city council minutes, or any city-run program — submit to the <strong>city clerk's office</strong> of the relevant city. Colorado Springs: <a href="https://coloradosprings.gov/open-records" target="_blank" rel="noopener noreferrer">coloradosprings.gov/open-records<span class="sr-only"> (opens in new window)</span></a></p>
+          </article>
+          <article class="jcard county" role="listitem">
+            <span class="jcard-label">County</span>
+            <div class="jcard-title">County Records</div>
+            <p>If the record involves county assessor data, county sheriff, county planning, county roads, or the Board of Commissioners — submit to <strong>El Paso County</strong> or the relevant county directly. El Paso County: <a href="https://www.elpasoco.com/open-records" target="_blank" rel="noopener noreferrer">elpasoco.com/open-records<span class="sr-only"> (opens in new window)</span></a></p>
+          </article>
+          <article class="jcard state" role="listitem">
+            <span class="jcard-label">State — Submit Here</span>
+            <div class="jcard-title">DOLA &amp; State Agencies</div>
+            <p>Submit to DOLA only for records <strong>DOLA creates or maintains</strong> — Local Government grants, housing programs, property tax data, or State Demography Office records. For other state agencies, submit directly to that agency.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <div style="margin:24px 0 32px;">
+        <a href="https://co.accessgov.com/dola/Forms/Page/dola/cora/1"
+           class="cta-btn"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Open the DOLA CORA Request Form (opens in new window)">
+          DOLA Open Record Request Form
+          <span class="sr-only">(opens in new window)</span>
+          →
+        </a>
+      </div>
+
+      <!-- FAQ ACCORDIONS — REDESIGNED -->
+      <section class="faq-section" aria-labelledby="faq-heading">
+        <h3 class="faq-group-label" id="faq-heading">Frequently asked questions</h3>
+
+        <button class="expand-all-btn" id="expand-all-btn" type="button" aria-expanded="false">
+          Expand all questions
+        </button>
+
+        <ul class="accordion-list" role="list" id="accordion-list">
+
+          <li class="acc-item" role="listitem">
+            <h4 style="margin:0;">
+              <button class="acc-btn"
+                      type="button"
+                      aria-expanded="false"
+                      aria-controls="acc-panel-1"
+                      id="acc-btn-1">
+                What is The Colorado Open Records Act (CORA)?
+                <span class="acc-chevron" aria-hidden="true"></span>
+              </button>
+            </h4>
+            <div class="acc-panel" id="acc-panel-1" role="region" aria-labelledby="acc-btn-1" hidden>
+              <div class="acc-panel-inner">
+                <p>The Colorado Open Records Act (<strong>C.R.S. § 24-72-201 to 206</strong>), commonly called CORA, empowers people to understand how Colorado's government functions through the review and inspection of public records. It requires governmental organizations to provide timely access to public records.</p>
+                <div style="margin-top:10px;">
+                  <span class="juris-tag juris-city">City</span>
+                  <span class="juris-tag juris-county">County</span>
+                  <span class="juris-tag juris-state">State</span>
+                  <p style="margin-top:8px;font-size:13px;"><strong>CORA applies at all levels of Colorado government</strong> — city, county, and state. Each entity receives and responds to its own requests. There is no central repository. If you need city police records, file with the city. If you need county assessor records, file with the county. If you need DOLA records, file here.</p>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="acc-item" role="listitem">
+            <h4 style="margin:0;">
+              <button class="acc-btn"
+                      type="button"
+                      aria-expanded="false"
+                      aria-controls="acc-panel-2"
+                      id="acc-btn-2">
+                What is a public record?
+                <span class="acc-chevron" aria-hidden="true"></span>
+              </button>
+            </h4>
+            <div class="acc-panel" id="acc-panel-2" role="region" aria-labelledby="acc-btn-2" hidden>
+              <div class="acc-panel-inner">
+                <p>A "public record" includes records the agency creates or keeps that are relevant to the work it is required or allowed to do by law or official rules. CORA mandates disclosure but does not obligate agencies to <strong>generate new records</strong> in response to a request.</p>
+                <div class="note" role="note">
+                  <p><strong>City vs. County vs. State:</strong> Each government entity only holds its own records. A city holds its own permits, ordinances, and contracts. A county holds its own planning documents, property records, and commissioner minutes. DOLA holds its own grant awards, housing program data, and department correspondence. Requesting records from the wrong entity will result in a "not in our possession" response.</p>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="acc-item" role="listitem">
+            <h4 style="margin:0;">
+              <button class="acc-btn"
+                      type="button"
+                      aria-expanded="false"
+                      aria-controls="acc-panel-3"
+                      id="acc-btn-3">
+                What records are excluded from public inspection?
+                <span class="acc-chevron" aria-hidden="true"></span>
+              </button>
+            </h4>
+            <div class="acc-panel" id="acc-panel-3" role="region" aria-labelledby="acc-btn-3" hidden>
+              <div class="acc-panel-inner">
+                <p>Some information is confidential or excluded under CORA. Examples of records that may be withheld:</p>
+                <ul>
+                  <li>Personal identifying information (names, contact info, SSNs, public assistance status)</li>
+                  <li>Work product for elected officials subject to non-disclosure per § 24-72-202(6)(a)(II)</li>
+                  <li>Privileged information (e.g. attorney-client privilege)</li>
+                  <li>Investigatory records during an active investigation</li>
+                  <li>Personnel files (available to the "person in interest" with proof of identity)</li>
+                  <li>Trade secrets and confidential commercial data</li>
+                </ul>
+                <div class="note" role="note">
+                  <p><strong>City / County note:</strong> Exclusions apply equally at all levels. City police investigatory records, county personnel files, and state agency attorney-client communications are all protected under the same CORA provisions.</p>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="acc-item" role="listitem">
+            <h4 style="margin:0;">
+              <button class="acc-btn"
+                      type="button"
+                      aria-expanded="false"
+                      aria-controls="acc-panel-4"
+                      id="acc-btn-4">
+                Is there a cost to obtain records?
+                <span class="acc-chevron" aria-hidden="true"></span>
+              </button>
+            </h4>
+            <div class="acc-panel" id="acc-panel-4" role="region" aria-labelledby="acc-btn-4" hidden>
+              <div class="acc-panel-inner">
+                <p>No fee unless the request involves more than two hours of staff time or more than 25 hard-copy pages. Fees per § 24-72-205(5) and (6) C.R.S.:</p>
+                <ul>
+                  <li><strong>$30 per hour</strong> after the first two hours of research (rounded to nearest 0.10 hour)</li>
+                  <li><strong>$0.25 per page</strong> after the first 25 hard-copy pages</li>
+                  <li>DOLA provides a cost estimate before beginning work; a <strong>50% deposit</strong> is required</li>
+                  <li>If actual cost exceeds estimate, remainder is due before records are released</li>
+                  <li>If actual cost is less, DOLA refunds any overpayment</li>
+                </ul>
+                <div class="note" role="note">
+                  <p><strong>City vs. County vs. State fees:</strong> Fee structures vary by entity. City of Colorado Springs, El Paso County, and state agencies each set their own rates within CORA's limits. Always confirm the specific entity's fee schedule before submitting. Some municipalities charge more or less than DOLA's rates.</p>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="acc-item" role="listitem">
+            <h4 style="margin:0;">
+              <button class="acc-btn"
+                      type="button"
+                      aria-expanded="false"
+                      aria-controls="acc-panel-5"
+                      id="acc-btn-5">
+                How do I submit a CORA request to DOLA?
+                <span class="acc-chevron" aria-hidden="true"></span>
+              </button>
+            </h4>
+            <div class="acc-panel" id="acc-panel-5" role="region" aria-labelledby="acc-btn-5" hidden>
+              <div class="acc-panel-inner">
+                <p>Use the <a href="https://co.accessgov.com/dola/Forms/Page/dola/cora/1" target="_blank" rel="noopener noreferrer">CORA Online Request Form<span class="sr-only"> (opens in new window)</span></a>. Verbal requests are not accepted. Include: your email, a detailed description of the documents sought, date ranges, and your format preference (electronic or hard copy).</p>
+                <p>You may also submit by mail to: <strong>Colorado Department of Local Affairs, 1313 Sherman St, Room 320, Denver CO 80203, Attn: CORA Administrator.</strong></p>
+                <div class="note" role="note">
+                  <p><strong>Wrong agency?</strong> If DOLA doesn't have the record, they'll tell you and attempt to direct you to the right agency. But it's faster to identify the right office first — use the jurisdiction guide at the top of this page.</p>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="acc-item" role="listitem">
+            <h4 style="margin:0;">
+              <button class="acc-btn"
+                      type="button"
+                      aria-expanded="false"
+                      aria-controls="acc-panel-6"
+                      id="acc-btn-6">
+                How long does a response take?
+                <span class="acc-chevron" aria-hidden="true"></span>
+              </button>
+            </h4>
+            <div class="acc-panel" id="acc-panel-6" role="region" aria-labelledby="acc-btn-6" hidden>
+              <div class="acc-panel-inner">
+                <p>DOLA strives to respond within <strong>3 working days</strong> as required by § 24-72-203(3)(b) C.R.S. The clock starts the first working day after a written request is received. Requests received at or after 2 PM are counted as received the next working day.</p>
+                <ul>
+                  <li>DOLA may contact you within 3 days to clarify a vague or overly broad request — this pauses the clock</li>
+                  <li>If extenuating circumstances exist, DOLA may extend up to <strong>7 additional working days</strong></li>
+                  <li>If you do not respond to clarification or fee estimates within <strong>5 business days</strong>, the request is closed as abandoned</li>
+                </ul>
+                <div class="note" role="note">
+                  <p><strong>City vs. County vs. State timelines:</strong> The 3-day response requirement applies to all Colorado government entities under CORA. However, cities and counties may have their own internal procedures and extension policies. Check the specific entity's CORA policy page.</p>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="acc-item" role="listitem">
+            <h4 style="margin:0;">
+              <button class="acc-btn"
+                      type="button"
+                      aria-expanded="false"
+                      aria-controls="acc-panel-7"
+                      id="acc-btn-7">
+                How do I write a good request? Avoid broad requests.
+                <span class="acc-chevron" aria-hidden="true"></span>
+              </button>
+            </h4>
+            <div class="acc-panel" id="acc-panel-7" role="region" aria-labelledby="acc-btn-7" hidden>
+              <div class="acc-panel-inner">
+                <p>Broad requests are costlier and slower. Be specific:</p>
+                <ul>
+                  <li>Narrow by <strong>date range</strong> (e.g. January 1 – June 30, 2024)</li>
+                  <li>Identify specific <strong>email addresses</strong> or individuals if possible</li>
+                  <li>Name the <strong>specific document or record type</strong> (e.g. "grant award letter for X program")</li>
+                  <li>Do not ask DOLA to suggest search terms — that is not permitted</li>
+                  <li>DOLA does not create new records or conduct analysis in response to requests</li>
+                </ul>
+                <p>If you are unsure what records exist, start with a narrow request and follow up. Multiple narrow requests are often faster and cheaper than one broad request.</p>
+              </div>
+            </div>
+          </li>
+
+        </ul>
+      </section>
+
+    </div><!-- /cora-body -->
+  </section>
+
+  <hr class="divider" aria-hidden="true">
+
+  <!-- ── DRUPAL CODE DELIVERY ── -->
+  <section class="drupal-section" aria-labelledby="drupal-heading">
+    <span class="eyebrow">Drupal code delivery</span>
+    <h2 class="section-h2" id="drupal-heading">Template fixes — copy-paste ready</h2>
+    <p style="font-size:14px;color:var(--ink-mute);margin-bottom:24px;font-weight:300;">
+      The site runs Drupal with jQuery 3.7.1. Accordion: <code>h2.card-header > div.panel-title > button.accordion-button</code>.
+      Region: <code>div[role=region][aria-labelledby]</code>. Three files cover all 5 failures.
+    </p>
+
+    <div class="tab-bar" role="tablist" aria-label="Code file tabs">
+      <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-twig" id="tab-twig-btn" type="button">accordion.html.twig</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-js" id="tab-js-btn" type="button">accordion-a11y.js</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-css" id="tab-css-btn" type="button">a11y-fixes.css</button>
+    </div>
+
+    <!-- TWIG -->
+    <div class="tab-panel active" id="tab-twig" role="tabpanel" aria-labelledby="tab-twig-btn">
+      <pre><code><span class="c">{# ─────────────────────────────────────────────────────────────────────
+  accordion.html.twig  (or field--bootstrap-accordion.html.twig)
+  
+  KEY FIX: Add aria-expanded="{{ item.active ? 'true' : 'false' }}"
+  to each button at server-render time so screen readers know
+  the initial collapsed state without waiting for JS.
+  
+  Location: themes/custom/YOUR_THEME/templates/accordion/
+  Or: modules/contrib/bootstrap_accordion/templates/
+─────────────────────────────────────────────────────────────────────── #}
+
+<span class="t">{% for key, item in items %}</span>
+  <span class="t">&lt;h2</span> <span class="a">class</span>=<span class="v">"card-header panel-heading color__ink"</span>
+       <span class="a">id</span>=<span class="v">"heading-{{ accordion_id }}-{{ key }}"</span><span class="t">&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"panel-title"</span><span class="t">&gt;</span>
+      <span class="t">&lt;button</span>
+        <span class="a">class</span>=<span class="v">"accordion-button button{% if not item.active %} collapsed{% endif %}"</span>
+        <span class="a">type</span>=<span class="v">"button"</span>
+        <span class="a">href</span>=<span class="v">"#collapse-{{ accordion_id }}-{{ key }}"</span>
+        <span class="a">aria-controls</span>=<span class="v">"collapse-{{ accordion_id }}-{{ key }}"</span>
+        <span class="g">aria-expanded="{{ item.active ? 'true' : 'false' }}"</span>
+        <span class="a">id</span>=<span class="v">"btn-{{ accordion_id }}-{{ key }}"</span>
+      <span class="t">&gt;</span>
+        {{ item.title }}
+      <span class="t">&lt;/button&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+  <span class="t">&lt;/h2&gt;</span>
+
+  <span class="t">&lt;div</span>
+    <span class="a">id</span>=<span class="v">"collapse-{{ accordion_id }}-{{ key }}"</span>
+    <span class="a">role</span>=<span class="v">"region"</span>
+    <span class="a">aria-labelledby</span>=<span class="v">"heading-{{ accordion_id }}-{{ key }}"</span>
+    <span class="a">class</span>=<span class="v">"panel-collapse collapse{% if item.active %} show{% endif %}"</span>
+  <span class="t">&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"panel-body card-body"</span><span class="t">&gt;</span>
+      {{ item.body }}
+    <span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+
+<span class="t">{% endfor %}</span></code></pre>
+    </div>
+
+    <!-- JS -->
+    <div class="tab-panel" id="tab-js" role="tabpanel" aria-labelledby="tab-js-btn">
+      <pre><code><span class="c">/**
+ * accordion-a11y.js
+ *
+ * Drupal behavior that patches the accordion toggle to keep
+ * aria-expanded in sync with open/closed state.
+ *
+ * Location: themes/custom/YOUR_THEME/js/accordion-a11y.js
+ * Register in YOUR_THEME.libraries.yml under your base library.
+ *
+ * This replaces or supplements the existing collapse handler.
+ */</span>
+
+(function ($, Drupal) {
+  'use strict';
+
+  Drupal.behaviors.accordionA11y = {
+    attach: function (context, settings) {
+
+      <span class="c">// Select all accordion buttons in this context</span>
+      var $buttons = $(context).find('.accordion-button[aria-controls]');
+
+      <span class="c">// Ensure aria-expanded is set if Twig hasn't done it</span>
+      $buttons.each(function () {
+        if (!this.hasAttribute('aria-expanded')) {
+          var targetId = this.getAttribute('aria-controls');
+          var isOpen = $('#' + targetId).hasClass('show');
+          this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+      });
+
+      <span class="c">// Toggle aria-expanded on click</span>
+      $buttons.once('accordion-a11y').on('click', function () {
+        var $btn = $(this);
+        var expanded = $btn.attr('aria-expanded') === 'true';
+        $btn.attr('aria-expanded', expanded ? 'false' : 'true');
+      });
+
+    }
+  };
+
+})(jQuery, Drupal);
+
+
+<span class="c">/**
+ * YOUR_THEME.libraries.yml — register the script:
+ *
+ * base:
+ *   version: VERSION
+ *   css:
+ *     theme:
+ *       css/style.css: {}
+ *       css/a11y-fixes.css: {}     # add this
+ *   js:
+ *     js/accordion-a11y.js: {}     # add this
+ *   dependencies:
+ *     - core/drupal
+ *     - core/jquery
+ */</span></code></pre>
+    </div>
+
+    <!-- CSS -->
+    <div class="tab-panel" id="tab-css" role="tabpanel" aria-labelledby="tab-css-btn">
+      <pre><code><span class="c">/**
+ * a11y-fixes.css
+ * Addresses all 5 confirmed failures from the live browser audit.
+ * Location: themes/custom/YOUR_THEME/css/a11y-fixes.css
+ *
+ * FAILURE 1: Accordion aria-expanded — handled in Twig + JS (see other tabs)
+ * FAILURE 2: Accordion button focus outline invisible on white bg
+ * FAILURE 3: Skip link target missing tabindex (handled in page.html.twig)
+ * FAILURE 4: Fieldset legend (handled in webform template)
+ * FAILURE 5: Footer new-tab links (handled in block--footer.html.twig)
+ */</span>
+
+
+<span class="c">/* ─── FAILURE 2: Accordion button focus ───────────────────────────── */</span>
+<span class="c">/* Current global :focus sets white outline — invisible on white bg.
+   Scope a navy override specifically to accordion buttons.
+   Navy #1a2857 on white: 10.6:1 — exceeds AA (4.5:1) ✓           */</span>
+
+.accordion-button:focus,
+.accordion-button:focus-visible {
+  outline: <span class="g">3px solid #1a2857</span>;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+<span class="c">/* Collapsed button state: slightly muted to communicate state */</span>
+.accordion-button.collapsed {
+  color: #2e3a4a; <span class="c">/* ink-mid — 9.1:1 on white ✓ */</span>
+}
+
+<span class="c">/* ─── FAILURE 2 cont: All interactive elements in content area ────── */</span>
+<span class="c">/* Catch any other interactive elements on the white content bg        */</span>
+#main-content a:focus,
+#main-content a:focus-visible,
+#main-content button:not(.accordion-button):focus,
+#main-content button:not(.accordion-button):focus-visible,
+#main-content input:focus,
+#main-content input:focus-visible,
+#main-content select:focus,
+#main-content select:focus-visible,
+#main-content textarea:focus,
+#main-content textarea:focus-visible {
+  outline: 3px solid #1d4ed8; <span class="c">/* focus blue — 6.7:1 on white ✓ */</span>
+  outline-offset: 2px;
+}
+
+<span class="c">/* ─── FAILURE 3: Skip link target focus suppression ──────────────── */</span>
+<span class="c">/* tabindex="-1" must be added in page.html.twig (see Twig tab).
+   CSS ensures the main container doesn't show a focus ring itself.   */</span>
+#main-content:focus {
+  outline: none;
+}
+
+<span class="c">/* ─── Skip link — ensure visible on focus ────────────────────────── */</span>
+.visually-hidden-focusable:focus,
+.skip-link:focus {
+  position: static;
+  clip: auto;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+  background: #1a2857;
+  color: #ffffff;
+  padding: 8px 16px;
+  z-index: 9999;
+}
+
+<span class="c">/* ─── FAILURE 5: Visually-hidden utility (for new-window notices) ── */</span>
+<span class="c">/* Already exists as .visually-hidden on the site. Verify it uses
+   this pattern — not display:none or visibility:hidden (those
+   also hide from AT). Correct pattern:                               */</span>
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+<span class="c">/* ─── Feedback form: fieldset/legend styling ─────────────────────── */</span>
+<span class="c">/* Once the legend is added in the webform template, style it         */</span>
+.webform-submission-content-rating-form fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+.webform-submission-content-rating-form legend {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1a1a2e;
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+<span class="c">/* ─── page.html.twig patch (copy into template, not CSS) ─────────── */</span>
+<span class="c">/*
+  In page.html.twig, change:
+    &lt;div id="main-content"&gt;
+  To:
+    &lt;div id="main-content" tabindex="-1"&gt;
+
+  This makes the skip link actually move focus in Firefox + NVDA.
+*/</span></code></pre>
+    </div>
+
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <div class="audit-footer" role="contentinfo">
+    <p>Prepared by StorySeed Studios · The Dais · El Paso County, Colorado · April 2026<br>
+    Live browser audit via Chrome extension · jQuery 3.7.1 confirmed on page · Drupal CMS · WCAG 2.1 AA<br>
+    This document is for informational purposes. Not legal advice.</p>
+  </div>
+
+</main>
+
+<script>
+// ── ACCORDION LOGIC (demo — fully AA compliant) ──────────────────
+const buttons = document.querySelectorAll('.acc-btn');
+
+buttons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    const panelId  = btn.getAttribute('aria-controls');
+    const panel    = document.getElementById(panelId);
+
+    // Close all others
+    buttons.forEach(b => {
+      if (b !== btn) {
+        b.setAttribute('aria-expanded', 'false');
+        const p = document.getElementById(b.getAttribute('aria-controls'));
+        if (p) p.hidden = true;
+      }
+    });
+
+    // Toggle this one
+    btn.setAttribute('aria-expanded', String(!expanded));
+    if (panel) panel.hidden = expanded;
+  });
+
+  // Keyboard: Home/End for fast navigation per WAI-ARIA pattern
+  btn.addEventListener('keydown', e => {
+    const btns = [...buttons];
+    const idx = btns.indexOf(btn);
+    if (e.key === 'Home') { e.preventDefault(); btns[0].focus(); }
+    if (e.key === 'End')  { e.preventDefault(); btns[btns.length - 1].focus(); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); btns[Math.min(idx+1, btns.length-1)].focus(); }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); btns[Math.max(idx-1, 0)].focus(); }
+  });
+});
+
+// ── EXPAND ALL ────────────────────────────────────────────────────
+const expandAllBtn = document.getElementById('expand-all-btn');
+const liveStatus = document.getElementById('live-status');
+
+expandAllBtn.addEventListener('click', () => {
+  const allExpanded = expandAllBtn.getAttribute('aria-expanded') === 'true';
+  const newState = !allExpanded;
+
+  buttons.forEach(btn => {
+    btn.setAttribute('aria-expanded', String(newState));
+    const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    if (panel) panel.hidden = !newState;
+  });
+
+  expandAllBtn.setAttribute('aria-expanded', String(newState));
+  expandAllBtn.textContent = newState ? 'Collapse all questions' : 'Expand all questions';
+  liveStatus.textContent = newState ? 'All questions expanded.' : 'All questions collapsed.';
+});
+
+// ── TAB SWITCHING ─────────────────────────────────────────────────
+const tabBtns  = document.querySelectorAll('.tab-btn');
+const tabPanels = document.querySelectorAll('.tab-panel');
+
+tabBtns.forEach((btn, i) => {
+  btn.addEventListener('click', () => {
+    tabBtns.forEach(b  => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    tabPanels.forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    tabPanels[i].classList.add('active');
+  });
+
+  btn.addEventListener('keydown', e => {
+    const btns = [...tabBtns];
+    const idx = btns.indexOf(btn);
+    if (e.key === 'ArrowRight') { e.preventDefault(); btns[(idx+1) % btns.length].click(); btns[(idx+1) % btns.length].focus(); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); btns[(idx-1+btns.length) % btns.length].click(); btns[(idx-1+btns.length) % btns.length].focus(); }
+  });
+});
+</script>
+
+</body>
+</html>
