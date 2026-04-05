@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORA Form — Implementation Guide · City of Colorado Springs</title>
+<style>
+:root{
+  --navy:#00205c;--blue:#0049b1;--green:#065f46;--green-bg:#ecfdf5;
+  --amber:#78350f;--amber-bg:#fffbeb;--red:#7f1d1d;--red-bg:#fef2f2;
+  --purple:#4c1d95;--purple-bg:#f5f3ff;
+  --off:#f5f7fa;--rule:#d0d7e0;--ink:#1a1f2e;--muted:#4a5568;
+  --mono:'Courier New',Courier,monospace;--font:system-ui,-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--off);color:var(--ink);font-family:var(--font);line-height:1.7;}
+
+.skip-link{position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:3px;font-size:13px;text-decoration:none;}
+.skip-link:focus{left:8px;}
+
+header{background:var(--navy);border-bottom:3px solid #c8a84b;padding:24px;}
+header h1{color:#fff;font-size:clamp(18px,3vw,26px);max-width:900px;margin:0 auto;}
+header p{color:rgba(255,255,255,.6);font-size:13px;max-width:900px;margin:4px auto 0;}
+
+.layout{display:grid;grid-template-columns:220px 1fr;gap:0;max-width:1100px;margin:0 auto;padding:32px 20px 80px;}
+
+/* SIDEBAR NAV */
+nav.sidebar{position:sticky;top:24px;align-self:start;padding-right:24px;}
+nav.sidebar h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;}
+nav.sidebar a{display:block;font-size:13px;color:var(--blue);text-decoration:none;padding:4px 0;border-left:2px solid var(--rule);padding-left:10px;margin-bottom:2px;transition:border-color .15s;}
+nav.sidebar a:hover,nav.sidebar a:focus{border-color:var(--blue);color:var(--navy);}
+.nav-section{margin-bottom:16px;}
+
+/* MAIN */
+main{min-width:0;}
+section{margin-bottom:48px;}
+h2.section-title{font-size:22px;color:var(--navy);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--rule);}
+h3{font-size:17px;color:var(--navy);margin:24px 0 8px;}
+h4{font-size:15px;color:var(--ink);margin:16px 0 6px;font-weight:700;}
+p{margin-bottom:12px;font-size:15px;line-height:1.75;}
+ul,ol{padding-left:20px;margin-bottom:12px;}
+li{font-size:15px;margin-bottom:4px;}
+a{color:var(--blue);}
+a:focus{outline:2px solid var(--blue);outline-offset:2px;border-radius:1px;}
+
+/* CALLOUT BOXES */
+.callout{padding:14px 18px;border-radius:0 4px 4px 0;margin:16px 0;font-size:14px;line-height:1.7;}
+.callout-green{background:var(--green-bg);border-left:4px solid #059669;color:var(--green);}
+.callout-amber{background:var(--amber-bg);border-left:4px solid #d97706;color:var(--amber);}
+.callout-blue{background:#eff6ff;border-left:4px solid var(--blue);color:var(--navy);}
+.callout-purple{background:var(--purple-bg);border-left:4px solid #7c3aed;color:var(--purple);}
+.callout strong{font-weight:700;}
+
+/* CODE BLOCKS */
+pre{background:#1e293b;color:#e2e8f0;padding:20px;border-radius:4px;overflow-x:auto;font-size:13px;line-height:1.6;margin:12px 0;}
+code{font-family:var(--mono);font-size:.9em;background:#e2e8f0;color:#1e293b;padding:1px 5px;border-radius:2px;}
+pre code{background:none;color:inherit;padding:0;}
+
+/* STEP LIST */
+.step-list{counter-reset:steps;list-style:none;padding:0;}
+.step-list li{counter-increment:steps;display:grid;grid-template-columns:40px 1fr;gap:12px;margin-bottom:20px;align-items:start;}
+.step-list li::before{content:counter(steps);display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--navy);color:#fff;border-radius:50%;font-weight:700;font-size:14px;flex-shrink:0;margin-top:2px;}
+.step-content h4{margin-top:0;}
+
+/* ENV TABLE */
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;}
+thead th{background:var(--navy);color:#fff;text-align:left;padding:10px 12px;font-weight:600;}
+tbody tr{border-bottom:1px solid var(--rule);}
+tbody tr:nth-child(even){background:#fafbfd;}
+td{padding:8px 12px;vertical-align:top;}
+td:first-child{font-family:var(--mono);font-size:13px;white-space:nowrap;color:var(--purple);}
+td:last-child{color:var(--muted);}
+
+/* FILE TREE */
+.file-tree{background:#fff;border:1px solid var(--rule);border-radius:4px;padding:16px 20px;font-family:var(--mono);font-size:13px;line-height:1.8;color:var(--ink);}
+.file-tree .dir{color:var(--navy);font-weight:700;}
+.file-tree .file{color:var(--muted);}
+.file-tree .comment{color:#059669;}
+
+/* BADGE */
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:.05em;}
+.badge-green{background:var(--green-bg);color:var(--green);}
+.badge-amber{background:var(--amber-bg);color:var(--amber);}
+.badge-blue{background:#eff6ff;color:var(--blue);}
+
+/* COST TABLE */
+.cost-table td{padding:10px 12px;}
+.cost-table td:first-child{font-family:inherit;font-weight:600;color:var(--ink);}
+.cost-zero{color:var(--green);font-weight:700;}
+
+footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:20px;font-size:13px;}
+footer a{color:#c8a84b;}
+
+@media(max-width:700px){
+  .layout{grid-template-columns:1fr;}
+  nav.sidebar{display:none;}
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header>
+  <h1>CORA Form — Implementation Guide</h1>
+  <p>City of Colorado Springs · IT Department Reference · Built by StorySeed / The Dais · April 2026</p>
+</header>
+
+<div class="layout">
+
+  <nav class="sidebar" aria-label="Page navigation">
+    <div class="nav-section">
+      <h2>Overview</h2>
+      <a href="#what-this-is">What this is</a>
+      <a href="#tech-stack">Tech stack</a>
+      <a href="#file-contents">File contents</a>
+    </div>
+    <div class="nav-section">
+      <h2>Form</h2>
+      <a href="#form-modes">Submission modes</a>
+      <a href="#form-config">Configuration</a>
+      <a href="#form-deploy">Deploying the form</a>
+    </div>
+    <div class="nav-section">
+      <h2>Azure Function</h2>
+      <a href="#azure-prereqs">Prerequisites</a>
+      <a href="#azure-mailbox">Set up mailbox</a>
+      <a href="#azure-deploy">Deploy to Azure</a>
+      <a href="#azure-config">Environment variables</a>
+      <a href="#azure-test">Testing</a>
+      <a href="#azure-connect">Connect to form</a>
+    </div>
+    <div class="nav-section">
+      <h2>Drupal</h2>
+      <a href="#drupal">Native Drupal option</a>
+    </div>
+    <div class="nav-section">
+      <h2>Reference</h2>
+      <a href="#costs">Cost estimate</a>
+      <a href="#routing">Department routing</a>
+      <a href="#cora-law">CORA law reference</a>
+      <a href="#contacts">Contacts</a>
+    </div>
+  </nav>
+
+  <main id="main" tabindex="-1">
+
+    <!-- WHAT THIS IS -->
+    <section id="what-this-is">
+      <h2 class="section-title">What this is</h2>
+
+      <p>This package is a replacement for the inaccessible GovOutreach third-party CORA
+      submission portals currently linked from
+      <a href="https://coloradosprings.gov/City-Clerk/CORA">coloradosprings.gov/City-Clerk/CORA</a>.
+      It was built by two residents and is offered to the City at no charge.</p>
+
+      <div class="callout callout-green">
+        <strong>Why this matters:</strong> The current GovOutreach portals fail WCAG 2.1 AA
+        accessibility standards — they render empty content to screen readers and other assistive
+        technology. The DOJ Final Rule compliance deadline for Colorado Springs (50,000+ population)
+        was April 24, 2026. This package provides a compliant replacement that the City can deploy
+        on existing infrastructure with no new vendor contracts.
+      </div>
+
+      <p>The package consists of three deliverables:</p>
+      <ul>
+        <li><strong>cos-cora-form-v2.html</strong> — the accessible public-facing form</li>
+        <li><strong>cos-cora-azure-function.zip</strong> — the Azure Function backend that processes submissions</li>
+        <li><strong>cos-cora-implementation-guide.html</strong> — this document</li>
+      </ul>
+    </section>
+
+    <!-- TECH STACK -->
+    <section id="tech-stack">
+      <h2 class="section-title">Tech stack confirmed</h2>
+
+      <p>coloradosprings.gov runs <strong>Drupal</strong> — confirmed by the
+      <code>drupalSettings</code> JavaScript object present on every page. Specifically it
+      runs the <strong>Tyler Colorado CMS platform</strong>, a Drupal multi-site distribution
+      managed by Tyler Technologies.</p>
+
+      <p><strong>It is not .NET.</strong> No ASP.NET ViewState was detected. No .aspx links
+      were found on the domain.</p>
+
+      <p>This is good news. Drupal has a mature, accessible, free form builder module
+      (Webform) that can replace GovOutreach entirely without custom code. See the
+      <a href="#drupal">Native Drupal option</a> section for that path.</p>
+
+      <p>The Azure Function path described in this guide works alongside Drupal — the form
+      can be hosted as a static page or embedded in Drupal, with the Function handling
+      backend processing independently of the CMS.</p>
+    </section>
+
+    <!-- FILE CONTENTS -->
+    <section id="file-contents">
+      <h2 class="section-title">File contents</h2>
+
+      <div class="file-tree" role="img" aria-label="File directory structure">
+        <div><span class="dir">cos-cora-azure-function/</span></div>
+        <div>&nbsp;&nbsp;<span class="dir">CoraSubmit/</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">index.js</span> <span class="comment">← main function — all logic here</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">function.json</span> <span class="comment">← Azure HTTP trigger bindings</span></div>
+        <div>&nbsp;&nbsp;<span class="dir">test/</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">test.js</span> <span class="comment">← local test — run before deploying</span></div>
+        <div>&nbsp;&nbsp;<span class="file">host.json</span> <span class="comment">← Azure Functions host config</span></div>
+        <div>&nbsp;&nbsp;<span class="file">package.json</span> <span class="comment">← dependencies: nodemailer, uuid</span></div>
+        <div>&nbsp;&nbsp;<span class="file">local.settings.json.example</span> <span class="comment">← config template (copy, never commit)</span></div>
+        <div>&nbsp;&nbsp;<span class="file">.gitignore</span> <span class="comment">← prevents credential commits</span></div>
+        <div>&nbsp;&nbsp;<span class="file">README.md</span> <span class="comment">← deployment guide (also in this HTML)</span></div>
+        <br>
+        <div><span class="file">cos-cora-form-v2.html</span> <span class="comment">← the accessible public form</span></div>
+        <div><span class="file">cos-cora-implementation-guide.html</span> <span class="comment">← this document</span></div>
+      </div>
+    </section>
+
+    <!-- FORM MODES -->
+    <section id="form-modes">
+      <h2 class="section-title">Form submission modes</h2>
+
+      <p>The form automatically operates in one of two modes based on the
+      <code>CONFIG.AZURE_FUNCTION_URL</code> setting at the top of the HTML file:</p>
+
+      <h3><span class="badge badge-green">Mode 1</span> Azure Function (recommended)</h3>
+      <p>When <code>AZURE_FUNCTION_URL</code> is set to a real endpoint, the form
+      POSTs to the Azure Function. The function generates a reference number, sends
+      a confirmation email to the resident, and routes the request to the correct
+      department. A green banner shows at the top of the form confirming online
+      submission is active.</p>
+
+      <h3><span class="badge badge-blue">Mode 2</span> Mailto fallback</h3>
+      <p>When <code>AZURE_FUNCTION_URL</code> is empty (default until Azure is deployed),
+      the form collects the resident's information and pre-fills a mailto: link with
+      everything ready to send. The resident's email client opens with the full request
+      pre-populated. A purple banner explains this to the resident.</p>
+
+      <div class="callout callout-amber">
+        <strong>Automatic fallback:</strong> Even in Azure mode, if the Azure Function
+        returns an error or is unreachable, the form automatically falls back to mailto
+        so the resident is never stranded. No submission is ever lost.
+      </div>
+    </section>
+
+    <!-- FORM CONFIG -->
+    <section id="form-config">
+      <h2 class="section-title">Configuring the form</h2>
+
+      <p>Open <code>cos-cora-form-v2.html</code> in a text editor. Find the
+      <code>&lt;script&gt;</code> block near the top (inside the <code>&lt;head&gt;</code>):</p>
+
+<pre><code>const CONFIG = {
+  AZURE_FUNCTION_URL: '',
+  // When deployed:
+  // 'https://func-cora-cos-prod.azurewebsites.net/api/cora-submit?code=YOUR_KEY'
+
+  CORA_EMAIL: 'City.Communications@coloradosprings.gov',
+};</code></pre>
+
+      <p>Two values to set:</p>
+      <ul>
+        <li><strong>AZURE_FUNCTION_URL</strong> — leave empty for mailto mode. After
+        deploying the Azure Function (Step 4 below), paste the full endpoint URL here
+        including the <code>?code=</code> function key.</li>
+        <li><strong>CORA_EMAIL</strong> — the email address that receives mailto fallback
+        submissions. Update this to the actual CORA coordinator email.</li>
+      </ul>
+
+      <p>That is the only configuration required in the HTML file.
+      Everything else is handled by the Azure Function's environment variables.</p>
+    </section>
+
+    <!-- FORM DEPLOY -->
+    <section id="form-deploy">
+      <h2 class="section-title">Deploying the form</h2>
+
+      <p>Three options, from fastest to most integrated:</p>
+
+      <h3>Option A — Static file (fastest, works today)</h3>
+      <p>Upload <code>cos-cora-form-v2.html</code> to the city's web server as a
+      static file. Link to it from the CORA page. No Drupal required.</p>
+
+      <h3>Option B — Drupal basic page</h3>
+      <p>Create a new Basic Page in Drupal. Set the text format to Full HTML.
+      Paste the entire HTML file contents as the page body. Save. The form
+      will render within the Drupal template.</p>
+
+      <h3>Option C — Replace GovOutreach links</h3>
+      <p>On the existing CORA page in Drupal, replace each GovOutreach link with a
+      direct link to the form with a pre-selected department parameter:</p>
+<pre><code>Contracting / Procurement — Submit a Request
+href="/cora-request?dept=procurement"</code></pre>
+      <p>Add a small script to the form page that reads the URL parameter and
+      pre-selects the department dropdown on load:</p>
+<pre><code>const params = new URLSearchParams(window.location.search);
+const dept = params.get('dept');
+if (dept) {
+  const sel = document.getElementById('department');
+  if (sel) sel.value = dept;
+}</code></pre>
+    </section>
+
+    <!-- AZURE PREREQS -->
+    <section id="azure-prereqs">
+      <h2 class="section-title">Azure Function prerequisites</h2>
+      <ul>
+        <li>Azure subscription (the City's existing Azure tenant works)</li>
+        <li>Node.js 18 or higher (for local testing only)</li>
+        <li>Azure Functions Core Tools v4 (for local testing only)</li>
+        <li>A Microsoft 365 mailbox to use as the sending address</li>
+      </ul>
+
+      <p>Install Core Tools for local development:</p>
+<pre><code>npm install -g azure-functions-core-tools@4 --unsafe-perm true</code></pre>
+
+      <p>Unzip the function package:</p>
+<pre><code>unzip cos-cora-azure-function.zip
+cd cos-cora-azure-function
+npm install</code></pre>
+    </section>
+
+    <!-- AZURE MAILBOX -->
+    <section id="azure-mailbox">
+      <h2 class="section-title">Step 1 — Set up the sending mailbox</h2>
+
+      <p>Create a dedicated Microsoft 365 mailbox for the function to send from:</p>
+      <p><code>cora-noreply@coloradosprings.gov</code></p>
+
+      <p>Generate an <strong>App Password</strong> for SMTP authentication:</p>
+      <ol class="step-list">
+        <li>
+          <div class="step-content">
+            <h4>Sign in to the mailbox account</h4>
+            <p>Go to <a href="https://account.microsoft.com">account.microsoft.com</a>
+            and sign in as <code>cora-noreply@coloradosprings.gov</code>.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <h4>Navigate to App Passwords</h4>
+            <p>Security → Advanced security options → App passwords → Create new app password.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <h4>Name it and copy the password</h4>
+            <p>Name: <strong>CORA Azure Function</strong>. Copy the generated password immediately —
+            it will not be shown again. Store it in Azure Key Vault or the Azure Function's
+            Application Settings (never in source code).</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="callout callout-blue">
+        <strong>Why an App Password?</strong> Microsoft 365 accounts with MFA enabled block
+        standard SMTP authentication. App Passwords bypass MFA for service accounts without
+        disabling MFA on the account. This is the recommended Microsoft approach for SMTP
+        relay from automated systems.
+      </div>
+    </section>
+
+    <!-- AZURE DEPLOY -->
+    <section id="azure-deploy">
+      <h2 class="section-title">Step 2 — Deploy to Azure</h2>
+
+      <h3>Option A — Azure CLI (recommended for IT)</h3>
+<pre><code># Login to Azure
+az login
+
+# Create resource group
+az group create \
+  --name rg-cora-prod \
+  --location eastus
+
+# Create storage account (required by Functions)
+az storage account create \
+  --name stcoracosprod \
+  --location eastus \
+  --resource-group rg-cora-prod \
+  --sku Standard_LRS
+
+# Create Function App
+az functionapp create \
+  --resource-group rg-cora-prod \
+  --consumption-plan-location eastus \
+  --runtime node \
+  --runtime-version 18 \
+  --functions-version 4 \
+  --name func-cora-cos-prod \
+  --storage-account stcoracosprod
+
+# Deploy the function code
+cd cos-cora-azure-function
+func azure functionapp publish func-cora-cos-prod</code></pre>
+
+      <h3>Option B — Azure Portal (no CLI)</h3>
+      <ol>
+        <li>portal.azure.com → Create a resource → Function App</li>
+        <li>Runtime: Node.js 18 · Region: East US · Plan: Consumption (Serverless)</li>
+        <li>After creation: Functions → Add → HTTP trigger → Name: CoraSubmit</li>
+        <li>Paste the contents of <code>CoraSubmit/index.js</code> into the code editor</li>
+        <li>Replace <code>function.json</code> with the provided bindings</li>
+      </ol>
+
+      <h3>Option C — GitHub Actions CI/CD (best for ongoing maintenance)</h3>
+      <p>Push the package to a private GitHub repo. In Azure portal:
+      Function App → Deployment Center → GitHub → connect and save.
+      Azure deploys automatically on every push to main.</p>
+    </section>
+
+    <!-- AZURE CONFIG -->
+    <section id="azure-config">
+      <h2 class="section-title">Step 3 — Environment variables</h2>
+
+      <p>In Azure portal: Function App → Configuration → Application settings.
+      Add each variable as a new application setting. Click <strong>Save</strong>
+      after adding all of them.</p>
+
+      <table>
+        <thead>
+          <tr><th>Variable name</th><th>Value</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>SMTP_HOST</td><td>smtp.office365.com</td><td>Microsoft 365 SMTP relay</td></tr>
+          <tr><td>SMTP_PORT</td><td>587</td><td>STARTTLS port</td></tr>
+          <tr><td>SMTP_USER</td><td>cora-noreply@coloradosprings.gov</td><td>The sending mailbox</td></tr>
+          <tr><td>SMTP_PASS</td><td><em>App Password from Step 1</em></td><td>Never in source code</td></tr>
+          <tr><td>ALLOWED_ORIGIN</td><td>https://coloradosprings.gov</td><td>CORS — city domain only</td></tr>
+          <tr><td>EMAIL_COORDINATOR</td><td>City.Communications@coloradosprings.gov</td><td>Receives all CC copies</td></tr>
+          <tr><td>EMAIL_PROCUREMENT</td><td><em>procurement staff email</em></td><td>Update to actual address</td></tr>
+          <tr><td>EMAIL_IT</td><td><em>IT staff email</em></td><td>Update to actual address</td></tr>
+          <tr><td>EMAIL_PLANNING</td><td>PCDHearings@ElPasoCO.com</td><td>Planning dept CORA</td></tr>
+          <tr><td>EMAIL_TRAFFIC</td><td>Traffic-Engineering.SMB@coloradosprings.gov</td><td>Traffic Engineering</td></tr>
+          <tr><td>EMAIL_POLICE</td><td>pio@coloradosprings.gov</td><td>Police Public Information</td></tr>
+          <tr><td>EMAIL_FIRE</td><td><em>fire dept CORA email</em></td><td>Update to actual address</td></tr>
+          <tr><td>EMAIL_UTILITIES</td><td>coracustomerservices@csu.org</td><td>CSU CORA</td></tr>
+          <tr><td>EMAIL_COURT</td><td>MunicipalCourtViolations@coloradosprings.gov</td><td>Municipal Court</td></tr>
+          <tr><td>EMAIL_NEIGHBORHOOD</td><td><em>neighborhood services email</em></td><td>Update to actual address</td></tr>
+          <tr><td>EMAIL_PUBLIC_WORKS</td><td><em>public works email</em></td><td>Update to actual address</td></tr>
+          <tr><td>EMAIL_FINANCE</td><td><em>finance email</em></td><td>Update to actual address</td></tr>
+          <tr><td>EMAIL_CITY_ATTORNEY</td><td><em>city attorney email</em></td><td>Update to actual address</td></tr>
+          <tr><td>EMAIL_MAYOR</td><td><em>mayor's office email</em></td><td>Update to actual address</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-amber">
+        <strong>Security reminder:</strong> Never put these values in
+        <code>local.settings.json</code> and commit that file to source control.
+        The <code>.gitignore</code> file in the package prevents accidental commits.
+        For production, store the SMTP password in Azure Key Vault and reference it
+        as a Key Vault reference in Application Settings.
+      </div>
+    </section>
+
+    <!-- AZURE TEST -->
+    <section id="azure-test">
+      <h2 class="section-title">Step 4 — Test locally before going live</h2>
+
+<pre><code># Copy the example settings and fill in real credentials
+cp local.settings.json.example local.settings.json
+# Edit local.settings.json with real SMTP credentials
+
+# Start the function locally
+func start
+
+# In a second terminal, run the test
+node test/test.js</code></pre>
+
+      <p>A successful test produces:</p>
+      <ul>
+        <li>A confirmation email at the <code>requester-email</code> test address</li>
+        <li>A routing email to the procurement coordinator email</li>
+        <li>A reference number printed in the terminal (format: CORA-YYYYMMDD-XXXXXXXX)</li>
+      </ul>
+
+      <p>Check both email inboxes before proceeding to deployment.</p>
+    </section>
+
+    <!-- CONNECT TO FORM -->
+    <section id="azure-connect">
+      <h2 class="section-title">Step 5 — Connect the form to the function</h2>
+
+      <p>After deploying, get the function URL from Azure portal:</p>
+      <p>Function App → Functions → CoraSubmit → <strong>Get Function URL</strong></p>
+
+      <p>The URL looks like:</p>
+<pre><code>https://func-cora-cos-prod.azurewebsites.net/api/cora-submit?code=ABC123def...</code></pre>
+
+      <p>Open <code>cos-cora-form-v2.html</code> and update the CONFIG block:</p>
+<pre><code>const CONFIG = {
+  AZURE_FUNCTION_URL: 'https://func-cora-cos-prod.azurewebsites.net/api/cora-submit?code=ABC123def...',
+  CORA_EMAIL: 'City.Communications@coloradosprings.gov',
+};</code></pre>
+
+      <p>The form will now show the green "Online submission active" banner and POST
+      directly to the Azure Function on submit.</p>
+    </section>
+
+    <!-- DRUPAL -->
+    <section id="drupal">
+      <h2 class="section-title">Native Drupal option (Webform module)</h2>
+
+      <p>coloradosprings.gov runs the Tyler Colorado Drupal CMS platform.
+      The <strong>Drupal Webform module</strong> provides a native alternative to the
+      Azure Function that lives entirely within the Drupal installation — no external
+      infrastructure required.</p>
+
+      <h3>Check if Webform is already installed</h3>
+      <p>Log in to Drupal admin and navigate to:</p>
+      <p><code>/admin/structure/webform</code></p>
+      <p>If the page loads — Webform is installed. If you get a 404 — request installation
+      from Tyler Colorado.</p>
+
+      <h3>Request installation from Tyler Colorado</h3>
+      <p>Email your Tyler Colorado account contact:</p>
+      <blockquote style="background:#f5f7fa;border-left:3px solid var(--rule);padding:12px 16px;font-style:italic;margin:12px 0;font-size:14px;">
+        "We need the Drupal Webform module installed on coloradosprings.gov.
+        It is available at drupal.org/project/webform and is one of the most-used
+        contributed modules in the Drupal ecosystem. We need it to replace inaccessible
+        third-party form vendors on our CORA page to meet DOJ Final Rule accessibility
+        requirements. Installation: <code>composer require drupal/webform &amp;&amp; drush en webform</code>"
+      </blockquote>
+
+      <h3>Build the form in Drupal Webform</h3>
+      <p>Once installed: Structure → Webforms → Add webform → Name: CORA Records Request</p>
+      <p>Add fields matching the form in this package. The Webform module handles all
+      conditional logic, email routing, confirmation messages, submission logging, and
+      WCAG 2.1 AA accessibility natively.</p>
+
+      <p>Email routing by department is handled through Webform's Handler system:
+      Settings → Emails/Handlers → Add email. One handler per department,
+      with a condition checking the department select field value.</p>
+
+      <div class="callout callout-green">
+        <strong>Webform advantage:</strong> Submissions are stored in Drupal's database,
+        giving city staff a searchable submission log directly in the Drupal admin.
+        No Azure infrastructure required. No SMTP configuration required.
+        Uses the City's existing Drupal mail configuration.
+      </div>
+    </section>
+
+    <!-- COSTS -->
+    <section id="costs">
+      <h2 class="section-title">Cost estimate</h2>
+
+      <table class="cost-table">
+        <thead>
+          <tr><th>Item</th><th>Monthly cost</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Azure Functions (Consumption plan)</td>
+            <td class="cost-zero">$0</td>
+            <td>Free tier: 1,000,000 executions/month. City CORA volume: ~200–500/month.</td>
+          </tr>
+          <tr>
+            <td>Azure Storage (required by Functions)</td>
+            <td class="cost-zero">~$0.02</td>
+            <td>Negligible at this volume.</td>
+          </tr>
+          <tr>
+            <td>Microsoft 365 mailbox (sending)</td>
+            <td class="cost-zero">$0</td>
+            <td>City already pays for M365. One additional mailbox is within existing licensing.</td>
+          </tr>
+          <tr>
+            <td>Drupal Webform module</td>
+            <td class="cost-zero">$0</td>
+            <td>Free open source module.</td>
+          </tr>
+          <tr>
+            <td>GovOutreach vendor (current)</td>
+            <td style="color:var(--red);font-weight:700;">Unknown — CORA request filed</td>
+            <td>This cost is eliminated if GovOutreach is replaced.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ROUTING -->
+    <section id="routing">
+      <h2 class="section-title">Department routing reference</h2>
+
+      <p>The form's department select values and their routing destinations.
+      Update <code>EMAIL_*</code> environment variables in Azure to the correct
+      staff addresses.</p>
+
+      <table>
+        <thead><tr><th>Select value</th><th>Label shown to resident</th><th>Env variable</th></tr></thead>
+        <tbody>
+          <tr><td>procurement</td><td>Contracting / Procurement Services</td><td>EMAIL_PROCUREMENT</td></tr>
+          <tr><td>it</td><td>Information Technology</td><td>EMAIL_IT</td></tr>
+          <tr><td>planning</td><td>Planning Department</td><td>EMAIL_PLANNING</td></tr>
+          <tr><td>traffic</td><td>Traffic and Transportation Engineering</td><td>EMAIL_TRAFFIC</td></tr>
+          <tr><td>police</td><td>Colorado Springs Police Department</td><td>EMAIL_POLICE</td></tr>
+          <tr><td>fire</td><td>Fire Department</td><td>EMAIL_FIRE</td></tr>
+          <tr><td>utilities</td><td>Colorado Springs Utilities</td><td>EMAIL_UTILITIES</td></tr>
+          <tr><td>municipal_court</td><td>Municipal Court</td><td>EMAIL_COURT</td></tr>
+          <tr><td>neighborhood</td><td>Neighborhood Services</td><td>EMAIL_NEIGHBORHOOD</td></tr>
+          <tr><td>public_works</td><td>Public Works</td><td>EMAIL_PUBLIC_WORKS</td></tr>
+          <tr><td>finance</td><td>Finance / Accounts Receivable</td><td>EMAIL_FINANCE</td></tr>
+          <tr><td>city_attorney</td><td>City Attorney</td><td>EMAIL_CITY_ATTORNEY</td></tr>
+          <tr><td>mayor</td><td>Mayor's Office</td><td>EMAIL_MAYOR</td></tr>
+          <tr><td>(empty) or other</td><td>I don't know — please route for me</td><td>EMAIL_COORDINATOR</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- CORA LAW -->
+    <section id="cora-law">
+      <h2 class="section-title">CORA legal reference</h2>
+
+      <table>
+        <thead><tr><th>Statute</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td>C.R.S. § 24-72-201</td><td>Legislative declaration — all public records open for inspection</td></tr>
+          <tr><td>C.R.S. § 24-72-203</td><td>Respond within 3 working days. Extension up to 7 additional days with written notice.</td></tr>
+          <tr><td>C.R.S. § 24-72-204</td><td>Written denial must cite specific statutory exemption.</td></tr>
+          <tr><td>C.R.S. § 24-72-205(5)(a)</td><td>Fees: $30/hour staff time after first 2 free hours. $0.25/page copies.</td></tr>
+          <tr><td>C.R.S. § 24-72-205(6)</td><td>Custodian may waive or reduce fees when in the public interest.</td></tr>
+          <tr><td>Title II ADA</td><td>Public entities must provide accessible digital services. DOJ Final Rule: WCAG 2.1 AA.</td></tr>
+          <tr><td>DOJ Final Rule (2024)</td><td>Colorado Springs (50,000+ pop): compliance required by April 24, 2026.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- CONTACTS -->
+    <section id="contacts">
+      <h2 class="section-title">Key contacts</h2>
+
+      <table>
+        <thead><tr><th>Role</th><th>Contact</th></tr></thead>
+        <tbody>
+          <tr><td>CORA / City Communications</td><td>City.Communications@coloradosprings.gov · <a href="tel:+17193855906">(719) 385-5906</a></td></tr>
+          <tr><td>Procurement Services</td><td>Nicole Spindler · <a href="tel:+17193855265">(719) 385-5265</a></td></tr>
+          <tr><td>Office of Accessibility</td><td>coloradosprings.gov/TitleIIADA</td></tr>
+          <tr><td>Municipal Court</td><td>MunicipalCourtViolations@coloradosprings.gov · <a href="tel:+17193855928">(719) 385-5928</a></td></tr>
+          <tr><td>Accounts Receivable</td><td><a href="tel:+17193852367">(719) 385-2367</a></td></tr>
+          <tr><td>Traffic Engineering</td><td>Traffic-Engineering.SMB@coloradosprings.gov</td></tr>
+          <tr><td>Planning / CORA</td><td>PCDHearings@ElPasoCO.com</td></tr>
+          <tr><td>Colorado FOIC (escalation)</td><td><a href="https://coloradofoic.org">coloradofoic.org</a></td></tr>
+          <tr><td>Tyler Colorado CMS</td><td><a href="https://cms.colorado.gov">cms.colorado.gov</a></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-blue" style="margin-top:24px;">
+        <strong>This package was built by StorySeed / The Dais and offered to the City of
+        Colorado Springs at no charge.</strong> No invoice. No vendor contract.
+        The story of how it was built is at The Dais.
+        One brick. Laid correctly. Why not.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <p>City of Colorado Springs · CORA Implementation Guide · StorySeed / The Dais · April 2026</p>
+  <p style="margin-top:4px;">
+    <a href="https://coloradosprings.gov/City-Clerk/CORA">CORA Page</a> ·
+    <a href="https://coloradosprings.gov/TitleIIADA">Web Accessibility</a> ·
+    <a href="https://coloradofoic.org">Colorado FOIC</a>
+  </p>
+</footer>
+
+</body>
+</html>

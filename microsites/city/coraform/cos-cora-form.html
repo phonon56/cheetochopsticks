@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request a City Record — Colorado Springs CORA</title>
+
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║  CORA RECORDS REQUEST FORM — City of Colorado Springs           ║
+  ║  Built by StorySeed / The Dais · Offered at no charge          ║
+  ║                                                                  ║
+  ║  CONFIGURATION — update these two values before deploying:      ║
+  ║                                                                  ║
+  ║  AZURE_FUNCTION_URL                                              ║
+  ║    Your Azure Function endpoint URL including the ?code= key.   ║
+  ║    Leave as empty string '' to use mailto fallback only.        ║
+  ║                                                                  ║
+  ║  CORA_EMAIL                                                      ║
+  ║    The city email that receives mailto fallback submissions.     ║
+  ║    Used when Azure Function is not configured or unavailable.   ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
+<script>
+const CONFIG = {
+  AZURE_FUNCTION_URL: '',
+  // Example when deployed:
+  // 'https://func-cora-cos-prod.azurewebsites.net/api/cora-submit?code=YOUR_KEY'
+
+  CORA_EMAIL: 'City.Communications@coloradosprings.gov',
+  // Primary CORA coordinator — receives mailto fallback submissions
+};
+</script>
+
+<style>
+:root {
+  --navy:#00205c;--blue:#0049b1;--sky:#1d6fa4;
+  --white:#ffffff;--off:#f5f7fa;--rule:#d0d7e0;--ink:#1a1f2e;--muted:#4a5568;
+  --red:#b91c1c;--red-bg:#fef2f2;--amber:#92400e;--amber-bg:#fffbeb;
+  --green:#065f46;--green-bg:#ecfdf5;--purple-bg:#f5f3ff;--purple:#4c1d95;
+  --focus:#1d4ed8;--mono:'Courier New',monospace;
+  --font:system-ui,-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--off);color:var(--ink);font-family:var(--font);line-height:1.7;}
+
+.skip-link{position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;padding:10px 20px;border-radius:3px;font-size:14px;text-decoration:none;z-index:999;font-weight:600;}
+.skip-link:focus{left:8px;}
+
+.site-header{background:var(--navy);border-bottom:3px solid #c8a84b;padding:20px 24px;}
+.header-inner{max-width:760px;margin:0 auto;}
+.site-header h1{font-size:clamp(18px,3vw,24px);font-weight:700;color:#fff;margin-bottom:2px;}
+.site-header p{font-size:13px;color:rgba(255,255,255,.6);}
+.site-header a{color:#c8a84b;text-decoration:none;}
+.site-header a:hover{text-decoration:underline;}
+
+.breadcrumb{background:#fff;border-bottom:1px solid var(--rule);padding:10px 24px;font-size:13px;color:var(--muted);}
+.breadcrumb a{color:var(--blue);text-decoration:none;}
+.breadcrumb a:hover{text-decoration:underline;}
+.breadcrumb span{margin:0 6px;color:var(--rule);}
+
+.page{max-width:760px;margin:0 auto;padding:32px 20px 80px;}
+
+/* MODE BANNER — shows which submission method is active */
+.mode-banner{font-size:13px;padding:8px 14px;border-radius:3px;margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.mode-azure{background:var(--green-bg);color:var(--green);border:1px solid #a7f3d0;}
+.mode-mailto{background:var(--purple-bg);color:var(--purple);border:1px solid #ddd6fe;}
+.mode-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.mode-azure .mode-dot{background:var(--green);}
+.mode-mailto .mode-dot{background:var(--purple);}
+
+.intro{background:#fff;border:1px solid var(--rule);border-radius:4px;padding:24px;margin-bottom:28px;}
+.intro h2{font-size:18px;color:var(--navy);margin-bottom:8px;}
+.intro p{font-size:15px;color:var(--muted);margin-bottom:8px;}
+.intro p:last-child{margin-bottom:0;}
+.intro strong{color:var(--ink);}
+
+.callout{background:var(--amber-bg);border:1px solid #fde68a;border-left:4px solid #d97706;padding:14px 18px;border-radius:0 4px 4px 0;margin-bottom:28px;font-size:14px;color:#78350f;line-height:1.7;}
+.callout strong{color:#451a03;}
+
+.form-card{background:#fff;border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin-bottom:24px;}
+.form-section{padding:24px;border-bottom:1px solid var(--rule);}
+.form-section:last-child{border-bottom:none;}
+.form-section h3{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px;padding-bottom:8px;border-bottom:2px solid var(--off);}
+.section-hint{font-size:13px;color:var(--muted);margin-bottom:16px;margin-top:4px;}
+
+.field{margin-bottom:20px;}
+.field:last-child{margin-bottom:0;}
+label{display:block;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+label .required{color:var(--red);margin-left:2px;font-weight:700;}
+label .optional{color:var(--muted);font-weight:400;font-size:13px;margin-left:4px;}
+.hint{font-size:13px;color:var(--muted);margin-bottom:6px;line-height:1.5;}
+
+input[type=text],input[type=email],input[type=tel],textarea,select{
+  width:100%;padding:10px 12px;border:2px solid var(--rule);border-radius:4px;
+  font-size:15px;color:var(--ink);background:#fff;font-family:inherit;
+  transition:border-color .15s;
+}
+input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,
+textarea:focus,select:focus{outline:3px solid var(--focus);outline-offset:1px;border-color:transparent;}
+textarea{resize:vertical;min-height:120px;}
+select{cursor:pointer;}
+.char-count{font-size:12px;color:var(--muted);text-align:right;margin-top:4px;}
+
+.radio-group,.check-group{display:flex;flex-direction:column;gap:8px;}
+.radio-option,.check-option{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:2px solid var(--rule);border-radius:4px;cursor:pointer;transition:border-color .15s,background .15s;}
+.radio-option:hover,.check-option:hover{border-color:var(--blue);background:#f0f7ff;}
+.radio-option:has(input:checked),.check-option:has(input:checked){border-color:var(--blue);background:#eff6ff;}
+.radio-option input,.check-option input{margin-top:2px;width:18px;height:18px;flex-shrink:0;cursor:pointer;accent-color:var(--blue);}
+.option-label{font-size:14px;font-weight:600;color:var(--ink);}
+.option-hint{font-size:13px;color:var(--muted);margin-top:1px;}
+
+.fee-waiver{background:var(--green-bg);border:1px solid #a7f3d0;border-radius:4px;padding:16px;margin-top:12px;}
+.fee-waiver .option-label{color:var(--green);}
+
+.timeline{display:grid;gap:0;}
+.timeline-item{display:grid;grid-template-columns:80px 1fr;gap:0 16px;padding:12px 0;border-bottom:1px solid var(--rule);}
+.timeline-item:last-child{border-bottom:none;}
+.timeline-day{font-size:13px;font-weight:700;color:var(--navy);font-family:var(--mono);}
+.timeline-text{font-size:14px;color:var(--muted);}
+
+.contact-box{background:var(--off);border:1px solid var(--rule);border-radius:4px;padding:16px;margin-top:16px;}
+.contact-box h4{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.contact-row{font-size:14px;color:var(--muted);margin-bottom:4px;}
+.contact-row a{color:var(--blue);}
+.contact-row strong{color:var(--ink);}
+
+/* HONEYPOT — visually hidden, traps bots */
+.hp-field{position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;tab-index:-1;}
+
+.submit-area{padding:24px;background:var(--off);border-top:1px solid var(--rule);}
+.btn-submit{background:var(--navy);color:#fff;padding:14px 32px;border:none;border-radius:4px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.02em;transition:background .15s;}
+.btn-submit:hover:not(:disabled){background:#001040;}
+.btn-submit:focus{outline:3px solid var(--focus);outline-offset:2px;}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;}
+.submit-note{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.6;}
+
+.success-panel{display:none;background:var(--green-bg);border:1px solid #6ee7b7;border-radius:4px;padding:28px;}
+.success-panel.visible{display:block;}
+.success-panel h2{color:var(--green);margin-bottom:8px;font-size:20px;}
+.success-panel p{color:#065f46;font-size:15px;margin-bottom:6px;}
+.ref-number{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--navy);background:#fff;padding:8px 14px;border-radius:3px;display:inline-block;margin:8px 0;}
+
+.mailto-panel{display:none;background:var(--purple-bg);border:1px solid #ddd6fe;border-radius:4px;padding:24px;margin-bottom:24px;}
+.mailto-panel.visible{display:block;}
+.mailto-panel h3{color:var(--purple);margin-bottom:8px;font-size:16px;}
+.mailto-panel p{color:#3b0764;font-size:14px;margin-bottom:10px;line-height:1.6;}
+.btn-mailto{display:inline-block;background:var(--purple);color:#fff;padding:11px 24px;border-radius:4px;font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;border:none;font-family:inherit;}
+.btn-mailto:hover{background:#3b0764;}
+.btn-mailto:focus{outline:3px solid var(--focus);outline-offset:2px;}
+
+.error-msg{font-size:13px;color:var(--red);margin-top:4px;display:none;}
+.field.error input,.field.error textarea,.field.error select{border-color:var(--red);}
+.field.error .error-msg{display:block;}
+
+.page-footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:20px;font-size:13px;margin-top:40px;}
+.page-footer a{color:#c8a84b;}
+
+@media(max-width:600px){
+  .timeline-item{grid-template-columns:1fr;}
+  .timeline-day{margin-bottom:4px;}
+  .btn-submit{width:100%;}
+}
+@media print{.skip-link,.btn-submit,.mode-banner{display:none;}.form-card{border:none;}}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <h1>Request a City Record</h1>
+    <p>Colorado Springs Open Records Act (CORA) ·
+      <a href="https://coloradosprings.gov/City-Clerk/CORA">Return to CORA information</a>
+    </p>
+  </div>
+</header>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="https://coloradosprings.gov">City of Colorado Springs</a>
+  <span aria-hidden="true">›</span>
+  <a href="https://coloradosprings.gov/cityclerk">City Clerk</a>
+  <span aria-hidden="true">›</span>
+  <a href="https://coloradosprings.gov/City-Clerk/CORA">CORA</a>
+  <span aria-hidden="true">›</span>
+  <span aria-current="page">Submit a Request</span>
+</nav>
+
+<main id="main" tabindex="-1">
+<div class="page">
+
+  <!-- Submission mode indicator — updated by JS on load -->
+  <div id="mode-banner" class="mode-banner mode-mailto" role="status" aria-live="polite">
+    <span class="mode-dot" aria-hidden="true"></span>
+    <span id="mode-text">Loading…</span>
+  </div>
+
+  <div class="intro" role="note">
+    <h2>What is this form?</h2>
+    <p>Use this form to request records held by the City of Colorado Springs.
+      <strong>You do not need to know a document number or RFP number.</strong>
+      Describe what you are looking for in plain language and we will route your
+      request to the right department.</p>
+    <p>This form is accessible on any device and works with screen readers and
+      keyboard navigation. If you need assistance, see the alternative contact
+      information at the bottom of this page.</p>
+  </div>
+
+  <div class="callout" role="alert">
+    <strong>Do not include sensitive information in this form.</strong>
+    Do not send credit card numbers, Social Security numbers, or passwords.
+    Payment for records is collected separately by Accounts Receivable.
+  </div>
+
+  <!-- mailto fallback panel — shown when Azure Function is not configured -->
+  <div class="mailto-panel" id="mailto-panel" role="region" aria-labelledby="mailto-title">
+    <h3 id="mailto-title">Submit by email instead</h3>
+    <p>The online form will prepare your request and open your email client with
+      everything pre-filled. Review and send from there. Your email client must
+      be set up on this device for this to work — if it is not, use the phone
+      or mail options below.</p>
+    <p id="mailto-note" style="font-size:13px;color:#4c1d95;"></p>
+    <button type="button" class="btn-mailto" id="mailto-btn" style="display:none;">
+      Open in email client →
+    </button>
+  </div>
+
+  <form id="cora-form" novalidate aria-label="CORA Records Request">
+
+    <!-- HONEYPOT — hidden from humans, catches bots -->
+    <div class="hp-field" aria-hidden="true">
+      <label for="website">Leave this blank</label>
+      <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <div class="form-card">
+
+      <!-- SECTION 1: WHAT ARE YOU LOOKING FOR -->
+      <div class="form-section">
+        <h3>What records are you looking for?</h3>
+        <p class="section-hint">Describe what you want in plain language. No document number needed.</p>
+
+        <div class="field" id="field-description">
+          <label for="record-description">
+            Describe the records you want<span class="required" aria-label="required">*</span>
+          </label>
+          <p class="hint" id="desc-hint">
+            Include what the records are about, any relevant dates, and names or
+            locations you know. The more specific, the faster we can respond.
+          </p>
+          <textarea
+            id="record-description"
+            name="record-description"
+            aria-describedby="desc-hint desc-error"
+            aria-required="true"
+            rows="5"
+            maxlength="2000"
+            placeholder="Example: I am looking for all contracts between the City and Esri Inc. for GIS software, including ArcGIS licenses, from 2020 to present."></textarea>
+          <div class="char-count" aria-live="polite" id="desc-count">0 / 2,000 characters</div>
+          <span class="error-msg" id="desc-error" role="alert">
+            Please describe the records you are requesting (at least 10 characters).
+          </span>
+        </div>
+
+        <div class="field">
+          <label for="date-range">
+            Date range for records <span class="optional">(optional)</span>
+          </label>
+          <p class="hint" id="date-hint">Example: January 2020 to April 2026. Leave blank if unsure.</p>
+          <input type="text" id="date-range" name="date-range"
+            aria-describedby="date-hint"
+            placeholder="e.g. January 2020 – April 2026">
+        </div>
+
+        <div class="field">
+          <label for="doc-number">
+            Document, contract, or RFP number <span class="optional">(optional — leave blank if unknown)</span>
+          </label>
+          <p class="hint" id="docnum-hint">
+            If you have a specific number, enter it here.
+            You do not need one to submit this request.
+          </p>
+          <input type="text" id="doc-number" name="doc-number"
+            aria-describedby="docnum-hint"
+            placeholder="e.g. RFP-2023-042 (leave blank if unknown)">
+        </div>
+      </div>
+
+      <!-- SECTION 2: DEPARTMENT -->
+      <div class="form-section">
+        <h3>Which city department do you think has these records?</h3>
+        <p class="section-hint">
+          Select "I don't know" if you're unsure — we will route the request.
+        </p>
+
+        <div class="field">
+          <label for="department">Department <span class="optional">(select if known)</span></label>
+          <select id="department" name="department" aria-describedby="dept-hint">
+            <option value="">I don't know — please route for me</option>
+            <option value="procurement">Contracting / Procurement Services</option>
+            <option value="it">Information Technology</option>
+            <option value="planning">Planning Department</option>
+            <option value="traffic">Traffic and Transportation Engineering</option>
+            <option value="police">Colorado Springs Police Department</option>
+            <option value="fire">Fire Department</option>
+            <option value="utilities">Colorado Springs Utilities</option>
+            <option value="municipal_court">Municipal Court</option>
+            <option value="neighborhood">Neighborhood Services / Code Enforcement</option>
+            <option value="public_works">Public Works</option>
+            <option value="finance">Finance / Accounts Receivable</option>
+            <option value="city_attorney">City Attorney</option>
+            <option value="mayor">Mayor's Office</option>
+            <option value="other">Other / Multiple departments</option>
+          </select>
+          <p class="hint" id="dept-hint" style="margin-top:8px;">
+            Note: Some departments have separate fee schedules.
+            You will be notified before any charges are incurred.
+          </p>
+        </div>
+
+        <div class="field">
+          <label for="topic-keywords">
+            Keywords or topic <span class="optional">(optional)</span>
+          </label>
+          <p class="hint" id="keywords-hint">
+            Add vendor names, project names, addresses, or other terms that
+            help staff locate the records faster.
+          </p>
+          <input type="text" id="topic-keywords" name="topic-keywords"
+            aria-describedby="keywords-hint"
+            placeholder="e.g. Esri, ArcGIS, Safety Action Plan, 123 Main Street">
+        </div>
+      </div>
+
+      <!-- SECTION 3: FORMAT -->
+      <div class="form-section">
+        <h3>How would you like to receive the records?</h3>
+
+        <div class="field">
+          <fieldset>
+            <legend style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:8px;">
+              Preferred format<span class="required" aria-label="required">*</span>
+            </legend>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="format" value="electronic" checked>
+                <div>
+                  <div class="option-label">Electronic / Email</div>
+                  <div class="option-hint">PDFs or digital files sent to your email. Fastest. No per-page fee.</div>
+                </div>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="format" value="inspect">
+                <div>
+                  <div class="option-label">In-person inspection</div>
+                  <div class="option-hint">View records at City offices. $30/hour staff time after the first two free hours.</div>
+                </div>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="format" value="copies">
+                <div>
+                  <div class="option-label">Printed copies by mail</div>
+                  <div class="option-hint">$0.25 per standard page plus postage. Staff time fee may apply.</div>
+                </div>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <!-- SECTION 4: FEE WAIVER -->
+      <div class="form-section">
+        <h3>Fee waiver request</h3>
+        <p class="section-hint">
+          The first two hours of staff time are free. You may request a waiver
+          if the request serves the public interest or you face financial hardship.
+        </p>
+
+        <div class="field">
+          <div class="fee-waiver">
+            <label class="check-option" style="border:none;padding:0;background:transparent;">
+              <input type="checkbox" name="fee-waiver" id="fee-waiver-check"
+                aria-describedby="waiver-hint">
+              <div>
+                <div class="option-label" style="color:var(--green);">Request a fee waiver</div>
+                <div class="option-hint" id="waiver-hint" style="color:#065f46;">
+                  Under C.R.S. § 24-72-205(6), fees may be waived when disclosure is
+                  in the public interest. Check this box and briefly explain below.
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="field" id="waiver-reason-field" style="display:none;">
+          <label for="waiver-reason">
+            Reason for fee waiver <span class="optional">(optional — but helpful)</span>
+          </label>
+          <p class="hint" id="waiver-reason-hint">
+            Examples: Public interest research. Cannot afford fees.
+            Records were inaccessible through the City's portal.
+          </p>
+          <textarea id="waiver-reason" name="waiver-reason"
+            aria-describedby="waiver-reason-hint"
+            rows="3" maxlength="500"
+            placeholder="Briefly explain why a fee waiver is appropriate."></textarea>
+        </div>
+      </div>
+
+      <!-- SECTION 5: ADA ACCOMMODATION -->
+      <div class="form-section">
+        <h3>Accessibility accommodations</h3>
+        <p class="section-hint">
+          Let us know if you need records in an alternative format or require
+          assistance accessing City services.
+        </p>
+
+        <div class="field">
+          <label class="check-option">
+            <input type="checkbox" id="ada-request" name="ada-request"
+              aria-describedby="ada-hint">
+            <div>
+              <div class="option-label">I need an accessibility accommodation</div>
+              <div class="option-hint" id="ada-hint">
+                Examples: large print, audio format, Braille, or help navigating this process.
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="field" id="ada-detail-field" style="display:none;">
+          <label for="ada-detail">Describe the accommodation needed <span class="optional">(optional)</span></label>
+          <textarea id="ada-detail" name="ada-detail" rows="2" maxlength="300"
+            placeholder="e.g. I need records in large print format."></textarea>
+        </div>
+      </div>
+
+      <!-- SECTION 6: YOUR INFORMATION -->
+      <div class="form-section">
+        <h3>Your contact information</h3>
+        <p class="section-hint">
+          Required so we can respond to your request. Used only to process this CORA request.
+        </p>
+
+        <div class="field" id="field-name">
+          <label for="requester-name">
+            Full name<span class="required" aria-label="required">*</span>
+          </label>
+          <input type="text" id="requester-name" name="requester-name"
+            aria-required="true" aria-describedby="name-error"
+            autocomplete="name" placeholder="Your full name">
+          <span class="error-msg" id="name-error" role="alert">Please enter your name.</span>
+        </div>
+
+        <div class="field" id="field-address">
+          <label for="requester-address">
+            Mailing address<span class="required" aria-label="required">*</span>
+          </label>
+          <p class="hint" id="addr-hint">Required by CORA. Include street, city, state, and zip.</p>
+          <input type="text" id="requester-address" name="requester-address"
+            aria-required="true" aria-describedby="addr-hint addr-error"
+            autocomplete="street-address"
+            placeholder="123 Main Street, Colorado Springs, CO 80903">
+          <span class="error-msg" id="addr-error" role="alert">Please enter your mailing address.</span>
+        </div>
+
+        <div class="field" id="field-email">
+          <label for="requester-email">
+            Email address<span class="required" aria-label="required">*</span>
+          </label>
+          <input type="email" id="requester-email" name="requester-email"
+            aria-required="true" aria-describedby="email-error"
+            autocomplete="email" placeholder="you@example.com">
+          <span class="error-msg" id="email-error" role="alert">Please enter a valid email address.</span>
+        </div>
+
+        <div class="field">
+          <label for="requester-phone">Phone number <span class="optional">(optional)</span></label>
+          <p class="hint" id="phone-hint">Helpful if we need to clarify your request quickly.</p>
+          <input type="tel" id="requester-phone" name="requester-phone"
+            aria-describedby="phone-hint"
+            autocomplete="tel" placeholder="(719) 555-1234">
+        </div>
+      </div>
+
+      <!-- SECTION 7: WHAT TO EXPECT -->
+      <div class="form-section">
+        <h3>What happens after you submit</h3>
+        <div class="timeline" role="list">
+          <div class="timeline-item" role="listitem">
+            <div class="timeline-day">Day 0</div>
+            <div class="timeline-text">
+              You submit. You receive an email confirmation with a reference number.
+              If you don't see it, check your spam folder or call
+              <a href="tel:+17193855906">(719) 385-5906</a>.
+            </div>
+          </div>
+          <div class="timeline-item" role="listitem">
+            <div class="timeline-day">Day 1–3</div>
+            <div class="timeline-text">
+              City staff review your request. If records are available, they may be
+              provided immediately. If more than two hours of staff time is needed,
+              you receive a cost estimate before any charges are incurred. You may
+              confirm, modify, or withdraw at that point.
+            </div>
+          </div>
+          <div class="timeline-item" role="listitem">
+            <div class="timeline-day">Up to Day 10</div>
+            <div class="timeline-text">
+              If extenuating circumstances apply, the City may extend by up to seven
+              additional working days. You will be notified in writing before Day 3.
+            </div>
+          </div>
+          <div class="timeline-item" role="listitem">
+            <div class="timeline-day">If denied</div>
+            <div class="timeline-text">
+              You have the right to a written explanation citing the specific statutory
+              exemption under C.R.S. § 24-72-204. You may also contact the
+              <a href="https://coloradofoic.org" target="_blank" rel="noopener noreferrer">
+                Colorado Freedom of Information Coalition</a>
+              for assistance.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end form-card -->
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <button type="submit" class="btn-submit" id="submit-btn">
+        Submit records request
+      </button>
+      <p class="submit-note">
+        By submitting you acknowledge fees may apply for staff time beyond two hours.
+        You will be notified before any charges are incurred and may withdraw at that time.
+        <br><br>
+        <strong>Need help?</strong>
+        Call <a href="tel:+17193855906">(719) 385-5906</a> or email
+        <a href="mailto:City.Communications@coloradosprings.gov">City.Communications@coloradosprings.gov</a>
+      </p>
+    </div>
+
+  </form>
+
+  <!-- SUCCESS STATE — shown after Azure Function submission -->
+  <div class="success-panel" id="success-panel" role="status" aria-live="polite" tabindex="-1">
+    <h2>Request submitted</h2>
+    <div class="ref-number" id="ref-display">—</div>
+    <p>Save this reference number. A confirmation has been sent to your email.
+      The City has three working days to respond.</p>
+    <p style="margin-top:12px;font-size:14px;">
+      Questions? Call <a href="tel:+17193855906">(719) 385-5906</a> or email
+      <a href="mailto:City.Communications@coloradosprings.gov">City.Communications@coloradosprings.gov</a>
+    </p>
+  </div>
+
+  <!-- FALLBACK CONTACTS -->
+  <div class="contact-box" role="complementary" aria-label="Alternative submission methods">
+    <h4>Can't use this form? Other ways to submit:</h4>
+    <div class="contact-row">
+      <strong>By phone:</strong>
+      <a href="tel:+17193855906">(719) 385-5906</a> — City Communications
+    </div>
+    <div class="contact-row">
+      <strong>By email:</strong>
+      <a href="mailto:City.Communications@coloradosprings.gov">City.Communications@coloradosprings.gov</a>
+    </div>
+    <div class="contact-row">
+      <strong>By mail:</strong>
+      City Clerk, 30 S. Nevada Ave., Suite 606, MC 660, Colorado Springs, CO 80903
+    </div>
+    <div class="contact-row" style="margin-top:8px;font-size:13px;color:var(--muted);">
+      Department contacts:
+      Procurement <a href="tel:+17193855265">(719) 385-5265</a> ·
+      Municipal Court <a href="tel:+17193855928">(719) 385-5928</a> ·
+      Accounts Receivable <a href="tel:+17193852367">(719) 385-2367</a>
+    </div>
+  </div>
+
+</div><!-- end page -->
+</main>
+
+<footer class="page-footer" role="contentinfo">
+  <p>City of Colorado Springs · CORA Records Request</p>
+  <p style="margin-top:4px;">
+    <a href="https://coloradosprings.gov/TitleIIADA">Web Accessibility</a> ·
+    <a href="https://coloradosprings.gov/City-Clerk/CORA">CORA Information</a> ·
+    <a href="https://coloradofoic.org">Colorado Freedom of Information Coalition</a>
+  </p>
+  <p style="margin-top:4px;font-size:11px;opacity:.6;">
+    Accessible form built by StorySeed / The Dais · Offered to the City at no charge
+  </p>
+</footer>
+
+<script>
+// ── CONFIG READ ──────────────────────────────────────────────────
+const AZURE_URL  = CONFIG.AZURE_FUNCTION_URL || '';
+const CORA_EMAIL = CONFIG.CORA_EMAIL         || 'City.Communications@coloradosprings.gov';
+const USE_AZURE  = !!AZURE_URL;
+
+// ── MODE BANNER ──────────────────────────────────────────────────
+(function() {
+  const banner   = document.getElementById('mode-banner');
+  const modeText = document.getElementById('mode-text');
+  const mailtoPanel = document.getElementById('mailto-panel');
+
+  if (USE_AZURE) {
+    banner.className = 'mode-banner mode-azure';
+    modeText.textContent = 'Online submission active — your request will be processed automatically.';
+    mailtoPanel.style.display = 'none';
+  } else {
+    banner.className = 'mode-banner mode-mailto';
+    modeText.textContent = 'Email submission mode — fill in the form below and we will prepare your request for your email client.';
+    mailtoPanel.style.display = 'block';
+    document.getElementById('mailto-note').textContent =
+      'Fill in the form below, then click the button to open your email client with everything pre-filled.';
+  }
+})();
+
+// ── CHARACTER COUNT ──────────────────────────────────────────────
+document.getElementById('record-description').addEventListener('input', function() {
+  document.getElementById('desc-count').textContent =
+    `${this.value.length.toLocaleString()} / 2,000 characters`;
+});
+
+// ── CONDITIONAL FIELDS ──────────────────────────────────────────
+document.getElementById('fee-waiver-check').addEventListener('change', function() {
+  const field = document.getElementById('waiver-reason-field');
+  field.style.display = this.checked ? 'block' : 'none';
+  if (this.checked) document.getElementById('waiver-reason').focus();
+});
+
+document.getElementById('ada-request').addEventListener('change', function() {
+  const field = document.getElementById('ada-detail-field');
+  field.style.display = this.checked ? 'block' : 'none';
+  if (this.checked) document.getElementById('ada-detail').focus();
+});
+
+// ── VALIDATION ───────────────────────────────────────────────────
+function validate() {
+  const rules = [
+    { id: 'record-description', fieldId: 'field-description', errId: 'desc-error',
+      check: v => v.trim().length >= 10 },
+    { id: 'requester-name',     fieldId: 'field-name',        errId: 'name-error',
+      check: v => v.trim().length >= 2 },
+    { id: 'requester-address',  fieldId: 'field-address',     errId: 'addr-error',
+      check: v => v.trim().length >= 5 },
+    { id: 'requester-email',    fieldId: 'field-email',       errId: 'email-error',
+      check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+  ];
+  let valid = true, firstErr = null;
+  rules.forEach(r => {
+    const el    = document.getElementById(r.id);
+    const field = document.getElementById(r.fieldId);
+    if (!r.check(el.value)) {
+      field.classList.add('error');
+      valid = false;
+      if (!firstErr) firstErr = el;
+    } else {
+      field.classList.remove('error');
+    }
+  });
+  if (firstErr) firstErr.focus();
+  return valid;
+}
+
+// ── COLLECT FORM DATA ────────────────────────────────────────────
+function collectData() {
+  const get = id => (document.getElementById(id) || {}).value || '';
+  const checked = id => (document.getElementById(id) || {}).checked || false;
+  const radio = name => {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : '';
+  };
+  return {
+    'record-description': get('record-description'),
+    'date-range':         get('date-range'),
+    'doc-number':         get('doc-number'),
+    'department':         get('department'),
+    'topic-keywords':     get('topic-keywords'),
+    'format':             radio('format'),
+    'fee-waiver':         checked('fee-waiver-check') ? 'yes' : '',
+    'waiver-reason':      get('waiver-reason'),
+    'ada-request':        checked('ada-request') ? 'yes' : '',
+    'ada-detail':         get('ada-detail'),
+    'requester-name':     get('requester-name'),
+    'requester-address':  get('requester-address'),
+    'requester-email':    get('requester-email'),
+    'requester-phone':    get('requester-phone'),
+    'website':            get('website'), // honeypot
+  };
+}
+
+// ── BUILD MAILTO BODY ────────────────────────────────────────────
+function buildMailtoHref(data) {
+  const dept = document.getElementById('department');
+  const deptLabel = dept.options[dept.selectedIndex].text;
+  const feeWaiver = data['fee-waiver'] === 'yes'
+    ? `\nFEE WAIVER REQUESTED: Yes${data['waiver-reason'] ? '\nReason: ' + data['waiver-reason'] : ''}`
+    : '\nFEE WAIVER REQUESTED: No';
+  const ada = data['ada-request'] === 'yes'
+    ? `\nADA ACCOMMODATION: Yes${data['ada-detail'] ? '\nDetail: ' + data['ada-detail'] : ''}`
+    : '';
+
+  const body = [
+    'COLORADO SPRINGS CORA RECORDS REQUEST',
+    '======================================',
+    '',
+    'RECORDS REQUESTED:',
+    data['record-description'],
+    '',
+    'Date range: '       + (data['date-range']      || 'Not specified'),
+    'Document number: '  + (data['doc-number']       || 'Not provided'),
+    'Department: '       + (deptLabel                || 'Not specified'),
+    'Keywords/topic: '   + (data['topic-keywords']   || 'None'),
+    'Format requested: ' + (data['format']           || 'Electronic'),
+    feeWaiver,
+    ada,
+    '',
+    'REQUESTER INFORMATION:',
+    'Name: '    + data['requester-name'],
+    'Address: ' + data['requester-address'],
+    'Email: '   + data['requester-email'],
+    'Phone: '   + (data['requester-phone'] || 'Not provided'),
+    '',
+    '======================================',
+    'Submitted via Colorado Springs accessible CORA form.',
+    'Pursuant to C.R.S. § 24-72-201 et seq.',
+    'Response required within 3 working days per C.R.S. § 24-72-203.',
+  ].join('\n');
+
+  const subject = encodeURIComponent('CORA Records Request — ' + data['requester-name']);
+  const bodyEnc = encodeURIComponent(body);
+  return `mailto:${CORA_EMAIL}?subject=${subject}&body=${bodyEnc}`;
+}
+
+// ── MAILTO BUTTON ────────────────────────────────────────────────
+document.getElementById('mailto-btn').addEventListener('click', function() {
+  const data = collectData();
+  window.location.href = buildMailtoHref(data);
+});
+
+// ── FORM SUBMIT ──────────────────────────────────────────────────
+document.getElementById('cora-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  if (!validate()) return;
+
+  const data = collectData();
+
+  // Honeypot check
+  if (data.website) return; // bot — silently ignore
+
+  const btn = document.getElementById('submit-btn');
+
+  if (USE_AZURE) {
+    // ── AZURE FUNCTION PATH ────────────────────────────────────────
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+
+    try {
+      const res = await fetch(AZURE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const json = await res.json();
+
+      if (json.success) {
+        document.getElementById('cora-form').style.display = 'none';
+        document.getElementById('mode-banner').style.display = 'none';
+        const successPanel = document.getElementById('success-panel');
+        document.getElementById('ref-display').textContent = json.reference || '—';
+        successPanel.classList.add('visible');
+        successPanel.focus();
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Submit records request';
+        // Fall back to mailto on Azure error
+        fallbackToMailto(data, 'There was a problem with online submission. Please use email instead.');
+      }
+
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Submit records request';
+      // Network error — fall back to mailto
+      fallbackToMailto(data, 'Could not connect to the submission server. Please use email instead.');
+    }
+
+  } else {
+    // ── MAILTO PATH ────────────────────────────────────────────────
+    const href = buildMailtoHref(data);
+    // Update the mailto button with current form data
+    const mailtoBtn = document.getElementById('mailto-btn');
+    mailtoBtn.style.display = 'inline-block';
+    mailtoBtn.onclick = function() { window.location.href = href; };
+    // Auto-trigger
+    window.location.href = href;
+    // Show confirmation note
+    document.getElementById('mailto-note').textContent =
+      'Your email client should have opened with the request pre-filled. ' +
+      'Review the email and click Send. If it did not open, use the button above.';
+  }
+});
+
+// ── MAILTO FALLBACK (called on Azure error) ──────────────────────
+function fallbackToMailto(data, message) {
+  const panel = document.getElementById('mailto-panel');
+  const note  = document.getElementById('mailto-note');
+  const btn   = document.getElementById('mailto-btn');
+  const href  = buildMailtoHref(data);
+
+  note.textContent = message;
+  btn.style.display = 'inline-block';
+  btn.onclick = function() { window.location.href = href; };
+
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  panel.focus();
+}
+
+// ── LIVE VALIDATION on blur ──────────────────────────────────────
+['record-description','requester-name','requester-address','requester-email']
+  .forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('blur', validate);
+  });
+</script>
+</body>
+</html>
