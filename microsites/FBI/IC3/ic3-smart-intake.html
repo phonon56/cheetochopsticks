@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crime Complaint Intake — Accessible Smart Form · StorySeed / The Dais</title>
+<style>
+:root {
+  --navy:  #001a4d;
+  --blue:  #0049b1;
+  --red:   #b91c1c;
+  --amber: #92400e;
+  --green: #065f46;
+  --gold:  #b8860b;
+  --ink:   #0f172a;
+  --muted: #475569;
+  --rule:  #e2e8f0;
+  --off:   #f8fafc;
+  --white: #ffffff;
+  --focus: #1d4ed8;
+  --mono:  'Courier New', monospace;
+  --sans:  system-ui, -apple-system, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body { background: var(--off); color: var(--ink); font-family: var(--sans); line-height: 1.6; }
+
+/* Skip + SR only */
+.skip { position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:3px;text-decoration:none;font-size:14px;z-index:999; }
+.skip:focus { left:8px; }
+.sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+
+/* Header */
+.site-header { background:linear-gradient(135deg,#001030,#00205c); border-bottom:2px solid var(--gold); padding:20px 24px; }
+.header-inner { max-width:800px; margin:0 auto; }
+.eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:rgba(200,168,75,.8); margin-bottom:6px; }
+.site-header h1 { font-size:clamp(18px,3vw,26px); font-weight:700; color:#fff; margin-bottom:4px; }
+.site-header p { font-size:13px; color:rgba(255,255,255,.55); }
+.disclaimer { background:rgba(255,255,255,.08); border-left:3px solid var(--gold); padding:8px 14px; margin-top:14px; font-size:12px; color:rgba(255,255,255,.65); line-height:1.5; }
+
+/* Main */
+.page { max-width:800px; margin:0 auto; padding:24px 16px 60px; }
+
+/* Step indicator */
+.step-nav { display:flex; gap:0; margin-bottom:28px; border-radius:6px; overflow:hidden; border:1px solid var(--rule); }
+.step-item { flex:1; padding:10px 8px; text-align:center; background:#fff; border-right:1px solid var(--rule); font-size:12px; color:var(--muted); }
+.step-item:last-child { border-right:none; }
+.step-item.active { background:var(--navy); color:#fff; font-weight:600; }
+.step-item.done { background:var(--green); color:#fff; }
+.step-item .step-num { display:block; font-family:var(--mono); font-size:11px; margin-bottom:2px; }
+
+/* Cards */
+.card { background:#fff; border:1px solid var(--rule); border-radius:6px; padding:24px; margin-bottom:16px; }
+.card h2 { font-size:18px; font-weight:600; color:var(--navy); margin-bottom:6px; }
+.card .card-sub { font-size:13px; color:var(--muted); margin-bottom:18px; line-height:1.6; }
+
+/* Triage textarea */
+.triage-area { position:relative; }
+.triage-area label { display:block; font-weight:600; font-size:15px; color:var(--ink); margin-bottom:8px; }
+.triage-area .field-hint { font-size:13px; color:var(--muted); margin-bottom:10px; }
+textarea.triage-input {
+  width:100%; min-height:120px; padding:14px; border:2px solid var(--rule);
+  border-radius:6px; font-size:15px; font-family:var(--sans); color:var(--ink);
+  resize:vertical; line-height:1.6;
+}
+textarea.triage-input:focus { outline:3px solid var(--focus); outline-offset:1px; border-color:transparent; }
+textarea.triage-input::placeholder { color:#94a3b8; }
+
+/* Examples */
+.examples { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.example-btn {
+  padding:5px 12px; border:1px solid var(--rule); border-radius:20px;
+  background:#fff; color:var(--muted); font-size:12px; cursor:pointer; font-family:var(--sans);
+}
+.example-btn:hover { background:var(--off); border-color:var(--blue); color:var(--blue); }
+.example-btn:focus { outline:2px solid var(--focus); outline-offset:2px; }
+
+/* Crime type result */
+.crime-result {
+  background:#eff6ff; border:1px solid #bfdbfe; border-left:4px solid var(--blue);
+  border-radius:0 6px 6px 0; padding:14px 16px; margin:16px 0; display:none;
+}
+.crime-result.visible { display:block; }
+.crime-result .cr-label { font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--blue); margin-bottom:4px; }
+.crime-result .cr-type { font-size:16px; font-weight:700; color:var(--navy); margin-bottom:4px; }
+.crime-result .cr-desc { font-size:13px; color:var(--muted); }
+
+/* Form fields */
+.field-group { margin-bottom:20px; }
+.field-group label { display:block; font-weight:600; font-size:14px; color:var(--ink); margin-bottom:5px; }
+.field-group label .req { color:var(--red); margin-left:2px; aria-hidden:true; }
+.field-group .field-hint { font-size:12px; color:var(--muted); margin-bottom:6px; }
+input[type=text], input[type=email], input[type=tel], input[type=number], select, textarea.field-input {
+  width:100%; padding:10px 12px; border:1px solid var(--rule); border-radius:4px;
+  font-size:14px; font-family:var(--sans); color:var(--ink); background:#fff;
+}
+input:focus, select:focus, textarea.field-input:focus {
+  outline:3px solid var(--focus); outline-offset:1px; border-color:transparent;
+}
+input.error, select.error { border-color:var(--red); }
+.field-error { color:var(--red); font-size:13px; margin-top:4px; display:none; }
+.field-error.visible { display:block; }
+
+/* Radio/checkbox groups */
+fieldset { border:none; padding:0; margin-bottom:20px; }
+fieldset legend { font-weight:600; font-size:14px; color:var(--ink); margin-bottom:10px; display:block; }
+fieldset legend .req { color:var(--red); }
+.radio-group, .check-group { display:flex; flex-direction:column; gap:8px; }
+.radio-option, .check-option {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:10px 12px; border:1px solid var(--rule); border-radius:4px; cursor:pointer;
+  background:#fff;
+}
+.radio-option:hover, .check-option:hover { background:var(--off); }
+.radio-option input, .check-option input { margin-top:3px; flex-shrink:0; }
+.radio-option:has(input:checked), .check-option:has(input:checked) {
+  border-color:var(--blue); background:#eff6ff;
+}
+.radio-label, .check-label { font-size:14px; color:var(--ink); }
+.radio-label small, .check-label small { display:block; font-size:12px; color:var(--muted); margin-top:1px; }
+
+/* Section divider */
+.section-head { font-family:var(--mono); font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin:24px 0 12px; padding-bottom:6px; border-bottom:1px solid var(--rule); }
+
+/* Buttons */
+.btn { padding:11px 24px; border:none; border-radius:4px; font-size:15px; font-weight:500; cursor:pointer; font-family:var(--sans); }
+.btn-primary { background:var(--navy); color:#fff; }
+.btn-primary:hover { background:#001040; }
+.btn-primary:focus { outline:3px solid var(--focus); outline-offset:2px; }
+.btn-primary:disabled { opacity:.5; cursor:not-allowed; }
+.btn-secondary { background:var(--off); color:var(--ink); border:1px solid var(--rule); }
+.btn-secondary:hover { background:#e8ecf2; }
+.btn-secondary:focus { outline:3px solid var(--focus); outline-offset:2px; }
+.btn-row { display:flex; gap:10px; align-items:center; margin-top:24px; flex-wrap:wrap; }
+
+/* Loading */
+.loading { display:none; align-items:center; gap:10px; color:var(--muted); font-size:14px; }
+.loading.visible { display:flex; }
+.spinner { width:20px; height:20px; border:2px solid var(--rule); border-top-color:var(--blue); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* Dynamic section container */
+.dynamic-fields { }
+.field-section { border:1px solid var(--rule); border-radius:6px; padding:18px; margin-bottom:16px; background:#fff; }
+.field-section h3 { font-size:14px; font-weight:600; color:var(--navy); margin-bottom:14px; }
+
+/* Success */
+.success-card { background:#ecfdf5; border:1px solid #a7f3d0; border-radius:6px; padding:24px; text-align:center; display:none; }
+.success-card.visible { display:block; }
+.success-card h2 { color:var(--green); font-size:20px; margin-bottom:8px; }
+.success-card p { color:var(--muted); font-size:14px; }
+
+/* Footer */
+footer { background:#fff; border-top:1px solid var(--rule); padding:16px 24px; text-align:center; }
+footer p { font-size:12px; color:var(--muted); }
+footer a { color:var(--blue); }
+footer a:focus { outline:2px solid var(--focus); border-radius:1px; }
+
+:focus-visible { outline:3px solid var(--focus); outline-offset:2px; border-radius:2px; }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to main content</a>
+<div id="announce" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+<div id="announce-assertive" role="alert" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+
+<!-- HEADER -->
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <p class="eyebrow">StorySeed Studios · The Dais · Accessible Civic Tools</p>
+    <h1>Internet Crime Complaint — Smart Intake</h1>
+    <p>Describe what happened in plain language. We'll ask only the questions that matter for your situation.</p>
+    <div class="disclaimer" role="note">
+      <strong>Demonstration tool only.</strong> This is an accessible interface concept — not affiliated with or endorsed by the FBI or IC3.
+      To file an official complaint, visit <a href="https://complaint.ic3.gov/" target="_blank" rel="noopener noreferrer" style="color:#c8a84b;">complaint.ic3.gov <span class="sr-only">(opens in new window)</span></a>.
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main id="main" tabindex="-1" role="main">
+<div class="page">
+
+  <!-- Step indicator -->
+  <nav aria-label="Form progress" role="navigation">
+    <ol class="step-nav" role="list">
+      <li class="step-item active" id="step-1-nav" aria-current="step" role="listitem">
+        <span class="step-num" aria-hidden="true">1</span>
+        What Happened?
+      </li>
+      <li class="step-item" id="step-2-nav" role="listitem">
+        <span class="step-num" aria-hidden="true">2</span>
+        Your Information
+      </li>
+      <li class="step-item" id="step-3-nav" role="listitem">
+        <span class="step-num" aria-hidden="true">3</span>
+        Incident Details
+      </li>
+      <li class="step-item" id="step-4-nav" role="listitem">
+        <span class="step-num" aria-hidden="true">4</span>
+        Review & Submit
+      </li>
+    </ol>
+  </nav>
+
+  <!-- ── STEP 1: TRIAGE ── -->
+  <div id="step-1" role="region" aria-labelledby="step1-heading">
+    <div class="card">
+      <h2 id="step1-heading">What happened to you?</h2>
+      <p class="card-sub">Describe the situation in your own words. You don't need to know what type of crime it was — just tell us what happened and we'll figure out what information to collect.</p>
+
+      <div class="triage-area">
+        <label for="situation-input">
+          Describe the situation
+          <span class="req" aria-label="required">*</span>
+        </label>
+        <p class="field-hint" id="situation-hint">For example: "Someone called pretending to be from the IRS and asked me to buy gift cards" or "I paid for something online and never received it."</p>
+        <textarea
+          class="triage-input"
+          id="situation-input"
+          name="situation"
+          rows="5"
+          required
+          aria-required="true"
+          aria-describedby="situation-hint situation-error"
+          placeholder="Tell us what happened…"
+        ></textarea>
+        <div id="situation-error" class="field-error" role="alert">Please describe what happened before continuing.</div>
+      </div>
+
+      <p style="font-size:13px;color:var(--muted);margin-top:12px;margin-bottom:8px;">Or choose a common situation:</p>
+      <div class="examples" role="group" aria-label="Common situations — click to pre-fill">
+        <button type="button" class="example-btn" onclick="fillExample('Someone pretended to be the IRS and demanded I pay with gift cards or wire transfer.')">IRS / government impersonation</button>
+        <button type="button" class="example-btn" onclick="fillExample('I paid for an item online but never received it and the seller stopped responding.')">Online purchase scam</button>
+        <button type="button" class="example-btn" onclick="fillExample('I received a romance scam — someone I met online said they loved me then asked for money.')">Romance scam</button>
+        <button type="button" class="example-btn" onclick="fillExample('My business email was compromised and someone sent a fraudulent wire transfer using my account.')">Business email compromise</button>
+        <button type="button" class="example-btn" onclick="fillExample('I lost money investing in cryptocurrency after someone online convinced me it was a sure investment.')">Crypto investment fraud</button>
+        <button type="button" class="example-btn" onclick="fillExample('Someone hacked into my accounts and is demanding ransom to restore my files.')">Ransomware / hacking</button>
+      </div>
+
+      <!-- Crime type result -->
+      <div class="crime-result" id="crime-result" role="status" aria-live="polite" aria-label="Detected crime type">
+        <div class="cr-label">Identified crime type</div>
+        <div class="cr-type" id="crime-type-text"></div>
+        <div class="cr-desc" id="crime-desc-text"></div>
+      </div>
+
+      <div class="loading" id="triage-loading" aria-label="Analyzing your description, please wait">
+        <span class="spinner" aria-hidden="true"></span>
+        Analyzing your situation…
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" id="analyze-btn" onclick="analyzeSituation()">
+          Continue →
+        </button>
+        <p style="font-size:13px;color:var(--muted);" id="analyze-note">We'll use your description to show only the relevant questions</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: YOUR INFO ── -->
+  <div id="step-2" style="display:none;" role="region" aria-labelledby="step2-heading">
+    <div class="card">
+      <h2 id="step2-heading">Your contact information</h2>
+      <p class="card-sub">We need to know who is filing this complaint. All fields marked with an asterisk are required.</p>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px;" role="note">Do <strong>not</strong> include Social Security numbers or dates of birth anywhere in this form.</p>
+
+      <fieldset>
+        <legend>Are you the person who was affected? <span class="req" aria-label="required">*</span></legend>
+        <div class="radio-group" role="radiogroup" aria-required="true">
+          <label class="radio-option">
+            <input type="radio" name="self-filing" value="yes" required aria-required="true">
+            <span class="radio-label">
+              Yes — I was directly affected
+              <small>You are filing on your own behalf</small>
+            </span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="self-filing" value="no">
+            <span class="radio-label">
+              No — I'm filing on behalf of someone else
+              <small>A family member, business, or other person was affected</small>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="field-group">
+        <label for="filer-name">Your full name <span class="req" aria-label="required">*</span></label>
+        <input type="text" id="filer-name" name="filer-name" required aria-required="true" autocomplete="name">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="field-group">
+          <label for="filer-phone">Your phone number <span class="req" aria-label="required">*</span></label>
+          <input type="tel" id="filer-phone" name="filer-phone" required aria-required="true" autocomplete="tel">
+        </div>
+        <div class="field-group">
+          <label for="filer-email">Your email address <span class="req" aria-label="required">*</span></label>
+          <input type="email" id="filer-email" name="filer-email" required aria-required="true" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
+        <button type="button" class="btn btn-primary" onclick="goToStep(3)">Continue to Incident Details →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: DYNAMIC INCIDENT FIELDS ── -->
+  <div id="step-3" style="display:none;" role="region" aria-labelledby="step3-heading">
+    <div class="card">
+      <h2 id="step3-heading">Incident details</h2>
+      <p class="card-sub" id="step3-sub">Based on your description, we'll ask only the questions relevant to your situation.</p>
+
+      <div id="dynamic-fields" class="dynamic-fields" aria-live="polite" aria-label="Relevant form fields for your situation">
+        <!-- Populated by JS based on crime type -->
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+        <button type="button" class="btn btn-primary" onclick="goToStep(4)">Review →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 4: REVIEW ── -->
+  <div id="step-4" style="display:none;" role="region" aria-labelledby="step4-heading">
+    <div class="card">
+      <h2 id="step4-heading">Review your complaint</h2>
+      <p class="card-sub">Please review everything below before submitting. You can go back to make changes.</p>
+
+      <div id="review-content" aria-label="Complaint summary" style="background:var(--off);border-radius:4px;padding:16px;margin-bottom:20px;">
+        <!-- Populated dynamically -->
+      </div>
+
+      <fieldset>
+        <legend>Signature and certification <span class="req" aria-label="required">*</span></legend>
+        <label class="check-option">
+          <input type="checkbox" id="certify" name="certify" required aria-required="true"
+            aria-describedby="certify-error">
+          <span class="check-label">
+            I certify that the information I have provided in this complaint is true and accurate to the best of my knowledge. I understand that providing false information could subject me to fine and/or imprisonment.
+          </span>
+        </label>
+        <div id="certify-error" class="field-error" role="alert">You must certify the accuracy of your complaint before submitting.</div>
+      </fieldset>
+
+      <div class="btn-row">
+        <button type="button" class="btn btn-secondary" onclick="goToStep(3)">← Back</button>
+        <button type="button" class="btn btn-primary" id="submit-btn" onclick="submitComplaint()">
+          Submit Complaint
+        </button>
+      </div>
+
+      <div class="loading" id="submit-loading" aria-label="Submitting your complaint, please wait">
+        <span class="spinner" aria-hidden="true"></span>
+        Submitting…
+      </div>
+    </div>
+
+    <div class="success-card" id="success-card" role="status" aria-live="polite" tabindex="-1">
+      <h2>✓ Complaint received</h2>
+      <p style="margin-bottom:12px;">Your complaint reference number: <strong id="ref-number"></strong></p>
+      <p>Keep this number for your records. You may be contacted by law enforcement if your complaint is investigated. Most complainants do not receive individual case updates.</p>
+      <p style="margin-top:12px;">
+        For the official IC3 system, visit
+        <a href="https://complaint.ic3.gov/" target="_blank" rel="noopener noreferrer">complaint.ic3.gov <span class="sr-only">(opens in new window)</span></a>.
+      </p>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</main>
+
+<footer role="contentinfo">
+  <p>StorySeed Studios · The Dais · Accessible Civic Tools · April 2026 · Demonstration only — not affiliated with the FBI or IC3 · <a href="https://complaint.ic3.gov/" target="_blank" rel="noopener noreferrer">File official complaint at IC3.gov <span class="sr-only">(opens in new window)</span></a></p>
+</footer>
+
+<script>
+// ── STATE ────────────────────────────────────────────────────────
+const state = { step: 1, crimeType: null, crimeDesc: null, situation: '' };
+
+// ── ANNOUNCE ─────────────────────────────────────────────────────
+function announce(msg, assertive = false) {
+  const el = document.getElementById(assertive ? 'announce-assertive' : 'announce');
+  el.textContent = '';
+  requestAnimationFrame(() => { el.textContent = msg; });
+}
+
+// ── EXAMPLE FILL ─────────────────────────────────────────────────
+function fillExample(text) {
+  document.getElementById('situation-input').value = text;
+  document.getElementById('situation-input').focus();
+  announce('Example filled in. Press Continue to analyze your situation.');
+}
+
+// ── STEP NAVIGATION ──────────────────────────────────────────────
+function goToStep(n) {
+  document.getElementById('step-' + state.step).style.display = 'none';
+  updateStepNav(state.step, 'done');
+  state.step = n;
+  const el = document.getElementById('step-' + n);
+  el.style.display = 'block';
+  updateStepNav(n, 'active');
+  // Move focus to heading
+  const h = el.querySelector('h2');
+  if (h) { h.setAttribute('tabindex', '-1'); h.focus(); }
+  announce('Step ' + n + ' of 4: ' + (el.querySelector('h2')?.textContent || ''));
+  if (n === 3) buildDynamicFields();
+  if (n === 4) buildReview();
+}
+
+function updateStepNav(n, cls) {
+  const navEl = document.getElementById('step-' + n + '-nav');
+  if (!navEl) return;
+  navEl.className = 'step-item ' + cls;
+  if (cls === 'active') navEl.setAttribute('aria-current', 'step');
+  else navEl.removeAttribute('aria-current');
+}
+
+// ── TRIAGE / ANALYZE ─────────────────────────────────────────────
+async function analyzeSituation() {
+  const situation = document.getElementById('situation-input').value.trim();
+  const errEl = document.getElementById('situation-error');
+
+  if (!situation) {
+    errEl.classList.add('visible');
+    document.getElementById('situation-input').classList.add('error');
+    document.getElementById('situation-input').focus();
+    announce('Error: please describe what happened before continuing.', true);
+    return;
+  }
+  errEl.classList.remove('visible');
+  document.getElementById('situation-input').classList.remove('error');
+  state.situation = situation;
+
+  document.getElementById('triage-loading').classList.add('visible');
+  document.getElementById('analyze-btn').disabled = true;
+  announce('Analyzing your situation, please wait.');
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `You are an intake specialist for an internet crime complaint center. 
+Analyze the user's description and respond ONLY with valid JSON (no markdown, no backticks):
+{
+  "crimeType": "short category name (e.g. Government Impersonation, Online Purchase Fraud, Romance Scam, Business Email Compromise, Investment Fraud/Crypto, Ransomware/Hacking, Identity Theft, Extortion, Other)",
+  "crimeDesc": "One sentence explaining what this crime type is and why it matches their description.",
+  "fields": ["list of field IDs needed from: financial_loss, transaction_type, amount_lost, financial_institution, crypto_details, subject_name, subject_email, subject_phone, subject_website, subject_address, date_of_incident, how_contacted, complaint_detail, evidence_description"]
+}`,
+        messages: [{ role: 'user', content: situation }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text || '';
+    let parsed;
+    try {
+      parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    } catch {
+      parsed = { crimeType: 'Internet Crime', crimeDesc: 'We were unable to automatically categorize your complaint. Please continue and describe your situation in detail.', fields: ['date_of_incident','how_contacted','amount_lost','complaint_detail'] };
+    }
+
+    state.crimeType = parsed.crimeType;
+    state.crimeDesc = parsed.crimeDesc;
+    state.fields = parsed.fields || ['date_of_incident','complaint_detail'];
+
+    document.getElementById('crime-type-text').textContent = parsed.crimeType;
+    document.getElementById('crime-desc-text').textContent = parsed.crimeDesc;
+    document.getElementById('crime-result').classList.add('visible');
+    announce('Identified crime type: ' + parsed.crimeType + '. ' + parsed.crimeDesc);
+
+    // Short pause then advance
+    setTimeout(() => goToStep(2), 1200);
+
+  } catch (err) {
+    // Fallback if API unavailable
+    state.crimeType = 'Internet Crime';
+    state.crimeDesc = 'Please describe your situation in detail in the next steps.';
+    state.fields = ['date_of_incident','how_contacted','amount_lost','complaint_detail','subject_name','subject_email'];
+    announce('Categorization unavailable — continuing with standard questions.', true);
+    goToStep(2);
+  } finally {
+    document.getElementById('triage-loading').classList.remove('visible');
+    document.getElementById('analyze-btn').disabled = false;
+  }
+}
+
+// ── DYNAMIC FIELDS ───────────────────────────────────────────────
+const FIELD_DEFS = {
+  date_of_incident: {
+    type: 'input', inputType: 'date', id: 'date_of_incident', label: 'Date of incident', required: true,
+    hint: 'When did this happen? Use the most recent date if it occurred over multiple days.'
+  },
+  how_contacted: {
+    type: 'radio', id: 'how_contacted', label: 'How were you first contacted?', required: true,
+    options: [
+      { value: 'phone', label: 'Phone call', hint: 'Including robocalls' },
+      { value: 'email', label: 'Email or text message' },
+      { value: 'social', label: 'Social media or online app' },
+      { value: 'website', label: 'Website or online ad' },
+      { value: 'in_person', label: 'In person' },
+      { value: 'other', label: 'Other method' },
+    ]
+  },
+  financial_loss: {
+    type: 'radio', id: 'financial_loss', label: 'Did you send or lose money?', required: true,
+    options: [
+      { value: 'yes', label: 'Yes — I sent or lost money' },
+      { value: 'no', label: 'No — no money was exchanged' },
+      { value: 'attempted', label: 'They tried but I did not send money' },
+    ]
+  },
+  amount_lost: {
+    type: 'input', inputType: 'number', id: 'amount_lost', label: 'Total dollar amount lost (USD)',
+    hint: 'Enter the total amount you lost. If none, enter 0.'
+  },
+  transaction_type: {
+    type: 'select', id: 'transaction_type', label: 'How was money sent?',
+    hint: 'Select the most recent or primary payment method used.',
+    options: ['Select one…','Wire transfer','Cryptocurrency','Gift cards / prepaid cards','Bank transfer / ACH','Credit or debit card','Cash / money order','Peer-to-peer app (Venmo, Zelle, Cash App)','Other']
+  },
+  financial_institution: {
+    type: 'input', inputType: 'text', id: 'financial_institution', label: 'Your bank or financial institution',
+    hint: 'Name of the bank, exchange, or app you used to send money.'
+  },
+  crypto_details: {
+    type: 'input', inputType: 'text', id: 'crypto_details', label: 'Cryptocurrency type and wallet address',
+    hint: 'E.g. Bitcoin — 1A2B3C… (include as much as you have)'
+  },
+  subject_name: {
+    type: 'input', inputType: 'text', id: 'subject_name', label: 'Name used by the suspect',
+    hint: 'The name they gave you — may be fake. Include it anyway.'
+  },
+  subject_email: {
+    type: 'input', inputType: 'email', id: 'subject_email', label: 'Suspect\'s email address'
+  },
+  subject_phone: {
+    type: 'input', inputType: 'tel', id: 'subject_phone', label: 'Suspect\'s phone number'
+  },
+  subject_website: {
+    type: 'input', inputType: 'text', id: 'subject_website', label: 'Website or URL involved'
+  },
+  subject_address: {
+    type: 'input', inputType: 'text', id: 'subject_address', label: 'Suspect\'s address (if known)'
+  },
+  complaint_detail: {
+    type: 'textarea', id: 'complaint_detail', label: 'Full description of what happened', required: true,
+    hint: 'Include all relevant details: dates, amounts, what was said, how you were contacted, what you did, what they did.'
+  },
+  evidence_description: {
+    type: 'textarea', id: 'evidence_description', label: 'Evidence you have',
+    hint: 'Describe any screenshots, emails, chat logs, receipts, or other records you have saved.'
+  }
+};
+
+function buildDynamicFields() {
+  const container = document.getElementById('dynamic-fields');
+  container.innerHTML = '';
+  document.getElementById('step3-sub').textContent =
+    'Crime type identified: ' + (state.crimeType || 'Internet Crime') + '. We\'ve selected the most relevant questions.';
+
+  const fields = state.fields || ['date_of_incident','how_contacted','amount_lost','complaint_detail'];
+
+  // Group into sections
+  const subjectFields = fields.filter(f => f.startsWith('subject_'));
+  const otherFields = fields.filter(f => !f.startsWith('subject_'));
+
+  function renderField(key) {
+    const def = FIELD_DEFS[key];
+    if (!def) return;
+    const wrap = document.createElement('div');
+
+    if (def.type === 'input') {
+      wrap.className = 'field-group';
+      wrap.innerHTML = `
+        <label for="${def.id}">${def.label}${def.required ? ' <span class="req" aria-label="required">*</span>' : ''}</label>
+        ${def.hint ? `<p class="field-hint" id="${def.id}-hint">${def.hint}</p>` : ''}
+        <input type="${def.inputType}" id="${def.id}" name="${def.id}"
+          ${def.required ? 'required aria-required="true"' : ''}
+          ${def.hint ? `aria-describedby="${def.id}-hint"` : ''}>
+      `;
+    } else if (def.type === 'textarea') {
+      wrap.className = 'field-group';
+      wrap.innerHTML = `
+        <label for="${def.id}">${def.label}${def.required ? ' <span class="req" aria-label="required">*</span>' : ''}</label>
+        ${def.hint ? `<p class="field-hint" id="${def.id}-hint">${def.hint}</p>` : ''}
+        <textarea class="field-input" id="${def.id}" name="${def.id}" rows="5"
+          ${def.required ? 'required aria-required="true"' : ''}
+          ${def.hint ? `aria-describedby="${def.id}-hint"` : ''}></textarea>
+      `;
+    } else if (def.type === 'radio') {
+      wrap.innerHTML = `
+        <fieldset>
+          <legend>${def.label}${def.required ? ' <span class="req" aria-label="required">*</span>' : ''}</legend>
+          <div class="radio-group" role="radiogroup" ${def.required ? 'aria-required="true"' : ''}>
+            ${def.options.map(opt => `
+              <label class="radio-option">
+                <input type="radio" name="${def.id}" value="${opt.value}" ${def.required ? 'required' : ''}>
+                <span class="radio-label">${opt.label}${opt.hint ? `<small>${opt.hint}</small>` : ''}</span>
+              </label>
+            `).join('')}
+          </div>
+        </fieldset>
+      `;
+    } else if (def.type === 'select') {
+      wrap.className = 'field-group';
+      wrap.innerHTML = `
+        <label for="${def.id}">${def.label}${def.required ? ' <span class="req" aria-label="required">*</span>' : ''}</label>
+        ${def.hint ? `<p class="field-hint" id="${def.id}-hint">${def.hint}</p>` : ''}
+        <select id="${def.id}" name="${def.id}"
+          ${def.required ? 'required aria-required="true"' : ''}
+          ${def.hint ? `aria-describedby="${def.id}-hint"` : ''}>
+          ${def.options.map(o => `<option>${o}</option>`).join('')}
+        </select>
+      `;
+    }
+    container.appendChild(wrap);
+  }
+
+  // Render non-subject fields
+  otherFields.forEach(renderField);
+
+  // Suspect info section
+  if (subjectFields.length > 0) {
+    const secHead = document.createElement('p');
+    secHead.className = 'section-head';
+    secHead.textContent = 'Information about the suspect (provide whatever you have — all optional)';
+    container.appendChild(secHead);
+    subjectFields.forEach(renderField);
+  }
+}
+
+// ── REVIEW ───────────────────────────────────────────────────────
+function buildReview() {
+  const container = document.getElementById('review-content');
+  const rows = [
+    ['Crime type', state.crimeType || 'Internet Crime'],
+    ['Your description', state.situation?.slice(0, 200) + (state.situation?.length > 200 ? '…' : '')],
+    ['Your name', document.getElementById('filer-name')?.value || '—'],
+    ['Your phone', document.getElementById('filer-phone')?.value || '—'],
+    ['Your email', document.getElementById('filer-email')?.value || '—'],
+  ];
+
+  // Add any dynamic field values
+  (state.fields || []).forEach(key => {
+    const el = document.getElementById(key);
+    if (!el || !el.value) return;
+    const def = FIELD_DEFS[key];
+    if (def) rows.push([def.label, el.value.slice(0, 200)]);
+  });
+
+  container.innerHTML = rows.map(([k, v]) => `
+    <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:14px;">
+      <span style="min-width:160px;font-weight:600;color:var(--muted);flex-shrink:0;">${k}</span>
+      <span style="color:var(--ink);">${v || '—'}</span>
+    </div>
+  `).join('');
+}
+
+// ── SUBMIT ───────────────────────────────────────────────────────
+function submitComplaint() {
+  const certify = document.getElementById('certify');
+  const certErr = document.getElementById('certify-error');
+
+  if (!certify.checked) {
+    certErr.classList.add('visible');
+    certify.focus();
+    announce('Error: you must certify the accuracy of your complaint.', true);
+    return;
+  }
+  certErr.classList.remove('visible');
+
+  document.getElementById('submit-loading').classList.add('visible');
+  document.getElementById('submit-btn').disabled = true;
+  announce('Submitting your complaint, please wait.');
+
+  // Simulate submission
+  setTimeout(() => {
+    document.getElementById('submit-loading').classList.remove('visible');
+    const refNum = 'IC3-' + Date.now().toString(36).toUpperCase();
+    document.getElementById('ref-number').textContent = refNum;
+    document.getElementById('success-card').classList.add('visible');
+    document.getElementById('success-card').focus();
+    announce('Complaint submitted successfully. Your reference number is ' + refNum + '. Keep this for your records.');
+  }, 1500);
+}
+</script>
+</body>
+</html>

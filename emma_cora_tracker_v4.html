@@ -1,0 +1,140 @@
+
+<style>button{font-family:var(--font-sans);cursor:pointer;}textarea{font-family:var(--font-sans);}</style>
+<div id="root4" style="padding:0.5rem 0;"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+const {useState}=React;
+const initialRequests=[
+  {id:1,agency:"El Paso County – Communications",contact:"Dominic Manzo",email:"dominic.manzo@elpasoco.com",subject:"Planning docs & BOCC presentation",dateSent:"2026-03-29",deadline:"2026-04-06",status:"response-received",paid:false,amount:0,category:"county",notes:"Blanket refusal issued. Response drafted citing C.R.S. § 24-72-203 — blanket future refusals not lawful."},
+  {id:2,agency:"El Paso County – Communications",contact:"Mike Madsen",email:"MichaelMadsen@elpasoco.com",subject:"Consolidated accounting ledger – all CORA requests",dateSent:"2026-04-01",deadline:"2026-04-06",status:"pending",paid:false,amount:0,category:"county",notes:"Mike committed to respond by EOD April 6. Requested itemized ledger of all requests, payments, refunds."},
+  {id:3,agency:"El Paso County – Communications",contact:"Mike Madsen",email:"MichaelMadsen@elpasoco.com",subject:"Coroner zip code data – Invoice #202614",dateSent:"2026-04-02",deadline:"2026-04-16",status:"pending",paid:false,amount:619.50,category:"county",notes:"21 hrs @ $29.50 = $619.50. Half ($309.75) due before work proceeds. Scope challenge + itemization request drafted. Do NOT pay until itemization received."},
+  {id:4,agency:"El Paso County – Sheriff's Office",contact:"Beth DeStefano",email:"BethDeStefano@elpasoco.com",subject:"3 Sheriff CORA requests – retention files & logs",dateSent:"2026-03-29",deadline:"2026-04-10",status:"partial",paid:true,amount:65,category:"sheriff",notes:"Paid $65 for 3 requests. Only 2 records received. No retention files, no logs, no receipt or itemized invoice. Formal follow-up drafted."},
+  {id:5,agency:"4th Judicial District – Clerk of Courts",contact:"Clerk of Courts",email:"04TranscriptRequest@judicial.state.co.us",subject:"House transfer docs – Sosebee property",dateSent:"2026-03-29",deadline:"2026-04-10",status:"escalation",paid:true,amount:300,category:"courts",notes:"Paid $300 via county link. No receipt, no invoice, no records produced. Governed by Chief Justice Directive 05-01. Escalation to OSCA planned."},
+  {id:6,agency:"Elbert County – Clerk of Court (Notary)",contact:"Lynda Eichler",email:"lynda.eichler@judicial.state.co.us",subject:"Notary journal – Feb 28, 2024 Warranty Deed",dateSent:"2026-03-29",deadline:"2026-04-08",status:"escalation",paid:false,amount:0,category:"courts",notes:"Journal entry received. Signer was SHERI KING — not Emma. Case 22 DR 31669 (Domestic Relations). Formal violation notice drafted. Escalate to CO SOS, CBI, AG, Sheriff."},
+  {id:7,agency:"City of Colorado Springs",contact:"CORA Office",email:"cora@coloradosprings.gov",subject:"Code enforcement – 1826 Wooten Rd & ZIP 80915",dateSent:null,deadline:null,status:"not-sent",paid:false,amount:0,category:"city",notes:"El Paso County confirmed City jurisdiction. Email drafted and ready to send."},
+  {id:8,agency:"DORA – CO Dept of Regulatory Agencies",contact:"Katie O'Donnell",email:"katie.odonnell@state.co.us",subject:"Lorson Ranch Metropolitan Districts (Nos. 1–7)",dateSent:null,deadline:null,status:"not-sent",paid:false,amount:0,category:"state",notes:"Request drafted for annual reports, bond filings, development assumptions 2020–present. CC: jennifer.mcpherson@state.co.us. Ready to send."},
+  {id:9,agency:"Colorado Secretary of State – Notary Program",contact:"Notary Program",email:"notary@coloradosos.gov",subject:"Notary violation complaint – Lynda Eichler",dateSent:null,deadline:null,status:"not-sent",paid:false,amount:0,category:"state",notes:"Complaint re: unauthorized notarization 2/28/24. Signer Sheri King was not the property owner. File at coloradosos.gov/notary."},
+  {id:10,agency:"Colorado Bureau of Investigation",contact:"CBI",email:"cbi.colorado.gov",subject:"Property/deed fraud – 1826 Wooten Rd",dateSent:null,deadline:null,status:"not-sent",paid:false,amount:0,category:"state",notes:"Potential deed fraud — Warranty Deed transferred without owner knowledge. Case 22 DR 31669. File at cbi.colorado.gov."},
+  {id:11,agency:"Colorado Attorney General",contact:"AG Office",email:"cora.request@coag.gov",subject:"CORA noncompliance – El Paso County",dateSent:null,deadline:null,status:"not-sent",paid:false,amount:0,category:"state",notes:"Escalation pending. File if Madsen and/or DeStefano fail to respond by deadlines."},
+  {id:12,agency:"El Paso County – Communications",contact:"Dominic Manzo",email:"DominicManzo@elpasoco.com",subject:"Lorson Ranch MD No. 6 – permits, COs, buildout data",dateSent:"2026-04-03",deadline:"2026-04-08",status:"pending",paid:false,amount:0,category:"county",notes:"Dominic treating scope clarification as new request. Response due April 8. Broader request also submitted for Banning Lewis, Wolf Ranch, Cordera, Briargate historic data."},
+  {id:13,agency:"El Paso County – Communications",contact:"Mike Madsen",email:"MichaelMadsen@elpasoco.com",subject:"A/V budget & expenditures – BOCC productions",dateSent:"2026-03-26",deadline:"2026-04-08",status:"pending",paid:false,amount:0,category:"county",notes:"Madsen paused request pending date range for item 4 email search. Respond with Jan 1 2025–Mar 26 2026. Pull budget docs yourself first at admin.elpasoco.com/financial-services/budget-finance/county-budget/ before paying fees."},
+  {id:14,agency:"El Paso County – Communications",contact:"Mike Madsen",email:"EPCCORA@elpasoco.com",subject:"Citizen Connect / GovOutreach – contracts, costs, management",dateSent:null,deadline:null,status:"not-sent",paid:false,amount:0,category:"county",notes:"Cost-conscious draft ready. Item 4 narrowed to compiled/formal documents only — no email search upfront. Covers Jan 1 2023–present."},
+  {id:15,agency:"El Paso County – Communications",contact:"Mike Madsen",email:"EPCCORA@elpasoco.com",subject:"CORA program staffing, budget & fee revenue – County",dateSent:null,deadline:null,status:"not-sent",paid:false,amount:0,category:"county",notes:"Request drafted. Seeks FTE count, department budget allocations, annual fee revenue collected, request volume, and software/vendor contracts for CORA administration across all county departments. Key goal: fee revenue vs cost to administer. Ready to send."},
+  {id:16,agency:"City of Colorado Springs – City Clerk",contact:"City Clerk CORA",email:"cora@coloradosprings.gov",subject:"CORA program staffing, budget & fee revenue – City",dateSent:null,deadline:null,status:"not-sent",paid:false,amount:0,category:"city",notes:"Request drafted. Same scope as county version — FTE count, budget allocations, annual fee revenue, request volume, software/vendor contracts. City processes CORA across multiple departments; if split, request referral to each custodian. Key goal: fee revenue vs cost to administer. Ready to send."}
+];
+
+const SC={
+  "not-sent":{label:"Not sent",bg:"#F1EFE8",color:"#5F5E5A",border:"#B4B2A9"},
+  "pending":{label:"Pending",bg:"#E6F1FB",color:"#185FA5",border:"#85B7EB"},
+  "partial":{label:"Partial response",bg:"#FAEEDA",color:"#854F0B",border:"#EF9F27"},
+  "response-received":{label:"Response received",bg:"#EAF3DE",color:"#3B6D11",border:"#97C459"},
+  "escalation":{label:"Escalation needed",bg:"#FCEBEB",color:"#A32D2D",border:"#F09595"},
+  "resolved":{label:"Resolved",bg:"#E1F5EE",color:"#0F6E56",border:"#5DCAA5"}
+};
+const CAT={
+  county:{label:"El Paso County",bg:"#EEEDFE",color:"#3C3489"},
+  sheriff:{label:"Sheriff",bg:"#FAECE7",color:"#712B13"},
+  courts:{label:"Courts",bg:"#FAEEDA",color:"#633806"},
+  city:{label:"City of CoS",bg:"#E1F5EE",color:"#085041"},
+  state:{label:"State",bg:"#E6F1FB",color:"#0C447C"}
+};
+
+function getDays(d){if(!d)return null;return Math.round((new Date(d)-new Date("2026-04-05"))/86400000);}
+
+function DeadlineBadge({deadline}){
+  if(!deadline)return React.createElement("span",{style:{color:"var(--color-text-secondary)",fontSize:12}},"—");
+  const days=getDays(deadline);
+  const label=new Date(deadline).toLocaleDateString("en-US",{month:"short",day:"numeric"});
+  const color=days<=0?"#A32D2D":days<=3?"#854F0B":"#3B6D11";
+  const bg=days<=0?"#FCEBEB":days<=3?"#FAEEDA":"#EAF3DE";
+  return React.createElement("span",{style:{background:bg,color,fontSize:11,padding:"2px 7px",borderRadius:4,fontWeight:500}},label+(days<0?" (overdue)":days===0?" (today)":`(${days}d)`));
+}
+
+function App(){
+  const[reqs,setReqs]=useState(()=>{try{const s=localStorage.getItem("cora_v5");return s?JSON.parse(s):initialRequests;}catch{return initialRequests;}});
+  const[filter,setFilter]=useState("all");
+  const[expanded,setExpanded]=useState(null);
+  const[editId,setEditId]=useState(null);
+  const[noteText,setNoteText]=useState("");
+
+  function save(u){setReqs(u);try{localStorage.setItem("cora_v5",JSON.stringify(u));}catch{}}
+  function updateStatus(id,s){save(reqs.map(r=>r.id===id?{...r,status:s}:r));}
+  function saveNote(id){save(reqs.map(r=>r.id===id?{...r,notes:noteText}:r));setEditId(null);}
+
+  const filtered=filter==="all"?reqs:reqs.filter(r=>r.status===filter);
+  const totalPaid=reqs.filter(r=>r.paid).reduce((s,r)=>s+r.amount,0);
+  const totalPending=reqs.filter(r=>!r.paid&&r.amount>0).reduce((s,r)=>s+r.amount,0);
+  const newIds=[15,16];
+
+  return React.createElement("div",{style:{fontFamily:"var(--font-sans)"}},
+    React.createElement("div",{style:{display:"grid",gridTemplateColumns:"repeat(4,minmax(0,1fr))",gap:10,marginBottom:"1.5rem"}},
+      [{label:"Total paid",value:`$${totalPaid.toFixed(2)}`,sub:"out of pocket"},{label:"Pending fees",value:`$${totalPending.toFixed(2)}`,sub:"do not pay yet"},{label:"Escalation needed",value:reqs.filter(r=>r.status==="escalation").length,sub:"immediate action"},{label:"Not yet sent",value:reqs.filter(r=>r.status==="not-sent").length,sub:"drafts ready"}]
+      .map((c,i)=>React.createElement("div",{key:i,style:{background:"var(--color-background-secondary)",borderRadius:"var(--border-radius-md)",padding:"12px 14px"}},
+        React.createElement("div",{style:{fontSize:12,color:"var(--color-text-secondary)",marginBottom:4}},c.label),
+        React.createElement("div",{style:{fontSize:22,fontWeight:500,color:"var(--color-text-primary)",lineHeight:1.2}},c.value),
+        React.createElement("div",{style:{fontSize:11,color:"var(--color-text-tertiary)",marginTop:2}},c.sub)
+      ))
+    ),
+    React.createElement("div",{style:{display:"flex",gap:6,flexWrap:"wrap",marginBottom:"1.25rem"}},
+      [["all","All"],...Object.entries(SC).map(([k,v])=>[k,v.label])].map(([key,label])=>
+        React.createElement("button",{key,onClick:()=>setFilter(key),style:{fontSize:12,padding:"4px 10px",borderRadius:20,cursor:"pointer",background:filter===key?"var(--color-background-secondary)":"transparent",border:`0.5px solid ${filter===key?"var(--color-border-secondary)":"var(--color-border-tertiary)"}`,color:"var(--color-text-secondary)"}},
+          `${label} (${key==="all"?reqs.length:reqs.filter(r=>r.status===key).length})`)
+      )
+    ),
+    React.createElement("div",{style:{display:"flex",flexDirection:"column",gap:8}},
+      filtered.map(req=>{
+        const sc=SC[req.status],cc=CAT[req.category],isOpen=expanded===req.id,isNew=newIds.includes(req.id);
+        return React.createElement("div",{key:req.id,style:{background:"var(--color-background-primary)",border:isNew?"1.5px solid #85B7EB":"0.5px solid var(--color-border-tertiary)",borderRadius:"var(--border-radius-lg)",overflow:"hidden"}},
+          isNew&&React.createElement("div",{style:{background:"#E6F1FB",color:"#185FA5",fontSize:11,padding:"3px 14px",fontWeight:500}},"New"),
+          React.createElement("div",{onClick:()=>setExpanded(isOpen?null:req.id),style:{padding:"12px 16px",cursor:"pointer",display:"flex",alignItems:"flex-start",gap:12}},
+            React.createElement("div",{style:{flex:1,minWidth:0}},
+              React.createElement("div",{style:{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap",marginBottom:4}},
+                React.createElement("span",{style:{fontSize:11,padding:"2px 7px",borderRadius:4,background:cc.bg,color:cc.color,fontWeight:500}},cc.label),
+                React.createElement("span",{style:{fontSize:11,padding:"2px 7px",borderRadius:4,background:sc.bg,color:sc.color,border:`0.5px solid ${sc.border}`}},sc.label),
+                req.paid&&React.createElement("span",{style:{fontSize:11,padding:"2px 7px",borderRadius:4,background:"#EAF3DE",color:"#3B6D11"}},`Paid $${req.amount.toFixed(2)}`),
+                !req.paid&&req.amount>0&&React.createElement("span",{style:{fontSize:11,padding:"2px 7px",borderRadius:4,background:"#FAEEDA",color:"#854F0B"}},`Est. $${req.amount.toFixed(2)}`)
+              ),
+              React.createElement("div",{style:{fontSize:14,fontWeight:500,color:"var(--color-text-primary)",marginBottom:2}},req.subject),
+              React.createElement("div",{style:{fontSize:12,color:"var(--color-text-secondary)"}},`${req.agency} · ${req.contact}`)
+            ),
+            React.createElement("div",{style:{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4,flexShrink:0}},
+              React.createElement(DeadlineBadge,{deadline:req.deadline}),
+              React.createElement("span",{style:{fontSize:18,color:"var(--color-text-tertiary)",lineHeight:1}},isOpen?"−":"+")
+            )
+          ),
+          isOpen&&React.createElement("div",{style:{borderTop:"0.5px solid var(--color-border-tertiary)",padding:"12px 16px",background:"var(--color-background-secondary)"}},
+            React.createElement("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"5px 16px",fontSize:12,marginBottom:12}},
+              [["Contact",req.contact],["Email",req.email],["Date sent",req.dateSent||"Not yet sent"],["Deadline",req.deadline?new Date(req.deadline).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}):"—"]].map(([k,v])=>
+                React.createElement("div",{key:k},React.createElement("span",{style:{color:"var(--color-text-secondary)"}},k+": "),React.createElement("span",{style:{color:"var(--color-text-primary)"}},v))
+              )
+            ),
+            React.createElement("div",{style:{marginBottom:12}},
+              React.createElement("div",{style:{fontSize:11,color:"var(--color-text-secondary)",marginBottom:4}},"Notes"),
+              editId===req.id
+                ?React.createElement("div",null,
+                    React.createElement("textarea",{value:noteText,onChange:e=>setNoteText(e.target.value),style:{width:"100%",fontSize:13,padding:8,borderRadius:"var(--border-radius-md)",border:"0.5px solid var(--color-border-secondary)",background:"var(--color-background-primary)",color:"var(--color-text-primary)",resize:"vertical",minHeight:80,boxSizing:"border-box"}}),
+                    React.createElement("div",{style:{display:"flex",gap:6,marginTop:6}},
+                      React.createElement("button",{onClick:()=>saveNote(req.id),style:{fontSize:12,padding:"4px 10px"}},"Save"),
+                      React.createElement("button",{onClick:()=>setEditId(null),style:{fontSize:12,padding:"4px 10px"}},"Cancel")
+                    )
+                  )
+                :React.createElement("div",{style:{fontSize:13,color:"var(--color-text-primary)",lineHeight:1.6,cursor:"pointer"},onClick:()=>{setEditId(req.id);setNoteText(req.notes);}},
+                    req.notes||React.createElement("span",{style:{color:"var(--color-text-tertiary)"}},"Click to add notes")
+                  )
+            ),
+            React.createElement("div",{style:{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center"}},
+              React.createElement("span",{style:{fontSize:11,color:"var(--color-text-secondary)"}},"Update status:"),
+              Object.entries(SC).map(([key,val])=>
+                React.createElement("button",{key,onClick:()=>updateStatus(req.id,key),style:{fontSize:11,padding:"3px 8px",borderRadius:4,cursor:"pointer",background:req.status===key?val.bg:"transparent",color:req.status===key?val.color:"var(--color-text-secondary)",border:`0.5px solid ${req.status===key?val.border:"var(--color-border-tertiary)"}`}},val.label)
+              )
+            )
+          )
+        );
+      })
+    ),
+    React.createElement("div",{style:{marginTop:"1.5rem",fontSize:12,color:"var(--color-text-tertiary)",textAlign:"center"}},`${reqs.length} requests tracked · Today: April 5, 2026`)
+  );
+}
+ReactDOM.render(React.createElement(App),document.getElementById("root4"));
+</script>
