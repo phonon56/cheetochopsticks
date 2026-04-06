@@ -3,540 +3,637 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Civic data for people who live here. Colorado Springs crash records, road funding, and local intelligence — built by residents, offered free.">
-  <meta name="theme-color" content="#0a0f1a">
+  <meta name="description" content="cheetochopsticks is under active construction. Civic data for Colorado Springs — built by residents, offered free, currently covered in sawdust.">
+  <title>cheetochopsticks — Workshop Mode</title>
 
-  <!-- Open Graph -->
-  <meta property="og:title"       content="cheetochopsticks — Civic data for people who live here">
-  <meta property="og:description" content="Colorado Springs crash records, road funding, and local intelligence — built by residents, offered free.">
-  <meta property="og:type"        content="website">
-  <meta property="og:url"         content="https://cheetochopsticks.com">
-
-  <title>cheetochopsticks — Civic data for people who live here</title>
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700;1,900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="shared/css/main.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0a0f1a;
+      --surface:    #111827;
+      --surface2:   #1a2436;
+      --border:     rgba(255,255,255,.07);
+      --border-hi:  rgba(255,255,255,.14);
+      --gold:       #c8a84b;
+      --gold-dim:   rgba(200,168,75,.15);
+      --gold-faint: rgba(200,168,75,.06);
+      --text:       #e8e2d4;
+      --muted:      #7a8ea6;
+      --mono:       'IBM Plex Mono', monospace;
+      --sans:       'IBM Plex Sans', sans-serif;
+      --serif:      'Playfair Display', Georgia, serif;
+      --red:        #c0392b;
+      --green:      #27ae60;
+      --blue:       #2980b9;
+      --amber:      #d4860a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Noise overlay ─────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Layout ─────────────────────────────────── */
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── Nav ─────────────────────────────────────── */
+    .nav {
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,26,.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { text-decoration: none; display: flex; align-items: baseline; gap: 1px; }
+    .nav-logo-word {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: -.01em;
+      color: var(--text);
+    }
+    .nav-logo-dot { color: var(--gold); font-size: .95rem; }
+    .nav-badge {
+      font-family: var(--mono);
+      font-size: .55rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      padding: 2px 7px;
+      border-radius: 2px;
+      background: var(--gold-faint);
+    }
+
+    /* ── Hero ────────────────────────────────────── */
+    .hero {
+      padding: 80px 0 60px;
+      border-bottom: 1px solid var(--border);
+    }
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: .625rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+      opacity: .5;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -.02em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-sub {
+      max-width: 580px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 500; }
+
+    /* ── Tape strips ─────────────────────────────── */
+    .tape {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+    .tape-live  { background: rgba(39,174,96,.15);  color: #2ecc71; border: 1px solid rgba(39,174,96,.3); }
+    .tape-wip   { background: rgba(212,134,10,.15); color: #f39c12; border: 1px solid rgba(212,134,10,.3); }
+    .tape-soon  { background: rgba(41,128,185,.12); color: #5dade2; border: 1px solid rgba(41,128,185,.25); }
+
+    /* ── Section label ───────────────────────────── */
+    .section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .section-header h2 {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .section-note {
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Page cards ──────────────────────────────── */
+    .page-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .page-card {
+      background: var(--surface);
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+      text-decoration: none;
+      transition: background .18s;
+      position: relative;
+    }
+    .page-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--gold);
+      opacity: 0;
+      transition: opacity .18s;
+    }
+    .page-card:hover { background: var(--surface2); }
+    .page-card:hover::before { opacity: 1; }
+    .page-card:hover .card-title { color: var(--gold); }
+
+    .card-left { min-width: 0; }
+    .card-scope {
+      font-family: var(--mono);
+      font-size: .55rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .card-title {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      transition: color .18s;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .card-desc {
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .card-desc em { font-style: italic; color: #556a84; }
+    .card-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      padding-top: 2px;
+      white-space: nowrap;
+    }
+    .card-arrow {
+      font-size: .85rem;
+      color: var(--muted);
+      transition: color .18s, transform .18s;
+    }
+    .page-card:hover .card-arrow {
+      color: var(--gold);
+      transform: translate(2px, -1px);
+    }
+
+    /* ── Coming soon block ───────────────────────── */
+    .coming-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .coming-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 16px 18px;
+      border-style: dashed;
+    }
+    .coming-card p {
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .coming-card p strong { color: #556a84; font-weight: 500; }
+
+    /* ── Dispatch note ───────────────────────────── */
+    .dispatch {
+      padding: 48px 0;
+    }
+    .dispatch-box {
+      background: var(--gold-faint);
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+      padding: 32px 36px;
+    }
+    .dispatch-box h3 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .dispatch-box p {
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.65;
+      max-width: 540px;
+    }
+    .dispatch-box p + p { margin-top: 10px; }
+    .dispatch-box strong { color: var(--text); font-weight: 500; }
+
+    /* ── Footer ──────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer p {
+      font-family: var(--mono);
+      font-size: .58rem;
+      letter-spacing: .09em;
+      color: #344555;
+    }
+    .footer a { color: var(--muted); text-decoration: none; }
+    .footer a:hover { color: var(--gold); }
+
+    /* ── Ticker ──────────────────────────────────── */
+    .ticker-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      margin: 0;
+      position: relative;
+    }
+    .ticker-wrap::before,
+    .ticker-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+    }
+    .ticker-wrap::before { left: 0;  background: linear-gradient(90deg, var(--bg), transparent); }
+    .ticker-wrap::after  { right: 0; background: linear-gradient(-90deg, var(--bg), transparent); }
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      animation: ticker 30s linear infinite;
+      width: max-content;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .ticker-item {
+      font-family: var(--mono);
+      font-size: .625rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 28px;
+      white-space: nowrap;
+    }
+    .ticker-item strong { color: var(--text); }
+    .ticker-sep {
+      width: 1px;
+      background: var(--border-hi);
+      flex-shrink: 0;
+      align-self: stretch;
+      margin: 2px 0;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 52px 0 44px; }
+      .page-card { grid-template-columns: 1fr; }
+      .card-right { flex-direction: row; align-items: center; }
+      .dispatch-box { padding: 24px 20px; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Accessibility anchors -->
-<a href="#main" class="skip-link">Skip to main content</a>
-<div id="live-region" class="live-region" role="status" aria-live="polite" aria-atomic="true"></div>
-
-<!-- ═══════════════════════════════════════════════════════
-     NAVIGATION
-     ═══════════════════════════════════════════════════════ -->
-<header class="site-nav" role="banner">
-  <div class="nav-inner">
-
-    <!-- Logo -->
-    <a href="/" class="nav-logo" aria-label="cheetochopsticks — home">
-      <span class="nav-logo-word">cheetochopsticks</span>
-      <span class="nav-logo-dot" aria-hidden="true">.com</span>
-    </a>
-
-    <!-- Primary links -->
-    <nav aria-label="Primary navigation">
-      <ul class="nav-links" role="list">
-        <li><a href="/stories" class="nav-link">Stories</a></li>
-        <li><a href="/data"    class="nav-link">Data</a></li>
-        <li><a href="/tools"   class="nav-link">Tools</a></li>
-        <li><a href="/about"   class="nav-link">About</a></li>
-      </ul>
-    </nav>
-
-    <!-- Right cluster -->
-    <div class="nav-right">
-
-      <!-- Search -->
-      <button class="nav-icon-btn" aria-label="Search the site" type="button">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-             aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </button>
-
-      <!-- You+ trigger -->
-      <button class="you-plus-trigger"
-              aria-haspopup="true"
-              aria-expanded="false"
-              aria-controls="you-plus-dropdown"
-              type="button">
-        You&thinsp;+
-        <svg class="you-plus-caret" viewBox="0 0 10 10" aria-hidden="true">
-          <polyline points="2,3 5,7 8,3"/>
-        </svg>
-      </button>
-
-      <!-- Mobile hamburger -->
-      <button class="nav-hamburger"
-              aria-label="Open navigation menu"
-              aria-expanded="false"
-              aria-controls="nav-drawer"
-              type="button">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-    </div><!-- /nav-right -->
-  </div><!-- /nav-inner -->
+<!-- Nav -->
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
+        <span class="nav-logo-word">cheetochopsticks</span><span class="nav-logo-dot">.com</span>
+      </a>
+      <span class="nav-badge">Workshop Mode</span>
+    </div>
+  </div>
 </header>
 
-
-<!-- ── You+ Dropdown ─────────────────────────────────────── -->
-<div id="you-plus-dropdown"
-     class="you-plus-dropdown"
-     role="dialog"
-     aria-label="You Plus — choose your data scope"
-     aria-modal="true">
-
-  <div class="dropdown-header">
-    <p class="eyebrow">Personalize your view</p>
-    <p>Choose the geographic scope that matters to you. More views are on the way.</p>
+<!-- Ticker -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item"><strong>6</strong> pages live or in progress</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">Many more in the queue</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>390</strong> fatalities over 9 years</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">No invoice attached</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">Built in Colorado Springs</span>
+    <span class="ticker-sep"></span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item"><strong>6</strong> pages live or in progress</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">Many more in the queue</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>390</strong> fatalities over 9 years</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">No invoice attached</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">Built in Colorado Springs</span>
+    <span class="ticker-sep"></span>
   </div>
-
-  <div class="dropdown-tiles" role="list">
-
-    <a href="/find" class="dropdown-tile" data-scope="find" role="listitem">
-      <span class="tile-icon" aria-hidden="true">🔍</span>
-      <span class="tile-name">Find You</span>
-      <span class="tile-desc">Enter your address or zip code to see data specific to your block and neighborhood.</span>
-    </a>
-
-    <a href="cos-traffic-hub.html#city" class="dropdown-tile" data-scope="city" role="listitem">
-      <span class="tile-icon" aria-hidden="true">🏙️</span>
-      <span class="tile-name">City</span>
-      <span class="tile-desc">Colorado Springs city limits. Crash records, road funding, and safety trends 2017–2025.</span>
-    </a>
-
-    <a href="cos-traffic-hub.html#county" class="dropdown-tile" data-scope="county" role="listitem">
-      <span class="tile-icon" aria-hidden="true">🗺️</span>
-      <span class="tile-name">County</span>
-      <span class="tile-desc">El Paso County — all jurisdictions. Data across every incorporated city and unincorporated areas.</span>
-    </a>
-
-    <a href="cos-traffic-hub.html#state" class="dropdown-tile" data-scope="state" role="listitem">
-      <span class="tile-icon" aria-hidden="true">🏔️</span>
-      <span class="tile-name">State</span>
-      <span class="tile-desc">Colorado statewide. CDOT data across all 64 counties — coming soon.</span>
-    </a>
-
-    <a href="/more" class="dropdown-tile" data-scope="more" role="listitem">
-      <span class="tile-icon" aria-hidden="true">✦</span>
-      <span class="tile-name">More</span>
-      <span class="tile-desc">Regional, national, and cross-jurisdictional data. The view from 30,000 feet. Being built now.</span>
-    </a>
-
-  </div>
-
-  <div class="dropdown-footer">
-    <p>Built in Colorado Springs &nbsp;·&nbsp; Offered free</p>
-    <a href="/about">About this project →</a>
-  </div>
-
 </div>
 
+<!-- Hero -->
+<main>
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow">StorySeed Studios · The Dais · Colorado Springs</p>
+    <h1>
+      You found<br>
+      the workshop.<br>
+      <em>Mind the sawdust.</em>
+    </h1>
+    <p class="hero-sub">
+      This is where we park everything that exists but isn't quite framed out yet.
+      Some pages are fully furnished. Some still have exposed wiring.
+      <strong>All of it is free, local, and built by two residents at a kitchen table</strong> —
+      which is exactly the kind of operation that puts the sawdust everywhere.
+    </p>
+    <p class="hero-sub" style="margin-top:-16px;">
+      The real home page is taking shape. In the meantime, here's what's actually browseable.
+    </p>
+  </div>
+</section>
 
-<!-- ── Mobile Drawer ─────────────────────────────────────── -->
-<nav id="nav-drawer" class="nav-drawer" aria-label="Mobile navigation">
-  <a href="/stories" class="nav-drawer-link">Stories</a>
-  <a href="/data"    class="nav-drawer-link">Data</a>
-  <a href="/tools"   class="nav-drawer-link">Tools</a>
-  <a href="/about"   class="nav-drawer-link">About</a>
-  <hr class="rule" style="margin:8px 0;">
-  <a href="/find"                 class="nav-drawer-link">🔍 Find You</a>
-  <a href="cos-traffic-hub.html" class="nav-drawer-link">🏙️ City Dashboard</a>
-  <a href="/county"               class="nav-drawer-link">🗺️ County <span class="tag-coming" style="margin-left:6px;font-family:var(--font-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;background:rgba(200,168,75,.12);color:#9a7e30;padding:1px 5px;border-radius:2px;">Soon</span></a>
-  <a href="/state"                class="nav-drawer-link">🏔️ State <span class="tag-coming" style="margin-left:6px;font-family:var(--font-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;background:rgba(200,168,75,.12);color:#9a7e30;padding:1px 5px;border-radius:2px;">Soon</span></a>
-</nav>
-
-
-<!-- ═══════════════════════════════════════════════════════
-     MAIN CONTENT
-     ═══════════════════════════════════════════════════════ -->
-<main id="main" tabindex="-1">
-
-
-  <!-- ── Hero ─────────────────────────────────────────────── -->
-  <section class="hero" aria-labelledby="hero-headline">
-
-    <div class="hero-inner">
-
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-rule" aria-hidden="true"></span>
-        <span class="eyebrow">StorySeed Studios · The Dais · Colorado Springs</span>
-      </div>
-
-      <h1 class="hero-headline" id="hero-headline">
-        Your city.<br>
-        Your data.<br>
-        <em>No spin.</em>
-      </h1>
-
-      <p class="hero-sub">
-        Crash records. Road funding. Local decisions.
-        All of it open, searchable, and explained in plain language —
-        built by two residents at a kitchen table and offered free to anyone who lives here.
-      </p>
-
-      <div class="hero-actions">
-        <a href="cos-traffic-hub.html" class="btn btn-primary">
-          View Traffic Dashboard
-          <span aria-hidden="true">→</span>
-        </a>
-        <a href="#mission" class="btn btn-outline">
-          What is this?
-        </a>
-      </div>
-
-    </div>
-
-    <!-- Data ticker — decorative, screen readers skip it -->
-    <div class="hero-ticker" aria-hidden="true">
-      <div class="ticker-track" aria-hidden="true">
-        <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><strong>390</strong> fatalities over 9 years</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><strong>5.6×</strong> expansion vs. preservation spending</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><strong>$42.3M</strong> total road revenue · FY reported</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><strong>88%</strong> of crashes happen on dry roads</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><strong>31%</strong> are rear-end collisions</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item"><span class="pulse-dot" aria-hidden="true"></span> Live data · ArcGIS API · March 2026</span>
-        <span class="ticker-sep"></span>
-        <span class="ticker-item">Records request filed <strong>April 2026</strong> — LOSS danger ratings pending</span>
-        <span class="ticker-sep"></span>
-      </div>
-    </div>
-
-  </section>
-
-
-  <!-- ── Feature strip ─────────────────────────────────────── -->
-  <section class="feature-strip" aria-labelledby="feature-heading">
-    <div class="container">
-
-      <h2 id="feature-heading" class="sr-only">Featured tools and data</h2>
-
-      <div class="feature-strip-grid">
-
-        <!-- Primary card -->
-        <article class="feature-card primary reveal" style="--card-accent: var(--gold);">
-          <div class="feature-card-tag">Traffic · Safety · Funding</div>
-          <h2>Colorado Springs Traffic Safety &amp; Funding Dashboard</h2>
-          <p>
-            Nine years of crash records. FHWA highway finance data.
-            National comparisons. Searchable by zip code.
-            The complete picture of how crashes happen here and where the road money goes.
-          </p>
-          <div style="display:flex;gap:24px;margin-top:8px;">
-            <div>
-              <div class="feature-stat">64,434</div>
-              <div class="feature-stat-label">Crash records</div>
-            </div>
-            <div>
-              <div class="feature-stat">9 yrs</div>
-              <div class="feature-stat-label">2017 – 2025</div>
-            </div>
-            <div>
-              <div class="feature-stat">$42M</div>
-              <div class="feature-stat-label">Road revenue mapped</div>
-            </div>
-          </div>
-          <div class="feature-card-meta">
-            <span><span class="pulse-dot" aria-hidden="true"></span>Live data</span>
-            <a href="cos-traffic-hub.html" aria-label="Open Traffic Safety Dashboard">Open dashboard <span aria-hidden="true" class="arrow">→</span></a>
-          </div>
-        </article>
-
-        <!-- Search card -->
-        <article class="feature-card reveal reveal-delay-1" style="--card-accent: #4a9eff;">
-          <div class="feature-card-tag">Search</div>
-          <h2>Crash Records by Zip Code</h2>
-          <p>
-            Filter 64,434 records by location, year, severity, road condition, and impairment.
-            Export to CSV. No map required, no login.
-          </p>
-          <div class="feature-card-meta">
-            <span>25 zip codes covered</span>
-            <a href="cos-traffic-hub.html" aria-label="Open crash search tool">Search <span aria-hidden="true" class="arrow">→</span></a>
-          </div>
-        </article>
-
-        <!-- Coming soon card -->
-        <article class="feature-card reveal reveal-delay-2" style="--card-accent: #6a7f96;">
-          <div class="feature-card-tag">Coming soon</div>
-          <h2>Corridor Danger Ratings</h2>
-          <p>
-            LOSS danger ratings for every major road corridor —
-            when the public records request comes back.
-            Filed April 2026. Pending.
-          </p>
-          <div class="feature-card-meta">
-            <span>Records request: pending</span>
-            <span style="color:#6a7f96;">ETA unknown</span>
-          </div>
-        </article>
-
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ── Mission ─────────────────────────────────────────────── -->
-  <section class="mission section" id="mission" aria-labelledby="mission-heading">
-    <div class="container">
-
-      <div class="mission-rule">
-        <div class="mission-rule-line"></div>
-        <span class="eyebrow">Why this exists</span>
-        <div class="mission-rule-line"></div>
-      </div>
-
-      <h2 class="mission-headline reveal" id="mission-heading">
-        Public data should be readable<br>by the public.
-      </h2>
-
-      <p class="mission-body reveal reveal-delay-1">
-        The crash data was always public. The road funding numbers were always filed.
-        The city's own Safety Action Plan said the right things.
-        <strong>None of it was in a form that residents could actually use.</strong>
-      </p>
-
-      <p class="mission-body reveal reveal-delay-2">
-        This is the attempt to fix that. No grant funding. No consulting contract.
-        Two people, a kitchen table, USAA on hold, and a public ArcGIS endpoint
-        that turned out to contain nine years of crash records.
-        The data is the city's. We just built the door.
-      </p>
-
-      <div class="mission-aside reveal reveal-delay-3">
-        <strong>The offer on the table:</strong>
-        Everything built here — the dashboard, the search tool, the analysis —
-        is offered to the City of Colorado Springs for public use.
-        No invoice attached. If it helps someone make a safer decision
-        or ask a better question at a council meeting, that's the whole point.
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ── Latest ──────────────────────────────────────────────── -->
-  <section class="feed-section" aria-labelledby="latest-heading">
-    <div class="container">
-
-      <div class="section-header">
-        <h2 id="latest-heading">Latest</h2>
-        <a href="/stories">All stories →</a>
-      </div>
-
-      <div class="feed-grid">
-
-        <article class="card reveal">
-          <div class="card-body">
-            <span class="card-tag data">Data</span>
-            <a href="cos-traffic-hub.html">
-              Traffic Safety &amp; Funding Dashboard — full release
-            </a>
-            <p>
-              64,434 crash records, 12 charts, FHWA funding analysis,
-              and a national comparison. Everything we have, searchable,
-              in one place.
-            </p>
-          </div>
-          <div class="card-footer">
-            <span>April 2026</span>
-            <span class="badge badge-live">● Live</span>
-          </div>
-        </article>
-
-        <article class="card reveal reveal-delay-1">
-          <div class="card-body">
-            <span class="card-tag story">Analysis</span>
-            <a href="cos-traffic-hub.html#national">
-              5.6 to 1: what COS road spending says that the city won't
-            </a>
-            <p>
-              The national norm is $5 in maintenance for every $1 in expansion.
-              Colorado Springs has it backwards. What that means over the next 15 years.
-            </p>
-          </div>
-          <div class="card-footer">
-            <span>April 2026</span>
-            <span class="badge badge-new">Analysis</span>
-          </div>
-        </article>
-
-        <article class="card reveal reveal-delay-2">
-          <div class="card-body">
-            <span class="card-tag pending">Records request</span>
-            <a href="/about#loss-request">
-              LOSS corridor danger ratings — what we asked for and why
-            </a>
-            <p>
-              The Safety Action Plan rated every major road corridor by danger level.
-              Those ratings are in internal GIS files. We asked for them April 2026.
-            </p>
-          </div>
-          <div class="card-footer">
-            <span>April 2026</span>
-            <span class="badge badge-pending">Pending</span>
-          </div>
-        </article>
-
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ── CTA Band ─────────────────────────────────────────────── -->
-  <section class="cta-band section" aria-labelledby="cta-heading">
-    <div class="container">
-      <h2 id="cta-heading">Stay in the loop.</h2>
-      <p>
-        When new data comes in, when the records request resolves,
-        when something changes — you'll know before the press release does.
-      </p>
-      <div class="input-row">
-        <label for="email-input" class="sr-only">Email address</label>
-        <input type="email"
-               id="email-input"
-               class="input-field"
-               placeholder="your@email.com"
-               autocomplete="email"
-               aria-describedby="email-hint">
-        <button class="btn btn-primary" type="button">
-          Notify me
-        </button>
-      </div>
-      <p id="email-hint" style="margin-top:10px;font-family:var(--font-mono);font-size:.625rem;color:#4a5f74;letter-spacing:.08em;">
-        No frequency, no algorithm. Only signal.
-      </p>
-    </div>
-  </section>
-
-
-</main>
-
-
-<!-- ═══════════════════════════════════════════════════════
-     FOOTER
-     ═══════════════════════════════════════════════════════ -->
-<footer class="site-footer" role="contentinfo">
+<!-- Pages in Progress -->
+<section class="section">
   <div class="container">
 
-    <div class="footer-grid">
-
-      <!-- Brand column -->
-      <div class="footer-brand">
-        <a href="/" class="nav-logo" aria-label="cheetochopsticks — home">
-          <span class="nav-logo-word">cheetochopsticks</span>
-          <span class="nav-logo-dot" aria-hidden="true">.com</span>
-        </a>
-        <p>
-          Civic data for people who live here.
-          Built by StorySeed Studios and The Dais in Colorado Springs, Colorado.
-          Offered free. No invoice attached.
-        </p>
-      </div>
-
-      <!-- Data column -->
-      <div class="footer-col">
-        <h4>Data</h4>
-        <ul>
-          <li><a href="cos-traffic-hub.html">Traffic Dashboard</a></li>
-          <li><a href="cos-traffic-hub.html">Crash Search by Zip</a></li>
-          <li><a href="cos-traffic-hub.html#national">National Comparison</a></li>
-          <li>
-            <a href="/loss-ratings">
-              LOSS Corridor Ratings
-              <span class="tag-coming">Pending</span>
-            </a>
-          </li>
-          <li>
-            <a href="/county">
-              County Dashboard
-              <span class="tag-coming">Soon</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Project column -->
-      <div class="footer-col">
-        <h4>Project</h4>
-        <ul>
-          <li><a href="/about">About</a></li>
-          <li><a href="/about#methods">Methods &amp; Sources</a></li>
-          <li><a href="/about#records">Records Requests</a></li>
-          <li><a href="/about#contact">Contact</a></li>
-          <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-        </ul>
-      </div>
-
-      <!-- Scope column -->
-      <div class="footer-col">
-        <h4>Scope</h4>
-        <ul>
-          <li><a href="/find">🔍 Find You</a></li>
-          <li><a href="cos-traffic-hub.html">🏙️ City — Colorado Springs</a></li>
-          <li>
-            <a href="/county">
-              🗺️ County — El Paso
-              <span class="tag-coming">Soon</span>
-            </a>
-          </li>
-          <li>
-            <a href="/state">
-              🏔️ State — Colorado
-              <span class="tag-coming">Soon</span>
-            </a>
-          </li>
-          <li>
-            <a href="/more">
-              ✦ More
-              <span class="tag-coming">Planned</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
+    <div class="section-header">
+      <h2>Pages that exist right now</h2>
+      <span class="section-note">6 active · more coming</span>
     </div>
 
-    <div class="footer-bottom">
+    <div class="page-grid">
+
+      <!-- Traffic Hub -->
+      <a class="page-card"
+         href="https://cheetochopsticks.com/microsites/city/Traffic/SafetyPlan/cos-traffic-hub.html">
+        <div class="card-left">
+          <p class="card-scope">City · Traffic &amp; Safety</p>
+          <p class="card-title">COS Traffic Safety &amp; Funding Dashboard</p>
+          <p class="card-desc">
+            64,434 crash records. 12 charts. FHWA funding analysis. A national spending
+            comparison that is, diplomatically speaking, <em>not flattering for city hall.</em>
+            This is the flagship. It's dressed.
+          </p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- CORA Implementation Guide -->
+      <a class="page-card"
+         href="https://cheetochopsticks.com/microsites/city/coraform/cos-cora-implementation-guide.html">
+        <div class="card-left">
+          <p class="card-scope">City · Public Records</p>
+          <p class="card-title">COS CORA Implementation Guide</p>
+          <p class="card-desc">
+            Colorado's open-records law is legally binding. This is a plain-language guide
+            on how the city is supposed to follow it — and what to do when they, let's say,
+            <em>creatively interpret</em> that obligation.
+          </p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- FBI Tips Redesign -->
+      <a class="page-card"
+         href="https://cheetochopsticks.com/microsites/FBI/tips-fbi-redesign.html">
+        <div class="card-left">
+          <p class="card-scope">Federal · UX Research</p>
+          <p class="card-title">FBI Tips — Redesign Proposal</p>
+          <p class="card-desc">
+            The FBI's public tip submission experience is, uh, a journey.
+            This is a redesign proposal for making it actually usable
+            by people who have information and want to share it
+            <em>without a cybersecurity degree.</em>
+          </p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- Assessor Property Conveyances -->
+      <a class="page-card"
+         href="https://cheetochopsticks.com/microsites/county/land/Assessor_Property%20Conveyances.html">
+        <div class="card-left">
+          <p class="card-scope">County · Land &amp; Property</p>
+          <p class="card-title">El Paso County — Assessor Property Conveyances</p>
+          <p class="card-desc">
+            Who owns what, and when did that change? Property transfer records,
+            decoded for humans. Useful if you're curious about your neighborhood,
+            or just like knowing things <em>before your realtor does.</em>
+          </p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- LDC Contact -->
+      <a class="page-card"
+         href="https://cheetochopsticks.com/microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">
+        <div class="card-left">
+          <p class="card-scope">County · Land Development Code</p>
+          <p class="card-title">Land Development Code — Contact &amp; Navigation</p>
+          <p class="card-desc">
+            Part of a larger effort to make the county's development code
+            something a resident can actually read. This is the contact
+            page — because someone has to be reachable when the code
+            <em>does something confusing (so, constantly).</em>
+          </p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- CDOLA CORA Audit -->
+      <a class="page-card"
+         href="https://cheetochopsticks.com/microsites/state/cdola/cdola-cora-audit-and-redesign.html">
+        <div class="card-left">
+          <p class="card-scope">State · DOLA · Public Records</p>
+          <p class="card-title">CDOLA — CORA Audit &amp; Redesign</p>
+          <p class="card-desc">
+            Colorado's Department of Local Affairs handles a lot of money that
+            flows to counties and municipalities. This is an audit of their
+            records-request process, plus a redesign proposal so it doesn't
+            feel like <em>faxing a library in 1987.</em>
+          </p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- Coming Soon -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>What's in the queue</h2>
+      <span class="section-note">No ETA. We have day jobs.</span>
+    </div>
+    <div class="coming-grid">
+      <div class="coming-card">
+        <p><strong>County Dashboard</strong><br>El Paso County — all jurisdictions, all crash data, full picture.</p>
+      </div>
+      <div class="coming-card">
+        <p><strong>LOSS Corridor Ratings</strong><br>Danger ratings for every major road. Pending a records request filed April 2026.</p>
+      </div>
+      <div class="coming-card">
+        <p><strong>Zip Code Search</strong><br>Your block, your crashes, your street. Hyper-local lookup coming.</p>
+      </div>
+      <div class="coming-card">
+        <p><strong>State Dashboard</strong><br>CDOT data across all 64 counties. Colorado from 30,000 feet.</p>
+      </div>
+      <div class="coming-card">
+        <p><strong>Stories</strong><br>Long-form analysis when the data says something nobody's saying out loud.</p>
+      </div>
+      <div class="coming-card">
+        <p><strong>A lot more</strong><br>We have a list. The list is longer than this page. That's intentional.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dispatch note -->
+<section class="dispatch">
+  <div class="container">
+    <div class="dispatch-box">
+      <h3>What is this, exactly?</h3>
       <p>
-        © 2026 StorySeed Studios · The Dais &nbsp;·&nbsp;
-        El Paso County, Colorado &nbsp;·&nbsp;
-        Data: City of Colorado Springs ArcGIS (live API) · FHWA Form 536 &nbsp;·&nbsp;
-        For informational purposes. Not legal advice.
+        cheetochopsticks is a civic data project built by two residents of Colorado Springs —
+        <strong>StorySeed Studios and The Dais</strong> — at a kitchen table, with public records,
+        too much coffee, and a sincere belief that people who live somewhere
+        deserve to actually understand it.
       </p>
       <p>
-        <a href="/privacy">Privacy</a> &nbsp;·&nbsp;
-        <a href="/about#methods">Methods</a> &nbsp;·&nbsp;
-        <a href="https://www.thedais.com" target="_blank" rel="noopener noreferrer">The Dais</a>
+        Everything here is free. No paywall, no pitch deck, no monetization strategy.
+        <strong>No invoice attached.</strong> If it helps one person ask a better question
+        at a city council meeting, or understand why their street feels dangerous,
+        that's the whole point.
+      </p>
+      <p>
+        If you want to know when something new drops —
+        <strong>before the press release, before the tweet, before the newsletter</strong>
+        — we're working on a way to do that. For now, bookmark this page
+        and check back when you remember. We'll be here, sawdust and all.
       </p>
     </div>
+  </div>
+</section>
+</main>
 
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer">
+      <p>© 2026 StorySeed Studios · The Dais &nbsp;·&nbsp; El Paso County, Colorado &nbsp;·&nbsp; Data: City of Colorado Springs ArcGIS · FHWA Form 536 &nbsp;·&nbsp; For informational purposes only.</p>
+      <p><a href="https://www.thedais.com" target="_blank" rel="noopener noreferrer">The Dais</a> &nbsp;·&nbsp; <a href="/">Home</a></p>
+    </div>
   </div>
 </footer>
-
-<!-- Scripts -->
-<script src="shared/js/main.js"></script>
 
 </body>
 </html>
