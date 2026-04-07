@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File a Complaint | Colorado Attorney General</title>
+<meta name="description" content="File a complaint with the Colorado Attorney General's Office. Describe what happened — we handle the routing to the right team.">
+
+<!-- ─────────────────────────────────────────────────────────
+     SALESFORCE CONFIGURATION — Set before deploying
+     ─────────────────────────────────────────────────────── -->
+<script>
+window.SFCONFIG = {
+  // Salesforce org domain (no trailing slash)
+  instanceUrl:   'https://YOUR_ORG.my.salesforce.com',
+  // Connected App credentials (never expose client_secret in frontend — use a proxy)
+  // In production: these calls go through your backend /api/case endpoint
+  apiVersion:    'v58.0',
+  // Set to true to use demo mode (no real API calls)
+  demoMode:      true,
+  // Optional: your backend proxy that handles Salesforce auth + case creation
+  proxyEndpoint: '/api/complaints/create',
+};
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── ROOT TOKENS ─────────────────────────────────────────── */
+:root {
+  --navy:        #0d1b2e;   /* Colorado AG navy */
+  --navy-mid:    #1a3050;
+  --navy-soft:   #243d5c;
+  --ink:         #1a1a2e;
+  --ink-mid:     #334155;
+  --ink-mute:    #4a5a6a;   /* 6.4:1 on white — WCAG AA pass */
+  --on-navy:     #8ab4c8;   /* 5.2:1 on navy — WCAG AA pass */
+  --white:       #ffffff;
+  --off-white:   #f7f8fa;
+  --rule:        rgba(13,27,46,.08);
+  --gold:        #c8a84b;   /* Colorado gold */
+  --gold-dark:   #a8832a;
+  --red:         #b91c1c;
+  --red-bg:      #fef2f2;
+  --teal:        #0e7490;
+  --teal-bg:     #f0f9ff;
+  --green:       #065f46;
+  --green-bg:    #ecfdf5;
+  --orange:      #92400e;
+  --orange-bg:   #fffbeb;
+  --purple:      #5b21b6;
+  --purple-bg:   #f5f3ff;
+  /* Focus ring — high visibility on all backgrounds */
+  --focus-ring:  #1d4ed8;
+  --focus-ring-on-dark: #fbbf24;
+}
+
+/* ── GLOBAL BASE ─────────────────────────────────────────── */
+html { font-size: 16px; scroll-behavior: smooth; scroll-padding-top: 8px; }
+
+body {
+  background: var(--off-white);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ── SKIP LINK — FIRST FOCUSABLE ELEMENT ─────────────────── */
+/* FIX #20: Skip link is the ABSOLUTE FIRST element in DOM   */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 6px;
+  z-index: 9999;
+  background: var(--navy);
+  color: #fff;
+  padding: 10px 18px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  border-radius: 3px;
+  text-decoration: none;
+  /* FIX #4: outline NOT removed on focus */
+  outline: 3px solid var(--focus-ring-on-dark);
+  outline-offset: 2px;
+}
+.skip-link:focus { left: 8px; }
+
+/* FIX #18: Global focus ring — visible on ALL interactive elements */
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── LIVE STATUS (screen reader announcements) ───────────── */
+[role="status"],
+[role="alert"] {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* SR-only utility */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── LANG TOGGLE BAR ─────────────────────────────────────── */
+.lang-bar {
+  background: var(--navy-mid);
+  padding: 6px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.lang-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.25);
+  color: var(--on-navy);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.lang-btn[aria-current="true"],
+.lang-btn:hover {
+  background: rgba(200,168,75,.2);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.lang-btn:focus-visible {
+  outline: 2px solid var(--focus-ring-on-dark);
+  outline-offset: 2px;
+}
+
+/* ── EMERGENCY BAR ───────────────────────────────────────── */
+.emergency-bar {
+  background: var(--red);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.emergency-bar p {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: .01em;
+  text-align: center;
+}
+.emergency-bar a {
+  color: #fde68a;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.emergency-bar a:hover { color: #fff; }
+.emergency-bar a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* ── SITE HEADER ─────────────────────────────────────────── */
+.site-header {
+  background: var(--navy);
+  padding: 0 24px;
+  border-bottom: 3px solid var(--gold);
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+.logo-link:focus-visible {
+  outline: 2px solid var(--focus-ring-on-dark);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+.logo-seal {
+  width: 46px; height: 46px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: .04em;
+  text-align: center;
+  line-height: 1.2;
+}
+.logo-text { color: #fff; }
+.logo-text strong {
+  display: block;
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+.logo-text span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--on-navy); /* 5.2:1 — WCAG AA pass */
+  display: block;
+}
+.header-secure {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--on-navy);
+}
+.lock-icon {
+  width: 13px; height: 13px;
+  border: 1.5px solid var(--on-navy);
+  border-radius: 2px;
+  position: relative;
+  display: inline-block;
+}
+.lock-icon::before {
+  content: '';
+  position: absolute;
+  top: -5px; left: 2px;
+  width: 7px; height: 5px;
+  border: 1.5px solid var(--on-navy);
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+}
+
+/* ── HERO ────────────────────────────────────────────────── */
+.hero {
+  background: var(--navy);
+  padding: 52px 24px 60px;
+}
+.hero-inner {
+  max-width: 660px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::after {
+  content: '';
+  flex: 1;
+  max-width: 44px;
+  height: 1px;
+  background: var(--gold);
+  opacity: .4;
+}
+.hero h1 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 14px;
+  letter-spacing: -.01em;
+}
+.hero p {
+  font-size: 15px;
+  color: rgba(255,255,255,.82);
+  line-height: 1.75;
+  font-weight: 300;
+  max-width: 520px;
+}
+.hero p strong { color: #fff; font-weight: 500; }
+
+.routing-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 22px;
+  padding: 12px 16px;
+  background: rgba(200,168,75,.1);
+  border: 1px solid rgba(200,168,75,.25);
+  border-radius: 4px;
+}
+.routing-arrow { color: var(--gold); font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+.routing-note p {
+  font-size: 13px;
+  color: rgba(255,255,255,.75);
+  line-height: 1.6;
+  font-weight: 300;
+}
+.routing-note strong { color: #fff; font-weight: 500; }
+
+/* ── MAIN / FORM SECTION ─────────────────────────────────── */
+.form-section {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
+}
+
+/* ── SALESFORCE STATUS STRIP ─────────────────────────────── */
+.sf-status-strip {
+  background: var(--teal-bg);
+  border: 1px solid rgba(14,116,144,.2);
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin: 16px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--teal);
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: .02em;
+}
+.sf-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+.sf-status-strip.demo { background: var(--orange-bg); border-color: rgba(146,64,14,.2); color: var(--orange); }
+.sf-status-strip.demo .sf-dot { background: var(--orange); }
+.sf-status-strip.error { background: var(--red-bg); border-color: rgba(185,28,28,.2); color: var(--red); }
+.sf-status-strip.error .sf-dot { background: var(--red); animation: none; }
+
+/* ── FORM CARD ───────────────────────────────────────────── */
+.form-card {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid rgba(13,27,46,.08);
+  box-shadow: 0 4px 24px rgba(13,27,46,.06);
+  margin-top: 24px;
+  overflow: hidden;
+}
+.form-card-header {
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--rule);
+}
+.form-card-header h2 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.form-card-header p {
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.6;
+}
+.form-card-header abbr { cursor: help; text-decoration: underline dotted; }
+
+/* ── FORM BODY ───────────────────────────────────────────── */
+.form-body { padding: 24px 28px; }
+
+/* Field wrapper */
+.field { margin-bottom: 22px; }
+.field:last-child { margin-bottom: 0; }
+
+/* Label row */
+.field-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+  flex-wrap: wrap;
+}
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.3;
+  cursor: pointer;
+}
+.req {
+  color: var(--red);
+  margin-left: 2px;
+  font-weight: 700;
+}
+.char-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+.char-count.near { color: var(--orange); }
+.char-count.over { color: var(--red); font-weight: 600; }
+
+/* Field hint */
+.field-hint {
+  font-size: 12.5px;
+  color: var(--ink-mute);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* Field error */
+.field-error {
+  font-size: 12.5px;
+  color: var(--red);
+  font-weight: 500;
+  margin-top: 5px;
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  min-height: 1em;
+}
+.field-error::before {
+  content: '⚠';
+  flex-shrink: 0;
+  font-size: 11px;
+  margin-top: 1px;
+}
+.field-error:empty { display: none; }
+
+/* Textarea */
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--off-white);
+  border: 1.5px solid #cbd5e1;
+  border-radius: 5px;
+  resize: vertical;
+  min-height: 148px;
+  transition: border-color .15s, box-shadow .15s;
+}
+textarea:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 0px;
+  border-color: var(--focus-ring);
+  background: #fff;
+}
+textarea[aria-invalid="true"] {
+  border-color: var(--red);
+  background: var(--red-bg);
+}
+
+/* Text input */
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
+  width: 100%;
+  padding: 10px 13px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  color: var(--ink);
+  background: var(--off-white);
+  border: 1.5px solid #cbd5e1;
+  border-radius: 5px;
+  transition: border-color .15s;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 0px;
+  border-color: var(--focus-ring);
+  background: #fff;
+}
+input[aria-invalid="true"] {
+  border-color: var(--red);
+  background: var(--red-bg);
+}
+
+/* Select */
+select {
+  width: 100%;
+  padding: 10px 13px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  color: var(--ink);
+  background: var(--off-white);
+  border: 1.5px solid #cbd5e1;
+  border-radius: 5px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23334155' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+select:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 0px;
+  border-color: var(--focus-ring);
+}
+
+/* ── CATEGORY CHIPS ──────────────────────────────────────── */
+.chips-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+.chip {
+  padding: 7px 13px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 20px;
+  background: var(--off-white);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.chip:hover {
+  border-color: var(--navy);
+  background: #fff;
+  color: var(--navy);
+}
+.chip[aria-pressed="true"] {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+.chip-icon { font-size: 14px; flex-shrink: 0; }
+
+/* Redirect note for certain chips */
+.chip-redirect {
+  display: none;
+  padding: 10px 14px;
+  background: var(--teal-bg);
+  border: 1px solid rgba(14,116,144,.25);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--teal);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.chip-redirect.visible { display: block; }
+.chip-redirect a { color: var(--teal); font-weight: 600; text-decoration: underline; }
+.chip-redirect a:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* ── DIVIDER ─────────────────────────────────────────────── */
+.field-divider {
+  height: 1px;
+  background: var(--rule);
+  margin: 4px 0 24px;
+}
+
+/* ── ANONYMOUS TOGGLE ────────────────────────────────────── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--off-white);
+  border: 1.5px solid #cbd5e1;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.toggle-row:focus-within {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 0px;
+  border-color: var(--focus-ring);
+}
+.toggle-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--navy);
+  cursor: pointer;
+  flex-shrink: 0;
+  /* FIX: checkbox needs explicit focus style */
+}
+.toggle-row input[type="checkbox"]:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  line-height: 1.4;
+}
+.toggle-sub {
+  font-size: 12px;
+  color: var(--ink-mute);
+  display: block;
+  font-weight: 400;
+  margin-top: 1px;
+}
+
+/* Contact fields (conditionally shown) */
+.contact-fields { transition: none; }
+.contact-fields.hidden { display: none; }
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 520px) {
+  .input-row { grid-template-columns: 1fr; }
+}
+
+/* ── AI ROUTING INDICATOR ────────────────────────────────── */
+.ai-routing {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--purple-bg);
+  border: 1px solid rgba(91,33,182,.15);
+  border-radius: 4px;
+  font-size: 12.5px;
+  color: var(--purple);
+  margin-top: 8px;
+}
+.ai-routing.visible { display: flex; }
+.ai-routing strong { font-weight: 600; }
+.ai-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(91,33,182,.2);
+  border-top-color: var(--purple);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── FORM FOOTER / SUBMIT ────────────────────────────────── */
+.form-footer {
+  padding: 20px 28px 26px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.submit-btn {
+  padding: 13px 28px;
+  background: var(--navy);
+  color: #fff;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background .15s;
+  white-space: nowrap;
+}
+.submit-btn:hover { background: var(--navy-mid); }
+.submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+.submit-btn:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+.btn-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  display: none;
+}
+.submit-btn.loading .btn-spinner { display: block; }
+.submit-btn.loading .btn-label { opacity: .7; }
+
+.form-disclaimer {
+  font-size: 11.5px;
+  color: var(--ink-mute);
+  line-height: 1.55;
+  max-width: 360px;
+}
+.form-disclaimer a {
+  color: var(--ink-mute);
+  text-decoration: underline;
+}
+
+/* ── CONFIRMATION PANEL ──────────────────────────────────── */
+.confirmation {
+  display: none;
+  padding: 32px 28px;
+}
+.confirmation.visible { display: block; }
+
+.confirmation-icon {
+  width: 56px; height: 56px;
+  background: var(--green-bg);
+  border: 2px solid rgba(6,95,70,.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  margin-bottom: 18px;
+}
+.confirmation h2 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+.confirmation > p {
+  font-size: 14.5px;
+  color: var(--ink-mute);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.ref-block {
+  background: var(--off-white);
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.ref-block-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  display: block;
+  margin-bottom: 4px;
+}
+.ref-number {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: .08em;
+}
+.sf-record-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--teal);
+  text-decoration: underline;
+}
+.sf-record-link:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+.next-steps {
+  list-style: none;
+  border-top: 1px solid var(--rule);
+  padding-top: 18px;
+}
+.next-steps li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  color: var(--ink-mid);
+  padding: 7px 0;
+  line-height: 1.55;
+  border-bottom: 1px solid var(--rule);
+}
+.next-steps li:last-child { border-bottom: none; }
+.step-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--gold);
+  background: rgba(200,168,75,.12);
+  border: 1px solid rgba(200,168,75,.3);
+  border-radius: 50%;
+  width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.new-complaint-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: 1.5px solid var(--navy);
+  border-radius: 4px;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  transition: background .15s;
+}
+.new-complaint-btn:hover { background: var(--off-white); }
+.new-complaint-btn:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* ── ALTERNATE PATHWAYS ──────────────────────────────────── */
+.alt-section {
+  margin-top: 32px;
+}
+.alt-section h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.alt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.alt-card {
+  display: block;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid rgba(13,27,46,.09);
+  border-radius: 6px;
+  text-decoration: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.alt-card:hover {
+  border-color: var(--navy);
+  box-shadow: 0 2px 8px rgba(13,27,46,.08);
+}
+.alt-card:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.alt-card-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 4px;
+}
+.alt-card-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.alt-card-desc {
+  font-size: 11.5px;
+  color: var(--ink-mute);
+  line-height: 1.55;
+}
+.alt-card-arrow {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-mute);
+  margin-top: 8px;
+}
+
+/* ── SALESFORCE INTEGRATION NOTES ───────────────────────── */
+.api-disclosure {
+  margin-top: 32px;
+  border: 1px solid rgba(13,27,46,.09);
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+}
+.api-toggle-btn {
+  width: 100%;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  cursor: pointer;
+  gap: 8px;
+}
+.api-toggle-btn:hover { background: var(--off-white); }
+.api-toggle-btn:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+.toggle-arrow { color: var(--ink-mute); font-size: 12px; transition: transform .2s; }
+.api-toggle-btn[aria-expanded="true"] .toggle-arrow { transform: rotate(180deg); }
+.api-body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .3s ease;
+}
+.api-body.open { max-height: 1200px; }
+.api-inner { padding: 4px 18px 20px; border-top: 1px solid var(--rule); }
+.api-intro {
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.7;
+  margin: 14px 0;
+}
+.api-code-block {
+  background: var(--navy);
+  color: #93c5fd;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  line-height: 1.7;
+  padding: 16px 18px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 10px 0;
+}
+.api-code-block .comment { color: rgba(255,255,255,.58); } /* raised from .35 (4.38:1 FAIL) → .58 (5.5:1 PASS) */
+.api-code-block .key { color: #fbbf24; }
+.api-code-block .val { color: #86efac; }
+.api-code-block .endpoint { color: #f9a8d4; }
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.site-footer {
+  background: var(--navy);
+  padding: 22px 24px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  margin-top: 40px;
+}
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-inner p {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: var(--on-navy);
+  text-transform: uppercase;
+}
+.footer-inner nav a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--on-navy);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-left: 14px;
+}
+.footer-inner nav a:hover { color: #fff; }
+.footer-inner nav a:first-child { margin-left: 0; }
+.footer-inner nav a:focus-visible {
+  outline: 2px solid var(--focus-ring-on-dark);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .form-body, .form-footer, .form-card-header { padding-left: 18px; padding-right: 18px; }
+  .form-footer { flex-direction: column; align-items: flex-start; }
+  .submit-btn { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     SKIP LINK — MUST BE ABSOLUTE FIRST ELEMENT IN DOM
+     FIX: Addresses audit findings #20 (first focusable) and
+          #4 (outline:none on skip link — now has visible ring)
+     ══════════════════════════════════════════════════════════ -->
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- Screen reader live regions — FIX #86 (assertive for errors) -->
+<div role="alert" id="live-alert" aria-atomic="true"></div>
+<div role="status" id="live-status" aria-atomic="true"></div>
+
+<!-- Language toggle bar — FIX #80 (lang switching) -->
+<div class="lang-bar" role="navigation" aria-label="Language selection">
+  <button class="lang-btn" aria-current="true" id="btn-en" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" id="btn-es" onclick="setLang('es')">ES</button>
+</div>
+
+<!-- Emergency bar -->
+<div role="region" aria-label="Emergency notice">
+  <div class="emergency-bar">
+    <p>
+      <strong>If this is an emergency, call 911.</strong>
+      &nbsp;·&nbsp;
+      AG Office: <a href="tel:17205086000" aria-label="Call the Attorney General at 720-508-6000">720-508-6000</a>
+      &nbsp;·&nbsp;
+      <a href="https://coag.gov/about-us/contact-colorado-office-attorney-general/"
+         aria-label="Contact the Colorado Attorney General's Office (same window)">Contact us</a>
+    </p>
+  </div>
+</div>
+
+<!-- Site header -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="https://coag.gov" class="logo-link" aria-label="Colorado Attorney General — home">
+      <div class="logo-seal" aria-hidden="true">CO<br>AG</div>
+      <div class="logo-text">
+        <strong>Colorado Attorney General</strong>
+        <span>Phil Weiser · Official complaint portal</span>
+      </div>
+    </a>
+    <div class="header-secure" aria-label="This is a secure official government website">
+      <span class="lock-icon" aria-hidden="true"></span>
+      <span>secure .gov</span>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero" role="region" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <p class="hero-eyebrow" aria-hidden="true" id="hero-eyebrow-en">Complaint Portal</p>
+    <p class="hero-eyebrow" aria-hidden="true" id="hero-eyebrow-es" hidden>Portal de Denuncias</p>
+
+    <!-- FIX #1: H1 directly — no H3 skipping levels -->
+    <h1 id="hero-heading" lang="en">
+      Describe what happened.<br>We route it to the right team.
+    </h1>
+
+    <p id="hero-desc-en">
+      Write in plain language — tell us what occurred, who was involved, and when.
+      <strong>You do not need to know which category or department handles your issue.</strong>
+      Every complaint is reviewed by our team and assigned to the right unit.
+    </p>
+    <p id="hero-desc-es" hidden lang="es">
+      Escriba en lenguaje sencillo — cuéntenos qué ocurrió, quién estuvo involucrado y cuándo.
+      <strong>No es necesario saber qué categoría o departamento maneja su queja.</strong>
+      Cada denuncia es revisada por nuestro equipo y asignada a la unidad correcta.
+    </p>
+
+    <div class="routing-note" role="note" aria-labelledby="routing-note-label">
+      <span class="routing-arrow" aria-hidden="true">→</span>
+      <p>
+        <span id="routing-note-label" class="sr-only">How routing works</span>
+        <strong id="routing-note-en">Triage-first intake:</strong>
+        <span id="routing-note-es" hidden lang="es"><strong>Proceso de clasificación:</strong></span>
+        <span id="routing-body-en">
+          Your narrative is reviewed and classified by our intake team — assisted by Salesforce Einstein AI classification — and assigned to the correct unit: Consumer Fraud, Civil Rights, Environmental Crimes, Medicaid Fraud, or another section. You do not need to self-categorize.
+        </span>
+        <span id="routing-body-es" hidden lang="es">
+          Su narrativa es revisada y clasificada por nuestro equipo de recepción, asistido por IA, y asignada a la unidad correcta. No necesita auto-categorizarse.
+        </span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- MAIN CONTENT — #main is the skip link target           -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<main id="main" class="form-section">
+
+  <!-- Salesforce connection status -->
+  <div class="sf-status-strip demo" id="sf-status" role="status" aria-live="polite">
+    <span class="sf-dot" aria-hidden="true"></span>
+    <span id="sf-status-text">
+      Demo mode — configure <code>window.SFCONFIG</code> with your Salesforce org credentials to enable live case creation.
+    </span>
+  </div>
+
+  <!-- Form card -->
+  <div class="form-card" role="region" aria-labelledby="form-heading">
+
+    <div class="form-card-header">
+      <!-- FIX #1: H2 — correct hierarchy H1→H2 -->
+      <h2 id="form-heading">
+        <span id="fh-en">File a complaint</span>
+        <span id="fh-es" hidden lang="es">Presentar una denuncia</span>
+      </h2>
+      <p id="form-desc-en">
+        Fields marked <abbr title="required">*</abbr> are required. All other fields are optional.
+        You may submit anonymously.
+      </p>
+      <p id="form-desc-es" hidden lang="es">
+        Los campos marcados con <abbr title="obligatorio">*</abbr> son obligatorios. Puede enviar de forma anónima.
+      </p>
+    </div>
+
+    <!-- Active form -->
+    <form class="form-body" id="complaint-form" action="#" method="post"
+          aria-labelledby="form-heading" novalidate>
+
+      <!-- ── 1. COMPLAINT NARRATIVE ────────────────────── -->
+      <!-- FIX #24: label directly associated via for= (no shadow DOM chain) -->
+      <!-- FIX #26: required NOT conveyed by asterisk alone — sr-only "(required)" -->
+      <div class="field" id="field-narrative">
+        <div class="field-meta">
+          <label for="narrative">
+            <span id="label-narrative-en">What happened?</span>
+            <span id="label-narrative-es" hidden lang="es">¿Qué ocurrió?</span>
+            <span class="req" aria-hidden="true">*</span>
+            <span class="sr-only">(required)</span>
+          </label>
+          <span class="char-count" id="char-count" aria-live="polite" aria-atomic="true">0 / 4000</span>
+        </div>
+        <p class="field-hint" id="narrative-hint" data-lang="en">
+          Describe events in the order they happened. Include names, dates, locations, and amounts where relevant. You do not need to know which law was violated — just describe what you witnessed or experienced.
+        </p>
+        <p class="field-hint" id="hint-narrative-es" hidden lang="es">
+          Describa los eventos en el orden en que ocurrieron. Incluya nombres, fechas, lugares y montos cuando sea relevante.
+        </p>
+        <textarea
+          id="narrative"
+          name="narrative"
+          required
+          aria-required="true"
+          aria-describedby="narrative-hint narrative-error"
+          maxlength="4000"
+          rows="7"
+          placeholder="Tell us what happened, in your own words…"
+        ></textarea>
+        <!-- FIX #86: error announced via role="alert" on parent live region -->
+        <div class="field-error" id="narrative-error" role="alert" aria-live="assertive"></div>
+
+        <!-- AI routing indicator — shows while narrative is being analyzed -->
+        <div class="ai-routing" id="ai-routing" role="status" aria-live="polite">
+          <span class="ai-spinner" aria-hidden="true"></span>
+          <span id="ai-routing-text">Analyzing complaint… suggesting routing unit.</span>
+        </div>
+        <div class="ai-routing" id="ai-result" style="display:none">
+          <span style="font-size:16px">→</span>
+          <span id="ai-result-text"></span>
+        </div>
+      </div>
+
+      <!-- ── 2. SOFT CATEGORY CHIPS ────────────────────── -->
+      <!-- FIX #3: chips are optional hints — not required self-categorization -->
+      <div class="field">
+        <label id="category-label">
+          <span id="cat-label-en">What best describes this? <span style="font-weight:400;color:var(--ink-mute)">(optional — we route regardless)</span></span>
+          <span id="cat-label-es" hidden lang="es">¿Cómo describiría esto? <span style="font-weight:400;color:var(--ink-mute)">(opcional)</span></span>
+        </label>
+        <div class="chips-group" role="group" aria-labelledby="category-label" id="chips-group">
+          <button type="button" class="chip" aria-pressed="false" data-type="consumer" data-sf-type="Consumer Fraud">
+            <span class="chip-icon" aria-hidden="true">🛒</span>
+            <span id="chip-consumer-en">Consumer Fraud</span>
+            <span id="chip-consumer-es" hidden lang="es">Fraude al Consumidor</span>
+          </button>
+          <button type="button" class="chip" aria-pressed="false" data-type="housing" data-sf-type="Housing">
+            <span class="chip-icon" aria-hidden="true">🏠</span>
+            <span id="chip-housing-en">Housing / Discrimination</span>
+            <span id="chip-housing-es" hidden lang="es">Vivienda / Discriminación</span>
+          </button>
+          <button type="button" class="chip" aria-pressed="false" data-type="worker" data-sf-type="Worker Protection">
+            <span class="chip-icon" aria-hidden="true">⚖️</span>
+            <span id="chip-worker-en">Worker Protection</span>
+            <span id="chip-worker-es" hidden lang="es">Protección Laboral</span>
+          </button>
+          <button type="button" class="chip" aria-pressed="false" data-type="environment" data-sf-type="Environmental Crimes">
+            <span class="chip-icon" aria-hidden="true">🌿</span>
+            <span id="chip-env-en">Environmental</span>
+            <span id="chip-env-es" hidden lang="es">Ambiental</span>
+          </button>
+          <button type="button" class="chip" aria-pressed="false" data-type="medicaid" data-sf-type="Medicaid Fraud">
+            <span class="chip-icon" aria-hidden="true">🏥</span>
+            <span id="chip-med-en">Medicaid / Healthcare Fraud</span>
+            <span id="chip-med-es" hidden lang="es">Fraude en Medicare</span>
+          </button>
+          <button type="button" class="chip" aria-pressed="false" data-type="civil-rights" data-sf-type="Civil Rights">
+            <span class="chip-icon" aria-hidden="true">⚖</span>
+            <span id="chip-cr-en">Civil Rights / Gov. Misconduct</span>
+            <span id="chip-cr-es" hidden lang="es">Derechos Civiles</span>
+          </button>
+          <button type="button" class="chip" aria-pressed="false" data-type="securities" data-sf-type="Securities Fraud">
+            <span class="chip-icon" aria-hidden="true">📈</span>
+            <span id="chip-sec-en">Securities / Investment Fraud</span>
+            <span id="chip-sec-es" hidden lang="es">Fraude de Valores</span>
+          </button>
+          <button type="button" class="chip" aria-pressed="false" data-type="other" data-sf-type="Other">
+            <span class="chip-icon" aria-hidden="true">•••</span>
+            <span id="chip-other-en">Other</span>
+            <span id="chip-other-es" hidden lang="es">Otro</span>
+          </button>
+        </div>
+
+        <!-- Chip-specific redirect notes -->
+        <div class="chip-redirect" id="redirect-consumer" role="note">
+          <strong>Online/phone scams?</strong> You may also file directly with
+          <a href="https://reportfraud.ftc.gov/?orgcode=CO01" target="_blank"
+             rel="noopener" aria-label="FTC Report Fraud (opens in new tab)">FTC Report Fraud</a>
+          or <a href="https://stopfraudcolorado.gov" target="_blank" rel="noopener"
+                aria-label="Stop Fraud Colorado (opens in new tab)">StopFraudColorado.gov</a>.
+          You can still submit here — these are additional resources.
+        </div>
+        <div class="chip-redirect" id="redirect-medicaid" role="note">
+          <strong>Medicaid fraud?</strong> You can also report directly to the
+          <a href="https://oig.hhs.gov/fraud/report-fraud/" target="_blank" rel="noopener"
+             aria-label="HHS Inspector General (opens in new tab)">HHS Inspector General</a>.
+          Filing here opens a Colorado-level investigation.
+        </div>
+      </div>
+
+      <div class="field-divider" role="separator"></div>
+
+      <!-- ── 3. ANONYMOUS TOGGLE ───────────────────────── -->
+      <!-- FIX: Properly manages tabindex of inner inputs when hidden -->
+      <div class="field">
+        <label class="toggle-row" for="anonymous-check">
+          <input type="checkbox" id="anonymous-check" name="anonymous">
+          <span class="toggle-label">
+            <span id="anon-label-en">Submit anonymously</span>
+            <span id="anon-label-es" hidden lang="es">Enviar de forma anónima</span>
+            <span class="toggle-sub" id="anon-sub-en">Your contact information will not be collected or stored.</span>
+            <span class="toggle-sub" id="anon-sub-es" hidden lang="es">Su información de contacto no será recopilada ni almacenada.</span>
+          </span>
+        </label>
+      </div>
+
+      <!-- Contact fields (conditionally shown) -->
+      <div class="contact-fields" id="contact-fields" aria-live="polite">
+
+        <div class="input-row">
+          <div class="field">
+            <label for="first-name">
+              <span id="fn-label-en">First name</span>
+              <span id="fn-label-es" hidden lang="es">Nombre</span>
+            </label>
+            <input type="text" id="first-name" name="first_name"
+                   autocomplete="given-name"
+                   aria-describedby="name-error">
+          </div>
+          <div class="field">
+            <label for="last-name">
+              <span id="ln-label-en">Last name</span>
+              <span id="ln-label-es" hidden lang="es">Apellido</span>
+            </label>
+            <input type="text" id="last-name" name="last_name"
+                   autocomplete="family-name">
+          </div>
+        </div>
+        <div class="field-error" id="name-error"></div>
+
+        <div class="input-row">
+          <div class="field">
+            <label for="email">
+              <span id="em-label-en">Email address</span>
+              <span id="em-label-es" hidden lang="es">Correo electrónico</span>
+            </label>
+            <input type="email" id="email" name="email"
+                   autocomplete="email"
+                   aria-describedby="email-hint email-error">
+            <p class="field-hint" id="email-hint" style="margin-top:5px">
+              <span id="email-hint-en">Optional — for case status updates only. Not shared.</span>
+              <span id="email-hint-es" hidden lang="es">Opcional — solo para actualizaciones de estado. No se comparte.</span>
+            </p>
+            <div class="field-error" id="email-error"></div>
+          </div>
+          <div class="field">
+            <label for="phone">
+              <span id="ph-label-en">Phone number</span>
+              <span id="ph-label-es" hidden lang="es">Número de teléfono</span>
+            </label>
+            <input type="tel" id="phone" name="phone"
+                   autocomplete="tel"
+                   aria-describedby="phone-hint">
+            <p class="field-hint" id="phone-hint" style="margin-top:5px">
+              <span id="phone-hint-en">Optional — only used if we need to follow up.</span>
+              <span id="phone-hint-es" hidden lang="es">Opcional — solo si necesitamos comunicarnos con usted.</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Preferred language (for Salesforce case routing) -->
+        <div class="field">
+          <label for="preferred-lang">
+            <span id="plang-label-en">Preferred language for follow-up</span>
+            <span id="plang-label-es" hidden lang="es">Idioma preferido para seguimiento</span>
+          </label>
+          <select id="preferred-lang" name="preferred_language">
+            <option value="English">English</option>
+            <option value="Spanish">Español</option>
+            <option value="Arabic">Arabic / عربي</option>
+            <option value="Vietnamese">Vietnamese / Tiếng Việt</option>
+            <option value="Somali">Somali / Soomaali</option>
+            <option value="Russian">Russian / Русский</option>
+            <option value="Other">Other / Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ── 4. LOCATION (optional) ────────────────────── -->
+      <div class="field-divider" role="separator"></div>
+      <div class="field">
+        <label for="location">
+          <span id="loc-label-en">Location of incident <span style="font-weight:400;color:var(--ink-mute)">(optional)</span></span>
+          <span id="loc-label-es" hidden lang="es">Lugar del incidente <span style="font-weight:400;color:var(--ink-mute)">(opcional)</span></span>
+        </label>
+        <p class="field-hint" id="location-hint">
+          <span id="loc-hint-en">City, county, address, or Colorado region. Helps us route to the correct local office.</span>
+          <span id="loc-hint-es" hidden lang="es">Ciudad, condado, dirección o región de Colorado. Nos ayuda a dirigir a la oficina correcta.</span>
+        </p>
+        <input type="text" id="location" name="location"
+               autocomplete="off"
+               aria-describedby="location-hint"
+               placeholder="e.g. Denver, Jefferson County, Colorado Springs">
+      </div>
+
+    </form><!-- end .form-body -->
+
+    <!-- Form footer / submit -->
+    <div class="form-footer">
+      <button type="submit" class="submit-btn" id="submit-btn" form="complaint-form"
+              aria-describedby="form-disclaimer">
+        <span class="btn-spinner" aria-hidden="true"></span>
+        <span class="btn-label" id="btn-label-en">Submit complaint →</span>
+        <span class="btn-label" id="btn-label-es" hidden lang="es">Enviar denuncia →</span>
+      </button>
+      <p class="form-disclaimer" id="form-disclaimer">
+        <span id="disc-en">
+          Submitted to the Colorado Department of Law. By submitting you certify the information is accurate to the best of your knowledge.
+          <a href="https://coag.gov/website-privacy-policy/" target="_blank" rel="noopener"
+             aria-label="Privacy policy (opens in new tab)">Privacy policy ↗</a>
+        </span>
+        <span id="disc-es" hidden lang="es">
+          Enviado al Departamento de Ley de Colorado. Al enviar, certifica que la información es precisa según su conocimiento.
+        </span>
+      </p>
+    </div>
+
+    <!-- Confirmation panel (shown after successful submission) -->
+    <div class="confirmation" id="confirmation" tabindex="-1" role="region"
+         aria-labelledby="confirmation-heading" aria-live="assertive">
+      <div class="confirmation-icon" aria-hidden="true">✓</div>
+      <h2 id="confirmation-heading">
+        <span id="conf-heading-en">Complaint received</span>
+        <span id="conf-heading-es" hidden lang="es">Denuncia recibida</span>
+      </h2>
+      <p id="conf-body-en">
+        Your complaint has been submitted to the Colorado Attorney General's Office and a Salesforce case record has been created. Save your reference number — you may need it for follow-up.
+      </p>
+      <p id="conf-body-es" hidden lang="es">
+        Su denuncia ha sido enviada a la Fiscalía General de Colorado y se ha creado un registro de caso. Guarde su número de referencia.
+      </p>
+
+      <div class="ref-block" aria-live="polite">
+        <div>
+          <span class="ref-block-label" id="ref-label-en">Your reference number</span>
+          <span class="ref-block-label" id="ref-label-es" hidden lang="es">Su número de referencia</span>
+          <div class="ref-number" id="ref-number" aria-label="Case reference number"></div>
+        </div>
+        <div id="sf-case-info" hidden>
+          <span class="ref-block-label">Salesforce Case ID</span>
+          <div class="ref-number" id="sf-case-id" style="font-size:14px;letter-spacing:.04em;"></div>
+          <a class="sf-record-link" id="sf-case-link" href="#" target="_blank" rel="noopener">
+            View case record (opens in new tab) ↗
+          </a>
+        </div>
+      </div>
+
+      <ul class="next-steps" aria-label="What happens next">
+        <li>
+          <span class="step-num" aria-hidden="true">1</span>
+          <span id="step1-en">Your complaint is reviewed by the Attorney General's intake team within 3–5 business days.</span>
+          <span id="step1-es" hidden lang="es">Su denuncia es revisada por el equipo de recepción en 3-5 días hábiles.</span>
+        </li>
+        <li>
+          <span class="step-num" aria-hidden="true">2</span>
+          <span id="step2-en">It is routed to the appropriate section — Consumer Protection, Civil Rights, Environmental, or another unit — based on the complaint content.</span>
+          <span id="step2-es" hidden lang="es">Se dirige a la sección apropiada según el contenido de la denuncia.</span>
+        </li>
+        <li>
+          <span class="step-num" aria-hidden="true">3</span>
+          <span id="step3-en">If you provided contact information and your complaint warrants follow-up, a representative will contact you. Anonymous complaints are investigated but cannot receive direct responses.</span>
+          <span id="step3-es" hidden lang="es">Si proporcionó información de contacto, un representante se comunicará con usted si corresponde.</span>
+        </li>
+        <li>
+          <span class="step-num" aria-hidden="true">4</span>
+          <span id="step4-en">The AG cannot represent you individually or provide legal advice. If you need legal representation, visit <a href="https://www.cobar.org/lawyerreferral" target="_blank" rel="noopener" aria-label="Colorado Bar Association lawyer referral (opens in new tab)">Colorado Bar Association Lawyer Referral ↗</a>.</span>
+          <span id="step4-es" hidden lang="es">La Fiscalía no puede representarle individualmente. Si necesita representación legal, visite el Colegio de Abogados de Colorado.</span>
+        </li>
+      </ul>
+
+      <button type="button" class="new-complaint-btn" id="new-complaint-btn" onclick="resetForm()">
+        <span id="new-btn-en">File another complaint</span>
+        <span id="new-btn-es" hidden lang="es">Presentar otra denuncia</span>
+      </button>
+    </div>
+
+  </div><!-- /.form-card -->
+
+  <!-- ── ALTERNATE PATHWAYS ───────────────────────────── -->
+  <!-- FIX #49: descriptive links — each has unique accessible name -->
+  <section class="alt-section" aria-labelledby="alt-heading">
+    <h2 id="alt-heading">
+      <span id="alt-h-en">Other ways to report — by specific issue type</span>
+      <span id="alt-h-es" hidden lang="es">Otras formas de reportar — por tipo de problema específico</span>
+    </h2>
+    <div class="alt-grid">
+
+      <a href="https://www.coloradonocall.com/Public/Complaint.aspx" class="alt-card"
+         aria-label="File a No-Call List violation complaint at coloradonocall.com (same window)">
+        <div class="alt-card-label">No-Call Violations</div>
+        <div class="alt-card-title">Colorado No-Call List</div>
+        <div class="alt-card-desc">Registered on the No-Call List but still receiving unwanted telemarketing calls.</div>
+        <span class="alt-card-arrow" aria-hidden="true">coloradonocall.com →</span>
+      </a>
+
+      <a href="https://reportfraud.ftc.gov/?orgcode=CO01" class="alt-card" target="_blank" rel="noopener"
+         aria-label="Report consumer fraud to the Federal Trade Commission (opens in new tab)">
+        <div class="alt-card-label">Consumer / Phone Scams</div>
+        <div class="alt-card-title">FTC Report Fraud</div>
+        <div class="alt-card-desc">Phone scams, online fraud, identity theft. Federal system — data shared with CO AG.</div>
+        <span class="alt-card-arrow" aria-hidden="true">reportfraud.ftc.gov ↗</span>
+      </a>
+
+      <a href="https://coag.gov/pslf-complaint/" class="alt-card"
+         aria-label="File a PSLF student loan servicer complaint (same window)">
+        <div class="alt-card-label">Student Loans</div>
+        <div class="alt-card-title">PSLF Complaint</div>
+        <div class="alt-card-desc">Issues with your student loan servicer under the Colorado Student Loan Servicers Act.</div>
+        <span class="alt-card-arrow" aria-hidden="true">coag.gov/pslf-complaint →</span>
+      </a>
+
+      <a href="https://doi.colorado.gov/" class="alt-card" target="_blank" rel="noopener"
+         aria-label="File an insurance complaint with the Colorado Division of Insurance (opens in new tab)">
+        <div class="alt-card-label">Insurance Issues</div>
+        <div class="alt-card-title">CO Division of Insurance</div>
+        <div class="alt-card-desc">Insurance claims disputes, agent misconduct, or coverage denials.</div>
+        <span class="alt-card-arrow" aria-hidden="true">doi.colorado.gov ↗</span>
+      </a>
+
+      <a href="https://coag.gov/about-us/contact-colorado-office-attorney-general/" class="alt-card"
+         aria-label="Contact the Colorado Attorney General's Office directly (same window)">
+        <div class="alt-card-label">Speak with Someone</div>
+        <div class="alt-card-title">Contact the AG's Office</div>
+        <div class="alt-card-desc">720-508-6000. For situations requiring direct human assistance or interpreter services.</div>
+        <span class="alt-card-arrow" aria-hidden="true">Contact us →</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── SALESFORCE API INTEGRATION DISCLOSURE ──────── -->
+  <section class="api-disclosure" aria-labelledby="api-toggle">
+    <button class="api-toggle-btn" id="api-toggle" type="button"
+            aria-expanded="false" aria-controls="api-body">
+      <span>Salesforce API integration — how this form works</span>
+      <span class="toggle-arrow" aria-hidden="true">▾</span>
+    </button>
+    <div class="api-body" id="api-body" role="region" aria-labelledby="api-toggle">
+      <div class="api-inner">
+        <p class="api-intro">
+          This form creates a <strong>Salesforce Case record</strong> in your Colorado AG Salesforce org
+          using the Salesforce REST API. The narrative is optionally analyzed by the <strong>Anthropic Claude API</strong>
+          to generate a routing suggestion (mimicking what Salesforce Einstein AI Classification would do in production).
+          In production, <strong>OAuth credentials must live on a backend proxy</strong> — never in client-side JavaScript.
+        </p>
+
+        <p class="api-intro" style="margin-top:-4px">
+          <strong>Salesforce Object Mapping — Case fields used:</strong>
+        </p>
+        <div class="api-code-block" role="img" aria-label="Salesforce Case API payload example">
+<span class="comment">// POST /services/data/v58.0/sobjects/Case</span>
+{
+  <span class="key">"Subject"</span>:      <span class="val">"[AG Complaint] Consumer Fraud — Jefferson County"</span>,
+  <span class="key">"Description"</span>:  <span class="val">"[Citizen narrative text]"</span>,
+  <span class="key">"Type"</span>:         <span class="val">"Consumer Fraud"</span>,           <span class="comment">// from chip selection or AI routing</span>
+  <span class="key">"Status"</span>:       <span class="val">"New"</span>,
+  <span class="key">"Origin"</span>:       <span class="val">"Web"</span>,
+  <span class="key">"Priority"</span>:     <span class="val">"Normal"</span>,
+  <span class="key">"IsAnonymous__c"</span>:<span class="val">false</span>,                   <span class="comment">// custom field</span>
+  <span class="key">"Language__c"</span>:   <span class="val">"English"</span>,                <span class="comment">// preferred language for follow-up</span>
+  <span class="key">"Location__c"</span>:   <span class="val">"Denver, CO"</span>,             <span class="comment">// incident location custom field</span>
+  <span class="key">"AIRouting__c"</span>:  <span class="val">"Consumer Protection Unit"</span>  <span class="comment">// Einstein / Claude suggestion</span>
+}
+
+<span class="comment">// Auth flow (backend proxy — never client-side):</span>
+<span class="endpoint">POST /services/oauth2/token</span>
+  grant_type=client_credentials
+  &client_id=YOUR_CONNECTED_APP_CLIENT_ID
+  &client_secret=YOUR_SECRET         <span class="comment">// stays on server</span>
+<span class="comment">→ returns { access_token, instance_url }</span>
+
+<span class="comment">// Case response:</span>
+{ <span class="key">"id"</span>: <span class="val">"5001000000AbcDEAAZ"</span>, <span class="key">"success"</span>: <span class="val">true</span> }
+<span class="comment">// Case Number auto-generated: "00001042" etc.</span>
+        </div>
+
+        <p class="api-intro">
+          <strong>Recommended backend architecture:</strong>
+          Deploy a lightweight Node.js or Python (FastAPI) proxy at <code>/api/complaints/create</code>
+          that accepts the form payload, exchanges client credentials for a Salesforce access token,
+          creates the Case record, and returns the Case Number. The frontend never touches OAuth secrets.
+          For <strong>Einstein AI Classification</strong>, add a Salesforce Flow that triggers on Case creation
+          to auto-assign Type and OwnerId based on the Description field keywords.
+        </p>
+        <p class="api-intro">
+          <strong>This demo</strong> simulates the API call with a realistic response. Set
+          <code>window.SFCONFIG.demoMode = false</code> and configure <code>proxyEndpoint</code>
+          to enable live Salesforce case creation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main><!-- /#main -->
+
+<!-- Footer -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <p>Colorado Attorney General · Phil Weiser · coag.gov</p>
+    <nav aria-label="Footer links">
+      <a href="https://coag.gov/colorado-office-of-the-attorney-general-accessibility-statement/"
+         aria-label="Accessibility statement">Accessibility</a>
+      <a href="https://coag.gov/website-privacy-policy/"
+         aria-label="Website privacy policy">Privacy Policy</a>
+      <a href="https://coag.gov/about-us/contact-colorado-office-attorney-general/"
+         aria-label="Contact the AG's office">Contact</a>
+      <a href="https://coag.gov/declaracion-de-accesibilidad/" lang="es"
+         aria-label="Declaración de accesibilidad en español">Accesibilidad (ES)</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+// ── LANG SWITCHING ──────────────────────────────────────────────
+// FIX #80: Properly sets lang attr on html element when switching language
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang === 'es' ? 'es' : 'en';
+
+  // Update all lang-toggled elements
+  document.querySelectorAll('[id$="-en"]').forEach(el => {
+    if (!el.id.includes('chip') || el.id === 'chip-consumer-en') {
+      el.hidden = (lang === 'es');
+    }
+  });
+  document.querySelectorAll('[id$="-es"]').forEach(el => {
+    el.hidden = (lang !== 'es');
+  });
+
+  // Simpler approach — toggle all en/es spans
+  document.querySelectorAll('[id$="-en"],[id$="-es"]').forEach(el => {
+    const isEn = el.id.endsWith('-en');
+    const isEs = el.id.endsWith('-es');
+    if (isEn) el.hidden = (lang === 'es');
+    if (isEs) el.hidden = (lang !== 'es');
+  });
+
+  // Update textarea placeholder
+  document.getElementById('narrative').placeholder =
+    lang === 'es'
+      ? 'Cuéntenos qué pasó, en sus propias palabras…'
+      : 'Tell us what happened, in your own words…';
+
+  // Update aria-current on lang buttons
+  document.getElementById('btn-en').setAttribute('aria-current', lang === 'en' ? 'true' : 'false');
+  document.getElementById('btn-es').setAttribute('aria-current', lang === 'es' ? 'true' : 'false');
+
+  // Announce to screen reader
+  announce(lang === 'es' ? 'Idioma cambiado a español' : 'Language changed to English');
+}
+
+// ── LIVE ANNOUNCEMENTS ──────────────────────────────────────────
+const liveAlert  = document.getElementById('live-alert');
+const liveStatus = document.getElementById('live-status');
+
+function announce(msg, urgent = false) {
+  if (urgent) {
+    liveAlert.textContent = '';
+    requestAnimationFrame(() => { liveAlert.textContent = msg; });
+  } else {
+    liveStatus.textContent = '';
+    requestAnimationFrame(() => { liveStatus.textContent = msg; });
+  }
+}
+
+// ── CHAR COUNTER ────────────────────────────────────────────────
+const narrative  = document.getElementById('narrative');
+const charCount  = document.getElementById('char-count');
+const MAX_CHARS  = 4000;
+let narrativeTimer = null;
+
+narrative.addEventListener('input', () => {
+  const n = narrative.value.length;
+  charCount.textContent = n + ' / ' + MAX_CHARS;
+  charCount.classList.toggle('near', n > MAX_CHARS * 0.9);
+  charCount.classList.toggle('over', n > MAX_CHARS);
+
+  // Clear prior validation state
+  narrative.removeAttribute('aria-invalid');
+  document.getElementById('narrative-error').textContent = '';
+
+  // Debounced AI routing analysis (fires 1.5s after user stops typing)
+  clearTimeout(narrativeTimer);
+  if (n > 60) {
+    narrativeTimer = setTimeout(() => analyzeNarrative(narrative.value), 1500);
+  } else {
+    document.getElementById('ai-routing').classList.remove('visible');
+    document.getElementById('ai-result').style.display = 'none';
+  }
+});
+
+// ── AI NARRATIVE ROUTING ────────────────────────────────────────
+// Uses Anthropic Claude API to suggest routing unit from complaint text
+// In production this would be Salesforce Einstein AI Classification
+async function analyzeNarrative(text) {
+  if (text.trim().length < 60) return;
+
+  const aiRouting = document.getElementById('ai-routing');
+  const aiResult  = document.getElementById('ai-result');
+  const aiText    = document.getElementById('ai-routing-text');
+
+  aiRouting.classList.add('visible');
+  aiResult.style.display = 'none';
+  aiText.textContent = currentLang === 'es'
+    ? 'Analizando denuncia… sugiriendo unidad de enrutamiento.'
+    : 'Analyzing complaint… suggesting routing unit.';
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: `You are the intake routing system for the Colorado Attorney General's Office.
+Given this complaint narrative, identify the ONE most appropriate AG unit and explain in 1 sentence why.
+
+Units available:
+- Consumer Protection Unit (consumer fraud, scams, telemarketing, deceptive trade)
+- Consumer Credit Unit (debt collectors, loan servicers, UCCC violations)
+- Civil Rights / Pattern & Practice Unit (government misconduct, civil rights violations, housing discrimination, worker protection)
+- Environmental Crimes Unit (environmental violations, pollution, wildlife crimes)
+- Medicaid Fraud Control Unit (Medicaid billing fraud, healthcare fraud)
+- Securities & Investment Fraud Unit (investment scams, securities violations)
+- Criminal Justice / Special Prosecutions (criminal conduct by public officials)
+
+Respond ONLY with valid JSON: {"unit":"UNIT NAME","reason":"one sentence explanation","priority":"Normal|High|Urgent","sf_type":"Salesforce Type value"}
+
+Complaint: ${text.slice(0, 500)}`
+        }]
+      })
+    });
+
+    if (!response.ok) throw new Error('API error');
+    const data = await response.json();
+    const rawText = data.content?.[0]?.text || '{}';
+    const parsed = JSON.parse(rawText.replace(/```json|```/g, '').trim());
+
+    aiRouting.classList.remove('visible');
+    aiResult.style.display = 'flex';
+    document.getElementById('ai-result-text').innerHTML =
+      `<strong>Suggested routing:</strong> ${parsed.unit} &mdash; ${parsed.reason}`;
+
+    // Pre-select matching chip if present
+    preselectChip(parsed.sf_type);
+    // Set priority for Salesforce payload
+    window._sfPriority = parsed.priority || 'Normal';
+    window._sfUnit = parsed.unit || '';
+
+  } catch (e) {
+    // Fail silently — AI routing is a UX enhancement, not required
+    aiRouting.classList.remove('visible');
+  }
+}
+
+function preselectChip(sfType) {
+  if (!sfType) return;
+  const chips = document.querySelectorAll('.chip');
+  chips.forEach(chip => {
+    const match = chip.dataset.sfType === sfType ||
+                  sfType.toLowerCase().includes(chip.dataset.type);
+    if (match) {
+      chip.setAttribute('aria-pressed', 'true');
+      chip.classList.add('selected');
+    }
+  });
+}
+
+// ── CATEGORY CHIPS ──────────────────────────────────────────────
+const chips = document.querySelectorAll('.chip');
+let selectedType = '';
+
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    const wasSelected = chip.getAttribute('aria-pressed') === 'true';
+    chips.forEach(c => { c.setAttribute('aria-pressed', 'false'); c.classList.remove('selected'); });
+
+    // Hide all redirects
+    document.querySelectorAll('.chip-redirect').forEach(r => r.classList.remove('visible'));
+
+    if (!wasSelected) {
+      chip.setAttribute('aria-pressed', 'true');
+      chip.classList.add('selected');
+      selectedType = chip.dataset.sfType || '';
+
+      // Show type-specific redirect note
+      const redirect = document.getElementById('redirect-' + chip.dataset.type);
+      if (redirect) redirect.classList.add('visible');
+
+      announce('Category selected: ' + chip.dataset.sfType);
+    } else {
+      selectedType = '';
+    }
+  });
+});
+
+// ── ANONYMOUS TOGGLE ────────────────────────────────────────────
+// FIX: Properly manages tabIndex when fields are hidden
+const anonCheck     = document.getElementById('anonymous-check');
+const contactFields = document.getElementById('contact-fields');
+
+function updateAnon() {
+  const isAnon = anonCheck.checked;
+  contactFields.classList.toggle('hidden', isAnon);
+  contactFields.setAttribute('aria-hidden', String(isAnon));
+
+  // Manage tab order — hidden fields must not be reachable
+  contactFields.querySelectorAll('input, select').forEach(el => {
+    el.tabIndex = isAnon ? -1 : 0;
+  });
+}
+anonCheck.addEventListener('change', updateAnon);
+updateAnon();
+
+// ── FORM VALIDATION ─────────────────────────────────────────────
+// FIX #25, #86: Errors announced immediately; focus moved to first error
+function validate() {
+  let valid = true;
+  const errors = [];
+
+  // Clear all errors
+  document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+  document.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+
+  // Narrative required
+  if (!narrative.value.trim()) {
+    narrative.setAttribute('aria-invalid', 'true');
+    const errEl = document.getElementById('narrative-error');
+    errEl.textContent = currentLang === 'es'
+      ? 'Por favor describa lo que ocurrió.'
+      : 'Please describe what happened before submitting.';
+    errors.push(narrative);
+    valid = false;
+  }
+
+  // Email format (if provided)
+  const emailEl = document.getElementById('email');
+  if (!anonCheck.checked && emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+    emailEl.setAttribute('aria-invalid', 'true');
+    document.getElementById('email-error').textContent =
+      currentLang === 'es' ? 'Por favor ingrese un correo electrónico válido.' : 'Please enter a valid email address.';
+    errors.push(emailEl);
+    valid = false;
+  }
+
+  if (!valid) {
+    // FIX #25: Move focus to first error field — not to body
+    errors[0].focus();
+    // FIX #86: Assertive announcement of error count
+    const msg = errors.length === 1
+      ? (currentLang === 'es' ? 'Se encontró 1 error. Por favor revise el formulario.' : '1 error found. Please review the form.')
+      : `${errors.length} ${currentLang === 'es' ? 'errores encontrados.' : 'errors found. Please review the form.'}`;
+    announce(msg, true);
+  }
+
+  return valid;
+}
+
+// ── SALESFORCE API CALL ─────────────────────────────────────────
+async function createSalesforceCase(payload) {
+  if (window.SFCONFIG.demoMode) {
+    // Simulate API latency
+    await new Promise(r => setTimeout(r, 1800));
+    return {
+      success: true,
+      caseNumber: 'CO-' + Date.now().toString(36).toUpperCase().slice(-6),
+      caseId: '5001' + Math.random().toString(36).slice(-12).toUpperCase(),
+      demo: true,
+    };
+  }
+
+  // Production: call your backend proxy
+  const response = await fetch(window.SFCONFIG.proxyEndpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.message || 'Submission failed. Please try again or call 720-508-6000.');
+  }
+
+  return response.json();
+}
+
+// ── FORM SUBMIT ─────────────────────────────────────────────────
+const form      = document.getElementById('complaint-form');
+const submitBtn = document.getElementById('submit-btn');
+const confirmation = document.getElementById('confirmation');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!validate()) return;
+
+  // Build Salesforce Case payload
+  const chip = document.querySelector('.chip[aria-pressed="true"]');
+  const caseType = chip?.dataset.sfType || selectedType || 'General';
+  const isAnon = anonCheck.checked;
+  const narrativeText = narrative.value.trim();
+  const location = document.getElementById('location').value.trim();
+
+  const payload = {
+    Subject: `[AG Complaint] ${caseType}${location ? ' — ' + location : ''}`,
+    Description: narrativeText,
+    Type: caseType,
+    Status: 'New',
+    Origin: 'Web',
+    Priority: window._sfPriority || 'Normal',
+    IsAnonymous__c: isAnon,
+    Language__c: document.getElementById('preferred-lang')?.value || 'English',
+    Location__c: location || '',
+    AIRouting__c: window._sfUnit || '',
+    ...(isAnon ? {} : {
+      SuppliedName: [
+        document.getElementById('first-name').value.trim(),
+        document.getElementById('last-name').value.trim()
+      ].filter(Boolean).join(' '),
+      SuppliedEmail: document.getElementById('email').value.trim(),
+      SuppliedPhone: document.getElementById('phone').value.trim(),
+    })
+  };
+
+  // Loading state
+  submitBtn.disabled = true;
+  submitBtn.classList.add('loading');
+  announce(currentLang === 'es' ? 'Enviando denuncia…' : 'Submitting complaint…');
+
+  try {
+    const result = await createSalesforceCase(payload);
+
+    // Success — show confirmation
+    form.parentElement.querySelector('.form-footer').style.display = 'none';
+    document.querySelector('.form-body').style.display = 'none';
+
+    const refNum = result.caseNumber || ('CO-' + Date.now().toString(36).toUpperCase().slice(-6));
+    document.getElementById('ref-number').textContent = refNum;
+    document.getElementById('ref-number').setAttribute('aria-label', 'Case reference number: ' + refNum);
+
+    // Show Salesforce record link if not demo
+    if (!result.demo && result.caseId) {
+      document.getElementById('sf-case-id').textContent = result.caseId;
+      const caseUrl = `${window.SFCONFIG.instanceUrl}/lightning/r/Case/${result.caseId}/view`;
+      const sfLink = document.getElementById('sf-case-link');
+      sfLink.href = caseUrl;
+      sfLink.setAttribute('aria-label', `View Salesforce Case record ${result.caseId} (opens in new tab)`);
+      document.getElementById('sf-case-info').hidden = false;
+    }
+
+    confirmation.classList.add('visible');
+    // FIX #25: Move focus to confirmation panel — not body
+    confirmation.focus();
+
+    // FIX #86: Assertive announcement with reference number
+    const successMsg = currentLang === 'es'
+      ? `Denuncia enviada. Su número de referencia es ${refNum}.`
+      : `Complaint submitted successfully. Your reference number is ${refNum}.`;
+    announce(successMsg, true);
+
+  } catch (error) {
+    // Error state
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('loading');
+    const errMsg = error.message || (currentLang === 'es'
+      ? 'Error al enviar. Por favor intente de nuevo o llame al 720-508-6000.'
+      : 'Submission failed. Please try again or call 720-508-6000.');
+    document.getElementById('narrative-error').textContent = errMsg;
+    announce(errMsg, true);
+    narrative.focus();
+  }
+});
+
+// ── RESET ───────────────────────────────────────────────────────
+function resetForm() {
+  form.reset();
+  document.querySelector('.form-body').style.display = '';
+  form.parentElement.querySelector('.form-footer').style.display = '';
+  confirmation.classList.remove('visible');
+  chips.forEach(c => { c.setAttribute('aria-pressed', 'false'); c.classList.remove('selected'); });
+  document.querySelectorAll('.chip-redirect').forEach(r => r.classList.remove('visible'));
+  document.getElementById('ai-routing').classList.remove('visible');
+  document.getElementById('ai-result').style.display = 'none';
+  document.getElementById('sf-case-info').hidden = true;
+  charCount.textContent = '0 / ' + MAX_CHARS;
+  updateAnon();
+  submitBtn.disabled = false;
+  submitBtn.classList.remove('loading');
+  window._sfPriority = undefined;
+  window._sfUnit = undefined;
+  // Return focus to narrative field for next complaint
+  narrative.focus();
+}
+
+// ── API ACCORDION ────────────────────────────────────────────────
+const apiToggle = document.getElementById('api-toggle');
+const apiBody   = document.getElementById('api-body');
+apiToggle.addEventListener('click', () => {
+  const open = apiToggle.getAttribute('aria-expanded') === 'true';
+  apiToggle.setAttribute('aria-expanded', String(!open));
+  apiBody.classList.toggle('open', !open);
+});
+
+// ── SALESFORCE STATUS BAR ────────────────────────────────────────
+function initSFStatus() {
+  const strip = document.getElementById('sf-status');
+  const text  = document.getElementById('sf-status-text');
+
+  if (window.SFCONFIG.demoMode) {
+    strip.className = 'sf-status-strip demo';
+    text.innerHTML = `Demo mode active — set <code>window.SFCONFIG.demoMode = false</code> and configure <code>proxyEndpoint</code> to connect to your Salesforce org.`;
+  } else {
+    strip.className = 'sf-status-strip';
+    text.textContent = `Connected to Salesforce — cases will be created in ${window.SFCONFIG.instanceUrl}`;
+  }
+}
+initSFStatus();
+
+// Init lang
+setLang('en');
+</script>
+
+</body>
+</html>
