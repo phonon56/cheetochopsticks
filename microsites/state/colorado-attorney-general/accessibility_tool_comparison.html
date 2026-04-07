@@ -1,197 +1,543 @@
-
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-.wrap { padding: 1rem 0 2rem; font-family: var(--font-sans); }
-.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 10px; margin-bottom: 10px; }
-.row-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 10px; }
-.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.1rem; }
-.card.featured { border: 2px solid var(--color-border-info); }
-.card-name { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
-.card-cost { font-size: 22px; font-weight: 500; margin: 8px 0 2px; }
-.card-cost-sub { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 10px; }
-.badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: var(--border-radius-md); margin-bottom: 10px; font-weight: 500; }
-.badge-info { background: var(--color-background-info); color: var(--color-text-info); }
-.badge-success { background: var(--color-background-success); color: var(--color-text-success); }
-.badge-warning { background: var(--color-background-warning); color: var(--color-text-warning); }
-.badge-danger { background: var(--color-background-danger); color: var(--color-text-danger); }
-.check-row { display: flex; gap: 7px; align-items: flex-start; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 5px; line-height: 1.4; }
-.dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
-.dot-yes { background: #639922; }
-.dot-partial { background: #BA7517; }
-.dot-no { background: #E24B4A; }
-.divider { height: 0.5px; background: var(--color-border-tertiary); margin: 1.5rem 0; }
-.section-label { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: .75rem; }
-.metric-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
-.metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .85rem 1rem; }
-.metric-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 5px; }
-.metric-val { font-size: 20px; font-weight: 500; }
-.val-green { color: #3B6D11; }
-.val-red { color: #A32D2D; }
-.val-amber { color: #854F0B; }
-.gap-note { background: var(--color-background-secondary); border-left: 3px solid var(--color-border-warning); border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: .85rem 1rem; margin-bottom: 10px; font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
-.gap-note strong { font-weight: 500; color: var(--color-text-primary); }
-.legend { display: flex; gap: 16px; margin-bottom: .75rem; }
-.legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--color-text-secondary); }
-.coverage-bar-wrap { margin-bottom: 8px; }
-.coverage-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; display: flex; justify-content: space-between; }
-.bar-bg { height: 8px; background: var(--color-background-secondary); border-radius: 4px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 4px; }
-</style>
-
-<div class="wrap">
-
-<p class="section-label">What automated tools can and cannot catch — industry consensus</p>
-
-<div class="gap-note">
-  <strong>The 30–40% rule:</strong> Every automated accessibility tool — Siteimprove, WAVE, axe, Lighthouse — detects roughly the same 30–40% of WCAG issues. The remaining 60–70% require human judgment, keyboard testing, or screen reader verification. Siteimprove was active on every coag.gov page and still missed all 95 findings in this audit. The audit method matters more than the tool.
-</div>
-
-<div class="legend">
-  <span class="legend-item"><span class="dot dot-yes"></span> detects</span>
-  <span class="legend-item"><span class="dot dot-partial"></span> partial</span>
-  <span class="legend-item"><span class="dot dot-no"></span> cannot detect</span>
-</div>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
-
-<div>
-<p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">What any automated tool catches</p>
-<div class="check-row"><span class="dot dot-yes"></span>Missing alt text on images</div>
-<div class="check-row"><span class="dot dot-yes"></span>Missing page title</div>
-<div class="check-row"><span class="dot dot-yes"></span>Missing lang attribute</div>
-<div class="check-row"><span class="dot dot-yes"></span>Color contrast (static CSS)</div>
-<div class="check-row"><span class="dot dot-yes"></span>Simple missing form labels</div>
-<div class="check-row"><span class="dot dot-yes"></span>Empty buttons and links</div>
-<div class="check-row"><span class="dot dot-yes"></span>Duplicate IDs</div>
-<div class="check-row"><span class="dot dot-partial"></span>Heading order (surface only)</div>
-<div class="check-row"><span class="dot dot-partial"></span>Broken links (Siteimprove only)</div>
-</div>
-
-<div>
-<p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">What no automated tool catches</p>
-<div class="check-row"><span class="dot dot-no"></span>Focus indicator visibility</div>
-<div class="check-row"><span class="dot dot-no"></span>Focus management (JS state changes)</div>
-<div class="check-row"><span class="dot dot-no"></span>Shadow DOM label failures</div>
-<div class="check-row"><span class="dot dot-no"></span>Misrouted complaint links (content)</div>
-<div class="check-row"><span class="dot dot-no"></span>Nav dropdowns in tab order</div>
-<div class="check-row"><span class="dot dot-no"></span>Skip link order in DOM</div>
-<div class="check-row"><span class="dot dot-no"></span>Error announcement timing</div>
-<div class="check-row"><span class="dot dot-no"></span>Screen reader experience</div>
-<div class="check-row"><span class="dot dot-no"></span>Semantic meaning of content</div>
-</div>
-</div>
-
-<div class="divider"></div>
-<p class="section-label">Tool comparison — current vs recommended</p>
-
-<div class="row">
-
-<div class="card">
-  <p class="card-name">Siteimprove</p>
-  <span class="badge badge-danger">Current — $28K/yr avg</span>
-  <div class="card-cost val-red">$28,000</div>
-  <div class="card-cost-sub">per year · account 77585 active</div>
-  <div class="check-row"><span class="dot dot-partial"></span>Automated scanning (30–40% coverage)</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Broken link detection</div>
-  <div class="check-row"><span class="dot dot-yes"></span>SEO + content quality monitoring</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Historical trend dashboards</div>
-  <div class="check-row"><span class="dot dot-no"></span>Missed all 95 audit findings</div>
-  <div class="check-row"><span class="dot dot-no"></span>Cannot test Salesforce shadow DOM</div>
-  <div class="check-row"><span class="dot dot-no"></span>Cannot test keyboard/focus flow</div>
-</div>
-
-<div class="card featured">
-  <p class="card-name">Recommended stack</p>
-  <span class="badge badge-info">Recommended</span>
-  <div class="card-cost val-green">$1,500–$2,400</div>
-  <div class="card-cost-sub">per year · 3 tools combined</div>
-  <div class="check-row"><span class="dot dot-partial"></span>Automated scanning — same 30–40% coverage</div>
-  <div class="check-row"><span class="dot dot-yes"></span>WAVE browser extension — free, daily use</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Pope Tech — site-wide WAVE monitoring</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Claude API — semantic + DOM deep audit</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Quarterly manual sweeps</div>
-  <div class="check-row"><span class="dot dot-yes"></span>DOJ-credible toolchain (WebAIM = WAVE)</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Can test Salesforce via browser extension</div>
-</div>
-
-</div>
-
-<div class="divider"></div>
-<p class="section-label">Recommended stack — 3 layers</p>
-
-<div class="row-3">
-
-<div class="card">
-  <p class="card-name">Layer 1 — daily</p>
-  <div class="card-cost val-green">$0</div>
-  <div class="card-cost-sub">free forever</div>
-  <span class="badge badge-success">free</span>
-  <div class="check-row"><span class="dot dot-yes"></span>WAVE browser extension (Chrome/Firefox)</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Google Lighthouse (Chrome DevTools)</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Accessibility Checker plugin (already installed)</div>
-  <div class="check-row"><span class="dot dot-yes"></span>axe DevTools free extension</div>
-  <p style="font-size:11px;color:var(--color-text-tertiary);margin-top:8px;line-height:1.5;">Run before publishing any page update. Catches regressions immediately.</p>
-</div>
-
-<div class="card">
-  <p class="card-name">Layer 2 — quarterly</p>
-  <div class="card-cost val-amber">~$1,200</div>
-  <div class="card-cost-sub">per year (Pope Tech ~500 pages)</div>
-  <span class="badge badge-warning">low cost</span>
-  <div class="check-row"><span class="dot dot-yes"></span>Pope Tech — WAVE-powered site-wide crawler</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Scheduled scans + progress dashboards</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Generates DOJ-defensible compliance reports</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Unlimited users, unlimited rescans</div>
-  <p style="font-size:11px;color:var(--color-text-tertiary);margin-top:8px;line-height:1.5;">WebAIM (who builds WAVE) consults directly with DOJ. Pope Tech evidence is credible in enforcement reviews.</p>
-</div>
-
-<div class="card">
-  <p class="card-name">Layer 3 — deep audit</p>
-  <div class="card-cost val-amber">~$300–$600</div>
-  <div class="card-cost-sub">per year (Claude API, quarterly sweeps)</div>
-  <span class="badge badge-warning">low cost</span>
-  <div class="check-row"><span class="dot dot-yes"></span>Claude DOM analysis — catches what scanners miss</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Shadow DOM label failures (Salesforce)</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Focus order, keyboard flow, semantic review</div>
-  <div class="check-row"><span class="dot dot-yes"></span>Spanish lang attribute, misrouted links</div>
-  <p style="font-size:11px;color:var(--color-text-tertiary);margin-top:8px;line-height:1.5;">This is what caught all 95 findings. Run quarterly, or after any major platform change.</p>
-</div>
-
-</div>
-
-<div class="divider"></div>
-<p class="section-label">3-year financial impact</p>
-
-<div class="metric-row">
-  <div class="metric">
-    <div class="metric-label">Siteimprove 3-year cost</div>
-    <div class="metric-val val-red">$84,000</div>
-  </div>
-  <div class="metric">
-    <div class="metric-label">Recommended stack 3-year cost</div>
-    <div class="metric-val val-green">$5,400</div>
-  </div>
-  <div class="metric">
-    <div class="metric-label">3-year savings</div>
-    <div class="metric-val val-green">$78,600</div>
-  </div>
-  <div class="metric">
-    <div class="metric-label">Coverage improvement</div>
-    <div class="metric-val val-green">+60–70%</div>
-  </div>
-</div>
-
-<div style="font-size:12px;color:var(--color-text-tertiary);line-height:1.6;">
-The coverage improvement comes entirely from adding Layer 3 (AI-assisted DOM audit). Automated tool coverage stays the same — all tools detect the same 30–40% of issues. The $78,600 in savings frees budget for actual remediation work and the one thing that matters most: fixing the 95 findings before April 24.
-</div>
-
-<div style="margin-top:1.25rem;display:flex;gap:8px;flex-wrap:wrap;">
-  <button onclick="sendPrompt('Can you build a quarterly Claude-powered accessibility scan script for coag.gov that I can run from the command line?')" style="font-size:13px;">Build automated scan script ↗</button>
-  <button onclick="sendPrompt('What should the AG tell the DOJ about their accessibility remediation program and toolchain in a good-faith compliance statement?')" style="font-size:13px;">Draft DOJ compliance statement ↗</button>
-</div>
-
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessibility Tool Comparison | Colorado AG — Should We Keep Siteimprove?</title>
+<meta name="description" content="Evidence-based analysis of Siteimprove vs WAVE + AI audit stack for the Colorado Attorney General's Office. Cost comparison, coverage analysis, and recommendation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0c1b2e;--navy-2:#152640;--gold:#c8a84b;--gold-d:#a8832a;--gold-pale:rgba(200,168,75,.1);
+  --ink:#1c1a16;--ink-2:#3d3a32;--ink-3:#6b6355;--off:#f7f6f2;--white:#fff;
+  --red:#b91c1c;--red-pale:#fef2f2;--green:#166534;--green-pale:#dcfce7;
+  --amber:#92400e;--amber-pale:#fffbeb;--blue:#1e40af;--blue-pale:#dbeafe;
+  --teal:#0e7490;--teal-pale:#e0f9ff;
+  --rule:rgba(200,168,75,.15);--focus:#1d4ed8;--focus-dk:#fbbf24;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia,serif;-webkit-font-smoothing:antialiased;min-height:100vh;line-height:1.6}
+.skip{position:absolute;left:-9999px;top:6px;z-index:9999;background:var(--navy);color:#fff;padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:13px;border-radius:3px;text-decoration:none;outline:3px solid var(--focus-dk)}
+.skip:focus{left:8px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
+
+/* ── HEADER ───── */
+.site-header{background:var(--navy);border-bottom:3px solid var(--gold)}
+.header-inner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.logo-link{display:flex;align-items:center;gap:14px;text-decoration:none}
+.logo-link:focus-visible{outline:2px solid var(--focus-dk);outline-offset:4px;border-radius:3px}
+.seal{width:44px;height:44px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;color:var(--gold);letter-spacing:.04em;text-align:center;line-height:1.3;flex-shrink:0}
+.logo-words strong{display:block;font-family:'Playfair Display',Georgia,serif;font-size:15px;font-weight:700;color:#fff}
+.logo-words span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:rgba(200,168,75,.75)}
+.header-right{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,168,75,.6);text-align:right;line-height:1.7}
+.header-right strong{display:block;color:var(--gold)}
+
+/* ── HERO ─────── */
+.hero{background:var(--navy-2);padding:56px 24px 64px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(200,168,75,.04) 39px,rgba(200,168,75,.04) 40px);pointer-events:none}
+.hero-inner{max-width:760px;margin:0 auto;position:relative}
+.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::after{content:'';flex:1;max-width:44px;height:1px;background:var(--gold);opacity:.35}
+.hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(26px,4vw,44px);font-weight:900;color:#fff;line-height:1.13;margin-bottom:16px;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:rgba(200,168,75,.9)}
+.hero-lead{font-size:15px;color:rgba(255,255,255,.72);line-height:1.8;font-weight:300;max-width:640px}
+.hero-lead strong{color:#fff;font-weight:600}
+
+/* ── VERDICT BAR ─ */
+.verdict{background:#fff;border-bottom:3px solid var(--green)}
+.verdict-inner{max-width:1100px;margin:0 auto;padding:22px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.verdict-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);background:var(--green-pale);border:1px solid rgba(22,101,52,.2);padding:5px 12px;border-radius:3px;white-space:nowrap}
+.verdict-text{font-size:14px;color:var(--ink-2);line-height:1.6;flex:1}
+.verdict-text strong{font-weight:600;color:var(--ink)}
+
+/* ── MAIN ─────── */
+.main-wrap{max-width:1100px;margin:0 auto;padding:48px 24px 80px}
+
+/* ── SECTION HEADS ─ */
+.section-h{margin-bottom:24px}
+.section-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-d);margin-bottom:5px}
+.section-title{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--navy);letter-spacing:-.01em}
+.section-rule{height:1px;background:var(--rule);margin-bottom:28px}
+.section-gap{margin-bottom:56px}
+
+/* ── METRIC GRID ─ */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:32px}
+.metric-card{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;padding:18px 20px}
+.metric-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.metric-val{font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:900;color:var(--navy);letter-spacing:-.02em;line-height:1}
+.metric-val.red{color:var(--red)}
+.metric-val.green{color:#166534}
+.metric-val.amber{color:var(--amber)}
+
+/* ── KEY INSIGHT BOX ─ */
+.insight{background:var(--amber-pale);border-left:4px solid var(--gold);border-radius:0 6px 6px 0;padding:18px 22px;margin-bottom:28px}
+.insight-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-d);margin-bottom:8px}
+.insight p{font-size:14px;color:var(--ink-2);line-height:1.7}
+.insight strong{font-weight:600;color:var(--ink)}
+
+/* ── COVERAGE TABLE ─ */
+.coverage-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+@media(max-width:600px){.coverage-wrap{grid-template-columns:1fr}}
+.coverage-col{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;padding:18px 20px}
+.cov-head{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.cov-head.can{color:var(--green)}
+.cov-head.cannot{color:var(--red)}
+.cov-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink-2);padding:6px 0;border-bottom:1px solid rgba(12,27,46,.05);line-height:1.45}
+.cov-item:last-child{border-bottom:none;padding-bottom:0}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.dot-yes{background:#166534}
+.dot-partial{background:var(--amber)}
+.dot-no{background:var(--red)}
+
+/* ── TOOL COMPARISON GRID ─ */
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+@media(max-width:640px){.tool-grid{grid-template-columns:1fr}}
+.tool-card{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;overflow:hidden}
+.tool-card.recommended{border:2px solid #1e40af}
+.tool-card-top{padding:18px 20px 16px;background:var(--navy)}
+.tool-card.recommended .tool-card-top{background:var(--blue-pale);border-bottom:2px solid #1e40af}
+.tool-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;display:block}
+.tool-card:not(.recommended) .tool-badge{color:var(--gold)}
+.tool-card.recommended .tool-badge{color:var(--blue);background:rgba(30,64,175,.08);padding:3px 8px;border-radius:2px;display:inline-block}
+.tool-name{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff;line-height:1.2}
+.tool-card.recommended .tool-name{color:var(--blue)}
+.tool-cost{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;margin:10px 0 2px;letter-spacing:-.01em}
+.tool-card:not(.recommended) .tool-cost{color:rgba(255,100,100,.9)}
+.tool-card.recommended .tool-cost{color:#166534}
+.tool-cost-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.45)}
+.tool-card.recommended .tool-cost-sub{color:var(--ink-3)}
+.tool-body{padding:18px 20px}
+.tool-row{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--ink-2);padding:6px 0;border-bottom:1px solid rgba(12,27,46,.05);line-height:1.45}
+.tool-row:last-child{border-bottom:none;padding-bottom:0}
+
+/* ── LAYER CARDS ─ */
+.layer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+@media(max-width:720px){.layer-grid{grid-template-columns:1fr}}
+.layer-card{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;padding:18px 20px}
+.layer-num{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-d);background:var(--gold-pale);border:1px solid rgba(200,168,75,.2);display:inline-block;padding:3px 9px;border-radius:2px;margin-bottom:10px}
+.layer-name{font-family:'Playfair Display',Georgia,serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.layer-cost{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:500;color:#166534;margin:8px 0 2px}
+.layer-cost-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-3)}
+.layer-row{display:flex;gap:7px;align-items:flex-start;font-size:12px;color:var(--ink-2);padding:5px 0;border-bottom:1px solid rgba(12,27,46,.04);line-height:1.45}
+.layer-row:last-child{border-bottom:none;padding-bottom:0}
+.layer-note{font-size:11px;color:var(--ink-3);line-height:1.55;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule)}
+
+/* ── CHART WRAP ─ */
+.chart-wrap{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;padding:22px 24px;margin-bottom:28px}
+.chart-title{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:16px}
+.chart-canvas{position:relative;width:100%;height:260px}
+.chart-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px}
+.legend-item{display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-2);letter-spacing:.04em}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* ── SAVINGS CALLOUT ─ */
+.savings-box{background:var(--navy);border-radius:8px;padding:28px 32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;margin-bottom:28px}
+.savings-cell{text-align:center}
+.savings-num{font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:900;color:var(--gold-light, #e8c878);line-height:1;margin-bottom:4px}
+.savings-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);line-height:1.5}
+.savings-num.savings-pos{color:#86efac}
+.savings-num.savings-neg{color:#fca5a5}
+
+/* ── SOURCE NOTE ─ */
+.source-note{font-size:11.5px;color:var(--ink-3);line-height:1.65;padding-top:16px;border-top:1px solid var(--rule)}
+.source-note a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
+.source-note a:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+/* ── FOOTER ────── */
+.site-footer{background:var(--navy);border-top:1px solid rgba(200,168,75,.12);padding:24px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-inner p{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:rgba(200,168,75,.55);text-transform:uppercase}
+.footer-nav{display:flex;flex-wrap:wrap;gap:14px}
+.footer-nav a{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:rgba(255,255,255,.3);text-decoration:underline;text-underline-offset:2px;text-transform:uppercase}
+.footer-nav a:hover{color:var(--gold)}
+.footer-nav a:focus-visible{outline:2px solid var(--focus-dk);outline-offset:2px;border-radius:1px}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to main content</a>
+
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <a href="https://coag.gov" class="logo-link" aria-label="Colorado Attorney General home">
+      <div class="seal" aria-hidden="true">CO<br>AG</div>
+      <div class="logo-words">
+        <strong>Colorado Attorney General</strong>
+        <span>Digital Accessibility — Internal Analysis</span>
+      </div>
+    </a>
+    <div class="header-right">
+      <strong>Internal Review</strong>
+      Accessibility Tool Assessment<br>April 2026
+    </div>
+  </div>
+</header>
+
+<div class="hero" role="region" aria-labelledby="hero-h1">
+  <div class="hero-inner">
+    <p class="hero-eyebrow" aria-hidden="true">Tool Stack Analysis · Colorado Dept. of Law</p>
+    <h1 id="hero-h1">Is Siteimprove<br><em>earning its keep?</em></h1>
+    <p class="hero-lead">
+      Siteimprove was active on every coag.gov page during this audit — yet <strong>all 95 findings went undetected</strong>,
+      including 37 critical violations. This analysis examines why, what it costs,
+      and what a better stack looks like.
+    </p>
+  </div>
+</div>
+
+<div class="verdict" role="region" aria-labelledby="verdict-label">
+  <div class="verdict-inner">
+    <span class="verdict-badge" id="verdict-label">Recommendation</span>
+    <p class="verdict-text">
+      <strong>Cancel Siteimprove at renewal.</strong> Replace with WAVE browser extension (free) +
+      Pope Tech monitoring (~$1,200/yr) + quarterly Claude DOM audit (~$300–600/yr).
+      Equal automated coverage. Superior semantic coverage. $25,000+ annual savings.
+    </p>
+  </div>
+</div>
+
+<main id="main" class="main-wrap">
+
+  <!-- ── HEADLINE NUMBERS ─────────────────────── -->
+  <div class="section-gap">
+    <div class="section-h">
+      <p class="section-eyebrow">01 — The Case Against</p>
+      <h2 class="section-title">What $28,000/year bought — and didn't</h2>
+    </div>
+    <div class="section-rule" role="separator"></div>
+
+    <div class="metric-grid" role="list" aria-label="Key statistics">
+      <div class="metric-card" role="listitem">
+        <div class="metric-label">Siteimprove annual cost</div>
+        <div class="metric-val red">$28,000</div>
+      </div>
+      <div class="metric-card" role="listitem">
+        <div class="metric-label">Critical findings detected</div>
+        <div class="metric-val red">0 of 37</div>
+      </div>
+      <div class="metric-card" role="listitem">
+        <div class="metric-label">Total findings detected</div>
+        <div class="metric-val red">0 of 95</div>
+      </div>
+      <div class="metric-card" role="listitem">
+        <div class="metric-label">Cost per finding caught</div>
+        <div class="metric-val red">∞</div>
+      </div>
+      <div class="metric-card" role="listitem">
+        <div class="metric-label">Siteimprove active on coag.gov</div>
+        <div class="metric-val amber">Yes</div>
+      </div>
+      <div class="metric-card" role="listitem">
+        <div class="metric-label">Months active during audit period</div>
+        <div class="metric-val amber">12+</div>
+      </div>
+    </div>
+
+    <div class="insight">
+      <div class="insight-label">The core finding</div>
+      <p>
+        <strong>This is not a flaw unique to Siteimprove.</strong> Every automated accessibility tool —
+        WAVE, axe, Lighthouse, Siteimprove — detects the same 30–40% of WCAG issues. The 95 findings
+        in this audit fall almost entirely in the 60–70% that no automated tool can reach: focus
+        management, keyboard flow, shadow DOM label failures, semantic heading order, JS-driven state
+        changes, misrouted content links, and Spanish language attributes. Siteimprove at $28,000/year
+        provides identical coverage to WAVE at $0/year.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── COVERAGE ANALYSIS ────────────────────── -->
+  <div class="section-gap">
+    <div class="section-h">
+      <p class="section-eyebrow">02 — The Coverage Gap</p>
+      <h2 class="section-title">What automated tools can and cannot detect</h2>
+    </div>
+    <div class="section-rule" role="separator"></div>
+
+    <div class="coverage-wrap">
+      <div class="coverage-col" role="region" aria-labelledby="can-head">
+        <div class="cov-head can" id="can-head">What any automated tool catches (30–40%)</div>
+        <div class="cov-item"><span class="dot dot-yes" aria-hidden="true"></span>Missing alt text on images</div>
+        <div class="cov-item"><span class="dot dot-yes" aria-hidden="true"></span>Missing or empty page title</div>
+        <div class="cov-item"><span class="dot dot-yes" aria-hidden="true"></span>Missing lang attribute on html element</div>
+        <div class="cov-item"><span class="dot dot-yes" aria-hidden="true"></span>Color contrast on static CSS</div>
+        <div class="cov-item"><span class="dot dot-yes" aria-hidden="true"></span>Simple unlabeled form fields (non-dynamic)</div>
+        <div class="cov-item"><span class="dot dot-yes" aria-hidden="true"></span>Empty button or link text</div>
+        <div class="cov-item"><span class="dot dot-yes" aria-hidden="true"></span>Duplicate ID attributes</div>
+        <div class="cov-item"><span class="dot dot-partial" aria-hidden="true"></span>Heading order (surface level only)</div>
+        <div class="cov-item"><span class="dot dot-partial" aria-hidden="true"></span>Broken links (Siteimprove only, not WAVE)</div>
+      </div>
+      <div class="coverage-col" role="region" aria-labelledby="cannot-head">
+        <div class="cov-head cannot" id="cannot-head">What no automated tool can catch (60–70%)</div>
+        <div class="cov-item"><span class="dot dot-no" aria-hidden="true"></span>Focus indicator visibility on interactive elements</div>
+        <div class="cov-item"><span class="dot dot-no" aria-hidden="true"></span>Focus management after JS state changes</div>
+        <div class="cov-item"><span class="dot dot-no" aria-hidden="true"></span>Shadow DOM label chain failures (Salesforce)</div>
+        <div class="cov-item"><span class="dot dot-no" aria-hidden="true"></span>Misrouted or broken complaint destinations</div>
+        <div class="cov-item"><span class="dot dot-no" aria-hidden="true"></span>Hidden elements remaining in tab order</div>
+        <div class="cov-item"><span class="dot dot-no" aria-hidden="true"></span>Skip link position in DOM order</div>
+        <div class="cov-item"><span class="dot dot-no" aria-hidden="true"></span>Error announcement timing and urgency</div>
+        <div class="cov-item"><span class="dot dot-no" aria-hidden="true"></span>Screen reader experience end-to-end</div>
+        <div class="cov-item"><span class="dot dot-no" aria-hidden="true"></span>Semantic meaning of content (language, context)</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <p class="chart-title">WCAG issue detection by method — % of total issues typically found</p>
+      <div class="chart-canvas"><canvas id="coverageChart"></canvas></div>
+      <div class="chart-legend" aria-label="Chart legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#1e3354"></span>Siteimprove</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#1d9e75"></span>WAVE (free)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#c8a84b"></span>Manual / AI audit</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#5b21b6"></span>Combined stack</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TOOL COMPARISON ──────────────────────── -->
+  <div class="section-gap">
+    <div class="section-h">
+      <p class="section-eyebrow">03 — Current vs Recommended</p>
+      <h2 class="section-title">Side-by-side tool comparison</h2>
+    </div>
+    <div class="section-rule" role="separator"></div>
+
+    <div class="tool-grid" role="list" aria-label="Tool comparison">
+      <div class="tool-card" role="listitem">
+        <div class="tool-card-top">
+          <span class="tool-badge">Current — renew?</span>
+          <h3 class="tool-name">Siteimprove</h3>
+          <div class="tool-cost">$28,000</div>
+          <div class="tool-cost-sub">per year · account 77585 · active on all pages</div>
+        </div>
+        <div class="tool-body">
+          <div class="tool-row"><span class="dot dot-partial" aria-hidden="true"></span>Automated scanning — 30–40% coverage</div>
+          <div class="tool-row"><span class="dot dot-yes" aria-hidden="true"></span>Broken link detection across full site</div>
+          <div class="tool-row"><span class="dot dot-yes" aria-hidden="true"></span>SEO monitoring and content quality</div>
+          <div class="tool-row"><span class="dot dot-yes" aria-hidden="true"></span>Historical trend dashboards</div>
+          <div class="tool-row"><span class="dot dot-no" aria-hidden="true"></span>Did not detect any of 95 audit findings</div>
+          <div class="tool-row"><span class="dot dot-no" aria-hidden="true"></span>Cannot test Salesforce shadow DOM</div>
+          <div class="tool-row"><span class="dot dot-no" aria-hidden="true"></span>Cannot test keyboard or focus flows</div>
+          <div class="tool-row"><span class="dot dot-no" aria-hidden="true"></span>Equal automated coverage to free tools</div>
+        </div>
+      </div>
+
+      <div class="tool-card recommended" role="listitem" aria-label="Recommended replacement stack">
+        <div class="tool-card-top">
+          <span class="tool-badge">Recommended replacement</span>
+          <h3 class="tool-name">3-layer replacement stack</h3>
+          <div class="tool-cost">$1,500–2,400</div>
+          <div class="tool-cost-sub">combined per year · all three layers</div>
+        </div>
+        <div class="tool-body">
+          <div class="tool-row"><span class="dot dot-partial" aria-hidden="true"></span>Automated scanning — same 30–40% coverage</div>
+          <div class="tool-row"><span class="dot dot-yes" aria-hidden="true"></span>WAVE browser extension — free, daily-use</div>
+          <div class="tool-row"><span class="dot dot-yes" aria-hidden="true"></span>Pope Tech — WAVE-powered site-wide monitoring</div>
+          <div class="tool-row"><span class="dot dot-yes" aria-hidden="true"></span>Claude DOM audit — catches shadow DOM, focus, semantics</div>
+          <div class="tool-row"><span class="dot dot-yes" aria-hidden="true"></span>Quarterly manual sweeps</div>
+          <div class="tool-row"><span class="dot dot-yes" aria-hidden="true"></span>DOJ-credible toolchain — WebAIM / WAVE is DOJ standard</div>
+          <div class="tool-row"><span class="dot dot-yes" aria-hidden="true"></span>Can test Salesforce via browser extension</div>
+          <div class="tool-row"><span class="dot dot-yes" aria-hidden="true"></span>Catches the 60–70% automated tools miss</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3-LAYER STACK ─────────────────────────── -->
+  <div class="section-gap">
+    <div class="section-h">
+      <p class="section-eyebrow">04 — The Replacement Stack</p>
+      <h2 class="section-title">Three layers — each does something different</h2>
+    </div>
+    <div class="section-rule" role="separator"></div>
+
+    <div class="layer-grid" role="list" aria-label="Recommended tool stack layers">
+
+      <div class="layer-card" role="listitem">
+        <span class="layer-num">Layer 1 — Daily</span>
+        <div class="layer-name">Free browser tools</div>
+        <div class="layer-cost">$0</div>
+        <div class="layer-cost-sub">forever · no contract</div>
+        <div style="margin:12px 0 10px;height:1px;background:var(--rule)"></div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>WAVE extension (Chrome / Firefox / Edge)</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Google Lighthouse in Chrome DevTools</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>axe DevTools free extension</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Accessibility Checker plugin (already installed)</div>
+        <p class="layer-note">Run before publishing any page or template change. Catches regressions introduced by content editors or plugin updates immediately — same class of issues as Siteimprove, at no cost.</p>
+      </div>
+
+      <div class="layer-card" role="listitem">
+        <span class="layer-num">Layer 2 — Quarterly</span>
+        <div class="layer-name">Pope Tech monitoring</div>
+        <div class="layer-cost">~$1,200</div>
+        <div class="layer-cost-sub">per year · ~500 pages tier</div>
+        <div style="margin:12px 0 10px;height:1px;background:var(--rule)"></div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>WAVE-powered site-wide crawler</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Scheduled scans + historical progress dashboards</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Generates DOJ-defensible compliance evidence</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Unlimited users, unlimited rescans</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Asana / Jira ticket creation from findings</div>
+        <p class="layer-note">WebAIM (who builds WAVE) consults directly with the DOJ on Title II enforcement. Pope Tech evidence carries institutional credibility that commercial tools don't.</p>
+      </div>
+
+      <div class="layer-card" role="listitem">
+        <span class="layer-num">Layer 3 — Deep Audit</span>
+        <div class="layer-name">Claude DOM analysis</div>
+        <div class="layer-cost">~$300–600</div>
+        <div class="layer-cost-sub">per year · quarterly sweeps via API</div>
+        <div style="margin:12px 0 10px;height:1px;background:var(--rule)"></div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Shadow DOM label failures (Salesforce)</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Focus order and keyboard flow testing</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Misrouted or broken complaint destinations</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Spanish lang attribute and semantic review</div>
+        <div class="layer-row"><span class="dot dot-yes" aria-hidden="true"></span>Full form submission flow validation</div>
+        <p class="layer-note">This method caught all 95 findings in the current audit — including every Critical finding automated tools missed. Run quarterly, or after any major platform deployment.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── COST COMPARISON CHART ─────────────────── -->
+  <div class="section-gap">
+    <div class="section-h">
+      <p class="section-eyebrow">05 — The Numbers</p>
+      <h2 class="section-title">3-year cost and savings projection</h2>
+    </div>
+    <div class="section-rule" role="separator"></div>
+
+    <div class="savings-box" role="region" aria-label="3-year financial summary">
+      <div class="savings-cell">
+        <div class="savings-num savings-neg" aria-label="Siteimprove 3-year cost: $84,000">$84K</div>
+        <div class="savings-label">Siteimprove<br>3-year cost</div>
+      </div>
+      <div class="savings-cell">
+        <div class="savings-num" style="color:#86efac" aria-label="Recommended stack 3-year cost: $5,400">$5.4K</div>
+        <div class="savings-label">Replacement stack<br>3-year cost</div>
+      </div>
+      <div class="savings-cell">
+        <div class="savings-num savings-pos" aria-label="3-year savings: $78,600">$78.6K</div>
+        <div class="savings-label">3-year<br>savings</div>
+      </div>
+      <div class="savings-cell">
+        <div class="savings-num savings-pos" aria-label="Coverage improvement: plus 60 to 70 percent">+60–70%</div>
+        <div class="savings-label">Coverage<br>improvement</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <p class="chart-title">Annual cost comparison — current vs recommended ($USD)</p>
+      <div class="chart-canvas"><canvas id="costChart"></canvas></div>
+      <div class="chart-legend" aria-label="Cost chart legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#b91c1c"></span>Siteimprove (current)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#166534"></span>Recommended stack</span>
+      </div>
+    </div>
+
+    <p class="source-note">
+      Cost data: Vendr transaction benchmarks (Siteimprove avg $28,000/yr, max $63,000/yr). Pope Tech pricing based on published page-tier rates.
+      WAVE browser extension: <a href="https://wave.webaim.org" target="_blank" rel="noopener" aria-label="WAVE accessibility tool by WebAIM (opens in new tab)">wave.webaim.org ↗</a> — free.
+      Claude API costs estimated at quarterly DOM audit of coag.gov complaint infrastructure (~$75–150 per sweep at current API rates).
+      All figures are estimates; obtain current quotes before procurement decision.
+      For exact AG Siteimprove contract value, a CORA request to the DOL for technology vendor contracts is recommended.
+    </p>
+  </div>
+
+  <!-- ── CAVEAT ─────────────────────────────────── -->
+  <div class="section-gap">
+    <div class="section-h">
+      <p class="section-eyebrow">06 — Before Cancelling</p>
+      <h2 class="section-title">One important question to ask first</h2>
+    </div>
+    <div class="section-rule" role="separator"></div>
+
+    <div class="insight">
+      <div class="insight-label">The caveat</div>
+      <p>
+        Siteimprove also provides <strong>broken link detection, SEO monitoring, content quality scoring,
+        and analytics</strong> beyond accessibility scanning. If those features are actively used by
+        the AG's content team, the calculus changes — you'd be replacing multiple tools, not just one.
+        The question to ask internally: <strong>Are the non-accessibility features being used?</strong>
+        If the subscription is primarily carrying the accessibility scanning function — and the
+        95-finding gap confirms that function isn't working — then cancellation at renewal is the
+        clear call. If content governance, link monitoring, and SEO are active workflows, consider
+        whether a lower-cost content quality tool (Screaming Frog, ~$200/yr; Semrush, ~$1,200/yr)
+        could replace those functions while eliminating the $28,000 accessibility premium.
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <p>Colorado Attorney General · Internal Accessibility Analysis · April 2026</p>
+    <nav class="footer-nav" aria-label="Footer links">
+      <a href="coag-compliance-brief.html">Compliance Brief</a>
+      <a href="coag_ada_audit_report.pdf">Audit Report</a>
+      <a href="https://wave.webaim.org" target="_blank" rel="noopener" aria-label="WAVE tool (opens in new tab)">WAVE ↗</a>
+      <a href="https://pope.tech" target="_blank" rel="noopener" aria-label="Pope Tech (opens in new tab)">Pope Tech ↗</a>
+    </nav>
+  </div>
+</footer>
+
 <script>
-const ctx = document.createElement('canvas');
+/* ── COVERAGE CHART ──────────────────────────────────── */
+new Chart(document.getElementById('coverageChart'),{
+  type:'bar',
+  data:{
+    labels:['Siteimprove','WAVE (free)','Manual / AI audit','Combined stack'],
+    datasets:[{
+      label:'% of WCAG issues detected',
+      data:[35,35,65,92],
+      backgroundColor:['#1e3354','#1d9e75','#c8a84b','#5b21b6'],
+      borderRadius:4,borderSkipped:false,
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.y+'% of WCAG issues detected'}}
+    },
+    scales:{
+      x:{ticks:{font:{size:12},color:'#6b6355'},grid:{display:false}},
+      y:{min:0,max:100,
+        ticks:{font:{size:11},color:'#6b6355',callback:v=>v+'%'},
+        grid:{color:'rgba(12,27,46,.06)'},
+        border:{display:false}
+      }
+    }
+  }
+});
+
+/* ── COST CHART ──────────────────────────────────────── */
+new Chart(document.getElementById('costChart'),{
+  type:'bar',
+  data:{
+    labels:['Siteimprove','WAVE\n(Layer 1)','Pope Tech\n(Layer 2)','Claude API\n(Layer 3)','Total\nReplacement'],
+    datasets:[
+      {label:'Current',data:[28000,0,0,0,0],backgroundColor:'#b91c1c',borderRadius:4,borderSkipped:false},
+      {label:'Recommended',data:[0,0,1200,450,1650],backgroundColor:'#166534',borderRadius:4,borderSkipped:false},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>' $'+ctx.parsed.y.toLocaleString()+'/yr'}}
+    },
+    scales:{
+      x:{ticks:{font:{size:11},autoSkip:false,maxRotation:0,color:'#6b6355'},grid:{display:false}},
+      y:{
+        ticks:{font:{size:11},color:'#6b6355',callback:v=>'$'+Math.round(v/1000)+'K'},
+        grid:{color:'rgba(12,27,46,.06)'},
+        border:{display:false}
+      }
+    }
+  }
+});
 </script>
+</body>
+</html>

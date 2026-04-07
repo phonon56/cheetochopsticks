@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File a Complaint | Colorado Attorney General — Phil Weiser</title>
+<meta name="description" content="Tell us what happened — Colorado AG handles the routing. Submit a complaint about consumer fraud, housing, worker protection, environmental crimes, civil rights violations, and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & ROOT ─────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0c1b2e; --navy-2:#152640; --navy-3:#1e3354;
+  --gold:#c8a84b; --gold-d:#a8832a; --gold-pale:rgba(200,168,75,.1);
+  --ink:#1c1a16; --ink-2:#3d3a32; --ink-3:#6b6355;
+  --off:#f7f6f2; --white:#fff;
+  --red:#b91c1c; --red-pale:#fef2f2;
+  --green:#065f46; --green-pale:#ecfdf5;
+  --teal:#0e7490; --teal-pale:#f0f9ff;
+  --purple:#5b21b6; --purple-pale:#f5f3ff;
+  --amber:#92400e; --amber-pale:#fffbeb;
+  --rule:rgba(200,168,75,.15);
+  --focus:#1d4ed8; --focus-dark:#fbbf24;
+  --radius:4px;
+}
+html{font-size:16px;scroll-behavior:smooth;scroll-padding-top:8px}
+body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia,serif;-webkit-font-smoothing:antialiased;min-height:100vh;line-height:1.6}
+
+/* ── ACCESSIBILITY ────────────────────────────────────── */
+.skip{position:absolute;left:-9999px;top:6px;z-index:9999;background:var(--navy);color:#fff;padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:13px;border-radius:3px;text-decoration:none;outline:3px solid var(--focus-dark);outline-offset:2px}
+.skip:focus{left:8px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+[role=alert],[role=status]{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* ── LANG BAR ─────────────────────────────────────────── */
+.lang-bar{background:var(--navy-2);padding:5px 24px;display:flex;justify-content:flex-end;gap:4px}
+.lang-btn{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(200,168,75,.8);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:2px;cursor:pointer;transition:all .15s}
+.lang-btn[aria-current=true],.lang-btn:hover{background:var(--gold-pale);border-color:var(--gold);color:var(--gold)}
+.lang-btn:focus-visible{outline:2px solid var(--focus-dark);outline-offset:2px}
+
+/* ── URGENT BAR ───────────────────────────────────────── */
+.urgent-bar{background:var(--red);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.urgent-bar p{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;color:#fff;letter-spacing:.02em;text-align:center}
+.urgent-bar a{color:#fde68a;font-weight:500;text-decoration:underline;text-underline-offset:2px}
+.urgent-bar a:hover{color:#fff}
+.urgent-bar a:focus-visible{outline:2px solid #fff;outline-offset:2px;border-radius:1px}
+
+/* ── HEADER ───────────────────────────────────────────── */
+.site-header{background:var(--navy);border-bottom:3px solid var(--gold)}
+.header-inner{max-width:1160px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.logo-link{display:flex;align-items:center;gap:14px;text-decoration:none}
+.logo-link:focus-visible{outline:2px solid var(--focus-dark);outline-offset:4px;border-radius:3px}
+.seal{width:46px;height:46px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:500;color:var(--gold);letter-spacing:.04em;text-align:center;line-height:1.3;flex-shrink:0}
+.logo-words strong{display:block;font-family:'Playfair Display',Georgia,serif;font-size:15px;font-weight:700;color:#fff;letter-spacing:.01em}
+.logo-words span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;color:rgba(200,168,75,.75)}
+.header-tel{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(200,168,75,.75);letter-spacing:.06em;text-decoration:none}
+.header-tel:hover{color:var(--gold)}
+.header-tel:focus-visible{outline:2px solid var(--focus-dark);outline-offset:2px}
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero{background:var(--navy-2);padding:56px 24px 64px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(200,168,75,.04) 79px,rgba(200,168,75,.04) 80px);pointer-events:none}
+.hero-inner{max-width:680px;margin:0 auto;position:relative}
+.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::after{content:'';flex:1;max-width:48px;height:1px;background:var(--gold);opacity:.35}
+.hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,4.5vw,48px);font-weight:900;line-height:1.13;color:#fff;margin-bottom:16px;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:rgba(200,168,75,.9)}
+.hero-lead{font-size:15px;color:rgba(255,255,255,.75);line-height:1.8;font-weight:300;max-width:540px;margin-bottom:22px}
+.hero-lead strong{color:#fff;font-weight:600}
+.routing-callout{display:flex;gap:10px;align-items:flex-start;padding:12px 16px;background:rgba(200,168,75,.08);border:1px solid rgba(200,168,75,.2);border-radius:4px}
+.routing-arrow{color:var(--gold);font-size:14px;margin-top:2px;flex-shrink:0;font-family:'IBM Plex Mono',monospace}
+.routing-callout p{font-size:13px;color:rgba(255,255,255,.68);line-height:1.65;font-weight:300}
+.routing-callout strong{color:#fff;font-weight:500}
+
+/* ── PAGE LAYOUT ──────────────────────────────────────── */
+.page-wrap{max-width:1160px;margin:0 auto;padding:32px 24px 80px;display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start}
+@media(max-width:880px){.page-wrap{grid-template-columns:1fr;gap:0}}
+
+/* ── SECTION LABELS ───────────────────────────────────── */
+.section-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-d);margin-bottom:6px}
+.section-title{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:var(--navy);letter-spacing:-.01em;margin-bottom:14px}
+.divider{height:1px;background:var(--rule);margin:22px 0}
+
+/* ── FORM COLUMN ──────────────────────────────────────── */
+.form-col{}
+.form-card{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.form-card-head{padding:20px 24px 18px;border-bottom:1px solid rgba(12,27,46,.07)}
+.form-card-head h2{font-family:'Playfair Display',Georgia,serif;font-size:19px;font-weight:700;color:var(--navy);margin-bottom:4px;letter-spacing:-.01em}
+.form-card-head p{font-size:13px;color:var(--ink-3);line-height:1.6}
+.form-card-head abbr{cursor:help;text-decoration:underline dotted}
+.form-body{padding:22px 24px}
+.field{margin-bottom:20px}
+.field:last-of-type{margin-bottom:0}
+.field-meta{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+label{font-size:13.5px;font-weight:600;color:var(--navy);cursor:pointer;font-family:'Source Serif 4',Georgia,serif}
+.req{color:var(--red);margin-left:2px}
+.char-count{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.char-count.near{color:var(--amber)}
+.field-hint{font-size:12.5px;color:var(--ink-3);line-height:1.55;margin-bottom:7px}
+.field-error{font-size:12px;color:var(--red);font-weight:500;margin-top:5px;min-height:1.2em;display:flex;align-items:flex-start;gap:4px}
+.field-error:empty{display:none}
+.field-error::before{content:'⚠';font-size:10px;margin-top:2px;flex-shrink:0}
+
+textarea,input[type=text],input[type=email],input[type=tel]{width:100%;padding:11px 13px;font-family:'Source Serif 4',Georgia,serif;font-size:14.5px;color:var(--ink);background:var(--off);border:1.5px solid #cbd5e1;border-radius:var(--radius);transition:border-color .15s}
+textarea{min-height:148px;resize:vertical;line-height:1.65}
+textarea:focus,input:focus{outline:3px solid var(--focus);outline-offset:0;border-color:var(--focus);background:#fff}
+textarea[aria-invalid=true],input[aria-invalid=true]{border-color:var(--red);background:var(--red-pale)}
+select{width:100%;padding:10px 13px;font-family:'Source Serif 4',Georgia,serif;font-size:14px;color:var(--ink);background:var(--off);border:1.5px solid #cbd5e1;border-radius:var(--radius);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23334155' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+select:focus{outline:3px solid var(--focus);outline-offset:0;border-color:var(--focus)}
+
+/* ── AI ROUTING INDICATOR ─────────────────────────────── */
+.ai-indicator{display:none;align-items:center;gap:8px;padding:10px 13px;background:var(--purple-pale);border:1px solid rgba(91,33,182,.15);border-radius:var(--radius);font-size:12.5px;color:var(--purple);margin-top:8px}
+.ai-indicator.show{display:flex}
+.ai-spinner{width:13px;height:13px;border:2px solid rgba(91,33,182,.2);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── CHIPS ────────────────────────────────────────────── */
+.chips-label{font-size:13.5px;font-weight:600;color:var(--navy);margin-bottom:6px;display:block;font-family:'Source Serif 4',Georgia,serif}
+.chips-hint{font-size:12px;color:var(--ink-3);margin-bottom:10px}
+.chips-wrap{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:6px 12px;border:1.5px solid #cbd5e1;border-radius:20px;background:var(--off);font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:500;color:var(--ink-2);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;white-space:nowrap;letter-spacing:.02em}
+.chip:hover{border-color:var(--navy);color:var(--navy);background:#fff}
+.chip[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+.chip-ico{font-size:13px;flex-shrink:0}
+.chip-note{display:none;font-size:12.5px;color:var(--teal);background:var(--teal-pale);border:1px solid rgba(14,116,144,.2);border-radius:3px;padding:9px 13px;margin-top:8px;line-height:1.6}
+.chip-note.show{display:block}
+.chip-note a{color:var(--teal);font-weight:600;text-decoration:underline}
+
+/* ── TOGGLE ROW ───────────────────────────────────────── */
+.toggle-row{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--off);border:1.5px solid #cbd5e1;border-radius:var(--radius);cursor:pointer}
+.toggle-row:focus-within{outline:3px solid var(--focus);outline-offset:0;border-color:var(--focus)}
+.toggle-row input[type=checkbox]{width:17px;height:17px;accent-color:var(--navy);cursor:pointer;flex-shrink:0}
+.toggle-label{font-size:13.5px;font-weight:500;color:var(--ink);cursor:pointer;font-family:'Source Serif 4',Georgia,serif}
+.toggle-sub{font-size:11.5px;color:var(--ink-3);display:block;font-weight:400;margin-top:1px}
+.contact-fields.hidden{display:none}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media(max-width:520px){.input-row{grid-template-columns:1fr}}
+
+/* ── SUBMIT ───────────────────────────────────────────── */
+.form-footer{padding:18px 24px 22px;border-top:1px solid rgba(12,27,46,.07);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.submit-btn{padding:12px 26px;background:var(--navy);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:none;border-radius:3px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s;white-space:nowrap}
+.submit-btn:hover{background:var(--navy-2)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed}
+.submit-btn:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.btn-spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.submit-btn.loading .btn-spinner{display:block}
+.submit-btn.loading .btn-label-en,.submit-btn.loading .btn-label-es{opacity:.7}
+.disclaimer{font-size:11.5px;color:var(--ink-3);line-height:1.55;max-width:340px}
+.disclaimer a{color:var(--ink-3);text-decoration:underline}
+
+/* ── CONFIRMATION ─────────────────────────────────────── */
+.confirmation{display:none;padding:28px 24px}
+.confirmation.show{display:block}
+.conf-icon{width:52px;height:52px;background:var(--green-pale);border:2px solid rgba(6,95,70,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.confirmation h2{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.confirmation>p{font-size:13.5px;color:var(--ink-3);line-height:1.7;margin-bottom:18px}
+.ref-block{background:var(--off);border:1.5px solid #cbd5e1;border-radius:5px;padding:14px 16px;margin-bottom:20px}
+.ref-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:4px}
+.ref-num{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:500;color:var(--navy);letter-spacing:.06em}
+.next-steps{border-top:1px solid var(--rule);padding-top:16px;list-style:none}
+.next-steps li{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink-2);padding:7px 0;line-height:1.55;border-bottom:1px solid var(--rule)}
+.next-steps li:last-child{border-bottom:none}
+.step-dot{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;color:var(--gold-d);background:rgba(200,168,75,.12);border:1px solid rgba(200,168,75,.3);border-radius:50%;width:19px;height:19px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.reset-btn{display:inline-block;margin-top:18px;padding:9px 18px;border:1.5px solid var(--navy);border-radius:3px;color:var(--navy);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;background:transparent;transition:background .15s}
+.reset-btn:hover{background:var(--off)}
+.reset-btn:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+
+/* ── SF STATUS STRIP ──────────────────────────────────── */
+.sf-strip{display:flex;align-items:center;gap:7px;padding:9px 13px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);background:var(--teal-pale);border:1px solid rgba(14,116,144,.2);border-radius:4px;margin-bottom:16px}
+.sf-strip.demo{color:var(--amber);background:var(--amber-pale);border-color:rgba(146,64,14,.2)}
+.sf-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ── SIDEBAR ──────────────────────────────────────────── */
+.sidebar{position:sticky;top:24px}
+@media(max-width:880px){.sidebar{position:static;margin-top:24px}}
+
+/* ── ALT PATHS CARD ───────────────────────────────────── */
+.alt-card-wrap{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;padding:18px 20px;margin-bottom:16px}
+.alt-card-wrap h2{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.alt-item{display:block;padding:11px 13px;border-radius:var(--radius);text-decoration:none;border:1px solid rgba(12,27,46,.08);margin-bottom:8px;transition:border-color .15s,background .15s}
+.alt-item:last-child{margin-bottom:0}
+.alt-item:hover{border-color:var(--navy);background:var(--off)}
+.alt-item:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:var(--radius)}
+.alt-item-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);display:block;margin-bottom:3px}
+.alt-item-title{font-size:13px;font-weight:600;color:var(--navy);display:block;margin-bottom:2px;font-family:'Source Serif 4',Georgia,serif}
+.alt-item-desc{font-size:11.5px;color:var(--ink-3);line-height:1.55;display:block}
+.alt-item-ext{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink-3);display:block;margin-top:5px}
+
+/* ── WHAT TO EXPECT CARD ──────────────────────────────── */
+.expect-card{background:var(--navy);border-radius:8px;padding:18px 20px;margin-bottom:16px}
+.expect-card h3{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.expect-item{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:rgba(255,255,255,.65);padding:7px 0;line-height:1.55;border-bottom:1px solid rgba(255,255,255,.06)}
+.expect-item:last-child{border-bottom:none;padding-bottom:0}
+.expect-num{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gold);background:rgba(200,168,75,.1);border:1px solid rgba(200,168,75,.25);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+/* ── DISCLAIMER SIDEBAR ───────────────────────────────── */
+.cannot-card{background:var(--amber-pale);border:1px solid rgba(146,64,14,.15);border-radius:6px;padding:14px 16px}
+.cannot-card h3{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.cannot-card p{font-size:12px;color:var(--ink-2);line-height:1.6;margin-bottom:8px}
+.cannot-card p:last-child{margin-bottom:0}
+.cannot-card a{color:var(--teal);text-decoration:underline;font-weight:500}
+
+/* ── RESOURCE ACCORDION ───────────────────────────────── */
+.resource-toggle{width:100%;background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;padding:14px 18px;text-align:left;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);transition:background .15s;margin-bottom:8px}
+.resource-toggle:hover{background:var(--off)}
+.resource-toggle:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.toggle-chevron{font-size:11px;color:var(--ink-3);transition:transform .25s}
+.resource-toggle[aria-expanded=true] .toggle-chevron{transform:rotate(180deg)}
+.resource-body{background:#fff;border:1px solid rgba(12,27,46,.09);border-top:none;border-radius:0 0 8px 8px;overflow:hidden;max-height:0;transition:max-height .3s ease;margin-top:-9px;margin-bottom:8px}
+.resource-body.open{max-height:1400px}
+.resource-inner{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:880px){.resource-inner{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.resource-inner{grid-template-columns:1fr}}
+.resource-cat h4{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);margin-bottom:8px}
+.resource-cat ul{list-style:none}
+.resource-cat li{margin-bottom:5px}
+.resource-cat a{font-size:12.5px;color:var(--teal);text-decoration:underline;text-underline-offset:2px;line-height:1.4;display:block}
+.resource-cat a:hover{color:var(--navy)}
+.resource-cat a:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:1px}
+
+/* ── FOOTER ───────────────────────────────────────────── */
+.site-footer{background:var(--navy);border-top:1px solid rgba(200,168,75,.12);padding:24px}
+.footer-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-inner p{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:rgba(200,168,75,.6);text-transform:uppercase}
+.footer-nav{display:flex;flex-wrap:wrap;gap:14px}
+.footer-nav a{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:rgba(255,255,255,.35);text-decoration:underline;text-underline-offset:2px;text-transform:uppercase}
+.footer-nav a:hover{color:var(--gold)}
+.footer-nav a:focus-visible{outline:2px solid var(--focus-dark);outline-offset:2px;border-radius:1px}
+</style>
+</head>
+<body>
+
+<!-- Skip link must be first -->
+<a href="#main" class="skip">Skip to main content</a>
+<div role="alert" id="live-alert" aria-atomic="true"></div>
+<div role="status" id="live-status" aria-atomic="true"></div>
+
+<!-- Language bar -->
+<div class="lang-bar" role="navigation" aria-label="Language selection">
+  <button class="lang-btn" id="btn-en" aria-current="true" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" id="btn-es" onclick="setLang('es')">ES</button>
+</div>
+
+<!-- Urgent bar -->
+<div role="region" aria-label="Emergency and urgent notice">
+  <div class="urgent-bar">
+    <p>
+      <strong>Life-threatening emergency? Call 911.</strong>
+      &nbsp;·&nbsp; AG Office:
+      <a href="tel:17205086000" aria-label="Call 720-508-6000">720-508-6000</a>
+      &nbsp;·&nbsp;
+      <a href="https://stopfraudcolorado.gov" target="_blank" rel="noopener" aria-label="Stop Fraud Colorado (opens in new tab)">StopFraudColorado.gov ↗</a>
+    </p>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <a href="https://coag.gov" class="logo-link" aria-label="Colorado Attorney General home">
+      <div class="seal" aria-hidden="true">CO<br>AG</div>
+      <div class="logo-words">
+        <strong>Colorado Attorney General</strong>
+        <span>Phil Weiser · Official Complaint Portal</span>
+      </div>
+    </a>
+    <a href="tel:17205086000" class="header-tel" aria-label="Call 720-508-6000">(720) 508-6000</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero" role="region" aria-labelledby="hero-h1">
+  <div class="hero-inner">
+    <p class="hero-eyebrow" aria-hidden="true" id="eyebrow-en">Complaint Portal · Colorado Department of Law</p>
+    <p class="hero-eyebrow" aria-hidden="true" id="eyebrow-es" hidden lang="es">Portal de Denuncias · Departamento de Ley de Colorado</p>
+
+    <h1 id="hero-h1" lang="en">
+      Tell us what<br><em>happened.</em><br>We handle the rest.
+    </h1>
+
+    <p class="hero-lead" id="lead-en">
+      Write in plain language. <strong>You do not need to identify the crime category or the right department.</strong>
+      Our intake team reads every submission and routes it to the correct unit — Consumer Fraud, Civil Rights, Environmental, Medicaid Fraud, or another section.
+    </p>
+    <p class="hero-lead" id="lead-es" hidden lang="es">
+      Escriba en lenguaje sencillo. <strong>No necesita identificar la categoría de delito ni el departamento correcto.</strong>
+      Nuestro equipo lee cada envío y lo dirige a la unidad correcta.
+    </p>
+
+    <div class="routing-callout" role="note" aria-labelledby="routing-note-lbl">
+      <span class="routing-arrow" aria-hidden="true">→</span>
+      <p>
+        <span id="routing-note-lbl" class="sr-only">How complaint routing works</span>
+        <strong id="rcn-en">Triage-first intake, powered by AI:</strong>
+        <span id="rcn-es" hidden lang="es"><strong>Clasificación automática:</strong></span>
+        <span id="rcb-en"> Your narrative is analyzed and routed to the right team. You do not need to self-categorize. Tips can be submitted anonymously.</span>
+        <span id="rcb-es" hidden lang="es"> Su narrativa se analiza y se dirige al equipo correcto. No necesita categorizarse. Las denuncias pueden enviarse de forma anónima.</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ─────────────────────────────────────────────── -->
+<main id="main">
+<div class="page-wrap">
+
+  <!-- ── LEFT: FORM ────────────────────────────── -->
+  <div class="form-col">
+
+    <div class="sf-strip demo" id="sf-strip" role="status" aria-live="polite">
+      <span class="sf-dot" aria-hidden="true"></span>
+      <span id="sf-strip-text">Demo mode — set SFCONFIG.demoMode = false to enable live Salesforce case creation.</span>
+    </div>
+
+    <div class="form-card" role="region" aria-labelledby="form-h2">
+      <div class="form-card-head">
+        <h2 id="form-h2">
+          <span id="fh-en">File a complaint</span>
+          <span id="fh-es" hidden lang="es">Presentar una denuncia</span>
+        </h2>
+        <p id="fhd-en">
+          Fields marked <abbr title="required">*</abbr> are required. All others are optional.
+          You may submit anonymously.
+        </p>
+        <p id="fhd-es" hidden lang="es">
+          Los campos marcados con <abbr title="obligatorio">*</abbr> son obligatorios. Puede enviar de forma anónima.
+        </p>
+      </div>
+
+      <form class="form-body" id="complaint-form" novalidate aria-labelledby="form-h2">
+
+        <!-- Narrative -->
+        <div class="field" id="field-narrative">
+          <div class="field-meta">
+            <label for="narrative">
+              <span id="nl-en">What happened?</span>
+              <span id="nl-es" hidden lang="es">¿Qué ocurrió?</span>
+              <span class="req" aria-hidden="true">*</span>
+              <span class="sr-only">(required)</span>
+            </label>
+            <span class="char-count" id="char-count" aria-live="polite" aria-atomic="true">0 / 4000</span>
+          </div>
+          <p class="field-hint" id="narrative-hint">
+            <span id="nh-en">Include names, dates, amounts, and what you experienced. Plain language is fine — no legal terminology needed.</span>
+            <span id="nh-es" hidden lang="es">Incluya nombres, fechas, montos y lo que experimentó. El lenguaje sencillo está bien.</span>
+          </p>
+          <textarea id="narrative" name="narrative" required aria-required="true"
+            aria-describedby="narrative-hint narrative-err"
+            maxlength="4000" rows="8"
+            placeholder="Tell us what happened, in your own words…"></textarea>
+          <div class="field-error" id="narrative-err" role="alert" aria-live="assertive"></div>
+          <!-- AI routing -->
+          <div class="ai-indicator" id="ai-thinking" role="status" aria-live="polite">
+            <span class="ai-spinner" aria-hidden="true"></span>
+            <span id="ai-thinking-text">Analyzing — suggesting routing unit…</span>
+          </div>
+          <div class="ai-indicator" id="ai-result" role="status">
+            <span aria-hidden="true">→</span>
+            <span id="ai-result-text"></span>
+          </div>
+        </div>
+
+        <!-- Category chips -->
+        <div class="field" id="field-category">
+          <span class="chips-label" id="chips-lbl">
+            <span id="cl-en">What best describes this?</span>
+            <span id="cl-es" hidden lang="es">¿Cómo describiría esto?</span>
+          </span>
+          <p class="chips-hint" id="chips-hint">
+            <span id="ch-en">Optional — we route regardless. Select one if it helps.</span>
+            <span id="ch-es" hidden lang="es">Opcional — enrutamos de todas formas.</span>
+          </p>
+          <div class="chips-wrap" role="group" aria-labelledby="chips-lbl">
+            <button type="button" class="chip" aria-pressed="false" data-type="consumer" data-sf="Consumer Fraud">
+              <span class="chip-ico" aria-hidden="true">🛒</span>
+              <span id="chip-consumer-en">Consumer Fraud</span>
+              <span id="chip-consumer-es" hidden lang="es">Fraude al Consumidor</span>
+            </button>
+            <button type="button" class="chip" aria-pressed="false" data-type="housing" data-sf="Housing">
+              <span class="chip-ico" aria-hidden="true">🏠</span>
+              <span id="chip-housing-en">Housing</span>
+              <span id="chip-housing-es" hidden lang="es">Vivienda</span>
+            </button>
+            <button type="button" class="chip" aria-pressed="false" data-type="worker" data-sf="Worker Protection">
+              <span class="chip-ico" aria-hidden="true">⚖️</span>
+              <span id="chip-worker-en">Worker Rights</span>
+              <span id="chip-worker-es" hidden lang="es">Derechos Laborales</span>
+            </button>
+            <button type="button" class="chip" aria-pressed="false" data-type="environment" data-sf="Environmental Crimes">
+              <span class="chip-ico" aria-hidden="true">🌿</span>
+              <span id="chip-env-en">Environmental</span>
+              <span id="chip-env-es" hidden lang="es">Ambiental</span>
+            </button>
+            <button type="button" class="chip" aria-pressed="false" data-type="medicaid" data-sf="Medicaid Fraud">
+              <span class="chip-ico" aria-hidden="true">🏥</span>
+              <span id="chip-med-en">Medicaid Fraud</span>
+              <span id="chip-med-es" hidden lang="es">Fraude en Medicaid</span>
+            </button>
+            <button type="button" class="chip" aria-pressed="false" data-type="civil" data-sf="Civil Rights">
+              <span class="chip-ico" aria-hidden="true">🛡️</span>
+              <span id="chip-civil-en">Civil Rights</span>
+              <span id="chip-civil-es" hidden lang="es">Derechos Civiles</span>
+            </button>
+            <button type="button" class="chip" aria-pressed="false" data-type="securities" data-sf="Securities Fraud">
+              <span class="chip-ico" aria-hidden="true">📈</span>
+              <span id="chip-sec-en">Securities / Investment</span>
+              <span id="chip-sec-es" hidden lang="es">Valores / Inversiones</span>
+            </button>
+            <button type="button" class="chip" aria-pressed="false" data-type="student" data-sf="Student Loan">
+              <span class="chip-ico" aria-hidden="true">🎓</span>
+              <span id="chip-stu-en">Student Loans</span>
+              <span id="chip-stu-es" hidden lang="es">Préstamos Estudiantiles</span>
+            </button>
+            <button type="button" class="chip" aria-pressed="false" data-type="other" data-sf="Other">
+              <span class="chip-ico" aria-hidden="true">···</span>
+              <span id="chip-other-en">Other / Not Sure</span>
+              <span id="chip-other-es" hidden lang="es">Otro / No estoy seguro</span>
+            </button>
+          </div>
+          <!-- Chip-specific notes -->
+          <div class="chip-note" id="note-consumer" role="note">
+            <strong>Also consider:</strong>
+            <a href="https://reportfraud.ftc.gov/?orgcode=CO01" target="_blank" rel="noopener" aria-label="FTC Report Fraud (opens in new tab)">FTC Report Fraud ↗</a> for phone scams and identity theft.
+            Filing here opens a Colorado-level investigation.
+          </div>
+          <div class="chip-note" id="note-medicaid" role="note">
+            <strong>Medicaid fraud</strong> can also be reported to the
+            <a href="https://oig.hhs.gov/fraud/report-fraud/" target="_blank" rel="noopener" aria-label="HHS Inspector General (opens in new tab)">HHS Inspector General ↗</a>.
+          </div>
+        </div>
+
+        <div style="height:1px;background:var(--rule);margin:4px 0 20px"></div>
+
+        <!-- Anonymous toggle -->
+        <div class="field">
+          <label class="toggle-row" for="anon-check">
+            <input type="checkbox" id="anon-check" name="anonymous">
+            <span class="toggle-label">
+              <span id="anon-en">Submit anonymously</span>
+              <span id="anon-es" hidden lang="es">Enviar de forma anónima</span>
+              <span class="toggle-sub" id="anon-sub-en">Your contact info will not be collected or stored.</span>
+              <span class="toggle-sub" id="anon-sub-es" hidden lang="es">Su información de contacto no será recopilada.</span>
+            </span>
+          </label>
+        </div>
+
+        <!-- Contact fields -->
+        <div class="contact-fields" id="contact-fields" aria-live="polite">
+          <div class="input-row">
+            <div class="field">
+              <label for="first-name">
+                <span id="fn-en">First name</span>
+                <span id="fn-es" hidden lang="es">Nombre</span>
+              </label>
+              <input type="text" id="first-name" name="first_name" autocomplete="given-name">
+            </div>
+            <div class="field">
+              <label for="last-name">
+                <span id="ln-en">Last name</span>
+                <span id="ln-es" hidden lang="es">Apellido</span>
+              </label>
+              <input type="text" id="last-name" name="last_name" autocomplete="family-name">
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="field">
+              <label for="email">
+                <span id="em-en">Email</span>
+                <span id="em-es" hidden lang="es">Correo electrónico</span>
+              </label>
+              <input type="email" id="email" name="email" autocomplete="email"
+                aria-describedby="email-hint email-err">
+              <p class="field-hint" id="email-hint" style="margin-top:5px">
+                <span id="ehn-en">Optional — for status updates only.</span>
+                <span id="ehn-es" hidden lang="es">Opcional — solo para actualizaciones.</span>
+              </p>
+              <div class="field-error" id="email-err"></div>
+            </div>
+            <div class="field">
+              <label for="phone">
+                <span id="ph-en">Phone</span>
+                <span id="ph-es" hidden lang="es">Teléfono</span>
+              </label>
+              <input type="tel" id="phone" name="phone" autocomplete="tel">
+            </div>
+          </div>
+          <div class="field">
+            <label for="pref-lang">
+              <span id="pl-en">Preferred language for follow-up</span>
+              <span id="pl-es" hidden lang="es">Idioma preferido para seguimiento</span>
+            </label>
+            <select id="pref-lang" name="preferred_language">
+              <option value="English">English</option>
+              <option value="Spanish">Español</option>
+              <option value="Arabic">Arabic / عربي</option>
+              <option value="Vietnamese">Vietnamese / Tiếng Việt</option>
+              <option value="Somali">Somali / Soomaali</option>
+              <option value="Other">Other / Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="height:1px;background:var(--rule);margin:4px 0 20px"></div>
+
+        <!-- Location -->
+        <div class="field">
+          <label for="location">
+            <span id="loc-en">Location of incident <span style="font-weight:400;color:var(--ink-3)">(optional)</span></span>
+            <span id="loc-es" hidden lang="es">Lugar del incidente <span style="font-weight:400;color:var(--ink-3)">(opcional)</span></span>
+          </label>
+          <input type="text" id="location" name="location" autocomplete="off"
+            placeholder="City, county, or Colorado region">
+        </div>
+
+      </form>
+
+      <div class="form-footer">
+        <button type="submit" class="submit-btn" id="submit-btn" form="complaint-form"
+                aria-describedby="form-disclaimer">
+          <span class="btn-spinner" aria-hidden="true"></span>
+          <span class="btn-label-en" id="sbl-en">Submit complaint →</span>
+          <span class="btn-label-es" id="sbl-es" hidden lang="es">Enviar denuncia →</span>
+        </button>
+        <p class="disclaimer" id="form-disclaimer">
+          <span id="disc-en">Submitted to the Colorado Dept. of Law. By submitting you certify information is accurate.
+          <a href="https://coag.gov/website-privacy-policy/" target="_blank" rel="noopener" aria-label="Privacy policy (opens in new tab)">Privacy policy ↗</a></span>
+          <span id="disc-es" hidden lang="es">Enviado al Departamento de Ley de Colorado. Al enviar, certifica que la información es precisa.</span>
+        </p>
+      </div>
+
+      <!-- Confirmation -->
+      <div class="confirmation" id="confirmation" tabindex="-1" role="region"
+           aria-labelledby="conf-h2" aria-live="assertive">
+        <div class="conf-icon" aria-hidden="true">✓</div>
+        <h2 id="conf-h2">
+          <span id="coh-en">Complaint received</span>
+          <span id="coh-es" hidden lang="es">Denuncia recibida</span>
+        </h2>
+        <p id="conb-en">Your complaint has been submitted. Save your reference number — you may need it for follow-up.</p>
+        <p id="conb-es" hidden lang="es">Su denuncia ha sido enviada. Guarde su número de referencia.</p>
+        <div class="ref-block">
+          <span class="ref-label" id="refl-en">Your reference number</span>
+          <span class="ref-label" id="refl-es" hidden lang="es">Su número de referencia</span>
+          <div class="ref-num" id="ref-num"></div>
+        </div>
+        <ul class="next-steps" aria-label="What happens next">
+          <li><span class="step-dot" aria-hidden="true">1</span>
+            <span id="s1-en">Your complaint is reviewed by the AG's intake team within 3–5 business days.</span>
+            <span id="s1-es" hidden lang="es">Su denuncia es revisada en 3-5 días hábiles.</span></li>
+          <li><span class="step-dot" aria-hidden="true">2</span>
+            <span id="s2-en">It is routed to the appropriate section based on the complaint content — not your self-selection.</span>
+            <span id="s2-es" hidden lang="es">Se dirige a la sección apropiada según el contenido de la denuncia.</span></li>
+          <li><span class="step-dot" aria-hidden="true">3</span>
+            <span id="s3-en">If you provided contact info and your complaint warrants follow-up, a representative will contact you.</span>
+            <span id="s3-es" hidden lang="es">Si proporcionó información de contacto, un representante se comunicará con usted.</span></li>
+          <li><span class="step-dot" aria-hidden="true">4</span>
+            <span id="s4-en">The AG cannot represent you individually. For legal help: <a href="https://coloradolegalservices.org/" target="_blank" rel="noopener" aria-label="Colorado Legal Services (opens in new tab)">Colorado Legal Services ↗</a></span>
+            <span id="s4-es" hidden lang="es">La Fiscalía no puede representarle individualmente.</span></li>
+        </ul>
+        <button type="button" class="reset-btn" onclick="resetForm()">
+          <span id="rbtn-en">File another complaint</span>
+          <span id="rbtn-es" hidden lang="es">Presentar otra denuncia</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Resource accordion -->
+    <button class="resource-toggle" id="resource-toggle" type="button"
+            aria-expanded="false" aria-controls="resource-body">
+      <span id="rt-en">Find the right agency — resource guide</span>
+      <span id="rt-es" hidden lang="es">Encuentre la agencia correcta — guía de recursos</span>
+      <span class="toggle-chevron" aria-hidden="true">▾</span>
+    </button>
+    <div class="resource-body" id="resource-body" role="region" aria-labelledby="resource-toggle">
+      <div class="resource-inner">
+        <div class="resource-cat">
+          <h4>Legal help</h4>
+          <ul>
+            <li><a href="https://coloradolegalservices.org/" target="_blank" rel="noopener" aria-label="Colorado Legal Services (opens in new tab)">Colorado Legal Services</a></li>
+            <li><a href="https://www.cobar.org/lawyerreferral" target="_blank" rel="noopener" aria-label="Find an attorney via CBA (opens in new tab)">Find an Attorney (CBA)</a></li>
+            <li><a href="https://www.courts.state.co.us/Forms/Forms_List.cfm?Form_Type_ID=9" target="_blank" rel="noopener" aria-label="Small Claims Court forms (opens in new tab)">Small Claims Court</a></li>
+          </ul>
+        </div>
+        <div class="resource-cat">
+          <h4>Credit &amp; banking</h4>
+          <ul>
+            <li><a href="https://www.consumerfinance.gov/complaint/" target="_blank" rel="noopener" aria-label="CFPB federal complaint (opens in new tab)">CFPB (Federal)</a></li>
+            <li><a href="https://banking.colorado.gov/" target="_blank" rel="noopener" aria-label="CO Division of Banking (opens in new tab)">CO Division of Banking</a></li>
+          </ul>
+        </div>
+        <div class="resource-cat">
+          <h4>Housing</h4>
+          <ul>
+            <li><a href="https://coloradohousingconnects.org/" target="_blank" rel="noopener" aria-label="Colorado Housing Connects (opens in new tab)">CO Housing Connects</a></li>
+            <li><a href="https://cdola.colorado.gov/mobile-home-park-oversight" target="_blank" rel="noopener" aria-label="Mobile Home Park Program (opens in new tab)">Mobile Home Park Program</a></li>
+          </ul>
+        </div>
+        <div class="resource-cat">
+          <h4>Health &amp; medical</h4>
+          <ul>
+            <li><a href="https://www.colorado.gov/dora/Medical_Board" target="_blank" rel="noopener" aria-label="Colorado Medical Board (opens in new tab)">Colorado Medical Board</a></li>
+            <li><a href="https://doi.colorado.gov/for-consumers/file-a-complaint" target="_blank" rel="noopener" aria-label="Medical billing insurance complaint (opens in new tab)">Medical Billing / Insurance</a></li>
+          </ul>
+        </div>
+        <div class="resource-cat">
+          <h4>Employment</h4>
+          <ul>
+            <li><a href="https://cdle.colorado.gov/wage-and-hour-laws" target="_blank" rel="noopener" aria-label="CO Dept of Labor and Employment (opens in new tab)">CO Dept of Labor &amp; Employment</a></li>
+            <li><a href="https://ccrd.colorado.gov/" target="_blank" rel="noopener" aria-label="Civil Rights Division (opens in new tab)">Civil Rights Division</a></li>
+          </ul>
+        </div>
+        <div class="resource-cat">
+          <h4>Identity theft</h4>
+          <ul>
+            <li><a href="https://www.identitytheft.gov/" target="_blank" rel="noopener" aria-label="FTC IdentityTheft.gov (opens in new tab)">FTC IdentityTheft.gov</a></li>
+            <li><a href="https://cdle.colorado.gov/fraud-prevention" target="_blank" rel="noopener" aria-label="Unemployment fraud reporting (opens in new tab)">Unemployment Fraud (CDLE)</a></li>
+          </ul>
+        </div>
+        <div class="resource-cat">
+          <h4>Older adults</h4>
+          <ul>
+            <li><a href="https://www.aarp.org/aarp-foundation/our-work/income/elderwatch.html" target="_blank" rel="noopener" aria-label="AARP ElderWatch (opens in new tab)">AARP ElderWatch</a></li>
+            <li><a href="https://www.coloradoaps.com/" target="_blank" rel="noopener" aria-label="Adult Protective Services (opens in new tab)">Adult Protective Services</a></li>
+          </ul>
+        </div>
+        <div class="resource-cat">
+          <h4>Automotive</h4>
+          <ul>
+            <li><a href="https://www.bbb.org/autoline/" target="_blank" rel="noopener" aria-label="BBB Auto Line for lemon law (opens in new tab)">BBB Auto Line (Lemon Law)</a></li>
+            <li><a href="https://www.nhtsa.gov/" target="_blank" rel="noopener" aria-label="NHTSA vehicle safety (opens in new tab)">NHTSA Vehicle Safety</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── RIGHT: SIDEBAR ────────────────────────── -->
+  <aside class="sidebar" aria-label="Related resources and information">
+
+    <!-- Alternate pathways -->
+    <div class="alt-card-wrap" role="region" aria-labelledby="alt-h">
+      <h2 id="alt-h">Other ways to report</h2>
+
+      <a href="https://reportfraud.ftc.gov/?orgcode=CO01" class="alt-item" target="_blank" rel="noopener"
+         aria-label="FTC Report Fraud — phone scams, identity theft, national database (opens in new tab)">
+        <span class="alt-item-label">Consumer scams</span>
+        <span class="alt-item-title">FTC Report Fraud</span>
+        <span class="alt-item-desc">Phone scams, identity theft, online fraud. Federal system — data shared with CO AG automatically.</span>
+        <span class="alt-item-ext">reportfraud.ftc.gov ↗</span>
+      </a>
+
+      <a href="https://www.coloradonocall.com/Public/Complaint.aspx" class="alt-item"
+         aria-label="Colorado No-Call List — unwanted telemarketing calls">
+        <span class="alt-item-label">Unwanted calls</span>
+        <span class="alt-item-title">Colorado No-Call List</span>
+        <span class="alt-item-desc">Registered on No-Call but still receiving unwanted telemarketing.</span>
+        <span class="alt-item-ext">coloradonocall.com →</span>
+      </a>
+
+      <a href="https://coag.gov/pslf-complaint/" class="alt-item"
+         aria-label="PSLF student loan servicer complaint form">
+        <span class="alt-item-label">Student loans</span>
+        <span class="alt-item-title">PSLF Complaint</span>
+        <span class="alt-item-desc">Issues with your loan servicer under the Colorado Student Loan Servicers Act.</span>
+        <span class="alt-item-ext">coag.gov/pslf-complaint →</span>
+      </a>
+
+      <a href="https://doi.colorado.gov/for-consumers/file-a-complaint" class="alt-item" target="_blank" rel="noopener"
+         aria-label="CO Division of Insurance — insurance disputes (opens in new tab)">
+        <span class="alt-item-label">Insurance disputes</span>
+        <span class="alt-item-title">CO Division of Insurance</span>
+        <span class="alt-item-desc">Claims disputes, coverage denials, agent misconduct.</span>
+        <span class="alt-item-ext">doi.colorado.gov ↗</span>
+      </a>
+
+      <a href="https://stopfraudcolorado.gov" class="alt-item" target="_blank" rel="noopener"
+         aria-label="Stop Fraud Colorado — fraud alerts and resources (opens in new tab)">
+        <span class="alt-item-label">Fraud prevention</span>
+        <span class="alt-item-title">StopFraudColorado.gov</span>
+        <span class="alt-item-desc">Scam alerts, fraud prevention resources, elder fraud information.</span>
+        <span class="alt-item-ext">stopfraudcolorado.gov ↗</span>
+      </a>
+
+      <a href="https://coag.gov/about-us/contact-colorado-office-attorney-general/" class="alt-item"
+         aria-label="Contact the AG's Office directly — 720-508-6000">
+        <span class="alt-item-label">Speak with someone</span>
+        <span class="alt-item-title">Contact the AG's Office</span>
+        <span class="alt-item-desc">720-508-6000. Interpreter services available.</span>
+        <span class="alt-item-ext">coag.gov/contact →</span>
+      </a>
+    </div>
+
+    <!-- What to expect -->
+    <div class="expect-card" role="region" aria-labelledby="expect-h">
+      <h3 id="expect-h">What happens next</h3>
+      <div class="expect-item">
+        <span class="expect-num" aria-hidden="true">1</span>
+        <span>Intake team reviews your submission within 3–5 business days and routes it to the right unit.</span>
+      </div>
+      <div class="expect-item">
+        <span class="expect-num" aria-hidden="true">2</span>
+        <span>AI-assisted classification assigns the complaint to Consumer Fraud, Civil Rights, Environmental, or another section.</span>
+      </div>
+      <div class="expect-item">
+        <span class="expect-num" aria-hidden="true">3</span>
+        <span>If you provided contact info and follow-up is warranted, a representative will contact you.</span>
+      </div>
+      <div class="expect-item">
+        <span class="expect-num" aria-hidden="true">4</span>
+        <span>Anonymous complaints are investigated but cannot receive direct responses.</span>
+      </div>
+    </div>
+
+    <!-- Cannot help with -->
+    <div class="cannot-card" role="region" aria-labelledby="cannot-h">
+      <h3 id="cannot-h">The AG cannot help with</h3>
+      <p>Individual legal representation, advice on your specific case, or guaranteed outcomes.</p>
+      <p>Disputes between private parties where no Colorado law was violated.</p>
+      <p>For personal legal help: <a href="https://coloradolegalservices.org/" target="_blank" rel="noopener" aria-label="Colorado Legal Services (opens in new tab)">Colorado Legal Services ↗</a></p>
+    </div>
+
+  </aside>
+</div>
+</main>
+
+<!-- Footer -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <p>Colorado Attorney General · Phil Weiser · 1300 Broadway, Denver CO 80203 · coag.gov</p>
+    <nav class="footer-nav" aria-label="Footer links">
+      <a href="https://coag.gov/colorado-office-of-the-attorney-general-accessibility-statement/">Accessibility</a>
+      <a href="https://coag.gov/website-privacy-policy/">Privacy</a>
+      <a href="https://coag.gov/about-us/contact-colorado-office-attorney-general/">Contact</a>
+      <a href="https://coag.gov/declaracion-de-accesibilidad/" lang="es">Accesibilidad</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* ── SALESFORCE CONFIG ─────────────────────────────── */
+window.SFCONFIG={instanceUrl:'https://YOUR_ORG.my.salesforce.com',apiVersion:'v58.0',demoMode:true,proxyEndpoint:'/api/complaints/create'};
+
+/* ── LIVE REGIONS ──────────────────────────────────── */
+const liveAlert=document.getElementById('live-alert');
+const liveStatus=document.getElementById('live-status');
+function announce(msg,urgent=false){
+  const el=urgent?liveAlert:liveStatus;
+  el.textContent='';
+  requestAnimationFrame(()=>el.textContent=msg);
+}
+
+/* ── LANG SWITCHING ────────────────────────────────── */
+let lang='en';
+function setLang(l){
+  lang=l;
+  document.documentElement.lang=l==='es'?'es':'en';
+  document.querySelectorAll('[id$="-en"]').forEach(el=>el.hidden=(l==='es'));
+  document.querySelectorAll('[id$="-es"]').forEach(el=>el.hidden=(l!=='es'));
+  document.getElementById('narrative').placeholder=l==='es'?'Cuéntenos qué pasó, en sus propias palabras…':'Tell us what happened, in your own words…';
+  document.getElementById('btn-en').setAttribute('aria-current',l==='en'?'true':'false');
+  document.getElementById('btn-es').setAttribute('aria-current',l==='es'?'true':'false');
+  announce(l==='es'?'Idioma cambiado a español':'Language changed to English');
+}
+
+/* ── CHAR COUNTER ──────────────────────────────────── */
+const narrative=document.getElementById('narrative');
+const charCount=document.getElementById('char-count');
+let aiTimer=null;
+narrative.addEventListener('input',()=>{
+  const n=narrative.value.length;
+  charCount.textContent=n+' / 4000';
+  charCount.classList.toggle('near',n>3600);
+  narrative.removeAttribute('aria-invalid');
+  document.getElementById('narrative-err').textContent='';
+  clearTimeout(aiTimer);
+  document.getElementById('ai-thinking').classList.remove('show');
+  document.getElementById('ai-result').style.display='none';
+  if(n>60){aiTimer=setTimeout(()=>analyzeNarrative(narrative.value),1500);}
+});
+
+/* ── AI ROUTING ────────────────────────────────────── */
+async function analyzeNarrative(text){
+  const thinking=document.getElementById('ai-thinking');
+  const result=document.getElementById('ai-result');
+  thinking.classList.add('show');
+  result.style.display='none';
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',
+        content:`You are the intake routing system for the Colorado Attorney General's Office.
+Given this complaint narrative, identify the ONE most appropriate AG unit.
+Units: Consumer Protection Unit, Consumer Credit Unit, Civil Rights/Pattern & Practice Unit,
+Environmental Crimes Unit, Medicaid Fraud Control Unit, Securities & Investment Fraud Unit,
+Criminal Justice/Special Prosecutions.
+Respond ONLY with valid JSON: {"unit":"UNIT NAME","reason":"one sentence","priority":"Normal|High|Urgent","sf_type":"SF Type"}
+Complaint: ${text.slice(0,500)}`}]})});
+    if(!resp.ok)throw new Error('API error');
+    const data=await resp.json();
+    const raw=data.content?.[0]?.text||'{}';
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    thinking.classList.remove('show');
+    document.getElementById('ai-result-text').innerHTML='<strong>Suggested routing:</strong> '+parsed.unit+' — '+parsed.reason;
+    result.style.display='flex';
+    preselectChip(parsed.sf_type);
+    window._sfPriority=parsed.priority||'Normal';
+    window._sfUnit=parsed.unit||'';
+  }catch(e){thinking.classList.remove('show');}
+}
+
+function preselectChip(sfType){
+  if(!sfType)return;
+  document.querySelectorAll('.chip').forEach(c=>{
+    if(c.dataset.sf===sfType||(sfType&&sfType.toLowerCase().includes(c.dataset.type))){
+      c.setAttribute('aria-pressed','true');
+    }
+  });
+}
+
+/* ── CHIPS ─────────────────────────────────────────── */
+let selectedSF='';
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    const was=chip.getAttribute('aria-pressed')==='true';
+    document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+    document.querySelectorAll('.chip-note').forEach(n=>n.classList.remove('show'));
+    if(!was){
+      chip.setAttribute('aria-pressed','true');
+      selectedSF=chip.dataset.sf||'';
+      const note=document.getElementById('note-'+chip.dataset.type);
+      if(note)note.classList.add('show');
+      announce('Category selected: '+selectedSF);
+    }else{selectedSF='';}
+  });
+});
+
+/* ── ANONYMOUS TOGGLE ──────────────────────────────── */
+const anonCheck=document.getElementById('anon-check');
+const contactFields=document.getElementById('contact-fields');
+function updateAnon(){
+  const isAnon=anonCheck.checked;
+  contactFields.classList.toggle('hidden',isAnon);
+  contactFields.setAttribute('aria-hidden',String(isAnon));
+  contactFields.querySelectorAll('input,select').forEach(el=>el.tabIndex=isAnon?-1:0);
+}
+anonCheck.addEventListener('change',updateAnon);
+updateAnon();
+
+/* ── VALIDATION ────────────────────────────────────── */
+function validate(){
+  let valid=true;
+  document.querySelectorAll('.field-error').forEach(el=>el.textContent='');
+  document.querySelectorAll('[aria-invalid]').forEach(el=>el.removeAttribute('aria-invalid'));
+  if(!narrative.value.trim()){
+    narrative.setAttribute('aria-invalid','true');
+    document.getElementById('narrative-err').textContent=lang==='es'?'Por favor describa lo que ocurrió.':'Please describe what happened before submitting.';
+    narrative.focus();
+    announce(lang==='es'?'Error: por favor complete el campo requerido.':'Error: please complete the required field.',true);
+    valid=false;
+  }
+  const emailEl=document.getElementById('email');
+  if(!anonCheck.checked&&emailEl.value.trim()&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)){
+    emailEl.setAttribute('aria-invalid','true');
+    document.getElementById('email-err').textContent='Please enter a valid email address.';
+    if(valid){emailEl.focus();valid=false;}
+  }
+  return valid;
+}
+
+/* ── SALESFORCE API ────────────────────────────────── */
+async function createCase(payload){
+  if(SFCONFIG.demoMode){
+    await new Promise(r=>setTimeout(r,1600));
+    return{success:true,caseNumber:'CO-'+Date.now().toString(36).toUpperCase().slice(-6),demo:true};
+  }
+  const r=await fetch(SFCONFIG.proxyEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  if(!r.ok)throw new Error('Submission failed. Please try again or call 720-508-6000.');
+  return r.json();
+}
+
+/* ── SUBMIT ────────────────────────────────────────── */
+const form=document.getElementById('complaint-form');
+const submitBtn=document.getElementById('submit-btn');
+const confirmation=document.getElementById('confirmation');
+form.addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(!validate())return;
+  const isAnon=anonCheck.checked;
+  const chip=document.querySelector('.chip[aria-pressed="true"]');
+  const payload={
+    Subject:'[AG Complaint] '+(selectedSF||chip?.dataset.sf||'General')+(document.getElementById('location').value?' — '+document.getElementById('location').value:''),
+    Description:narrative.value.trim(),
+    Type:selectedSF||chip?.dataset.sf||'General',
+    Status:'New',Origin:'Web',
+    Priority:window._sfPriority||'Normal',
+    IsAnonymous__c:isAnon,
+    Language__c:document.getElementById('pref-lang')?.value||'English',
+    Location__c:document.getElementById('location').value.trim(),
+    AIRouting__c:window._sfUnit||'',
+    ...(isAnon?{}:{
+      SuppliedName:[document.getElementById('first-name').value,document.getElementById('last-name').value].filter(Boolean).join(' '),
+      SuppliedEmail:document.getElementById('email').value.trim(),
+      SuppliedPhone:document.getElementById('phone').value.trim(),
+    })
+  };
+  submitBtn.disabled=true;
+  submitBtn.classList.add('loading');
+  announce(lang==='es'?'Enviando denuncia…':'Submitting complaint…');
+  try{
+    const result=await createCase(payload);
+    document.querySelector('.form-body').style.display='none';
+    document.querySelector('.form-footer').style.display='none';
+    const ref=result.caseNumber||('CO-'+Date.now().toString(36).toUpperCase().slice(-6));
+    document.getElementById('ref-num').textContent=ref;
+    confirmation.classList.add('show');
+    confirmation.focus();
+    announce((lang==='es'?'Denuncia enviada. Número de referencia: ':'Complaint submitted. Reference: ')+ref,true);
+  }catch(err){
+    submitBtn.disabled=false;
+    submitBtn.classList.remove('loading');
+    document.getElementById('narrative-err').textContent=err.message;
+    announce(err.message,true);
+    narrative.focus();
+  }
+});
+
+function resetForm(){
+  form.reset();
+  document.querySelector('.form-body').style.display='';
+  document.querySelector('.form-footer').style.display='';
+  confirmation.classList.remove('show');
+  document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+  document.querySelectorAll('.chip-note').forEach(n=>n.classList.remove('show'));
+  document.getElementById('ai-thinking').classList.remove('show');
+  document.getElementById('ai-result').style.display='none';
+  charCount.textContent='0 / 4000';
+  submitBtn.disabled=false;
+  submitBtn.classList.remove('loading');
+  updateAnon();
+  narrative.focus();
+}
+
+/* ── RESOURCE ACCORDION ────────────────────────────── */
+const resToggle=document.getElementById('resource-toggle');
+const resBody=document.getElementById('resource-body');
+resToggle.addEventListener('click',()=>{
+  const open=resToggle.getAttribute('aria-expanded')==='true';
+  resToggle.setAttribute('aria-expanded',String(!open));
+  resBody.classList.toggle('open',!open);
+  announce(!open?'Resource guide expanded.':'Resource guide collapsed.');
+});
+resBody.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){resToggle.setAttribute('aria-expanded','false');resBody.classList.remove('open');resToggle.focus();}
+});
+
+/* ── SF STATUS ──────────────────────────────────────── */
+(function(){
+  const strip=document.getElementById('sf-strip');
+  const txt=document.getElementById('sf-strip-text');
+  if(!SFCONFIG.demoMode){strip.className='sf-strip';txt.textContent='Connected to Salesforce — '+SFCONFIG.instanceUrl;}
+})();
+
+/* ── INIT ───────────────────────────────────────────── */
+setLang('en');
+</script>
+</body>
+</html>

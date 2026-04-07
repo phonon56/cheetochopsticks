@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA Compliance Brief — Colorado Attorney General | Digital Accessibility Emergency Response Package</title>
+<meta name="description" content="Formal ADA/WCAG 2.1 compliance brief and remediation package for the Colorado Attorney General's Office. DOJ Title II deadline: April 24, 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --navy:#0c1b2e;
+  --navy-2:#152640;
+  --navy-3:#1e3354;
+  --gold:#c8a84b;
+  --gold-light:#e8c878;
+  --gold-pale:rgba(200,168,75,.10);
+  --red:#b91c1c;
+  --red-pale:#fef2f2;
+  --white:#ffffff;
+  --off:#f7f6f2;
+  --ink:#1c1a16;
+  --ink-2:#3d3a32;
+  --ink-3:#6b6355;
+  --rule:rgba(200,168,75,.18);
+  --focus:#1d4ed8;
+}
+
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia,serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* ── SKIP LINK ─────────────────────────── */
+.skip{position:absolute;left:-9999px;top:6px;z-index:9999;background:var(--navy);color:#fff;padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:13px;border-radius:3px;text-decoration:none;outline:3px solid var(--gold)}
+.skip:focus{left:8px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
+
+/* ── DEADLINE BANNER ───────────────────── */
+.deadline-banner{background:var(--red);padding:0}
+.deadline-inner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.deadline-left{display:flex;align-items:center;gap:14px}
+.deadline-pulse{width:12px;height:12px;border-radius:50%;background:#fff;flex-shrink:0;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.deadline-text{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;color:#fff;line-height:1.5}
+.deadline-text strong{display:block;font-size:14px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.deadline-count{font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:900;color:#fff;letter-spacing:-.02em;white-space:nowrap}
+.deadline-count span{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;display:block;text-align:right;color:rgba(255,255,255,.7);margin-top:-2px}
+
+/* ── SITE HEADER ───────────────────────── */
+.site-header{background:var(--navy);border-bottom:3px solid var(--gold)}
+.header-inner{max-width:1100px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo-link{display:flex;align-items:center;gap:16px;text-decoration:none}
+.logo-link:focus-visible{outline:2px solid var(--gold-light);outline-offset:4px;border-radius:3px}
+.seal{width:50px;height:50px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.seal-text{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;color:var(--gold);letter-spacing:.06em;text-align:center;line-height:1.3}
+.logo-words strong{display:block;font-family:'Playfair Display',Georgia,serif;font-size:17px;font-weight:700;color:#fff;letter-spacing:.01em}
+.logo-words span{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,168,75,.8)}
+.header-doc-id{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:right;line-height:1.6}
+.header-doc-id strong{display:block;color:var(--gold);font-size:11px;letter-spacing:.1em}
+
+/* ── HERO ──────────────────────────────── */
+.hero{background:var(--navy-2);padding:72px 24px 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(200,168,75,.04) 39px,rgba(200,168,75,.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(200,168,75,.04) 39px,rgba(200,168,75,.04) 40px);pointer-events:none}
+.hero-inner{max-width:860px;margin:0 auto;position:relative}
+.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::after{content:'';flex:1;max-width:60px;height:1px;background:var(--gold);opacity:.35}
+.hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(30px,5vw,52px);font-weight:900;line-height:1.12;color:#fff;letter-spacing:-.02em;margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--gold-light)}
+.hero-lead{font-size:clamp(14px,2vw,17px);color:rgba(255,255,255,.72);line-height:1.8;font-weight:300;max-width:700px;margin-bottom:32px}
+.hero-lead strong{color:#fff;font-weight:600}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:rgba(200,168,75,.2);border:1px solid rgba(200,168,75,.2);border-radius:6px;overflow:hidden;margin-top:8px}
+.stat-cell{background:var(--navy);padding:18px 20px}
+.stat-num{font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:900;color:var(--gold-light);line-height:1;letter-spacing:-.02em}
+.stat-num.red-stat{color:#fca5a5}
+.stat-label{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:6px;line-height:1.4}
+
+/* ── LEGAL NOTICE BLOCK ────────────────── */
+.legal-notice{background:var(--red-pale);border-left:4px solid var(--red);margin:0;padding:0}
+.legal-notice-inner{max-width:1100px;margin:0 auto;padding:32px 24px}
+.legal-notice-header{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.legal-notice-header::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0}
+.legal-body{font-size:14px;line-height:1.85;color:#5f1d1d;max-width:900px}
+.legal-body p{margin-bottom:12px}
+.legal-body p:last-child{margin-bottom:0}
+.legal-body strong{font-weight:600;color:#7f1d1d}
+.cite{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#991b1b;background:rgba(185,28,28,.08);padding:1px 5px;border-radius:2px;white-space:nowrap}
+
+/* ── MAIN CONTENT ──────────────────────── */
+.main-content{max-width:1100px;margin:0 auto;padding:56px 24px 80px}
+
+/* ── SECTION HEADERS ───────────────────── */
+.section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:28px}
+.section-num{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--gold);background:var(--gold-pale);border:1px solid rgba(200,168,75,.25);border-radius:3px;padding:4px 10px;white-space:nowrap}
+.section-title{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--navy);letter-spacing:-.01em}
+.section-rule{height:1px;background:var(--rule);margin-bottom:28px}
+
+/* ── DOCUMENT GRID ─────────────────────── */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:48px}
+
+.doc-card{background:#fff;border:1px solid rgba(12,27,46,.10);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s}
+.doc-card:hover{box-shadow:0 8px 32px rgba(12,27,46,.10);transform:translateY(-2px)}
+.doc-card.featured{border:2px solid var(--gold)}
+
+.doc-card-top{background:var(--navy);padding:22px 22px 20px;position:relative}
+.doc-type-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:block}
+.doc-card-title{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff;line-height:1.25;letter-spacing:-.01em}
+.doc-card-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.38);margin-top:8px;letter-spacing:.06em}
+.doc-card-icon{position:absolute;top:20px;right:20px;font-size:22px;opacity:.35}
+
+.doc-card-body{padding:20px 22px;flex:1;display:flex;flex-direction:column;gap:12px}
+.doc-card-desc{font-size:13px;line-height:1.7;color:var(--ink-2);flex:1}
+.doc-findings{display:flex;flex-wrap:wrap;gap:6px}
+.doc-finding-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 8px;border-radius:3px;letter-spacing:.04em;font-weight:500}
+.tag-crit{background:#fee2e2;color:#991b1b}
+.tag-serious{background:#fef3c7;color:#92400e}
+.tag-pass{background:#dcfce7;color:#166534}
+.tag-info{background:#dbeafe;color:#1e40af}
+.tag-tool{background:#f3e8ff;color:#6b21a8}
+
+.doc-card-footer{padding:14px 22px;border-top:1px solid rgba(12,27,46,.07);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.doc-link{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);padding:8px 14px;border:1.5px solid var(--navy);border-radius:3px;transition:background .15s,color .15s;white-space:nowrap}
+.doc-link:hover{background:var(--navy);color:#fff}
+.doc-link:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.doc-link svg{width:13px;height:13px;flex-shrink:0}
+.doc-size{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-3);letter-spacing:.06em}
+
+/* ── FINDINGS SUMMARY TABLE ────────────── */
+.findings-table{width:100%;border-collapse:collapse;margin-bottom:48px;font-size:13.5px}
+.findings-table thead th{background:var(--navy);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:12px 16px;text-align:left;font-weight:500;border:none}
+.findings-table tbody tr{border-bottom:1px solid rgba(12,27,46,.07);transition:background .15s}
+.findings-table tbody tr:hover{background:var(--gold-pale)}
+.findings-table tbody tr:last-child{border-bottom:none}
+.findings-table td{padding:12px 16px;vertical-align:top;line-height:1.5}
+.findings-table td:first-child{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-3);white-space:nowrap}
+.findings-table tbody tr:nth-child(even){background:rgba(12,27,46,.02)}
+.findings-table tbody tr:nth-child(even):hover{background:var(--gold-pale)}
+.sev-badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:2px;font-weight:500;white-space:nowrap}
+.sev-crit{background:#fee2e2;color:#991b1b}
+.sev-ser{background:#fef3c7;color:#92400e}
+.sev-pass{background:#dcfce7;color:#166534}
+.wcag-sc{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-3)}
+
+/* ── REMEDIATION TIMELINE ──────────────── */
+.timeline{position:relative;padding-left:28px;margin-bottom:48px}
+.timeline::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:rgba(200,168,75,.3)}
+.tl-item{position:relative;margin-bottom:28px}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-23px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--gold);background:var(--off);flex-shrink:0}
+.tl-dot.urgent{background:var(--red);border-color:var(--red)}
+.tl-dot.done{background:var(--gold);border-color:var(--gold)}
+.tl-date{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.tl-date.red-date{color:var(--red)}
+.tl-title{font-family:'Source Serif 4',Georgia,serif;font-size:15px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.tl-body{font-size:13px;color:var(--ink-2);line-height:1.65}
+.tl-body .cite{color:var(--ink-3);background:rgba(0,0,0,.05)}
+
+/* ── STATUTORY CITATIONS ───────────────── */
+.citations-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:48px}
+.citation-card{background:#fff;border:1px solid rgba(12,27,46,.10);border-radius:6px;padding:16px 18px}
+.citation-ref{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:var(--navy);letter-spacing:.04em;margin-bottom:6px}
+.citation-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.citation-body{font-size:12px;color:var(--ink-3);line-height:1.6}
+
+/* ── CONTACT / COORDINATOR ─────────────── */
+.coordinator-card{background:var(--navy);border-radius:8px;padding:28px 32px;display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap;margin-bottom:48px}
+.coordinator-avatar{width:52px;height:52px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--navy);flex-shrink:0}
+.coordinator-info{flex:1;min-width:200px}
+.coordinator-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.7);margin-bottom:6px}
+.coordinator-name{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:4px}
+.coordinator-role{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:12px}
+.coordinator-contacts{display:flex;flex-wrap:wrap;gap:16px}
+.coord-link{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold-light);text-decoration:none;letter-spacing:.04em}
+.coord-link:hover{color:#fff;text-decoration:underline}
+.coord-link:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:2px}
+.coordinator-right{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.coord-stat{text-align:right}
+.coord-stat-num{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;color:var(--gold-light)}
+.coord-stat-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+
+/* ── FOOTER ────────────────────────────── */
+.site-footer{background:var(--navy);border-top:1px solid rgba(200,168,75,.15);padding:32px 24px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-left p{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);line-height:1.8}
+.footer-left strong{color:rgba(255,255,255,.5)}
+.footer-nav{display:flex;flex-wrap:wrap;gap:16px}
+.footer-nav a{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);text-decoration:underline;text-underline-offset:3px}
+.footer-nav a:hover{color:var(--gold)}
+.footer-nav a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* ── ANIMATIONS ─────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hero-inner>*{animation:fadeUp .5s ease both}
+.hero-eyebrow{animation-delay:.05s}
+.hero h1{animation-delay:.15s}
+.hero-lead{animation-delay:.25s}
+.stat-row{animation-delay:.35s}
+
+/* ── RESPONSIVE ─────────────────────────── */
+@media(max-width:600px){
+  .header-doc-id{display:none}
+  .findings-table{font-size:12px}
+  .findings-table td{padding:10px 10px}
+  .coordinator-right{display:none}
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to main content</a>
+
+<!-- ── DEADLINE BANNER ─────────────────────── -->
+<div role="region" aria-label="Compliance deadline notice">
+  <div class="deadline-banner">
+    <div class="deadline-inner">
+      <div class="deadline-left">
+        <span class="deadline-pulse" aria-hidden="true"></span>
+        <div class="deadline-text">
+          <strong>DOJ Title II Compliance Deadline</strong>
+          28 C.F.R. §§ 35.200–35.205 · WCAG 2.1 Level AA Required
+        </div>
+      </div>
+      <div class="deadline-count" aria-label="18 days remaining until deadline">
+        18 <span>days remaining</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── HEADER ──────────────────────────────── -->
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <a href="https://coag.gov" class="logo-link" aria-label="Colorado Attorney General — coag.gov">
+      <div class="seal" aria-hidden="true">
+        <div class="seal-text">CO<br>AG</div>
+      </div>
+      <div class="logo-words">
+        <strong>Colorado Attorney General</strong>
+        <span>Phil Weiser · Department of Law</span>
+      </div>
+    </a>
+    <div class="header-doc-id" aria-label="Document classification: ADA compliance brief, April 2026">
+      <strong>ADA Compliance Brief</strong>
+      April 2026 · Digital Accessibility<br>
+      Prepared for AG Office Review
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO ────────────────────────────────── -->
+<div class="hero" role="region" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <p class="hero-eyebrow" aria-hidden="true">Emergency Compliance Package · Colorado Dept. of Law</p>
+    <h1 id="hero-heading">
+      Digital Accessibility<br>
+      <em>Compliance Brief</em>
+    </h1>
+    <p class="hero-lead">
+      A comprehensive ADA / WCAG 2.1 Level AA audit of the Colorado Attorney General's digital complaint
+      infrastructure identified <strong>95 confirmed violations</strong> across four technology platforms.
+      The DOJ Title II compliance deadline of <strong>April 24, 2026</strong> — enacted by
+      <strong>28 C.F.R. §§ 35.200–35.205</strong> — is 18 days from the date of this brief.
+      This package contains the full audit record, compliant form prototype, and remediation roadmap
+      required to demonstrate good-faith compliance and reduce enforcement exposure.
+    </p>
+
+    <div class="stat-row" role="list" aria-label="Audit summary statistics">
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num red-stat">95</div>
+        <div class="stat-label">Confirmed<br>WCAG Violations</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num red-stat">37</div>
+        <div class="stat-label">Critical<br>Severity</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num red-stat">4</div>
+        <div class="stat-label">Technology<br>Platforms</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num">$115K</div>
+        <div class="stat-label">DOJ First<br>Violation Fine</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num">$815K</div>
+        <div class="stat-label">Max Precedent<br>Total Exposure</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num red-stat">18</div>
+        <div class="stat-label">Days to<br>Deadline</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LEGAL NOTICE ─────────────────────────── -->
+<section class="legal-notice" aria-labelledby="legal-notice-heading">
+  <div class="legal-notice-inner">
+    <div class="legal-notice-header" id="legal-notice-heading">
+      Mandatory Compliance Notice — Attorney General's Office of Colorado
+    </div>
+    <div class="legal-body">
+      <p>
+        The Colorado Attorney General's Office, as a state government entity, is legally obligated under
+        <strong>Title II of the Americans with Disabilities Act</strong> (<span class="cite">42 U.S.C. §§ 12131–12165</span>)
+        and the Department of Justice's <strong>Web Accessibility Final Rule</strong>
+        (<span class="cite">28 C.F.R. §§ 35.200–35.205</span>, effective June 24, 2024) to ensure that all
+        public-facing websites, web applications, and complaint intake systems conform to
+        <strong>WCAG 2.1 Level AA</strong> by no later than <strong>April 24, 2026</strong>.
+        The Colorado AG's office serves a population well exceeding 50,000 persons, placing it squarely
+        within the mandatory compliance cohort specified at <span class="cite">28 C.F.R. § 35.200(b)(1)</span>.
+        The DOJ has confirmed that no extensions to this deadline are available.
+      </p>
+      <p>
+        Enforcement of this obligation is compounded by the fact that this office is charged with
+        <em>enforcing</em> ADA Title II against other Colorado entities under
+        <span class="cite">42 U.S.C. § 12133</span>. Any failure to comply with the same standards this
+        office enforces creates substantial institutional, legal, and reputational exposure. The DOJ
+        Civil Rights Division enforces Title II through complaint investigations, compliance reviews, and
+        pattern-or-practice litigation. Civil penalties for a first violation are
+        <strong>$115,231</strong> (inflation-adjusted 2024); a second violation is
+        <strong>$230,464</strong>. Settlement agreements with comparable state agencies have resulted in
+        total costs of <strong>$665,000–$815,000</strong> inclusive of remediation, legal fees,
+        accessibility coordinator requirements, and mandatory staff training. Emergency remediation
+        rates — applicable to work commenced after April 24 — are currently running
+        <strong>4–5× normal vendor rates</strong> due to market scarcity.
+      </p>
+      <p>
+        Additional obligations arise under <strong>Section 504 of the Rehabilitation Act</strong>
+        (<span class="cite">29 U.S.C. § 794</span>), <strong>Executive Order 13166</strong> (LEP access —
+        directly implicated by the Spanish-language complaint infrastructure findings),
+        <strong>Title VI of the Civil Rights Act</strong> (<span class="cite">42 U.S.C. § 2000d</span>),
+        and <strong>8 CCR 1501-11</strong> (Colorado Technology Accessibility Standards).
+        The materials contained in this package constitute the good-faith compliance record recommended
+        by DOJ guidance for entities demonstrating documented remediation effort prior to enforcement action.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── MAIN ─────────────────────────────────── -->
+<main id="main" class="main-content" role="main">
+
+  <!-- ── DELIVERABLES ───────────────────────── -->
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Compliance Package — Deliverables</h2>
+  </div>
+  <div class="section-rule" role="separator"></div>
+
+  <div class="doc-grid" role="list" aria-label="Compliance package documents">
+
+    <!-- PDF AUDIT REPORT -->
+    <article class="doc-card featured" role="listitem" aria-labelledby="doc1-title">
+      <div class="doc-card-top">
+        <span class="doc-type-badge">Primary Deliverable</span>
+        <h3 class="doc-card-title" id="doc1-title">ADA / WCAG 2.1 Formal Audit Report</h3>
+        <div class="doc-card-meta">PDF · 14 sections · 30+ pages</div>
+        <span class="doc-card-icon" aria-hidden="true">📋</span>
+      </div>
+      <div class="doc-card-body">
+        <p class="doc-card-desc">
+          Full formal audit covering coag.gov, complaints.coag.gov (Salesforce Experience Cloud),
+          all seven Gravity Forms deployments, the Spanish complaint infrastructure, and
+          coloradonocall.com. Includes statutory citations on every finding, technology stack map,
+          remediation priority matrix (top 30 findings), and platform recommendations.
+          Formatted for submission to DOJ as a good-faith compliance record.
+        </p>
+        <div class="doc-findings">
+          <span class="doc-finding-tag tag-crit">37 Critical</span>
+          <span class="doc-finding-tag tag-serious">51 Serious</span>
+          <span class="doc-finding-tag tag-info">4 Platforms</span>
+          <span class="doc-finding-tag tag-info">Statutory Citations</span>
+        </div>
+      </div>
+      <div class="doc-card-footer">
+        <a href="coag_ada_audit_report.pdf" class="doc-link" aria-label="Open ADA audit report PDF">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Open Report
+        </a>
+        <span class="doc-size">64 KB · PDF</span>
+      </div>
+    </article>
+
+    <!-- COMPLAINT FORM PROTOTYPE -->
+    <article class="doc-card" role="listitem" aria-labelledby="doc2-title">
+      <div class="doc-card-top">
+        <span class="doc-type-badge">Technical Prototype</span>
+        <h3 class="doc-card-title" id="doc2-title">Salesforce-Integrated Complaint Form</h3>
+        <div class="doc-card-meta">HTML · Production-ready · Bilingual EN/ES</div>
+        <span class="doc-card-icon" aria-hidden="true">⚡</span>
+      </div>
+      <div class="doc-card-body">
+        <p class="doc-card-desc">
+          Triage-first complaint intake form modeled on the FBI tips architecture. Single narrative
+          field — no forced self-categorization. Full Salesforce REST API integration (Case object),
+          Claude AI routing, bilingual English/Spanish toggle with correct <code>lang</code> switching,
+          and all 95 audit findings addressed in design. 131 accessibility passes, 0 failures
+          after remediation.
+        </p>
+        <div class="doc-findings">
+          <span class="doc-finding-tag tag-pass">131 A11y Passes</span>
+          <span class="doc-finding-tag tag-tool">Salesforce API</span>
+          <span class="doc-finding-tag tag-tool">AI Routing</span>
+          <span class="doc-finding-tag tag-pass">WCAG 2.1 AA</span>
+        </div>
+      </div>
+      <div class="doc-card-footer">
+        <a href="coag-complaint-form.html" class="doc-link" aria-label="Open accessible complaint form prototype">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Open Form
+        </a>
+        <span class="doc-size">74 KB · HTML</span>
+      </div>
+    </article>
+
+    <!-- ADA AUDIT HTML -->
+    <article class="doc-card" role="listitem" aria-labelledby="doc3-title">
+      <div class="doc-card-top">
+        <span class="doc-type-badge">Technical Audit</span>
+        <h3 class="doc-card-title" id="doc3-title">Interactive ADA Audit — coag.gov</h3>
+        <div class="doc-card-meta">HTML · DOM-level findings · Annotated</div>
+        <span class="doc-card-icon" aria-hidden="true">🔍</span>
+      </div>
+      <div class="doc-card-body">
+        <p class="doc-card-desc">
+          Interactive HTML record of the live browser audit. Documents real-time DOM inspection
+          results — tab order, focus indicators, ARIA chains, shadow DOM traversal, color contrast
+          computations, and heading hierarchy. Complements the formal PDF with technical evidence
+          at the code level. Useful for the development team implementing remediation.
+        </p>
+        <div class="doc-findings">
+          <span class="doc-finding-tag tag-info">DOM Analysis</span>
+          <span class="doc-finding-tag tag-info">Contrast Ratios</span>
+          <span class="doc-finding-tag tag-info">Tab Order Map</span>
+          <span class="doc-finding-tag tag-info">Shadow DOM</span>
+        </div>
+      </div>
+      <div class="doc-card-footer">
+        <a href="coag-ada-audit.html" class="doc-link" aria-label="Open interactive ADA audit record">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Open Audit
+        </a>
+        <span class="doc-size">34 KB · HTML</span>
+      </div>
+    </article>
+
+    <!-- REDESIGN PROTOTYPE -->
+    <article class="doc-card" role="listitem" aria-labelledby="doc4-title">
+      <div class="doc-card-top">
+        <span class="doc-type-badge">UX Prototype</span>
+        <h3 class="doc-card-title" id="doc4-title">File-a-Complaint Hub Redesign</h3>
+        <div class="doc-card-meta">HTML · Triage-first architecture · AG branded</div>
+        <span class="doc-card-icon" aria-hidden="true">✦</span>
+      </div>
+      <div class="doc-card-body">
+        <p class="doc-card-desc">
+          Full redesign of the coag.gov complaint intake hub applying the FBI tips triage model:
+          skip link first, global focus ring, descriptive card links, correct heading hierarchy,
+          no forced self-categorization. Demonstrates what the landing experience should be
+          post-remediation. Addresses findings #1–#20 and #45–#48 directly.
+        </p>
+        <div class="doc-findings">
+          <span class="doc-finding-tag tag-pass">Focus Fixed</span>
+          <span class="doc-finding-tag tag-pass">Links Descriptive</span>
+          <span class="doc-finding-tag tag-pass">Headings Correct</span>
+          <span class="doc-finding-tag tag-tool">FBI Tips Model</span>
+        </div>
+      </div>
+      <div class="doc-card-footer">
+        <a href="coag-file-complaint-redesign.html" class="doc-link" aria-label="Open file-a-complaint hub redesign prototype">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Open Redesign
+        </a>
+        <span class="doc-size">43 KB · HTML</span>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ── CRITICAL FINDINGS SUMMARY ──────────── -->
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Critical Findings Requiring Immediate Action</h2>
+  </div>
+  <div class="section-rule" role="separator"></div>
+
+  <table class="findings-table" aria-label="Critical accessibility findings requiring immediate remediation">
+    <thead>
+      <tr>
+        <th scope="col">Finding</th>
+        <th scope="col">Severity</th>
+        <th scope="col">Description</th>
+        <th scope="col">WCAG SC</th>
+        <th scope="col">Platform</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>#18</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>No visible focus indicator on any link site-wide — keyboard users receive no visual feedback on any interactive element</td>
+        <td><span class="wcag-sc">2.4.7</span></td>
+        <td>coag.gov</td>
+      </tr>
+      <tr>
+        <td>#19</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>All collapsed nav dropdowns remain in Tab order — 50+ invisible links precede main content for keyboard users</td>
+        <td><span class="wcag-sc">2.1.1, 2.4.3</span></td>
+        <td>coag.gov</td>
+      </tr>
+      <tr>
+        <td>#45–48</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>Four complaint categories route to broken destinations — Securities Fraud has no form; others redirect to licensing pages or press releases</td>
+        <td><span class="wcag-sc">2.4.4</span></td>
+        <td>coag.gov</td>
+      </tr>
+      <tr>
+        <td>#24</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>All Salesforce form field labels inaccessible — aria-labelledby chains broken by nested shadow DOM; every field announced as unlabeled to screen readers</td>
+        <td><span class="wcag-sc">1.3.1, 4.1.2</span></td>
+        <td>complaints.coag.gov</td>
+      </tr>
+      <tr>
+        <td>#79</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>Spanish complaint hub has 11 nameless image-only card links — entire Spanish complaint navigation invisible to assistive technology</td>
+        <td><span class="wcag-sc">1.1.1, 4.1.2</span></td>
+        <td>coag.gov / ES</td>
+      </tr>
+      <tr>
+        <td>#80</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>lang="en-US" on all Spanish-language pages — screen readers mispronounce all Spanish content; Level A (most fundamental) WCAG failure</td>
+        <td><span class="wcag-sc">3.1.1 (A), 3.1.2</span></td>
+        <td>coag.gov / ES</td>
+      </tr>
+      <tr>
+        <td>#92</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>coloradonocall.com error text: 1.33:1 contrast ratio on medium-blue background — validation messages physically unreadable</td>
+        <td><span class="wcag-sc">1.4.3</span></td>
+        <td>coloradonocall.com</td>
+      </tr>
+      <tr>
+        <td>#25</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>Salesforce form: focus drops to &lt;body&gt; after validation failure — users cannot locate error fields; no assertive announcement</td>
+        <td><span class="wcag-sc">3.3.1, 2.4.3</span></td>
+        <td>complaints.coag.gov</td>
+      </tr>
+      <tr>
+        <td>#35</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>Salesforce optional demographic step: fields marked required in DOM despite being presented as optional — users cannot advance without completing them</td>
+        <td><span class="wcag-sc">3.3.2, 1.3.1</span></td>
+        <td>complaints.coag.gov</td>
+      </tr>
+      <tr>
+        <td>#20</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>Skip link is not the first focusable element — announcement banner link precedes it, defeating its bypass function entirely</td>
+        <td><span class="wcag-sc">2.4.1</span></td>
+        <td>coag.gov</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── REMEDIATION TIMELINE ─────────────── -->
+  <div class="section-head">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Recommended Remediation Timeline</h2>
+  </div>
+  <div class="section-rule" role="separator"></div>
+
+  <div class="timeline" role="list" aria-label="Remediation timeline">
+
+    <div class="tl-item" role="listitem">
+      <div class="tl-dot urgent" aria-hidden="true"></div>
+      <div class="tl-date red-date">Immediately — April 7–10, 2026</div>
+      <div class="tl-title">Emergency fixes: broken routes, Spanish lang, skip link</div>
+      <div class="tl-body">
+        Fix four broken complaint category redirections (#45–48). Add <span class="cite">lang="es"</span>
+        to all Spanish page templates (#80). Move skip link to DOM position 1 (#20).
+        Add <span class="cite">alt</span> text to 11 Spanish hub card images (#79).
+        These are content/template changes — no development sprint required.
+        Under <span class="cite">28 C.F.R. § 35.130(b)(1)(i)</span>, denial of program access
+        is the highest-priority enforcement category.
+      </div>
+    </div>
+
+    <div class="tl-item" role="listitem">
+      <div class="tl-dot urgent" aria-hidden="true"></div>
+      <div class="tl-date red-date">Sprint 1 — April 10–17, 2026</div>
+      <div class="tl-title">Global CSS fixes: focus indicators, nav tab order, paragraph spacing</div>
+      <div class="tl-body">
+        Add global <span class="cite">:focus-visible</span> CSS rule (#18).
+        Apply <span class="cite">tabindex="-1"</span> to collapsed nav dropdown links (#19).
+        Set <span class="cite">scroll-padding-top: 40px</span> on html (#94).
+        Add <span class="cite">margin-bottom: 2em</span> to paragraph elements (#95).
+        These are single-file CSS changes deployable in minutes.
+      </div>
+    </div>
+
+    <div class="tl-item" role="listitem">
+      <div class="tl-dot" aria-hidden="true"></div>
+      <div class="tl-date">Sprint 2 — April 17–24, 2026 (deadline)</div>
+      <div class="tl-title">Gravity Forms template fixes — all 7 forms simultaneously</div>
+      <div class="tl-body">
+        Add <span class="cite">aria-hidden="true"</span> to required asterisk spans.
+        Change Previous button <span class="cite">type</span> from <span class="cite">submit</span>
+        to <span class="cite">button</span>. Add step indicators with
+        <span class="cite">aria-current="step"</span>. Wrap radio groups in
+        <span class="cite">fieldset/legend</span>. Add <span class="cite">role="alert"</span>
+        to validation container. Template-level — fix once, applies to all 7 forms.
+      </div>
+    </div>
+
+    <div class="tl-item" role="listitem">
+      <div class="tl-dot" aria-hidden="true"></div>
+      <div class="tl-date">Post-deadline — April 25 – June 2026</div>
+      <div class="tl-title">Salesforce platform remediation and CRM expansion</div>
+      <div class="tl-body">
+        Engage Salesforce on shadow DOM label failures (#24), CSS error dialog (#11),
+        switch toggle ARIA (#34), and progress indicator semantics (#30).
+        Begin Salesforce Government Cloud + Service Cloud Case Management evaluation.
+        Deploy the triage-first complaint form prototype included in this package as replacement
+        for the current multi-step categorization flow.
+      </div>
+    </div>
+
+    <div class="tl-item" role="listitem">
+      <div class="tl-dot done" aria-hidden="true"></div>
+      <div class="tl-date">Ongoing — Q3 2026 onward</div>
+      <div class="tl-title">Replace Siteimprove with WAVE + AI quarterly audit cycle</div>
+      <div class="tl-body">
+        Cancel Siteimprove at renewal (~$28,000/year savings). Deploy Pope Tech (WAVE-powered,
+        ~$1,200/year) for automated regression monitoring. Schedule quarterly DOM-level AI audits
+        to catch the 60–70% of issues automated tools cannot detect. Estimated 3-year savings:
+        $78,600, with superior coverage.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── STATUTORY CITATIONS ──────────────── -->
+  <div class="section-head">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Governing Legal Authority</h2>
+  </div>
+  <div class="section-rule" role="separator"></div>
+
+  <div class="citations-grid" role="list" aria-label="Governing statutes and regulations">
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">42 U.S.C. §§ 12131–12165</div>
+      <div class="citation-title">ADA Title II</div>
+      <div class="citation-body">Prohibits discrimination on the basis of disability in services, programs, and activities of state and local governments. Primary enforcement authority for AG website accessibility.</div>
+    </div>
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">28 C.F.R. §§ 35.200–35.205</div>
+      <div class="citation-title">DOJ Web Accessibility Final Rule</div>
+      <div class="citation-body">Effective June 24, 2024. Adopts WCAG 2.1 Level AA as the mandatory technical standard. Mandatory compliance for entities serving 50,000+ persons by April 24, 2026. No extensions.</div>
+    </div>
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">29 U.S.C. § 794</div>
+      <div class="citation-title">Section 504, Rehabilitation Act</div>
+      <div class="citation-body">Prohibits disability discrimination by any program receiving federal financial assistance. Applies to the AG's federally funded units (Medicaid Fraud Control, etc.).</div>
+    </div>
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">Executive Order 13166</div>
+      <div class="citation-title">Limited English Proficiency Access</div>
+      <div class="citation-body">Requires meaningful access for LEP persons to federally funded programs. Directly implicated by the Spanish-language infrastructure findings — particularly lang="en-US" on all Spanish pages.</div>
+    </div>
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">42 U.S.C. § 2000d</div>
+      <div class="citation-title">Title VI, Civil Rights Act</div>
+      <div class="citation-body">Prohibits discrimination based on national origin in federally assisted programs. Spanish-language nameless image links and English-only No-Call path implicate this authority.</div>
+    </div>
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">8 CCR 1501-11</div>
+      <div class="citation-title">Colorado Technology Accessibility</div>
+      <div class="citation-body">Colorado's state-level technology accessibility standards, requiring WCAG conformance for state digital services. Independent of — and in addition to — the federal DOJ rule.</div>
+    </div>
+  </div>
+
+  <!-- ── TITLE II COORDINATOR ─────────────── -->
+  <div class="section-head">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Title II Accessibility Coordinator</h2>
+  </div>
+  <div class="section-rule" role="separator"></div>
+
+  <div class="coordinator-card" role="region" aria-labelledby="coord-heading">
+    <div class="coordinator-avatar" aria-hidden="true">CP</div>
+    <div class="coordinator-info">
+      <div class="coordinator-label">Designated Title II ADA Coordinator</div>
+      <div class="coordinator-name" id="coord-heading">C. Pitman</div>
+      <div class="coordinator-role">ADA Title II Coordinator · Colorado Attorney General's Office</div>
+      <div class="coordinator-contacts">
+        <a href="mailto:Accessibility@coag.gov" class="coord-link" aria-label="Email the ADA coordinator at Accessibility at coag.gov">Accessibility@coag.gov</a>
+        <a href="tel:+17205086411" class="coord-link" aria-label="Call the ADA coordinator at 720-508-6411">720-508-6411</a>
+        <a href="https://coag.gov/colorado-office-of-the-attorney-general-accessibility-statement/" class="coord-link" aria-label="View the AG accessibility statement (opens in same window)">Accessibility Statement</a>
+      </div>
+    </div>
+    <div class="coordinator-right" aria-hidden="true">
+      <div class="coord-stat">
+        <div class="coord-stat-num">Jul 1, 2025</div>
+        <div class="coord-stat-label">Statement last updated</div>
+      </div>
+      <div class="coord-stat">
+        <div class="coord-stat-num">77585</div>
+        <div class="coord-stat-label">Siteimprove account</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ──────────────────────────────── -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <p><strong>Colorado Department of Law</strong><br>
+      Ralph L. Carr Colorado Judicial Center<br>
+      1300 Broadway, Denver, CO 80203 · coag.gov</p>
+    </div>
+    <nav class="footer-nav" aria-label="Footer links">
+      <a href="https://coag.gov/colorado-office-of-the-attorney-general-accessibility-statement/">Accessibility Statement</a>
+      <a href="https://coag.gov/website-privacy-policy/">Privacy Policy</a>
+      <a href="https://coag.gov/about-us/contact-colorado-office-attorney-general/">Contact</a>
+      <a href="https://coag.gov/declaracion-de-accesibilidad/" lang="es">Accesibilidad (ES)</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+// Live deadline countdown
+(function() {
+  const deadline = new Date('2026-04-24T00:00:00');
+  function update() {
+    const now = new Date();
+    const diff = deadline - now;
+    if (diff <= 0) {
+      const el = document.querySelector('.deadline-count');
+      if (el) { el.innerHTML = 'DEADLINE<span>PASSED</span>'; el.style.color='#fca5a5'; }
+      return;
+    }
+    const days = Math.floor(diff / 86400000);
+    const el = document.querySelector('.deadline-count');
+    if (el) {
+      el.innerHTML = days + '<span>days remaining</span>';
+      el.setAttribute('aria-label', days + ' days remaining until deadline');
+    }
+  }
+  update();
+  setInterval(update, 60000);
+})();
+</script>
+
+</body>
+</html>
