@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <meta name="description" content="Live tracker for all open records requests and military housing number analysis for El Paso County.">
+  <title>CORA Requests Tracker — cheetochopsticks</title>
+  <style>
+
+    :root {
+      --bg:#0c1220; --surface:#141e2e; --surface2:#1c2a3e; --surface3:#233045;
+      --border:rgba(255,255,255,.09); --border-hi:rgba(255,255,255,.18);
+      --gold:#c8a84b; --gold-dim:rgba(200,168,75,.18); --gold-faint:rgba(200,168,75,.07); --gold-lt:#fde68a;
+      --text:#ede8dc; --muted:#96adc4; --quiet:#506070;
+      --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif; --serif:'Playfair Display',Georgia,serif;
+      --red:#f87171; --red-dim:rgba(248,113,113,.13);
+      --green:#4ade80; --green-dim:rgba(74,222,128,.11);
+      --blue:#60a5fa; --blue-dim:rgba(96,165,250,.11);
+      --amber:#fbbf24; --amber-dim:rgba(251,191,36,.13);
+      --teal:#5dcaa5; --teal-dim:rgba(93,202,165,.11);
+      --purple:#c8c5f8; --purple-dim:rgba(159,155,236,.11);
+    }
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{font-size:100%;scroll-behavior:smooth;}
+    body{font-family:var(--sans);font-size:17px;line-height:1.65;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+    .z1{position:relative;z-index:1;}
+    .container{max-width:900px;margin:0 auto;padding:0 24px;}
+    a{color:var(--blue);text-decoration:none;}
+    a:hover{color:var(--gold);text-decoration:underline;}
+
+    /* Skip link */
+    .skip-link{position:absolute;top:-100px;left:16px;background:var(--gold);color:#0c1220;font-family:var(--mono);font-size:.78rem;font-weight:700;letter-spacing:.08em;padding:10px 18px;border-radius:3px;text-decoration:none;z-index:9999;transition:top .2s;}
+    .skip-link:focus{top:16px;}
+
+    /* Focus */
+    *:focus{outline:none;}
+    *:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:2px;}
+
+    /* Nav */
+    .site-nav{border-bottom:1px solid var(--border);padding:14px 0;position:sticky;top:0;background:rgba(12,18,32,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:200;}
+    .nav-inner{display:flex;align-items:center;gap:0;}
+    .nav-logo{text-decoration:none;display:flex;align-items:baseline;gap:1px;margin-right:28px;flex-shrink:0;}
+    .nav-logo:hover{text-decoration:none;}
+    .nav-logo-word{font-family:var(--sans);font-weight:600;font-size:.95rem;letter-spacing:-.01em;color:var(--text);}
+    .nav-logo-dot{color:var(--gold);font-size:.95rem;}
+    .nav-links{display:flex;align-items:center;gap:2px;flex:1;}
+    .nav-link{font-family:var(--mono);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:6px 11px;border-radius:3px;border:1px solid transparent;transition:all .18s;white-space:nowrap;}
+    .nav-link:hover{color:var(--text);background:rgba(255,255,255,.04);text-decoration:none;}
+    .nav-link.you-link{color:var(--gold);border-color:var(--gold-dim);background:var(--gold-faint);}
+    .nav-link.you-link:hover{background:var(--gold-dim);}
+    .nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0;}
+    .nav-crumb{font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-left:auto;}
+
+    /* Page header */
+    .page-hd{padding:52px 0 36px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+    .page-hd::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),rgba(200,168,75,.1));}
+    .page-eyebrow{font-family:var(--mono);font-size:.76rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+    .page-eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--gold);opacity:.5;}
+    .page-hd h1{font-family:var(--serif);font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:700;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin-bottom:14px;font-style:normal;}
+    .page-hd .page-sub{font-size:1rem;color:var(--muted);max-width:560px;line-height:1.7;}
+    .page-hd .page-sub strong{color:var(--text);font-weight:500;}
+
+    /* Page body */
+    .page-body{padding:40px 0 60px;}
+
+    /* Content cards (replacing artifact card styles) */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:1rem;}
+    .card+.card{margin-top:0;}
+
+    /* Tabs */
+    .tab-row{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap;role:tablist;}
+    .tab{font-size:.82rem;padding:7px 14px;border-radius:8px;border:1px solid var(--border-hi);cursor:pointer;background:transparent;color:var(--muted);transition:all .18s;font-family:var(--sans);}
+    .tab:hover{color:var(--text);border-color:var(--border-hi);background:rgba(255,255,255,.04);}
+    .tab.active{background:var(--gold-dim);color:var(--text);border-color:rgba(200,168,75,.35);}
+    .panel{display:none;}.panel.active{display:block;}
+
+    /* Badges */
+    .badge{font-size:.76rem;padding:3px 9px;border-radius:4px;white-space:nowrap;display:inline-block;font-weight:500;}
+    .b-pass,.badge-green{background:rgba(74,222,128,.12);color:#4ade80;}
+    .b-fail,.badge-red{background:rgba(248,113,113,.13);color:#f87171;}
+    .b-partial,.badge-amber{background:rgba(251,191,36,.13);color:#fbbf24;}
+    .b-key,.badge-purple{background:rgba(159,155,236,.13);color:#c8c5f8;}
+    .b-real,.badge-teal{background:rgba(93,202,165,.13);color:#5dcaa5;}
+    .b-sent,.badge-green2{background:rgba(74,222,128,.12);color:#4ade80;}
+    .b-ready,.badge-blue{background:rgba(96,165,250,.13);color:#ede8dc;}
+    .b-pending,.badge-amber2{background:rgba(251,191,36,.13);color:#fbbf24;}
+    .b-pub{background:rgba(93,202,165,.13);color:#5dcaa5;}
+    .b-survey{background:rgba(248,113,113,.13);color:#f87171;}
+    .badge-red-old,.badge-amber-old,.badge-green-old,.badge-blue-old{font-size:.76rem;padding:3px 9px;border-radius:4px;}
+    .badge-red{background:rgba(248,113,113,.13);color:#f87171;}
+    .badge-amber{background:rgba(251,191,36,.13);color:#fbbf24;}
+    .badge-green{background:rgba(74,222,128,.12);color:#4ade80;}
+    .badge-blue{background:rgba(96,165,250,.13);color:#ede8dc;}
+
+    /* Rows */
+    .row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);font-size:.88rem;gap:10px;}
+    .row:last-child{border-bottom:none;}
+    .rl{color:var(--muted);flex:3;line-height:1.55;}
+    .rv{flex:2;text-align:right;font-size:.82rem;color:var(--text);}
+
+    /* Section label */
+    .sec{font-size:.76rem;font-weight:600;color:var(--gold);letter-spacing:.1em;margin:1.25rem 0 8px;text-transform:uppercase;font-family:var(--mono);}
+
+    /* Alert boxes */
+    .alert{background:var(--red-dim);border-radius:8px;padding:12px 14px;margin:10px 0;font-size:.9rem;color:var(--red);line-height:1.6;border-left:3px solid var(--red);}
+    .warnbox{background:var(--amber-dim);border-radius:8px;padding:12px 14px;margin:10px 0;font-size:.9rem;color:var(--amber);line-height:1.6;border-left:3px solid var(--amber);}
+    .infobox{background:var(--blue-dim);border-radius:8px;padding:12px 14px;margin:10px 0;font-size:.9rem;color:var(--text);line-height:1.6;border-left:3px solid var(--blue);}
+    .src{background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:.88rem;color:var(--muted);line-height:1.65;border-left:3px solid var(--border-hi);}
+    .src-warn{border-left-color:var(--red);}
+    .src-survey{border-left-color:var(--amber);}
+
+    /* Stat grid */
+    .mg,.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:1.25rem;}
+    .m,.stat-item{background:var(--surface2);border-radius:8px;padding:14px 16px;}
+    .ml,.stat-label{font-size:.76rem;color:var(--muted);margin-bottom:5px;line-height:1.4;font-family:var(--mono);}
+    .mv,.stat-val{font-size:1.25rem;font-weight:600;color:var(--text);}
+    .ms,.stat-sub{font-size:.76rem;color:var(--quiet);margin-top:3px;}
+
+    /* Nobody big text */
+    .nobody{font-size:1rem;font-weight:600;color:var(--red);padding:10px 0 5px;}
+
+    /* Notes */
+    .note{font-size:.9rem;color:var(--muted);line-height:1.65;padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;}
+    .note:last-child{border-bottom:none;}
+    .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:7px;}
+
+    /* Check grid */
+    .check-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+    @media(max-width:600px){.check-grid{grid-template-columns:1fr;}}
+    .check-card{background:var(--surface2);border-radius:8px;padding:14px 16px;}
+    .check-title{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:8px;}
+    .check-item{font-size:.88rem;color:var(--muted);padding:4px 0;display:flex;align-items:flex-start;gap:7px;line-height:1.5;}
+    .ci{font-size:.9rem;flex-shrink:0;}
+
+    /* Contact rows */
+    .contact-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);gap:14px;flex-wrap:wrap;}
+    .contact-row:last-child{border-bottom:none;}
+    .contact-name{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:3px;}
+    .contact-detail{font-size:.82rem;color:var(--muted);}
+    .email-pill{display:inline-block;font-size:.82rem;background:var(--blue-dim);color:var(--blue);padding:4px 10px;border-radius:12px;cursor:pointer;user-select:all;margin-top:4px;word-break:break-all;border:1px solid rgba(96,165,250,.2);}
+    .email-pill:hover{background:rgba(96,165,250,.2);}
+
+    /* Letter box */
+    .letter-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:18px;font-size:.88rem;line-height:1.8;color:var(--text);white-space:pre-wrap;font-family:var(--mono);margin:10px 0;max-height:420px;overflow-y:auto;}
+    .fill-field{background:var(--amber-dim);color:var(--amber);padding:1px 5px;border-radius:3px;font-style:normal;}
+
+    /* Buttons */
+    .copy-btn,.cta-btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-hi);border-radius:8px;padding:8px 16px;font-size:.85rem;cursor:pointer;background:transparent;color:var(--text);margin:6px 4px 0 0;font-family:var(--sans);transition:all .18s;}
+    .copy-btn:hover,.cta-btn:hover{background:var(--surface2);border-color:var(--gold);}
+    .copy-btn.copied{border-color:rgba(74,222,128,.4);color:var(--green);}
+
+    /* Tracker */
+    .tracker-item{padding:12px 0;border-bottom:1px solid var(--border);}
+    .tracker-item:last-child{border-bottom:none;}
+    .t-title{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+    .t-who{font-size:.82rem;color:var(--muted);margin-bottom:3px;}
+    .t-detail{font-size:.82rem;color:var(--quiet);line-height:1.55;}
+    .t-dates{font-size:.78rem;font-family:var(--mono);color:var(--muted);margin-top:5px;}
+
+    /* Step row */
+    .step-row{display:flex;gap:12px;align-items:flex-start;margin:10px 0;font-size:.9rem;color:var(--muted);}
+    .step-num{width:24px;height:24px;border-radius:50%;border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:600;flex-shrink:0;color:var(--muted);}
+
+    /* Info row */
+    .info-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:.88rem;color:var(--muted);}
+    .url-link{color:var(--blue);font-size:.85rem;word-break:break-all;text-decoration:none;}
+    .url-link:hover{text-decoration:underline;color:var(--gold);}
+
+    /* Bar charts */
+    .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:.88rem;}
+    .bar-label{width:140px;color:var(--muted);flex-shrink:0;}
+    .bar-track{flex:1;background:var(--surface3);border-radius:3px;height:12px;overflow:hidden;}
+    .bar-fill{height:100%;border-radius:3px;}
+    .bar-pct{width:36px;text-align:right;color:var(--text);font-weight:600;}
+
+    /* Risk table */
+    .risk-table{width:100%;border-collapse:collapse;font-size:.88rem;}
+    .risk-table th{text-align:left;padding:7px 10px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border);font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono);}
+    .risk-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+    .risk-table tr:last-child td{border-bottom:none;}
+    .risk-table tr:hover td{background:var(--surface2);}
+
+    /* Platform chips */
+    .platform-row{display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;}
+    .plat-chip{border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;flex:1;min-width:160px;background:var(--surface);}
+    .plat-name{font-size:.88rem;font-weight:600;color:var(--text);}
+    .plat-count{font-size:1.2rem;font-weight:600;margin:4px 0;}
+    .plat-detail{font-size:.82rem;color:var(--muted);}
+
+    /* Gap grid */
+    .gap-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+    @media(max-width:600px){.gap-grid{grid-template-columns:1fr 1fr;}}
+    .gap-item{border:1px solid var(--border);border-radius:8px;padding:.85rem 1rem;background:var(--surface);}
+    .gap-doc{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:5px;}
+    .gap-pct{font-size:1.3rem;font-weight:600;}
+    .gap-sub{font-size:.82rem;color:var(--muted);margin-top:3px;line-height:1.5;}
+
+    /* Section label (old artifact style) */
+    .section-label{font-size:.76rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:1.5rem 0 .6rem;font-family:var(--mono);}
+
+    /* Stats top row (4-col) */
+    .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
+    @media(max-width:700px){.cards{grid-template-columns:1fr 1fr;}}
+    @media(max-width:400px){.cards{grid-template-columns:1fr;}}
+    .card-stat-item{background:var(--surface2);border-radius:8px;padding:.9rem 1rem;}
+    .card-label{font-size:.76rem;color:var(--muted);margin-bottom:6px;font-family:var(--mono);}
+    .card-val{font-size:1.5rem;font-weight:600;color:var(--text);}
+    .card-sub{font-size:.76rem;color:var(--quiet);margin-top:3px;}
+
+    /* Grid 2-col panels */
+    .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-bottom:1.5rem;}
+    @media(max-width:640px){.grid2{grid-template-columns:1fr;}}
+    .panel-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;}
+    .panel-title{font-size:.92rem;font-weight:600;color:var(--text);margin-bottom:.85rem;}
+
+    /* Footer */
+    .site-footer{border-top:1px solid var(--border);padding:28px 0;}
+    .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+    .footer-inner p{font-family:var(--mono);font-size:.72rem;letter-spacing:.07em;color:var(--quiet);line-height:1.7;}
+    .footer-inner a{color:var(--muted);text-decoration:none;}
+    .footer-inner a:hover{color:var(--gold);}
+
+    @media(max-width:600px){.nav-links{display:none;}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;}}
+
+  </style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="site-nav z1" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
+        <span class="nav-logo-word">cheetochopsticks</span><span class="nav-logo-dot">.com</span>
+      </a>
+      <nav class="nav-links" aria-label="Site sections">
+        <a class="nav-link you-link" href="/#you">You</a>
+        <a class="nav-link" href="/#shared">Shared</a>
+        <a class="nav-link" href="/#land">Land</a>
+        <a class="nav-link" href="/#building">Building</a>
+        <a class="nav-link" href="/#people">People</a>
+        <a class="nav-link" href="/#events">Events</a>
+      </nav>
+      <span class="nav-crumb" aria-label="Current section">Shared · CORA Tracker</span>
+    </div>
+  </div>
+</header>
+
+<section class="page-hd z1" role="region" aria-labelledby="page-h1">
+  <div class="container">
+    <p class="page-eyebrow" aria-hidden="true">Shared · Open records · 2 requests pending</p>
+    <h1 id="page-h1">CORA Requests Tracker</h1>
+    <p class="page-sub">All open records requests in one place — who was asked, what was asked, what came back. Military housing numbers cross-referenced with public data.</p>
+  </div>
+</section>
+
+<main id="main-content" class="page-body z1" tabindex="-1">
+  <div class="container">
+
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
+.badge{font-size:13px;padding:2px 7px;border-radius:8px;white-space:nowrap;display:inline-block}
+.b-sent{background:rgba(74,222,128,.12);color:#4ade80}
+.b-ready{background:rgba(96,165,250,.13);color:#ede8dc}
+.b-pending{background:rgba(251,191,36,.13);color:#fbbf24}
+.b-real{background:rgba(74,222,128,.12);color:#4ade80}
+.b-survey{background:rgba(248,113,113,.13);color:#f87171}
+.b-pub{background:rgba(93,202,165,.13);color:#5dcaa5}
+.row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:14px;gap:8px}
+.row:last-child{border-bottom:none}
+.rl{color:var(--muted);flex:3;line-height:1.5}
+.rv{flex:2;text-align:right;color:var(--text);font-size:14px}
+.sec{font-size:13px;font-weight:500;color:var(--quiet);letter-spacing:.06em;margin:1rem 0 6px;text-transform:uppercase}
+.tab-row{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
+.tab{font-size:14px;padding:5px 12px;border-radius:8px;border:0.5px solid var(--border-hi);cursor:pointer;background:transparent;color:var(--muted)}
+.tab.active{background:var(--blue-dim);color:var(--text);border-color:rgba(96,165,250,.3)}
+.panel{display:none}.panel.active{display:block}
+.src{background:var(--surface2);border-radius:8px;padding:8px 12px;margin-top:6px;font-size:14px;color:var(--muted);line-height:1.6;border-left:3px solid #639922}
+.src-survey{border-left-color:#E24B4A}
+.alert{background:var(--red-dim);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:14px;color:var(--red);line-height:1.6}
+.warnbox{background:var(--amber-dim);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:14px;color:var(--amber);line-height:1.6}
+.infobox{background:var(--blue-dim);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:14px;color:var(--blue);line-height:1.6}
+.tracker-item{padding:10px 0;border-bottom:0.5px solid var(--border)}
+.tracker-item:last-child{border-bottom:none}
+.t-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.t-who{font-size:14px;color:var(--muted);margin-bottom:3px}
+.t-detail{font-size:14px;color:var(--quiet);line-height:1.5}
+.t-dates{font-size:14px;font-family:var(--mono);color:var(--muted);margin-top:4px}
+.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:1rem}
+.m{background:var(--surface2);border-radius:8px;padding:12px}
+.ml{font-size:14px;color:var(--muted);margin-bottom:4px;line-height:1.4}
+.mv{font-size:18px;font-weight:500;color:var(--text)}
+.ms{font-size:14px;color:var(--quiet);margin-top:3px}
+</style>
+
+<div style="padding:1rem 0">
+
+<div class="tab-row">
+  <button class="tab active" onclick="showTab('tracker')">Request tracker</button>
+  <button class="tab" onclick="showTab('military')">Military numbers — public</button>
+  <button class="tab" onclick="showTab('gaps')">What the FOIA adds</button>
+</div>
+
+<div id="panel-tracker" class="panel active">
+
+  <div class="mg">
+    <div class="m"><div class="ml">Requests sent</div><div class="mv" style="color:#0F6E56">2</div><div class="ms">awaiting response</div></div>
+    <div class="m"><div class="ml">Requests ready to send</div><div class="mv" style="color:var(--blue)">2</div><div class="ms">drafted, not yet sent</div></div>
+    <div class="m"><div class="ml">Requests still needed</div><div class="mv" style="color:#633806">3</div><div class="ms">not yet drafted</div></div>
+    <div class="m"><div class="ml">Total days to statutory deadline (CORA)</div><div class="mv">3 days</div><div class="ms">then 7-day extension possible</div></div>
+  </div>
+
+  <div class="card">
+    <div class="sec">Sent — awaiting response</div>
+
+    <div class="tracker-item">
+      <div class="t-title">
+        <span>1. El Paso County Assessor — full parcel database export</span>
+        <span class="badge b-sent">sent Apr 7, 2026</span>
+      </div>
+      <div class="t-who">To: [contact via agency website]</div>
+      <div class="t-detail">Requesting: APN, owner name, owner mailing address, property class, year built, sq footage, assessed value, exemption status, metro district membership, lat/lng. Format: CSV/Excel/shapefile.</div>
+      <div class="t-dates">Sent: Apr 7 | Statutory deadline: Apr 10 | Extension deadline: Apr 21 | Follow-up if no response: Apr 11</div>
+    </div>
+
+    <div class="tracker-item">
+      <div class="t-title">
+        <span>2. Colorado Springs Utilities — residential account data 2005–2025</span>
+        <span class="badge b-sent">sent Apr 7, 2026</span>
+      </div>
+      <div class="t-who">To: CSU public records contact — csu.org</div>
+      <div class="t-detail">Requesting: (1) total active residential accounts per year, (2) new accounts opened per year, (3) accounts closed per year, (4) zero/near-zero usage accounts per year. Aggregate only — no customer-level data.</div>
+      <div class="t-dates">Sent: Apr 7 | Statutory deadline: Apr 10 | Extension deadline: Apr 21 | Follow-up if no response: Apr 11</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sec">Ready to send — drafted</div>
+
+    <div class="tracker-item">
+      <div class="t-title">
+        <span>3. Fort Carson FOIA — housing occupancy and BAH by ZIP</span>
+        <span class="badge b-ready">draft complete</span>
+      </div>
+      <div class="t-who">To: [contact via agency website] | Also: efoia.army.mil</div>
+      <div class="t-detail">Requesting: on-post housing units + occupancy annually 2010–2025; BAH recipients by ZIP code (most recent year); PCS moves in/out annually 2010–2025; dependents registered annually. Also covers Peterson SFB and Schriever SFB. Fee waiver requested.</div>
+      <div class="t-dates">Statutory: 20 business days | Est. response: Jun–Aug 2026 | Army FOIA routinely delayed — track carefully</div>
+      <div class="infobox" style="margin-top:6px">Note: See "Military numbers — public" tab for numbers already available without this FOIA. File when ready but don't wait on it to proceed.</div>
+    </div>
+
+    <div class="tracker-item">
+      <div class="t-title">
+        <span>4. Colorado Attorney General — formal CORA complaint</span>
+        <span class="badge b-ready">draft complete</span>
+      </div>
+      <div class="t-who">To: [contact via agency website] | CC: [contact via agency website]; [contact via agency website]; [contact via agency website]</div>
+      <div class="t-detail">Formal complaint against El Paso County Sheriff's Office and Open Records Office. Six legal violations identified. Requests formal investigation, production of eviction notice records, December 27 footage, 1826 Wooten Road conveyance records, and billing accounting.</div>
+      <div class="t-dates">No statutory deadline to file — but sooner strengthens position | Attach full email chain Mar 29 – Apr 6, 2026</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sec">Still needed — not yet drafted</div>
+
+    <div class="tracker-item">
+      <div class="t-title">
+        <span>5. El Paso County Development Services — certificates of occupancy</span>
+        <span class="badge b-pending">not drafted</span>
+      </div>
+      <div class="t-who">To: [contact via agency website] | [contact via agency website]</div>
+      <div class="t-detail">Request: all certificates of occupancy issued by address and year, 2005–2025. Will show the real gap between homes permitted and homes legally occupied. Critical for the housing need calculation.</div>
+      <div class="t-dates">CORA — 3-day statutory response | Suggest sending week of Apr 13</div>
+    </div>
+
+    <div class="tracker-item">
+      <div class="t-title">
+        <span>6. El Paso County Finance — impact fees collected by development</span>
+        <span class="badge b-pending">not drafted</span>
+      </div>
+      <div class="t-who">To: El Paso County Finance Department</div>
+      <div class="t-detail">Request: all transportation, water, park, and school impact fees collected annually by development name or ZIP code, 2005–2025. Will show what taxpayers funded for developments that still have vacant parcels.</div>
+      <div class="t-dates">CORA — 3-day statutory response | Suggest sending with CO above</div>
+    </div>
+
+    <div class="tracker-item">
+      <div class="t-title">
+        <span>7. City of Colorado Springs — short-term rental licenses by ZIP</span>
+        <span class="badge b-pending">not drafted</span>
+      </div>
+      <div class="t-who">To: City of Colorado Springs — CORA or business license office</div>
+      <div class="t-detail">Request: all active and historical short-term rental (Airbnb/VRBO) licenses by address and ZIP code, 2018–2025. Will reveal investor-held units invisible to vacancy surveys.</div>
+      <div class="t-dates">CORA — 3-day statutory response | Also check: coloradosprings.gov licensing portal</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sec">Ongoing — responses received, follow-up needed</div>
+    <div class="tracker-item">
+      <div class="t-title">
+        <span>El Paso County CORA — Sheriff's Office / Open Records (LRMD 2025)</span>
+        <span class="badge b-pending">disputed — incomplete</span>
+      </div>
+      <div class="t-who">To: [contact via agency website] | Beth DeStefano [contact via agency website]</div>
+      <div class="t-detail">DeStefano declared "complete" Apr 6. Response sent disputing completion. Seven specific records still outstanding: eviction notice identity, Dec 27 footage, 1826 Wooten Road conveyance, authorizing orders. AG complaint filed. Madsen invoked 7-day extension Apr 6 — deadline Apr 15.</div>
+      <div class="t-dates">Extension deadline: Apr 15 | If not cured: file Application for Order to Show Cause — C.R.S. § 24-72-204(5)</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="panel-military" class="panel">
+  <div class="card">
+    <div class="sec">Publicly available military numbers — no FOIA needed <span class="badge b-pub">public sources</span></div>
+    <div class="src">Sources: (1) Fort Carson February 2025 Fact Sheet — home.army.mil/carson. (2) Colorado Springs Gazette, September 2025 — "A look at military base employment in Colorado Springs and El Paso County." (3) US Air Force Academy FY2024 Economic Impact Report. (4) Wikipedia Fort Carson CDP — 2020 US Census count. All figures are published by the installations themselves or reported from official Army/Space Force statements.</div>
+
+    <div class="sec" style="margin-top:1rem">Fort Carson</div>
+    <div class="row"><span class="rl">Total workforce (active duty + reservists + civilian + contractors) <span class="badge b-pub">Army Feb 2025</span></span><span class="rv">32,410</span></div>
+    <div class="row"><span class="rl">Fort Carson — 3rd largest employer in Colorado <span class="badge b-pub">Army fact sheet</span></span><span class="rv">behind State of CO (36.5k) and DIA (35k)</span></div>
+    <div class="row"><span class="rl">Annual economic impact <span class="badge b-pub">Army fact sheet</span></span><span class="rv">$2.55 billion/yr</span></div>
+    <div class="row"><span class="rl">Fort Carson CDP population — 2020 Census <span class="badge b-survey">Census — undercounts</span></span><span class="rv">17,693 on-post</span></div>
+    <div class="row"><span class="rl">ZIP codes served: 80902, 80913 <span class="badge b-pub">USPS / Army</span></span><span class="rv">civilian census severely undercounts both</span></div>
+
+    <div class="sec" style="margin-top:1rem">Peterson Space Force Base</div>
+    <div class="row"><span class="rl">Space Operations Command total workforce <span class="badge b-pub">Space Force Mar 2025</span></span><span class="rv">15,000</span></div>
+    <div class="row"><span class="rl">Includes: active duty, reserve, National Guard, civilian <span class="badge b-pub">official statement</span></span><span class="rv">does not include Space Command personnel</span></div>
+    <div class="row"><span class="rl">ZIP code: 80914 <span class="badge b-pub">USPS</span></span><span class="rv">on-post population not in civilian census</span></div>
+
+    <div class="sec" style="margin-top:1rem">US Air Force Academy</div>
+    <div class="row"><span class="rl">Total personnel — cadets + active duty + reservists + civilian <span class="badge b-pub">USAFA FY2024</span></span><span class="rv">10,482</span></div>
+    <div class="row"><span class="rl">Location: Northgate area ZIP 80921 <span class="badge b-pub">USPS</span></span><span class="rv">adjacent to Flying Horse, Flying Horse North MDs</span></div>
+
+    <div class="sec" style="margin-top:1rem">Schriever Space Force Base</div>
+    <div class="row"><span class="rl">Personnel estimate <span class="badge b-survey">public estimate — no official figure found</span></span><span class="rv">~3,000+ military + civilian</span></div>
+    <div class="row"><span class="rl">ZIP code: 80912 <span class="badge b-pub">USPS</span></span><span class="rv">military ZIP — civilian census not applicable</span></div>
+
+    <div class="sec" style="margin-top:1rem">Total El Paso County military community</div>
+    <div class="row"><span class="rl">Fort Carson workforce (published)</span><span class="rv">32,410</span></div>
+    <div class="row"><span class="rl">Peterson Space Operations Command (published)</span><span class="rv">15,000</span></div>
+    <div class="row"><span class="rl">US Air Force Academy (published)</span><span class="rv">10,482</span></div>
+    <div class="row"><span class="rl">Schriever (estimated)</span><span class="rv">~3,000</span></div>
+    <div class="row"><span class="rl">Total military community workforce</span><span class="rv" style="font-weight:600">~60,892 published/est.</span></div>
+    <div class="row"><span class="rl">Dependents (spouses + children — NOT in above figures) <span class="badge b-survey">estimated</span></span><span class="rv">~20,000–30,000 additional</span></div>
+    <div class="row"><span class="rl">Total military community including dependents <span class="badge b-survey">estimated</span></span><span class="rv">~80,000–90,000</span></div>
+    <div class="row"><span class="rl">As % of El Paso County population (~744k)</span><span class="rv">~11–12%</span></div>
+
+    <div class="warnbox">The published workforce numbers (60,892) include civilian employees and contractors who live off-post and DO appear in census data. Active duty only — the figure that creates housing demand distinct from civilian demand — is not broken out in the published totals. That is what the FOIA seeks. For now, Fort Carson's 2020 Census on-post count of 17,693 is the only verified on-post residential population figure.</div>
+
+    <div class="sec" style="margin-top:1rem">BAH impact on local rents — confirmed public statements</div>
+    <div class="row"><span class="rl">Military family quoted in published reporting (2023)</span><span class="rv">"BAH does not cover actual cost for housing and utilities"</span></div>
+    <div class="row"><span class="rl">Result: demand pressure in 80906, 80911, 80916, 80925 ZIPs</span><span class="rv">near Fort Carson gates</span></div>
+    <div class="row"><span class="rl">SW El Paso County — only submarket with positive rent growth 2024</span><span class="rv">+0.7% <span class="badge b-survey">CBRE est.</span></span></div>
+    <div class="row"><span class="rl">Fort Carson ZIP 80913 census-recorded civilian pop.</span><span class="rv">2,990 — severe undercount confirmed</span></div>
+  </div>
+</div>
+
+<div id="panel-gaps" class="panel">
+  <div class="card">
+    <div class="sec">What the FOIA adds that public numbers don't have</div>
+    <div class="row"><span class="rl">Active duty ONLY (separate from civilian/contractor) — annual</span><span class="rv"><span class="badge b-pending">FOIA needed</span></span></div>
+    <div class="row"><span class="rl">On-post housing units occupied vs vacant — annual</span><span class="rv"><span class="badge b-pending">FOIA needed</span></span></div>
+    <div class="row"><span class="rl">PCS moves in/out annually — real rotation count</span><span class="rv"><span class="badge b-pending">FOIA needed</span></span></div>
+    <div class="row"><span class="rl">BAH recipients by ZIP code — off-post demand by area</span><span class="rv"><span class="badge b-pending">FOIA needed</span></span></div>
+    <div class="row"><span class="rl">Dependents registered at Fort Carson — annual</span><span class="rv"><span class="badge b-pending">FOIA needed</span></span></div>
+    <div class="row"><span class="rl">Year-by-year change in force size (2010–2025)</span><span class="rv"><span class="badge b-pending">FOIA needed</span></span></div>
+
+    <div class="sec" style="margin-top:1rem">What you can use right now from public data</div>
+    <div class="row"><span class="rl">Fort Carson total workforce (published Feb 2025)</span><span class="rv">32,410 <span class="badge b-pub">use now</span></span></div>
+    <div class="row"><span class="rl">Peterson Space Operations Command (published)</span><span class="rv">15,000 <span class="badge b-pub">use now</span></span></div>
+    <div class="row"><span class="rl">USAFA total (FY2024 economic impact report)</span><span class="rv">10,482 <span class="badge b-pub">use now</span></span></div>
+    <div class="row"><span class="rl">Fort Carson CDP on-post population (2020 Census)</span><span class="rv">17,693 <span class="badge b-pub">use now</span></span></div>
+    <div class="row"><span class="rl">$2.55B annual economic impact (Army)</span><span class="rv"><span class="badge b-pub">use now</span></span></div>
+    <div class="row"><span class="rl">SW El Paso only submarket with positive rent growth 2024</span><span class="rv"><span class="badge b-pub">use now — CBRE</span></span></div>
+    <div class="infobox">You have enough public data to make the core argument: a military community of 60,000+ workers representing 11–12% of county population is systematically invisible to every housing survey and planning model. The FOIA adds precision — but the argument stands without it.</div>
+
+    <div class="sec" style="margin-top:1rem">All outstanding request deadlines at a glance</div>
+    <div class="row"><span class="rl">CORA — Assessor (sent Apr 7)</span><span class="rv">Statutory: Apr 10 | Extension: Apr 21</span></div>
+    <div class="row"><span class="rl">CORA — CSU (sent Apr 7)</span><span class="r
+
+  </div>
+</main>
+
+<footer class="site-footer z1" role="contentinfo">
+  <div class="container">
+    <div class="footer-inner">
+      <p>© 2026 StorySeed Studios · The Dais &nbsp;·&nbsp; El Paso County, Colorado &nbsp;·&nbsp; For informational purposes only. Built from public records.</p>
+      <p><a href="https://www.thedais.com" target="_blank" rel="noopener noreferrer">The Dais</a> &nbsp;·&nbsp; <a href="/">Home</a></p>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+    var panel = document.getElementById('panel-' + id);
+    if (panel) panel.classList.add('active');
+    document.querySelectorAll('.tab[data-tab="' + id + '"]').forEach(function(t){
+      t.classList.add('active'); t.setAttribute('aria-selected','true');
+    });
+  }
+  // Convert onclick to data-tab
+  document.querySelectorAll('.tab[onclick]').forEach(function(t){
+    var m = t.getAttribute('onclick').match(/showTab\('([^']+)'\)/);
+    if(m){ t.setAttribute('data-tab', m[1]); t.removeAttribute('onclick'); t.addEventListener('click', function(){ showTab(m[1]); }); }
+  });
+  // Keyboard nav for tabs
+  document.querySelectorAll('.tab-row').forEach(function(row){
+    row.setAttribute('role','tablist');
+    row.querySelectorAll('.tab').forEach(function(t){
+      t.setAttribute('role','tab');
+      if(!t.hasAttribute('aria-selected')) t.setAttribute('aria-selected','false');
+    });
+    row.addEventListener('keydown', function(e){
+      var tabs = Array.from(row.querySelectorAll('.tab'));
+      var idx = tabs.indexOf(document.activeElement);
+      if(e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); tabs[(idx+1)%tabs.length].focus(); }
+      if(e.key==='ArrowLeft'||e.key==='ArrowUp'){ e.preventDefault(); tabs[(idx-1+tabs.length)%tabs.length].focus(); }
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); document.activeElement.click(); }
+    });
+  });
+</script>
+
+</body>
+</html>

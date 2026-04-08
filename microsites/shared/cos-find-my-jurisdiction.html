@@ -373,11 +373,15 @@ dl.glos dd{padding:10px 14px;font-size:.82rem;color:var(--muted);line-height:1.6
     <form id="search-form" role="search" aria-label="Address jurisdiction lookup">
 
       <div class="chips" role="group" aria-labelledby="chip-label-id">
-        <span class="chip-label" id="chip-label-id">Try an example</span>
-        <button type="button" class="chip" data-q="1234 Galley Rd, Colorado Springs">Street address</button>
-        <button type="button" class="chip" data-q="Fountain Valley Rd">Near Fountain (unincorporated)</button>
-        <button type="button" class="chip" data-q="Manitou Ave, Manitou Springs">Manitou Springs</button>
-        <button type="button" class="chip" data-q="3232 Airport Rd, Falcon">Falcon area</button>
+        <span class="chip-label" id="chip-label-id">Try a sample address</span>
+        <button type="button" class="chip" data-q="1234 Galley Rd, Colorado Springs, CO">Colorado Springs</button>
+        <button type="button" class="chip" data-q="456 Security Blvd, Security-Widefield, CO">Security-Widefield</button>
+        <button type="button" class="chip" data-q="789 Manitou Ave, Manitou Springs, CO">Manitou Springs</button>
+        <button type="button" class="chip" data-q="3232 Airport Rd, Falcon, CO">Falcon area</button>
+        <button type="button" class="chip" data-q="100 Woodmen Hills Dr, Peyton, CO">Woodmen Hills</button>
+        <button type="button" class="chip" data-q="5000 Black Forest Rd, Colorado Springs, CO">Black Forest</button>
+        <button type="button" class="chip" data-q="200 Lorson Ranch Blvd, Fountain, CO">Lorson Ranch</button>
+        <button type="button" class="chip" data-q="300 Highway 105, Monument, CO">Monument</button>
       </div>
 
       <label class="field-label" for="search-input">Your address</label>
@@ -569,69 +573,216 @@ dl.glos dd{padding:10px 14px;font-size:.82rem;color:var(--muted);line-height:1.6
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 'use strict';
 
-/* ── Jurisdiction data ──────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   JURISDICTION DATABASE — El Paso County sample addresses
+   Each entry: meta, cards[], note, maps[], metroDistricts[]
+═══════════════════════════════════════════════════════════ */
 var JUR = {
+
   csprings: {
-    meta: 'Colorado Springs city limits · El Paso County',
+    meta: 'City of Colorado Springs · El Paso County · SD11',
     cards: [
-      { label:'Municipality',    icon:'🏙️', name:'City of Colorado Springs', note:'City roads · Utilities · City zoning · City Council',           url:'https://coloradosprings.gov' },
-      { label:'County',          icon:'🏛️', name:'El Paso County',           note:'Property assessment · Property taxes · Assessor · BOCC',         url:'https://elpasoco.com' },
-      { label:'School district', icon:'🎓', name:'School District 11',        note:'Colorado Springs School District 11',                             url:'https://www.d11.org' },
-      { label:'Utilities',       icon:'⚡', name:'Colorado Springs Utilities', note:'Electric · Gas · Water · Wastewater',                            url:'https://csu.org' },
+      { label:'Municipality',    icon:'🏙️', name:'City of Colorado Springs',   note:'City Council · City roads · Zoning · City code enforcement',    url:'https://coloradosprings.gov' },
+      { label:'County',          icon:'🏛️', name:'El Paso County',             note:'Property assessment · Taxes · Assessor · BOCC',                  url:'https://elpasoco.com' },
+      { label:'School district', icon:'🎓', name:'Colorado Springs SD 11',     note:'Largest school district in EPC · d11.org',                        url:'https://www.d11.org' },
+      { label:'Utilities',       icon:'⚡', name:'Colorado Springs Utilities',  note:'Electric · Gas · Water · Wastewater (city-owned utility)',        url:'https://csu.org' },
     ],
-    note: 'This address is within Colorado Springs city limits. Both the City and El Paso County have jurisdiction — over different things. The City handles roads, zoning, and utilities. The County handles property assessment, taxes, and unincorporated land.',
-    maps: ['epc','co','zoning','gis']
+    note: 'This address is within Colorado Springs city limits. The City handles roads, zoning, code enforcement, and utilities. El Paso County handles property assessment and taxes. Depending on your specific parcel you may also be in one or more metropolitan districts — check the Assessor for your full tax entity list.',
+    maps: ['epc','cos','co','zoning','gis'],
+    metroNote: 'Colorado Springs has many metro districts — especially in newer neighborhoods north and northeast of I-25. Check the EPC Assessor for your specific parcel\'s tax entities.'
   },
-  unincorporated: {
-    meta: 'Unincorporated El Paso County — no city',
+
+  widefield: {
+    meta: 'Security-Widefield · Unincorporated El Paso County · SD3',
     cards: [
-      { label:'Jurisdiction',    icon:'🌾', name:'Unincorporated El Paso County', note:'No city — the County governs directly',                 url:'https://elpasoco.com' },
-      { label:'County',          icon:'🏛️', name:'El Paso County',               note:'Property assessment · Taxes · Land use · BOCC · Roads', url:'https://elpasoco.com' },
-      { label:'School district', icon:'🎓', name:'Widefield School District 3',   note:'Widefield SD3',                                         url:'https://www.wsd3.org' },
+      { label:'Jurisdiction',    icon:'🌾', name:'Unincorporated El Paso County', note:'No city — County governs directly',                                url:'https://elpasoco.com' },
+      { label:'County',          icon:'🏛️', name:'El Paso County',               note:'Property assessment · Taxes · Roads · Land use · BOCC',            url:'https://elpasoco.com' },
+      { label:'School district', icon:'🎓', name:'Widefield School District 3',   note:'Security-Widefield-Fontaine area · wsd3.org',                      url:'https://www.wsd3.org' },
+      { label:'Water/San',       icon:'💧', name:'Security Water District',       note:'Water and sanitation services for the Security-Widefield corridor', url:'https://www.securitywater.org' },
     ],
-    note: 'This address is in unincorporated El Paso County — inside county boundaries but not inside any city or town. El Paso County governs directly. There is no city council, no city utilities, and no city zoning. The Board of County Commissioners is your governing body.',
-    maps: ['epc','co','zoning','gis']
+    note: 'Security-Widefield is in unincorporated El Paso County — no city government. The County Board of County Commissioners governs directly. This area has several special districts (water, fire, sanitation) and is near Fort Carson. Metro district coverage is limited but growing.',
+    maps: ['epc','co','zoning','gis'],
+    metroNote: 'Some Widefield/Security parcels are in special districts. Check the EPC Assessor for your parcel\'s full tax entity list.'
   },
+
+  fountain: {
+    meta: 'City of Fountain · El Paso County · Widefield SD3 or Fountain SD8',
+    cards: [
+      { label:'Municipality',    icon:'⛲', name:'City of Fountain',              note:'Own city council · Own zoning · Own roads',                        url:'https://www.fountain.colorado.gov' },
+      { label:'County',          icon:'🏛️', name:'El Paso County',               note:'Property assessment · Taxes · Assessor',                            url:'https://elpasoco.com' },
+      { label:'School district', icon:'🎓', name:'Fountain-Fort Carson SD 8',     note:'Serves Fountain and the Fort Carson corridor · fountain.k12.co.us', url:'https://www.fountain.k12.co.us' },
+      { label:'Utilities',       icon:'💧', name:'City of Fountain Public Works', note:'Water · Wastewater · City roads',                                   url:'https://www.fountain.colorado.gov' },
+    ],
+    note: 'Fountain is its own city — separate from Colorado Springs. It has its own city council, mayor, and zoning. El Paso County handles property assessment and taxes. Fountain-Fort Carson School District 8 serves most of the area.',
+    maps: ['epc','co','zoning','gis'],
+    metroNote: null
+  },
+
+  lorson: {
+    meta: 'Lorson Ranch Metropolitan Districts · Unincorporated EPC · Fountain-Fort Carson SD8',
+    cards: [
+      { label:'Jurisdiction',    icon:'🌾', name:'Unincorporated El Paso County', note:'No city — County governs directly',                                        url:'https://elpasoco.com' },
+      { label:'County',          icon:'🏛️', name:'El Paso County',               note:'Property assessment · Taxes · Roads · BOCC oversight',                    url:'https://elpasoco.com' },
+      { label:'Metro districts', icon:'🏗️', name:'Lorson Ranch MDs 1–7',         note:'7 metro districts · 2026 bonds · Developer-controlled board · No website', url:'https://lorsonranchmds.com' },
+      { label:'School district', icon:'🎓', name:'Fountain-Fort Carson SD 8',     note:'Fountain-Fort Carson SD · fountain.k12.co.us',                             url:'https://www.fountain.k12.co.us' },
+    ],
+    note: 'Lorson Ranch is in unincorporated El Paso County adjacent to Fort Carson. This area has 7 active metropolitan districts (MD1 through MD7) that issued bonds in March 2026. District 1 controls operations and has a developer-controlled board (Landhuis Co.). Residents pay mill levies to each district. The only public website is lorsonranchmds.com. No annual audit, service plan, or mill levy explanation is publicly posted.',
+    maps: ['epc','co','zoning','gis'],
+    metroNote: 'ALERT: This parcel is in the Lorson Ranch Metropolitan District area. 7 metro districts are active. Check the EPC Assessor for your exact tax entity list and current mill levy rates.'
+  },
+
   manitou: {
-    meta: 'City of Manitou Springs · El Paso County',
+    meta: 'City of Manitou Springs · El Paso County · Manitou Springs SD14',
     cards: [
-      { label:'Municipality',    icon:'🏔️', name:'City of Manitou Springs',            note:'Own city council · Own zoning · Own utilities',         url:'https://www.manitousprings.org' },
-      { label:'County',          icon:'🏛️', name:'El Paso County',                     note:'Property assessment · Property taxes · Assessor',       url:'https://elpasoco.com' },
-      { label:'School district', icon:'🎓', name:'Manitou Springs School District 14', note:'Manitou Springs SD14',                                   url:'https://www.mssd14.org' },
+      { label:'Municipality',    icon:'🏔️', name:'City of Manitou Springs',              note:'Own city council · Own zoning · Own utilities · Historic district', url:'https://www.manitousprings.org' },
+      { label:'County',          icon:'🏛️', name:'El Paso County',                       note:'Property assessment · Taxes · Assessor',                              url:'https://elpasoco.com' },
+      { label:'School district', icon:'🎓', name:'Manitou Springs School District 14',   note:'Small, high-performing district · mssd14.org',                        url:'https://www.mssd14.org' },
     ],
-    note: 'Manitou Springs is its own city — entirely separate from Colorado Springs, with its own city council, zoning, and municipal services. El Paso County still handles property assessment and taxes. City services are the City of Manitou Springs\'s responsibility.',
-    maps: ['epc','co','zoning','gis']
+    note: 'Manitou Springs is its own municipality — completely separate from Colorado Springs, with its own elected city council, zoning rules, and services. Historic district regulations apply to most of the city. El Paso County handles property assessment and taxes.',
+    maps: ['epc','co','zoning','gis'],
+    metroNote: null
   },
+
   falcon: {
-    meta: 'Falcon / eastern El Paso County — unincorporated',
+    meta: 'Falcon / Peyton · Unincorporated El Paso County · Falcon SD49',
     cards: [
-      { label:'Jurisdiction',    icon:'🌄', name:'Unincorporated El Paso County', note:'No city — the County governs directly',                 url:'https://elpasoco.com' },
-      { label:'County',          icon:'🏛️', name:'El Paso County',               note:'Property assessment · Taxes · Land use · BOCC',         url:'https://elpasoco.com' },
-      { label:'School district', icon:'🎓', name:'Falcon School District 49',    note:'Falcon SD49 — large and fast-growing',                   url:'https://www.d49.org' },
+      { label:'Jurisdiction',    icon:'🌄', name:'Unincorporated El Paso County', note:'No city — County governs directly',                                   url:'https://elpasoco.com' },
+      { label:'County',          icon:'🏛️', name:'El Paso County',               note:'Property assessment · Taxes · Land use · BOCC',                       url:'https://elpasoco.com' },
+      { label:'School district', icon:'🎓', name:'Falcon School District 49',    note:'One of the fastest-growing school districts in Colorado · d49.org',   url:'https://www.d49.org' },
+      { label:'Fire',            icon:'🔥', name:'Falcon Fire Protection District', note:'Emergency services for eastern EPC corridor',                        url:'https://www.falconfire.org' },
     ],
-    note: 'The Falcon area is in unincorporated El Paso County — no city government. El Paso County governs directly. School District 49 serves most of this area. Special fire and water districts may also apply to your specific parcel.',
-    maps: ['epc','co','zoning','gis']
+    note: 'The Falcon/Peyton area is in unincorporated El Paso County — no city. El Paso County and the BOCC govern directly. School District 49 is one of the state\'s fastest-growing districts. Fire and water are handled by special districts. Some newer subdivisions have metropolitan districts — check the EPC Assessor for your parcel.',
+    maps: ['epc','co','zoning','gis'],
+    metroNote: 'Newer Falcon-area subdivisions may have metropolitan districts. Check the EPC Assessor for your parcel\'s complete tax entity list.'
+  },
+
+  woodmen: {
+    meta: 'Woodmen Hills / Meridian Ranch · Unincorporated EPC · Falcon SD49',
+    cards: [
+      { label:'Jurisdiction',    icon:'🌲', name:'Unincorporated El Paso County', note:'No city — County governs directly',                               url:'https://elpasoco.com' },
+      { label:'County',          icon:'🏛️', name:'El Paso County',               note:'Property assessment · Taxes · Roads · BOCC',                     url:'https://elpasoco.com' },
+      { label:'Metro district',  icon:'🏗️', name:'Woodmen Hills Metropolitan District', note:'Active metro district · ADA-compliant Streamline site', url:'https://www.woodmenhillsmetrodistrict.com' },
+      { label:'School district', icon:'🎓', name:'Falcon School District 49',    note:'Falcon SD49 · d49.org',                                          url:'https://www.d49.org' },
+    ],
+    note: 'Woodmen Hills is one of the few El Paso County metro districts with a functioning, ADA-baseline website (hosted on Streamline Government). This area is in unincorporated EPC — no city government. The metro district handles community amenities and infrastructure. Meridian Ranch is adjacent with its own separate metro district.',
+    maps: ['epc','co','zoning','gis'],
+    metroNote: 'Woodmen Hills Metropolitan District is active. Website: woodmenhillsmetrodistrict.com (Streamline platform — better ADA baseline than most EPC districts).'
+  },
+
+  blackforest: {
+    meta: 'Black Forest · Unincorporated El Paso County · Academy SD20',
+    cards: [
+      { label:'Jurisdiction',    icon:'🌲', name:'Unincorporated El Paso County',      note:'No city — County governs directly',                           url:'https://elpasoco.com' },
+      { label:'County',          icon:'🏛️', name:'El Paso County',                    note:'Property assessment · Taxes · Roads · Land use · BOCC',       url:'https://elpasoco.com' },
+      { label:'School district', icon:'🎓', name:'Academy School District 20',         note:'Serves northern COS and Black Forest · asd20.org',            url:'https://www.asd20.org' },
+      { label:'Fire',            icon:'🔥', name:'Black Forest Fire/Rescue',           note:'Fire protection district for northern EPC',                   url:'https://bffire.org' },
+    ],
+    note: 'Black Forest is a semi-rural unincorporated area in northern El Paso County. No city government — El Paso County governs directly. The area is served by Academy School District 20, Black Forest Fire/Rescue, and several water and special districts. Metro districts are rare here but check the Assessor for your specific parcel.',
+    maps: ['epc','co','zoning','gis'],
+    metroNote: null
+  },
+
+  monument: {
+    meta: 'Town of Monument / Palmer Lake · El Paso County · Lewis-Palmer SD38',
+    cards: [
+      { label:'Municipality',    icon:'🏔️', name:'Town of Monument',                 note:'Own town board · Own zoning · Limited municipal services',   url:'https://www.townofmonument.org' },
+      { label:'County',          icon:'🏛️', name:'El Paso County',                   note:'Property assessment · Taxes · Assessor',                      url:'https://elpasoco.com' },
+      { label:'School district', icon:'🎓', name:'Lewis-Palmer School District 38',  note:'Serves Monument, Palmer Lake, and northern EPC · lewispalmer.org', url:'https://www.lewispalmer.org' },
+      { label:'Water',           icon:'💧', name:'Tri-Lakes Monument Fire & Water',  note:'Water and fire protection for northern EPC corridor',         url:'https://www.tlmfire.org' },
+    ],
+    note: 'Monument is its own incorporated town in the northern part of El Paso County near the Douglas County border. It has a town board and limited municipal services. Palmer Lake is a separate small town to the north. Lewis-Palmer School District 38 serves the area. Property taxes go to El Paso County.',
+    maps: ['epc','co','zoning','gis'],
+    metroNote: null
+  },
+
+  briargate: {
+    meta: 'Briargate / Wolf Ranch · Colorado Springs · Academy SD20 or SD11',
+    cards: [
+      { label:'Municipality',    icon:'🏙️', name:'City of Colorado Springs',   note:'City Council · City roads · Zoning · City services',             url:'https://coloradosprings.gov' },
+      { label:'County',          icon:'🏛️', name:'El Paso County',             note:'Property assessment · Taxes · Assessor',                         url:'https://elpasoco.com' },
+      { label:'School district', icon:'🎓', name:'Academy School District 20', note:'North Colorado Springs · asd20.org',                              url:'https://www.asd20.org' },
+      { label:'Utilities',       icon:'⚡', name:'Colorado Springs Utilities',  note:'Electric · Gas · Water · Wastewater',                             url:'https://csu.org' },
+    ],
+    note: 'Briargate, Wolf Ranch, and the areas along Briargate Pkwy / Research Pkwy are within Colorado Springs city limits but served by Academy District 20 (not D11). Many newer subdivisions in this corridor have metropolitan districts — Banning Lewis Ranch, 4-Way Ranch, and others. Check the EPC Assessor for your parcel\'s full tax entity list.',
+    maps: ['epc','cos','co','zoning','gis'],
+    metroNote: 'LIKELY METRO DISTRICT AREA: Banning Lewis Ranch, Wolf Ranch, and 4-Way Ranch all have active metropolitan districts with websites hosted on Streamline Government. Check the EPC Assessor for your specific parcel.'
   }
+
 };
 
+/* ═══════════════════════════════════════════════════════════
+   MAP CARDS
+═══════════════════════════════════════════════════════════ */
 var MAP_CARDS = {
-  epc:    { name:'EPC Parcels Open Data',    org:'El Paso County GIS',                   desc:'Official parcel boundaries. ArcGIS viewer, GeoJSON, CSV.',        badge:'County-owned · Free', url:'https://opendata-elpasoco.hub.arcgis.com/datasets/0e616418d0824212a90fcc2b9ac7fbf2_0/explore' },
-  co:     { name:'Colorado Parcel Viewer',   org:'Colorado Division of Property Tax',    desc:'Statewide parcel map — all 64 Colorado counties.',                 badge:'State-maintained · Free', url:'https://dpt.colorado.gov' },
-  zoning: { name:'County Zoning Map Viewer', org:'El Paso County Planning',              desc:'Zoning layers, parcel boundaries, development overlays.',          badge:'County-owned · Free', url:'https://elpasoco.maps.arcgis.com/apps/SimpleViewer/index.html' },
-  gis:    { name:'Free GIS Data Downloads',  org:'El Paso County GIS Division',          desc:'Bulk shapefiles, tax entity boundaries, aerial photography.',      badge:'County-owned · Free', url:'https://admin.elpasoco.com/free-gis-data/' },
+  epc:    { name:'EPC Parcels Open Data',     org:'El Paso County GIS Division',          desc:'Official parcel boundaries, tax entities, ownership. ArcGIS viewer with GeoJSON/CSV download.',        badge:'County-owned · Free', url:'https://opendata-elpasoco.hub.arcgis.com/datasets/0e616418d0824212a90fcc2b9ac7fbf2_0/explore' },
+  cos:    { name:'Colorado Springs GIS Maps', org:'City of Colorado Springs',              desc:'City zoning, annexation boundaries, city council districts, city-owned infrastructure.',               badge:'City-owned · Free',   url:'https://coloradosprings.gov/departments/information-technology/gis' },
+  co:     { name:'Colorado Parcel Viewer',    org:'Colorado Division of Property Tax',    desc:'Statewide parcel map — all 64 Colorado counties. Find boundaries and assessment data.',                badge:'State-maintained · Free', url:'https://dpt.colorado.gov' },
+  zoning: { name:'County Zoning Map Viewer',  org:'El Paso County Planning',              desc:'Planning and zoning layers, parcel boundaries, development overlay zones, city limits layer.',         badge:'County-owned · Free', url:'https://elpasoco.maps.arcgis.com/apps/SimpleViewer/index.html' },
+  gis:    { name:'Free GIS Data Downloads',   org:'El Paso County GIS Division',          desc:'Bulk shapefiles, tax entity boundaries, aerial photography, road centerlines.',                        badge:'County-owned · Free', url:'https://admin.elpasoco.com/free-gis-data/' },
 };
 
+/* ═══════════════════════════════════════════════════════════
+   ADDRESS MATCHING ENGINE
+   Order matters — more specific patterns first
+═══════════════════════════════════════════════════════════ */
 function pickJur(q) {
-  var s = q.toLowerCase();
-  if (s.indexOf('manitou') !== -1) return JUR.manitou;
-  if (s.indexOf('falcon') !== -1 || s.indexOf('airport rd') !== -1) return JUR.falcon;
-  if (s.indexOf('fountain') !== -1 || s.indexOf('security') !== -1 || s.indexOf('unincorporated') !== -1) return JUR.unincorporated;
+  var s = q.toLowerCase()
+    .replace(/,\s*/g, ' ')
+    .replace(/\./g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  // ── Lorson Ranch / Fort Carson southeast corridor ────────
+  if (/lorson|drennan|bragdon|bradley rd|st charles mesa|enoch rd/.test(s)) return JUR.lorson;
+  if (/fountain.*(co|colorado)/.test(s) && /ranch|metro|md\s*[1-7]/.test(s)) return JUR.lorson;
+
+  // ── Manitou Springs ──────────────────────────────────────
+  if (/manitou|ruxton|pikes peak ave|crystal park|ute pass/.test(s)) return JUR.manitou;
+
+  // ── Monument / Palmer Lake (northern EPC) ────────────────
+  if (/monument|palmer lake|gleneagle|baptist rd|higby|leather chaps|misty acr|donala/.test(s)) return JUR.monument;
+  if (/\bhwy\s*105\b|highway 105|struthers/.test(s)) return JUR.monument;
+
+  // ── Black Forest ─────────────────────────────────────────
+  if (/black forest|shoup|vollmer|meridian rd.*(north|palmer)|roller coaster/.test(s)) return JUR.blackforest;
+  if (/rangewood|hodgen|teaching tree|fox run/.test(s)) return JUR.blackforest;
+
+  // ── Woodmen Hills / Meridian Ranch (eastern unincorp) ────
+  if (/woodmen hills|meridian ranch|meridian rd.*(falcon|peyton)|peyton hwy/.test(s)) return JUR.woodmen;
+
+  // ── Briargate / Wolf Ranch / northern COS ────────────────
+  if (/briargate|wolf ranch|banning lewis|research pkwy|voyager|interquest|chapel hills|chapel ridge|sand creek/.test(s)) return JUR.briargate;
+  if (/4.way ranch|4way ranch|meridian village|tc[3\s]*pkwy|rangewood.*cos/.test(s)) return JUR.briargate;
+
+  // ── Falcon / Peyton / eastern EPC ───────────────────────
+  if (/falcon|peyton|calhan|ellicott|cimarron hills|meridian.*east|airport rd|antelope meadows/.test(s)) return JUR.falcon;
+  if (/\bsd.?49\b|d49|district 49/.test(s)) return JUR.falcon;
+
+  // ── Security-Widefield ───────────────────────────────────
+  if (/security|widefield|fontaine|widefield.*blvd|security.*blvd/.test(s)) return JUR.widefield;
+
+  // ── Fountain (city) ──────────────────────────────────────
+  if (/\bfountain\b/.test(s) && !/banning lewis|fountain.*metro|fountain.*ranch/.test(s)) return JUR.fountain;
+  if (/\bhwy\s*85\b|\bus.?85\b|highway 85/.test(s)) return JUR.fountain;
+
+  // ── Colorado Springs city — specific named areas ─────────
+  if (/old colorado city|downtown cos|tejon|nevada.*south|el paso.*blvd/.test(s)) return JUR.csprings;
+  if (/\bmanual\b|south.*cos|venetucci|corson/.test(s)) return JUR.csprings;
+
+  // ── Default: Colorado Springs city ───────────────────────
+  // Most EPC searches that don't match above are COS city
+  if (/colorado springs|cos\b|colo spr/.test(s)) return JUR.csprings;
+
+  // Very generic — if nothing matched, default COS with a caveat
   return JUR.csprings;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   RENDER FUNCTIONS
+═══════════════════════════════════════════════════════════ */
 function renderJurGrid(j) {
   var grid = document.getElementById('jur-grid');
   if (!grid) return;
@@ -639,16 +790,32 @@ function renderJurGrid(j) {
   j.cards.forEach(function(c) {
     var d = document.createElement('div');
     d.className = 'jur-card';
-    d.setAttribute('role','listitem');
+    d.setAttribute('role', 'listitem');
     d.innerHTML =
       '<span class="jur-card-label">' + c.label + '</span>' +
       '<span class="jur-card-icon" aria-hidden="true">' + c.icon + '</span>' +
       '<span class="jur-card-name">' +
-        (c.url ? '<a href="' + c.url + '" target="_blank" rel="noopener" aria-label="' + c.name + ' website (opens in new tab)">' + c.name + '</a>' : c.name) +
+        (c.url
+          ? '<a href="' + c.url + '" target="_blank" rel="noopener" aria-label="' + c.name + ' website — opens in new tab">' + c.name + '</a>'
+          : c.name) +
       '</span>' +
       '<span class="jur-card-note">' + c.note + '</span>';
     grid.appendChild(d);
   });
+
+  // Metro district alert card if relevant
+  if (j.metroNote) {
+    var alert = document.createElement('div');
+    alert.className = 'jur-card';
+    alert.setAttribute('role', 'listitem');
+    alert.style.borderLeft = '3px solid var(--amber)';
+    alert.innerHTML =
+      '<span class="jur-card-label" style="color:var(--amber)">Metro districts</span>' +
+      '<span class="jur-card-icon" aria-hidden="true">&#9888;&#65039;</span>' +
+      '<span class="jur-card-name" style="color:var(--amber)">Special district alert</span>' +
+      '<span class="jur-card-note">' + j.metroNote + ' &nbsp;<a href="https://assessor.elpasoco.com" target="_blank" rel="noopener" style="color:var(--blue)">Check Assessor &rarr;</a></span>';
+    grid.appendChild(alert);
+  }
 }
 
 function renderMapGrid(keys) {
@@ -663,7 +830,7 @@ function renderMapGrid(keys) {
     a.href = m.url;
     a.target = '_blank';
     a.rel = 'noopener';
-    a.setAttribute('role','listitem');
+    a.setAttribute('role', 'listitem');
     a.setAttribute('aria-label', m.name + ' — ' + m.org + ' (opens in new tab)');
     a.innerHTML =
       '<span class="map-card-name">' + m.name + '</span>' +
@@ -674,10 +841,17 @@ function renderMapGrid(keys) {
   });
 }
 
-/* ── Search ─────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   SEARCH
+═══════════════════════════════════════════════════════════ */
 function doSearch(query) {
-  if (!query || !query.trim()) return;
-  var q = query.trim();
+  var q = (query || '').trim();
+  if (!q) {
+    var inp = document.getElementById('search-input');
+    if (inp) inp.focus();
+    return;
+  }
+
   var j = pickJur(q);
 
   document.getElementById('r-addr').textContent = q;
@@ -694,14 +868,28 @@ function doSearch(query) {
 
   var results = document.getElementById('results');
   results.classList.add('visible');
-  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(function() {
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var addr = document.getElementById('r-addr');
+    if (addr) { addr.setAttribute('tabindex', '-1'); addr.focus(); }
+  }, 60);
 
-  /* Move focus to the address heading for screen readers */
-  var addr = document.getElementById('r-addr');
-  if (addr) { addr.setAttribute('tabindex','-1'); addr.focus(); }
+  // Update search hint to show a "search again" link
+  var hint = document.getElementById('search-hint');
+  if (hint) hint.innerHTML = 'Showing sample data for <strong>' + q + '</strong>. &nbsp;<button onclick="clearSearch()" style="background:none;border:none;color:var(--blue);cursor:pointer;font-size:inherit;padding:0;text-decoration:underline;font-family:inherit">Search a different address</button>';
 }
 
-/* ── Form ───────────────────────────────────────────────── */
+function clearSearch() {
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('pre-search').style.display = '';
+  document.getElementById('no-results').style.display = 'none';
+  var inp = document.getElementById('search-input');
+  if (inp) { inp.value = ''; inp.focus(); }
+  var hint = document.getElementById('search-hint');
+  if (hint) hint.textContent = 'Demonstration using sample data — no address is transmitted or stored.';
+}
+
+/* ── Form submit ────────────────────────────────────────── */
 var form = document.getElementById('search-form');
 var inp  = document.getElementById('search-input');
 if (form) {
@@ -710,17 +898,37 @@ if (form) {
     doSearch(inp ? inp.value : '');
   });
 }
-if (inp) {
-  inp.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); doSearch(this.value); }
-  });
-}
 
-/* ── Chips ──────────────────────────────────────────────── */
-document.querySelectorAll('.chip[data-q]').forEach(function(c) {
-  c.addEventListener('click', function() {
-    if (inp) { inp.value = this.getAttribute('data-q'); inp.focus(); }
+/* ── Chips: populate AND auto-search ───────────────────── */
+document.querySelectorAll('.chip[data-q]').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    var q = this.getAttribute('data-q');
+    if (inp) inp.value = q;
+    doSearch(q);
+  });
+  // Also handle keyboard Enter/Space
+  chip.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this.click();
+    }
   });
 });
 
-/* ── Glossary toggle ────────────────────────────────────�
+/* ── Glossary toggle ────────────────────────────────────── */
+var toggle = document.querySelector('.glossary-toggle');
+var gBody  = document.getElementById('glossary-body');
+if (toggle && gBody) {
+  toggle.addEventListener('click', function() {
+    var expanded = this.getAttribute('aria-expanded') === 'true';
+    this.setAttribute('aria-expanded', String(!expanded));
+    gBody.classList.toggle('open', !expanded);
+  });
+  toggle.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
+  });
+}
+
+</script>
+</body>
+</html>

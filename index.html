@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="cheetochopsticks is under active construction. Civic data for Colorado Springs — built by residents, offered free, currently covered in sawdust.">
-  <title>cheetochopsticks — Workshop Mode</title>
+  <meta name="description" content="cheetochopsticks — trying to figure things out, one step at a time. Public records, jurisdiction tools, and open data for El Paso County residents. Free, no invoice attached.">
+  <title>cheetochopsticks — figuring it out · El Paso County</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,38 +14,90 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:         #0a0f1a;
-      --surface:    #111827;
-      --surface2:   #1a2436;
-      --border:     rgba(255,255,255,.07);
-      --border-hi:  rgba(255,255,255,.14);
+      --bg:         #0c1220;
+      --surface:    #141e2e;
+      --surface2:   #1c2a3e;
+      --surface3:   #233045;
+      --border:     rgba(255,255,255,.09);
+      --border-hi:  rgba(255,255,255,.18);
       --gold:       #c8a84b;
-      --gold-dim:   rgba(200,168,75,.15);
-      --gold-faint: rgba(200,168,75,.06);
-      --text:       #e8e2d4;
-      --muted:      #7a8ea6;
+      --gold-dim:   rgba(200,168,75,.18);
+      --gold-faint: rgba(200,168,75,.07);
+      --gold-lt:    #fde68a;
+      --text:       #ede8dc;
+      --muted:      #96adc4;
+      --quiet:      #506070;
       --mono:       'IBM Plex Mono', monospace;
       --sans:       'IBM Plex Sans', sans-serif;
       --serif:      'Playfair Display', Georgia, serif;
-      --red:        #c0392b;
-      --green:      #27ae60;
-      --blue:       #2980b9;
-      --amber:      #d4860a;
+      --red:        #f87171;
+      --red-dim:    rgba(248,113,113,.12);
+      --green:      #4ade80;
+      --green-dim:  rgba(74,222,128,.1);
+      --blue:       #60a5fa;
+      --blue-dim:   rgba(96,165,250,.1);
+      --amber:      #fbbf24;
+      --amber-dim:  rgba(251,191,36,.12);
     }
 
     html { scroll-behavior: smooth; }
+
+    /* ── Skip link (ADA) ─────────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--gold);
+      color: #0c1220;
+      font-family: var(--mono);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 10px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ── Focus visible — universal gold ring ─────────────────────── */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Serif subheadline ───────────────────────────────────────── */
+    .section-sub {
+      font-family: var(--sans);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 4px;
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
 
     body {
       background: var(--bg);
       color: var(--text);
       font-family: var(--sans);
-      font-size: 16px;
-      line-height: 1.6;
+      font-size: 17px;
+      line-height: 1.65;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    /* ── Noise overlay ─────────────────────────── */
     body::before {
       content: '';
       position: fixed;
@@ -55,21 +107,32 @@
       z-index: 0;
     }
 
-    /* ── Layout ─────────────────────────────────── */
     .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-    /* ── Nav ─────────────────────────────────────── */
+    /* ── NAV ─────────────────────────────────────────────────────── */
     .nav {
       border-bottom: 1px solid var(--border);
-      padding: 18px 0;
+      padding: 14px 0;
       position: sticky;
       top: 0;
-      background: rgba(10,15,26,.92);
-      backdrop-filter: blur(12px);
-      z-index: 100;
+      background: rgba(10,15,26,.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 200;
     }
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
-    .nav-logo { text-decoration: none; display: flex; align-items: baseline; gap: 1px; }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nav-logo {
+      text-decoration: none;
+      display: flex;
+      align-items: baseline;
+      gap: 1px;
+      margin-right: 32px;
+      flex-shrink: 0;
+    }
     .nav-logo-word {
       font-family: var(--sans);
       font-weight: 600;
@@ -78,21 +141,297 @@
       color: var(--text);
     }
     .nav-logo-dot { color: var(--gold); font-size: .95rem; }
-    .nav-badge {
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+    .nav-link {
       font-family: var(--mono);
-      font-size: .55rem;
-      letter-spacing: .12em;
+      font-size: .76rem;
+      letter-spacing: .1em;
       text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,.04); }
+    .nav-link.you-link {
       color: var(--gold);
-      border: 1px solid var(--gold-dim);
-      padding: 2px 7px;
-      border-radius: 2px;
+      border-color: var(--gold-dim);
       background: var(--gold-faint);
     }
+    .nav-link.you-link:hover { background: var(--gold-dim); }
+    .nav-link.active {
+      color: var(--text);
+      border-color: var(--border-hi);
+      background: rgba(255,255,255,.06);
+      text-decoration: underline;
+      text-decoration-color: var(--gold);
+      text-underline-offset: 3px;
+    }
 
-    /* ── Hero ────────────────────────────────────── */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: .75rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      letter-spacing: .06em;
+      transition: all .18s;
+    }
+    .notif-btn:hover { color: var(--text); border-color: var(--border-hi); }
+    .notif-count {
+      background: var(--red);
+      color: #0a0f1a;
+      font-size: .72rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 1px 5px;
+      font-family: var(--mono);
+      line-height: 1.4;
+    }
+
+    /* ── NOTIFICATIONS PANEL ─────────────────────────────────────── */
+    .notif-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .notif-overlay.open { opacity: 1; pointer-events: all; }
+    .notif-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--surface);
+      border-left: 1px solid var(--border-hi);
+      z-index: 301;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.32,.72,0,1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .notif-panel.open { transform: translateX(0); }
+    .notif-panel-head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .notif-panel-title {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .notif-close {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--muted);
+      font-size: .75rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: var(--mono);
+      transition: all .15s;
+    }
+    .notif-close:hover { color: var(--text); border-color: var(--border-hi); }
+    .notif-filters {
+      display: flex;
+      gap: 6px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .nf-btn {
+      font-family: var(--mono);
+      font-size: .76rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .nf-btn:hover { color: var(--text); border-color: var(--border-hi); }
+    .nf-btn.active { background: var(--gold-dim); color: var(--gold); border-color: rgba(200,168,75,.3); }
+    .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .notif-group-label {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--quiet);
+      padding: 10px 20px 4px;
+    }
+    .notif-item {
+      padding: 12px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+      transition: background .15s;
+      cursor: default;
+    }
+    .notif-item:hover { background: rgba(255,255,255,.02); }
+    .notif-item.hidden { display: none; }
+    .notif-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .nd-red    { background: var(--red); }
+    .nd-amber  { background: var(--amber); }
+    .nd-blue   { background: var(--blue); }
+    .nd-green  { background: var(--green); }
+    .nd-gold   { background: var(--gold); }
+    .nd-quiet  { background: var(--quiet); }
+    .notif-body { flex: 1; }
+    .notif-text {
+      font-size: .85rem;
+      color: var(--text);
+      line-height: 1.55;
+      margin-bottom: 3px;
+    }
+    .notif-text strong { color: var(--gold-lt); font-weight: 500; }
+    .notif-meta {
+      font-family: var(--mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      color: var(--quiet);
+      margin-bottom: 4px;
+    }
+    .notif-action {
+      font-family: var(--mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--gold-dim);
+      padding-bottom: 1px;
+      transition: border-color .15s;
+    }
+    .notif-action:hover { border-color: var(--gold); }
+
+    /* ── TICKER ──────────────────────────────────────────────────── */
+    .ticker-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      position: relative;
+    }
+    .ticker-wrap::before,
+    .ticker-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+    }
+    .ticker-wrap::before { left: 0;  background: linear-gradient(90deg, var(--bg), transparent); }
+    .ticker-wrap::after  { right: 0; background: linear-gradient(-90deg, var(--bg), transparent); }
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      animation: ticker 36s linear infinite;
+      width: max-content;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .ticker-item {
+      font-family: var(--mono);
+      font-size: .625rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 28px;
+      white-space: nowrap;
+    }
+    .ticker-item strong { color: var(--text); }
+    .ticker-item.alert { color: var(--red); }
+    .ticker-sep { width: 1px; background: var(--border-hi); flex-shrink: 0; align-self: stretch; margin: 2px 0; }
+
+    /* ── SECTIONS ────────────────────────────────────────────────── */
+    .section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+    .section-anchor { position: relative; top: -80px; }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .section-eyebrow {
+      font-family: var(--mono);
+      font-size: .76rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px; height: 1px;
+      background: var(--gold);
+      opacity: .5;
+    }
+    .section-header h2 {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .section-note {
+      font-family: var(--mono);
+      font-size: .76rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── HERO ────────────────────────────────────────────────────── */
     .hero {
-      padding: 80px 0 60px;
+      padding: 72px 0 56px;
       border-bottom: 1px solid var(--border);
     }
     .eyebrow {
@@ -109,74 +448,122 @@
     .eyebrow::before {
       content: '';
       display: inline-block;
-      width: 28px;
-      height: 1px;
+      width: 28px; height: 1px;
       background: var(--gold);
       opacity: .5;
     }
     .hero h1 {
       font-family: var(--serif);
-      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
       font-weight: 700;
       line-height: 1.12;
       letter-spacing: -.02em;
       color: var(--text);
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
-    .hero h1 em {
-      font-style: italic;
-      color: var(--gold);
-    }
+    .hero h1 em { font-style: normal; color: var(--gold); }
     .hero-sub {
-      max-width: 580px;
+      max-width: 560px;
       font-size: 1.05rem;
       color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 36px;
+      line-height: 1.75;
+      margin-bottom: 32px;
     }
     .hero-sub strong { color: var(--text); font-weight: 500; }
 
-    /* ── Tape strips ─────────────────────────────── */
-    .tape {
-      display: inline-block;
+    /* ── YOU SECTION ─────────────────────────────────────────────── */
+    .you-banner {
+      background: var(--gold-faint);
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .you-banner::after {
+      content: 'YOU';
+      position: absolute;
+      right: 24px; top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--serif);
+      font-size: 7rem;
+      font-weight: 900;
+      font-style: normal;
+      color: rgba(200,168,75,.06);
+      pointer-events: none;
+      line-height: 1;
+      user-select: none;
+    }
+    .you-banner h3 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .you-banner p {
+      font-size: .95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 500px;
+      margin-bottom: 18px;
+    }
+    .you-banner p strong { color: var(--text); font-weight: 500; }
+    .you-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: #0a0f1a;
       font-family: var(--mono);
-      font-size: .65rem;
+      font-size: .78rem;
+      font-weight: 700;
       letter-spacing: .12em;
       text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 2px;
-      vertical-align: middle;
-      margin-left: 6px;
+      padding: 10px 20px;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: background .18s;
     }
-    .tape-live  { background: rgba(39,174,96,.15);  color: #2ecc71; border: 1px solid rgba(39,174,96,.3); }
-    .tape-wip   { background: rgba(212,134,10,.15); color: #f39c12; border: 1px solid rgba(212,134,10,.3); }
-    .tape-soon  { background: rgba(41,128,185,.12); color: #5dade2; border: 1px solid rgba(41,128,185,.25); }
-
-    /* ── Section label ───────────────────────────── */
-    .section { padding: 56px 0; border-bottom: 1px solid var(--border); }
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 32px;
-      gap: 16px;
-      flex-wrap: wrap;
+    .you-cta:hover { background: var(--gold-lt); }
+    .you-stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
     }
-    .section-header h2 {
+    .you-stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 14px 16px;
+    }
+    .you-stat-label {
+      font-family: var(--mono);
+      font-size: .76rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--quiet);
+      margin-bottom: 6px;
+    }
+    .you-stat-val {
       font-family: var(--serif);
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--text);
+      line-height: 1;
     }
-    .section-note {
-      font-family: var(--mono);
-      font-size: .6rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
+    .you-stat-val.red { color: var(--red); }
+    .you-stat-val.amber { color: var(--amber); }
+    .you-stat-val.gold { color: var(--gold); }
+    .you-stat-sub {
+      font-size: .72rem;
       color: var(--muted);
+      margin-top: 4px;
     }
 
-    /* ── Page cards ──────────────────────────────── */
+    /* ── PAGE CARDS ──────────────────────────────────────────────── */
     .page-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -186,10 +573,9 @@
       border-radius: 6px;
       overflow: hidden;
     }
-
     .page-card {
       background: var(--surface);
-      padding: 24px 28px;
+      padding: 22px 26px;
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 12px;
@@ -210,31 +596,30 @@
     .page-card:hover { background: var(--surface2); }
     .page-card:hover::before { opacity: 1; }
     .page-card:hover .card-title { color: var(--gold); }
-
     .card-left { min-width: 0; }
     .card-scope {
       font-family: var(--mono);
-      font-size: .55rem;
+      font-size: .76rem;
       letter-spacing: .14em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .card-title {
-      font-family: var(--serif);
-      font-size: 1.05rem;
+      font-family: var(--sans);
+      font-size: 1rem;
       font-weight: 700;
       color: var(--text);
       transition: color .18s;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       line-height: 1.3;
     }
     .card-desc {
-      font-size: .85rem;
+      font-size: .88rem;
       color: var(--muted);
-      line-height: 1.55;
+      line-height: 1.6;
     }
-    .card-desc em { font-style: italic; color: #556a84; }
+    .card-desc em { font-style: normal; color: var(--muted); }
     .card-right {
       display: flex;
       flex-direction: column;
@@ -248,12 +633,188 @@
       color: var(--muted);
       transition: color .18s, transform .18s;
     }
-    .page-card:hover .card-arrow {
+    .page-card:hover .card-arrow { color: var(--gold); transform: translate(2px,-1px); }
+
+    /* ── TAPE BADGES ─────────────────────────────────────────────── */
+    .tape {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .76rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 2px;
+      vertical-align: middle;
+    }
+    .tape-live    { background: rgba(74,222,128,.12); color: #4ade80; border: 1px solid rgba(74,222,128,.25); }
+    .tape-wip     { background: rgba(251,191,36,.12); color: #fbbf24; border: 1px solid rgba(251,191,36,.25); }
+    .tape-soon    { background: rgba(96,165,250,.1);  color: #60a5fa; border: 1px solid rgba(96,165,250,.2); }
+    .tape-critical{ background: var(--red-dim);        color: var(--red); border: 1px solid rgba(248,113,113,.25); }
+    .tape-shared  { background: var(--gold-faint);    color: var(--gold); border: 1px solid var(--gold-dim); }
+
+    /* ── MINI CARDS (2-col grid) ─────────────────────────────────── */
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .mini-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 16px 18px;
+      text-decoration: none;
+      display: block;
+      transition: all .18s;
+      position: relative;
+    }
+    .mini-card:hover { background: var(--surface2); border-color: var(--border-hi); }
+    .mini-card:hover .mini-title { color: var(--gold); }
+    .mini-tag {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .mini-title {
+      font-family: var(--sans);
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 5px;
+      line-height: 1.3;
+      transition: color .18s;
+    }
+    .mini-desc { font-size: .83rem; color: var(--muted); line-height: 1.55; }
+    .mini-footer {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mini-stat {
+      font-family: var(--mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      color: var(--quiet);
+    }
+    .mini-stat strong { color: var(--muted); }
+
+    /* ── PEOPLE ──────────────────────────────────────────────────── */
+    .people-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .person-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: border-color .18s;
+    }
+    .person-card:hover { border-color: var(--border-hi); }
+    .person-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      border: 1px solid rgba(200,168,75,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono);
+      font-size: .76rem;
+      font-weight: 700;
       color: var(--gold);
-      transform: translate(2px, -1px);
+      flex-shrink: 0;
+      letter-spacing: .04em;
+    }
+    .person-name {
+      font-size: .95rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .person-role {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .person-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: var(--gold-faint);
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      padding: 2px 6px;
+      border-radius: 2px;
+      margin-top: 5px;
     }
 
-    /* ── Coming soon block ───────────────────────── */
+    /* ── EVENTS ──────────────────────────────────────────────────── */
+    .events-list { display: flex; flex-direction: column; gap: 8px; }
+    .event-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: border-color .18s;
+    }
+    .event-row:hover { border-color: var(--border-hi); }
+    .event-date { text-align: center; flex-shrink: 0; width: 38px; }
+    .event-month {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .event-day {
+      font-family: var(--sans);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .event-body { flex: 1; }
+    .event-title {
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .event-detail { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+    .event-badge {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      margin-left: auto;
+      align-self: flex-start;
+      white-space: nowrap;
+    }
+    .eb-critical { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
+    .eb-warn { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(251,191,36,.2); }
+    .eb-info { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,165,250,.2); }
+    .eb-ok   { background: var(--green-dim); color: var(--green); border: 1px solid rgba(74,222,128,.2); }
+
+    /* ── COMING SOON ─────────────────────────────────────────────── */
     .coming-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -262,10 +823,9 @@
     }
     .coming-card {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px dashed rgba(255,255,255,.08);
       border-radius: 4px;
       padding: 16px 18px;
-      border-style: dashed;
     }
     .coming-card p {
       font-family: var(--mono);
@@ -276,10 +836,8 @@
     }
     .coming-card p strong { color: #556a84; font-weight: 500; }
 
-    /* ── Dispatch note ───────────────────────────── */
-    .dispatch {
-      padding: 48px 0;
-    }
+    /* ── DISPATCH ────────────────────────────────────────────────── */
+    .dispatch { padding: 48px 0; }
     .dispatch-box {
       background: var(--gold-faint);
       border: 1px solid var(--gold-dim);
@@ -287,22 +845,17 @@
       padding: 32px 36px;
     }
     .dispatch-box h3 {
-      font-family: var(--serif);
+      font-family: var(--sans);
       font-size: 1.25rem;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 10px;
     }
-    .dispatch-box p {
-      color: var(--muted);
-      font-size: .9rem;
-      line-height: 1.65;
-      max-width: 540px;
-    }
+    .dispatch-box p { color: var(--muted); font-size: .95rem; line-height: 1.7; max-width: 540px; }
     .dispatch-box p + p { margin-top: 10px; }
     .dispatch-box strong { color: var(--text); font-weight: 500; }
 
-    /* ── Footer ──────────────────────────────────── */
+    /* ── FOOTER ──────────────────────────────────────────────────── */
     .footer {
       border-top: 1px solid var(--border);
       padding: 32px 0;
@@ -314,86 +867,220 @@
     }
     .footer p {
       font-family: var(--mono);
-      font-size: .58rem;
+      font-size: .76rem;
       letter-spacing: .09em;
       color: #344555;
     }
     .footer a { color: var(--muted); text-decoration: none; }
     .footer a:hover { color: var(--gold); }
 
-    /* ── Ticker ──────────────────────────────────── */
-    .ticker-wrap {
-      overflow: hidden;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 0;
-      margin: 0;
-      position: relative;
-    }
-    .ticker-wrap::before,
-    .ticker-wrap::after {
-      content: '';
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 80px;
-      z-index: 2;
-    }
-    .ticker-wrap::before { left: 0;  background: linear-gradient(90deg, var(--bg), transparent); }
-    .ticker-wrap::after  { right: 0; background: linear-gradient(-90deg, var(--bg), transparent); }
-    .ticker-track {
+    /* ── DIVIDERS ────────────────────────────────────────────────── */
+    .section-divider {
       display: flex;
-      gap: 0;
-      animation: ticker 30s linear infinite;
-      width: max-content;
+      align-items: center;
+      gap: 16px;
+      margin: 32px 0 24px;
     }
-    .ticker-track:hover { animation-play-state: paused; }
-    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    .ticker-item {
+    .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+    .section-divider-label {
       font-family: var(--mono);
-      font-size: .625rem;
-      letter-spacing: .1em;
+      font-size: .76rem;
+      letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--muted);
-      padding: 0 28px;
+      color: var(--quiet);
       white-space: nowrap;
-    }
-    .ticker-item strong { color: var(--text); }
-    .ticker-sep {
-      width: 1px;
-      background: var(--border-hi);
-      flex-shrink: 0;
-      align-self: stretch;
-      margin: 2px 0;
     }
 
     @media (max-width: 600px) {
-      .hero { padding: 52px 0 44px; }
+      .hero { padding: 48px 0 40px; }
       .page-card { grid-template-columns: 1fr; }
       .card-right { flex-direction: row; align-items: center; }
       .dispatch-box { padding: 24px 20px; }
+      .you-banner { padding: 22px 20px; }
+      .you-banner::after { display: none; }
+      .notif-panel { width: 100%; }
+      .nav-links { display: none; }
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: rgba(12,18,32,.98);
+        border-bottom: 1px solid var(--border-hi);
+        padding: 12px 16px;
+        gap: 4px;
+        z-index: 199;
+      }
+      .nav-menu-btn { display: flex; }
     }
+    @media (min-width: 601px) {
+      .nav-menu-btn { display: none; }
+    }
+    .nav-menu-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      font-size: .75rem;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-family: var(--mono);
+      transition: all .15s;
+      margin-left: 8px;
+    }
+    .nav-menu-btn:hover { color: var(--text); border-color: var(--border-hi); }
   </style>
 </head>
 <body>
 
-<!-- Nav -->
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     NAV
+════════════════════════════════════════════════════════════════════ -->
 <header class="nav" role="banner">
   <div class="container">
     <div class="nav-inner">
       <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
         <span class="nav-logo-word">cheetochopsticks</span><span class="nav-logo-dot">.com</span>
       </a>
-      <span class="nav-badge">Workshop Mode</span>
+      <nav class="nav-links" id="nav-links" aria-label="Site sections">
+        <a class="nav-link you-link" href="#you">You</a>
+        <a class="nav-link" href="#shared">Shared</a>
+        <a class="nav-link" href="#land">Land</a>
+        <a class="nav-link" href="#building">Building</a>
+        <a class="nav-link" href="#people">People</a>
+        <a class="nav-link" href="#events">Events</a>
+      </nav>
+      <div class="nav-right">
+        <button class="nav-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">Menu</button>
+        <button class="notif-btn" onclick="openNotif()" aria-label="Open alerts and notifications, 9 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+          <span>Alerts</span>
+          <span class="notif-count" aria-live="polite">9</span>
+        </button>
+      </div>
     </div>
   </div>
 </header>
 
-<!-- Ticker -->
+<!-- ═══════════════════════════════════════════════════════════════════
+     NOTIFICATIONS PANEL
+════════════════════════════════════════════════════════════════════ -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
+<aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">Alerts &amp; notifications</span>
+    <button class="notif-close" onclick="closeNotif()">Close ✕</button>
+  </div>
+  <div class="notif-filters" role="group" aria-label="Filter notifications">
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (9)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (3)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (3)</button>
+  </div>
+  <div class="notif-scroll">
+
+    <div class="notif-group-label">Critical — act now</div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
+        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35 · April 8, 2026</div>
+        <a class="notif-action" href="#building">View building audit →</a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access their own district's records.</div>
+        <div class="notif-meta">EPC Assessor audit · April 2026</div>
+        <a class="notif-action" href="#shared">See district audit →</a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021. No governance docs. No financials. One compliance letter fixes all 30+ simultaneously.</div>
+        <div class="notif-meta">Platform audit · April 2026</div>
+        <a class="notif-action" href="microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter →</a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">High priority</div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes, budgets, and audit docs are almost certainly untagged. This is the real HB21-1110 failure — not the homepage.</div>
+        <div class="notif-meta">ADA document audit · April 2026</div>
+        <a class="notif-action" href="#building">View ADA analysis →</a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it. This is the foundational legal document. Not one district links it publicly.</div>
+        <div class="notif-meta">Governance gap · §32-1-202</div>
+        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">See audit dashboard →</a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106. Due to State Auditor by July 31. The clock is running.</div>
+        <div class="notif-meta">Governance gap · §32-1-106 · due July 31</div>
+        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">See audit dashboard →</a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">Informational</div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records both awaiting reply. Response window is still open.</div>
+        <div class="notif-meta">CORA tracker · April 2026</div>
+        <a class="notif-action" href="microsites/shared/requests_tracker_and_military_numbers.html">View tracker →</a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
+        <div class="notif-meta">Compliance analysis · April 2026</div>
+        <a class="notif-action" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis →</a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
+        <div class="notif-meta">New · April 2026</div>
+        <a class="notif-action" href="microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction →</a>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     TICKER
+════════════════════════════════════════════════════════════════════ -->
 <div class="ticker-wrap" aria-hidden="true">
   <div class="ticker-track">
-    <span class="ticker-item"><strong>6</strong> pages live or in progress</span>
+    <span class="ticker-item alert"><strong>ADA deadline</strong> · April 24 · 16 days</span>
     <span class="ticker-sep"></span>
-    <span class="ticker-item">Many more in the queue</span>
+    <span class="ticker-item"><strong>284</strong> metro districts · El Paso County</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item alert"><strong>249</strong> districts · zero web presence</span>
     <span class="ticker-sep"></span>
     <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span>
     <span class="ticker-sep"></span>
@@ -401,12 +1088,16 @@
     <span class="ticker-sep"></span>
     <span class="ticker-item">No invoice attached</span>
     <span class="ticker-sep"></span>
-    <span class="ticker-item">Built in Colorado Springs</span>
+    <span class="ticker-item"><strong>0%</strong> of districts post service plans publicly</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">Built by residents · Colorado Springs</span>
     <span class="ticker-sep"></span>
     <!-- duplicate for seamless loop -->
-    <span class="ticker-item"><strong>6</strong> pages live or in progress</span>
+    <span class="ticker-item alert"><strong>ADA deadline</strong> · April 24 · 16 days</span>
     <span class="ticker-sep"></span>
-    <span class="ticker-item">Many more in the queue</span>
+    <span class="ticker-item"><strong>284</strong> metro districts · El Paso County</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item alert"><strong>249</strong> districts · zero web presence</span>
     <span class="ticker-sep"></span>
     <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span>
     <span class="ticker-sep"></span>
@@ -414,55 +1105,102 @@
     <span class="ticker-sep"></span>
     <span class="ticker-item">No invoice attached</span>
     <span class="ticker-sep"></span>
-    <span class="ticker-item">Built in Colorado Springs</span>
+    <span class="ticker-item"><strong>0%</strong> of districts post service plans publicly</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">Built by residents · Colorado Springs</span>
     <span class="ticker-sep"></span>
   </div>
 </div>
 
-<!-- Hero -->
-<main>
+<!-- ═══════════════════════════════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════════════════════════════ -->
+<main id="main-content">
+
+<!-- HERO -->
 <section class="hero">
   <div class="container">
-    <p class="eyebrow">StorySeed Studios · The Dais · Colorado Springs</p>
+    <p class="eyebrow">StorySeed Studios · The Dais · El Paso County, Colorado</p>
     <h1>
-      You found<br>
-      the workshop.<br>
-      <em>Mind the sawdust.</em>
+      Trying to figure<br>
+      things out —<br>
+      <em>one step at a time.</em>
     </h1>
     <p class="hero-sub">
-      This is where we park everything that exists but isn't quite framed out yet.
-      Some pages are fully furnished. Some still have exposed wiring.
-      <strong>All of it is free and local.</strong> —
-      which is exactly the kind of operation that puts the sawdust everywhere.
-    </p>
-    <p class="hero-sub" style="margin-top:-16px;">
-      The real home page is taking shape. In the meantime, here's what's actually browseable.
+      284 metro districts. One county. <strong>Zero invoices attached.</strong>
+      Everything here is free, built from public records, and written so that
+      a resident can read it — not just a lawyer or a lobbyist.
     </p>
   </div>
 </section>
 
-<!-- Pages in Progress -->
-<section class="section">
+<!-- ═══ YOU ════════════════════════════════════════════════════════ -->
+<section class="section" id="you">
   <div class="container">
-
+    <div id="you-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow">You</div>
     <div class="section-header">
-      <h2>Pages that exist right now</h2>
-      <span class="section-note">6 active · more coming</span>
+      <h2>Start with where you are</h2>
+      <span class="section-note">Jurisdiction → district → everything else</span>
     </div>
+    <p class="section-sub">Because if you don't know where you are on the map, nothing else on this site quite makes sense yet.</p>
+
+    <div class="you-banner">
+      <h3>If you don't know where you are on the map, how do you know what's going on?</h3>
+      <p>
+        El Paso County has <strong>284 metro districts</strong>. You're probably in at least one —
+        and paying a mill levy for it on every property tax bill. But which district?
+        Who manages it? What do they owe you, legally? It starts with your address.
+      </p>
+      <a class="you-cta" href="microsites/shared/You/cos-find-my-jurisdiction.html">
+        Find my jurisdiction →
+      </a>
+    </div>
+
+    <div class="you-stat-row">
+      <div class="you-stat">
+        <div class="you-stat-label">Districts in EPC</div>
+        <div class="you-stat-val">284</div>
+        <div class="you-stat-sub">Confirmed via Assessor</div>
+      </div>
+      <div class="you-stat">
+        <div class="you-stat-label">Have a website</div>
+        <div class="you-stat-val amber">~35</div>
+        <div class="you-stat-sub">12% of all districts</div>
+      </div>
+      <div class="you-stat">
+        <div class="you-stat-label">Dark — no web access</div>
+        <div class="you-stat-val red">249</div>
+        <div class="you-stat-sub">CORA request only</div>
+      </div>
+      <div class="you-stat">
+        <div class="you-stat-label">ADA deadline</div>
+        <div class="you-stat-val red">Apr 24</div>
+        <div class="you-stat-sub">16 days from today</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SHARED ═════════════════════════════════════════════════════ -->
+<section class="section" id="shared">
+  <div class="container">
+    <div id="shared-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow">Shared</div>
+    <div class="section-header">
+      <h2>All dashboards</h2>
+      <span class="section-note">5 tools · April 2026</span>
+    </div>
+    <p class="section-sub">The tools anyone in El Paso County can use — no login, no fee, no particular expertise required.</p>
 
     <div class="page-grid">
 
-      <!-- Traffic Hub -->
-      <a class="page-card"
-         href="https://cheetochopsticks.com/microsites/city/Traffic/SafetyPlan/cos-traffic-hub.html">
+      <a class="page-card" href="microsites/shared/You/cos-find-my-jurisdiction.html">
         <div class="card-left">
-          <p class="card-scope">City · Traffic &amp; Safety</p>
-          <p class="card-title">COS Traffic Safety &amp; Funding Dashboard</p>
-          <p class="card-desc">
-            64,434 crash records. 12 charts. FHWA funding analysis. A national spending
-            comparison that is, diplomatically speaking, <em>not flattering for city hall.</em>
-            This is the flagship. It's dressed.
-          </p>
+          <p class="card-scope">Shared · You · All jurisdictions</p>
+          <p class="card-title">Find my jurisdiction</p>
+          <p class="card-desc">Type your address. Know immediately: your city boundary, county district, school district, metro districts, and utilities. Plain language, no login, no paywall. <em>The entry point for everything else.</em></p>
         </div>
         <div class="card-right">
           <span class="tape tape-live">Live</span>
@@ -470,17 +1208,23 @@
         </div>
       </a>
 
-      <!-- CORA Implementation Guide -->
-      <a class="page-card"
-         href="https://cheetochopsticks.com/microsites/city/coraform/cos-cora-implementation-guide.html">
+      <a class="page-card" href="microsites/shared/epc_district_audit_dashboard.html">
         <div class="card-left">
-          <p class="card-scope">City · Public Records</p>
-          <p class="card-title">COS CORA Implementation Guide</p>
-          <p class="card-desc">
-            Colorado's open-records law is legally binding. This is a plain-language guide
-            on how the city is supposed to follow it — and what to do when they, let's say,
-            <em>creatively interpret</em> that obligation.
-          </p>
+          <p class="card-scope">Shared · County · 284 metro districts</p>
+          <p class="card-title">EPC Metro District Audit Dashboard</p>
+          <p class="card-desc">Governance gaps, ADA compliance, and platform analysis across all 284 El Paso County metro districts. 88% have zero public web presence. <em>0% post service plans. 0% post annual audits.</em> The data, laid bare.</p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-critical">9 alerts</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="microsites/shared/metro_district_citizen_toolkit.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · Citizen action</p>
+          <p class="card-title">Metro District Citizen Toolkit</p>
+          <p class="card-desc">Sample CORA request letters, BOCC letter templates, DOJ complaint drafts, every contact you need. Because knowing what's broken is only useful if you have <em>somewhere to send that knowledge.</em></p>
         </div>
         <div class="card-right">
           <span class="tape tape-wip">In Progress</span>
@@ -488,90 +1232,23 @@
         </div>
       </a>
 
-      <!-- FBI Tips Redesign -->
-      <a class="page-card"
-         href="https://cheetochopsticks.com/microsites/FBI/tips-fbi-redesign.html">
+      <a class="page-card" href="microsites/shared/requests_tracker_and_military_numbers.html">
         <div class="card-left">
-          <p class="card-scope">Federal · UX Research</p>
-          <p class="card-title">FBI Tips — Redesign Proposal</p>
-          <p class="card-desc">
-            The FBI's public tip submission experience is, uh, a journey.
-            This is a redesign proposal for making it actually usable
-            by people who have information and want to share it
-            <em>without a cybersecurity degree.</em>
-          </p>
+          <p class="card-scope">Shared · CORA · Open records</p>
+          <p class="card-title">CORA Requests Tracker &amp; Military Housing Numbers</p>
+          <p class="card-desc">Live tracker for all open records requests — who was asked, what was asked, what came back. Military housing figures cross-referenced with public and survey data. <em>Two requests pending. Clock is running.</em></p>
         </div>
         <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
+          <span class="tape tape-wip">2 Pending</span>
           <span class="card-arrow">↗</span>
         </div>
       </a>
 
-      <!-- Assessor Property Conveyances -->
-      <a class="page-card"
-         href="https://cheetochopsticks.com/microsites/county/land/Assessor_Property%20Conveyances.html">
+      <a class="page-card" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">
         <div class="card-left">
-          <p class="card-scope">County · Land &amp; Property</p>
-          <p class="card-title">El Paso County — Assessor Property Conveyances</p>
-          <p class="card-desc">
-            Who owns what, and when did that change? Property transfer records,
-            decoded for humans. Useful if you're curious about your neighborhood,
-            or just like knowing things <em>before your realtor does.</em>
-          </p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <!-- LDC Contact -->
-      <a class="page-card"
-         href="https://cheetochopsticks.com/microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">
-        <div class="card-left">
-          <p class="card-scope">County · Land Development Code</p>
-          <p class="card-title">Land Development Code — Contact &amp; Navigation</p>
-          <p class="card-desc">
-            Part of a larger effort to make the county's development code
-            something a resident can actually read. This is the contact
-            page — because someone has to be reachable when the code
-            <em>does something confusing (so, constantly).</em>
-          </p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <!-- CDOLA CORA Audit -->
-      <a class="page-card"
-         href="https://cheetochopsticks.com/microsites/state/cdola/cdola-cora-audit-and-redesign.html">
-        <div class="card-left">
-          <p class="card-scope">State · DOLA · Public Records</p>
-          <p class="card-title">CDOLA — CORA Audit &amp; Redesign</p>
-          <p class="card-desc">
-            Colorado's Department of Local Affairs handles a lot of money that
-            flows to counties and municipalities. This is an audit of their
-            records-request process, plus a redesign proposal so it doesn't
-            feel like <em>faxing a library in 1987.</em>
-          </p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-		
-		   <!-- Jurisdiction checker Audit -->
-      <a class="page-card"
-         href="https://cheetochopsticks.com/microsites/shared/You/cos-find-my-jurisdiction.html">
-        <div class="card-left">
-          <p class="card-scope">State · County · City </p>
-          <p class="card-title">Your Jurisdiction</p>
-          <p class="card-desc">
-			<em> Put in your address to find out your jurisdictions.</em>
-          </p>
+          <p class="card-scope">Shared · County · Developer compliance</p>
+          <p class="card-title">Wolfersberger Compliance &amp; Bellamese Analysis</p>
+          <p class="card-desc">Developer agreement compliance history, parcel-level records, and findings from the Bellamese analysis. The kind of research that takes <em>months of records requests</em> to assemble — assembled.</p>
         </div>
         <div class="card-right">
           <span class="tape tape-wip">In Progress</span>
@@ -583,37 +1260,490 @@
   </div>
 </section>
 
-<!-- Coming Soon -->
+<!-- ═══ LAND ════════════════════════════════════════════════════════ -->
+<section class="section" id="land">
+  <div class="container">
+    <div id="land-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow">Land</div>
+    <div class="section-header">
+      <h2>Property, districts &amp; jurisdiction</h2>
+      <span class="section-note">Assessor · LDC · Metro districts</span>
+    </div>
+    <p class="section-sub">Who owns what. Who governs it. And what the rules are for building on it — in language that doesn't require a law degree.</p>
+
+    <div class="mini-grid">
+
+      <a class="mini-card" href="microsites/shared/You/cos-find-my-jurisdiction.html">
+        <div class="mini-tag">Shared · You</div>
+        <div class="mini-title">Jurisdiction map</div>
+        <div class="mini-desc">Which governments touch your parcel? City, county, school district, special districts, utilities — all resolved by address.</div>
+        <div class="mini-footer">
+          <span class="mini-stat">El Paso County · COS</span>
+          <span class="tape tape-live" style="font-size:.5rem;padding:2px 7px">Live</span>
+        </div>
+      </a>
+
+      <a class="mini-card" href="microsites/county/land/Assessor_Property%20Conveyances.html">
+        <div class="mini-tag">County · Land &amp; Property</div>
+        <div class="mini-title">Assessor property conveyances</div>
+        <div class="mini-desc">Who owns what, and when did that change? Property transfer records, decoded for humans. Know your neighborhood before your realtor does.</div>
+        <div class="mini-footer">
+          <span class="mini-stat">EPC Assessor data</span>
+          <span class="tape tape-wip" style="font-size:.5rem;padding:2px 7px">WIP</span>
+        </div>
+      </a>
+
+      <a class="mini-card" href="microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">
+        <div class="mini-tag">County · Land Development Code</div>
+        <div class="mini-title">Land Development Code — contact &amp; navigation</div>
+        <div class="mini-desc">A readable entry point into the county's development code. Because someone has to be reachable when the code does something confusing.</div>
+        <div class="mini-footer">
+          <span class="mini-stat">EPC LDC</span>
+          <span class="tape tape-wip" style="font-size:.5rem;padding:2px 7px">WIP</span>
+        </div>
+      </a>
+
+      <a class="mini-card" href="microsites/shared/epc_district_audit_dashboard.html">
+        <div class="mini-tag">County · Metro districts</div>
+        <div class="mini-title">Metro district coverage map</div>
+        <div class="mini-desc">284 districts, 3 platforms, 88% with zero public web presence. Where the dark zones are — and which districts are actually reachable.</div>
+        <div class="mini-footer">
+          <span class="mini-stat"><strong>249</strong> dark · <strong>35</strong> have sites</span>
+          <span class="tape tape-critical" style="font-size:.5rem;padding:2px 7px">Critical</span>
+        </div>
+      </a>
+
+      <a class="mini-card" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">
+        <div class="mini-tag">County · Developer records</div>
+        <div class="mini-title">Wolfersberger &amp; Bellamese parcels</div>
+        <div class="mini-desc">Parcel-level compliance history for specific developer agreements. The paper trail, assembled from public records and CORA responses.</div>
+        <div class="mini-footer">
+          <span class="mini-stat">CORA-sourced · April 2026</span>
+          <span class="tape tape-wip" style="font-size:.5rem;padding:2px 7px">WIP</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BUILDING ════════════════════════════════════════════════════ -->
+<section class="section" id="building">
+  <div class="container">
+    <div id="building-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow">Building</div>
+    <div class="section-header">
+      <h2>Website audit &amp; ADA compliance</h2>
+      <span class="section-note">HB21-1110 · WCAG 2.1 AA · 284 sites</span>
+    </div>
+    <p class="section-sub">Public entities have a legal obligation to be accessible online. We're tracking how well — or poorly — that's going.</p>
+
+    <div class="mini-grid">
+
+      <a class="mini-card" href="microsites/shared/epc_district_audit_dashboard.html">
+        <div class="mini-tag">Shared · Full audit</div>
+        <div class="mini-title">District website audit dashboard</div>
+        <div class="mini-desc">Governance docs, ADA checks, platform breakdown. Eight sites fully audited, covering 51 districts. The compliance gaps are not subtle.</div>
+        <div class="mini-footer">
+          <span class="mini-stat"><strong>8</strong> audited · <strong>51</strong> districts covered</span>
+          <span class="tape tape-critical" style="font-size:.5rem;padding:2px 7px">9 gaps</span>
+        </div>
+      </a>
+
+      <a class="mini-card" href="microsites/shared/epc_district_audit_dashboard.html">
+        <div class="mini-tag">ADA · HB21-1110 · Deadline Apr 24</div>
+        <div class="mini-title">PDF accessibility — the real gap</div>
+        <div class="mini-desc">Homepage ADA is mostly solved. The failure is document accessibility. Every posted PDF is almost certainly untagged. WCAG 1.3.1. Zero sites pass.</div>
+        <div class="mini-footer">
+          <span class="mini-stat"><strong>0%</strong> tagged PDFs · all 8 audited sites</span>
+          <span class="tape tape-critical" style="font-size:.5rem;padding:2px 7px">Critical</span>
+        </div>
+      </a>
+
+      <a class="mini-card" href="microsites/shared/epc_district_audit_dashboard.html">
+        <div class="mini-tag">Platform · Streamline Government</div>
+        <div class="mini-title">Streamline Government — 4 sites, 13 districts</div>
+        <div class="mini-desc">Best ADA baseline of the three platforms. 4-Way Ranch, Banning Lewis Ranch, Woodmen Hills, Meridian Service. Still missing service plans and tagged PDFs.</div>
+        <div class="mini-footer">
+          <span class="mini-stat">Best baseline · gaps remain</span>
+          <span class="tape tape-wip" style="font-size:.5rem;padding:2px 7px">Managed</span>
+        </div>
+      </a>
+
+      <a class="mini-card" href="microsites/shared/epc_district_audit_dashboard.html">
+        <div class="mini-tag">Platform · WSDM WordPress · Highest risk</div>
+        <div class="mini-title">WS Districts — 30+ districts, one template</div>
+        <div class="mini-desc">Single WordPress site. If it fails WAVE audit, 30+ districts fail simultaneously. Calendar last updated 2021. No governance docs. No financials.</div>
+        <div class="mini-footer">
+          <span class="mini-stat"><strong>30+</strong> districts · 1 compliance letter fixes all</span>
+          <span class="tape tape-critical" style="font-size:.5rem;padding:2px 7px">Critical</span>
+        </div>
+      </a>
+
+      <a class="mini-card" href="microsites/state/cdola/cdola-cora-audit-and-redesign.html">
+        <div class="mini-tag">State · DOLA</div>
+        <div class="mini-title">CDOLA — CORA audit &amp; redesign</div>
+        <div class="mini-desc">Colorado's Department of Local Affairs handles county and municipal funding. Their records-request process audited, with a redesign proposal that doesn't involve faxes.</div>
+        <div class="mini-footer">
+          <span class="mini-stat">State records · DOLA</span>
+          <span class="tape tape-wip" style="font-size:.5rem;padding:2px 7px">WIP</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PEOPLE ══════════════════════════════════════════════════════ -->
+<section class="section" id="people">
+  <div class="container">
+    <div id="people-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow">People</div>
+    <div class="section-header">
+      <h2>Who you need to know</h2>
+      <span class="section-note">BOCC · District managers · State contacts</span>
+    </div>
+    <p class="section-sub">The organizations and offices that make decisions affecting your property, your taxes, and your streets — whether you know their names or not.</p>
+
+    <div class="people-grid">
+
+      <div class="person-card">
+        <div class="person-avatar">EPC</div>
+        <div>
+          <div class="person-name">El Paso County BOCC</div>
+          <div class="person-role">Board of County Commissioners · 5 members · Oversight of all metro districts in unincorporated EPC</div>
+          <span class="person-tag">Decision maker</span>
+        </div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">WSD</div>
+        <div>
+          <div class="person-name">WS Districts (WSDM)</div>
+          <div class="person-role">Manages 30+ metro district websites · Single WordPress platform · Primary compliance contact for bulk remediation</div>
+          <span class="person-tag">Compliance target</span>
+        </div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">SG</div>
+        <div>
+          <div class="person-name">Streamline Government</div>
+          <div class="person-role">Platform for 4 district sites · 13 districts covered · Best ADA baseline · Contact for PDF tagging requirements</div>
+          <span class="person-tag">Platform vendor</span>
+        </div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">DOJ</div>
+        <div>
+          <div class="person-name">U.S. DOJ Civil Rights Division</div>
+          <div class="person-role">ADA Title II enforcement · 28 C.F.R. Part 35 · Complaint intake for districts failing April 24 deadline</div>
+          <span class="person-tag">Federal enforcement</span>
+        </div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">OSA</div>
+        <div>
+          <div class="person-name">Colorado State Auditor</div>
+          <div class="person-role">Receives annual district audits by July 31 · C.R.S. §32-1-106 · Currently receives what the public cannot access</div>
+          <span class="person-tag">State oversight</span>
+        </div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-avatar">DL</div>
+        <div>
+          <div class="person-name">DOLA — Dept. of Local Affairs</div>
+          <div class="person-role">Colorado's municipal oversight body · Metro district registration and service plan approval · CORA contact</div>
+          <span class="person-tag">State oversight</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider" style="margin-top:28px">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">Full contact lists in the citizen toolkit</div>
+      <div class="section-divider-line"></div>
+    </div>
+    <div style="text-align:center;margin-top:4px;">
+      <a class="you-cta" href="microsites/shared/metro_district_citizen_toolkit.html" style="font-size:.6rem;padding:8px 18px;">
+        Open citizen toolkit — all contacts →
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ EVENTS ══════════════════════════════════════════════════════ -->
+<section class="section" id="events">
+  <div class="container">
+    <div id="events-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow">Events</div>
+    <div class="section-header">
+      <h2>Dates that matter</h2>
+      <span class="section-note">Deadlines · meetings · filings</span>
+    </div>
+    <p class="section-sub">The dates that move slowly until they don't. A few of these are legally binding. Most residents have never heard of them.</p>
+
+    <div class="events-list">
+
+      <div class="event-row">
+        <div class="event-date">
+          <div class="event-month">Apr</div>
+          <div class="event-day" style="color:var(--red)">24</div>
+        </div>
+        <div class="event-body">
+          <div class="event-title">ADA Title II compliance deadline — all local government websites</div>
+          <div class="event-detail">WCAG 2.1 AA required for all public entity websites under 28 C.F.R. Part 35. HB21-1110 applies to PDF documents. Zero district sites confirmed compliant on document accessibility. <strong>16 days.</strong></div>
+        </div>
+        <span class="event-badge eb-critical">Critical · 16 days</span>
+      </div>
+
+      <div class="event-row">
+        <div class="event-date">
+          <div class="event-month">Jul</div>
+          <div class="event-day" style="color:var(--amber)">31</div>
+        </div>
+        <div class="event-body">
+          <div class="event-title">Annual audit due to Colorado State Auditor — all metro districts</div>
+          <div class="event-detail">C.R.S. §32-1-106 requires annual audits submitted to the State Auditor by July 31. Currently, 0 of 8 audited districts post these publicly. The State Auditor sees it. Residents don't.</div>
+        </div>
+        <span class="event-badge eb-warn">High · Q3</span>
+      </div>
+
+      <div class="event-row">
+        <div class="event-date">
+          <div class="event-month">May</div>
+          <div class="event-day">6</div>
+        </div>
+        <div class="event-body">
+          <div class="event-title">El Paso County BOCC regular meeting</div>
+          <div class="event-detail">BOCC meetings are the primary venue for metro district oversight action. Draft BOCC resolution requiring service plans and audit docs on all district websites — full template in the citizen toolkit.</div>
+        </div>
+        <span class="event-badge eb-info">Meeting</span>
+      </div>
+
+      <div class="event-row">
+        <div class="event-date">
+          <div class="event-month">May</div>
+          <div class="event-day">20</div>
+        </div>
+        <div class="event-body">
+          <div class="event-title">CORA response window closes — pending requests</div>
+          <div class="event-detail">Two outstanding CORA requests (military housing numbers, district governance records). Colorado law requires response within 3 business days with up to 7-day extension. Response window tracked in CORA tracker.</div>
+        </div>
+        <span class="event-badge eb-warn">CORA deadline</span>
+      </div>
+
+      <div class="event-row">
+        <div class="event-date">
+          <div class="event-month">Jan</div>
+          <div class="event-day">31</div>
+        </div>
+        <div class="event-body">
+          <div class="event-title">BOCC proposed mandate — tagged PDFs on all district sites</div>
+          <div class="event-detail">Proposed: BOCC resolution requiring all publicly posted PDFs to be WCAG 1.3.1 tagged by January 31, 2027. Currently zero sites comply. One resolution, 284 districts. <em>Proposed — not yet filed.</em></div>
+        </div>
+        <span class="event-badge eb-info">Proposed '27</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ALL PAGES (existing) ════════════════════════════════════════ -->
 <section class="section">
   <div class="container">
+    <div class="section-eyebrow">All pages</div>
+    <div class="section-header">
+      <h2>Pages that exist right now</h2>
+      <span class="section-note">11 active · more coming</span>
+    </div>
+    <p class="section-sub">Some are fully furnished. Some still have exposed wiring. All of it is free, local, and built without a pitch deck.</p>
+
+    <div class="page-grid">
+
+      <a class="page-card" href="https://cheetochopsticks.com/microsites/city/Traffic/SafetyPlan/cos-traffic-hub.html">
+        <div class="card-left">
+          <p class="card-scope">City · Traffic &amp; Safety</p>
+          <p class="card-title">COS Traffic Safety &amp; Funding Dashboard</p>
+          <p class="card-desc">64,434 crash records. 12 charts. FHWA funding analysis. A national spending comparison that is, diplomatically speaking, <em>not flattering for city hall.</em> This is the flagship. It's dressed.</p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="microsites/shared/You/cos-find-my-jurisdiction.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · You · State · County · City</p>
+          <p class="card-title">Your jurisdiction</p>
+          <p class="card-desc">Put in your address. Find out every government that touches it — city limits, county district, school district, metro districts, utilities. <em>The map before everything else.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="microsites/shared/epc_district_audit_dashboard.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · County · 284 metro districts</p>
+          <p class="card-title">EPC Metro District Audit Dashboard</p>
+          <p class="card-desc">Governance gaps, ADA compliance status, and platform analysis across all 284 El Paso County metro districts. <em>The numbers are not reassuring.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-critical">9 alerts</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="microsites/shared/metro_district_citizen_toolkit.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · Citizen action</p>
+          <p class="card-title">Metro District Citizen Toolkit</p>
+          <p class="card-desc">Sample CORA letters, BOCC letter templates, DOJ complaint drafts, every contact you need to push for change. <em>The playbook, open-sourced.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="microsites/shared/requests_tracker_and_military_numbers.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · CORA</p>
+          <p class="card-title">CORA Requests Tracker &amp; Military Housing Numbers</p>
+          <p class="card-desc">Live tracker for all open records requests. Military housing figures. <em>Two pending, clock running.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">2 Pending</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · Developer compliance</p>
+          <p class="card-title">Wolfersberger Compliance &amp; Bellamese Analysis</p>
+          <p class="card-desc">Developer agreement compliance history and parcel-level findings. <em>Months of records requests, assembled.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="https://cheetochopsticks.com/microsites/city/coraform/cos-cora-implementation-guide.html">
+        <div class="card-left">
+          <p class="card-scope">City · Public Records</p>
+          <p class="card-title">COS CORA Implementation Guide</p>
+          <p class="card-desc">Colorado's open-records law is legally binding. Plain-language guide on how the city is supposed to follow it — and what to do when they <em>creatively interpret</em> that obligation.</p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="https://cheetochopsticks.com/microsites/FBI/tips-fbi-redesign.html">
+        <div class="card-left">
+          <p class="card-scope">Federal · UX Research</p>
+          <p class="card-title">FBI Tips — Redesign Proposal</p>
+          <p class="card-desc">The FBI's public tip submission experience is, uh, a journey. A redesign proposal for making it usable by people who have information <em>without a cybersecurity degree.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="https://cheetochopsticks.com/microsites/county/land/Assessor_Property%20Conveyances.html">
+        <div class="card-left">
+          <p class="card-scope">County · Land &amp; Property</p>
+          <p class="card-title">El Paso County — Assessor Property Conveyances</p>
+          <p class="card-desc">Who owns what, and when did that change? Property transfer records, decoded for humans. Useful if you like knowing things <em>before your realtor does.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="https://cheetochopsticks.com/microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">
+        <div class="card-left">
+          <p class="card-scope">County · Land Development Code</p>
+          <p class="card-title">Land Development Code — Contact &amp; Navigation</p>
+          <p class="card-desc">Part of a larger effort to make the county's development code something a resident can actually read. Because someone has to be reachable <em>when the code does something confusing (so, constantly).</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" href="https://cheetochopsticks.com/microsites/state/cdola/cdola-cora-audit-and-redesign.html">
+        <div class="card-left">
+          <p class="card-scope">State · DOLA · Public Records</p>
+          <p class="card-title">CDOLA — CORA Audit &amp; Redesign</p>
+          <p class="card-desc">Colorado's Department of Local Affairs handles money that flows to counties and municipalities. An audit of their records-request process — so it doesn't feel like <em>faxing a library in 1987.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMING SOON ══════════════════════════════════════════════════ -->
+<section class="section" aria-label="Upcoming pages">
+  <div class="container">
+    <div class="section-eyebrow">Coming up</div>
     <div class="section-header">
       <h2>What's in the queue</h2>
       <span class="section-note">No ETA. We have day jobs.</span>
     </div>
-    <div class="coming-grid">
+    <p class="section-sub">The list is longer than this page. That's intentional.</p>
+    <div class="coming-grid" role="list">
       <div class="coming-card">
         <p><strong>County Dashboard</strong><br>El Paso County — all jurisdictions, all crash data, full picture.</p>
       </div>
       <div class="coming-card">
-        <p><strong>LOSS Corridor Ratings</strong><br>Danger ratings for every major road. Pending a records request filed April 2026.</p>
+        <p><strong>LOSS Corridor Ratings</strong><br>Danger ratings for every major road. Pending records request filed April 2026.</p>
       </div>
       <div class="coming-card">
         <p><strong>Zip Code Search</strong><br>Your block, your crashes, your street. Hyper-local lookup coming.</p>
       </div>
       <div class="coming-card">
+        <p><strong>Metro District Portal</strong><br>Unified public interface for the 249 districts with no website. CORA shouldn't be the only option.</p>
+      </div>
+      <div class="coming-card">
         <p><strong>State Dashboard</strong><br>CDOT data across all 64 counties. Colorado from 30,000 feet.</p>
+      </div>
+      <div class="coming-card">
+        <p><strong>Mill Levy Explainer</strong><br>You're paying it. Every property tax bill. No district explains what it is or why.</p>
+      </div>
+      <div class="coming-card">
+        <p><strong>Bond &amp; Debt Tracker</strong><br>Outstanding balances, maturity dates, resident liability. The stuff that outlasts administrations.</p>
       </div>
       <div class="coming-card">
         <p><strong>Stories</strong><br>Long-form analysis when the data says something nobody's saying out loud.</p>
       </div>
       <div class="coming-card">
-        <p><strong>A lot more</strong><br>We have a list. The list is longer than this page. That's intentional.</p>
+        <p><strong>A lot more</strong><br>The list is longer than this page. That's intentional.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Dispatch note -->
+<!-- DISPATCH -->
 <section class="dispatch">
   <div class="container">
     <div class="dispatch-box">
@@ -628,28 +1758,124 @@
         Everything here is free. No paywall, no pitch deck, no monetization strategy.
         <strong>No invoice attached.</strong> If it helps one person ask a better question
         at a city council meeting, or understand why their street feels dangerous,
+        or find out which metro district is charging them a mill levy they can't look up —
         that's the whole point.
       </p>
       <p>
+        The <strong>Alerts</strong> button in the nav is real. Those nine notifications are current.
         If you want to know when something new drops —
-        <strong>before the press release, before the tweet, before the newsletter</strong>
-        — we're working on a way to do that. For now, bookmark this page
-        and check back when you remember. We'll be here, sawdust and all.
+        <strong>before the press release, before the tweet</strong>
+        — bookmark this page and check the ticker. We'll be here.
       </p>
     </div>
   </div>
 </section>
+
 </main>
 
-<!-- Footer -->
+<!-- FOOTER -->
 <footer>
   <div class="container">
     <div class="footer">
-      <p>© 2026 StorySeed Studios · The Dais &nbsp;·&nbsp; El Paso County, Colorado &nbsp;·&nbsp; Data: City of Colorado Springs ArcGIS · FHWA Form 536 &nbsp;·&nbsp; For informational purposes only.</p>
+      <p>© 2026 StorySeed Studios · The Dais &nbsp;·&nbsp; El Paso County, Colorado &nbsp;·&nbsp; Data: EPC Assessor live DOM · City of Colorado Springs ArcGIS · FHWA Form 536 &nbsp;·&nbsp; For informational purposes only.</p>
       <p><a href="https://www.thedais.com" target="_blank" rel="noopener noreferrer">The Dais</a> &nbsp;·&nbsp; <a href="/">Home</a></p>
     </div>
   </div>
 </footer>
+
+<script>
+  function toggleMobileNav() {
+    var nav = document.getElementById('nav-links');
+    var btn = document.querySelector('.nav-menu-btn');
+    var open = nav.classList.toggle('mobile-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.textContent = open ? 'Close' : 'Menu';
+  }
+
+  var lastFocus;
+
+  function openNotif() {
+    lastFocus = document.activeElement;
+    var overlay = document.getElementById('notif-overlay');
+    var panel   = document.getElementById('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    overlay.classList.add('open');
+    overlay.removeAttribute('aria-hidden');
+    panel.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() { panel.focus(); }, 50);
+  }
+
+  function closeNotif() {
+    var overlay = document.getElementById('notif-overlay');
+    var panel   = document.getElementById('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    panel.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeNotif();
+    if (e.key === 'Tab' && document.getElementById('notif-panel').classList.contains('open')) {
+      var focusable = document.getElementById('notif-panel')
+        .querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+
+  function filterNotif(tier, btn) {
+    document.querySelectorAll('.nf-btn').forEach(function(b) {
+      b.classList.remove('active');
+      b.removeAttribute('aria-pressed');
+    });
+    btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
+    document.querySelectorAll('.notif-item').forEach(function(item) {
+      if (tier === 'all') {
+        item.classList.remove('hidden');
+        item.removeAttribute('aria-hidden');
+      } else {
+        var hide = item.dataset.tier !== tier;
+        item.classList.toggle('hidden', hide);
+        hide ? item.setAttribute('aria-hidden','true') : item.removeAttribute('aria-hidden');
+      }
+    });
+    document.querySelectorAll('.notif-group-label').forEach(function(label) {
+      label.style.display = tier === 'all' ? '' : 'none';
+    });
+  }
+
+  /* Active nav link on scroll */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['you','shared','land','building','people','events'];
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.id;
+        navLinks.forEach(function(l) {
+          var active = l.getAttribute('href') === '#' + id;
+          l.classList.toggle('active', active);
+          active ? l.setAttribute('aria-current','true') : l.removeAttribute('aria-current');
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+
+  sections.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+</script>
 
 </body>
 </html>
