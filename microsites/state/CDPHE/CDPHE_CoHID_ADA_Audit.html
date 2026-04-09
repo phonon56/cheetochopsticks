@@ -6,7 +6,8 @@
   <title>ADA Accessibility Audit – CDPHE CoHID Mortality Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../../shared/css/main.css" />
   <style>
     :root {
       --red:    #c0392b;
@@ -459,6 +460,137 @@
 
   <!-- SKIP LINK: Required WCAG 2.4.1 -->
   <a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- ═══ SITE NAV ═══ -->
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="../../../index.html" class="nav-logo" aria-label="cheetochopsticks home">
+        <span class="nav-logo-word">cheetochopsticks</span><span class="nav-logo-dot">.com</span>
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Site sections">
+        <a class="nav-link you-link" href="../../../index.html#you">You</a>
+        <a class="nav-link" href="../../../index.html#shared">Shared</a>
+        <a class="nav-link" href="../../../index.html#land">Land</a>
+        <a class="nav-link" href="../../../index.html#building">Building</a>
+        <a class="nav-link" href="../../../index.html#people">People</a>
+        <a class="nav-link" href="../../../index.html#events">Events</a>
+      </nav>
+      <div class="nav-right">
+        <button class="nav-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">Menu</button>
+        <button class="notif-btn" onclick="openNotif()" aria-label="Open alerts and notifications, 9 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+          <span>Alerts</span>
+          <span class="notif-count" aria-live="polite">9</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ NOTIFICATIONS PANEL ═══ -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
+<aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">Alerts &amp; notifications</span>
+    <button class="notif-close" onclick="closeNotif()">Close &#10005;</button>
+  </div>
+  <div class="notif-filters" role="group" aria-label="Filter notifications">
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (9)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (3)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (3)</button>
+  </div>
+  <div class="notif-scroll">
+    <div class="notif-group-label">Critical — act now</div>
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA.</div>
+        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access records.</div>
+        <div class="notif-meta">EPC Assessor audit · April 2026</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021.</div>
+        <div class="notif-meta">Platform audit · April 2026</div>
+      </div>
+    </div>
+    <div class="notif-group-label">High priority</div>
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes and audit docs are almost certainly untagged.</div>
+        <div class="notif-meta">ADA document audit · April 2026</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it.</div>
+        <div class="notif-meta">Governance gap · §32-1-202</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106.</div>
+        <div class="notif-meta">Governance gap · §32-1-106</div>
+      </div>
+    </div>
+    <div class="notif-group-label">Informational</div>
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records awaiting reply.</div>
+        <div class="notif-meta">CORA tracker · April 2026</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review.</div>
+        <div class="notif-meta">Compliance analysis · April 2026</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts and utilities.</div>
+        <div class="notif-meta">New · April 2026</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ TICKER ═══ -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item alert"><strong>ADA deadline</strong> · April 24 · 16 days</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>284</strong> metro districts · El Paso County</span><span class="ticker-sep"></span>
+    <span class="ticker-item alert"><strong>249</strong> districts · zero web presence</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>390</strong> fatalities over 9 years</span><span class="ticker-sep"></span>
+    <span class="ticker-item">No invoice attached</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>0%</strong> of districts post service plans publicly</span><span class="ticker-sep"></span>
+    <span class="ticker-item">Built by residents · Colorado Springs</span><span class="ticker-sep"></span>
+    <span class="ticker-item alert"><strong>ADA deadline</strong> · April 24 · 16 days</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>284</strong> metro districts · El Paso County</span><span class="ticker-sep"></span>
+    <span class="ticker-item alert"><strong>249</strong> districts · zero web presence</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>390</strong> fatalities over 9 years</span><span class="ticker-sep"></span>
+    <span class="ticker-item">No invoice attached</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>0%</strong> of districts post service plans publicly</span><span class="ticker-sep"></span>
+    <span class="ticker-item">Built by residents · Colorado Springs</span><span class="ticker-sep"></span>
+  </div>
+</div>
 
   <header role="banner">
     <div class="header-inner">
@@ -950,5 +1082,6 @@
     <p style="margin-top:.4rem;">For questions: <a href="mailto:emma@pivottruenorth.com">emma@pivottruenorth.com</a> &nbsp;·&nbsp; 310-913-8931</p>
   </footer>
 
+<script src="../../../shared/js/main.js"></script>
 </body>
 </html>
