@@ -635,6 +635,79 @@
     }
     .page-card:hover .card-arrow { color: var(--gold); transform: translate(2px,-1px); }
 
+    /* ── GROUP CARDS (multi-link) ────────────────────────────────── */
+    .group-card {
+      background: var(--surface);
+      padding: 22px 26px 6px;
+      position: relative;
+      border-left: 3px solid transparent;
+      transition: border-color .18s, background .18s;
+    }
+    .group-card:hover { border-left-color: var(--gold); background: var(--surface2); }
+    .group-card .card-left { padding-bottom: 10px; }
+    .group-links {
+      border-top: 1px solid var(--border);
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+    }
+    .group-link {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 2px;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: padding-left .18s;
+    }
+    .group-link:last-child { border-bottom: none; }
+    .group-link:hover { padding-left: 8px; }
+    .group-link:hover .group-link-title { color: var(--gold); }
+    .group-link:hover .group-link-arrow { color: var(--gold); transform: translate(2px,-1px); }
+    .group-link-title {
+      font-family: var(--sans);
+      font-size: .92rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.35;
+      transition: color .18s;
+    }
+    .group-link-sub {
+      display: block;
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .08em;
+      color: var(--quiet);
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .group-link-arrow {
+      font-size: .85rem;
+      color: var(--muted);
+      transition: color .18s, transform .18s;
+    }
+
+    /* ── SCOPE HEADINGS within Dashboards section ────────────────── */
+    .scope-heading {
+      font-family: var(--mono);
+      font-size: .76rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 40px 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .scope-heading:first-of-type { margin-top: 6px; }
+    .scope-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
     /* ── TAPE BADGES ─────────────────────────────────────────────── */
     .tape {
       display: inline-block;
@@ -947,9 +1020,7 @@
       </a>
       <nav class="nav-links" id="nav-links" aria-label="Site sections">
         <a class="nav-link you-link" href="#you">You</a>
-        <a class="nav-link" href="#shared">Shared</a>
-        <a class="nav-link" href="#land">Land</a>
-        <a class="nav-link" href="#building">Building</a>
+        <a class="nav-link" href="#dashboards">Dashboards</a>
         <a class="nav-link" href="#people">People</a>
         <a class="nav-link" href="#events">Events</a>
       </nav>
@@ -984,6 +1055,15 @@
     <div class="notif-group-label">Critical — act now</div>
 
     <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Downtown Funding and Records Search</strong> Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</div>
+        <div class="notif-meta">Annual adopted budget —  C.R.S. 29-1-101 et seq · April 10, 2026</div>
+        <a class="notif-action" href="#building">View dashbaord →</a>
+      </div>
+    </div>
+	  
+	      <div class="notif-item" data-tier="critical">
       <div class="notif-dot nd-red"></div>
       <div class="notif-body">
         <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
@@ -1183,25 +1263,26 @@
   </div>
 </section>
 
-<!-- ═══ SHARED ═════════════════════════════════════════════════════ -->
-<section class="section" id="shared">
+<!-- ═══ DASHBOARDS ═══════════════════════════════════════════════════ -->
+<section class="section" id="dashboards">
   <div class="container">
-    <div id="shared-anchor" class="section-anchor"></div>
-    <div class="section-eyebrow">Shared</div>
+    <div id="dashboards-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow">Dashboards</div>
     <div class="section-header">
-      <h2>All dashboards</h2>
-      <span class="section-note">5 tools · April 2026</span>
+      <h2>Everything, grouped by jurisdiction</h2>
+      <span class="section-note">Each card holds one or more pages</span>
     </div>
-    <p class="section-sub">The tools anyone in El Paso County can use — no login, no fee, no particular expertise required.</p>
+    <p class="section-sub">Each dashboard lives under the jurisdiction whose records it covers. Cards with multiple links mean that scope has a small family of pages that belong together.</p>
 
+    <!-- ── Shared ──────────────────────────────────────────────── -->
+    <h3 class="scope-heading">Shared — for everyone</h3>
     <div class="page-grid">
-		
-		 <a class="page-card" href="microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html">
+
+      <a class="page-card" href="microsites/shared/cos-find-my-jurisdiction.html">
         <div class="card-left">
-          <p class="card-scope">Shared · You · State </p>
-          <p class="card-title">El Paso County Mortality</p>
-          <p class="card-desc">National Benchmarks + Military Population Analysis
-El Paso County death data compared to Colorado and US averages. Includes dedicated analysis of how Fort Carson and other military installations affect mortality statistics. Data: CDPHE CoHID + CDC NCHS + DoD Fort Carson. <em>ADA Dashboards</em></p>
+          <p class="card-scope">Shared · You</p>
+          <p class="card-title">Find my jurisdiction</p>
+          <p class="card-desc">Type your address. Know immediately which governments touch it — city, county, school district, metro districts, utilities. <em>The entry point for everything else.</em></p>
         </div>
         <div class="card-right">
           <span class="tape tape-live">Live</span>
@@ -1209,11 +1290,11 @@ El Paso County death data compared to Colorado and US averages. Includes dedicat
         </div>
       </a>
 
-      <a class="page-card" href="microsites/shared/cos-find-my-jurisdiction.html">
+      <a class="page-card" href="microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html">
         <div class="card-left">
-          <p class="card-scope">Shared · You · All jurisdictions</p>
-          <p class="card-title">Find my jurisdiction</p>
-          <p class="card-desc">Type your address. Know immediately: your city boundary, county district, school district, metro districts, and utilities. Plain language, no login, no paywall. <em>The entry point for everything else.</em></p>
+          <p class="card-scope">Shared · State · CDPHE</p>
+          <p class="card-title">El Paso County Mortality Dashboard</p>
+          <p class="card-desc">EPC death data compared to Colorado and US averages, with dedicated Fort Carson and military installation analysis. Data: CDPHE CoHID + CDC NCHS + DoD. <em>An accessible redesign of the state tool.</em></p>
         </div>
         <div class="card-right">
           <span class="tape tape-live">Live</span>
@@ -1223,9 +1304,9 @@ El Paso County death data compared to Colorado and US averages. Includes dedicat
 
       <a class="page-card" href="microsites/shared/epc_district_audit_dashboard.html">
         <div class="card-left">
-          <p class="card-scope">Shared · County · 284 metro districts</p>
+          <p class="card-scope">Shared · 284 metro districts</p>
           <p class="card-title">EPC Metro District Audit Dashboard</p>
-          <p class="card-desc">Governance gaps, ADA compliance, and platform analysis across all 284 El Paso County metro districts. 88% have zero public web presence. <em>0% post service plans. 0% post annual CDPHEs.</em> The data, laid bare.</p>
+          <p class="card-desc">Governance gaps, ADA compliance, and platform analysis across all 284 El Paso County metro districts. 88% have zero public web presence. <em>The data, laid bare.</em></p>
         </div>
         <div class="card-right">
           <span class="tape tape-critical">9 alerts</span>
@@ -1237,7 +1318,7 @@ El Paso County death data compared to Colorado and US averages. Includes dedicat
         <div class="card-left">
           <p class="card-scope">Shared · Citizen action</p>
           <p class="card-title">Metro District Citizen Toolkit</p>
-          <p class="card-desc">Sample CORA request letters, BOCC letter templates, DOJ complaint drafts, every contact you need. Because knowing what's broken is only useful if you have <em>somewhere to send that knowledge.</em></p>
+          <p class="card-desc">Sample CORA request letters, BOCC templates, DOJ complaint drafts, every contact you need. <em>Somewhere to send the knowledge once you have it.</em></p>
         </div>
         <div class="card-right">
           <span class="tape tape-wip">In Progress</span>
@@ -1248,8 +1329,8 @@ El Paso County death data compared to Colorado and US averages. Includes dedicat
       <a class="page-card" href="microsites/shared/requests_tracker_and_military_numbers.html">
         <div class="card-left">
           <p class="card-scope">Shared · CORA · Open records</p>
-          <p class="card-title">CORA Requests Tracker &amp; Military Housing Numbers</p>
-          <p class="card-desc">Live tracker for all open records requests — who was asked, what was asked, what came back. Military housing figures cross-referenced with public and survey data. <em>Two requests pending. Clock is running.</em></p>
+          <p class="card-title">CORA Requests Tracker &amp; Military Housing</p>
+          <p class="card-desc">Live tracker for all open records requests — who was asked, what came back. Military housing figures cross-referenced with public and survey data. <em>Two requests pending. Clock is running.</em></p>
         </div>
         <div class="card-right">
           <span class="tape tape-wip">2 Pending</span>
@@ -1259,9 +1340,9 @@ El Paso County death data compared to Colorado and US averages. Includes dedicat
 
       <a class="page-card" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">
         <div class="card-left">
-          <p class="card-scope">Shared · County · Developer compliance</p>
+          <p class="card-scope">Shared · Developer compliance</p>
           <p class="card-title">Wolfersberger Compliance &amp; Bellamese Analysis</p>
-          <p class="card-desc">Developer agreement compliance history, parcel-level records, and findings from the Bellamese analysis. The kind of research that takes <em>months of records requests</em> to assemble — assembled.</p>
+          <p class="card-desc">Developer agreement compliance history, parcel-level records, and findings from the Bellamese analysis. <em>Months of records requests, assembled.</em></p>
         </div>
         <div class="card-right">
           <span class="tape tape-wip">In Progress</span>
@@ -1270,153 +1351,219 @@ El Paso County death data compared to Colorado and US averages. Includes dedicat
       </a>
 
     </div>
-  </div>
-</section>
 
-<!-- ═══ LAND ════════════════════════════════════════════════════════ -->
-<section class="section" id="land">
-  <div class="container">
-    <div id="land-anchor" class="section-anchor"></div>
-    <div class="section-eyebrow">Land</div>
-    <div class="section-header">
-      <h2>Property, districts &amp; jurisdiction</h2>
-      <span class="section-note">Assessor · LDC · Metro districts</span>
-    </div>
-    <p class="section-sub">Who owns what. Who governs it. And what the rules are for building on it — in language that doesn't require a law degree.</p>
+    <!-- ── City ────────────────────────────────────────────────── -->
+    <h3 class="scope-heading">City of Colorado Springs</h3>
+    <div class="page-grid">
 
-    <div class="mini-grid">
-
-      <a class="mini-card" href="microsites/shared/You/cos-find-my-jurisdiction.html">
-        <div class="mini-tag">Shared · You</div>
-        <div class="mini-title">Jurisdiction map</div>
-        <div class="mini-desc">Which governments touch your parcel? City, county, school district, special districts, utilities — all resolved by address.</div>
-        <div class="mini-footer">
-          <span class="mini-stat">El Paso County · COS</span>
-          <span class="tape tape-live" style="font-size:.5rem;padding:2px 7px">Live</span>
+      <div class="group-card">
+        <div class="card-left">
+          <p class="card-scope">City · Public Records</p>
+          <p class="card-title">COS CORA — Form &amp; Implementation</p>
+          <p class="card-desc">Colorado's open-records law is legally binding. The city's request form, paired with a plain-language guide on how the city is supposed to follow it — and what to do when they <em>creatively interpret</em> that obligation.</p>
         </div>
-      </a>
-	
-
-      <a class="mini-card" href="microsites/county/land/Assessor_Property%20Conveyances.html">
-        <div class="mini-tag">County · Land &amp; Property</div>
-        <div class="mini-title">Assessor property conveyances</div>
-        <div class="mini-desc">Who owns what, and when did that change? Property transfer records, decoded for humans. Know your neighborhood before your realtor does.</div>
-        <div class="mini-footer">
-          <span class="mini-stat">EPC Assessor data</span>
-          <span class="tape tape-wip" style="font-size:.5rem;padding:2px 7px">WIP</span>
+        <div class="group-links">
+          <a class="group-link" href="microsites/city/coraform/cos-cora-form.html">
+            <div>
+              <div class="group-link-title">Colorado Springs CORA Form</div>
+              <span class="group-link-sub">Submit a request</span>
+            </div>
+            <span class="group-link-arrow">↗</span>
+          </a>
+          <a class="group-link" href="microsites/city/coraform/cos-cora-implementation-guide.html">
+            <div>
+              <div class="group-link-title">CORA Implementation Guide</div>
+              <span class="group-link-sub">How the city should follow the law</span>
+            </div>
+            <span class="group-link-arrow">↗</span>
+          </a>
         </div>
-      </a>
+      </div>
 
-      <a class="mini-card" href="microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">
-        <div class="mini-tag">County · Land Development Code</div>
-        <div class="mini-title">Land Development Code — contact &amp; navigation</div>
-        <div class="mini-desc">A readable entry point into the county's development code. Because someone has to be reachable when the code does something confusing.</div>
-        <div class="mini-footer">
-          <span class="mini-stat">EPC LDC</span>
-          <span class="tape tape-wip" style="font-size:.5rem;padding:2px 7px">WIP</span>
+      <a class="page-card" href="microsites/city/traffic/SafetyPlan/cos-traffic-hub.html">
+        <div class="card-left">
+          <p class="card-scope">City · Traffic &amp; Safety</p>
+          <p class="card-title">COS Traffic Safety Plan</p>
+          <p class="card-desc">64,434 crash records, 12 charts, FHWA funding analysis. A national spending comparison that is, diplomatically speaking, <em>not flattering for city hall.</em></p>
         </div>
-      </a>
-
-      <a class="mini-card" href="microsites/shared/epc_district_audit_dashboard.html">
-        <div class="mini-tag">County · Metro districts</div>
-        <div class="mini-title">Metro district coverage map</div>
-        <div class="mini-desc">284 districts, 3 platforms, 88% with zero public web presence. Where the dark zones are — and which districts are actually reachable.</div>
-        <div class="mini-footer">
-          <span class="mini-stat"><strong>249</strong> dark · <strong>35</strong> have sites</span>
-          <span class="tape tape-critical" style="font-size:.5rem;padding:2px 7px">Critical</span>
-        </div>
-      </a>
-
-      <a class="mini-card" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">
-        <div class="mini-tag">County · Developer records</div>
-        <div class="mini-title">Wolfersberger &amp; Bellamese parcels</div>
-        <div class="mini-desc">Parcel-level compliance history for specific developer agreements. The paper trail, assembled from public records and CORA responses.</div>
-        <div class="mini-footer">
-          <span class="mini-stat">CORA-sourced · April 2026</span>
-          <span class="tape tape-wip" style="font-size:.5rem;padding:2px 7px">WIP</span>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow">↗</span>
         </div>
       </a>
 
     </div>
-  </div>
-</section>
 
-<!-- ═══ BUILDING ════════════════════════════════════════════════════ -->
-<section class="section" id="building">
-  <div class="container">
-    <div id="building-anchor" class="section-anchor"></div>
-    <div class="section-eyebrow">Building</div>
-    <div class="section-header">
-      <h2>Website audit &amp; ADA compliance</h2>
-      <span class="section-note">HB21-1110 · WCAG 2.1 AA · 284 sites</span>
-    </div>
-    <p class="section-sub">Public entities have a legal obligation to be accessible online. We're tracking how well — or poorly — that's going.</p>
+    <!-- ── County ──────────────────────────────────────────────── -->
+    <h3 class="scope-heading">El Paso County</h3>
+    <div class="page-grid">
 
-    <div class="mini-grid">
-		
-	
-		
-		   <a class="mini-card" href="microsites/state/CDPHE_CoHID_ADA_Audit.html">
-        <div class="mini-tag">State · Full audit</div>
-        <div class="mini-title">ADA Compliance Audit: CDPHE CoHID Mortality Dashboard</div>
-        <div class="mini-desc">The Colorado Department of Public Health and Environment (CDPHE) operates a public health mortality data dashboard at cohealthviz.dphe.state.co.us using Tableau Server. This audit was conducted on April 8, 2026 — 16 days before the DOJ Title II ADA final rule compliance deadline of April 24, 2026 — which requires all state and local government web content to meet WCAG 2.1 Level AA.</div>
-        <div class="mini-footer">
-          <span class="mini-stat"><strong>4</strong> critical</span>
-          <span class="tape tape-critical" style="font-size:.5rem;padding:2px 7px">7 gaps</span>
+      <a class="page-card" href="microsites/county/land/Assessor_Property%20Conveyances.html">
+        <div class="card-left">
+          <p class="card-scope">County · Assessor</p>
+          <p class="card-title">Assessor — Property Conveyances</p>
+          <p class="card-desc">Who owns what, and when did that change? Property transfer records, decoded for humans. <em>Know your neighborhood before your realtor does.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
         </div>
       </a>
 
-      <a class="mini-card" href="microsites/shared/epc_district_audit_dashboard.html">
-        <div class="mini-tag">Shared · Full audit</div>
-        <div class="mini-title">District website audit dashboard</div>
-        <div class="mini-desc">Governance docs, ADA checks, platform breakdown. Eight sites fully audited, covering 51 districts. The compliance gaps are not subtle.</div>
-        <div class="mini-footer">
-          <span class="mini-stat"><strong>8</strong> audited · <strong>51</strong> districts covered</span>
-          <span class="tape tape-critical" style="font-size:.5rem;padding:2px 7px">9 gaps</span>
+      <div class="group-card">
+        <div class="card-left">
+          <p class="card-scope">County · Land Development Code</p>
+          <p class="card-title">Land Development Code</p>
+          <p class="card-desc">A readable entry point into the county's development code. Because someone has to be reachable <em>when the code does something confusing (so, constantly).</em></p>
         </div>
-      </a>
-
-      <a class="mini-card" href="microsites/shared/epc_district_audit_dashboard.html">
-        <div class="mini-tag">ADA · HB21-1110 · Deadline Apr 24</div>
-        <div class="mini-title">PDF accessibility — the real gap</div>
-        <div class="mini-desc">Homepage ADA is mostly solved. The failure is document accessibility. Every posted PDF is almost certainly untagged. WCAG 1.3.1. Zero sites pass.</div>
-        <div class="mini-footer">
-          <span class="mini-stat"><strong>0%</strong> tagged PDFs · all 8 audited sites</span>
-          <span class="tape tape-critical" style="font-size:.5rem;padding:2px 7px">Critical</span>
+        <div class="group-links">
+          <a class="group-link" href="microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">
+            <div>
+              <div class="group-link-title">LDC — Contact &amp; Navigation</div>
+              <span class="group-link-sub">Who to reach at the county</span>
+            </div>
+            <span class="group-link-arrow">↗</span>
+          </a>
+          <a class="group-link" href="microsites/county/land/LandDevelopmentCode/ldc-page-04-accessibility-statement.html">
+            <div>
+              <div class="group-link-title">LDC — Accessibility Statement</div>
+              <span class="group-link-sub">WCAG posture &amp; remediation</span>
+            </div>
+            <span class="group-link-arrow">↗</span>
+          </a>
         </div>
-      </a>
+      </div>
 
-      <a class="mini-card" href="microsites/shared/epc_district_audit_dashboard.html">
-        <div class="mini-tag">Platform · Streamline Government</div>
-        <div class="mini-title">Streamline Government — 4 sites, 13 districts</div>
-        <div class="mini-desc">Best ADA baseline of the three platforms. 4-Way Ranch, Banning Lewis Ranch, Woodmen Hills, Meridian Service. Still missing service plans and tagged PDFs.</div>
-        <div class="mini-footer">
-          <span class="mini-stat">Best baseline · gaps remain</span>
-          <span class="tape tape-wip" style="font-size:.5rem;padding:2px 7px">Managed</span>
+      <a class="page-card" href="microsites/county/land/dashboard/el_paso_population_components.html">
+        <div class="card-left">
+          <p class="card-scope">County · Population Dashboard</p>
+          <p class="card-title">El Paso Population Components</p>
+          <p class="card-desc">Births, deaths, and migration — the components that actually move a county's population numbers, broken down for residents rather than demographers.</p>
         </div>
-      </a>
-
-      <a class="mini-card" href="microsites/shared/epc_district_audit_dashboard.html">
-        <div class="mini-tag">Platform · WSDM WordPress · Highest risk</div>
-        <div class="mini-title">WS Districts — 30+ districts, one template</div>
-        <div class="mini-desc">Single WordPress site. If it fails WAVE audit, 30+ districts fail simultaneously. Calendar last updated 2021. No governance docs. No financials.</div>
-        <div class="mini-footer">
-          <span class="mini-stat"><strong>30+</strong> districts · 1 compliance letter fixes all</span>
-          <span class="tape tape-critical" style="font-size:.5rem;padding:2px 7px">Critical</span>
-        </div>
-      </a>
-
-      <a class="mini-card" href="microsites/state/cdola/cdola-cora-audit-and-redesign.html">
-        <div class="mini-tag">State · DOLA</div>
-        <div class="mini-title">CDOLA — CORA audit &amp; redesign</div>
-        <div class="mini-desc">Colorado's Department of Local Affairs handles county and municipal funding. Their records-request process audited, with a redesign proposal that doesn't involve faxes.</div>
-        <div class="mini-footer">
-          <span class="mini-stat">State records · DOLA</span>
-          <span class="tape tape-wip" style="font-size:.5rem;padding:2px 7px">WIP</span>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
         </div>
       </a>
 
     </div>
+
+    <!-- ── Downtown ────────────────────────────────────────────── -->
+    <h3 class="scope-heading">Downtown Colorado Springs</h3>
+    <div class="page-grid">
+
+      <a class="page-card" href="microsites/downtown/downtown_cs_search_portal_v2_ada.html">
+        <div class="card-left">
+          <p class="card-scope">Downtown · Full Disclosure</p>
+          <p class="card-title">Downtown Funding &amp; Records Search</p>
+          <p class="card-desc">Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place. <em>The first searchable index for downtown money.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ── State ───────────────────────────────────────────────── -->
+    <h3 class="scope-heading">State of Colorado</h3>
+    <div class="page-grid">
+
+      <div class="group-card">
+        <div class="card-left">
+          <p class="card-scope">State · CDPHE</p>
+          <p class="card-title">Colorado Dept. of Public Health &amp; Environment</p>
+          <p class="card-desc">An audit of the CDPHE CoHID Tableau dashboard, plus the El Paso County mortality redesign. Conducted 16 days before the April 24 ADA Title II deadline.</p>
+        </div>
+        <div class="group-links">
+          <a class="group-link" href="microsites/state/CDPHE/CDPHE_CoHID_ADA_Audit.html">
+            <div>
+              <div class="group-link-title">CDPHE CoHID — ADA Audit</div>
+              <span class="group-link-sub">7 WCAG 2.1 AA gaps · Tableau</span>
+            </div>
+            <span class="group-link-arrow">↗</span>
+          </a>
+          <a class="group-link" href="microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html">
+            <div>
+              <div class="group-link-title">El Paso County Mortality Dashboard</div>
+              <span class="group-link-sub">Accessible redesign with military analysis</span>
+            </div>
+            <span class="group-link-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <a class="page-card" href="microsites/state/cdola/cdola-cora-audit-and-redesign.html">
+        <div class="card-left">
+          <p class="card-scope">State · CDOLA</p>
+          <p class="card-title">CDOLA — CORA Audit &amp; Redesign</p>
+          <p class="card-desc">Colorado's Department of Local Affairs handles money flowing to counties and municipalities. Their records-request process audited, with a redesign that <em>doesn't involve faxes.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <div class="group-card">
+        <div class="card-left">
+          <p class="card-scope">State · Attorney General</p>
+          <p class="card-title">Colorado Attorney General</p>
+          <p class="card-desc">A full audit, compliance brief, and accessible redesign of the Colorado AG's consumer complaint experience — plus a side-by-side comparison of the tools used to find the gaps.</p>
+        </div>
+        <div class="group-links">
+          <a class="group-link" href="microsites/state/colorado-attorney-general/accessibility_tool_comparison.html">
+            <div>
+              <div class="group-link-title">Accessibility Tool Comparison</div>
+              <span class="group-link-sub">WAVE · axe · Lighthouse</span>
+            </div>
+            <span class="group-link-arrow">↗</span>
+          </a>
+          <a class="group-link" href="microsites/state/colorado-attorney-general/coag-complaint-form.html">
+            <div>
+              <div class="group-link-title">COAG Complaint Form</div>
+              <span class="group-link-sub">Current state of the live form</span>
+            </div>
+            <span class="group-link-arrow">↗</span>
+          </a>
+          <a class="group-link" href="microsites/state/colorado-attorney-general/coag-compliance-brief.html">
+            <div>
+              <div class="group-link-title">COAG Compliance Brief</div>
+              <span class="group-link-sub">ADA posture &amp; findings</span>
+            </div>
+            <span class="group-link-arrow">↗</span>
+          </a>
+          <a class="group-link" href="microsites/state/colorado-attorney-general/coag-file-complaint-redesign.html">
+            <div>
+              <div class="group-link-title">File a Complaint — Redesign</div>
+              <span class="group-link-sub">Accessible, plain-language rebuild</span>
+            </div>
+            <span class="group-link-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Federal ─────────────────────────────────────────────── -->
+    <h3 class="scope-heading">Federal</h3>
+    <div class="page-grid">
+
+      <a class="page-card" href="microsites/FBI/tips-fbi-redesign.html">
+        <div class="card-left">
+          <p class="card-scope">Federal · FBI · UX Research</p>
+          <p class="card-title">FBI Tips — Redesign Proposal</p>
+          <p class="card-desc">The FBI's public tip submission experience is, uh, a journey. A redesign proposal for making it usable by people who have information <em>without a cybersecurity degree.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+    </div>
+
   </div>
 </section>
 
@@ -1580,154 +1727,6 @@ El Paso County death data compared to Colorado and US averages. Includes dedicat
   </div>
 </section>
 
-<!-- ═══ ALL PAGES (existing) ════════════════════════════════════════ -->
-<section class="section">
-  <div class="container">
-    <div class="section-eyebrow">All pages</div>
-    <div class="section-header">
-      <h2>Pages that exist right now</h2>
-      <span class="section-note">11 active · more coming</span>
-    </div>
-    <p class="section-sub">Some are fully furnished. Some still have exposed wiring. All of it is free, local, and built without a pitch deck.</p>
-
-    <div class="page-grid">
-
-      <a class="page-card" href="https://cheetochopsticks.com/microsites/city/Traffic/SafetyPlan/cos-traffic-hub.html">
-        <div class="card-left">
-          <p class="card-scope">City · Traffic &amp; Safety</p>
-          <p class="card-title">COS Traffic Safety &amp; Funding Dashboard</p>
-          <p class="card-desc">64,434 crash records. 12 charts. FHWA funding analysis. A national spending comparison that is, diplomatically speaking, <em>not flattering for city hall.</em> This is the flagship. It's dressed.</p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-live">Live</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <a class="page-card" href="microsites/shared/You/cos-find-my-jurisdiction.html">
-        <div class="card-left">
-          <p class="card-scope">Shared · You · State · County · City</p>
-          <p class="card-title">Your jurisdiction</p>
-          <p class="card-desc">Put in your address. Find out every government that touches it — city limits, county district, school district, metro districts, utilities. <em>The map before everything else.</em></p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-live">Live</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <a class="page-card" href="microsites/shared/epc_district_audit_dashboard.html">
-        <div class="card-left">
-          <p class="card-scope">Shared · County · 284 metro districts</p>
-          <p class="card-title">EPC Metro District Audit Dashboard</p>
-          <p class="card-desc">Governance gaps, ADA compliance status, and platform analysis across all 284 El Paso County metro districts. <em>The numbers are not reassuring.</em></p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-critical">9 alerts</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <a class="page-card" href="microsites/shared/metro_district_citizen_toolkit.html">
-        <div class="card-left">
-          <p class="card-scope">Shared · Citizen action</p>
-          <p class="card-title">Metro District Citizen Toolkit</p>
-          <p class="card-desc">Sample CORA letters, BOCC letter templates, DOJ complaint drafts, every contact you need to push for change. <em>The playbook, open-sourced.</em></p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <a class="page-card" href="microsites/shared/requests_tracker_and_military_numbers.html">
-        <div class="card-left">
-          <p class="card-scope">Shared · CORA</p>
-          <p class="card-title">CORA Requests Tracker &amp; Military Housing Numbers</p>
-          <p class="card-desc">Live tracker for all open records requests. Military housing figures. <em>Two pending, clock running.</em></p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">2 Pending</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <a class="page-card" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">
-        <div class="card-left">
-          <p class="card-scope">Shared · Developer compliance</p>
-          <p class="card-title">Wolfersberger Compliance &amp; Bellamese Analysis</p>
-          <p class="card-desc">Developer agreement compliance history and parcel-level findings. <em>Months of records requests, assembled.</em></p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <a class="page-card" href="https://cheetochopsticks.com/microsites/city/coraform/cos-cora-implementation-guide.html">
-        <div class="card-left">
-          <p class="card-scope">City · Public Records</p>
-          <p class="card-title">COS CORA Implementation Guide</p>
-          <p class="card-desc">Colorado's open-records law is legally binding. Plain-language guide on how the city is supposed to follow it — and what to do when they <em>creatively interpret</em> that obligation.</p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <a class="page-card" href="https://cheetochopsticks.com/microsites/FBI/tips-fbi-redesign.html">
-        <div class="card-left">
-          <p class="card-scope">Federal · UX Research</p>
-          <p class="card-title">FBI Tips — Redesign Proposal</p>
-          <p class="card-desc">The FBI's public tip submission experience is, uh, a journey. A redesign proposal for making it usable by people who have information <em>without a cybersecurity degree.</em></p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <a class="page-card" href="https://cheetochopsticks.com/microsites/county/land/Assessor_Property%20Conveyances.html">
-        <div class="card-left">
-          <p class="card-scope">County · Land &amp; Property</p>
-          <p class="card-title">El Paso County — Assessor Property Conveyances</p>
-          <p class="card-desc">Who owns what, and when did that change? Property transfer records, decoded for humans. Useful if you like knowing things <em>before your realtor does.</em></p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <a class="page-card" href="https://cheetochopsticks.com/microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">
-        <div class="card-left">
-          <p class="card-scope">County · Land Development Code</p>
-          <p class="card-title">Land Development Code — Contact &amp; Navigation</p>
-          <p class="card-desc">Part of a larger effort to make the county's development code something a resident can actually read. Because someone has to be reachable <em>when the code does something confusing (so, constantly).</em></p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-      <a class="page-card" href="https://cheetochopsticks.com/microsites/state/cdola/cdola-cora-audit-and-redesign.html">
-        <div class="card-left">
-          <p class="card-scope">State · DOLA · Public Records</p>
-          <p class="card-title">CDOLA — CORA Audit &amp; Redesign</p>
-          <p class="card-desc">Colorado's Department of Local Affairs handles money that flows to counties and municipalities. An audit of their records-request process — so it doesn't feel like <em>faxing a library in 1987.</em></p>
-        </div>
-        <div class="card-right">
-          <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
-        </div>
-      </a>
-
-    </div>
-  </div>
-</section>
-
 <!-- ═══ COMING SOON ══════════════════════════════════════════════════ -->
 <section class="section" aria-label="Upcoming pages">
   <div class="container">
@@ -1883,7 +1882,7 @@ El Paso County death data compared to Colorado and US averages. Includes dedicat
 
   /* Active nav link on scroll */
   var navLinks = document.querySelectorAll('.nav-link');
-  var sections = ['you','shared','land','building','people','events'];
+  var sections = ['you','dashboards','people','events'];
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
