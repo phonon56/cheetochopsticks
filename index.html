@@ -14,30 +14,41 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
+      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
+         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
+           text    #ede8dc → 15.3  AAA
+           muted   #96adc4 →  8.1  AAA
+           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
+           gold    #c8a84b →  8.2  AAA
+           gold-lt #fde68a → 15.0  AAA
+           red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
+           green   #4ade80 → 10.7  AAA
+           blue    #60a5fa →  7.4  AAA
+           amber   #fbbf24 → 11.2  AAA                                  */
       --bg:         #0c1220;
       --surface:    #141e2e;
       --surface2:   #1c2a3e;
       --surface3:   #233045;
-      --border:     rgba(255,255,255,.09);
-      --border-hi:  rgba(255,255,255,.18);
+      --border:     rgba(255,255,255,.14);
+      --border-hi:  rgba(255,255,255,.28);
       --gold:       #c8a84b;
-      --gold-dim:   rgba(200,168,75,.18);
-      --gold-faint: rgba(200,168,75,.07);
+      --gold-dim:   rgba(200,168,75,.22);
+      --gold-faint: rgba(200,168,75,.09);
       --gold-lt:    #fde68a;
       --text:       #ede8dc;
       --muted:      #96adc4;
-      --quiet:      #506070;
+      --quiet:      #8ca3b8;
       --mono:       'IBM Plex Mono', monospace;
       --sans:       'IBM Plex Sans', sans-serif;
       --serif:      'Playfair Display', Georgia, serif;
-      --red:        #f87171;
-      --red-dim:    rgba(248,113,113,.12);
+      --red:        #fca5a5;
+      --red-dim:    rgba(252,165,165,.16);
       --green:      #4ade80;
-      --green-dim:  rgba(74,222,128,.1);
+      --green-dim:  rgba(74,222,128,.14);
       --blue:       #60a5fa;
-      --blue-dim:   rgba(96,165,250,.1);
+      --blue-dim:   rgba(96,165,250,.14);
       --amber:      #fbbf24;
-      --amber-dim:  rgba(251,191,36,.12);
+      --amber-dim:  rgba(251,191,36,.16);
     }
 
     html { scroll-behavior: smooth; }
@@ -91,8 +102,8 @@
       background: var(--bg);
       color: var(--text);
       font-family: var(--sans);
-      font-size: 17px;
-      line-height: 1.65;
+      font-size: 18px;
+      line-height: 1.7;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
@@ -375,7 +386,7 @@
     @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     .ticker-item {
       font-family: var(--mono);
-      font-size: .625rem;
+      font-size: .78rem;
       letter-spacing: .1em;
       text-transform: uppercase;
       color: var(--muted);
@@ -436,7 +447,7 @@
     }
     .eyebrow {
       font-family: var(--mono);
-      font-size: .625rem;
+      font-size: .78rem;
       letter-spacing: .18em;
       text-transform: uppercase;
       color: var(--gold);
@@ -902,12 +913,12 @@
     }
     .coming-card p {
       font-family: var(--mono);
-      font-size: .7rem;
+      font-size: .78rem;
       letter-spacing: .08em;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.6;
     }
-    .coming-card p strong { color: #556a84; font-weight: 500; }
+    .coming-card p strong { color: var(--text); font-weight: 600; }
 
     /* ── DISPATCH ────────────────────────────────────────────────── */
     .dispatch { padding: 48px 0; }
@@ -940,9 +951,9 @@
     }
     .footer p {
       font-family: var(--mono);
-      font-size: .76rem;
+      font-size: .8rem;
       letter-spacing: .09em;
-      color: #344555;
+      color: var(--muted);
     }
     .footer a { color: var(--muted); text-decoration: none; }
     .footer a:hover { color: var(--gold); }
@@ -1042,7 +1053,7 @@
 <aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
   <div class="notif-panel-head">
     <span class="notif-panel-title">Alerts &amp; notifications</span>
-    <button class="notif-close" onclick="closeNotif()">Close ✕</button>
+    <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
   </div>
   <div class="notif-filters" role="group" aria-label="Filter notifications">
     <button class="nf-btn active" onclick="filterNotif('all', this)">All (9)</button>
@@ -1198,10 +1209,10 @@
 <main id="main-content">
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" aria-labelledby="hero-heading">
   <div class="container">
     <p class="eyebrow">StorySeed Studios · The Dais · El Paso County, Colorado</p>
-    <h1>
+    <h1 id="hero-heading">
       Trying to figure<br>
       things out —<br>
       <em>one step at a time.</em>
@@ -1215,12 +1226,12 @@
 </section>
 
 <!-- ═══ YOU ════════════════════════════════════════════════════════ -->
-<section class="section" id="you">
+<section class="section" id="you" aria-labelledby="you-heading">
   <div class="container">
     <div id="you-anchor" class="section-anchor"></div>
-    <div class="section-eyebrow">You</div>
+    <div class="section-eyebrow" aria-hidden="true">You</div>
     <div class="section-header">
-      <h2>Start with where you are</h2>
+      <h2 id="you-heading">Start with where you are</h2>
       <span class="section-note">Jurisdiction → district → everything else</span>
     </div>
     <p class="section-sub">Because if you don't know where you are on the map, nothing else on this site quite makes sense yet.</p>
@@ -1264,21 +1275,21 @@
 </section>
 
 <!-- ═══ DASHBOARDS ═══════════════════════════════════════════════════ -->
-<section class="section" id="dashboards">
+<section class="section" id="dashboards" aria-labelledby="dashboards-heading">
   <div class="container">
     <div id="dashboards-anchor" class="section-anchor"></div>
-    <div class="section-eyebrow">Dashboards</div>
+    <div class="section-eyebrow" aria-hidden="true">Dashboards</div>
     <div class="section-header">
-      <h2>Everything, grouped by jurisdiction</h2>
+      <h2 id="dashboards-heading">Everything, grouped by jurisdiction</h2>
       <span class="section-note">Each card holds one or more pages</span>
     </div>
     <p class="section-sub">Each dashboard lives under the jurisdiction whose records it covers. Cards with multiple links mean that scope has a small family of pages that belong together.</p>
 
     <!-- ── Shared ──────────────────────────────────────────────── -->
-    <h3 class="scope-heading">Shared — for everyone</h3>
-    <div class="page-grid">
+    <h3 class="scope-heading" id="scope-shared">Shared — for everyone</h3>
+    <div class="page-grid" role="list" aria-labelledby="scope-shared">
 
-      <a class="page-card" href="microsites/shared/cos-find-my-jurisdiction.html">
+      <a class="page-card" role="listitem" href="microsites/shared/cos-find-my-jurisdiction.html">
         <div class="card-left">
           <p class="card-scope">Shared · You</p>
           <p class="card-title">Find my jurisdiction</p>
@@ -1286,11 +1297,11 @@
         </div>
         <div class="card-right">
           <span class="tape tape-live">Live</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
-      <a class="page-card" href="microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html">
+      <a class="page-card" role="listitem" href="microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html">
         <div class="card-left">
           <p class="card-scope">Shared · State · CDPHE</p>
           <p class="card-title">El Paso County Mortality Dashboard</p>
@@ -1298,11 +1309,11 @@
         </div>
         <div class="card-right">
           <span class="tape tape-live">Live</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
-      <a class="page-card" href="microsites/shared/epc_district_audit_dashboard.html">
+      <a class="page-card" role="listitem" href="microsites/shared/epc_district_audit_dashboard.html">
         <div class="card-left">
           <p class="card-scope">Shared · 284 metro districts</p>
           <p class="card-title">EPC Metro District Audit Dashboard</p>
@@ -1310,11 +1321,11 @@
         </div>
         <div class="card-right">
           <span class="tape tape-critical">9 alerts</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
-      <a class="page-card" href="microsites/shared/metro_district_citizen_toolkit.html">
+      <a class="page-card" role="listitem" href="microsites/shared/metro_district_citizen_toolkit.html">
         <div class="card-left">
           <p class="card-scope">Shared · Citizen action</p>
           <p class="card-title">Metro District Citizen Toolkit</p>
@@ -1322,11 +1333,11 @@
         </div>
         <div class="card-right">
           <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
-      <a class="page-card" href="microsites/shared/requests_tracker_and_military_numbers.html">
+      <a class="page-card" role="listitem" href="microsites/shared/requests_tracker_and_military_numbers.html">
         <div class="card-left">
           <p class="card-scope">Shared · CORA · Open records</p>
           <p class="card-title">CORA Requests Tracker &amp; Military Housing</p>
@@ -1334,11 +1345,11 @@
         </div>
         <div class="card-right">
           <span class="tape tape-wip">2 Pending</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
-      <a class="page-card" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">
+      <a class="page-card" role="listitem" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">
         <div class="card-left">
           <p class="card-scope">Shared · Developer compliance</p>
           <p class="card-title">Wolfersberger Compliance &amp; Bellamese Analysis</p>
@@ -1346,41 +1357,41 @@
         </div>
         <div class="card-right">
           <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
     </div>
 
     <!-- ── City ────────────────────────────────────────────────── -->
-    <h3 class="scope-heading">City of Colorado Springs</h3>
-    <div class="page-grid">
+    <h3 class="scope-heading" id="scope-city">City of Colorado Springs</h3>
+    <div class="page-grid" role="list" aria-labelledby="scope-city">
 
-      <div class="group-card">
+      <div class="group-card" role="listitem">
         <div class="card-left">
           <p class="card-scope">City · Public Records</p>
           <p class="card-title">COS CORA — Form &amp; Implementation</p>
           <p class="card-desc">Colorado's open-records law is legally binding. The city's request form, paired with a plain-language guide on how the city is supposed to follow it — and what to do when they <em>creatively interpret</em> that obligation.</p>
         </div>
-        <div class="group-links">
-          <a class="group-link" href="microsites/city/coraform/cos-cora-form.html">
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/city/coraform/cos-cora-form.html">
             <div>
               <div class="group-link-title">Colorado Springs CORA Form</div>
               <span class="group-link-sub">Submit a request</span>
             </div>
-            <span class="group-link-arrow">↗</span>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
-          <a class="group-link" href="microsites/city/coraform/cos-cora-implementation-guide.html">
+          <a class="group-link" role="listitem" href="microsites/city/coraform/cos-cora-implementation-guide.html">
             <div>
               <div class="group-link-title">CORA Implementation Guide</div>
               <span class="group-link-sub">How the city should follow the law</span>
             </div>
-            <span class="group-link-arrow">↗</span>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
 
-      <a class="page-card" href="microsites/city/traffic/SafetyPlan/cos-traffic-hub.html">
+      <a class="page-card" role="listitem" href="microsites/city/traffic/SafetyPlan/cos-traffic-hub.html">
         <div class="card-left">
           <p class="card-scope">City · Traffic &amp; Safety</p>
           <p class="card-title">COS Traffic Safety Plan</p>
@@ -1388,17 +1399,17 @@
         </div>
         <div class="card-right">
           <span class="tape tape-live">Live</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
     </div>
 
     <!-- ── County ──────────────────────────────────────────────── -->
-    <h3 class="scope-heading">El Paso County</h3>
-    <div class="page-grid">
+    <h3 class="scope-heading" id="scope-county">El Paso County</h3>
+    <div class="page-grid" role="list" aria-labelledby="scope-county">
 
-      <a class="page-card" href="microsites/county/land/Assessor_Property%20Conveyances.html">
+      <a class="page-card" role="listitem" href="microsites/county/land/Assessor_Property%20Conveyances.html">
         <div class="card-left">
           <p class="card-scope">County · Assessor</p>
           <p class="card-title">Assessor — Property Conveyances</p>
@@ -1406,35 +1417,35 @@
         </div>
         <div class="card-right">
           <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
-      <div class="group-card">
+      <div class="group-card" role="listitem">
         <div class="card-left">
           <p class="card-scope">County · Land Development Code</p>
           <p class="card-title">Land Development Code</p>
           <p class="card-desc">A readable entry point into the county's development code. Because someone has to be reachable <em>when the code does something confusing (so, constantly).</em></p>
         </div>
-        <div class="group-links">
-          <a class="group-link" href="microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">
             <div>
               <div class="group-link-title">LDC — Contact &amp; Navigation</div>
               <span class="group-link-sub">Who to reach at the county</span>
             </div>
-            <span class="group-link-arrow">↗</span>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
-          <a class="group-link" href="microsites/county/land/LandDevelopmentCode/ldc-page-04-accessibility-statement.html">
+          <a class="group-link" role="listitem" href="microsites/county/land/LandDevelopmentCode/ldc-page-04-accessibility-statement.html">
             <div>
               <div class="group-link-title">LDC — Accessibility Statement</div>
               <span class="group-link-sub">WCAG posture &amp; remediation</span>
             </div>
-            <span class="group-link-arrow">↗</span>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
 
-      <a class="page-card" href="microsites/county/land/dashboard/el_paso_population_components.html">
+      <a class="page-card" role="listitem" href="microsites/county/land/dashboard/el_paso_population_components.html">
         <div class="card-left">
           <p class="card-scope">County · Population Dashboard</p>
           <p class="card-title">El Paso Population Components</p>
@@ -1442,59 +1453,71 @@
         </div>
         <div class="card-right">
           <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
     </div>
 
     <!-- ── Downtown ────────────────────────────────────────────── -->
-    <h3 class="scope-heading">Downtown Colorado Springs</h3>
-    <div class="page-grid">
+    <h3 class="scope-heading" id="scope-downtown">Downtown Colorado Springs</h3>
+    <div class="page-grid" role="list" aria-labelledby="scope-downtown">
 
-      <a class="page-card" href="microsites/downtown/downtown_cs_search_portal_v2_ada.html">
+      <div class="group-card" role="listitem">
         <div class="card-left">
           <p class="card-scope">Downtown · Full Disclosure</p>
-          <p class="card-title">Downtown Funding &amp; Records Search</p>
-          <p class="card-desc">Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place. <em>The first searchable index for downtown money.</em></p>
+          <p class="card-title">Downtown Colorado Springs — Records &amp; Businesses</p>
+          <p class="card-desc">The first searchable index for downtown money and the businesses that receive it. Paired with a directory of every business inside the BID footprint.</p>
         </div>
-        <div class="card-right">
-          <span class="tape tape-live">Live</span>
-          <span class="card-arrow">↗</span>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/downtown/downtown_cs_search_portal_v2_ada.html">
+            <div>
+              <div class="group-link-title">Downtown Funding &amp; Records Search</div>
+              <span class="group-link-sub">BID · DDA · TIF · board meetings</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="microsites/downtown/downtown_cs_business_directory.html">
+            <div>
+              <div class="group-link-title">Downtown Business Directory</div>
+              <span class="group-link-sub">Every business in the BID footprint</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
         </div>
-      </a>
+      </div>
 
     </div>
 
     <!-- ── State ───────────────────────────────────────────────── -->
-    <h3 class="scope-heading">State of Colorado</h3>
-    <div class="page-grid">
+    <h3 class="scope-heading" id="scope-state">State of Colorado</h3>
+    <div class="page-grid" role="list" aria-labelledby="scope-state">
 
-      <div class="group-card">
+      <div class="group-card" role="listitem">
         <div class="card-left">
           <p class="card-scope">State · CDPHE</p>
           <p class="card-title">Colorado Dept. of Public Health &amp; Environment</p>
           <p class="card-desc">An audit of the CDPHE CoHID Tableau dashboard, plus the El Paso County mortality redesign. Conducted 16 days before the April 24 ADA Title II deadline.</p>
         </div>
-        <div class="group-links">
-          <a class="group-link" href="microsites/state/CDPHE/CDPHE_CoHID_ADA_Audit.html">
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/state/CDPHE/CDPHE_CoHID_ADA_Audit.html">
             <div>
               <div class="group-link-title">CDPHE CoHID — ADA Audit</div>
               <span class="group-link-sub">7 WCAG 2.1 AA gaps · Tableau</span>
             </div>
-            <span class="group-link-arrow">↗</span>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
-          <a class="group-link" href="microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html">
+          <a class="group-link" role="listitem" href="microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html">
             <div>
               <div class="group-link-title">El Paso County Mortality Dashboard</div>
               <span class="group-link-sub">Accessible redesign with military analysis</span>
             </div>
-            <span class="group-link-arrow">↗</span>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
 
-      <a class="page-card" href="microsites/state/cdola/cdola-cora-audit-and-redesign.html">
+      <a class="page-card" role="listitem" href="microsites/state/cdola/cdola-cora-audit-and-redesign.html">
         <div class="card-left">
           <p class="card-scope">State · CDOLA</p>
           <p class="card-title">CDOLA — CORA Audit &amp; Redesign</p>
@@ -1502,44 +1525,44 @@
         </div>
         <div class="card-right">
           <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
-      <div class="group-card">
+      <div class="group-card" role="listitem">
         <div class="card-left">
           <p class="card-scope">State · Attorney General</p>
           <p class="card-title">Colorado Attorney General</p>
           <p class="card-desc">A full audit, compliance brief, and accessible redesign of the Colorado AG's consumer complaint experience — plus a side-by-side comparison of the tools used to find the gaps.</p>
         </div>
-        <div class="group-links">
-          <a class="group-link" href="microsites/state/colorado-attorney-general/accessibility_tool_comparison.html">
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/state/colorado-attorney-general/accessibility_tool_comparison.html">
             <div>
               <div class="group-link-title">Accessibility Tool Comparison</div>
               <span class="group-link-sub">WAVE · axe · Lighthouse</span>
             </div>
-            <span class="group-link-arrow">↗</span>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
-          <a class="group-link" href="microsites/state/colorado-attorney-general/coag-complaint-form.html">
+          <a class="group-link" role="listitem" href="microsites/state/colorado-attorney-general/coag-complaint-form.html">
             <div>
               <div class="group-link-title">COAG Complaint Form</div>
               <span class="group-link-sub">Current state of the live form</span>
             </div>
-            <span class="group-link-arrow">↗</span>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
-          <a class="group-link" href="microsites/state/colorado-attorney-general/coag-compliance-brief.html">
+          <a class="group-link" role="listitem" href="microsites/state/colorado-attorney-general/coag-compliance-brief.html">
             <div>
               <div class="group-link-title">COAG Compliance Brief</div>
               <span class="group-link-sub">ADA posture &amp; findings</span>
             </div>
-            <span class="group-link-arrow">↗</span>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
-          <a class="group-link" href="microsites/state/colorado-attorney-general/coag-file-complaint-redesign.html">
+          <a class="group-link" role="listitem" href="microsites/state/colorado-attorney-general/coag-file-complaint-redesign.html">
             <div>
               <div class="group-link-title">File a Complaint — Redesign</div>
               <span class="group-link-sub">Accessible, plain-language rebuild</span>
             </div>
-            <span class="group-link-arrow">↗</span>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
@@ -1547,10 +1570,10 @@
     </div>
 
     <!-- ── Federal ─────────────────────────────────────────────── -->
-    <h3 class="scope-heading">Federal</h3>
-    <div class="page-grid">
+    <h3 class="scope-heading" id="scope-federal">Federal</h3>
+    <div class="page-grid" role="list" aria-labelledby="scope-federal">
 
-      <a class="page-card" href="microsites/FBI/tips-fbi-redesign.html">
+      <a class="page-card" role="listitem" href="microsites/FBI/tips-fbi-redesign.html">
         <div class="card-left">
           <p class="card-scope">Federal · FBI · UX Research</p>
           <p class="card-title">FBI Tips — Redesign Proposal</p>
@@ -1558,7 +1581,7 @@
         </div>
         <div class="card-right">
           <span class="tape tape-wip">In Progress</span>
-          <span class="card-arrow">↗</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
         </div>
       </a>
 
@@ -1568,20 +1591,20 @@
 </section>
 
 <!-- ═══ PEOPLE ══════════════════════════════════════════════════════ -->
-<section class="section" id="people">
+<section class="section" id="people" aria-labelledby="people-heading">
   <div class="container">
     <div id="people-anchor" class="section-anchor"></div>
-    <div class="section-eyebrow">People</div>
+    <div class="section-eyebrow" aria-hidden="true">People</div>
     <div class="section-header">
-      <h2>Who you need to know</h2>
+      <h2 id="people-heading">Who you need to know</h2>
       <span class="section-note">BOCC · District managers · State contacts</span>
     </div>
     <p class="section-sub">The organizations and offices that make decisions affecting your property, your taxes, and your streets — whether you know their names or not.</p>
 
-    <div class="people-grid">
+    <div class="people-grid" role="list">
 
-      <div class="person-card">
-        <div class="person-avatar">EPC</div>
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">EPC</div>
         <div>
           <div class="person-name">El Paso County BOCC</div>
           <div class="person-role">Board of County Commissioners · 5 members · Oversight of all metro districts in unincorporated EPC</div>
@@ -1589,8 +1612,8 @@
         </div>
       </div>
 
-      <div class="person-card">
-        <div class="person-avatar">WSD</div>
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">WSD</div>
         <div>
           <div class="person-name">WS Districts (WSDM)</div>
           <div class="person-role">Manages 30+ metro district websites · Single WordPress platform · Primary compliance contact for bulk remediation</div>
@@ -1598,8 +1621,8 @@
         </div>
       </div>
 
-      <div class="person-card">
-        <div class="person-avatar">SG</div>
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">SG</div>
         <div>
           <div class="person-name">Streamline Government</div>
           <div class="person-role">Platform for 4 district sites · 13 districts covered · Best ADA baseline · Contact for PDF tagging requirements</div>
@@ -1607,8 +1630,8 @@
         </div>
       </div>
 
-      <div class="person-card">
-        <div class="person-avatar">DOJ</div>
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">DOJ</div>
         <div>
           <div class="person-name">U.S. DOJ Civil Rights Division</div>
           <div class="person-role">ADA Title II enforcement · 28 C.F.R. Part 35 · Complaint intake for districts failing April 24 deadline</div>
@@ -1616,8 +1639,8 @@
         </div>
       </div>
 
-      <div class="person-card">
-        <div class="person-avatar">OSA</div>
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">OSA</div>
         <div>
           <div class="person-name">Colorado State Auditor</div>
           <div class="person-role">Receives annual district audits by July 31 · C.R.S. §32-1-106 · Currently receives what the public cannot access</div>
@@ -1625,8 +1648,8 @@
         </div>
       </div>
 
-      <div class="person-card">
-        <div class="person-avatar">DL</div>
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">DL</div>
         <div>
           <div class="person-name">DOLA — Dept. of Local Affairs</div>
           <div class="person-role">Colorado's municipal oversight body · Metro district registration and service plan approval · CORA contact</div>
@@ -1642,7 +1665,7 @@
       <div class="section-divider-line"></div>
     </div>
     <div style="text-align:center;margin-top:4px;">
-      <a class="you-cta" href="microsites/shared/metro_district_citizen_toolkit.html" style="font-size:.6rem;padding:8px 18px;">
+      <a class="you-cta" href="microsites/shared/metro_district_citizen_toolkit.html" style="font-size:.78rem;padding:10px 20px;">
         Open citizen toolkit — all contacts →
       </a>
     </div>
@@ -1651,19 +1674,19 @@
 </section>
 
 <!-- ═══ EVENTS ══════════════════════════════════════════════════════ -->
-<section class="section" id="events">
+<section class="section" id="events" aria-labelledby="events-heading">
   <div class="container">
     <div id="events-anchor" class="section-anchor"></div>
-    <div class="section-eyebrow">Events</div>
+    <div class="section-eyebrow" aria-hidden="true">Events</div>
     <div class="section-header">
-      <h2>Dates that matter</h2>
+      <h2 id="events-heading">Dates that matter</h2>
       <span class="section-note">Deadlines · meetings · filings</span>
     </div>
     <p class="section-sub">The dates that move slowly until they don't. A few of these are legally binding. Most residents have never heard of them.</p>
 
-    <div class="events-list">
+    <div class="events-list" role="list">
 
-      <div class="event-row">
+      <div class="event-row" role="listitem">
         <div class="event-date">
           <div class="event-month">Apr</div>
           <div class="event-day" style="color:var(--red)">24</div>
@@ -1675,7 +1698,7 @@
         <span class="event-badge eb-critical">Critical · 16 days</span>
       </div>
 
-      <div class="event-row">
+      <div class="event-row" role="listitem">
         <div class="event-date">
           <div class="event-month">Jul</div>
           <div class="event-day" style="color:var(--amber)">31</div>
@@ -1687,7 +1710,7 @@
         <span class="event-badge eb-warn">High · Q3</span>
       </div>
 
-      <div class="event-row">
+      <div class="event-row" role="listitem">
         <div class="event-date">
           <div class="event-month">May</div>
           <div class="event-day">6</div>
@@ -1699,7 +1722,7 @@
         <span class="event-badge eb-info">Meeting</span>
       </div>
 
-      <div class="event-row">
+      <div class="event-row" role="listitem">
         <div class="event-date">
           <div class="event-month">May</div>
           <div class="event-day">20</div>
@@ -1711,7 +1734,7 @@
         <span class="event-badge eb-warn">CORA deadline</span>
       </div>
 
-      <div class="event-row">
+      <div class="event-row" role="listitem">
         <div class="event-date">
           <div class="event-month">Jan</div>
           <div class="event-day">31</div>
@@ -1728,40 +1751,40 @@
 </section>
 
 <!-- ═══ COMING SOON ══════════════════════════════════════════════════ -->
-<section class="section" aria-label="Upcoming pages">
+<section class="section" aria-labelledby="coming-heading">
   <div class="container">
-    <div class="section-eyebrow">Coming up</div>
+    <div class="section-eyebrow" aria-hidden="true">Coming up</div>
     <div class="section-header">
-      <h2>What's in the queue</h2>
+      <h2 id="coming-heading">What's in the queue</h2>
       <span class="section-note">No ETA. We have day jobs.</span>
     </div>
     <p class="section-sub">The list is longer than this page. That's intentional.</p>
-    <div class="coming-grid" role="list">
-      <div class="coming-card">
+    <div class="coming-grid" role="list" aria-label="Upcoming pages in the queue">
+      <div class="coming-card" role="listitem">
         <p><strong>County Dashboard</strong><br>El Paso County — all jurisdictions, all crash data, full picture.</p>
       </div>
-      <div class="coming-card">
+      <div class="coming-card" role="listitem">
         <p><strong>LOSS Corridor Ratings</strong><br>Danger ratings for every major road. Pending records request filed April 2026.</p>
       </div>
-      <div class="coming-card">
+      <div class="coming-card" role="listitem">
         <p><strong>Zip Code Search</strong><br>Your block, your crashes, your street. Hyper-local lookup coming.</p>
       </div>
-      <div class="coming-card">
+      <div class="coming-card" role="listitem">
         <p><strong>Metro District Portal</strong><br>Unified public interface for the 249 districts with no website. CORA shouldn't be the only option.</p>
       </div>
-      <div class="coming-card">
+      <div class="coming-card" role="listitem">
         <p><strong>State Dashboard</strong><br>CDOT data across all 64 counties. Colorado from 30,000 feet.</p>
       </div>
-      <div class="coming-card">
+      <div class="coming-card" role="listitem">
         <p><strong>Mill Levy Explainer</strong><br>You're paying it. Every property tax bill. No district explains what it is or why.</p>
       </div>
-      <div class="coming-card">
+      <div class="coming-card" role="listitem">
         <p><strong>Bond &amp; Debt Tracker</strong><br>Outstanding balances, maturity dates, resident liability. The stuff that outlasts administrations.</p>
       </div>
-      <div class="coming-card">
+      <div class="coming-card" role="listitem">
         <p><strong>Stories</strong><br>Long-form analysis when the data says something nobody's saying out loud.</p>
       </div>
-      <div class="coming-card">
+      <div class="coming-card" role="listitem">
         <p><strong>A lot more</strong><br>The list is longer than this page. That's intentional.</p>
       </div>
     </div>
