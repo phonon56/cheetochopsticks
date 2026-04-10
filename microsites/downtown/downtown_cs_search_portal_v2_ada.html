@@ -1,10 +1,26 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Downtown Funding &amp; Records Search Portal — Colorado Springs</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Muli:ital,wght@0,400;0,600;0,700;0,800&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
+  /* Color palette — verified WCAG 2.1 AA / AAA
+     All text pairs meet AAA (7:1+):
+       cs-text #111 on #fff       → 18.9  AAA
+       cs-muted #3A4A5A on #fff   →  9.1  AAA
+       cs-muted #3A4A5A on #F3F5F7 → 8.3  AAA
+       cs-navy #213B5D on #fff    → 11.4  AAA
+       cs-green #4A6100 on #fff   →  7.0  AAA
+       cs-teal #0F4F64 on #fff    →  9.0  AAA
+       cs-error #8B0000 on #fff   → 10.0  AAA
+       #fff on cs-navy #213B5D    → 11.4  AAA
+       hero-desc #C8D8E8 on #213B5D → 7.8  AAA  */
   --cs-navy:   #213B5D;
   --cs-green:  #4A6100;
   --cs-teal:   #0F4F64;
@@ -18,7 +34,16 @@
   --focus-ring: 0 0 0 3px #FFD700;
 }
 
-body, .portal { font-family: 'Muli', sans-serif; font-size: 16px; line-height: 1.6; color: var(--cs-text); background: var(--cs-white); }
+/* ── Universal focus-visible ring (ADA) ── */
+*:focus { outline: none; }
+*:focus-visible { outline: 3px solid #FFD700; outline-offset: 3px; border-radius: 2px; }
+
+/* ── Reduced motion (ADA) ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+body, .portal { font-family: 'Muli', sans-serif; font-size: 17px; line-height: 1.65; color: var(--cs-text); background: var(--cs-white); }
 
 /* ── Skip link ── */
 .skip { position: absolute; top: -999px; left: 6px; background: var(--cs-navy); color: #fff; padding: 10px 18px; font-size: 16px; font-weight: 700; border-radius: 0 0 6px 6px; text-decoration: none; z-index: 9999; }
@@ -37,7 +62,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 16px; line-height: 1
 .logo-box { width: 48px; height: 48px; background: var(--cs-navy); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .logo-box svg { width: 30px; height: 30px; }
 .logo-words strong { display: block; font-size: 18px; font-weight: 800; color: var(--cs-navy); }
-.logo-words span { display: block; font-size: 12px; font-weight: 700; color: var(--cs-teal); letter-spacing: 1.2px; text-transform: uppercase; }
+.logo-words span { display: block; font-size: 13px; font-weight: 700; color: var(--cs-teal); letter-spacing: 1.2px; text-transform: uppercase; }
 .header-badge { margin-left: auto; font-size: 14px; font-weight: 700; color: var(--cs-teal); border: 2px solid var(--cs-teal); padding: 5px 12px; border-radius: 4px; }
 
 /* ── Hero / search ── */
@@ -79,11 +104,11 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 16px; line-height: 1
 .layout { display: flex; }
 .sidebar { width: 248px; min-width: 248px; background: var(--cs-light); border-right: 2px solid var(--cs-border); padding: 22px 18px; }
 .sidebar-section { margin-bottom: 26px; }
-.sidebar-section h2 { font-size: 13px; font-weight: 800; color: var(--cs-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.sidebar-section h2 { font-size: 14px; font-weight: 800; color: var(--cs-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
 .filter-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 16px; color: var(--cs-text); cursor: pointer; }
 .filter-item input[type=checkbox] { width: 20px; height: 20px; cursor: pointer; accent-color: var(--cs-navy); flex-shrink: 0; }
 .filter-item input:focus { outline: 3px solid var(--cs-navy); outline-offset: 2px; }
-.fcount { margin-left: auto; font-size: 13px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.fcount { margin-left: auto; font-size: 14px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
 .fcount-bid { background: #D0DCF5; color: #0D2260; }
 .fcount-dda { background: #C8EBD0; color: #0D3A18; }
 .fcount-dp  { background: #FAE8CC; color: #5C2E00; }
@@ -101,7 +126,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 16px; line-height: 1
 .record { border: 2px solid var(--cs-border); border-radius: 6px; padding: 18px 22px; margin-bottom: 14px; background: #fff; }
 .record:hover { border-color: var(--cs-teal); }
 .record-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
-.rec-badge { font-size: 13px; font-weight: 800; padding: 4px 10px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+.rec-badge { font-size: 14px; font-weight: 800; padding: 4px 10px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
 .rec-badge-BID { background: #D0DCF5; color: #0D2260; }
 .rec-badge-DDA { background: #C8EBD0; color: #0D3A18; }
 .rec-badge-Partnership { background: #FAE8CC; color: #5C2E00; }
@@ -111,7 +136,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 16px; line-height: 1
 .rec-amount { font-size: 19px; font-weight: 800; color: var(--cs-navy); white-space: nowrap; margin-left: 12px; }
 .rec-meta { display: flex; flex-wrap: wrap; gap: 14px; font-size: 15px; color: var(--cs-muted); margin-bottom: 10px; }
 .rec-meta span { display: flex; align-items: center; gap: 5px; }
-.status-pill { font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 10px; }
+.status-pill { font-size: 14px; font-weight: 700; padding: 3px 10px; border-radius: 10px; }
 .pill-Approved { background: #C8EBD0; color: #0D3A18; }
 .pill-Pending { background: #FEF3C7; color: #5C3D00; }
 .pill-Minutes { background: #D0DCF5; color: #0D2260; }
@@ -128,7 +153,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 16px; line-height: 1
 .entity-card.e-bid { border-top: 5px solid #0D2260; }
 .entity-card.e-dda { border-top: 5px solid #0D3A18; }
 .entity-card.e-dp  { border-top: 5px solid #5C2E00; }
-.entity-card .abbr { font-size: 12px; font-weight: 800; color: var(--cs-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.entity-card .abbr { font-size: 14px; font-weight: 800; color: var(--cs-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
 .entity-card h3 { font-size: 17px; font-weight: 800; color: var(--cs-navy); margin-bottom: 10px; }
 .entity-card p { font-size: 15px; color: var(--cs-muted); line-height: 1.6; margin-bottom: 12px; }
 .entity-card dl { font-size: 15px; }
@@ -141,17 +166,18 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 16px; line-height: 1
   .entity-grid { grid-template-columns: 1fr; }
 }
 </style>
+</head>
+<body>
 
 <div class="portal">
   <a href="#main-content" class="skip">Skip to main content</a>
-  <h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">Downtown Colorado Springs Funding Transparency Portal</h2>
 
-  <div class="topbar" role="banner">
+  <nav class="topbar" aria-label="Utility links">
     <a href="#">downtowncs.com</a>
     <a href="#">About the BID</a>
     <a href="#">About the DDA</a>
     <a href="#">Contact</a>
-  </div>
+  </nav>
 
   <header class="site-header">
     <a class="logo-link" href="#" aria-label="Downtown Colorado Springs — return to home">
@@ -472,3 +498,5 @@ function toggleMissing(){
 
 applyFilters();
 </script>
+</body>
+</html>

@@ -5,31 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CORA Form — Implementation Guide · City of Colorado Springs</title>
 <style>
+/* ── WCAG 2.1 AA / AAA palette — verified ≥ 4.5:1 ──
+   navy/blue/muted on off/white → 7+ AAA
+   callout text on tinted bgs   → 7+ AAA
+   header-sub #d6d8e0 on navy   → 10.8 AAA (was rgba(.6) ≈ 3.25 FAIL)
+   footer-sub #d6d8e0 on navy   → 10.8 AAA (was rgba(.6) ≈ 3.25 FAIL)
+   file-tree comment #047857 on white → 5.3 AA (was #059669 ≈ 3.8 FAIL)
+*/
 :root{
   --navy:#00205c;--blue:#0049b1;--green:#065f46;--green-bg:#ecfdf5;
   --amber:#78350f;--amber-bg:#fffbeb;--red:#7f1d1d;--red-bg:#fef2f2;
   --purple:#4c1d95;--purple-bg:#f5f3ff;
   --off:#f5f7fa;--rule:#d0d7e0;--ink:#1a1f2e;--muted:#4a5568;
+  --on-navy:#d6d8e0;--focus:#1d4ed8;
   --mono:'Courier New',Courier,monospace;--font:system-ui,-apple-system,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{font-size:16px;scroll-behavior:smooth;}
-body{background:var(--off);color:var(--ink);font-family:var(--font);line-height:1.7;}
+body{background:var(--off);color:var(--ink);font-family:var(--font);line-height:1.7;font-size:17px;}
 
-.skip-link{position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:3px;font-size:13px;text-decoration:none;}
+/* ── Focus-visible universal ring ── */
+*:focus{outline:none;}
+*:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px;}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important;}
+}
+
+.skip-link{position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;padding:10px 20px;border-radius:3px;font-size:14px;font-weight:600;text-decoration:none;z-index:999;}
 .skip-link:focus{left:8px;}
 
 header{background:var(--navy);border-bottom:3px solid #c8a84b;padding:24px;}
-header h1{color:#fff;font-size:clamp(18px,3vw,26px);max-width:900px;margin:0 auto;}
-header p{color:rgba(255,255,255,.6);font-size:13px;max-width:900px;margin:4px auto 0;}
+header h1{color:#fff;font-size:clamp(20px,3vw,26px);max-width:900px;margin:0 auto;}
+/* was rgba(255,255,255,.6) ≈ 3.25 FAIL / 13px → #d6d8e0 on navy = 10.8 AAA / 14px */
+header p{color:var(--on-navy);font-size:14px;max-width:900px;margin:4px auto 0;}
 
 .layout{display:grid;grid-template-columns:220px 1fr;gap:0;max-width:1100px;margin:0 auto;padding:32px 20px 80px;}
 
 /* SIDEBAR NAV */
 nav.sidebar{position:sticky;top:24px;align-self:start;padding-right:24px;}
-nav.sidebar h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;}
-nav.sidebar a{display:block;font-size:13px;color:var(--blue);text-decoration:none;padding:4px 0;border-left:2px solid var(--rule);padding-left:10px;margin-bottom:2px;transition:border-color .15s;}
-nav.sidebar a:hover,nav.sidebar a:focus{border-color:var(--blue);color:var(--navy);}
+/* was 11px — raised to 12.5px (0.78rem) */
+nav.sidebar h2{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;}
+nav.sidebar a{display:block;font-size:14px;color:var(--blue);text-decoration:none;padding:5px 0;border-left:2px solid var(--rule);padding-left:10px;margin-bottom:2px;transition:border-color .15s;}
+nav.sidebar a:hover,nav.sidebar a:focus{border-color:var(--blue);color:var(--navy);text-decoration:underline;}
 .nav-section{margin-bottom:16px;}
 
 /* MAIN */
@@ -42,7 +61,6 @@ p{margin-bottom:12px;font-size:15px;line-height:1.75;}
 ul,ol{padding-left:20px;margin-bottom:12px;}
 li{font-size:15px;margin-bottom:4px;}
 a{color:var(--blue);}
-a:focus{outline:2px solid var(--blue);outline-offset:2px;border-radius:1px;}
 
 /* CALLOUT BOXES */
 .callout{padding:14px 18px;border-radius:0 4px 4px 0;margin:16px 0;font-size:14px;line-height:1.7;}
@@ -53,8 +71,8 @@ a:focus{outline:2px solid var(--blue);outline-offset:2px;border-radius:1px;}
 .callout strong{font-weight:700;}
 
 /* CODE BLOCKS */
-pre{background:#1e293b;color:#e2e8f0;padding:20px;border-radius:4px;overflow-x:auto;font-size:13px;line-height:1.6;margin:12px 0;}
-code{font-family:var(--mono);font-size:.9em;background:#e2e8f0;color:#1e293b;padding:1px 5px;border-radius:2px;}
+pre{background:#1e293b;color:#e2e8f0;padding:20px;border-radius:4px;overflow-x:auto;font-size:14px;line-height:1.6;margin:12px 0;}
+code{font-family:var(--mono);font-size:.9em;background:#e2e8f0;color:#1e293b;padding:2px 6px;border-radius:2px;}
 pre code{background:none;color:inherit;padding:0;}
 
 /* STEP LIST */
@@ -69,17 +87,18 @@ thead th{background:var(--navy);color:#fff;text-align:left;padding:10px 12px;fon
 tbody tr{border-bottom:1px solid var(--rule);}
 tbody tr:nth-child(even){background:#fafbfd;}
 td{padding:8px 12px;vertical-align:top;}
-td:first-child{font-family:var(--mono);font-size:13px;white-space:nowrap;color:var(--purple);}
+td:first-child{font-family:var(--mono);font-size:14px;white-space:nowrap;color:var(--purple);}
 td:last-child{color:var(--muted);}
 
 /* FILE TREE */
-.file-tree{background:#fff;border:1px solid var(--rule);border-radius:4px;padding:16px 20px;font-family:var(--mono);font-size:13px;line-height:1.8;color:var(--ink);}
+.file-tree{background:#fff;border:1px solid var(--rule);border-radius:4px;padding:16px 20px;font-family:var(--mono);font-size:14px;line-height:1.8;color:var(--ink);}
 .file-tree .dir{color:var(--navy);font-weight:700;}
 .file-tree .file{color:var(--muted);}
-.file-tree .comment{color:#059669;}
+/* was #059669 on white ≈ 3.77 FAIL — now #047857 = 5.3 AA */
+.file-tree .comment{color:#047857;}
 
 /* BADGE */
-.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:.05em;}
+.badge{display:inline-block;font-size:.78rem;font-weight:700;padding:2px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:.05em;}
 .badge-green{background:var(--green-bg);color:var(--green);}
 .badge-amber{background:var(--amber-bg);color:var(--amber);}
 .badge-blue{background:#eff6ff;color:var(--blue);}
@@ -89,8 +108,10 @@ td:last-child{color:var(--muted);}
 .cost-table td:first-child{font-family:inherit;font-weight:600;color:var(--ink);}
 .cost-zero{color:var(--green);font-weight:700;}
 
-footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:20px;font-size:13px;}
-footer a{color:#c8a84b;}
+/* was rgba(255,255,255,.6) ≈ 3.25 FAIL / 13px → #d6d8e0 = 10.8 AAA / 14px */
+footer{background:var(--navy);color:var(--on-navy);text-align:center;padding:20px;font-size:14px;}
+footer a{color:#fde68a;text-decoration:underline;}
+footer a:hover{text-decoration:none;}
 
 @media(max-width:700px){
   .layout{grid-template-columns:1fr;}
@@ -104,7 +125,7 @@ footer a{color:#c8a84b;}
 
 <header>
   <h1>CORA Form — Implementation Guide</h1>
-  <p>City of Colorado Springs · IT Department Reference · Built by StorySeed / The Dais · April 2026</p>
+  <p>City of Colorado Springs <span aria-hidden="true">·</span> IT Department Reference <span aria-hidden="true">·</span> Built by StorySeed / The Dais <span aria-hidden="true">·</span> April 2026</p>
 </header>
 
 <div class="layout">
@@ -147,8 +168,8 @@ footer a{color:#c8a84b;}
   <main id="main" tabindex="-1">
 
     <!-- WHAT THIS IS -->
-    <section id="what-this-is">
-      <h2 class="section-title">What this is</h2>
+    <section id="what-this-is" aria-labelledby="h-what-this-is">
+      <h2 class="section-title" id="h-what-this-is">What this is</h2>
 
       <p>This package is a replacement for the inaccessible GovOutreach third-party CORA
       submission portals currently linked from
@@ -172,8 +193,8 @@ footer a{color:#c8a84b;}
     </section>
 
     <!-- TECH STACK -->
-    <section id="tech-stack">
-      <h2 class="section-title">Tech stack confirmed</h2>
+    <section id="tech-stack" aria-labelledby="h-tech-stack">
+      <h2 class="section-title" id="h-tech-stack">Tech stack confirmed</h2>
 
       <p>coloradosprings.gov runs <strong>Drupal</strong> — confirmed by the
       <code>drupalSettings</code> JavaScript object present on every page. Specifically it
@@ -193,8 +214,8 @@ footer a{color:#c8a84b;}
     </section>
 
     <!-- FILE CONTENTS -->
-    <section id="file-contents">
-      <h2 class="section-title">File contents</h2>
+    <section id="file-contents" aria-labelledby="h-file-contents">
+      <h2 class="section-title" id="h-file-contents">File contents</h2>
 
       <div class="file-tree" role="img" aria-label="File directory structure">
         <div><span class="dir">cos-cora-azure-function/</span></div>
@@ -215,8 +236,8 @@ footer a{color:#c8a84b;}
     </section>
 
     <!-- FORM MODES -->
-    <section id="form-modes">
-      <h2 class="section-title">Form submission modes</h2>
+    <section id="form-modes" aria-labelledby="h-form-modes">
+      <h2 class="section-title" id="h-form-modes">Form submission modes</h2>
 
       <p>The form automatically operates in one of two modes based on the
       <code>CONFIG.AZURE_FUNCTION_URL</code> setting at the top of the HTML file:</p>
@@ -242,8 +263,8 @@ footer a{color:#c8a84b;}
     </section>
 
     <!-- FORM CONFIG -->
-    <section id="form-config">
-      <h2 class="section-title">Configuring the form</h2>
+    <section id="form-config" aria-labelledby="h-form-config">
+      <h2 class="section-title" id="h-form-config">Configuring the form</h2>
 
       <p>Open <code>cos-cora-form-v2.html</code> in a text editor. Find the
       <code>&lt;script&gt;</code> block near the top (inside the <code>&lt;head&gt;</code>):</p>
@@ -270,8 +291,8 @@ footer a{color:#c8a84b;}
     </section>
 
     <!-- FORM DEPLOY -->
-    <section id="form-deploy">
-      <h2 class="section-title">Deploying the form</h2>
+    <section id="form-deploy" aria-labelledby="h-form-deploy">
+      <h2 class="section-title" id="h-form-deploy">Deploying the form</h2>
 
       <p>Three options, from fastest to most integrated:</p>
 
@@ -300,8 +321,8 @@ if (dept) {
     </section>
 
     <!-- AZURE PREREQS -->
-    <section id="azure-prereqs">
-      <h2 class="section-title">Azure Function prerequisites</h2>
+    <section id="azure-prereqs" aria-labelledby="h-azure-prereqs">
+      <h2 class="section-title" id="h-azure-prereqs">Azure Function prerequisites</h2>
       <ul>
         <li>Azure subscription (the City's existing Azure tenant works)</li>
         <li>Node.js 18 or higher (for local testing only)</li>
@@ -319,8 +340,8 @@ npm install</code></pre>
     </section>
 
     <!-- AZURE MAILBOX -->
-    <section id="azure-mailbox">
-      <h2 class="section-title">Step 1 — Set up the sending mailbox</h2>
+    <section id="azure-mailbox" aria-labelledby="h-azure-mailbox">
+      <h2 class="section-title" id="h-azure-mailbox">Step 1 — Set up the sending mailbox</h2>
 
       <p>Create a dedicated Microsoft 365 mailbox for the function to send from:</p>
       <p><code>cora-noreply@coloradosprings.gov</code></p>
@@ -359,8 +380,8 @@ npm install</code></pre>
     </section>
 
     <!-- AZURE DEPLOY -->
-    <section id="azure-deploy">
-      <h2 class="section-title">Step 2 — Deploy to Azure</h2>
+    <section id="azure-deploy" aria-labelledby="h-azure-deploy">
+      <h2 class="section-title" id="h-azure-deploy">Step 2 — Deploy to Azure</h2>
 
       <h3>Option A — Azure CLI (recommended for IT)</h3>
 <pre><code># Login to Azure
@@ -408,8 +429,8 @@ func azure functionapp publish func-cora-cos-prod</code></pre>
     </section>
 
     <!-- AZURE CONFIG -->
-    <section id="azure-config">
-      <h2 class="section-title">Step 3 — Environment variables</h2>
+    <section id="azure-config" aria-labelledby="h-azure-config">
+      <h2 class="section-title" id="h-azure-config">Step 3 — Environment variables</h2>
 
       <p>In Azure portal: Function App → Configuration → Application settings.
       Add each variable as a new application setting. Click <strong>Save</strong>
@@ -452,8 +473,8 @@ func azure functionapp publish func-cora-cos-prod</code></pre>
     </section>
 
     <!-- AZURE TEST -->
-    <section id="azure-test">
-      <h2 class="section-title">Step 4 — Test locally before going live</h2>
+    <section id="azure-test" aria-labelledby="h-azure-test">
+      <h2 class="section-title" id="h-azure-test">Step 4 — Test locally before going live</h2>
 
 <pre><code># Copy the example settings and fill in real credentials
 cp local.settings.json.example local.settings.json
@@ -476,8 +497,8 @@ node test/test.js</code></pre>
     </section>
 
     <!-- CONNECT TO FORM -->
-    <section id="azure-connect">
-      <h2 class="section-title">Step 5 — Connect the form to the function</h2>
+    <section id="azure-connect" aria-labelledby="h-azure-connect">
+      <h2 class="section-title" id="h-azure-connect">Step 5 — Connect the form to the function</h2>
 
       <p>After deploying, get the function URL from Azure portal:</p>
       <p>Function App → Functions → CoraSubmit → <strong>Get Function URL</strong></p>
@@ -496,8 +517,8 @@ node test/test.js</code></pre>
     </section>
 
     <!-- DRUPAL -->
-    <section id="drupal">
-      <h2 class="section-title">Native Drupal option (Webform module)</h2>
+    <section id="drupal" aria-labelledby="h-drupal">
+      <h2 class="section-title" id="h-drupal">Native Drupal option (Webform module)</h2>
 
       <p>coloradosprings.gov runs the Tyler Colorado Drupal CMS platform.
       The <strong>Drupal Webform module</strong> provides a native alternative to the
@@ -539,8 +560,8 @@ node test/test.js</code></pre>
     </section>
 
     <!-- COSTS -->
-    <section id="costs">
-      <h2 class="section-title">Cost estimate</h2>
+    <section id="costs" aria-labelledby="h-costs">
+      <h2 class="section-title" id="h-costs">Cost estimate</h2>
 
       <table class="cost-table">
         <thead>
@@ -577,8 +598,8 @@ node test/test.js</code></pre>
     </section>
 
     <!-- ROUTING -->
-    <section id="routing">
-      <h2 class="section-title">Department routing reference</h2>
+    <section id="routing" aria-labelledby="h-routing">
+      <h2 class="section-title" id="h-routing">Department routing reference</h2>
 
       <p>The form's department select values and their routing destinations.
       Update <code>EMAIL_*</code> environment variables in Azure to the correct
@@ -606,8 +627,8 @@ node test/test.js</code></pre>
     </section>
 
     <!-- CORA LAW -->
-    <section id="cora-law">
-      <h2 class="section-title">CORA legal reference</h2>
+    <section id="cora-law" aria-labelledby="h-cora-law">
+      <h2 class="section-title" id="h-cora-law">CORA legal reference</h2>
 
       <table>
         <thead><tr><th>Statute</th><th>Requirement</th></tr></thead>
@@ -624,16 +645,16 @@ node test/test.js</code></pre>
     </section>
 
     <!-- CONTACTS -->
-    <section id="contacts">
-      <h2 class="section-title">Key contacts</h2>
+    <section id="contacts" aria-labelledby="h-contacts">
+      <h2 class="section-title" id="h-contacts">Key contacts</h2>
 
       <table>
         <thead><tr><th>Role</th><th>Contact</th></tr></thead>
         <tbody>
-          <tr><td>CORA / City Communications</td><td>City.Communications@coloradosprings.gov · <a href="tel:+17193855906">(719) 385-5906</a></td></tr>
-          <tr><td>Procurement Services</td><td>Nicole Spindler · <a href="tel:+17193855265">(719) 385-5265</a></td></tr>
+          <tr><td>CORA / City Communications</td><td>City.Communications@coloradosprings.gov <span aria-hidden="true">·</span> <a href="tel:+17193855906">(719) 385-5906</a></td></tr>
+          <tr><td>Procurement Services</td><td>Nicole Spindler <span aria-hidden="true">·</span> <a href="tel:+17193855265">(719) 385-5265</a></td></tr>
           <tr><td>Office of Accessibility</td><td>coloradosprings.gov/TitleIIADA</td></tr>
-          <tr><td>Municipal Court</td><td>MunicipalCourtViolations@coloradosprings.gov · <a href="tel:+17193855928">(719) 385-5928</a></td></tr>
+          <tr><td>Municipal Court</td><td>MunicipalCourtViolations@coloradosprings.gov <span aria-hidden="true">·</span> <a href="tel:+17193855928">(719) 385-5928</a></td></tr>
           <tr><td>Accounts Receivable</td><td><a href="tel:+17193852367">(719) 385-2367</a></td></tr>
           <tr><td>Traffic Engineering</td><td>Traffic-Engineering.SMB@coloradosprings.gov</td></tr>
           <tr><td>Planning / CORA</td><td>PCDHearings@ElPasoCO.com</td></tr>
@@ -653,11 +674,11 @@ node test/test.js</code></pre>
   </main>
 </div>
 
-<footer>
-  <p>City of Colorado Springs · CORA Implementation Guide · StorySeed / The Dais · April 2026</p>
+<footer role="contentinfo">
+  <p>City of Colorado Springs <span aria-hidden="true">·</span> CORA Implementation Guide <span aria-hidden="true">·</span> StorySeed / The Dais <span aria-hidden="true">·</span> April 2026</p>
   <p style="margin-top:4px;">
-    <a href="https://coloradosprings.gov/City-Clerk/CORA">CORA Page</a> ·
-    <a href="https://coloradosprings.gov/TitleIIADA">Web Accessibility</a> ·
+    <a href="https://coloradosprings.gov/City-Clerk/CORA">CORA Page</a> <span aria-hidden="true">·</span>
+    <a href="https://coloradosprings.gov/TitleIIADA">Web Accessibility</a> <span aria-hidden="true">·</span>
     <a href="https://coloradofoic.org">Colorado FOIC</a>
   </p>
 </footer>

@@ -9,7 +9,13 @@
   <meta name="description" content="Sample CORA letters, BOCC templates, DOJ complaint drafts, and every contact you need to push for change in El Paso County.">
   <title>Metro District Citizen Toolkit — cheetochopsticks</title>
   <style>
-    :root{--bg:#0c1220;--surface:#141e2e;--surface2:#1c2a3e;--surface3:#233045;--border:rgba(255,255,255,.09);--border-hi:rgba(255,255,255,.18);--gold:#c8a84b;--gold-dim:rgba(200,168,75,.18);--gold-faint:rgba(200,168,75,.07);--gold-lt:#fde68a;--text:#ede8dc;--muted:#96adc4;--quiet:#506070;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',Georgia,serif;--red:#f87171;--red-dim:rgba(248,113,113,.13);--green:#4ade80;--green-dim:rgba(74,222,128,.11);--blue:#60a5fa;--blue-dim:rgba(96,165,250,.11);--amber:#fbbf24;--amber-dim:rgba(251,191,36,.13);}
+    /* Palette verified WCAG 2.1 AA/AAA on --bg #0c1220
+       text   #ede8dc → 15.3 AAA · muted #96adc4 → 8.08 AAA
+       quiet  #8ca3b8 → 7.16 AAA (was #506070, 2.89 — FAIL AA)
+       red    #fca5a5 → 9.85 AAA (was #f87171, 6.76 AA only)
+       gold   #c8a84b → 8.16 AAA · blue #60a5fa → 7.36 AAA
+       amber  #fbbf24 → 11.2 AAA · green #4ade80 → 10.7 AAA */
+    :root{--bg:#0c1220;--surface:#141e2e;--surface2:#1c2a3e;--surface3:#233045;--border:rgba(255,255,255,.09);--border-hi:rgba(255,255,255,.18);--gold:#c8a84b;--gold-dim:rgba(200,168,75,.18);--gold-faint:rgba(200,168,75,.07);--gold-lt:#fde68a;--text:#ede8dc;--muted:#96adc4;--quiet:#8ca3b8;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',Georgia,serif;--red:#fca5a5;--red-dim:rgba(252,165,165,.14);--green:#4ade80;--green-dim:rgba(74,222,128,.11);--blue:#60a5fa;--blue-dim:rgba(96,165,250,.11);--amber:#fbbf24;--amber-dim:rgba(251,191,36,.13);}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{font-size:100%;scroll-behavior:smooth;}
     body{font-family:var(--sans);font-size:17px;line-height:1.65;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;}
@@ -29,14 +35,14 @@
     .nav-logo-word{font-family:var(--sans);font-weight:600;font-size:.95rem;color:var(--text);}
     .nav-logo-dot{color:var(--gold);font-size:.95rem;}
     .nav-links{display:flex;align-items:center;gap:2px;flex:1;}
-    .nav-link{font-family:var(--mono);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:6px 11px;border-radius:3px;border:1px solid transparent;transition:all .18s;white-space:nowrap;}
+    .nav-link{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:6px 11px;border-radius:3px;border:1px solid transparent;transition:all .18s;white-space:nowrap;}
     .nav-link:hover{color:var(--text);background:rgba(255,255,255,.04);}
     .nav-link.you-link{color:var(--gold);border-color:var(--gold-dim);background:var(--gold-faint);}
-    .nav-crumb{font-family:var(--mono);font-size:.76rem;color:var(--quiet);margin-left:auto;}
+    .nav-crumb{font-family:var(--mono);font-size:.78rem;color:var(--quiet);margin-left:auto;}
     @media(max-width:660px){.nav-links{display:none;}}
     .page-hd{padding:52px 0 36px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
     .page-hd::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),rgba(200,168,75,.1));}
-    .page-eyebrow{font-family:var(--mono);font-size:.76rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+    .page-eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
     .page-eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--gold);opacity:.5;}
     .page-hd h1{font-family:var(--serif);font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:700;line-height:1.15;color:var(--text);margin-bottom:14px;font-style:normal;}
     .page-sub{font-size:1rem;color:var(--muted);max-width:580px;line-height:1.7;}
@@ -50,7 +56,7 @@
     .section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.4rem;margin-bottom:1rem;}
     .section-title{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border);font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;}
     .step-row{display:flex;gap:12px;align-items:flex-start;margin:10px 0;font-size:.9rem;color:var(--muted);}
-    .step-num{width:24px;height:24px;border-radius:50%;border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:.76rem;font-weight:600;flex-shrink:0;color:var(--muted);}
+    .step-num{width:24px;height:24px;border-radius:50%;border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;flex-shrink:0;color:var(--muted);}
     .contact-row{display:flex;justify-content:space-between;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border);gap:14px;flex-wrap:wrap;}
     .contact-row:last-child{border-bottom:none;}
     .contact-name{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:3px;}
@@ -76,7 +82,7 @@
     .copy-btn.copied{border-color:rgba(74,222,128,.4);color:var(--green);}
     .site-footer{border-top:1px solid var(--border);padding:28px 0;}
     .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
-    .footer-inner p{font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;color:var(--quiet);line-height:1.7;}
+    .footer-inner p{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;color:var(--quiet);line-height:1.7;}
     .footer-inner a{color:var(--muted);}
     .footer-inner a:hover{color:var(--gold);}
     @media(prefers-reduced-motion:reduce){*{transition:none!important;}}

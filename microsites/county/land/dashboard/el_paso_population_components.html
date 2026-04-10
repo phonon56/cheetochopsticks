@@ -1,41 +1,57 @@
 
 <style>
+/* ============================================================
+   ADA PASS — el_paso_population_components (embedded fragment)
+   Fragment inherits document color tokens from its host page.
+   Bumped all text ≥12.5px (0.78rem) to meet AA minimum legible
+   size; line-heights raised to ≥1.5; added focus-visible ring;
+   added prefers-reduced-motion guard for Chart.js tooltip motion.
+   ============================================================ */
 *{box-sizing:border-box;margin:0;padding:0}
 .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
 .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1rem}
 .metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px}
-.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;line-height:1.4}
-.mv{font-size:20px;font-weight:500;color:var(--color-text-primary)}
-.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:3px}
-.badge{font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);white-space:nowrap;display:inline-block}
+.ml{font-size:0.8125rem;color:var(--color-text-secondary);margin-bottom:4px;line-height:1.5}
+.mv{font-size:1.375rem;font-weight:500;color:var(--color-text-primary);line-height:1.3}
+.ms{font-size:0.8125rem;color:var(--color-text-tertiary);margin-top:3px;line-height:1.5}
+.badge{font-size:0.8125rem;padding:2px 8px;border-radius:var(--border-radius-md);white-space:nowrap;display:inline-block;line-height:1.5}
 .real{background:var(--color-background-success);color:var(--color-text-success)}
 .est{background:var(--color-background-danger);color:var(--color-text-danger)}
 .mixed{background:var(--color-background-warning);color:var(--color-text-warning)}
-.row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px;gap:12px}
+.row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:0.9375rem;gap:12px;line-height:1.6}
 .row:last-child{border-bottom:none}
-.rl{color:var(--color-text-secondary);flex:2;line-height:1.5}
-.rv{flex:1;text-align:right;font-weight:500;color:var(--color-text-primary)}
-.sec{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.05em;margin:1.2rem 0 8px;text-transform:uppercase}
-.note{font-size:12px;color:var(--color-text-secondary);line-height:1.6;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;gap:8px}
+.rl{color:var(--color-text-secondary);flex:2;line-height:1.6}
+.rv{flex:1;text-align:right;font-weight:500;color:var(--color-text-primary);line-height:1.6}
+.sec{font-size:0.8125rem;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.05em;margin:1.2rem 0 8px;text-transform:uppercase;line-height:1.5}
+.note{font-size:0.875rem;color:var(--color-text-secondary);line-height:1.65;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;gap:8px}
 .note:last-child{border-bottom:none}
 .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px;font-size:12px;color:var(--color-text-secondary)}
+.leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px;font-size:0.875rem;color:var(--color-text-secondary);line-height:1.6}
 .li{display:flex;align-items:center;gap:6px}
 .lsq{width:10px;height:10px;border-radius:2px}
 .tab-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
-.tab{font-size:12px;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary)}
+.tab{font-size:0.875rem;padding:8px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary);line-height:1.5}
 .tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.tab:focus-visible{outline:3px solid var(--color-border-info, #378ADD);outline-offset:3px;border-radius:var(--border-radius-md)}
 .panel{display:none}.panel.active{display:block}
-.src{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;margin-top:8px;font-size:12px;color:var(--color-text-secondary);line-height:1.6}
-.alert{background:var(--color-background-danger);border-radius:var(--border-radius-md);padding:10px 12px;margin-top:8px;font-size:12px;color:var(--color-text-danger);line-height:1.6}
-.warn{background:var(--color-background-warning);border-radius:var(--border-radius-md);padding:10px 12px;margin-top:8px;font-size:12px;color:var(--color-text-warning);line-height:1.6}
+.src{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;margin-top:8px;font-size:0.875rem;color:var(--color-text-secondary);line-height:1.65}
+.alert{background:var(--color-background-danger);border-radius:var(--border-radius-md);padding:10px 12px;margin-top:8px;font-size:0.875rem;color:var(--color-text-danger);line-height:1.65}
+.warn{background:var(--color-background-warning);border-radius:var(--border-radius-md);padding:10px 12px;margin-top:8px;font-size:0.875rem;color:var(--color-text-warning);line-height:1.65}
+/* Chart-surrounding focusable controls & reduced-motion guard */
+button:focus-visible{outline:3px solid var(--color-border-info, #378ADD);outline-offset:3px}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;scroll-behavior:auto !important}
+}
+/* Visually hidden label — available to screen readers only */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 
-<div style="padding:1rem 0">
-<div class="leg">
-  <span class="li"><span class="lsq" style="background:#1D9E75"></span>Real administrative record</span>
-  <span class="li"><span class="lsq" style="background:#E24B4A"></span>Census estimate — not a real count</span>
-  <span class="li"><span class="lsq" style="background:#BA7517"></span>Derived / mixed</span>
+<section style="padding:1rem 0" aria-labelledby="epc-pop-heading">
+<h2 id="epc-pop-heading" class="sr-only">El Paso County population components of change</h2>
+<div class="leg" role="list" aria-label="Data source legend">
+  <span class="li" role="listitem"><span class="lsq" style="background:#1D9E75" aria-hidden="true"></span>Real administrative record</span>
+  <span class="li" role="listitem"><span class="lsq" style="background:#E24B4A" aria-hidden="true"></span>Census estimate — not a real count</span>
+  <span class="li" role="listitem"><span class="lsq" style="background:#BA7517" aria-hidden="true"></span>Derived / mixed</span>
 </div>
 
 <div class="metric-grid">
@@ -61,19 +77,19 @@
   </div>
 </div>
 
-<div class="tab-row">
-  <button class="tab active" onclick="showTab('components')">Components of change</button>
-  <button class="tab" onclick="showTab('births')">Births and deaths</button>
-  <button class="tab" onclick="showTab('migration')">Migration — what we don't know</button>
-  <button class="tab" onclick="showTab('military')">The military factor</button>
-  <button class="tab" onclick="showTab('sources')">Data sources</button>
+<div class="tab-row" role="tablist" aria-label="Population data views">
+  <button type="button" class="tab active" role="tab" id="tab-components" aria-selected="true" aria-controls="panel-components" onclick="showTab('components', this)">Components of change</button>
+  <button type="button" class="tab" role="tab" id="tab-births" aria-selected="false" aria-controls="panel-births" onclick="showTab('births', this)">Births and deaths</button>
+  <button type="button" class="tab" role="tab" id="tab-migration" aria-selected="false" aria-controls="panel-migration" onclick="showTab('migration', this)">Migration — what we don't know</button>
+  <button type="button" class="tab" role="tab" id="tab-military" aria-selected="false" aria-controls="panel-military" onclick="showTab('military', this)">The military factor</button>
+  <button type="button" class="tab" role="tab" id="tab-sources" aria-selected="false" aria-controls="panel-sources" onclick="showTab('sources', this)">Data sources</button>
 </div>
 
-<div id="panel-components" class="panel active">
+<div id="panel-components" class="panel active" role="tabpanel" aria-labelledby="tab-components">
   <div class="card">
     <div class="sec">Population change = natural growth + net migration — El Paso County estimates</div>
     <div class="src">Sources: Colorado State Demography Office (DOLA) — demography.dola.colorado.gov/births-deaths-migration. Natural growth (births − deaths) uses real vital record counts. Net migration is a Census Bureau estimate — not a count. These two are combined to produce total population change.</div>
-    <div style="position:relative;width:100%;height:260px;margin-top:1rem">
+    <div style="position:relative;width:100%;height:260px;margin-top:1rem" role="img" aria-label="Stacked bar chart showing natural growth, net domestic migration, and international migration for El Paso County by decade, 1990s through 2024–25. Values in the neighboring table.">
       <canvas id="chartComponents"></canvas>
     </div>
   </div>
@@ -85,17 +101,17 @@
     <div class="row"><span class="rl">2010s avg natural growth per year <span class="badge real">real</span></span><span class="rv">~7,400</span></div>
     <div class="row"><span class="rl">2010s avg net domestic migration per year <span class="badge est">est.</span></span><span class="rv" style="color:#A32D2D">-5,300</span></div>
     <div class="row"><span class="rl">2010s avg international migration per year <span class="badge est">est.</span></span><span class="rv" style="color:#0F6E56">+1,800</span></div>
-    <div class="row"><span class="rl">2021–2022 natural growth <span class="badge real">real</span></span><span class="rv">3,448 <span style="font-size:11px;color:var(--color-text-danger)">(COVID deaths)</span></span></div>
+    <div class="row"><span class="rl">2021–2022 natural growth <span class="badge real">real</span></span><span class="rv">3,448 <span style="font-size:13px;color:var(--color-text-danger)">(COVID deaths)</span></span></div>
     <div class="row"><span class="rl">2024–2025 total population added <span class="badge est">est.</span></span><span class="rv">4,700</span></div>
     <div class="alert">El Paso County has had net domestic out-migration every decade going back to the 1990s. The county's population grew only because births and international immigration outpaced the people leaving. That structural pattern is now weakening — births are declining and international migration dropped 55% nationally in 2024–2025.</div>
   </div>
 </div>
 
-<div id="panel-births" class="panel">
+<div id="panel-births" class="panel" role="tabpanel" aria-labelledby="tab-births" hidden>
   <div class="card">
     <div class="sec">Births and deaths — real administrative records</div>
     <div class="src">Source: Colorado Department of Public Health and Environment (CDPHE) Vital Statistics Program. Birth and death certificates are legally required filings — this is a real count, not a survey or estimate. Available by county at cdphe.colorado.gov. DOLA compiles these into annual county-level components of change.</div>
-    <div style="position:relative;width:100%;height:260px;margin-top:1rem">
+    <div style="position:relative;width:100%;height:260px;margin-top:1rem" role="img" aria-label="Line chart showing annual births and deaths in El Paso County from 1990 through 2025. Key values appear in the neighboring facts table.">
       <canvas id="chartBirths"></canvas>
     </div>
   </div>
@@ -111,7 +127,7 @@
   </div>
 </div>
 
-<div id="panel-migration" class="panel">
+<div id="panel-migration" class="panel" role="tabpanel" aria-labelledby="tab-migration" hidden>
   <div class="card">
     <div class="sec">Migration — the number nobody actually counts</div>
     <div class="alert">There is no government system that counts who moves into or out of El Paso County each year. Net migration is a Census Bureau calculation — total population change minus natural growth — not a direct measurement. Nobody counts U-Hauls, change of address forms are not compiled by county, and driver's license transfers are not published.</div>
@@ -123,48 +139,60 @@
     <div class="row"><span class="rl">Voter registration new registrants by county</span><span class="rv"><span class="badge mixed">partial — registered voters only</span></span></div>
     <div class="row"><span class="rl">CSU utility new accounts opened per year</span><span class="rv"><span class="badge real">CORA pending — best proxy</span></span></div>
     <div class="row"><span class="rl">CSU utility accounts closed per year</span><span class="rv"><span class="badge real">CORA pending — best out-migration proxy</span></span></div>
-    <div class="note"><span class="dot" style="background:#1D9E75"></span><span>The CSU utility account data — new accounts opened and closed per year — is the closest thing to a real count of people moving in and out that exists at the county level. It captures actual physical residency changes, not survey estimates.</span></div>
-    <div class="note"><span class="dot" style="background:#E24B4A"></span><span>The Census Bureau's migration estimate is calculated as a residual — total population change minus births plus deaths. It absorbs all measurement error from every other estimate. It is not measured independently.</span></div>
+    <div class="note"><span class="dot" style="background:#1D9E75" aria-hidden="true"></span><span>The CSU utility account data — new accounts opened and closed per year — is the closest thing to a real count of people moving in and out that exists at the county level. It captures actual physical residency changes, not survey estimates.</span></div>
+    <div class="note"><span class="dot" style="background:#E24B4A" aria-hidden="true"></span><span>The Census Bureau's migration estimate is calculated as a residual — total population change minus births plus deaths. It absorbs all measurement error from every other estimate. It is not measured independently.</span></div>
   </div>
 </div>
 
-<div id="panel-military" class="panel">
+<div id="panel-military" class="panel" role="tabpanel" aria-labelledby="tab-military" hidden>
   <div class="card">
     <div class="sec">The military distortion — unique to El Paso County</div>
-    <div class="note"><span class="dot" style="background:#E24B4A"></span><span>Fort Carson, Peterson Space Force Base, Schriever Space Force Base, and the Air Force Academy collectively represent one of the largest military concentrations in the US. Military personnel and their families cycle through El Paso County on 2–3 year rotation orders — creating a population churn that looks identical to civilian in/out migration in Census estimates but is structurally different.</span></div>
-    <div class="note"><span class="dot" style="background:#E24B4A"></span><span>Military personnel on-post at Fort Carson live in federal housing not tracked by the county assessor, pay no property tax, and generate no utility account with CSU. They are present in the population but invisible to nearly every administrative data system used for planning.</span></div>
-    <div class="note"><span class="dot" style="background:#BA7517"></span><span>When military relocations slow — as happened in 2024 per market reports — apartment absorption spikes, school enrollment shifts, and retail demand changes. But no planning system predicted this because military rotation data is federal and not shared with the county.</span></div>
-    <div class="note"><span class="dot" style="background:#BA7517"></span><span>Basic Allowance for Housing (BAH) paid to military families distorts rental market pricing — landlords price to BAH rates, pushing rents above what civilian incomes can support. When rotation orders change, that demand disappears without warning.</span></div>
-    <div class="note"><span class="dot" style="background:#1D9E75"></span><span>A FOIA request to the Department of the Army for Fort Carson annual on-post housing occupancy counts, and a similar request to Peterson/Schriever for off-post housing allowance recipients by ZIP code, would be the only way to account for this population in any real planning model.</span></div>
-    <button onclick="sendPrompt('Draft a FOIA request to the Department of the Army for Fort Carson annual on-post housing occupancy and off-post BAH recipient counts by ZIP code')" style="width:100%;margin-top:1rem">Draft Fort Carson FOIA request ↗</button>
+    <div class="note"><span class="dot" style="background:#E24B4A" aria-hidden="true"></span><span>Fort Carson, Peterson Space Force Base, Schriever Space Force Base, and the Air Force Academy collectively represent one of the largest military concentrations in the US. Military personnel and their families cycle through El Paso County on 2–3 year rotation orders — creating a population churn that looks identical to civilian in/out migration in Census estimates but is structurally different.</span></div>
+    <div class="note"><span class="dot" style="background:#E24B4A" aria-hidden="true"></span><span>Military personnel on-post at Fort Carson live in federal housing not tracked by the county assessor, pay no property tax, and generate no utility account with CSU. They are present in the population but invisible to nearly every administrative data system used for planning.</span></div>
+    <div class="note"><span class="dot" style="background:#BA7517" aria-hidden="true"></span><span>When military relocations slow — as happened in 2024 per market reports — apartment absorption spikes, school enrollment shifts, and retail demand changes. But no planning system predicted this because military rotation data is federal and not shared with the county.</span></div>
+    <div class="note"><span class="dot" style="background:#BA7517" aria-hidden="true"></span><span>Basic Allowance for Housing (BAH) paid to military families distorts rental market pricing — landlords price to BAH rates, pushing rents above what civilian incomes can support. When rotation orders change, that demand disappears without warning.</span></div>
+    <div class="note"><span class="dot" style="background:#1D9E75" aria-hidden="true"></span><span>A FOIA request to the Department of the Army for Fort Carson annual on-post housing occupancy counts, and a similar request to Peterson/Schriever for off-post housing allowance recipients by ZIP code, would be the only way to account for this population in any real planning model.</span></div>
+    <button type="button" onclick="sendPrompt('Draft a FOIA request to the Department of the Army for Fort Carson annual on-post housing occupancy and off-post BAH recipient counts by ZIP code')" style="width:100%;margin-top:1rem;padding:10px 16px;font-size:0.9375rem;line-height:1.4;cursor:pointer">Draft Fort Carson FOIA request <span aria-hidden="true">↗</span></button>
   </div>
 </div>
 
-<div id="panel-sources" class="panel">
+<div id="panel-sources" class="panel" role="tabpanel" aria-labelledby="tab-sources" hidden>
   <div class="card">
     <div class="sec">Real data sources — births, deaths, migration</div>
-    <div class="row"><span class="rl">Annual births by county — real count</span><span class="rv" style="font-size:12px;color:var(--color-text-info)">CDPHE Vital Statistics — cdphe.colorado.gov</span></div>
-    <div class="row"><span class="rl">Annual deaths by county — real count</span><span class="rv" style="font-size:12px;color:var(--color-text-info)">CDPHE Vital Statistics — cdphe.colorado.gov</span></div>
-    <div class="row"><span class="rl">Births, deaths and migration lookup tool</span><span class="rv" style="font-size:12px;color:var(--color-text-info)">DOLA — demography.dola.colorado.gov/births-deaths-migration</span></div>
-    <div class="row"><span class="rl">IRS migration data (tax return address changes)</span><span class="rv" style="font-size:12px;color:var(--color-text-info)">IRS SOI — irs.gov/statistics/soi-tax-stats-migration-data</span></div>
-    <div class="row"><span class="rl">USPS change of address (national change of address)</span><span class="rv" style="font-size:12px;color:var(--color-text-info)">USPS NCOA — licensed data, not free</span></div>
-    <div class="row"><span class="rl">Best real proxy for in-migration</span><span class="rv" style="font-size:12px;color:var(--color-text-success)">CSU new utility accounts — CORA pending</span></div>
-    <div class="row"><span class="rl">Best real proxy for out-migration</span><span class="rv" style="font-size:12px;color:var(--color-text-success)">CSU closed utility accounts — CORA pending</span></div>
-    <div class="row"><span class="rl">Military population at Fort Carson</span><span class="rv" style="font-size:12px;color:var(--color-text-info)">FOIA — Dept of Army</span></div>
-    <div class="row"><span class="rl">Voter registration new + cancelled by year</span><span class="rv" style="font-size:12px;color:var(--color-text-info)">CO Secretary of State — sos.state.co.us</span></div>
+    <div class="row"><span class="rl">Annual births by county — real count</span><span class="rv" style="font-size:13px;color:var(--color-text-info)">CDPHE Vital Statistics — cdphe.colorado.gov</span></div>
+    <div class="row"><span class="rl">Annual deaths by county — real count</span><span class="rv" style="font-size:13px;color:var(--color-text-info)">CDPHE Vital Statistics — cdphe.colorado.gov</span></div>
+    <div class="row"><span class="rl">Births, deaths and migration lookup tool</span><span class="rv" style="font-size:13px;color:var(--color-text-info)">DOLA — demography.dola.colorado.gov/births-deaths-migration</span></div>
+    <div class="row"><span class="rl">IRS migration data (tax return address changes)</span><span class="rv" style="font-size:13px;color:var(--color-text-info)">IRS SOI — irs.gov/statistics/soi-tax-stats-migration-data</span></div>
+    <div class="row"><span class="rl">USPS change of address (national change of address)</span><span class="rv" style="font-size:13px;color:var(--color-text-info)">USPS NCOA — licensed data, not free</span></div>
+    <div class="row"><span class="rl">Best real proxy for in-migration</span><span class="rv" style="font-size:13px;color:var(--color-text-success)">CSU new utility accounts — CORA pending</span></div>
+    <div class="row"><span class="rl">Best real proxy for out-migration</span><span class="rv" style="font-size:13px;color:var(--color-text-success)">CSU closed utility accounts — CORA pending</span></div>
+    <div class="row"><span class="rl">Military population at Fort Carson</span><span class="rv" style="font-size:13px;color:var(--color-text-info)">FOIA — Dept of Army</span></div>
+    <div class="row"><span class="rl">Voter registration new + cancelled by year</span><span class="rv" style="font-size:13px;color:var(--color-text-info)">CO Secretary of State — sos.state.co.us</span></div>
     <div class="src" style="margin-top:1rem">The DOLA county births-deaths-migration lookup tool is free, no login required, and returns real vital statistics data combined with Census migration estimates clearly labeled by source. Start there before filing any records requests for this data.</div>
   </div>
 </div>
 
-</div>
+</section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-function showTab(id){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-'+id).classList.add('active');
-  event.target.classList.add('active');
+function showTab(id, btn){
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.classList.remove('active');
+    t.setAttribute('aria-selected','false');
+  });
+  document.querySelectorAll('.panel').forEach(p=>{
+    p.classList.remove('active');
+    p.setAttribute('hidden','');
+  });
+  var panel=document.getElementById('panel-'+id);
+  panel.classList.add('active');
+  panel.removeAttribute('hidden');
+  var trigger = btn || (typeof event!=='undefined' && event && event.target);
+  if(trigger){
+    trigger.classList.add('active');
+    trigger.setAttribute('aria-selected','true');
+  }
 }
 
 new Chart(document.getElementById('chartComponents'),{

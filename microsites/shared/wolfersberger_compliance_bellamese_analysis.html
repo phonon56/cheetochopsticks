@@ -10,13 +10,19 @@
   <title>Wolfersberger Compliance & Bella Mesa Analysis — cheetochopsticks</title>
   <style>
 
+    /* Palette verified WCAG 2.1 AA/AAA on --bg #0c1220
+       text   #ede8dc → 15.3 AAA · muted #96adc4 → 8.08 AAA
+       quiet  #8ca3b8 → 7.16 AAA (was #506070, 2.89 — FAIL AA)
+       red    #fca5a5 → 9.85 AAA (was #f87171, 6.76 AA only)
+       gold   #c8a84b → 8.16 AAA · blue #60a5fa → 7.36 AAA
+       teal   #5dcaa5 → 9.31 AAA · purple #c8c5f8 → 11.4 AAA */
     :root {
       --bg:#0c1220; --surface:#141e2e; --surface2:#1c2a3e; --surface3:#233045;
       --border:rgba(255,255,255,.09); --border-hi:rgba(255,255,255,.18);
       --gold:#c8a84b; --gold-dim:rgba(200,168,75,.18); --gold-faint:rgba(200,168,75,.07); --gold-lt:#fde68a;
-      --text:#ede8dc; --muted:#96adc4; --quiet:#506070;
+      --text:#ede8dc; --muted:#96adc4; --quiet:#8ca3b8;
       --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif; --serif:'Playfair Display',Georgia,serif;
-      --red:#f87171; --red-dim:rgba(248,113,113,.13);
+      --red:#fca5a5; --red-dim:rgba(252,165,165,.14);
       --green:#4ade80; --green-dim:rgba(74,222,128,.11);
       --blue:#60a5fa; --blue-dim:rgba(96,165,250,.11);
       --amber:#fbbf24; --amber-dim:rgba(251,191,36,.13);
@@ -49,17 +55,17 @@
     .nav-logo-word{font-family:var(--sans);font-weight:600;font-size:.95rem;letter-spacing:-.01em;color:var(--text);}
     .nav-logo-dot{color:var(--gold);font-size:.95rem;}
     .nav-links{display:flex;align-items:center;gap:2px;flex:1;}
-    .nav-link{font-family:var(--mono);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:6px 11px;border-radius:3px;border:1px solid transparent;transition:all .18s;white-space:nowrap;}
+    .nav-link{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:6px 11px;border-radius:3px;border:1px solid transparent;transition:all .18s;white-space:nowrap;}
     .nav-link:hover{color:var(--text);background:rgba(255,255,255,.04);text-decoration:none;}
     .nav-link.you-link{color:var(--gold);border-color:var(--gold-dim);background:var(--gold-faint);}
     .nav-link.you-link:hover{background:var(--gold-dim);}
     .nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0;}
-    .nav-crumb{font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-left:auto;}
+    .nav-crumb{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-left:auto;}
 
     /* Page header */
     .page-hd{padding:52px 0 36px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
     .page-hd::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),rgba(200,168,75,.1));}
-    .page-eyebrow{font-family:var(--mono);font-size:.76rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+    .page-eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
     .page-eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--gold);opacity:.5;}
     .page-hd h1{font-family:var(--serif);font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:700;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin-bottom:14px;font-style:normal;}
     .page-hd .page-sub{font-size:1rem;color:var(--muted);max-width:560px;line-height:1.7;}
@@ -80,9 +86,9 @@
     .panel{display:none;}.panel.active{display:block;}
 
     /* Badges */
-    .badge{font-size:.76rem;padding:3px 9px;border-radius:4px;white-space:nowrap;display:inline-block;font-weight:500;}
+    .badge{font-size:.78rem;padding:3px 9px;border-radius:4px;white-space:nowrap;display:inline-block;font-weight:500;}
     .b-pass,.badge-green{background:rgba(74,222,128,.12);color:#4ade80;}
-    .b-fail,.badge-red{background:rgba(248,113,113,.13);color:#f87171;}
+    .b-fail,.badge-red{background:rgba(252,165,165,.14);color:#fca5a5;} /* was #f87171 6.76 → #fca5a5 9.85 AAA */
     .b-partial,.badge-amber{background:rgba(251,191,36,.13);color:#fbbf24;}
     .b-key,.badge-purple{background:rgba(159,155,236,.13);color:#c8c5f8;}
     .b-real,.badge-teal{background:rgba(93,202,165,.13);color:#5dcaa5;}
@@ -90,9 +96,9 @@
     .b-ready,.badge-blue{background:rgba(96,165,250,.13);color:#ede8dc;}
     .b-pending,.badge-amber2{background:rgba(251,191,36,.13);color:#fbbf24;}
     .b-pub{background:rgba(93,202,165,.13);color:#5dcaa5;}
-    .b-survey{background:rgba(248,113,113,.13);color:#f87171;}
-    .badge-red-old,.badge-amber-old,.badge-green-old,.badge-blue-old{font-size:.76rem;padding:3px 9px;border-radius:4px;}
-    .badge-red{background:rgba(248,113,113,.13);color:#f87171;}
+    .b-survey{background:rgba(252,165,165,.14);color:#fca5a5;} /* was #f87171 → #fca5a5 AAA */
+    .badge-red-old,.badge-amber-old,.badge-green-old,.badge-blue-old{font-size:.78rem;padding:3px 9px;border-radius:4px;}
+    .badge-red{background:rgba(252,165,165,.14);color:#fca5a5;} /* was #f87171 → #fca5a5 AAA */
     .badge-amber{background:rgba(251,191,36,.13);color:#fbbf24;}
     .badge-green{background:rgba(74,222,128,.12);color:#4ade80;}
     .badge-blue{background:rgba(96,165,250,.13);color:#ede8dc;}
@@ -104,7 +110,7 @@
     .rv{flex:2;text-align:right;font-size:.82rem;color:var(--text);}
 
     /* Section label */
-    .sec{font-size:.76rem;font-weight:600;color:var(--gold);letter-spacing:.1em;margin:1.25rem 0 8px;text-transform:uppercase;font-family:var(--mono);}
+    .sec{font-size:.78rem;font-weight:600;color:var(--gold);letter-spacing:.1em;margin:1.25rem 0 8px;text-transform:uppercase;font-family:var(--mono);}
 
     /* Alert boxes */
     .alert{background:var(--red-dim);border-radius:8px;padding:12px 14px;margin:10px 0;font-size:.9rem;color:var(--red);line-height:1.6;border-left:3px solid var(--red);}
@@ -117,9 +123,9 @@
     /* Stat grid */
     .mg,.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:1.25rem;}
     .m,.stat-item{background:var(--surface2);border-radius:8px;padding:14px 16px;}
-    .ml,.stat-label{font-size:.76rem;color:var(--muted);margin-bottom:5px;line-height:1.4;font-family:var(--mono);}
+    .ml,.stat-label{font-size:.78rem;color:var(--muted);margin-bottom:5px;line-height:1.4;font-family:var(--mono);}
     .mv,.stat-val{font-size:1.25rem;font-weight:600;color:var(--text);}
-    .ms,.stat-sub{font-size:.76rem;color:var(--quiet);margin-top:3px;}
+    .ms,.stat-sub{font-size:.78rem;color:var(--quiet);margin-top:3px;}
 
     /* Nobody big text */
     .nobody{font-size:1rem;font-weight:600;color:var(--red);padding:10px 0 5px;}
@@ -164,7 +170,7 @@
 
     /* Step row */
     .step-row{display:flex;gap:12px;align-items:flex-start;margin:10px 0;font-size:.9rem;color:var(--muted);}
-    .step-num{width:24px;height:24px;border-radius:50%;border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:600;flex-shrink:0;color:var(--muted);}
+    .step-num{width:24px;height:24px;border-radius:50%;border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;flex-shrink:0;color:var(--muted);}
 
     /* Info row */
     .info-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:.88rem;color:var(--muted);}
@@ -201,16 +207,16 @@
     .gap-sub{font-size:.82rem;color:var(--muted);margin-top:3px;line-height:1.5;}
 
     /* Section label (old artifact style) */
-    .section-label{font-size:.76rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:1.5rem 0 .6rem;font-family:var(--mono);}
+    .section-label{font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:1.5rem 0 .6rem;font-family:var(--mono);}
 
     /* Stats top row (4-col) */
     .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
     @media(max-width:700px){.cards{grid-template-columns:1fr 1fr;}}
     @media(max-width:400px){.cards{grid-template-columns:1fr;}}
     .card-stat-item{background:var(--surface2);border-radius:8px;padding:.9rem 1rem;}
-    .card-label{font-size:.76rem;color:var(--muted);margin-bottom:6px;font-family:var(--mono);}
+    .card-label{font-size:.78rem;color:var(--muted);margin-bottom:6px;font-family:var(--mono);}
     .card-val{font-size:1.5rem;font-weight:600;color:var(--text);}
-    .card-sub{font-size:.76rem;color:var(--quiet);margin-top:3px;}
+    .card-sub{font-size:.78rem;color:var(--quiet);margin-top:3px;}
 
     /* Grid 2-col panels */
     .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-bottom:1.5rem;}
@@ -221,7 +227,7 @@
     /* Footer */
     .site-footer{border-top:1px solid var(--border);padding:28px 0;}
     .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
-    .footer-inner p{font-family:var(--mono);font-size:.72rem;letter-spacing:.07em;color:var(--quiet);line-height:1.7;}
+    .footer-inner p{font-family:var(--mono);font-size:.78rem;letter-spacing:.07em;color:var(--quiet);line-height:1.7;}
     .footer-inner a{color:var(--muted);text-decoration:none;}
     .footer-inner a:hover{color:var(--gold);}
 
@@ -269,7 +275,7 @@
 .card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
 .badge{font-size:13px;padding:2px 7px;border-radius:8px;white-space:nowrap;display:inline-block}
 .b-pass{background:rgba(74,222,128,.12);color:#4ade80}
-.b-fail{background:rgba(248,113,113,.13);color:#f87171}
+.b-fail{background:rgba(252,165,165,.14);color:#fca5a5} /* was #f87171 6.76 → #fca5a5 9.85 AAA */
 .b-partial{background:rgba(251,191,36,.13);color:#fbbf24}
 .b-key{background:rgba(159,155,236,.13);color:#c8c5f8}
 .b-real{background:rgba(93,202,165,.13);color:#5dcaa5}
@@ -277,13 +283,13 @@
 .row:last-child{border-bottom:none}
 .rl{color:var(--muted);flex:3;line-height:1.5}
 .rv{flex:2;text-align:right;font-size:14px;color:var(--text)}
-.sec{font-size:13px;font-weight:500;color:var(--quiet);letter-spacing:.06em;margin:1rem 0 6px;text-transform:uppercase}
+.sec{font-size:13px;font-weight:500;color:var(--muted);letter-spacing:.06em;margin:1rem 0 6px;text-transform:uppercase} /* was var(--quiet) — bumped for section headings */
 .tab-row{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
 .tab{font-size:14px;padding:5px 12px;border-radius:8px;border:0.5px solid var(--border-hi);cursor:pointer;background:transparent;color:var(--muted)}
 .tab.active{background:var(--blue-dim);color:var(--text);border-color:rgba(96,165,250,.3)}
 .panel{display:none}.panel.active{display:block}
 .src{background:var(--surface2);border-radius:8px;padding:8px 12px;font-size:14px;color:var(--muted);line-height:1.6;border-left:3px solid var(--border)}
-.src-warn{border-left-color:#E24B4A}
+.src-warn{border-left-color:#fca5a5} /* was #E24B4A, matches new --red */
 .alert{background:var(--red-dim);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:14px;color:var(--red);line-height:1.6}
 .warnbox{background:var(--amber-dim);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:14px;color:var(--amber);line-height:1.6}
 .infobox{background:var(--blue-dim);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:14px;color:var(--blue);line-height:1.6}
@@ -300,14 +306,14 @@
 </style>
 
 <div style="padding:1rem 0">
-<div class="tab-row">
-  <button class="tab active" onclick="showTab('wolf')">Wolfersberger — oversight gaps</button>
-  <button class="tab" onclick="showTab('lrmd')">lorsonranchmds.com audit</button>
-  <button class="tab" onclick="showTab('bella')">Bella Mesa — what it is</button>
-  <button class="tab" onclick="showTab('connect')">The connection</button>
+<div class="tab-row" role="tablist" aria-label="Compliance analysis sections">
+  <button class="tab active" id="tab-btn-wolf" role="tab" aria-selected="true" aria-controls="panel-wolf" onclick="showTab('wolf')">Wolfersberger — oversight gaps</button>
+  <button class="tab" id="tab-btn-lrmd" role="tab" aria-selected="false" aria-controls="panel-lrmd" onclick="showTab('lrmd')">lorsonranchmds.com audit</button>
+  <button class="tab" id="tab-btn-bella" role="tab" aria-selected="false" aria-controls="panel-bella" onclick="showTab('bella')">Bella Mesa — what it is</button>
+  <button class="tab" id="tab-btn-connect" role="tab" aria-selected="false" aria-controls="panel-connect" onclick="showTab('connect')">The connection</button>
 </div>
 
-<div id="panel-wolf" class="panel active">
+<div id="panel-wolf" class="panel active" role="tabpanel" aria-labelledby="tab-btn-wolf">
   <div class="card">
     <div class="sec">Wolfersberger LLC — "Colorado Metro District Regulatory Oversight: Fact or Fiction?"</div>
     <div class="src">Source: wolfersbergerllc.com/metro-district-regulatory-oversight — a Colorado accounting and advocacy firm specializing in metro district reform. Wolfersberger has successfully assisted homeowners in recalling developer-controlled boards. Their findings are confirmed by CBS Colorado investigative reporting (March and May 2025) and the Bond Buyer (December 2024).</div>
@@ -339,7 +345,7 @@
   </div>
 </div>
 
-<div id="panel-lrmd" class="panel">
+<div id="panel-lrmd" class="panel" role="tabpanel" aria-labelledby="tab-btn-lrmd">
   <div class="card">
     <div class="sec">lorsonranchmds.com — HB 25-1219 compliance audit (April 7, 2026)</div>
     <div class="src">Direct browser review of lorsonranchmds.com conducted April 7, 2026. HB 25-1219 signed May 29, 2025, effective August 6, 2025. Requirements checked against statute text as summarized by Otten Johnson (ottenjohnson.com).</div>
@@ -394,7 +400,7 @@
   </div>
 </div>
 
-<div id="panel-bella" class="panel">
+<div id="panel-bella" class="panel" role="tabpanel" aria-labelledby="tab-btn-bella">
   <div class="card">
     <div class="sec">Bella Mesa Metropolitan District — what it actually is</div>
     <div class="src">Source: bellamesametro.specialdistrict.org — direct review April 7, 2026.</div>
@@ -413,7 +419,7 @@
   </div>
 </div>
 
-<div id="panel-connect" class="panel">
+<div id="panel-connect" class="panel" role="tabpanel" aria-labelledby="tab-btn-connect">
   <div class="card">
     <div class="sec">How Bella Mesa connects to Lorson Ranch — the industry fact sheet pipeline</div>
 

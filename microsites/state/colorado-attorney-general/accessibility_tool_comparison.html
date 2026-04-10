@@ -11,46 +11,57 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0c1b2e;--navy-2:#152640;--gold:#c8a84b;--gold-d:#a8832a;--gold-pale:rgba(200,168,75,.1);
+  /* Palette — WCAG 2.1 AA/AAA verified on --off #f7f6f2 and --navy #0c1b2e
+     ink     #1c1a16 →16.07 AAA   navy     #0c1b2e →16.02 AAA
+     ink-2   #3d3a32 →10.50 AAA   gold     #c8a84b → 7.56 AAA (on navy)
+     ink-3   #6b6355 → 5.48 AA    green    #166534 → 7.13 AAA (on white)
+     gold-d  #7a5e1a → 5.64 AA    red      #b91c1c → 6.47 AA  (was #a8832a, 3.27 FAIL)
+     teal    #0a5868 → 7.44 AAA   blue     #1e40af → 8.72 AAA (was #0e7490, 4.95) */
+  --navy:#0c1b2e;--navy-2:#152640;--gold:#c8a84b;--gold-d:#7a5e1a;--gold-pale:rgba(200,168,75,.1);
   --ink:#1c1a16;--ink-2:#3d3a32;--ink-3:#6b6355;--off:#f7f6f2;--white:#fff;
   --red:#b91c1c;--red-pale:#fef2f2;--green:#166534;--green-pale:#dcfce7;
   --amber:#92400e;--amber-pale:#fffbeb;--blue:#1e40af;--blue-pale:#dbeafe;
-  --teal:#0e7490;--teal-pale:#e0f9ff;
-  --rule:rgba(200,168,75,.15);--focus:#1d4ed8;--focus-dk:#fbbf24;
+  --teal:#0a5868;--teal-pale:#e0f9ff;
+  --rule:rgba(200,168,75,.22);--focus:#1d4ed8;--focus-dk:#fbbf24;
 }
-html{font-size:16px;scroll-behavior:smooth}
-body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia,serif;-webkit-font-smoothing:antialiased;min-height:100vh;line-height:1.6}
-.skip{position:absolute;left:-9999px;top:6px;z-index:9999;background:var(--navy);color:#fff;padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:13px;border-radius:3px;text-decoration:none;outline:3px solid var(--focus-dk)}
+html{font-size:17px;scroll-behavior:smooth}
+body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia,serif;-webkit-font-smoothing:antialiased;min-height:100vh;line-height:1.65}
+.skip{position:absolute;left:-9999px;top:6px;z-index:9999;background:var(--navy);color:#fff;padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:.82rem;border-radius:3px;text-decoration:none;outline:3px solid var(--focus-dk)}
 .skip:focus{left:8px}
-:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
+*:focus{outline:none}
+*:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
 
 /* ── HEADER ───── */
 .site-header{background:var(--navy);border-bottom:3px solid var(--gold)}
 .header-inner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .logo-link{display:flex;align-items:center;gap:14px;text-decoration:none}
 .logo-link:focus-visible{outline:2px solid var(--focus-dk);outline-offset:4px;border-radius:3px}
-.seal{width:44px;height:44px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;color:var(--gold);letter-spacing:.04em;text-align:center;line-height:1.3;flex-shrink:0}
-.logo-words strong{display:block;font-family:'Playfair Display',Georgia,serif;font-size:15px;font-weight:700;color:#fff}
-.logo-words span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:rgba(200,168,75,.75)}
-.header-right{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,168,75,.6);text-align:right;line-height:1.7}
+.seal{width:44px;height:44px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--gold);letter-spacing:.04em;text-align:center;line-height:1.3;flex-shrink:0}
+.logo-words strong{display:block;font-family:'Playfair Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff}
+/* was rgba(200,168,75,.75) → 4.78 on navy at 9px, raised to .78rem and #d0b052, 8.26 AAA */
+.logo-words span{display:block;font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:#d0b052}
+/* was rgba(200,168,75,.6) 3.52 FAIL → #c8a84b 7.56 AAA */
+.header-right{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#c8a84b;text-align:right;line-height:1.7}
 .header-right strong{display:block;color:var(--gold)}
 
 /* ── HERO ─────── */
 .hero{background:var(--navy-2);padding:56px 24px 64px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(200,168,75,.04) 39px,rgba(200,168,75,.04) 40px);pointer-events:none}
 .hero-inner{max-width:760px;margin:0 auto;position:relative}
-.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px}
 .hero-eyebrow::after{content:'';flex:1;max-width:44px;height:1px;background:var(--gold);opacity:.35}
-.hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(26px,4vw,44px);font-weight:900;color:#fff;line-height:1.13;margin-bottom:16px;letter-spacing:-.02em}
-.hero h1 em{font-style:italic;color:rgba(200,168,75,.9)}
-.hero-lead{font-size:15px;color:rgba(255,255,255,.72);line-height:1.8;font-weight:300;max-width:640px}
+.hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,4vw,46px);font-weight:900;color:#fff;line-height:1.13;margin-bottom:16px;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:#d0b052}
+/* was rgba(255,255,255,.72) 8.21 AAA, kept; bumped weight for legibility */
+.hero-lead{font-size:1rem;color:rgba(255,255,255,.92);line-height:1.75;font-weight:400;max-width:640px}
 .hero-lead strong{color:#fff;font-weight:600}
 
 /* ── VERDICT BAR ─ */
 .verdict{background:#fff;border-bottom:3px solid var(--green)}
 .verdict-inner{max-width:1100px;margin:0 auto;padding:22px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.verdict-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);background:var(--green-pale);border:1px solid rgba(22,101,52,.2);padding:5px 12px;border-radius:3px;white-space:nowrap}
-.verdict-text{font-size:14px;color:var(--ink-2);line-height:1.6;flex:1}
+.verdict-badge{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green);background:var(--green-pale);border:1px solid rgba(22,101,52,.4);padding:6px 12px;border-radius:3px;white-space:nowrap}
+.verdict-text{font-size:1rem;color:var(--ink-2);line-height:1.6;flex:1}
 .verdict-text strong{font-weight:600;color:var(--ink)}
 
 /* ── MAIN ─────── */
@@ -58,34 +69,35 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
 
 /* ── SECTION HEADS ─ */
 .section-h{margin-bottom:24px}
-.section-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-d);margin-bottom:5px}
-.section-title{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--navy);letter-spacing:-.01em}
+/* eyebrow color was #a8832a (3.27 FAIL) → #7a5e1a (5.64 AA) */
+.section-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-d);margin-bottom:6px}
+.section-title{font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;font-weight:700;color:var(--navy);letter-spacing:-.01em}
 .section-rule{height:1px;background:var(--rule);margin-bottom:28px}
 .section-gap{margin-bottom:56px}
 
 /* ── METRIC GRID ─ */
 .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:32px}
-.metric-card{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;padding:18px 20px}
-.metric-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
-.metric-val{font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:900;color:var(--navy);letter-spacing:-.02em;line-height:1}
+.metric-card{background:#fff;border:1px solid rgba(12,27,46,.18);border-radius:8px;padding:18px 20px}
+.metric-label{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.metric-val{font-family:'Playfair Display',Georgia,serif;font-size:1.85rem;font-weight:900;color:var(--navy);letter-spacing:-.02em;line-height:1}
 .metric-val.red{color:var(--red)}
 .metric-val.green{color:#166534}
 .metric-val.amber{color:var(--amber)}
 
 /* ── KEY INSIGHT BOX ─ */
 .insight{background:var(--amber-pale);border-left:4px solid var(--gold);border-radius:0 6px 6px 0;padding:18px 22px;margin-bottom:28px}
-.insight-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-d);margin-bottom:8px}
-.insight p{font-size:14px;color:var(--ink-2);line-height:1.7}
+.insight-label{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);margin-bottom:8px}
+.insight p{font-size:1rem;color:var(--ink-2);line-height:1.7}
 .insight strong{font-weight:600;color:var(--ink)}
 
 /* ── COVERAGE TABLE ─ */
 .coverage-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
 @media(max-width:600px){.coverage-wrap{grid-template-columns:1fr}}
-.coverage-col{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;padding:18px 20px}
-.cov-head{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.coverage-col{background:#fff;border:1px solid rgba(12,27,46,.18);border-radius:8px;padding:18px 20px}
+.cov-head{font-family:'IBM Plex Mono',monospace;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
 .cov-head.can{color:var(--green)}
 .cov-head.cannot{color:var(--red)}
-.cov-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink-2);padding:6px 0;border-bottom:1px solid rgba(12,27,46,.05);line-height:1.45}
+.cov-item{display:flex;gap:8px;align-items:flex-start;font-size:.95rem;color:var(--ink-2);padding:6px 0;border-bottom:1px solid rgba(12,27,46,.1);line-height:1.5}
 .cov-item:last-child{border-bottom:none;padding-bottom:0}
 .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
 .dot-yes{background:#166534}
@@ -95,63 +107,69 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
 /* ── TOOL COMPARISON GRID ─ */
 .tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
 @media(max-width:640px){.tool-grid{grid-template-columns:1fr}}
-.tool-card{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;overflow:hidden}
+.tool-card{background:#fff;border:1px solid rgba(12,27,46,.18);border-radius:8px;overflow:hidden}
 .tool-card.recommended{border:2px solid #1e40af}
 .tool-card-top{padding:18px 20px 16px;background:var(--navy)}
 .tool-card.recommended .tool-card-top{background:var(--blue-pale);border-bottom:2px solid #1e40af}
-.tool-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;display:block}
+.tool-badge{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;display:block}
 .tool-card:not(.recommended) .tool-badge{color:var(--gold)}
 .tool-card.recommended .tool-badge{color:var(--blue);background:rgba(30,64,175,.08);padding:3px 8px;border-radius:2px;display:inline-block}
-.tool-name{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff;line-height:1.2}
+.tool-name{font-family:'Playfair Display',Georgia,serif;font-size:1.2rem;font-weight:700;color:#fff;line-height:1.2}
 .tool-card.recommended .tool-name{color:var(--blue)}
-.tool-cost{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;margin:10px 0 2px;letter-spacing:-.01em}
-.tool-card:not(.recommended) .tool-cost{color:rgba(255,100,100,.9)}
+.tool-cost{font-family:'IBM Plex Mono',monospace;font-size:1.4rem;font-weight:500;margin:10px 0 2px;letter-spacing:-.01em}
+/* was rgba(255,100,100,.9) ≈ #e75d5f 5.06 → #fca5a5 9.13 AAA */
+.tool-card:not(.recommended) .tool-cost{color:#fca5a5}
 .tool-card.recommended .tool-cost{color:#166534}
-.tool-cost-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.45)}
+/* was rgba(255,255,255,.45) 4.44 → #b8bec6 9.26 AAA */
+.tool-cost-sub{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:#b8bec6}
 .tool-card.recommended .tool-cost-sub{color:var(--ink-3)}
 .tool-body{padding:18px 20px}
-.tool-row{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--ink-2);padding:6px 0;border-bottom:1px solid rgba(12,27,46,.05);line-height:1.45}
+.tool-row{display:flex;gap:8px;align-items:flex-start;font-size:.92rem;color:var(--ink-2);padding:7px 0;border-bottom:1px solid rgba(12,27,46,.1);line-height:1.5}
 .tool-row:last-child{border-bottom:none;padding-bottom:0}
 
 /* ── LAYER CARDS ─ */
 .layer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
 @media(max-width:720px){.layer-grid{grid-template-columns:1fr}}
-.layer-card{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;padding:18px 20px}
-.layer-num{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-d);background:var(--gold-pale);border:1px solid rgba(200,168,75,.2);display:inline-block;padding:3px 9px;border-radius:2px;margin-bottom:10px}
-.layer-name{font-family:'Playfair Display',Georgia,serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px}
-.layer-cost{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:500;color:#166534;margin:8px 0 2px}
-.layer-cost-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-3)}
-.layer-row{display:flex;gap:7px;align-items:flex-start;font-size:12px;color:var(--ink-2);padding:5px 0;border-bottom:1px solid rgba(12,27,46,.04);line-height:1.45}
+.layer-card{background:#fff;border:1px solid rgba(12,27,46,.18);border-radius:8px;padding:18px 20px}
+.layer-num{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);background:var(--gold-pale);border:1px solid rgba(200,168,75,.4);display:inline-block;padding:4px 10px;border-radius:2px;margin-bottom:10px}
+.layer-name{font-family:'Playfair Display',Georgia,serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.layer-cost{font-family:'IBM Plex Mono',monospace;font-size:1.15rem;font-weight:500;color:#166534;margin:8px 0 2px}
+.layer-cost-sub{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--ink-3)}
+.layer-row{display:flex;gap:7px;align-items:flex-start;font-size:.9rem;color:var(--ink-2);padding:6px 0;border-bottom:1px solid rgba(12,27,46,.1);line-height:1.5}
 .layer-row:last-child{border-bottom:none;padding-bottom:0}
-.layer-note{font-size:11px;color:var(--ink-3);line-height:1.55;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule)}
+.layer-note{font-size:.85rem;color:var(--ink-3);line-height:1.6;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule)}
 
 /* ── CHART WRAP ─ */
-.chart-wrap{background:#fff;border:1px solid rgba(12,27,46,.09);border-radius:8px;padding:22px 24px;margin-bottom:28px}
-.chart-title{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:16px}
+.chart-wrap{background:#fff;border:1px solid rgba(12,27,46,.18);border-radius:8px;padding:22px 24px;margin-bottom:28px}
+.chart-title{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:16px}
 .chart-canvas{position:relative;width:100%;height:260px}
 .chart-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px}
-.legend-item{display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-2);letter-spacing:.04em}
+.legend-item{display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--ink-2);letter-spacing:.04em}
 .legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 
 /* ── SAVINGS CALLOUT ─ */
 .savings-box{background:var(--navy);border-radius:8px;padding:28px 32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;margin-bottom:28px}
 .savings-cell{text-align:center}
-.savings-num{font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:900;color:var(--gold-light, #e8c878);line-height:1;margin-bottom:4px}
-.savings-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);line-height:1.5}
+.savings-num{font-family:'Playfair Display',Georgia,serif;font-size:2rem;font-weight:900;color:#e8c878;line-height:1;margin-bottom:6px}
+/* was rgba(255,255,255,.4) 3.77 FAIL → #b0b8c0 8.63 AAA */
+.savings-label{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:#b0b8c0;line-height:1.5}
 .savings-num.savings-pos{color:#86efac}
 .savings-num.savings-neg{color:#fca5a5}
 
 /* ── SOURCE NOTE ─ */
-.source-note{font-size:11.5px;color:var(--ink-3);line-height:1.65;padding-top:16px;border-top:1px solid var(--rule)}
+/* font 11.5px → .85rem; teal was #0e7490 4.95 → #0a5868 7.44 AAA */
+.source-note{font-size:.85rem;color:var(--ink-3);line-height:1.7;padding-top:16px;border-top:1px solid var(--rule)}
 .source-note a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
 .source-note a:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 
 /* ── FOOTER ────── */
-.site-footer{background:var(--navy);border-top:1px solid rgba(200,168,75,.12);padding:24px}
+.site-footer{background:var(--navy);border-top:1px solid rgba(200,168,75,.3);padding:24px}
 .footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.footer-inner p{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:rgba(200,168,75,.55);text-transform:uppercase}
+/* was rgba(200,168,75,.55) ≈ #73693e 3.15 FAIL → #c8a84b 7.56 AAA */
+.footer-inner p{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.08em;color:#c8a84b;text-transform:uppercase}
 .footer-nav{display:flex;flex-wrap:wrap;gap:14px}
-.footer-nav a{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;color:rgba(255,255,255,.3);text-decoration:underline;text-underline-offset:2px;text-transform:uppercase}
+/* was rgba(255,255,255,.3) ≈ #555f6d 2.68 FAIL → #c9cdd3 10.86 AAA */
+.footer-nav a{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.08em;color:#c9cdd3;text-decoration:underline;text-underline-offset:2px;text-transform:uppercase}
 .footer-nav a:hover{color:var(--gold)}
 .footer-nav a:focus-visible{outline:2px solid var(--focus-dk);outline-offset:2px;border-radius:1px}
 </style>
@@ -176,7 +194,7 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
   </div>
 </header>
 
-<div class="hero" role="region" aria-labelledby="hero-h1">
+<section class="hero" aria-labelledby="hero-h1">
   <div class="hero-inner">
     <p class="hero-eyebrow" aria-hidden="true">Tool Stack Analysis · Colorado Dept. of Law</p>
     <h1 id="hero-h1">Is Siteimprove<br><em>earning its keep?</em></h1>
@@ -186,9 +204,9 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
       and what a better stack looks like.
     </p>
   </div>
-</div>
+</section>
 
-<div class="verdict" role="region" aria-labelledby="verdict-label">
+<section class="verdict" aria-labelledby="verdict-label">
   <div class="verdict-inner">
     <span class="verdict-badge" id="verdict-label">Recommendation</span>
     <p class="verdict-text">
@@ -197,15 +215,15 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
       Equal automated coverage. Superior semantic coverage. $25,000+ annual savings.
     </p>
   </div>
-</div>
+</section>
 
 <main id="main" class="main-wrap">
 
   <!-- ── HEADLINE NUMBERS ─────────────────────── -->
-  <div class="section-gap">
+  <section class="section-gap" aria-labelledby="sec-01-h">
     <div class="section-h">
-      <p class="section-eyebrow">01 — The Case Against</p>
-      <h2 class="section-title">What $28,000/year bought — and didn't</h2>
+      <p class="section-eyebrow" aria-hidden="true">01 — The Case Against</p>
+      <h2 class="section-title" id="sec-01-h">What $28,000/year bought — and didn't</h2>
     </div>
     <div class="section-rule" role="separator"></div>
 
@@ -247,13 +265,13 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
         provides identical coverage to WAVE at $0/year.
       </p>
     </div>
-  </div>
+  </section>
 
   <!-- ── COVERAGE ANALYSIS ────────────────────── -->
-  <div class="section-gap">
+  <section class="section-gap" aria-labelledby="sec-02-h">
     <div class="section-h">
-      <p class="section-eyebrow">02 — The Coverage Gap</p>
-      <h2 class="section-title">What automated tools can and cannot detect</h2>
+      <p class="section-eyebrow" aria-hidden="true">02 — The Coverage Gap</p>
+      <h2 class="section-title" id="sec-02-h">What automated tools can and cannot detect</h2>
     </div>
     <div class="section-rule" role="separator"></div>
 
@@ -288,19 +306,19 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
       <p class="chart-title">WCAG issue detection by method — % of total issues typically found</p>
       <div class="chart-canvas"><canvas id="coverageChart"></canvas></div>
       <div class="chart-legend" aria-label="Chart legend">
-        <span class="legend-item"><span class="legend-dot" style="background:#1e3354"></span>Siteimprove</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#1d9e75"></span>WAVE (free)</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#c8a84b"></span>Manual / AI audit</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#5b21b6"></span>Combined stack</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#1e3354" aria-hidden="true"></span>Siteimprove</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#1d9e75" aria-hidden="true"></span>WAVE (free)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#c8a84b" aria-hidden="true"></span>Manual / AI audit</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#5b21b6" aria-hidden="true"></span>Combined stack</span>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- ── TOOL COMPARISON ──────────────────────── -->
-  <div class="section-gap">
+  <section class="section-gap" aria-labelledby="sec-03-h">
     <div class="section-h">
-      <p class="section-eyebrow">03 — Current vs Recommended</p>
-      <h2 class="section-title">Side-by-side tool comparison</h2>
+      <p class="section-eyebrow" aria-hidden="true">03 — Current vs Recommended</p>
+      <h2 class="section-title" id="sec-03-h">Side-by-side tool comparison</h2>
     </div>
     <div class="section-rule" role="separator"></div>
 
@@ -343,13 +361,13 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- ── 3-LAYER STACK ─────────────────────────── -->
-  <div class="section-gap">
+  <section class="section-gap" aria-labelledby="sec-04-h">
     <div class="section-h">
-      <p class="section-eyebrow">04 — The Replacement Stack</p>
-      <h2 class="section-title">Three layers — each does something different</h2>
+      <p class="section-eyebrow" aria-hidden="true">04 — The Replacement Stack</p>
+      <h2 class="section-title" id="sec-04-h">Three layers — each does something different</h2>
     </div>
     <div class="section-rule" role="separator"></div>
 
@@ -397,13 +415,13 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
       </div>
 
     </div>
-  </div>
+  </section>
 
   <!-- ── COST COMPARISON CHART ─────────────────── -->
-  <div class="section-gap">
+  <section class="section-gap" aria-labelledby="sec-05-h">
     <div class="section-h">
-      <p class="section-eyebrow">05 — The Numbers</p>
-      <h2 class="section-title">3-year cost and savings projection</h2>
+      <p class="section-eyebrow" aria-hidden="true">05 — The Numbers</p>
+      <h2 class="section-title" id="sec-05-h">3-year cost and savings projection</h2>
     </div>
     <div class="section-rule" role="separator"></div>
 
@@ -430,25 +448,25 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
       <p class="chart-title">Annual cost comparison — current vs recommended ($USD)</p>
       <div class="chart-canvas"><canvas id="costChart"></canvas></div>
       <div class="chart-legend" aria-label="Cost chart legend">
-        <span class="legend-item"><span class="legend-dot" style="background:#b91c1c"></span>Siteimprove (current)</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#166534"></span>Recommended stack</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#b91c1c" aria-hidden="true"></span>Siteimprove (current)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#166534" aria-hidden="true"></span>Recommended stack</span>
       </div>
     </div>
 
     <p class="source-note">
       Cost data: Vendr transaction benchmarks (Siteimprove avg $28,000/yr, max $63,000/yr). Pope Tech pricing based on published page-tier rates.
-      WAVE browser extension: <a href="https://wave.webaim.org" target="_blank" rel="noopener" aria-label="WAVE accessibility tool by WebAIM (opens in new tab)">wave.webaim.org ↗</a> — free.
+      WAVE browser extension: <a href="https://wave.webaim.org" target="_blank" rel="noopener" aria-label="WAVE accessibility tool by WebAIM (opens in new tab)">wave.webaim.org <span aria-hidden="true">↗</span></a> — free.
       Claude API costs estimated at quarterly DOM audit of coag.gov complaint infrastructure (~$75–150 per sweep at current API rates).
       All figures are estimates; obtain current quotes before procurement decision.
       For exact AG Siteimprove contract value, a CORA request to the DOL for technology vendor contracts is recommended.
     </p>
-  </div>
+  </section>
 
   <!-- ── CAVEAT ─────────────────────────────────── -->
-  <div class="section-gap">
+  <section class="section-gap" aria-labelledby="sec-06-h">
     <div class="section-h">
-      <p class="section-eyebrow">06 — Before Cancelling</p>
-      <h2 class="section-title">One important question to ask first</h2>
+      <p class="section-eyebrow" aria-hidden="true">06 — Before Cancelling</p>
+      <h2 class="section-title" id="sec-06-h">One important question to ask first</h2>
     </div>
     <div class="section-rule" role="separator"></div>
 
@@ -466,7 +484,7 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
         could replace those functions while eliminating the $28,000 accessibility premium.
       </p>
     </div>
-  </div>
+  </section>
 
 </main>
 
@@ -476,8 +494,8 @@ body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia
     <nav class="footer-nav" aria-label="Footer links">
       <a href="coag-compliance-brief.html">Compliance Brief</a>
       <a href="coag_ada_audit_report.pdf">Audit Report</a>
-      <a href="https://wave.webaim.org" target="_blank" rel="noopener" aria-label="WAVE tool (opens in new tab)">WAVE ↗</a>
-      <a href="https://pope.tech" target="_blank" rel="noopener" aria-label="Pope Tech (opens in new tab)">Pope Tech ↗</a>
+      <a href="https://wave.webaim.org" target="_blank" rel="noopener" aria-label="WAVE tool (opens in new tab)">WAVE <span aria-hidden="true">↗</span></a>
+      <a href="https://pope.tech" target="_blank" rel="noopener" aria-label="Pope Tech (opens in new tab)">Pope Tech <span aria-hidden="true">↗</span></a>
     </nav>
   </div>
 </footer>

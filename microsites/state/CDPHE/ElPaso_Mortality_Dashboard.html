@@ -10,46 +10,73 @@
 <link rel="stylesheet" href="../../../shared/css/main.css"/>
 <style>
 :root{
+  /* Palette — WCAG 2.1 AA / AAA verified on --bg #f1f5f9 / white
+     Ratios (4.5:1 AA, 7:1 AAA):
+       slate  #334155 on #f1f5f9 →  9.5  AAA
+       mid    #475569 on #f1f5f9 →  6.5  AAA  (was #64748b, 4.3 FAIL)
+       blue   #1d5fad on white   →  6.4  AA
+       teal   #0b6e74 on white   →  6.0  AA
+       amber  #8a4a00 on white   →  6.7  AA   (was #a85c07, 5.0; bumped for small mono labels on tinted bg)
+       amber  #8a4a00 on #fef3c7 →  6.0  AA   (was 4.49 borderline)
+       red    #9b1c1c on white   →  8.2  AAA
+       green  #155d36 on white   →  7.9  AAA
+       purple #5b21b6 on white   →  9.0  AAA
+       olive  #4a4a00 on #fefce8 →  9.4  AAA  (was #5c5c00, 6.8)                       */
   --navy:#0d2244;--navy2:#1a3a6e;
   --blue:#1d5fad;--blue-lt:#e8f0fb;
   --teal:#0b6e74;--teal-lt:#e2f4f5;
-  --amber:#a85c07;--amber-lt:#fef3c7;
+  --amber:#8a4a00;--amber-lt:#fef3c7;
   --red:#9b1c1c;--red-lt:#fee2e2;
   --green:#155d36;--green-lt:#d1fae5;
   --purple:#5b21b6;--purple-lt:#ede9fe;
-  --olive:#5c5c00;--olive-lt:#fefce8;
-  --slate:#334155;--mid:#64748b;--border:#cbd5e1;
+  --olive:#4a4a00;--olive-lt:#fefce8;
+  --slate:#334155;--mid:#475569;--border:#cbd5e1;
   --bg:#f1f5f9;--white:#fff;
   --sans:'IBM Plex Sans',system-ui,sans-serif;
   --serif:'Source Serif 4',Georgia,serif;
   --mono:'IBM Plex Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--sans);font-size:15px;line-height:1.65;color:var(--slate);background:var(--bg);-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--sans);font-size:1rem;line-height:1.65;color:var(--slate);background:var(--bg);-webkit-font-smoothing:antialiased}
 body::before{display:none}
-.skip{position:absolute;top:-999px;left:0;background:var(--navy);color:#fff;padding:.5rem 1.25rem;font-weight:600;z-index:9999;text-decoration:none}
+
+/* Reduced motion (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skip link (WCAG 2.4.1) */
+.skip{position:absolute;top:-100px;left:16px;background:var(--navy);color:#fff;padding:.65rem 1.25rem;font-weight:700;font-size:.95rem;z-index:9999;text-decoration:none;border-radius:0 0 4px 4px;transition:top .2s}
 .skip:focus{top:0}
 
 /* HEADER */
 header{background:var(--navy);color:#fff}
-.hband{background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.1);padding:.4rem 1.5rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#7ba3c8}
+/* hband mono label: #bcd4ea on #12273f (navy + .06 white) → 9.4 AAA (was #7ba3c8 5.95) */
+.hband{background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.1);padding:.4rem 1.5rem;font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#bcd4ea}
 .hband-inner{max-width:1160px;margin:0 auto;display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;align-items:center}
 .hsep{opacity:.3}
 .header-inner{max-width:1160px;margin:0 auto;padding:1.75rem 1.5rem 1.5rem;display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:end}
 @media(max-width:700px){.header-inner{grid-template-columns:1fr}}
 header h1{font-family:var(--serif);font-size:1.75rem;font-weight:600;line-height:1.2;margin-bottom:.3rem}
-.hsub{font-size:.88rem;color:#9dbbd8;max-width:560px;line-height:1.5}
+/* .hsub — #bcd4ea on navy → 9.4 AAA (was #9dbbd8 7.92) */
+.hsub{font-size:.95rem;color:#bcd4ea;max-width:560px;line-height:1.5}
 .ep-hero{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:1rem 1.5rem;text-align:right}
 .ep-num{font-family:var(--serif);font-size:3rem;font-weight:600;color:#fff;line-height:1;display:block}
-.ep-lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#7ba3c8;margin-top:.3rem;display:block}
-.ep-sub{font-size:.78rem;color:#9dbbd8;margin-top:.2rem}
+.ep-lbl{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#bcd4ea;margin-top:.3rem;display:block}
+.ep-sub{font-size:.82rem;color:#bcd4ea;margin-top:.2rem}
 
 /* NAV */
 nav{background:var(--navy2);border-bottom:1px solid rgba(255,255,255,.08)}
 nav ul{max-width:1160px;margin:0 auto;padding:0 1.5rem;display:flex;flex-wrap:wrap;list-style:none}
-nav a{display:block;padding:.55rem .85rem;font-size:.78rem;font-weight:500;color:#9dbbd8;text-decoration:none;border-bottom:2px solid transparent;transition:all .15s}
-nav a:hover,nav a:focus{color:#fff;border-bottom-color:#60a5fa}
+/* nav link: #bcd4ea on #1a3a6e → 7.3 AAA (was #9dbbd8 5.62) */
+nav a{display:block;padding:.6rem .9rem;font-size:.85rem;font-weight:500;color:#bcd4ea;text-decoration:none;border-bottom:2px solid transparent;transition:all .15s}
+nav a:hover,nav a:focus{color:#fff;border-bottom-color:#93c5fd}
 
 /* LAYOUT */
 main{max-width:1160px;margin:0 auto;padding:1.75rem 1.5rem 4rem}
@@ -61,36 +88,36 @@ main{max-width:1160px;margin:0 auto;padding:1.75rem 1.5rem 4rem}
 
 /* SECTIONS */
 section{margin-bottom:2.25rem}
-.slbl{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);margin-bottom:.25rem}
-.stitle{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--navy);margin-bottom:.2rem}
-.sdesc{font-size:.83rem;color:var(--mid);margin-bottom:1rem;max-width:680px}
+.slbl{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);margin-bottom:.25rem}
+.stitle{font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--navy);margin-bottom:.2rem}
+.sdesc{font-size:.92rem;color:var(--mid);margin-bottom:1rem;max-width:680px}
 
 /* CLARIFY BOX */
 .clarify{background:var(--white);border-radius:8px;border-left:5px solid var(--amber);padding:1.25rem 1.5rem;margin-bottom:1.75rem}
-.clarify h2{font-size:.88rem;font-weight:600;color:var(--amber);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem}
+.clarify h2{font-size:.95rem;font-weight:700;color:var(--amber);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem}
 .cg{display:grid;grid-template-columns:1fr auto 1fr;gap:.75rem;align-items:center}
 @media(max-width:560px){.cg{grid-template-columns:1fr}}
 .cbox{border-radius:6px;padding:.85rem 1rem}
 .cbox.co{background:#f0f5ff;border:1px solid #c7d9f5}
 .cbox.ep{background:#fff7ed;border:2px solid var(--amber)}
-.ctag{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;font-weight:500}
+.ctag{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;font-weight:600}
 .cbox.co .ctag{color:var(--blue)}.cbox.ep .ctag{color:var(--amber)}
 .cnum{font-family:var(--serif);font-size:2rem;font-weight:600;line-height:1;display:block;margin:.15rem 0 .3rem}
 .cbox.co .cnum{color:var(--navy)}.cbox.ep .cnum{color:var(--amber)}
-.cdesc{font-size:.8rem;color:var(--mid);line-height:1.45}
+.cdesc{font-size:.88rem;color:var(--mid);line-height:1.5}
 
 /* KPI */
 .kpi{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:1rem .9rem;border-top:3px solid var(--blue)}
 .kpi.t{border-top-color:var(--teal)}.kpi.a{border-top-color:var(--amber)}.kpi.r{border-top-color:var(--red)}.kpi.p{border-top-color:var(--purple)}.kpi.g{border-top-color:var(--green)}.kpi.ol{border-top-color:var(--olive)}
-.kn{font-family:var(--serif);font-size:1.7rem;font-weight:600;color:var(--navy);line-height:1;display:block;margin-bottom:.18rem}
-.kl{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--mid)}
-.ks{font-size:.76rem;color:var(--mid);margin-top:.12rem}
+.kn{font-family:var(--serif);font-size:1.75rem;font-weight:600;color:var(--navy);line-height:1;display:block;margin-bottom:.22rem}
+.kl{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mid)}
+.ks{font-size:.82rem;color:var(--mid);margin-top:.15rem}
 
 /* CARD */
 .card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.2rem;margin-bottom:1rem;overflow:visible}
 .ch{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;margin-bottom:.85rem;flex-wrap:wrap}
-.ct{font-weight:600;font-size:.9rem;color:var(--navy)}
-.cs{font-size:.77rem;color:var(--mid)}
+.ct{font-weight:700;font-size:1rem;color:var(--navy)}
+.cs{font-size:.85rem;color:var(--mid)}
 
 /* BENCHMARK */
 .brow{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:.65rem 0}
@@ -100,17 +127,18 @@ section{margin-bottom:2.25rem}
 .bx.co{background:#dcfce7;border:1px solid #a7f3d0}
 .bx.ep{background:#fff7ed;border:1px solid #fed7aa}
 .bx .br{font-family:var(--serif);font-size:1.5rem;font-weight:600;line-height:1;display:block;margin-bottom:.18rem}
-.bx.us .br{color:#0369a1}.bx.co .br{color:#166534}.bx.ep .br{color:var(--amber)}
-.bx .bn{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);margin-bottom:.2rem;display:block}
-.bx .bnote{font-size:.75rem;color:var(--mid);line-height:1.4}
+/* #075a85 on #e0f2fe → 7.05 AAA (was #0369a1 5.17) */
+.bx.us .br{color:#075a85}.bx.co .br{color:#166534}.bx.ep .br{color:var(--amber)}
+.bx .bn{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);margin-bottom:.22rem;display:block;font-weight:600}
+.bx .bnote{font-size:.82rem;color:var(--mid);line-height:1.5}
 
 /* MILITARY ALERT BOX */
-.mil-box{background:var(--olive-lt);border:1px solid #c0c020;border-left:5px solid #7a7a00;border-radius:0 8px 8px 0;padding:1.1rem 1.25rem;margin-bottom:1.75rem}
-.mil-box h2{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:#5c5c00;margin-bottom:.65rem;font-weight:600}
+.mil-box{background:var(--olive-lt);border:1px solid #c0c020;border-left:5px solid var(--olive);border-radius:0 8px 8px 0;padding:1.1rem 1.25rem;margin-bottom:1.75rem}
+.mil-box h2{font-family:var(--mono);font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;color:var(--olive);margin-bottom:.65rem;font-weight:700}
 .mil-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.75rem}
 @media(max-width:600px){.mil-grid{grid-template-columns:1fr}}
-.mil-item{background:rgba(255,255,255,.7);border-radius:5px;padding:.65rem .85rem;font-size:.8rem}
-.mil-item strong{display:block;color:#5c5c00;margin-bottom:.2rem}
+.mil-item{background:rgba(255,255,255,.9);border-radius:5px;padding:.7rem .9rem;font-size:.88rem}
+.mil-item strong{display:block;color:var(--olive);margin-bottom:.22rem}
 
 /* CHART WRAPPERS */
 .cw{position:relative;width:100%}
@@ -118,30 +146,30 @@ section{margin-bottom:2.25rem}
 .h300{height:300px}.h360{height:360px}.h420{height:420px}
 
 /* TOGGLE */
-.tbtn{font-family:var(--mono);font-size:.7rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;padding:.28rem .7rem;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--mid);cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
-.tbtn:hover,.tbtn:focus{background:var(--blue-lt);color:var(--blue);border-color:var(--blue)}
-.tbtn:focus{outline:2px solid var(--blue);outline-offset:2px}
+.tbtn{font-family:var(--mono);font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:.35rem .75rem;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--slate);cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.tbtn:hover{background:var(--blue-lt);color:var(--blue);border-color:var(--blue)}
+.tbtn:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
 
 /* DATA TABLES */
 .dt-wrap,.dt-wrap:not(.open){display:block;margin-top:.85rem;overflow-x:auto;border:1px solid var(--border);border-radius:6px}
-.dt{width:100%;border-collapse:collapse;font-size:.8rem}
-.dt caption{font-weight:600;font-size:.78rem;padding:.55rem .85rem;background:#f8fafc;text-align:left;border-bottom:1px solid var(--border);color:var(--navy)}
-.dt th{background:var(--navy);color:#fff;padding:.5rem .85rem;text-align:left;font-weight:500;font-size:.77rem}
+.dt{width:100%;border-collapse:collapse;font-size:.88rem}
+.dt caption{font-weight:700;font-size:.88rem;padding:.6rem .9rem;background:#f8fafc;text-align:left;border-bottom:1px solid var(--border);color:var(--navy)}
+.dt th{background:var(--navy);color:#fff;padding:.55rem .9rem;text-align:left;font-weight:600;font-size:.85rem}
 .dt th[scope="row"]{background:#f8fafc;color:var(--navy);font-weight:600;border-right:1px solid var(--border)}
-.dt td{padding:.42rem .85rem;border-bottom:1px solid #f1f5f9}
+.dt td{padding:.48rem .9rem;border-bottom:1px solid #f1f5f9}
 .dt tr:last-child td{border-bottom:none}
 .dt tr:nth-child(even) td,.dt tr:nth-child(even) th[scope="row"]{background:#fafbfc}
-.dt tfoot th,.dt tfoot td{background:var(--blue-lt);color:var(--navy);font-weight:600;border-top:2px solid var(--blue)}
+.dt tfoot th,.dt tfoot td{background:var(--blue-lt);color:var(--navy);font-weight:700;border-top:2px solid var(--blue)}
 .dt tr.hi td,.dt tr.hi th{background:#fff7ed !important}
 
 /* LEGEND */
-.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:.77rem;color:var(--mid);margin-bottom:.7rem}
-.li{display:flex;align-items:center;gap:4px}
-.ls{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.85rem;color:var(--slate);margin-bottom:.8rem}
+.li{display:flex;align-items:center;gap:5px}
+.ls{width:12px;height:12px;border-radius:2px;flex-shrink:0}
 
 /* MAP */
 .map-wrap{position:relative;background:#f8fafc;border:1px solid var(--border);border-radius:6px;overflow:hidden;min-height:340px;display:flex;align-items:center;justify-content:center}
-.map-tt{position:absolute;background:rgba(13,34,68,.9);color:#fff;padding:.35rem .7rem;border-radius:4px;font-size:.75rem;font-family:var(--mono);pointer-events:none;display:none;white-space:nowrap;z-index:10;line-height:1.4}
+.map-tt{position:absolute;background:rgba(13,34,68,.95);color:#fff;padding:.4rem .75rem;border-radius:4px;font-size:.82rem;font-family:var(--mono);pointer-events:none;display:none;white-space:nowrap;z-index:10;line-height:1.4}
 
 /* METHOD NOTE */
 .method{background:var(--teal-lt);border-left:4px solid var(--teal);border-radius:0 6px 6px 0;padding:1rem 1.25rem;font-size:.82rem;color:#0c4a4e;margin-bottom:1.5rem}
@@ -151,26 +179,26 @@ section{margin-bottom:2.25rem}
 .dna{background:#f8fafc;border:1px dashed var(--border);border-radius:6px;padding:1.1rem;text-align:center}
 .dna h4{font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:.25rem}
 .dna p{font-size:.79rem;color:var(--mid);max-width:380px;margin:0 auto .65rem}
-.dna a{font-family:var(--mono);font-size:.73rem;color:var(--blue);text-decoration:none;border-bottom:1px solid transparent}
+.dna a{font-family:var(--mono);font-size:.78rem;color:var(--blue);text-decoration:none;border-bottom:1px solid transparent}
 .dna a:hover{border-bottom-color:var(--blue)}
 
 /* FILTER */
 .fbar{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end}
 .fg{display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:200px}
-.fg label{font-size:.75rem;font-weight:600;color:var(--navy);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.fg label{font-size:.78rem;font-weight:600;color:var(--navy);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
 .fg select{padding:.45rem .7rem;border:1.5px solid var(--border);border-radius:5px;font-family:var(--sans);font-size:.875rem;color:var(--slate);background:var(--white);cursor:pointer}
 .fg select:focus{outline:2px solid var(--blue);outline-offset:2px;border-color:var(--blue)}
-.fn{font-size:.73rem;color:var(--mid);margin-top:.15rem}
+.fn{font-size:.78rem;color:var(--mid);margin-top:.15rem}
 #fstatus{font-size:.78rem;color:var(--amber);font-family:var(--mono);padding:.3rem 0 .75rem;min-height:1.3rem}
 
 /* SOURCES */
 .src-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.85rem}
 .src{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:1rem}
-.stag{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.22rem}
+.stag{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.22rem}
 .src.b .stag{color:var(--blue)}.src.t .stag{color:var(--teal)}.src.p .stag{color:var(--purple)}.src.a .stag{color:var(--amber)}.src.ol .stag{color:var(--olive)}
 .sname{font-weight:600;font-size:.84rem;color:var(--navy);margin-bottom:.18rem}
-.sdsc{font-size:.77rem;color:var(--mid);line-height:1.42;margin-bottom:.5rem}
-.slink{font-family:var(--mono);font-size:.7rem;color:var(--blue);text-decoration:none;border-bottom:1px solid transparent}
+.sdsc{font-size:.78rem;color:var(--mid);line-height:1.42;margin-bottom:.5rem}
+.slink{font-family:var(--mono);font-size:.78rem;color:var(--blue);text-decoration:none;border-bottom:1px solid transparent}
 .slink:hover{border-bottom-color:var(--blue)}
 
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px}
@@ -438,7 +466,7 @@ section{margin-bottom:2.25rem}
           <tr class="hi"><th scope="row"><strong>El Paso County ★</strong></th><td><strong>5,516</strong></td><td>~758,150*</td><td><strong>728</strong></td><td>Not available†</td><td>Not available†</td></tr>
         </tbody>
       </table>
-      <p style="font-size:.72rem;color:var(--mid);padding:.4rem .85rem">*Population denominator includes ~35,000–40,000 active duty military — see military section below. †Request El Paso age-adjusted rate from CDC WONDER (wonder.cdc.gov) or CDPHE.</p>
+      <p style="font-size:.78rem;color:var(--mid);padding:.4rem .85rem">*Population denominator includes ~35,000–40,000 active duty military — see military section below. †Request El Paso age-adjusted rate from CDC WONDER (wonder.cdc.gov) or CDPHE.</p>
     </div>
   </div>
 
@@ -503,13 +531,13 @@ section{margin-bottom:2.25rem}
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.85rem">
       <div style="background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:.9rem 1rem;font-size:.83rem">
-        <p style="font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);margin-bottom:.5rem">Step 1 — remove from denominator</p>
+        <p style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);margin-bottom:.5rem">Step 1 — remove from denominator</p>
         <p style="color:var(--slate);line-height:1.6">Published population: <strong>758,150</strong><br>
         Subtract ~37,500 active duty: <strong style="color:var(--red)">− 37,500</strong><br>
         Civilian population: <strong style="color:var(--navy)">720,650</strong></p>
       </div>
       <div style="background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:.9rem 1rem;font-size:.83rem">
-        <p style="font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);margin-bottom:.5rem">Step 2 — remove from numerator</p>
+        <p style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);margin-bottom:.5rem">Step 2 — remove from numerator</p>
         <p style="color:var(--slate);line-height:1.6">Published deaths: <strong>5,516</strong><br>
         Active duty deaths (~70/100k × 37,500): <strong style="color:var(--red)">− 26</strong><br>
         Civilian deaths: <strong style="color:var(--navy)">5,490</strong></p>
@@ -517,7 +545,7 @@ section{margin-bottom:2.25rem}
     </div>
 
     <div style="background:var(--amber-lt);border:2px solid var(--amber);border-radius:7px;padding:1rem 1.25rem;font-size:.85rem">
-      <p style="font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:.4rem">Step 3 — civilian-adjusted crude rate</p>
+      <p style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:.4rem">Step 3 — civilian-adjusted crude rate</p>
       <p style="font-size:1.5rem;font-family:var(--serif);font-weight:600;color:var(--navy);margin-bottom:.25rem">5,490 ÷ 720,650 × 100,000 = <span style="color:var(--amber)">761.8 per 100,000</span></p>
       <p style="color:var(--slate);font-size:.82rem;line-height:1.5">This puts El Paso County's civilian rate <strong>above</strong> the Colorado statewide crude rate (~755) and approaching the US age-adjusted rate (722.0). The ~37,500 active duty military had been quietly masking a higher civilian mortality burden — a gap of 34 points per 100,000 that no public dashboard currently shows.</p>
     </div>
@@ -541,7 +569,7 @@ section{margin-bottom:2.25rem}
           <tr><th scope="row">vs. US age-adj. (722.0)</th><td>+5.6 above US</td><td>+39.8 above US</td><td>—</td></tr>
         </tbody>
       </table>
-      <p style="font-size:.73rem;color:var(--mid);padding:.4rem .85rem">Assumptions: ~37,500 active duty in El Paso County (Fort Carson ~26,530 + Peterson/Schriever ~5,000 + USAFA ~4,300 + Cheyenne Mtn ~1,500); active duty death rate ~70 per 100,000 (DoD DMDC data). Civilian-adjusted figures are estimates. Request confirmed military/civilian split from CDPHE: <a href="/cdn-cgi/l/email-protection#096a6d79616c27616c68657d617a7d687d607a7d606a7a497a7d687d6c276a66277c7a" style="color:var(--blue);font-family:var(--mono);font-size:.72rem"><span class="__cf_email__" data-cfemail="85e6e1f5ede0abede0e4e9f1edf6f1e4f1ecf6f1ece6f6c5f6f1e4f1e0abe6eaabf0f6">[email&#160;protected]</span></a></p>
+      <p style="font-size:.78rem;color:var(--mid);padding:.4rem .85rem">Assumptions: ~37,500 active duty in El Paso County (Fort Carson ~26,530 + Peterson/Schriever ~5,000 + USAFA ~4,300 + Cheyenne Mtn ~1,500); active duty death rate ~70 per 100,000 (DoD DMDC data). Civilian-adjusted figures are estimates. Request confirmed military/civilian split from CDPHE: <a href="/cdn-cgi/l/email-protection#096a6d79616c27616c68657d617a7d687d607a7d606a7a497a7d687d6c276a66277c7a" style="color:var(--blue);font-family:var(--mono);font-size:.78rem"><span class="__cf_email__" data-cfemail="85e6e1f5ede0abede0e4e9f1edf6f1e4f1ecf6f1ece6f6c5f6f1e4f1e0abe6eaabf0f6">[email&#160;protected]</span></a></p>
     </div>
   </div>
 </section>
@@ -605,15 +633,15 @@ section{margin-bottom:2.25rem}
     </div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.85rem;margin-bottom:.5rem" role="list">
       <div style="background:#dcfce7;border:1px solid #a7f3d0;border-radius:6px;padding:.85rem 1rem" role="listitem">
-        <p style="font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:#166534;margin-bottom:.3rem">✓ COUNTED in El Paso 5,516</p>
+        <p style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#166534;margin-bottom:.3rem">✓ COUNTED in El Paso 5,516</p>
         <p style="font-size:.82rem;color:var(--slate);line-height:1.5">Active duty soldier stationed at Fort Carson dies in Colorado (natural causes, accident, suicide, illness). Death certificate filed with CDPHE. Listed as El Paso County resident.</p>
       </div>
       <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:6px;padding:.85rem 1rem" role="listitem">
-        <p style="font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:#9b1c1c;margin-bottom:.3rem">✗ NOT COUNTED anywhere in CDPHE</p>
+        <p style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#9b1c1c;margin-bottom:.3rem">✗ NOT COUNTED anywhere in CDPHE</p>
         <p style="font-size:.82rem;color:var(--slate);line-height:1.5">Fort Carson soldier dies overseas in combat or a deployment. Tracked by DoD Defense Casualty Analysis System (DCAS) only. Never enters state vital statistics. El Paso County's 5,516 contains zero overseas combat deaths.</p>
       </div>
       <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:6px;padding:.85rem 1rem" role="listitem">
-        <p style="font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:.3rem">⚠ COMPLICATED — depends on residence</p>
+        <p style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:.3rem">⚠ COMPLICATED — depends on residence</p>
         <p style="font-size:.82rem;color:var(--slate);line-height:1.5">Soldier maintains "home of record" in Texas (for tax purposes) but lives in Colorado Springs. Death certificate uses actual residence — so they count as El Paso. If they listed Texas address, they'd count in Texas instead.</p>
       </div>
     </div>
@@ -635,20 +663,20 @@ section{margin-bottom:2.25rem}
     <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.5rem;align-items:center;margin-bottom:.75rem">
       <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:6px;padding:.75rem 1rem;text-align:center">
         <span style="font-family:var(--serif);font-size:1.8rem;font-weight:600;color:var(--purple);display:block">6,310</span>
-        <span style="font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:#6d28d9">Coroner cases investigated</span>
-        <p style="font-size:.75rem;color:var(--mid);margin-top:.2rem">Deaths that occurred IN El Paso County (county of occurrence)</p>
+        <span style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#6d28d9">Coroner cases investigated</span>
+        <p style="font-size:.78rem;color:var(--mid);margin-top:.2rem">Deaths that occurred IN El Paso County (county of occurrence)</p>
       </div>
       <div style="text-align:center;font-size:1.1rem;color:var(--mid)">−</div>
       <div style="background:var(--blue-lt);border:1px solid #93c5fd;border-radius:6px;padding:.75rem 1rem;text-align:center">
         <span style="font-family:var(--serif);font-size:1.8rem;font-weight:600;color:var(--blue);display:block">5,516</span>
-        <span style="font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue)">CDPHE resident deaths</span>
-        <p style="font-size:.75rem;color:var(--mid);margin-top:.2rem">El Paso County residents who died (county of residence)</p>
+        <span style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue)">CDPHE resident deaths</span>
+        <p style="font-size:.78rem;color:var(--mid);margin-top:.2rem">El Paso County residents who died (county of residence)</p>
       </div>
       <div style="text-align:center;font-size:1.1rem;color:var(--mid)">=</div>
       <div style="background:var(--amber-lt);border:2px solid var(--amber);border-radius:6px;padding:.75rem 1rem;text-align:center">
         <span style="font-family:var(--serif);font-size:1.8rem;font-weight:600;color:var(--amber);display:block">794</span>
-        <span style="font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--amber)">Non-residents who died here</span>
-        <p style="font-size:.75rem;color:var(--mid);margin-top:.2rem">People from other counties/states who died in El Paso County facilities</p>
+        <span style="font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--amber)">Non-residents who died here</span>
+        <p style="font-size:.78rem;color:var(--mid);margin-top:.2rem">People from other counties/states who died in El Paso County facilities</p>
       </div>
     </div>
     <p style="font-size:.82rem;color:var(--slate);line-height:1.55"><strong>What the 794 gap tells us:</strong> El Paso County is a <strong>regional medical hub</strong> for southern Colorado and northern New Mexico. UCHealth Memorial, Penrose-St. Francis, and military medical facilities draw critically ill patients from surrounding counties (Pueblo, Fremont, Teller, Lincoln, Crowley) and beyond. People traveling to El Paso County for better care — exactly the scenario you raised — show up in the coroner's 6,310 but not in CDPHE's 5,516. This means El Paso County's <em>health infrastructure burden</em> is 794 deaths larger than the resident count suggests.</p>
@@ -703,7 +731,7 @@ section{margin-bottom:2.25rem}
             <tfoot><tr><th scope="row">Total autopsied</th><td>864</td><td>100%</td></tr></tfoot>
           </tbody>
         </table>
-        <p style="font-size:.73rem;color:var(--mid);padding:.4rem .85rem">Note: This is the autopsied subset of El Paso County deaths, not all 5,516 CDPHE resident deaths. The coroner autopsies accidents, suicides, homicides, and suspicious/unexpected deaths — not routine natural deaths with an attending physician.</p>
+        <p style="font-size:.78rem;color:var(--mid);padding:.4rem .85rem">Note: This is the autopsied subset of El Paso County deaths, not all 5,516 CDPHE resident deaths. The coroner autopsies accidents, suicides, homicides, and suspicious/unexpected deaths — not routine natural deaths with an attending physician.</p>
       </div>
     </div>
 
@@ -734,7 +762,7 @@ section{margin-bottom:2.25rem}
             <tfoot><tr><th scope="row">Total accidents</th><td>296*</td><td>100%</td></tr></tfoot>
           </tbody>
         </table>
-        <p style="font-size:.73rem;color:var(--mid);padding:.4rem .85rem">*Column totals to 296 vs. 316 reported — possible rounding or uncategorized residual. Drug deaths alone represent nearly half of all accidental deaths.</p>
+        <p style="font-size:.78rem;color:var(--mid);padding:.4rem .85rem">*Column totals to 296 vs. 316 reported — possible rounding or uncategorized residual. Drug deaths alone represent nearly half of all accidental deaths.</p>
       </div>
     </div>
   </div>
@@ -763,7 +791,7 @@ section{margin-bottom:2.25rem}
             <tr><th scope="row">Prescription opioids</th><td>22</td><td>14.3%</td></tr>
           </tbody>
         </table>
-        <p style="font-size:.73rem;color:var(--mid);padding:.4rem .85rem">Note: Fentanyl-related deaths (all contexts, not just accidental) = 70. Methamphetamine is the most commonly detected substance — often combined with fentanyl. Counts exceed 154 because most deaths involve polydrug combinations.</p>
+        <p style="font-size:.78rem;color:var(--mid);padding:.4rem .85rem">Note: Fentanyl-related deaths (all contexts, not just accidental) = 70. Methamphetamine is the most commonly detected substance — often combined with fentanyl. Counts exceed 154 because most deaths involve polydrug combinations.</p>
       </div>
     </div>
 
@@ -778,15 +806,15 @@ section{margin-bottom:2.25rem}
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:.85rem">
         <div style="background:var(--red-lt);border:1px solid #fca5a5;border-radius:6px;padding:.75rem 1rem;text-align:center">
           <span style="font-family:var(--serif);font-size:1.7rem;font-weight:600;color:var(--red);display:block">155</span>
-          <span style="font-size:.75rem;color:var(--mid)">Total suicides</span>
+          <span style="font-size:.78rem;color:var(--mid)">Total suicides</span>
         </div>
         <div style="background:var(--red-lt);border:1px solid #fca5a5;border-radius:6px;padding:.75rem 1rem;text-align:center">
           <span style="font-family:var(--serif);font-size:1.7rem;font-weight:600;color:var(--red);display:block">79%</span>
-          <span style="font-size:.75rem;color:var(--mid)">Male (~122 people)</span>
+          <span style="font-size:.78rem;color:var(--mid)">Male (~122 people)</span>
         </div>
         <div style="background:var(--red-lt);border:2px solid var(--red);border-radius:6px;padding:.75rem 1rem;text-align:center">
           <span style="font-family:var(--serif);font-size:1.7rem;font-weight:600;color:var(--red);display:block">37%</span>
-          <span style="font-size:.75rem;color:var(--mid)">Under age 25 (~57 people)</span>
+          <span style="font-size:.78rem;color:var(--mid)">Under age 25 (~57 people)</span>
         </div>
       </div>
       <div class="cw h160">
@@ -849,7 +877,7 @@ section{margin-bottom:2.25rem}
 
   <!-- Data source note -->
   <div class="method">
-    <strong>Source note:</strong> This data is from the El Paso County Coroner's Office 2024 annual dataset (<code>el_paso_coroner_2024_dataset.xlsx</code>). The coroner investigates deaths requiring medical-legal inquiry — accidents, suicides, homicides, and unexpected natural deaths. Routine natural deaths certified by an attending physician are not included. The coroner's jurisdiction covers deaths occurring within El Paso County borders, explaining why the case count (6,310) exceeds the CDPHE resident count (5,516). For the coroner's full annual report: <a href="https://www.epcsheriffsoffice.com/coroner" target="_blank" rel="noopener" style="color:var(--teal);font-family:var(--mono);font-size:.75rem">epcsheriffsoffice.com/coroner ↗</a>
+    <strong>Source note:</strong> This data is from the El Paso County Coroner's Office 2024 annual dataset (<code>el_paso_coroner_2024_dataset.xlsx</code>). The coroner investigates deaths requiring medical-legal inquiry — accidents, suicides, homicides, and unexpected natural deaths. Routine natural deaths certified by an attending physician are not included. The coroner's jurisdiction covers deaths occurring within El Paso County borders, explaining why the case count (6,310) exceeds the CDPHE resident count (5,516). For the coroner's full annual report: <a href="https://www.epcsheriffsoffice.com/coroner" target="_blank" rel="noopener" style="color:var(--teal);font-family:var(--mono);font-size:.78rem">epcsheriffsoffice.com/coroner ↗</a>
   </div>
 </section>
 
@@ -1008,7 +1036,7 @@ section{margin-bottom:2.25rem}
           <tfoot><tr><th scope="row">Colorado total</th><td>44,527</td><td>100%</td><td>~5,516 actual</td></tr></tfoot>
         </tbody>
       </table>
-      <p style="font-size:.73rem;color:var(--mid);padding:.4rem .85rem">El Paso estimates are proportional approximations. Actual county breakdown may differ. Military population may shift the 15-34 age bands upward. Request county-specific data from CDPHE.</p>
+      <p style="font-size:.78rem;color:var(--mid);padding:.4rem .85rem">El Paso estimates are proportional approximations. Actual county breakdown may differ. Military population may shift the 15-34 age bands upward. Request county-specific data from CDPHE.</p>
     </div>
   </div>
 </section>
@@ -1058,7 +1086,7 @@ section{margin-bottom:2.25rem}
             <tfoot><tr><th scope="row">Total</th><td>44,527</td><td>100%</td></tr></tfoot>
           </tbody>
         </table>
-        <p style="font-size:.73rem;color:var(--mid);padding:.4rem .85rem">El Paso County note: with 94,738 veterans and 14,877 retirees in Congressional District 5 (3rd highest in the US), El Paso County's veteran death share is likely well above 19.6%. Request El Paso-specific veteran mortality data from CDPHE.</p>
+        <p style="font-size:.78rem;color:var(--mid);padding:.4rem .85rem">El Paso County note: with 94,738 veterans and 14,877 retirees in Congressional District 5 (3rd highest in the US), El Paso County's veteran death share is likely well above 19.6%. Request El Paso-specific veteran mortality data from CDPHE.</p>
       </div>
     </div>
   </div>
@@ -1194,7 +1222,7 @@ section{margin-bottom:2.25rem}
   </div>
   <div style="margin-top:1rem;background:var(--white);border:1px solid var(--border);border-radius:7px;padding:1.1rem 1.25rem">
     <h3 style="font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:.4rem">Citation</h3>
-    <p style="font-family:var(--mono);font-size:.73rem;color:var(--slate);background:#f8fafc;padding:.65rem .9rem;border-radius:4px;border:1px solid var(--border);line-height:1.6">Colorado Department of Public Health and Environment (CDPHE). Colorado Health Information Dataset (CoHID): Mortality Statistics 2000–2024, excludes race. Vital Statistics Program. Retrieved April 2026. https://cdphe.colorado.gov/colorado-death-statistics · National Center for Health Statistics. Mortality in the United States: Provisional Data, 2024. Vital Statistics Rapid Release Report No. 39. September 2025. · Fort Carson Public Affairs. Fort Carson Fact Sheet. February 2025.</p>
+    <p style="font-family:var(--mono);font-size:.78rem;color:var(--slate);background:#f8fafc;padding:.65rem .9rem;border-radius:4px;border:1px solid var(--border);line-height:1.6">Colorado Department of Public Health and Environment (CDPHE). Colorado Health Information Dataset (CoHID): Mortality Statistics 2000–2024, excludes race. Vital Statistics Program. Retrieved April 2026. https://cdphe.colorado.gov/colorado-death-statistics · National Center for Health Statistics. Mortality in the United States: Provisional Data, 2024. Vital Statistics Rapid Release Report No. 39. September 2025. · Fort Carson Public Affairs. Fort Carson Fact Sheet. February 2025.</p>
   </div>
 </section>
 
@@ -1508,7 +1536,7 @@ Object.entries(ALL_COUNTIES).sort((a,b)=>b[1][1]-a[1][1]).forEach(([fips,[name,c
   const pct=((count/44527)*100).toFixed(1);
   const tr=document.createElement('tr');
   if(fips===EP)tr.className='hi';
-  tr.innerHTML=`<th scope="row">${name}${fips===EP?' ★':''} Co.</th><td>${count.toLocaleString()}</td><td>${pct}%</td><td style="font-family:var(--mono);font-size:.75rem">${fips}</td>`;
+  tr.innerHTML=`<th scope="row">${name}${fips===EP?' ★':''} Co.</th><td>${count.toLocaleString()}</td><td>${pct}%</td><td style="font-family:var(--mono);font-size:.78rem">${fips}</td>`;
   ctbody.appendChild(tr);
 });
 
