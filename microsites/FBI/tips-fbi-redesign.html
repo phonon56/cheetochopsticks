@@ -49,7 +49,7 @@ body {
   font-family: 'IBM Plex Mono', monospace;
   border-radius: 2px; z-index: 999; text-decoration: none;
 }
-.skip:focus { left: 8px; }
+.skip:focus-visible { left: 8px; }
 
 /* ── EMERGENCY BAR ── */
 .emergency-bar {
@@ -76,7 +76,7 @@ body {
   border-bottom: 1px solid rgba(253,230,138,.4);
 }
 .emergency-bar a:hover { border-color: #fde68a; }
-.emergency-bar a:focus {
+.emergency-bar a:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
   border-radius: 1px;
@@ -304,7 +304,7 @@ body {
   min-height: 160px;
   resize: vertical;
 }
-.field textarea:focus, .field input:focus, .field select:focus {
+.field textarea:focus-visible, .field input:focus-visible, .field select:focus-visible {
   outline: 2px solid var(--teal); /* primary focus indicator — visible in forced-colors mode */
   outline-offset: 0;
   border-color: var(--teal);
@@ -369,7 +369,7 @@ input[aria-invalid="true"] {
   accent-color: var(--teal);
   cursor: pointer;
 }
-.anon-toggle input[type="checkbox"]:focus {
+.anon-toggle input[type="checkbox"]:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
@@ -457,7 +457,7 @@ input[aria-invalid="true"] {
   border-color: var(--navy);
   color: #fff;
 }
-.chip:focus {
+.chip:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
@@ -494,7 +494,7 @@ input[aria-invalid="true"] {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.redirect-callout-text a:focus {
+.redirect-callout-text a:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
   border-radius: 1px;
@@ -529,7 +529,7 @@ input[aria-invalid="true"] {
   gap: 8px;
 }
 .btn-submit:hover { background: var(--navy-soft); }
-.btn-submit:focus {
+.btn-submit:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
@@ -629,7 +629,7 @@ input[aria-invalid="true"] {
   border-color: rgba(13,27,46,.2);
   box-shadow: 0 2px 12px rgba(13,27,46,.06);
 }
-.alt-card:focus {
+.alt-card:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
@@ -688,7 +688,7 @@ input[aria-invalid="true"] {
   transition: border-color .15s;
 }
 .audit-toggle-btn:hover { border-color: rgba(13,27,46,.2); }
-.audit-toggle-btn:focus {
+.audit-toggle-btn:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
@@ -792,7 +792,7 @@ input[aria-invalid="true"] {
   text-underline-offset: 3px;
 }
 .footer-inner a:hover { color: #fff; }
-.footer-inner a:focus {
+.footer-inner a:focus-visible {
   outline: 2px solid #fff; /* was 1px rgba(.4) — too thin/faint; now solid 2px white */
   outline-offset: 2px;
   border-radius: 1px;
