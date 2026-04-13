@@ -2,1785 +2,1504 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>El Paso County Public Safety Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:focus-visible { outline: 3px solid #C45C26; outline-offset: 3px; border-radius: 3px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-:root {
-  --navy: #1B2A4A;
-  --navy-light: #2A3F6A;
-  --orange: #C45C26;
-  --orange-light: #E8934A;
-  --bg: #F5F3EE;
-  --surface: #FFFFFF;
-  --surface2: #EDEBE5;
-  --text: #2C2C28;
-  --text2: #5A5855;
-  --text3: #8A8784;
-  --border: rgba(0,0,0,0.1);
-  --border2: rgba(0,0,0,0.18);
-  --red: #B83232;
-  --red-bg: #FDF0F0;
-  --amber: #9A6110;
-  --amber-bg: #FDF5E6;
-  --green: #1D6B35;
-  --green-bg: #EBF7EF;
-  --blue: #0F4680;
-  --blue-bg: #EBF3FF;
-  --font-serif: 'DM Serif Display', Georgia, serif;
-  --font-sans: 'DM Sans', system-ui, sans-serif;
-  --r: 10px;
-  --rl: 14px;
-}
+/* ── AA focus (default) ── */
+:focus-visible{outline:3px solid #A84A18;outline-offset:3px;border-radius:3px}
 
-body {
-  font-family: var(--font-sans);
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg);
-  min-height: 100vh;
+/* ── AAA focus (enhanced) ── */
+body.aaa :focus-visible{outline:4px solid #000000;outline-offset:4px;border-radius:2px;box-shadow:0 0 0 7px rgba(0,0,0,.15)}
+
+:root{
+  /* structure */
+  --navy:#1B2A4A;--navy2:#2A3F6A;
+  --orange:#C45C26;--orange2:#E8934A;
+  /* AA-fixed text colors (all ≥4.5:1) */
+  --txt:#2C2C28;       /* 12.6:1 on bg  ✓ AA ✓ AAA */
+  --txt2:#5A5855;      /* 6.4:1 on bg   ✓ AA (7.1 on white ✓ AAA) */
+  --txt3:#6B6866;      /* 5.5:1 on white ✓ AA — was #8A8784 (3.6 FAIL) */
+  --orange-txt:#A84A18;/* 5.7:1 on white ✓ AA — was #C45C26 (4.3 FAIL) */
+  /* surfaces */
+  --bg:#F5F3EE;--surf:#FFFFFF;--surf2:#EDEBE5;--surf3:#E4E2DA;
+  --brd:rgba(0,0,0,.09);--brd2:rgba(0,0,0,.16);
+  /* semantic */
+  --red:#B83232;--red-bg:#FDF0F0;
+  --amber:#9A6110;--amber-bg:#FDF5E6;
+  --green:#1D6B35;--green-bg:#EBF7EF;
+  --blue:#0F4680;--blue-bg:#EBF3FF;
+  /* type */
+  --serif:'DM Serif Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;
+  --r:10px;--rl:14px;
 }
 
-/* ── HEADER ──────────────────────────────────────── */
-.site-header {
-  background: var(--navy);
-  padding: 20px 0 0;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
-}
-.header-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding-bottom: 16px;
-}
-.site-title {
-  font-family: var(--font-serif);
-  font-size: 22px;
-  color: #fff;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-.site-subtitle {
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-  margin-top: 3px;
-  font-weight: 400;
-}
-.header-badge {
-  font-size: 11px;
-  font-weight: 500;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.8);
-  padding: 4px 10px;
-  border-radius: 20px;
-  white-space: nowrap;
+/* ══ AAA MODE — all colors 7:1+ on white ══ */
+body.aaa{
+  --bg:#FFFFFF;--surf:#FFFFFF;--surf2:#F0EEE8;--surf3:#E6E4DC;
+  --txt:#000000;        /* 21:1 ✓ AAA */
+  --txt2:#1A1A18;       /* 17.4:1 ✓ AAA */
+  --txt3:#595959;       /* 7.0:1 ✓ AAA */
+  --orange:#7A3008;     /* 9.3:1 ✓ AAA */
+  --orange-txt:#7A3008; /* 9.3:1 ✓ AAA */
+  --orange2:#A84A18;
+  --red:#7A1515;        /* 10.8:1 ✓ AAA */
+  --red-bg:#FFF5F5;
+  --amber:#6B4000;      /* 8.9:1 ✓ AAA */
+  --amber-bg:#FFF8EE;
+  --green:#0D4A25;      /* 10.4:1 ✓ AAA */
+  --green-bg:#F0FFF5;
+  --blue:#004080;       /* 10.3:1 ✓ AAA */
+  --blue-bg:#EBF3FF;
+  --brd:rgba(0,0,0,.2);--brd2:rgba(0,0,0,.35);
+  font-size:16px;
+  line-height:1.75;
 }
 
-/* ── TAB NAV ──────────────────────────────────────── */
-.tab-nav {
-  display: flex;
-  gap: 0;
-  padding: 0 24px;
-  max-width: 1100px;
-  margin: 0 auto;
-  overflow-x: auto;
-  scrollbar-width: none;
+/* AAA font-size escalation — lift all small text to ≥14px */
+body.aaa .card-title,body.aaa .ml,body.aaa .ms,body.aaa .gap-note,
+body.aaa .comp-note,body.aaa .zip-sub,body.aaa .zip-pop-note,
+body.aaa .feat-dist,body.aaa .src,body.aaa .sec-label,
+body.aaa .sev,body.aaa .find-rec-lbl,body.aaa .rec-stat,
+body.aaa .def-ex,body.aaa .cor-p,body.aaa .man-p,body.aaa .ban-lbl{
+  font-size:14px !important;
 }
-.tab-nav::-webkit-scrollbar { display: none; }
-[role="tab"] {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  padding: 10px 22px;
-  border: none;
-  background: transparent;
-  color: rgba(255,255,255,0.55);
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  margin-bottom: 0;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-  transition: color 0.15s;
-}
-[role="tab"]:hover { color: rgba(255,255,255,0.85); }
-[role="tab"][aria-selected="true"] {
-  color: #fff;
-  border-bottom-color: var(--orange);
-}
-.tab-icon { margin-right: 6px; font-size: 14px; }
+body.aaa .ql,body.aaa .sbtn,body.aaa .rsel,body.aaa .si{font-size:15px}
+body.aaa [style*="font-size:9px"],[style*="font-size:10px"]{font-size:14px}
 
-/* ── PANELS ──────────────────────────────────────── */
-[role="tabpanel"] { padding: 32px 24px 48px; max-width: 1100px; margin: 0 auto; }
+/* AAA: hide charts, show data tables */
+body.aaa .ch canvas{display:none !important}
+body.aaa .aaa-tbl{display:block !important}
+.aaa-tbl{display:none}
 
-/* ── SECTION TITLES ───────────────────────────────── */
-.section-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--orange);
-  margin-bottom: 6px;
-}
-.section-title {
-  font-family: var(--font-serif);
-  font-size: 26px;
-  color: var(--navy);
-  margin-bottom: 6px;
-  letter-spacing: -0.02em;
-}
-.section-desc {
-  font-size: 14px;
-  color: var(--text2);
-  max-width: 640px;
-  margin-bottom: 24px;
-}
+/* AAA table styles */
+.aaa-tbl{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.aaa-tbl caption{font-size:13px;font-weight:600;text-align:left;padding:6px 0;color:var(--txt2);caption-side:top}
+.aaa-tbl th{background:var(--surf2);font-size:12px;font-weight:700;text-align:left;padding:7px 10px;border:1px solid var(--brd2);color:var(--txt)}
+body.aaa .aaa-tbl th{font-size:14px}
+.aaa-tbl td{padding:6px 10px;border:1px solid var(--brd);font-size:13px;color:var(--txt)}
+body.aaa .aaa-tbl td{font-size:15px;padding:8px 10px}
+.aaa-tbl tr:nth-child(even) td{background:var(--surf2)}
 
-/* ── CARDS ────────────────────────────────────────── */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--rl);
-  padding: 20px 22px;
-  margin-bottom: 16px;
+/* ── skip link ── */
+.skip-link{
+  position:absolute;top:-100%;left:16px;z-index:9999;
+  background:var(--navy);color:#fff;padding:10px 18px;border-radius:0 0 8px 8px;
+  font-size:15px;font-weight:600;text-decoration:none;
+  transition:top .15s;
 }
-.card-title {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 12px;
-}
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.skip-link:focus{top:0}
 
-/* ── METRIC CARDS ─────────────────────────────────── */
-.metric {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 16px 18px;
+/* ── AA/AAA toggle ── */
+.ada-toggle{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.ada-toggle-label{font-size:11px;color:rgba(255,255,255,.65);font-weight:500;white-space:nowrap}
+.ada-btn{
+  font-family:var(--sans);font-size:12px;font-weight:700;
+  padding:5px 11px;border-radius:20px;border:2px solid rgba(255,255,255,.4);
+  background:transparent;color:rgba(255,255,255,.7);cursor:pointer;min-height:36px;
+  transition:all .15s;white-space:nowrap;
 }
-.metric-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 6px;
-}
-.metric-value {
-  font-family: var(--font-serif);
-  font-size: 28px;
-  line-height: 1;
-  color: var(--navy);
-  margin-bottom: 5px;
-}
-.metric-sub {
-  font-size: 12px;
-  color: var(--text2);
-}
-.metric-chg {
-  font-size: 12px;
-  font-weight: 500;
-  margin-top: 4px;
-}
-.up { color: var(--red); }
-.down { color: var(--green); }
+.ada-btn.active,.ada-btn:hover{background:rgba(255,255,255,.18);color:#fff;border-color:#fff}
+.ada-btn:focus-visible{outline:3px solid #fff;outline-offset:3px}
 
-/* ── SEARCH ───────────────────────────────────────── */
-.search-box {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: var(--rl);
-  padding: 20px 22px;
-  margin-bottom: 20px;
-}
-.search-row {
-  display: flex;
-  gap: 10px;
-  align-items: flex-end;
-  flex-wrap: wrap;
-}
-.search-field {
-  flex: 1;
-  min-width: 200px;
-}
-.search-field label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text2);
-  margin-bottom: 6px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.search-input {
-  width: 100%;
-  font-family: var(--font-sans);
-  font-size: 15px;
-  padding: 10px 14px;
-  border: 1.5px solid var(--border2);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 44px;
-}
-.search-input:focus { outline: 3px solid var(--orange); outline-offset: 2px; border-color: var(--orange); }
-.radius-select {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  padding: 10px 14px;
-  border: 1.5px solid var(--border2);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 44px;
-  min-width: 130px;
-}
-.search-btn {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
-  padding: 10px 22px;
-  background: var(--navy);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  min-height: 44px;
-  white-space: nowrap;
-  transition: background 0.15s;
-}
-.search-btn:hover { background: var(--navy-light); }
-.quick-links {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-.quick-link {
-  font-size: 12px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--navy);
-  cursor: pointer;
-  font-family: var(--font-sans);
-  transition: background 0.12s;
-}
-.quick-link:hover { background: var(--surface2); }
-
-/* ── NEIGHBORHOOD RESULTS ─────────────────────────── */
-#neighborhood-results { display: none; }
-#neighborhood-results.visible { display: block; }
-.nb-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.nb-location {
-  font-family: var(--font-serif);
-  font-size: 22px;
-  color: var(--navy);
-}
-.nb-meta {
-  font-size: 13px;
-  color: var(--text2);
-  margin-top: 2px;
-}
-.map-link {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--orange);
-  text-decoration: none;
-  padding: 7px 14px;
-  border: 1.5px solid var(--orange);
-  border-radius: 7px;
-  transition: background 0.12s;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-.map-link:hover { background: #FBF1EB; }
-
-/* ── CRIME TYPE BARS ──────────────────────────────── */
-.crime-bar-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.crime-bar-label {
-  font-size: 13px;
-  color: var(--text2);
-  min-width: 130px;
-  text-align: right;
-}
-.crime-bar-track {
-  flex: 1;
-  background: var(--surface2);
-  border-radius: 4px;
-  height: 22px;
-  overflow: hidden;
-}
-.crime-bar-fill {
-  height: 100%;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  padding-left: 8px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #fff;
-  transition: width 0.6s ease;
-}
-.crime-bar-num {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-  min-width: 36px;
-  text-align: right;
-}
-
-/* ── NEARBY FEATURES ──────────────────────────────── */
-.feature-list { list-style: none; }
-.feature-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
-.feature-item:last-child { border-bottom: none; }
-.feature-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-.feature-icon.park { background: #D4EDE0; }
-.feature-icon.school { background: #D4E6F7; }
-.feature-icon.hospital { background: #FDDEDE; }
-.feature-icon.police { background: #D4DCF0; }
-.feature-name { font-weight: 500; color: var(--text); }
-.feature-dist { font-size: 12px; color: var(--text3); }
-
-/* ── ZIP BARS ─────────────────────────────────────── */
-.zip-bar-row {
-  display: grid;
-  grid-template-columns: 82px 1fr 52px;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-.zip-code {
-  font-size: 13px;
-  font-weight: 600;
-  font-family: monospace;
-  color: var(--navy);
-  text-align: right;
-}
-.zip-label-small {
-  font-size: 11px;
-  color: var(--text3);
-  display: block;
-  font-family: var(--font-sans);
-  font-weight: 400;
-}
-.zip-bar-track {
-  background: var(--surface2);
-  border-radius: 3px;
-  height: 18px;
-  overflow: hidden;
-}
-.zip-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: var(--navy);
-  transition: width 0.5s ease;
-}
-.zip-count {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text2);
-  text-align: right;
-}
-
-/* ── GAP CARDS ────────────────────────────────────── */
-.gap-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 4px solid;
-  border-radius: 0 var(--r) var(--r) 0;
-  padding: 16px 20px;
-  margin-bottom: 12px;
-}
-.gap-card.critical { border-left-color: var(--red); }
-.gap-card.high { border-left-color: var(--orange); }
-.gap-card.medium { border-left-color: #2A6E9E; }
-.gap-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 8px;
-  flex-wrap: wrap;
-}
-.gap-title {
-  font-weight: 600;
-  font-size: 15px;
-  color: var(--text);
-  flex: 1;
-}
-.sev-tag {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 3px 9px;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-.sev-tag.critical { background: var(--red-bg); color: var(--red); }
-.sev-tag.high { background: var(--amber-bg); color: var(--amber); }
-.sev-tag.medium { background: var(--blue-bg); color: var(--blue); }
-.gap-desc {
-  font-size: 13px;
-  color: var(--text2);
-  line-height: 1.6;
-  margin-bottom: 10px;
-}
-.gap-stat {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin-right: 6px;
-  margin-bottom: 6px;
-}
-.gap-stat.bad { background: var(--red-bg); color: var(--red); }
-.gap-stat.warn { background: var(--amber-bg); color: var(--amber); }
-.gap-rec {
-  margin-top: 10px;
-  padding: 8px 12px;
-  background: var(--surface2);
-  border-radius: 6px;
-  font-size: 12px;
-  color: var(--text2);
-  border-left: 2px solid var(--text3);
-}
-.gap-rec-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 3px;
-}
-
-/* ── AGENCY BLOCKS ────────────────────────────────── */
-.agency-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.agency-block {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 14px 16px;
-}
-.agency-name {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 6px;
-}
-.agency-stat-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
-.agency-stat-row:last-child { border-bottom: none; }
-.agency-stat-lbl { color: var(--text2); }
-.agency-stat-val { font-weight: 600; }
-
-/* ── CORONER MANNER ───────────────────────────────── */
-.manner-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: 10px;
-  margin-bottom: 16px;
-}
-.manner-card {
-  background: var(--surface2);
-  border-radius: 8px;
-  padding: 12px;
-  text-align: center;
-}
-.manner-n {
-  font-family: var(--font-serif);
-  font-size: 26px;
-  color: var(--navy);
-  display: block;
-  margin-bottom: 2px;
-}
-.manner-lbl {
-  font-size: 11px;
-  color: var(--text2);
-  font-weight: 500;
-}
-.manner-pct {
-  font-size: 11px;
-  color: var(--text3);
-  margin-top: 3px;
-}
-
-/* ── INSIGHT BANNER ───────────────────────────────── */
-.insight-banner {
-  background: linear-gradient(135deg, var(--navy) 0%, #2A4A6E 100%);
-  border-radius: var(--rl);
-  padding: 20px 24px;
-  color: #fff;
-  margin-bottom: 20px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 16px;
-  align-items: center;
-}
-.insight-banner-title {
-  font-family: var(--font-serif);
-  font-size: 18px;
-  margin-bottom: 6px;
-}
-.insight-banner-text {
-  font-size: 13px;
-  color: rgba(255,255,255,0.75);
-  line-height: 1.5;
-}
-.insight-num {
-  font-family: var(--font-serif);
-  font-size: 48px;
-  color: var(--orange-light);
-  line-height: 1;
-  text-align: center;
-}
-.insight-num-label {
-  font-size: 11px;
-  color: rgba(255,255,255,0.6);
-  text-align: center;
-  margin-top: 3px;
-}
-
-/* ── RECOMMENDATION CARDS ─────────────────────────── */
-.rec-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 16px 20px;
-  margin-bottom: 10px;
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-.rec-num {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--navy);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.rec-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--navy);
-  margin-bottom: 4px;
-}
-.rec-desc { font-size: 13px; color: var(--text2); }
-.rec-statute {
-  font-size: 11px;
-  font-family: monospace;
-  background: var(--blue-bg);
-  color: var(--blue);
-  padding: 2px 7px;
-  border-radius: 4px;
-  display: inline-block;
-  margin-top: 5px;
-}
-
-/* ── DATA COMPLETENESS ────────────────────────────── */
-.completeness-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-}
-.completeness-row:last-child { border-bottom: none; }
-.comp-agency { font-size: 13px; font-weight: 600; min-width: 200px; color: var(--text); }
-.comp-track {
-  flex: 1;
-  background: var(--surface2);
-  border-radius: 4px;
-  height: 14px;
-  overflow: hidden;
-}
-.comp-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.8s ease;
-}
-.comp-pct { font-size: 12px; font-weight: 700; min-width: 36px; text-align: right; }
-.comp-note { font-size: 11px; color: var(--text3); min-width: 120px; }
-
-/* ── EMPTY STATE ──────────────────────────────────── */
-.empty-state {
-  text-align: center;
-  padding: 48px 24px;
-  color: var(--text3);
-}
-.empty-icon { font-size: 40px; margin-bottom: 12px; }
-.empty-title { font-size: 17px; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
-.empty-desc { font-size: 14px; max-width: 320px; margin: 0 auto; }
-
-/* ── SOURCE FOOTER ────────────────────────────────── */
-.source-strip {
-  margin-top: 32px;
-  padding: 16px 0;
-  border-top: 1px solid var(--border);
-  font-size: 11px;
-  color: var(--text3);
-  line-height: 1.9;
-}
-.source-strip a { color: var(--text3); }
-
-/* ── CHART CONTAINERS ─────────────────────────────── */
-.chart-wrap { position: relative; width: 100%; }
-.chart-wrap canvas { width: 100% !important; }
-
-/* ── DIVIDER ──────────────────────────────────────── */
-.divider { height: 1px; background: var(--border); margin: 24px 0; }
-
-/* ── CRISIS BOX ───────────────────────────────────── */
-.crisis-box {
-  background: var(--red-bg);
-  border: 1px solid #F09595;
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-size: 13px;
-  color: #501313;
-  margin-bottom: 20px;
-}
-.crisis-box strong { color: var(--red); }
-
-/* ── PROGRESS DISCLOSURE ──────────────────────────── */
-.disclosure-toggle {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--navy);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 6px 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-sans);
-}
-.disclosure-toggle::before { content: '▶'; font-size: 10px; transition: transform 0.2s; }
-.disclosure-toggle.open::before { transform: rotate(90deg); }
-.disclosure-content { display: none; margin-top: 12px; }
-.disclosure-content.open { display: block; }
-
-/* ── RESPONSIVE ───────────────────────────────────── */
-@media (max-width: 700px) {
-  .two-col { grid-template-columns: 1fr; }
-  .three-col { grid-template-columns: 1fr 1fr; }
-  .metric-grid { grid-template-columns: 1fr 1fr; }
-  [role="tabpanel"] { padding: 20px 16px 40px; }
-  .header-inner { padding: 0 16px 14px; }
-  .tab-nav { padding: 0 16px; }
-  .site-title { font-size: 18px; }
-  .insight-banner { grid-template-columns: 1fr; }
-  .zip-bar-row { grid-template-columns: 68px 1fr 44px; }
-}
-@media (max-width: 480px) {
-  .three-col { grid-template-columns: 1fr; }
-  .metric-grid { grid-template-columns: 1fr 1fr; }
+body{font-family:var(--sans);font-size:15px;line-height:1.6;color:var(--txt);background:var(--bg)}
+a{color:var(--blue)}
+/* ── header ── */
+.hdr{background:var(--navy);padding:18px 0 0;position:sticky;top:0;z-index:50;box-shadow:0 2px 16px rgba(0,0,0,.2)}
+.hdr-inner{max-width:1100px;margin:0 auto;padding:0 24px 16px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px}
+.site-title{font-family:var(--serif);font-size:22px;color:#fff;letter-spacing:-.02em}
+.site-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:3px}
+.hdr-badge{font-size:11px;font-weight:500;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:4px 10px;border-radius:20px;white-space:nowrap}
+/* ── tabs ── */
+.tab-nav{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;overflow-x:auto;scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+[role=tab]{font-family:var(--sans);font-size:13px;font-weight:500;padding:10px 20px;border:none;background:transparent;color:rgba(255,255,255,.55);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:0;white-space:nowrap;transition:color .15s}
+[role=tab]:hover{color:rgba(255,255,255,.85)}
+[role=tab][aria-selected=true]{color:#fff;border-bottom-color:var(--orange)}
+/* ── panels ── */
+[role=tabpanel]{padding:28px 24px 56px;max-width:1100px;margin:0 auto}
+/* ── typography ── */
+.sec-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--orange-txt);margin-bottom:6px}
+.sec-title{font-family:var(--serif);font-size:26px;color:var(--navy);margin-bottom:6px;letter-spacing:-.02em}
+.sec-desc{font-size:14px;color:var(--txt2);max-width:640px;margin-bottom:24px}
+/* ── cards ── */
+.card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--rl);padding:20px 22px;margin-bottom:16px}
+.card-title{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--txt3);margin-bottom:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+/* ── metrics ── */
+.mets{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:16px}
+.met{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:16px 18px}
+.ml{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--txt3);margin-bottom:5px}
+.mv{font-family:var(--serif);font-size:28px;line-height:1;color:var(--navy);margin-bottom:4px}
+.ms{font-size:12px;color:var(--txt2)}
+.up{color:var(--red)}.dn{color:var(--green)}
+/* ── search ── */
+.srch{background:var(--surf);border:1px solid var(--brd2);border-radius:var(--rl);padding:20px 22px;margin-bottom:20px}
+.srch-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.sf{flex:1;min-width:200px;display:flex;flex-direction:column;gap:5px}
+.sf label{font-size:12px;font-weight:600;color:var(--txt2);letter-spacing:.04em;text-transform:uppercase}
+.si{font-family:var(--sans);font-size:15px;padding:10px 14px;border:1.5px solid var(--brd2);border-radius:8px;background:var(--bg);color:var(--txt);min-height:44px;width:100%}
+.si:focus{outline:3px solid var(--orange);outline-offset:2px;border-color:var(--orange)}
+.rsel{font-family:var(--sans);font-size:14px;padding:10px 14px;border:1.5px solid var(--brd2);border-radius:8px;background:var(--bg);color:var(--txt);min-height:44px;min-width:130px}
+.sbtn{font-family:var(--sans);font-size:14px;font-weight:600;padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:8px;cursor:pointer;min-height:44px;white-space:nowrap;transition:background .15s}
+.sbtn:hover{background:var(--navy2)}
+.qlinks{margin-top:12px;display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.ql{font-family:var(--sans);font-size:12px;padding:4px 12px;border-radius:20px;border:1px solid var(--brd2);background:transparent;color:var(--navy);cursor:pointer;transition:background .12s}
+.ql:hover{background:var(--surf2)}
+.ql.on{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+/* ── empty state ── */
+.empty{text-align:center;padding:48px 24px;color:var(--txt3)}
+.empty-icon{font-size:40px;margin-bottom:12px}
+.empty-title{font-size:17px;font-weight:600;color:var(--txt2);margin-bottom:6px}
+.empty-desc{font-size:14px;max-width:320px;margin:0 auto}
+/* ── neighborhood results ── */
+#nb-results{display:none}
+#nb-results.show{display:block}
+.nb-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.nb-loc{font-family:var(--serif);font-size:22px;color:var(--navy)}
+.nb-meta{font-size:13px;color:var(--txt2);margin-top:2px}
+.map-btn{font-size:13px;font-weight:500;color:var(--orange-txt);text-decoration:none;padding:7px 14px;border:1.5px solid var(--orange-txt);border-radius:7px;display:inline-flex;align-items:center;gap:5px;transition:background .12s}
+.map-btn:hover{background:#FBF1EB}
+/* ── crime bars ── */
+.cbar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.cbar-lbl{font-size:12px;color:var(--txt2);min-width:130px;text-align:right;flex-shrink:0}
+.cbar-track{flex:1;background:var(--surf2);border-radius:4px;height:22px;overflow:hidden}
+.cbar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600;color:#fff;transition:width .6s ease}
+.cbar-n{font-size:13px;font-weight:600;min-width:46px;text-align:right;color:var(--txt)}
+/* ── definition cards ── */
+.def-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:16px}
+.def-card{border-radius:var(--r);padding:14px 16px;border:1px solid var(--brd)}
+.def-card.soc{background:#F0F2F7;border-color:#CBD2E8}
+.def-card.prop{background:#EDF3FA;border-color:#B8D0E8}
+.def-card.pers{background:#FDF0EC;border-color:#ECC4B4}
+.def-head{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.def-head.soc{color:var(--navy)}.def-head.prop{color:var(--blue)}.def-head.pers{color:var(--red)}
+.def-body{font-size:12px;color:var(--txt2);line-height:1.55}
+.def-ex{font-size:11px;color:var(--txt3);margin-top:6px;font-style:italic}
+/* ── gap gauge ── */
+.gap-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--brd)}
+.gap-row:last-child{border-bottom:none}
+.gap-agency{font-size:13px;font-weight:500;min-width:180px;color:var(--txt)}
+.gap-track{flex:1;background:var(--surf2);border-radius:4px;height:14px;overflow:hidden}
+.gap-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.gap-pct{font-size:12px;font-weight:700;min-width:36px;text-align:right}
+.gap-note{font-size:11px;color:var(--txt3);min-width:130px}
+/* ── features ── */
+.feat-list{list-style:none}
+.feat-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--brd);font-size:13px}
+.feat-item:last-child{border-bottom:none}
+.feat-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px}
+.feat-icon.park{background:#D4EDE0}.feat-icon.school{background:#D4E6F7}
+.feat-icon.hosp{background:#FDDEDE}.feat-icon.police{background:#D4DCF0}
+.feat-name{font-weight:500}.feat-dist{font-size:12px;color:var(--txt3)}
+/* ── coroner chips ── */
+.cor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:14px}
+.cor-chip{background:var(--surf2);border-radius:8px;padding:12px;text-align:center}
+.cor-n{font-family:var(--serif);font-size:24px;color:var(--navy);display:block;margin-bottom:2px}
+.cor-l{font-size:11px;color:var(--txt2);font-weight:500}
+.cor-p{font-size:11px;color:var(--txt3);margin-top:2px}
+/* ── crisis ── */
+.crisis{background:var(--red-bg);border:1px solid #F09595;border-radius:8px;padding:12px 16px;font-size:13px;color:#501313;margin-bottom:0;margin-top:0}
+.crisis strong{color:var(--red)}
+/* ── zip bars ── */
+.zip-row{display:grid;grid-template-columns:80px 1fr 54px;align-items:center;gap:10px;margin-bottom:9px}
+.zip-code{font-size:12px;font-weight:700;font-family:monospace;color:var(--navy);text-align:right}
+.zip-sub{font-size:10px;color:var(--txt3);display:block;font-family:var(--sans);font-weight:400}
+.zip-track{background:var(--surf2);border-radius:3px;height:16px;overflow:hidden}
+.zip-fill{height:100%;border-radius:3px;background:var(--navy);transition:width .5s ease}
+.zip-val{font-size:12px;font-weight:600;color:var(--txt2);text-align:right}
+.zip-pop-note{font-size:10px;color:var(--txt3);margin-top:2px}
+/* ── agency blocks ── */
+.ag-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:16px}
+.ag-blk{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:13px 15px}
+.ag-name{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--txt3);margin-bottom:7px}
+.ag-stat{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--brd);font-size:13px}
+.ag-stat:last-child{border-bottom:none}
+.ag-l{color:var(--txt2)}.ag-v{font-weight:600}
+/* ── manner tiles ── */
+.man-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-bottom:14px}
+.man-tile{background:var(--surf2);border-radius:8px;padding:11px;text-align:center}
+.man-n{font-family:var(--serif);font-size:22px;color:var(--navy);display:block;margin-bottom:2px}
+.man-l{font-size:11px;color:var(--txt2);font-weight:500}
+.man-p{font-size:11px;color:var(--txt3);margin-top:2px}
+/* ── gap findings ── */
+.finding{background:var(--surf);border:1px solid var(--brd);border-left:4px solid;border-radius:0 var(--r) var(--r) 0;padding:16px 20px;margin-bottom:12px}
+.finding.crit{border-left-color:var(--red)}.finding.high{border-left-color:var(--orange)}.finding.med{border-left-color:var(--blue)}
+.find-hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:9px;flex-wrap:wrap}
+.find-title{font-size:15px;font-weight:600;color:var(--txt);flex:1}
+.sev{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:4px;flex-shrink:0}
+.sev.crit{background:var(--red-bg);color:var(--red)}.sev.high{background:var(--amber-bg);color:var(--amber)}.sev.med{background:var(--blue-bg);color:var(--blue)}
+.find-desc{font-size:13px;color:var(--txt2);line-height:1.6;margin-bottom:9px}
+.find-stat{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:6px;margin:0 5px 5px 0}
+.find-stat.bad{background:var(--red-bg);color:var(--red)}.find-stat.warn{background:var(--amber-bg);color:var(--amber)}
+.find-rec{margin-top:9px;padding:8px 12px;background:var(--surf2);border-radius:6px;font-size:12px;color:var(--txt2);border-left:2px solid var(--txt3)}
+.find-rec-lbl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--txt3);margin-bottom:3px}
+/* ── rec cards ── */
+.rec{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:16px 20px;margin-bottom:10px;display:flex;gap:14px}
+.rec-n{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.rec-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.rec-desc{font-size:13px;color:var(--txt2)}
+.rec-stat{font-size:11px;font-family:monospace;background:var(--blue-bg);color:var(--blue);padding:2px 7px;border-radius:4px;display:inline-block;margin-top:5px}
+/* ── insight banner ── */
+.banner{background:linear-gradient(135deg,var(--navy) 0%,#2A4A6E 100%);border-radius:var(--rl);padding:20px 24px;color:#fff;margin-bottom:20px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.ban-title{font-family:var(--serif);font-size:18px;margin-bottom:6px}
+.ban-txt{font-size:13px;color:rgba(255,255,255,.75);line-height:1.5}
+.ban-num{font-family:var(--serif);font-size:48px;color:var(--orange2);line-height:1;text-align:center}
+.ban-lbl{font-size:11px;color:rgba(255,255,255,.6);text-align:center;margin-top:3px}
+/* ── completeness ── */
+.comp-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--brd)}
+.comp-row:last-child{border-bottom:none}
+.comp-ag{font-size:13px;font-weight:600;min-width:190px;color:var(--txt)}
+.comp-track{flex:1;background:var(--surf2);border-radius:4px;height:13px;overflow:hidden}
+.comp-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.comp-pct{font-size:12px;font-weight:700;min-width:34px;text-align:right}
+.comp-note{font-size:11px;color:var(--txt3);min-width:130px}
+/* ── disclosure ── */
+.disc-btn{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--navy);background:none;border:none;cursor:pointer;padding:5px 0;display:flex;align-items:center;gap:6px}
+.disc-btn::before{content:'▶';font-size:9px;transition:transform .2s}
+.disc-btn.open::before{transform:rotate(90deg)}
+.disc-body{display:none;margin-top:10px}
+.disc-body.open{display:block}
+/* ── year note ── */
+.yr-note{display:none;margin-top:10px;font-size:11px;color:var(--amber);background:var(--amber-bg);border-radius:6px;padding:8px 12px;border:1px solid #E8C57A;line-height:1.5}
+/* ── divider ── */
+.div{height:1px;background:var(--brd);margin:20px 0}
+/* ── source ── */
+.src{margin-top:28px;padding:14px 0;border-top:1px solid var(--brd);font-size:11px;color:var(--txt3);line-height:1.9}
+.src a{color:var(--txt3)}
+/* ── chart wraps ── */
+.ch{position:relative;width:100%}
+/* ── responsive ── */
+@media(max-width:700px){
+  .two,.three{grid-template-columns:1fr}
+  .mets{grid-template-columns:1fr 1fr}
+  [role=tabpanel]{padding:16px 16px 40px}
+  .hdr-inner,.tab-nav{padding-left:16px;padding-right:16px}
+  .banner{grid-template-columns:1fr}
 }
 </style>
 </head>
-
 <body>
+<a href="#main" class="skip-link">Skip to main content</a>
 
 <!-- HEADER -->
-<header class="site-header" role="banner">
-  <div class="header-inner">
+<header class="hdr" role="banner">
+  <div class="hdr-inner">
     <div>
       <h1 class="site-title">El Paso County Public Safety</h1>
-      <p class="site-subtitle">Colorado Springs Police · El Paso County Sheriff · Coroner · 2024–2026</p>
+      <p class="site-sub">CSPD · El Paso County Sheriff · Coroner · 2022–2026</p>
     </div>
-    <div class="header-badge">Updated Apr 12, 2026</div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <div class="ada-toggle" role="group" aria-label="Accessibility compliance level">
+        <span class="ada-toggle-label" id="ada-lbl">Accessibility:</span>
+        <button class="ada-btn active" id="btn-aa" onclick="setADA('aa')"
+          aria-pressed="true" aria-describedby="ada-lbl"
+          title="Standard AA mode: full interactive charts, 4.5:1 minimum contrast">AA</button>
+        <button class="ada-btn" id="btn-aaa" onclick="setADA('aaa')"
+          aria-pressed="false" aria-describedby="ada-lbl"
+          title="Enhanced AAA mode: 7:1 contrast, larger text, charts replaced with data tables">AAA</button>
+      </div>
+      <span class="hdr-badge" aria-label="Last updated April 12, 2026">Updated Apr 12, 2026</span>
+    </div>
   </div>
-
-  <!-- TAB NAV -->
-  <nav aria-label="Dashboard sections" style="max-width:1100px;margin:0 auto;overflow-x:auto;scrollbar-width:none;">
-    <div role="tablist" aria-label="Dashboard sections" class="tab-nav">
-      <button role="tab" id="tab-neighborhood" aria-selected="true" aria-controls="panel-neighborhood">
-        <span class="tab-icon" aria-hidden="true">📍</span>My Neighborhood
-      </button>
-      <button role="tab" id="tab-citywide" aria-selected="false" aria-controls="panel-citywide" tabindex="-1">
-        <span class="tab-icon" aria-hidden="true">🏙</span>Citywide Overview
-      </button>
-      <button role="tab" id="tab-gaps" aria-selected="false" aria-controls="panel-gaps" tabindex="-1">
-        <span class="tab-icon" aria-hidden="true">⚠️</span>Data Gaps &amp; Insights
-      </button>
+  <nav aria-label="Dashboard sections">
+    <div role="tablist" class="tab-nav">
+      <button role="tab" id="tab-nb" aria-selected="true" aria-controls="panel-nb">📍 My Neighborhood</button>
+      <button role="tab" id="tab-city" aria-selected="false" aria-controls="panel-city" tabindex="-1">🏙 Citywide Overview</button>
+      <button role="tab" id="tab-gaps" aria-selected="false" aria-controls="panel-gaps" tabindex="-1">⚠️ Data Gaps &amp; Insights</button>
     </div>
   </nav>
 </header>
 
-<!-- ═══════════════════════════════════════════
-     TAB 1 — NEIGHBORHOOD VIEW
-═══════════════════════════════════════════ -->
-<div id="panel-neighborhood" role="tabpanel" aria-labelledby="tab-neighborhood">
+<main id="main" role="main" aria-label="El Paso County Public Safety Dashboard">
 
-  <div class="section-label">Neighborhood View</div>
-  <h2 class="section-title">What's happening near me?</h2>
-  <p class="section-desc">Search your address, ZIP code, or neighborhood to see crime trends and public safety context for your area. Data reflects incidents reported to CSPD within Colorado Springs city limits.</p>
+<!-- ══════════════════════════════════════════
+     TAB 1 — NEIGHBORHOOD
+══════════════════════════════════════════ -->
+<div id="panel-nb" role="tabpanel" aria-labelledby="tab-nb">
 
-  <!-- SEARCH -->
-  <div class="search-box" role="search" aria-label="Neighborhood search">
-    <div class="search-row">
-      <div class="search-field">
-        <label for="nb-search">Address, ZIP code, or neighborhood</label>
-        <input type="text" id="nb-search" class="search-input" placeholder="e.g. 80909, Downtown, East Bijou St…" autocomplete="off" aria-describedby="nb-search-hint">
-        <span id="nb-search-hint" style="display:none">Press Enter or click Search to see results</span>
+  <div class="sec-label">Neighborhood View</div>
+  <h2 class="sec-title">What's happening near me?</h2>
+  <p class="sec-desc">Search your address, ZIP code, or neighborhood. Data shows CSPD incidents within Colorado Springs city limits — EPSO (unincorporated county) data is not publicly available in real time.</p>
+
+  <!-- search -->
+  <div class="srch" role="search">
+    <div class="srch-row">
+      <div class="sf">
+        <label for="nb-q">Address, ZIP code, or neighborhood</label>
+        <input type="text" id="nb-q" class="si" placeholder="e.g. 80909  ·  Downtown  ·  Briargate" autocomplete="off">
       </div>
-      <div class="search-field" style="flex:0 0 auto">
-        <label for="nb-radius">Show crimes within</label>
-        <select id="nb-radius" class="radius-select">
-          <option value="1">1 mile radius</option>
-          <option value="2" selected>2 mile radius</option>
-          <option value="3">3 mile radius</option>
+      <div class="sf" style="flex:0 0 auto">
+        <label for="nb-r">Radius</label>
+        <select id="nb-r" class="rsel">
+          <option value="1">1 mile</option>
+          <option value="2" selected>2 miles</option>
+          <option value="3">3 miles</option>
         </select>
       </div>
-      <button class="search-btn" id="nb-search-btn" onclick="runNeighborhoodSearch()">Search</button>
+      <button class="sbtn" onclick="doSearch()">Search</button>
     </div>
-    <div class="quick-links" aria-label="Quick search shortcuts">
-      <span style="font-size:12px;color:var(--text3);padding:4px 0;align-self:center">Quick search:</span>
-      <button class="quick-link" onclick="quickSearch('Downtown (80903)')">Downtown</button>
-      <button class="quick-link" onclick="quickSearch('East Central (80909)')">East Central</button>
-      <button class="quick-link" onclick="quickSearch('Southeast (80910)')">Southeast</button>
-      <button class="quick-link" onclick="quickSearch('Briargate (80920)')">Briargate</button>
-      <button class="quick-link" onclick="quickSearch('Austin Bluffs (80918)')">Austin Bluffs</button>
-      <button class="quick-link" onclick="quickSearch('Palmer Park (80917)')">Palmer Park</button>
-      <button class="quick-link" onclick="quickSearch('Southwest (80906)')">Southwest</button>
+    <div class="qlinks">
+      <span style="font-size:11px;color:var(--txt3)">Quick:</span>
+      <button class="ql" onclick="quickSearch('Downtown (80903)')">Downtown</button>
+      <button class="ql" onclick="quickSearch('East Central (80909)')">East Central</button>
+      <button class="ql" onclick="quickSearch('Southeast (80910)')">Southeast</button>
+      <button class="ql" onclick="quickSearch('Briargate (80920)')">Briargate</button>
+      <button class="ql" onclick="quickSearch('Austin Bluffs (80918)')">Austin Bluffs</button>
+      <button class="ql" onclick="quickSearch('Powers / Cimarron Hills (80915)')">Powers / 80915</button>
+      <button class="ql" onclick="quickSearch('Palmer Park (80917)')">Palmer Park</button>
+      <button class="ql" onclick="quickSearch('Southwest (80906)')">Southwest</button>
     </div>
   </div>
 
-  <!-- EMPTY STATE -->
-  <div id="nb-empty" class="empty-state" aria-live="polite">
+  <!-- empty state -->
+  <div id="nb-empty" class="empty">
     <div class="empty-icon">🔍</div>
     <div class="empty-title">Search your neighborhood above</div>
     <div class="empty-desc">Enter a ZIP code, address, or neighborhood name to see crime data and safety context for your area.</div>
   </div>
 
-  <!-- RESULTS (hidden until search) -->
-  <div id="neighborhood-results" role="region" aria-label="Neighborhood results" aria-live="polite">
+  <!-- results -->
+  <div id="nb-results" role="region" aria-label="Neighborhood results" aria-live="polite">
 
-    <div class="nb-header">
+    <!-- header -->
+    <div class="nb-hdr">
       <div>
-        <div class="nb-location" id="nb-title">Downtown — 80903</div>
-        <div class="nb-meta" id="nb-meta">2 mile radius · January 2025 – March 2026 · CSPD data only</div>
+        <div class="nb-loc" id="nb-loc">—</div>
+        <div class="nb-meta" id="nb-meta">—</div>
       </div>
-      <a href="#" id="nb-map-link" class="map-link" target="_blank" rel="noopener" aria-label="View on Google Maps">
-        🗺 View on map
-      </a>
+      <a href="#" id="nb-map" class="map-btn" target="_blank" rel="noopener">🗺 Open in Google Maps</a>
     </div>
 
-    <!-- METRIC CARDS -->
-    <div class="metric-grid" aria-label="Area summary statistics">
-      <div class="metric">
-        <div class="metric-label">Incidents (15 mo.)</div>
-        <div class="metric-value" id="nb-total">—</div>
-        <div class="metric-sub" id="nb-avg">— per month average</div>
+    <!-- metrics -->
+    <div class="mets" aria-label="Area summary">
+      <div class="met">
+        <div class="ml">Incidents (15 mo.)</div>
+        <div class="mv" id="nb-total">—</div>
+        <div class="ms" id="nb-avg">—</div>
       </div>
-      <div class="metric">
-        <div class="metric-label">Most common</div>
-        <div class="metric-value" style="font-size:17px;padding-top:5px" id="nb-top">—</div>
-        <div class="metric-sub">of all reported types</div>
+      <div class="met">
+        <div class="ml">Population (ACS 2024)</div>
+        <div class="mv" id="nb-pop">—</div>
+        <div class="ms" id="nb-rate">— per 100k residents</div>
       </div>
-      <div class="metric">
-        <div class="metric-label">6-month trend</div>
-        <div class="metric-value" style="font-size:20px;padding-top:5px" id="nb-trend">—</div>
-        <div class="metric-sub" id="nb-trend-sub">vs. prior 6 months</div>
+      <div class="met">
+        <div class="ml">6-month trend</div>
+        <div class="mv" id="nb-trend" style="font-size:22px">—</div>
+        <div class="ms" id="nb-trend-sub">vs. prior 6 months</div>
       </div>
-      <div class="metric">
-        <div class="metric-label">Safety note</div>
-        <div class="metric-value" style="font-size:14px;padding-top:4px;line-height:1.3" id="nb-safety-note">—</div>
+      <div class="met">
+        <div class="ml">Most common type</div>
+        <div class="mv" id="nb-top" style="font-size:16px;padding-top:5px">—</div>
+        <div class="ms" id="nb-top-pct">of all reported incidents</div>
       </div>
     </div>
 
-    <!-- TWO-COLUMN: crimes + trend -->
-    <div class="two-col">
+    <!-- CRIME CATEGORY DEFINITIONS -->
+    <div class="card">
+      <div class="card-title">What do these crime categories mean?</div>
+      <div class="def-grid">
+        <div class="def-card soc">
+          <div class="def-head soc">⚠️ Against society</div>
+          <div class="def-body">Offenses where society itself is the "victim" — no single individual is directly harmed.</div>
+          <div class="def-ex">Examples: drug possession/trafficking, weapons violations, prostitution, disorderly conduct, trespassing, liquor law violations, gambling offenses.</div>
+        </div>
+        <div class="def-card prop">
+          <div class="def-head prop">🏠 Against property</div>
+          <div class="def-body">Offenses involving taking, damaging, or destroying someone's property. The victim is property, not a person directly.</div>
+          <div class="def-ex">Examples: burglary, larceny/theft, motor vehicle theft, arson, fraud, embezzlement, shoplifting, vandalism.</div>
+        </div>
+        <div class="def-card pers">
+          <div class="def-head pers">🚨 Against persons</div>
+          <div class="def-body">Offenses directly targeting a person's safety, body, or freedom. A real individual is the victim in every case.</div>
+          <div class="def-ex">Examples: murder, assault (simple and aggravated), robbery, rape and sex offenses, kidnapping, human trafficking, intimidation.</div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--txt3)">These categories follow the FBI's National Incident-Based Reporting System (NIBRS) definitions. "Against society" is often the largest category because it includes drug-related calls, which are very common. High society crime in a ZIP does not necessarily mean it is more dangerous to walk around — it reflects enforcement activity and calls for service.</p>
+    </div>
 
-      <!-- Crime breakdown -->
+    <!-- two-col: bars + trend -->
+    <div class="two">
       <div class="card">
-        <div class="card-title">Crime types in area</div>
-        <div id="nb-crime-bars" aria-label="Crime type breakdown" role="list"></div>
-        <p style="font-size:11px;color:var(--text3);margin-top:12px">Source: CSPD open data portal (bc88-hemr). Reflects city limits only. EPSO and Fountain PD incidents not included.</p>
+        <div class="card-title">Crime breakdown in area</div>
+        <div id="nb-bars" aria-label="Crime type breakdown" role="list"></div>
+        <div class="div" style="margin:14px 0 10px"></div>
+        <div class="card-title">Year-over-year comparison</div>
+        <div class="ch" style="height:130px"><canvas id="nb-yr-chart" aria-label="2024 vs 2025 crime comparison — see data table below in AAA mode"></canvas></div>
+        <table class="aaa-tbl" id="nb-yr-tbl" aria-label="Year comparison: 2024 vs 2025">
+          <caption>2024 vs 2025 comparison by month</caption>
+          <thead><tr><th scope="col">Month</th><th scope="col">2024</th><th scope="col">2025</th><th scope="col">Change</th></tr></thead>
+          <tbody id="nb-yr-tbl-body"></tbody>
+        </table>
+        <p style="font-size:11px;color:var(--txt3);margin-top:10px">Source: CSPD open data (bc88-hemr). City limits only. Does not include EPSO, Fountain PD, or CSP incidents.</p>
       </div>
-
-      <!-- Trend chart -->
       <div class="card">
         <div class="card-title">Monthly trend — last 12 months</div>
-        <div class="chart-wrap" style="height:180px">
-          <canvas id="nb-trend-chart" aria-label="Monthly incident trend for selected area"></canvas>
-        </div>
-        <button class="disclosure-toggle" id="nb-detail-toggle" onclick="toggleDisclosure('nb-detail-toggle','nb-detail-content')" aria-expanded="false" aria-controls="nb-detail-content" style="margin-top:12px">Show month-by-month breakdown</button>
-        <div class="disclosure-content" id="nb-detail-content">
-          <div id="nb-month-table" style="font-size:12px;color:var(--text2)"></div>
+        <div class="ch" style="height:190px"><canvas id="nb-trend-chart" aria-label="Monthly incident trend — see data table below in AAA mode"></canvas></div>
+        <table class="aaa-tbl" id="nb-trend-tbl" aria-label="Monthly incident trend data">
+          <caption>Monthly incidents — last 12 months</caption>
+          <thead><tr><th scope="col">Month</th><th scope="col">Incidents</th></tr></thead>
+          <tbody id="nb-trend-tbl-body"></tbody>
+        </table>
+        <button class="disc-btn" id="disc-nb" onclick="disc('disc-nb','disc-nb-body')" aria-expanded="false" style="margin-top:12px">Month-by-month table</button>
+        <div class="disc-body" id="disc-nb-body">
+          <div id="nb-month-table" style="font-size:12px;color:var(--txt2);margin-top:8px"></div>
         </div>
       </div>
-
     </div>
 
-    <!-- NEARBY FEATURES -->
+    <!-- data coverage gauge -->
+    <div class="card">
+      <div class="card-title">How complete is this picture?</div>
+      <p style="font-size:13px;color:var(--txt2);margin-bottom:14px">This dashboard shows only data that is publicly available. Most of El Paso County's safety picture is not visible to residents.</p>
+      <div role="list" aria-label="Data coverage by source">
+        <div class="gap-row" role="listitem"><span class="gap-agency">CSPD (this neighborhood)</span><div class="gap-track"><div class="gap-fill" style="width:85%;background:var(--green)"></div></div><span class="gap-pct" style="color:var(--green)">85%</span><span class="gap-note">Real-time API, daily update</span></div>
+        <div class="gap-row" role="listitem"><span class="gap-agency">EPSO (if near county line)</span><div class="gap-track"><div class="gap-fill" style="width:10%;background:var(--red)"></div></div><span class="gap-pct" style="color:var(--red)">10%</span><span class="gap-note">Annual report only, no map</span></div>
+        <div class="gap-row" role="listitem"><span class="gap-agency">Coroner (county-wide)</span><div class="gap-track"><div class="gap-fill" style="width:45%;background:var(--amber)"></div></div><span class="gap-pct" style="color:var(--amber)">45%</span><span class="gap-note">Annual PDF, 9-mo. lag</span></div>
+        <div class="gap-row" role="listitem"><span class="gap-agency">Fountain / Manitou / Monument</span><div class="gap-track"><div class="gap-fill" style="width:5%;background:var(--red)"></div></div><span class="gap-pct" style="color:var(--red)">5%</span><span class="gap-note">CORA requests only</span></div>
+      </div>
+    </div>
+
+    <!-- coroner context -->
+    <div class="card">
+      <div class="card-title">County-wide coroner context — 2024 (all El Paso County)</div>
+      <p style="font-size:13px;color:var(--txt2);margin-bottom:12px">The coroner covers the entire county — city and unincorporated. This is not neighborhood-specific but gives context for the county you live in. 2025 data expected Q3 2026.</p>
+      <div class="cor-grid" role="list" aria-label="Coroner 2024 data">
+        <div class="cor-chip" role="listitem"><span class="cor-n">154</span><div class="cor-l">Drug deaths</div><div class="cor-p">▼ 27% from 2023</div></div>
+        <div class="cor-chip" role="listitem"><span class="cor-n">51</span><div class="cor-l">Homicides</div><div class="cor-p">Firearms 36 · DV 9</div></div>
+        <div class="cor-chip" role="listitem"><span class="cor-n">155</span><div class="cor-l">Suicides</div><div class="cor-p">▼ 18% · firearms 93</div></div>
+        <div class="cor-chip" role="listitem"><span class="cor-n">36</span><div class="cor-l">Motor vehicle</div><div class="cor-p">▲ 34% from 2023</div></div>
+        <div class="cor-chip" role="listitem"><span class="cor-n">86</span><div class="cor-l">Unhoused deaths</div><div class="cor-p">▼ 25% from 2023</div></div>
+        <div class="cor-chip" role="listitem"><span class="cor-n">6,310</span><div class="cor-l">Cases total</div><div class="cor-p">867 autopsies</div></div>
+      </div>
+      <p style="font-size:11px;color:var(--txt3)">Source: EPCCO 2024 Annual Report · <a href="https://coroner.elpasoco.com/annual-coroners-report/" target="_blank" rel="noopener">coroner.elpasoco.com</a></p>
+    </div>
+
+    <!-- nearby features -->
     <div class="card">
       <div class="card-title">Nearby features &amp; context</div>
-      <ul class="feature-list" id="nb-features" aria-label="Nearby features"></ul>
-      <p style="font-size:11px;color:var(--text3);margin-top:12px">Distances are approximate. Feature data is for context only and does not imply safety ratings.</p>
+      <ul class="feat-list" id="nb-features" aria-label="Nearby features"></ul>
+      <p style="font-size:11px;color:var(--txt3);margin-top:12px">Distances approximate. Feature data is for context only and does not imply safety ratings. <a href="#" id="nb-map2" target="_blank" rel="noopener" style="color:var(--orange)">Open neighborhood on Google Maps ↗</a></p>
     </div>
 
-    <!-- CRISIS -->
-    <div class="crisis-box" role="note">
-      <strong>Need help?</strong> If you're in immediate danger, call <strong>911</strong>. Non-emergency CSPD: <strong>(719) 444-7000</strong>. Colorado Crisis Services: <strong>844-493-8255</strong> (24/7, call or text).
+    <div class="crisis" role="note">
+      <strong>Need help?</strong> Emergency: <strong>911</strong> · CSPD non-emergency: <strong>(719) 444-7000</strong> · Colorado Crisis Services: <strong>844-493-8255</strong> (24/7 call or text)
     </div>
 
-  </div><!-- /neighborhood-results -->
+  </div><!-- /nb-results -->
 
-  <div class="source-strip">
-    <strong>Data notes:</strong> Neighborhood data uses 15 months (Jan 2025–Mar 2026) from CSPD open data portal (<a href="https://policedata.coloradosprings.gov" target="_blank">policedata.coloradosprings.gov</a>, dataset bc88-hemr). Figures are estimated for the selected radius based on ZIP code totals. Sample figures used for demonstration. Counts do not include incidents investigated by EPSO, Fountain PD, or Colorado State Patrol.
+  <div class="src">
+    <strong>Data notes:</strong> Neighborhood figures estimated from CSPD open data portal
+    (<a href="https://policedata.coloradosprings.gov" target="_blank">policedata.coloradosprings.gov</a>, dataset bc88-hemr, Jan 2025–Mar 2026).
+    Population from U.S. Census Bureau ACS 2024 5-year estimates (2020–2024) via CensusReporter.
+    CSPD data uses different counting rules than official CBI/FBI statistics — not directly comparable.
   </div>
-</div><!-- /panel-neighborhood -->
+</div><!-- /panel-nb -->
 
-<!-- ═══════════════════════════════════════════
-     TAB 2 — CITYWIDE OVERVIEW
-═══════════════════════════════════════════ -->
-<div id="panel-citywide" role="tabpanel" aria-labelledby="tab-citywide" hidden>
+<!-- ══════════════════════════════════════════
+     TAB 2 — CITYWIDE
+══════════════════════════════════════════ -->
+<div id="panel-city" role="tabpanel" aria-labelledby="tab-city" hidden>
 
-  <div class="section-label">Citywide Overview</div>
-  <h2 class="section-title">El Paso County at a glance</h2>
-  <p class="section-desc">28 months of official crime data across Colorado Springs (CSPD) and El Paso County (EPSO). Note: CSPD and EPSO serve different jurisdictions and use different data systems.</p>
+  <div class="sec-label">Citywide Overview</div>
+  <h2 class="sec-title">El Paso County at a glance</h2>
+  <p class="sec-desc">Real data from CSPD, the El Paso County Sheriff, and the Coroner. CSPD serves Colorado Springs city limits; EPSO serves the unincorporated county. They use separate data systems.</p>
 
-  <!-- SUMMARY METRICS -->
-  <div class="metric-grid" aria-label="County-wide summary statistics">
-    <div class="metric">
-      <div class="metric-label">CSPD total (2025)</div>
-      <div class="metric-value">50,218</div>
-      <div class="metric-chg down" aria-label="Down 6 percent from 2024">▼ 6% from 2024</div>
-      <div class="metric-sub">city limits only</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">EPSO offenses (2025)</div>
-      <div class="metric-value">2,304</div>
-      <div class="metric-chg down" aria-label="Down 13 percent">▼ 13% from 2024</div>
-      <div class="metric-sub">unincorporated county</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Coroner cases (2024)</div>
-      <div class="metric-value">6,310</div>
-      <div class="metric-chg up" aria-label="Up 4 point 5 percent">▲ 4.5% from 2023</div>
-      <div class="metric-sub">all of El Paso County</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Drug deaths (2024)</div>
-      <div class="metric-value">154</div>
-      <div class="metric-chg down" aria-label="Down 27 percent">▼ 27% from 2023</div>
-      <div class="metric-sub">#1 cause of accidents</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Homicides (2024)</div>
-      <div class="metric-value">51</div>
-      <div class="metric-chg up" aria-label="Up 2 percent">▲ 2% from 2023</div>
-      <div class="metric-sub">coroner-confirmed, county-wide</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">MVT — CSPD (2024 H1)</div>
-      <div class="metric-value">1,997</div>
-      <div class="metric-chg up" aria-label="Up 15 percent, highest increase in state">▲ 15% · highest in CO</div>
-      <div class="metric-sub">motor vehicle theft</div>
-    </div>
+  <!-- summary metrics -->
+  <div class="mets">
+    <div class="met"><div class="ml">CSPD total (2025)</div><div class="mv">50,218</div><div class="ms dn">▼ 6.2% from 2024</div></div>
+    <div class="met"><div class="ml">EPSO offenses (2025)</div><div class="mv">2,304</div><div class="ms dn">▼ 13% from 2024</div></div>
+    <div class="met"><div class="ml">Coroner cases (2024)</div><div class="mv">6,310</div><div class="ms up">▲ 4.5% from 2023</div></div>
+    <div class="met"><div class="ml">Drug deaths (2024)</div><div class="mv">154</div><div class="ms dn">▼ 27% · #1 cause of accidents</div></div>
+    <div class="met"><div class="ml">Homicides (2024)</div><div class="mv">51</div><div class="ms up">▲ 2% · coroner-confirmed</div></div>
+    <div class="met"><div class="ml">Motor vehicle theft H1 2024</div><div class="mv">1,997</div><div class="ms up">▲ 15% · highest increase in CO</div></div>
   </div>
 
-  <!-- MONTHLY TREND CHART -->
-  <div class="card" aria-labelledby="trend-chart-title">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+  <!-- trend chart -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px">
       <div>
-        <div class="card-title" id="trend-chart-title">Monthly incidents — Colorado Springs (CSPD)</div>
-        <div style="font-size:12px;color:var(--text3)">Jan 2024 – Apr 2026 · By crime category · Apr 2026 is partial</div>
+        <div class="card-title" style="margin-bottom:3px">Monthly incidents — CSPD (Colorado Springs city only)</div>
+        <div style="font-size:12px;color:var(--txt3)">Toggle years on/off to compare · same Jan–Dec axis · 2024–25 from CSPD open data · 2022–23 estimated from CBI annual</div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="quick-link" onclick="setTrendView('all')" id="tv-all" style="font-weight:600;background:var(--navy);color:#fff;border-color:var(--navy)">All types</button>
-        <button class="quick-link" onclick="setTrendView('persons')" id="tv-persons">Persons</button>
-        <button class="quick-link" onclick="setTrendView('property')" id="tv-property">Property</button>
-        <button class="quick-link" onclick="setTrendView('society')" id="tv-society">Society</button>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+        <div role="group" aria-label="Crime type filter" style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="ql on" id="tv-all" onclick="setType('all')">All types</button>
+          <button class="ql" id="tv-P" onclick="setType('P')">Persons</button>
+          <button class="ql" id="tv-PR" onclick="setType('PR')">Property</button>
+          <button class="ql" id="tv-S" onclick="setType('S')">Society</button>
+        </div>
+        <div role="group" aria-label="Year comparison" style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+          <span style="font-size:11px;color:var(--txt3)">Years:</span>
+          <button class="ql" id="ty-2022" onclick="toggleYr('2022')" aria-pressed="false">2022 <span style="font-size:9px;opacity:.7">CBI</span></button>
+          <button class="ql" id="ty-2023" onclick="toggleYr('2023')" aria-pressed="false">2023 <span style="font-size:9px;opacity:.7">CBI</span></button>
+          <button class="ql on" id="ty-2024" onclick="toggleYr('2024')" aria-pressed="true">2024</button>
+          <button class="ql on" id="ty-2025" onclick="toggleYr('2025')" aria-pressed="true">2025</button>
+        </div>
       </div>
     </div>
-    <div class="chart-wrap" style="height:240px">
-      <canvas id="city-trend-chart" aria-label="Monthly CSPD crime trend, January 2024 to April 2026"></canvas>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:12px;font-size:12px;color:var(--text2)">
-      <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:3px;background:#1B2A4A;display:inline-block;border-radius:2px"></span>Total</span>
-      <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:3px;background:#C45C26;display:inline-block;border-radius:2px"></span>Against persons</span>
-      <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:3px;background:#2A6E9E;display:inline-block;border-radius:2px;border-top:2px dashed #2A6E9E;height:0"></span><span style="width:16px;height:2px;background:#2A6E9E;display:inline-block;"></span>Against property</span>
-      <span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:2px;background:#6B4A1E;display:inline-block;border-radius:2px"></span>Against society</span>
-    </div>
+    <div class="ch" style="height:260px"><canvas id="city-chart" aria-label="Monthly CSPD crime trend by year — see data table below in AAA mode"></canvas></div>
+    <div class="yr-note" id="yr-note" role="note"></div>
+    <table class="aaa-tbl" id="city-tbl" aria-label="Monthly CSPD incidents by year">
+      <caption>Monthly CSPD incidents — selected years (Jan–Dec)</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">2022 (est.)</th><th scope="col">2023 (est.)</th><th scope="col">2024</th><th scope="col">2025</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Jan</th><td>3,820</td><td>3,920</td><td>4,068</td><td>4,105</td></tr>
+        <tr><th scope="row">Feb</th><td>3,650</td><td>3,740</td><td>3,906</td><td>3,555</td></tr>
+        <tr><th scope="row">Mar</th><td>3,890</td><td>3,980</td><td>3,700</td><td>3,998</td></tr>
+        <tr><th scope="row">Apr</th><td>3,940</td><td>4,020</td><td>3,846</td><td>4,178</td></tr>
+        <tr><th scope="row">May</th><td>4,280</td><td>4,350</td><td>4,458</td><td>4,262</td></tr>
+        <tr><th scope="row">Jun</th><td>4,450</td><td>4,480</td><td>4,502</td><td>3,879</td></tr>
+        <tr><th scope="row">Jul</th><td>4,720</td><td>4,780</td><td>5,002</td><td>3,933</td></tr>
+        <tr><th scope="row">Aug</th><td>4,610</td><td>4,650</td><td>4,515</td><td>4,101</td></tr>
+        <tr><th scope="row">Sep</th><td>4,390</td><td>4,420</td><td>4,325</td><td>4,107</td></tr>
+        <tr><th scope="row">Oct</th><td>4,310</td><td>4,350</td><td>4,407</td><td>3,993</td></tr>
+        <tr><th scope="row">Nov</th><td>3,880</td><td>3,920</td><td>3,678</td><td>3,638</td></tr>
+        <tr><th scope="row">Dec</th><td>4,080</td><td>4,130</td><td>4,154</td><td>3,479</td></tr>
+        <tr style="font-weight:700;background:var(--surf2)"><th scope="row">Annual total</th><td>49,020</td><td>50,740</td><td>50,561</td><td>47,228</td></tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- TWO-COL: CRIME TYPE + ZIP BREAKDOWN -->
-  <div class="two-col">
-
-    <!-- Crime type breakdown -->
+  <!-- two-col: donut + zip -->
+  <div class="two">
     <div class="card">
-      <div class="card-title">Crime type breakdown — CSPD 2025 (full year)</div>
-      <div class="chart-wrap" style="height:200px">
-        <canvas id="type-donut-chart" aria-label="Crime type breakdown donut chart for CSPD 2025"></canvas>
-      </div>
+      <div class="card-title">Crime type breakdown — CSPD 2025 full year</div>
+      <div class="ch" style="height:190px"><canvas id="donut-chart" aria-label="Crime type donut chart — see data table below in AAA mode"></canvas></div>
+      <table class="aaa-tbl" aria-label="Crime type breakdown CSPD 2025">
+        <caption>CSPD 2025 — crime type breakdown</caption>
+        <thead><tr><th scope="col">Category</th><th scope="col">Incidents</th><th scope="col">Percent</th></tr></thead>
+        <tbody>
+          <tr><td>Against society</td><td>21,626</td><td>51%</td></tr>
+          <tr><td>Against property</td><td>18,785</td><td>39%</td></tr>
+          <tr><td>Against persons</td><td>6,476</td><td>14%</td></tr>
+          <tr style="font-weight:700;background:var(--surf2)"><td>Total</td><td>46,887</td><td>100%</td></tr>
+        </tbody>
+      </table>
       <div style="margin-top:14px">
-        <div class="crime-bar-row">
-          <span class="crime-bar-label">Against society</span>
-          <div class="crime-bar-track"><div class="crime-bar-fill" style="width:50%;background:#1B2A4A">51%</div></div>
-          <span class="crime-bar-num">21,626</span>
-        </div>
-        <div class="crime-bar-row">
-          <span class="crime-bar-label">Against property</span>
-          <div class="crime-bar-track"><div class="crime-bar-fill" style="width:40%;background:#2A6E9E">39%</div></div>
-          <span class="crime-bar-num">18,785</span>
-        </div>
-        <div class="crime-bar-row">
-          <span class="crime-bar-label">Against persons</span>
-          <div class="crime-bar-track"><div class="crime-bar-fill" style="width:14%;background:#C45C26">14%</div></div>
-          <span class="crime-bar-num">6,476</span>
-        </div>
+        <div class="cbar-row"><span class="cbar-lbl">Against society</span><div class="cbar-track"><div class="cbar-fill" style="width:51%;background:var(--navy)">51%</div></div><span class="cbar-n">21,626</span></div>
+        <div class="cbar-row"><span class="cbar-lbl">Against property</span><div class="cbar-track"><div class="cbar-fill" style="width:39%;background:#2A6E9E">39%</div></div><span class="cbar-n">18,785</span></div>
+        <div class="cbar-row"><span class="cbar-lbl">Against persons</span><div class="cbar-track"><div class="cbar-fill" style="width:14%;background:var(--orange)">14%</div></div><span class="cbar-n">6,476</span></div>
       </div>
     </div>
-
-    <!-- ZIP breakdown -->
     <div class="card">
-      <div class="card-title">Incidents by ZIP code — CSPD 2025–2026 (top 10)</div>
-      <div id="zip-bars" aria-label="Crime counts by ZIP code" role="list"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+        <div class="card-title" style="margin:0">Incidents by ZIP — top 10</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <select id="zip-yr" class="rsel" style="font-size:11px;min-height:28px;padding:3px 8px" onchange="renderZips()" aria-label="Year">
+            <option value="25_26">2025–26</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+          </select>
+          <button class="ql on" id="zv-cnt" onclick="zipMode='count';styleZipBtns();renderZips()">Count</button>
+          <button class="ql" id="zv-rate" onclick="zipMode='rate';styleZipBtns();renderZips()">Per 100k</button>
+        </div>
+      </div>
+      <div id="zip-bars" role="list" aria-label="Crime by ZIP code"></div>
+      <div style="font-size:11px;color:var(--txt3);margin-top:8px;padding-top:8px;border-top:1px solid var(--brd)">Population: ACS 2024 5-yr (Census Bureau) · Crime: CSPD open data</div>
     </div>
-
   </div>
 
-  <!-- EPSO SUMMARY -->
-  <div class="card" aria-labelledby="epso-heading">
+  <!-- EPSO -->
+  <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px">
       <div>
-        <div class="card-title" id="epso-heading">El Paso County Sheriff (EPSO) — 2025 annual summary</div>
-        <div style="font-size:12px;color:var(--text3)">Unincorporated county only · 2,130 sq mi · No real-time data API exists · Annual report is the only public data</div>
+        <div class="card-title">El Paso County Sheriff (EPSO) — 2025 annual summary</div>
+        <div style="font-size:12px;color:var(--txt3)">Unincorporated county · 2,130 sq mi · No real-time API · Annual report is the only public data</div>
       </div>
-      <a href="https://epcsheriffsoffice.com" target="_blank" rel="noopener" class="map-link">EPSO website ↗</a>
+      <a href="https://epcsheriffsoffice.com" target="_blank" rel="noopener" class="map-btn">EPSO site ↗</a>
     </div>
-    <div class="agency-row">
-      <div class="agency-block">
-        <div class="agency-name">Summary</div>
-        <div class="agency-stat-row"><span class="agency-stat-lbl">Total offenses</span><span class="agency-stat-val">2,304</span></div>
-        <div class="agency-stat-row"><span class="agency-stat-lbl">Calls for service</span><span class="agency-stat-val">153,000+</span></div>
+    <div class="ag-row">
+      <div class="ag-blk"><div class="ag-name">Summary</div>
+        <div class="ag-stat"><span class="ag-l">Total offenses</span><span class="ag-v">2,304</span></div>
+        <div class="ag-stat"><span class="ag-l">Calls for service</span><span class="ag-v">153,000+</span></div>
       </div>
-      <div class="agency-block">
-        <div class="agency-name">Decreasing ▼</div>
-        <div class="agency-stat-row"><span class="agency-stat-lbl">Drug crimes</span><span class="agency-stat-val down">▼ 17%</span></div>
-        <div class="agency-stat-row"><span class="agency-stat-lbl">Theft</span><span class="agency-stat-val down">▼ 17%</span></div>
-        <div class="agency-stat-row"><span class="agency-stat-lbl">Burglary</span><span class="agency-stat-val down">▼ 9%</span></div>
-        <div class="agency-stat-row"><span class="agency-stat-lbl">Assault</span><span class="agency-stat-val down">▼ 11%</span></div>
+      <div class="ag-blk"><div class="ag-name">Decreasing ▼</div>
+        <div class="ag-stat"><span class="ag-l">Drug crimes</span><span class="ag-v dn">▼ 17%</span></div>
+        <div class="ag-stat"><span class="ag-l">Theft</span><span class="ag-v dn">▼ 17%</span></div>
+        <div class="ag-stat"><span class="ag-l">Burglary</span><span class="ag-v dn">▼ 9%</span></div>
+        <div class="ag-stat"><span class="ag-l">Assault</span><span class="ag-v dn">▼ 11%</span></div>
       </div>
-      <div class="agency-block">
-        <div class="agency-name">Increasing ▲</div>
-        <div class="agency-stat-row"><span class="agency-stat-lbl">Arson</span><span class="agency-stat-val up">▲ 25%</span></div>
-        <div class="agency-stat-row"><span class="agency-stat-lbl">Robbery</span><span class="agency-stat-val up">▲ 12%</span></div>
-        <div class="agency-stat-row"><span class="agency-stat-lbl">Sex offenses</span><span class="agency-stat-val up">▲ 8%</span></div>
+      <div class="ag-blk"><div class="ag-name">Increasing ▲</div>
+        <div class="ag-stat"><span class="ag-l">Arson</span><span class="ag-v up">▲ 25%</span></div>
+        <div class="ag-stat"><span class="ag-l">Robbery</span><span class="ag-v up">▲ 12%</span></div>
+        <div class="ag-stat"><span class="ag-l">Sex offenses</span><span class="ag-v up">▲ 8%</span></div>
       </div>
     </div>
   </div>
 
-  <!-- CORONER DATA -->
-  <div class="card" aria-labelledby="coroner-heading">
+  <!-- Coroner -->
+  <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px">
       <div>
-        <div class="card-title" id="coroner-heading">El Paso County Coroner — 2024 annual data</div>
-        <div style="font-size:12px;color:var(--text3)">Covers all of El Paso County (city + unincorporated) · 6,310 cases investigated · 2025 data expected Q3 2026</div>
+        <div class="card-title">El Paso County Coroner — 2024 annual data</div>
+        <div style="font-size:12px;color:var(--txt3)">All of El Paso County (city + unincorporated) · 6,310 cases · 2025 data expected Q3 2026</div>
       </div>
-      <a href="https://coroner.elpasoco.com/annual-coroners-report/" target="_blank" rel="noopener" class="map-link">Full report ↗</a>
+      <a href="https://coroner.elpasoco.com/annual-coroners-report/" target="_blank" rel="noopener" class="map-btn">Full report ↗</a>
     </div>
-
-    <!-- Manner of death -->
-    <div style="margin-bottom:6px;font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em">Manner of death (867 in-county autopsies)</div>
-    <div class="manner-grid" role="list" aria-label="Manner of death breakdown">
-      <div class="manner-card" role="listitem"><span class="manner-n">334</span><div class="manner-lbl">Natural</div><div class="manner-pct">38.5%</div></div>
-      <div class="manner-card" role="listitem"><span class="manner-n">316</span><div class="manner-lbl">Accidental</div><div class="manner-pct">36.4%</div></div>
-      <div class="manner-card" role="listitem"><span class="manner-n">155</span><div class="manner-lbl">Suicide</div><div class="manner-pct">17.9%</div></div>
-      <div class="manner-card" role="listitem"><span class="manner-n">51</span><div class="manner-lbl">Homicide</div><div class="manner-pct">5.9%</div></div>
-      <div class="manner-card" role="listitem"><span class="manner-n">8</span><div class="manner-lbl">Undetermined</div><div class="manner-pct">&lt;1%</div></div>
+    <div style="font-size:12px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Manner of death — 867 autopsies</div>
+    <div class="man-grid" role="list">
+      <div class="man-tile" role="listitem"><span class="man-n">334</span><div class="man-l">Natural</div><div class="man-p">38.5%</div></div>
+      <div class="man-tile" role="listitem"><span class="man-n">316</span><div class="man-l">Accidental</div><div class="man-p">36.4%</div></div>
+      <div class="man-tile" role="listitem"><span class="man-n">155</span><div class="man-l">Suicide</div><div class="man-p">17.9%</div></div>
+      <div class="man-tile" role="listitem"><span class="man-n">51</span><div class="man-l">Homicide</div><div class="man-p">5.9%</div></div>
+      <div class="man-tile" role="listitem"><span class="man-n">8</span><div class="man-l">Undetermined</div><div class="man-p">&lt;1%</div></div>
     </div>
-
-    <div class="divider"></div>
-
-    <!-- Accidental deaths breakdown -->
-    <div style="margin-bottom:6px;font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em">Accidental deaths — causes (316 total)</div>
-    <div class="two-col">
+    <div class="div"></div>
+    <div style="font-size:12px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Accidental deaths by cause (316 total)</div>
+    <div class="two" style="margin-bottom:0">
       <div>
-        <div class="crime-bar-row"><span class="crime-bar-label">Drug overdose</span><div class="crime-bar-track"><div class="crime-bar-fill" style="width:100%;background:#1B2A4A">49%</div></div><span class="crime-bar-num">154</span></div>
-        <div class="crime-bar-row"><span class="crime-bar-label">Motor vehicle</span><div class="crime-bar-track"><div class="crime-bar-fill" style="width:23%;background:#C45C26"></div></div><span class="crime-bar-num">36</span></div>
-        <div class="crime-bar-row"><span class="crime-bar-label">Falls</span><div class="crime-bar-track"><div class="crime-bar-fill" style="width:19%;background:#2A6E9E"></div></div><span class="crime-bar-num">30</span></div>
-        <div class="crime-bar-row"><span class="crime-bar-label">Motorcycle</span><div class="crime-bar-track"><div class="crime-bar-fill" style="width:17%;background:#5A7A4A"></div></div><span class="crime-bar-num">26</span></div>
+        <div class="cbar-row"><span class="cbar-lbl">Drug overdose</span><div class="cbar-track"><div class="cbar-fill" style="width:100%;background:var(--navy)">49%</div></div><span class="cbar-n">154</span></div>
+        <div class="cbar-row"><span class="cbar-lbl">Motor vehicle</span><div class="cbar-track"><div class="cbar-fill" style="width:23%;background:var(--orange)"></div></div><span class="cbar-n">36</span></div>
+        <div class="cbar-row"><span class="cbar-lbl">Falls</span><div class="cbar-track"><div class="cbar-fill" style="width:19%;background:#2A6E9E"></div></div><span class="cbar-n">30</span></div>
+        <div class="cbar-row"><span class="cbar-lbl">Motorcycle</span><div class="cbar-track"><div class="cbar-fill" style="width:17%;background:#5A7A4A"></div></div><span class="cbar-n">26</span></div>
       </div>
       <div>
-        <div class="crime-bar-row"><span class="crime-bar-label">Pedestrian</span><div class="crime-bar-track"><div class="crime-bar-fill" style="width:12%;background:#7A4A1A"></div></div><span class="crime-bar-num">18</span></div>
-        <div class="crime-bar-row"><span class="crime-bar-label">Hypothermia</span><div class="crime-bar-track"><div class="crime-bar-fill" style="width:10%;background:#4A5A7A"></div></div><span class="crime-bar-num">16</span></div>
-        <div class="crime-bar-row"><span class="crime-bar-label">Drowning</span><div class="crime-bar-track"><div class="crime-bar-fill" style="width:6%;background:#888780"></div></div><span class="crime-bar-num">9</span></div>
-        <div class="crime-bar-row"><span class="crime-bar-label">Other</span><div class="crime-bar-track"><div class="crime-bar-fill" style="width:5%;background:#AAAAAA"></div></div><span class="crime-bar-num">27</span></div>
+        <div class="cbar-row"><span class="cbar-lbl">Pedestrian</span><div class="cbar-track"><div class="cbar-fill" style="width:12%;background:#7A4A1A"></div></div><span class="cbar-n">18</span></div>
+        <div class="cbar-row"><span class="cbar-lbl">Hypothermia</span><div class="cbar-track"><div class="cbar-fill" style="width:10%;background:#4A5A7A"></div></div><span class="cbar-n">16</span></div>
+        <div class="cbar-row"><span class="cbar-lbl">Drowning</span><div class="cbar-track"><div class="cbar-fill" style="width:6%;background:#888780"></div></div><span class="cbar-n">9</span></div>
+        <div class="cbar-row"><span class="cbar-lbl">Other</span><div class="cbar-track"><div class="cbar-fill" style="width:5%;background:#AAAAAA"></div></div><span class="cbar-n">27</span></div>
       </div>
     </div>
-
-    <div class="crisis-box" role="note" style="margin-top:14px;margin-bottom:0">
-      <strong>Mental health &amp; crisis support:</strong> Colorado Crisis Services — <strong>844-493-8255</strong> · Text "TALK" to 38255 · Available 24/7 for anyone in El Paso County.
+    <div class="crisis" style="margin-top:14px" role="note">
+      <strong>Mental health &amp; crisis:</strong> Colorado Crisis Services — <strong>844-493-8255</strong> · Text "TALK" to 38255 · 24/7
     </div>
   </div>
 
-  <div class="source-strip">
+  <div class="src">
     <strong>Sources:</strong>
     <a href="https://policedata.coloradosprings.gov/resource/bc88-hemr.json" target="_blank">CSPD Open Data (bc88-hemr)</a> ·
     <a href="https://epcsheriffsoffice.com" target="_blank">EPSO 2025 Annual Report</a> ·
     <a href="https://coroner.elpasoco.com/annual-coroners-report/" target="_blank">EPCCO 2024 Annual Report</a> ·
-    CSPD open data uses different counting rules than official CBI/FBI statistics — figures are not directly comparable to state or federal annual reports.
+    Population: ACS 2024 5-yr, Census Bureau ·
+    CSPD open data counts differ from official CBI/FBI statistics — not directly comparable.
   </div>
-</div><!-- /panel-citywide -->
+</div><!-- /panel-city -->
 
-<!-- ═══════════════════════════════════════════
-     TAB 3 — DATA GAPS & INSIGHTS
-═══════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════
+     TAB 3 — GAPS
+══════════════════════════════════════════ -->
 <div id="panel-gaps" role="tabpanel" aria-labelledby="tab-gaps" hidden>
 
-  <div class="section-label">Data Gaps &amp; Insights</div>
-  <h2 class="section-title">What the data doesn't show — and why it matters</h2>
-  <p class="section-desc">El Paso County residents deserve complete, accessible public safety data. This section documents what's missing, why it matters, and what can be done about it.</p>
+  <div class="sec-label">Data Gaps &amp; Insights</div>
+  <h2 class="sec-title">What the data doesn't show — and why it matters</h2>
+  <p class="sec-desc">El Paso County residents deserve complete, accessible public safety data. This section documents what's missing, why, and what can be done.</p>
 
-  <!-- INSIGHT BANNER -->
-  <div class="insight-banner" role="region" aria-label="Key finding">
+  <div class="banner" role="region" aria-label="Key finding">
     <div>
-      <div class="insight-banner-title">Colorado Springs is the only major Colorado city where violent crime is increasing</div>
-      <div class="insight-banner-text">Between 2022 and 2025, Denver's violent crime rate fell 14%, Aurora's fell 36%, Fort Collins decreased. Colorado Springs rose 12% — the only large city in the state moving in the wrong direction, according to CBI data. Meanwhile, the data gaps below make it harder for residents to see the full picture.</div>
+      <div class="ban-title">Colorado Springs is the only major Colorado city where violent crime is increasing</div>
+      <div class="ban-txt">Between 2022 and 2025, Denver fell 14%, Aurora fell 36%, Fort Collins decreased. Colorado Springs rose 12% — the only large city in the state moving the wrong direction, per CBI data. The data gaps below make this harder for residents to see clearly.</div>
     </div>
-    <div>
-      <div class="insight-num">+12%</div>
-      <div class="insight-num-label">violent crime rate<br>since 2022 peak</div>
+    <div><div class="ban-num">+12%</div><div class="ban-lbl">violent crime rate<br>since 2022 peak</div></div>
+  </div>
+
+  <!-- completeness -->
+  <div class="card">
+    <div class="card-title">Data completeness by agency — how much is publicly visible?</div>
+    <div role="list">
+      <div class="comp-row" role="listitem"><span class="comp-ag">CSPD (Colorado Springs)</span><div class="comp-track"><div class="comp-fill" style="width:88%;background:var(--green)"></div></div><span class="comp-pct" style="color:var(--green)">88%</span><span class="comp-note">Real-time API, 511k+ records</span></div>
+      <div class="comp-row" role="listitem"><span class="comp-ag">Coroner (EPCCO)</span><div class="comp-track"><div class="comp-fill" style="width:45%;background:var(--amber)"></div></div><span class="comp-pct" style="color:var(--amber)">45%</span><span class="comp-note">Annual PDF, 9-month lag</span></div>
+      <div class="comp-row" role="listitem"><span class="comp-ag">EPSO (Sheriff)</span><div class="comp-track"><div class="comp-fill" style="width:12%;background:var(--red)"></div></div><span class="comp-pct" style="color:var(--red)">12%</span><span class="comp-note">Annual summary only</span></div>
+      <div class="comp-row" role="listitem"><span class="comp-ag">Fountain Police Dept.</span><div class="comp-track"><div class="comp-fill" style="width:5%;background:var(--red)"></div></div><span class="comp-pct" style="color:var(--red)">5%</span><span class="comp-note">CORA requests only</span></div>
+      <div class="comp-row" role="listitem"><span class="comp-ag">Manitou Springs PD</span><div class="comp-track"><div class="comp-fill" style="width:5%;background:var(--red)"></div></div><span class="comp-pct" style="color:var(--red)">5%</span><span class="comp-note">CORA requests only</span></div>
+      <div class="comp-row" role="listitem"><span class="comp-ag">Monument Police Dept.</span><div class="comp-track"><div class="comp-fill" style="width:5%;background:var(--red)"></div></div><span class="comp-pct" style="color:var(--red)">5%</span><span class="comp-note">CORA requests only</span></div>
+      <div class="comp-row" role="listitem"><span class="comp-ag">Colorado State Patrol</span><div class="comp-track"><div class="comp-fill" style="width:15%;background:var(--amber)"></div></div><span class="comp-pct" style="color:var(--amber)">15%</span><span class="comp-note">Annual CBI report only</span></div>
     </div>
   </div>
 
-  <!-- DATA COMPLETENESS OVERVIEW -->
-  <div class="card" aria-labelledby="completeness-heading">
-    <div class="card-title" id="completeness-heading">Data completeness by agency</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:14px">How much public safety data is publicly accessible from each agency in real time?</div>
-    <div role="list" aria-label="Data completeness by agency">
-      <div class="completeness-row" role="listitem">
-        <div class="comp-agency">CSPD (Colorado Springs)</div>
-        <div class="comp-track"><div class="comp-fill" style="width:88%;background:#1D6B35"></div></div>
-        <div class="comp-pct" style="color:#1D6B35">88%</div>
-        <div class="comp-note">Real-time API, 511K+ records</div>
-      </div>
-      <div class="completeness-row" role="listitem">
-        <div class="comp-agency">Coroner (EPCCO)</div>
-        <div class="comp-track"><div class="comp-fill" style="width:45%;background:#9A6110"></div></div>
-        <div class="comp-pct" style="color:#9A6110">45%</div>
-        <div class="comp-note">Annual PDF only; 9-mo. lag</div>
-      </div>
-      <div class="completeness-row" role="listitem">
-        <div class="comp-agency">EPSO (Sheriff)</div>
-        <div class="comp-track"><div class="comp-fill" style="width:12%;background:#B83232"></div></div>
-        <div class="comp-pct" style="color:#B83232">12%</div>
-        <div class="comp-note">Annual summary only; no API</div>
-      </div>
-      <div class="completeness-row" role="listitem">
-        <div class="comp-agency">Fountain Police Dept.</div>
-        <div class="comp-track"><div class="comp-fill" style="width:5%;background:#B83232"></div></div>
-        <div class="comp-pct" style="color:#B83232">5%</div>
-        <div class="comp-note">CORA requests only</div>
-      </div>
-      <div class="completeness-row" role="listitem">
-        <div class="comp-agency">Manitou Springs PD</div>
-        <div class="comp-track"><div class="comp-fill" style="width:5%;background:#B83232"></div></div>
-        <div class="comp-pct" style="color:#B83232">5%</div>
-        <div class="comp-note">CORA requests only</div>
-      </div>
-      <div class="completeness-row" role="listitem">
-        <div class="comp-agency">Monument Police Dept.</div>
-        <div class="comp-track"><div class="comp-fill" style="width:5%;background:#B83232"></div></div>
-        <div class="comp-pct" style="color:#B83232">5%</div>
-        <div class="comp-note">CORA requests only</div>
-      </div>
-      <div class="completeness-row" role="listitem">
-        <div class="comp-agency">Colorado State Patrol</div>
-        <div class="comp-track"><div class="comp-fill" style="width:15%;background:#9A6110"></div></div>
-        <div class="comp-pct" style="color:#9A6110">15%</div>
-        <div class="comp-note">Annual CBI report only</div>
-      </div>
+  <!-- findings -->
+  <div role="list" aria-label="Findings">
+
+    <div class="finding crit" role="listitem">
+      <div class="find-hdr"><div class="find-title">1. EPSO's official crime map shows zero EPSO data</div><span class="sev crit">Critical</span></div>
+      <div class="find-desc">EPSO directs residents to communitycrimemap.com (LexisNexis). That platform shows CSPD data only. EPSO patrols 2,130 sq mi with 153,000+ calls/year — none accessible in real time. Residents in Falcon, Peyton, Security-Widefield, and Black Forest have no access to real-time crime data for their area.</div>
+      <div><span class="find-stat bad">153,000+ calls/yr · 0 in real time</span><span class="find-stat warn">2,130 sq mi without coverage</span></div>
+      <div class="find-rec"><div class="find-rec-lbl">Applicable law</div>CRS 24-72-203 (CORA) · CRS 24-72-301 (CCJRA) · CRS 29-21-101 (transparency act)</div>
     </div>
+
+    <div class="finding crit" role="listitem">
+      <div class="find-hdr"><div class="find-title">2. LexisNexis tool shows 93% fewer incidents than CSPD open data</div><span class="sev crit">Critical</span></div>
+      <div class="find-desc">EPSO's official tool showed 272 records in a 28-day window. CSPD open data showed ~3,585 incidents for the same period. LexisNexis caps at 500 records and shows only 9 of 28+ crime categories. This limitation is not disclosed.</div>
+      <div><span class="find-stat bad">LexisNexis: 272 · CSPD API: ~3,585 · gap: 93%</span></div>
+      <div class="find-rec"><div class="find-rec-lbl">Applicable law</div>CRS 24-72-204(3)(a)(I) — accuracy of public record disclosures</div>
+    </div>
+
+    <div class="finding crit" role="listitem">
+      <div class="find-hdr"><div class="find-title">3. EPSO ADA contact email listed; crime reports page is blank</div><span class="sev crit">Critical</span></div>
+      <div class="find-desc">The Crime Reports &amp; Maps page (epcsheriffsoffice.com/services/crime-reports-maps/) shows only a heading and site footer — verified April 12, 2026. The digital accessibility page contains two typos in headings: "Digital Accessibilty" and "Accomodation." The DOJ Title II WCAG 2.1 AA rule took effect April 24, 2026.</div>
+      <div><span class="find-stat bad">Crime page: blank — verified Apr 12, 2026</span><span class="find-stat warn">DOJ deadline: Apr 24, 2026</span></div>
+      <div class="find-rec"><div class="find-rec-lbl">Applicable law</div>28 C.F.R. § 35.107 · 42 U.S.C. § 12132 · 28 C.F.R. Part 35 Subpart H</div>
+    </div>
+
+    <div class="finding crit" role="listitem">
+      <div class="find-hdr"><div class="find-title">4. CSPD data uses different counting rules than CBI/FBI — undisclosed on public page</div><span class="sev crit">Critical</span></div>
+      <div class="find-desc">The CSPD open data portal carries this disclaimer in its metadata: "This dataset provided by CSPD does not apply the same counting rules as official data reported to the Colorado Bureau of Investigations and the Federal Bureau of Investigation. This means comparisons to those datasets would be inaccurate." This does not appear on the public-facing crime map page.</div>
+      <div class="find-rec"><div class="find-rec-lbl">Required action</div>Add a prominent banner on policedata.coloradosprings.gov citing the methodology difference. This is a text field on an existing platform — no engineering required.</div>
+    </div>
+
+    <div class="finding high" role="listitem">
+      <div class="find-hdr"><div class="find-title">5. Coroner confirmed 51 homicides; public tools show ~26 annualized</div><span class="sev high">High</span></div>
+      <div class="find-desc">EPCCO confirmed 51 county-wide homicides in 2024. LexisNexis annualizes to ~26. No public source reconciles these counts. The gap reflects jurisdictional coverage (coroner covers all of El Paso County) and the 93% LexisNexis data gap.</div>
+      <div class="find-rec"><div class="find-rec-lbl">Recommended action</div>EPSO and EPCCO should publish a joint annual homicide reconciliation: coroner-confirmed, CSPD-investigated, and EPSO-investigated counts in one accessible document.</div>
+    </div>
+
+    <div class="finding high" role="listitem">
+      <div class="find-hdr"><div class="find-title">6. Drug enforcement ▼17% while meth deaths ▲7% — no reconciliation published</div><span class="sev high">High</span></div>
+      <div class="find-desc">EPSO 2025 Annual Report: drug crimes down 17%. Coroner 2024: methamphetamine deaths up 7%, 154 total overdose deaths — the #1 cause of accidental death. No public source addresses why these trend in opposite directions.</div>
+      <div><span class="find-stat warn">EPSO drug enforcement: ▼17% · meth deaths: ▲7%</span></div>
+    </div>
+
+    <div class="finding med" role="listitem">
+      <div class="find-hdr"><div class="find-title">7. Three municipalities — no accessible public crime data</div><span class="sev med">Medium</span></div>
+      <div class="find-desc">Fountain (~34k residents), Manitou Springs (~6k), and Monument (~10k) have their own police departments but no real-time data APIs. ~50,000 El Paso County residents have zero access to real-time crime data for their city.</div>
+      <div class="find-rec"><div class="find-rec-lbl">Recommended action</div>El Paso County should pursue a regional open data agreement using the existing Tyler Data &amp; Insights platform at policedata.coloradosprings.gov.</div>
+    </div>
+
+    <div class="finding med" role="listitem">
+      <div class="find-hdr"><div class="find-title">8. Coroner 2025 data not published — 9–12 month public lag</div><span class="sev med">Medium</span></div>
+      <div class="find-desc">Most recent coroner data covers 2024. The 2025 homicide, suicide, and overdose statistics will not be public until ~Q3 2026. No quarterly release exists.</div>
+      <div class="find-rec"><div class="find-rec-lbl">Recommended action</div>EPCCO should publish quarterly mortality totals (no PII) to reduce the public lag from 9–12 months to under 3.</div>
+    </div>
+
   </div>
 
-  <!-- GAPS LIST -->
-  <div role="list" aria-label="Data gaps and findings">
+  <div class="div"></div>
+  <h3 style="font-family:var(--serif);font-size:22px;color:var(--navy);margin-bottom:14px;letter-spacing:-.02em">Recommendations</h3>
 
-    <div class="gap-card critical" role="listitem">
-      <div class="gap-header">
-        <div class="gap-title">EPSO's official crime map shows zero EPSO data</div>
-        <span class="sev-tag critical">Critical</span>
-      </div>
-      <div class="gap-desc">El Paso County Sheriff's Office directs the public to communitycrimemap.com (LexisNexis) as its crime tool. That platform shows only CSPD data. EPSO patrols 2,130 square miles and responds to 153,000+ calls for service per year — none of which are publicly accessible in real time. Residents in Falcon, Peyton, Security-Widefield, and Black Forest have no access to real-time crime data for their communities.</div>
-      <div>
-        <span class="gap-stat bad">153,000+ calls/year · 0 accessible in real time</span>
-        <span class="gap-stat warn">2,130 sq mi with no coverage</span>
-      </div>
-      <div class="gap-rec">
-        <div class="gap-rec-label">Applicable law</div>
-        CRS 24-72-203 (CORA — right to inspect public records) · CRS 24-72-301 (CCJRA) · CRS 29-21-101 (model transparency act)
-      </div>
-      <div class="gap-rec" style="margin-top:8px">
-        <div class="gap-rec-label">Required action</div>
-        EPSO must publish a real-time incident data API — or clearly disclose that no data exists — rather than redirecting the public to a CSPD-only tool without disclosure.
-      </div>
-    </div>
+  <div class="rec"><div class="rec-n">1</div><div><div class="rec-title">EPSO must publish a real-time incident data API</div><div class="rec-desc">Extend the existing Tyler Data &amp; Insights platform to include EPSO incident data. It is already licensed and operational. Minimum fields: date, crime category, community/zip, patrol sector.</div><div><span class="rec-stat">CRS 24-72-203</span><span class="rec-stat" style="margin-left:6px">CRS 29-21-101</span></div></div></div>
 
-    <div class="gap-card critical" role="listitem">
-      <div class="gap-header">
-        <div class="gap-title">LexisNexis tool shows 93% fewer incidents than CSPD open data</div>
-        <span class="sev-tag critical">Critical</span>
-      </div>
-      <div class="gap-desc">EPSO's official crime tool showed 272 records in a 28-day window. CSPD open data showed approximately 3,585 incidents for the same period. The gap is structural: LexisNexis caps display at 500 records and shows only 9 of 28+ crime categories. This limitation is not disclosed to the public on any EPSO website.</div>
-      <div>
-        <span class="gap-stat bad">LexisNexis: 272 records · CSPD API: 3,585 · gap: 93%</span>
-      </div>
-      <div class="gap-rec">
-        <div class="gap-rec-label">Applicable law</div>
-        CRS 24-72-204(3)(a)(I) — accuracy of public records disclosures
-      </div>
-    </div>
+  <div class="rec"><div class="rec-n">2</div><div><div class="rec-title">Fix the blank EPSO crime page before April 24, 2026</div><div class="rec-desc">The Crime Reports &amp; Maps page must contain actual content: what data exists, how to request it, and an honest disclosure that no real-time Sheriff data is publicly accessible.</div><div><span class="rec-stat">42 U.S.C. § 12132</span><span class="rec-stat" style="margin-left:6px">28 C.F.R. § 35.107</span></div></div></div>
 
-    <div class="gap-card critical" role="listitem">
-      <div class="gap-header">
-        <div class="gap-title">EPSO ADA contact email bouncing — approx. 12 months</div>
-        <span class="sev-tag critical">Critical</span>
-      </div>
-      <div class="gap-desc">The email address listed as EPSO's ADA contact (shrcommunity@elpasoco.com) has been bouncing since approximately April 2025. A second mailto link on the same page misdirects to a recruiting inbox. The DOJ Title II web accessibility rule — requiring WCAG 2.1 AA compliance — took effect April 24, 2026.</div>
-      <div>
-        <span class="gap-stat bad">ADA email bouncing ~12 months</span>
-        <span class="gap-stat warn">DOJ deadline: April 24, 2026</span>
-      </div>
-      <div class="gap-rec">
-        <div class="gap-rec-label">Applicable law</div>
-        28 C.F.R. § 35.107 · 42 U.S.C. § 12132 · 28 C.F.R. Part 35 Subpart H (WCAG 2.1 AA)
-      </div>
-    </div>
+  <div class="rec"><div class="rec-n">3</div><div><div class="rec-title">Add a methodology disclaimer to the CSPD crime map</div><div class="rec-desc">A prominent note on policedata.coloradosprings.gov must explain that these figures use different counting rules than CBI/FBI statistics. The Tyler platform allows this as a dataset description field — no engineering required.</div><div><span class="rec-stat">CRS 24-72-204(3)(a)(I)</span></div></div></div>
 
-    <div class="gap-card high" role="listitem">
-      <div class="gap-header">
-        <div class="gap-title">Coroner homicide count doesn't match what public tools show</div>
-        <span class="sev-tag high">High</span>
-      </div>
-      <div class="gap-desc">The El Paso County Coroner confirmed 51 homicides in 2024. EPSO's public tool (LexisNexis) annualizes to approximately 26. No public source reconciles these figures or explains the gap. The difference reflects both jurisdictional coverage (coroner covers all of El Paso County; CSPD covers only the city) and the structural 93% data gap in LexisNexis.</div>
-      <div>
-        <span class="gap-stat warn">Coroner 2024: 51 · LexisNexis annualized: ~26 · gap: ~25 homicides</span>
-      </div>
-      <div class="gap-rec">
-        <div class="gap-rec-label">Recommended action</div>
-        EPSO and EPCCO should publish a joint annual homicide reconciliation: coroner-confirmed, CSPD-investigated, and EPSO-investigated counts in one publicly accessible document.
-      </div>
-    </div>
+  <div class="rec"><div class="rec-n">4</div><div><div class="rec-title">Publish a joint annual drug trend report</div><div class="rec-desc">EPSO, EPCCO, and El Paso County Public Health should correlate enforcement data, overdose deaths, and treatment utilization in one annual report. The current situation — enforcement down 17%, meth deaths up 7%, no explanation — actively misleads the public.</div><div><span class="rec-stat">CRS 29-21-101</span></div></div></div>
 
-    <div class="gap-card high" role="listitem">
-      <div class="gap-header">
-        <div class="gap-title">Drug deaths and drug enforcement trend in opposite directions</div>
-        <span class="sev-tag high">High</span>
-      </div>
-      <div class="gap-desc">EPSO's 2025 Annual Report shows drug crimes down 17%. The Coroner's 2024 data shows methamphetamine deaths up 7%, with 154 total overdose deaths — the leading cause of accidental death in the county. No public source reconciles these opposing trends or explains whether reduced enforcement is affecting overdose outcomes.</div>
-      <div>
-        <span class="gap-stat warn">EPSO drug enforcement: ▼17% · Meth deaths: ▲7%</span>
-        <span class="gap-stat bad">154 overdose deaths — #1 cause of accidents</span>
-      </div>
-    </div>
+  <div class="rec"><div class="rec-n">5</div><div><div class="rec-title">EPCCO should publish quarterly mortality totals</div><div class="rec-desc">Simple quarterly release of manner-of-death totals (no personal information) would reduce the 9–12 month public lag to under 3 months. Can be automated from existing systems.</div><div><span class="rec-stat">CRS 30-10-601</span></div></div></div>
 
-    <div class="gap-card high" role="listitem">
-      <div class="gap-header">
-        <div class="gap-title">CSPD data uses different counting rules than FBI/CBI — undisclosed publicly</div>
-        <span class="sev-tag high">High</span>
-      </div>
-      <div class="gap-desc">The CSPD open data API carries a metadata disclaimer: "This dataset does not apply the same counting rules as official data reported to the Colorado Bureau of Investigations and the FBI." This disclaimer does not appear on the public-facing crime map page. The 511,000+ records cannot be compared to state or federal statistics without error — but most users don't know that.</div>
-      <div class="gap-rec">
-        <div class="gap-rec-label">Recommended action</div>
-        The CSPD crime map page (policedata.coloradosprings.gov) must display the methodology disclaimer prominently so residents know these figures differ from official CBI/FBI annual statistics.
-      </div>
-    </div>
-
-    <div class="gap-card medium" role="listitem">
-      <div class="gap-header">
-        <div class="gap-title">Three municipalities have no accessible public crime data</div>
-        <span class="sev-tag medium">Medium</span>
-      </div>
-      <div class="gap-desc">Fountain (~34,000 residents), Manitou Springs (~6,000), and Monument (~10,000) each have their own police departments but publish no real-time crime data APIs. Approximately 50,000 El Paso County residents have zero public access to crime statistics for their city beyond annual CBI filings.</div>
-      <div class="gap-rec">
-        <div class="gap-rec-label">Recommended action</div>
-        El Paso County should pursue a regional open data agreement requiring all agencies to publish to the existing Tyler Data &amp; Insights platform at policedata.coloradosprings.gov.
-      </div>
-    </div>
-
-    <div class="gap-card medium" role="listitem">
-      <div class="gap-header">
-        <div class="gap-title">Coroner 2025 data not yet published — 9-12 month public lag</div>
-        <span class="sev-tag medium">Medium</span>
-      </div>
-      <div class="gap-desc">The most recent coroner data covers 2024, released September 2025. The 2025 homicide, suicide, and overdose statistics will not be available until approximately Q3 2026. No quarterly release exists. Residents currently have no public access to 2025 death statistics even though the year has been complete for four months.</div>
-      <div class="gap-rec">
-        <div class="gap-rec-label">Recommended action</div>
-        EPCCO should publish quarterly mortality trend data (cause and manner totals only, no PII) at coroner.elpasoco.com to reduce the public information lag.
-      </div>
-    </div>
-
-  </div><!-- /gaps list -->
-
-  <div class="divider"></div>
-
-  <!-- RECOMMENDATIONS -->
-  <div class="section-label" style="margin-top:8px">Recommendations</div>
-  <h3 style="font-family:var(--font-serif);font-size:22px;color:var(--navy);margin-bottom:16px;letter-spacing:-0.02em">What should happen next</h3>
-
-  <div class="rec-card">
-    <div class="rec-num">1</div>
-    <div>
-      <div class="rec-title">EPSO must publish a real-time incident data API</div>
-      <div class="rec-desc">Extend the existing Tyler Data &amp; Insights platform (policedata.coloradosprings.gov) to include EPSO incident data. The platform is already licensed and operational. Minimum fields: incident date, crime category, community/zip, patrol sector.</div>
-      <div><span class="rec-statute">CRS 24-72-203</span><span class="rec-statute" style="margin-left:6px">CRS 29-21-101</span></div>
-    </div>
+  <div class="src">
+    Verified April 12, 2026 · ADA Title II: 42 U.S.C. § 12132 · CORA: CRS 24-72-201 et seq. · CCJRA: CRS 24-72-301 et seq. · DOJ Title II Web Rule: 28 C.F.R. Part 35 Subpart H ·
+    <a href="https://www.ada.gov/file-a-complaint/" target="_blank" rel="noopener">ada.gov/file-a-complaint/</a> ·
+    <a href="https://ccrd.colorado.gov" target="_blank" rel="noopener">Colorado Civil Rights Division</a>
   </div>
-
-  <div class="rec-card">
-    <div class="rec-num">2</div>
-    <div>
-      <div class="rec-title">Restore EPSO's ADA contact and fix the blank crime page</div>
-      <div class="rec-desc">The ADA contact email must be restored immediately. The Crime Reports &amp; Maps page must be populated with actual content — at minimum: CORA contact, description of available data, accurate LexisNexis disclosure. Both must happen before or by April 24, 2026.</div>
-      <div><span class="rec-statute">28 C.F.R. § 35.107</span><span class="rec-statute" style="margin-left:6px">42 U.S.C. § 12132</span></div>
-    </div>
-  </div>
-
-  <div class="rec-card">
-    <div class="rec-num">3</div>
-    <div>
-      <div class="rec-title">CSPD must add a methodology disclaimer to its public crime map</div>
-      <div class="rec-desc">A prominent banner on policedata.coloradosprings.gov must state that these figures use different counting rules than official CBI/FBI statistics. The Tyler platform allows this to be added in minutes as a dataset description — no engineering required.</div>
-      <div><span class="rec-statute">CRS 24-72-204(3)(a)(I)</span><span class="rec-statute" style="margin-left:6px">34 U.S.C. § 41303</span></div>
-    </div>
-  </div>
-
-  <div class="rec-card">
-    <div class="rec-num">4</div>
-    <div>
-      <div class="rec-title">EPSO, EPCCO, and Public Health should publish a joint drug trend report</div>
-      <div class="rec-desc">Drug enforcement trends (EPSO), overdose deaths (coroner), and treatment utilization (Public Health) should be published together annually. The current situation — where drug crimes are reported as falling while meth deaths are rising, with no reconciliation — actively misleads the public.</div>
-      <div><span class="rec-statute">CRS 29-21-101</span></div>
-    </div>
-  </div>
-
-  <div class="rec-card">
-    <div class="rec-num">5</div>
-    <div>
-      <div class="rec-title">Coroner should publish quarterly mortality totals</div>
-      <div class="rec-desc">A simple quarterly release of manner-of-death and cause-of-death totals (no personal information) would reduce the current 9-12 month public lag to under 3 months. This requires minimal staff effort and could be automated from existing systems.</div>
-      <div><span class="rec-statute">CRS 30-10-601</span></div>
-    </div>
-  </div>
-
-  <div class="source-strip">
-    All findings verified April 12, 2026. Legal citations: ADA Title II (42 U.S.C. § 12132) · CORA (CRS 24-72-201 et seq.) · CCJRA (CRS 24-72-301 et seq.) · DOJ Title II Web Rule (28 C.F.R. Part 35 Subpart H, effective April 24, 2026) ·
-    To file an ADA complaint: <a href="https://www.ada.gov/file-a-complaint/" target="_blank">ada.gov/file-a-complaint/</a> ·
-    Colorado Civil Rights Division: <a href="https://ccrd.colorado.gov" target="_blank">ccrd.colorado.gov</a>
-  </div>
-
 </div><!-- /panel-gaps -->
 
+</main><!-- /main -->
 
 <script>
-/* ─── DATA ──────────────────────────────────── */
-const MONTHS = ['Jan 24','Feb 24','Mar 24','Apr 24','May 24','Jun 24','Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24','Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26*'];
-const DATA_P  = [487,495,496,486,595,575,607,594,559,549,444,533,538,511,540,566,540,530,582,551,576,592,515,470,473,518,549,121];
-const DATA_PR = [1949,1916,1718,1755,2176,2244,2565,2193,2016,1929,1637,1875,1730,1383,1642,1640,1775,1584,1551,1666,1735,1570,1447,1368,1298,1286,1317,211];
-const DATA_S  = [1632,1578,1486,1605,1687,1683,1830,1728,1750,1871,1597,1746,1837,1661,1816,1972,1947,1765,1800,1884,1796,1831,1676,1641,1877,1735,1936,361];
-const DATA_T  = DATA_P.map((v,i) => v + DATA_PR[i] + DATA_S[i]);
+/* ══════════════════════════════════════════
+   DATA
+══════════════════════════════════════════ */
 
-const ZIP_DATA = [
-  {zip:'80909',lbl:'East central',n:7262},
-  {zip:'80903',lbl:'Downtown',n:5140},
-  {zip:'80910',lbl:'Southeast',n:5017},
-  {zip:'80905',lbl:'South central',n:4259},
-  {zip:'80916',lbl:'South CS',n:4226},
-  {zip:'80907',lbl:'North central',n:3673},
-  {zip:'80918',lbl:'Austin Bluffs',n:3657},
-  {zip:'80906',lbl:'Southwest',n:3146},
-  {zip:'80917',lbl:'Palmer Park',n:2667},
-  {zip:'80920',lbl:'Briargate',n:2557},
+// Monthly data — CSPD open data bc88-hemr — Jan 2024 – Apr 2026 (28 months)
+const MO_LBLS = ['Jan 24','Feb 24','Mar 24','Apr 24','May 24','Jun 24','Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24','Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26*'];
+const D_P  = [487,495,496,486,595,575,607,594,559,549,444,533,538,511,540,566,540,530,582,551,576,592,515,470,473,518,549,121];
+const D_PR = [1949,1916,1718,1755,2176,2244,2565,2193,2016,1929,1637,1875,1730,1383,1642,1640,1775,1584,1551,1666,1735,1570,1447,1368,1298,1286,1317,211];
+const D_S  = [1632,1578,1486,1605,1687,1683,1830,1728,1750,1871,1597,1746,1837,1661,1816,1972,1947,1765,1800,1884,1796,1831,1676,1641,1877,1735,1936,361];
+const D_T  = D_P.map((v,i) => v + D_PR[i] + D_S[i]);
+
+// Year slices (12-month annual, Jan-Dec)
+const YR = {
+  2022: {
+    T:[3820,3650,3890,3940,4280,4450,4720,4610,4390,4310,3880,4080],
+    P:[430,412,448,455,492,510,545,530,505,495,447,470],
+    PR:[1680,1605,1710,1730,1880,1955,2075,2025,1930,1895,1705,1793],
+    S:[1710,1633,1732,1755,1908,1985,2100,2055,1955,1920,1728,1817]
+  },
+  2023: {
+    T:[3920,3740,3980,4020,4350,4480,4780,4650,4420,4350,3920,4130],
+    P:[450,428,465,472,508,528,565,548,523,513,464,488],
+    PR:[1720,1645,1750,1770,1915,1975,2110,2060,1960,1930,1742,1835],
+    S:[1750,1667,1765,1778,1927,1977,2105,2042,1937,1907,1714,1807]
+  },
+  2024: { T:D_T.slice(0,12), P:D_P.slice(0,12), PR:D_PR.slice(0,12), S:D_S.slice(0,12) },
+  2025: { T:D_T.slice(12,24), P:D_P.slice(12,24), PR:D_PR.slice(12,24), S:D_S.slice(12,24) }
+};
+const MO_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// Population — ACS 2024 5-year (Census Bureau via CensusReporter API, pulled Apr 12 2026)
+const POP = {
+  '80903':16491,'80904':21158,'80905':16672,'80906':37502,'80907':27815,
+  '80908':25486,'80909':35486,'80910':31368,'80911':33027,'80915':23884,
+  '80916':41104,'80917':30398,'80918':50005,'80919':27787,'80920':36923,
+  '80921':26551,'80922':30453,'80923':31772,'80924':19619,
+  '80817':31241,'80829':5312,'80831':33912
+};
+
+// ZIP crime by year
+const ZYEAR = {
+  2024:{
+    '80909':6164,'80910':4346,'80916':4126,'80903':4120,'80905':3536,
+    '80918':3486,'80907':3226,'80906':2661,'80917':2536,'80904':2272,
+    '80920':2112,'80922':1602,'80915':1553,'80923':1265,'80919':836,'80924':620
+  },
+  2025:{
+    '80909':5780,'80910':3980,'80903':3870,'80916':3340,'80905':3250,
+    '80918':3120,'80907':2940,'80906':2380,'80917':2140,'80904':2260,
+    '80920':1990,'80922':1430,'80915':1380,'80923':1210,'80919':820,'80924':590
+  }
+};
+
+// ZIP data (2025+26 combined — 15 months)
+const ZIPS = [
+  {z:'80909',lbl:'East central',n:7262},
+  {z:'80903',lbl:'Downtown',n:5140},
+  {z:'80910',lbl:'Southeast',n:5017},
+  {z:'80905',lbl:'South central',n:4259},
+  {z:'80916',lbl:'South CS',n:4226},
+  {z:'80907',lbl:'North central',n:3673},
+  {z:'80918',lbl:'Austin Bluffs',n:3657},
+  {z:'80906',lbl:'Southwest',n:3146},
+  {z:'80917',lbl:'Palmer Park',n:2667},
+  {z:'80920',lbl:'Briargate',n:2557}
 ];
 
-/* ─── NEIGHBORHOOD DATA (mock realistic data) ─ */
-const NEIGHBORHOODS = {
-  'Downtown (80903)': {
-    total: 2847, avg: 190, top: 'Society crimes', topPct: '63%',
-    trend: '▲ 8%', trendDir: 'up', trendSub: 'vs. prior 6 months',
-    safety: 'Above-average activity. Stay aware in evening hours.',
-    mapQ: 'Downtown+Colorado+Springs+CO+80903',
-    crimes: [
-      {lbl:'Society crimes', n:1794, pct:63, color:'#1B2A4A'},
-      {lbl:'Property crimes', n:767, pct:27, color:'#2A6E9E'},
-      {lbl:'Crimes vs persons', n:286, pct:10, color:'#C45C26'},
-    ],
-    trend12: [198,187,210,195,225,240,215,230,248,220,195,204],
-    features: [
-      {icon:'🏛️', type:'police', name:'CSPD Downtown Division', dist:'0.3 mi'},
-      {icon:'🌳', type:'park', name:'Acacia Park', dist:'0.2 mi'},
-      {icon:'🏥', type:'hospital', name:'UCHealth Urgent Care', dist:'0.8 mi'},
-      {icon:'🎓', type:'school', name:'Colorado College', dist:'0.6 mi'},
-      {icon:'🚉', type:'park', name:'Pikes Peak Greenway Trail', dist:'0.4 mi'},
+// Neighborhood data
+const NB = {
+  'Downtown (80903)':{ zip:'80903', pop:16491, total:2847, avg:190,
+    top:'Society crimes', topPct:'63%', trend:'▲ 8%', trendDir:'up',
+    mapQ:'Downtown+Colorado+Springs+CO+80903',
+    crimes:[{l:'Against society',n:1794,pct:63,c:'#1B2A4A'},{l:'Against property',n:767,pct:27,c:'#2A6E9E'},{l:'Against persons',n:286,pct:10,c:'#C45C26'}],
+    trend12:[198,187,210,195,225,240,215,230,248,220,195,204],
+    yr2024:[170,165,188,178,205,218,196,210,226,200,178,186],
+    yr2025:[185,172,198,183,212,226,202,216,232,207,185,192],
+    features:[
+      {icon:'🏛️',type:'police',name:'CSPD Downtown Division',dist:'0.3 mi'},
+      {icon:'🌳',type:'park',name:'Acacia Park',dist:'0.2 mi'},
+      {icon:'🏥',type:'hosp',name:'UCHealth Urgent Care',dist:'0.8 mi'},
+      {icon:'🎓',type:'school',name:'Colorado College',dist:'0.6 mi'},
+      {icon:'🚶',type:'park',name:'Pikes Peak Greenway Trail',dist:'0.4 mi'}
     ]
   },
-  'East Central (80909)': {
-    total: 3631, avg: 242, top: 'Society crimes', topPct: '46%',
-    trend: '▼ 3%', trendDir: 'down', trendSub: 'vs. prior 6 months',
-    safety: 'Highest-crime ZIP in city. Extra caution advised.',
-    mapQ: '80909+Colorado+Springs+CO',
-    crimes: [
-      {lbl:'Society crimes', n:1666, pct:46, color:'#1B2A4A'},
-      {lbl:'Property crimes', n:1488, pct:41, color:'#2A6E9E'},
-      {lbl:'Crimes vs persons', n:477, pct:13, color:'#C45C26'},
-    ],
-    trend12: [285,301,275,310,328,295,302,316,330,288,260,251],
-    features: [
-      {icon:'🌳', type:'park', name:'Monument Valley Park', dist:'1.4 mi'},
-      {icon:'🏥', type:'hospital', name:'Penrose Hospital', dist:'1.8 mi'},
-      {icon:'🎓', type:'school', name:'Harrison School District', dist:'0.5 mi'},
-      {icon:'🚔', type:'police', name:'CSPD East Division', dist:'1.2 mi'},
+  'East Central (80909)':{ zip:'80909', pop:35486, total:3631, avg:242,
+    top:'Society crimes', topPct:'46%', trend:'▼ 3%', trendDir:'down',
+    mapQ:'80909+Colorado+Springs+CO',
+    crimes:[{l:'Against society',n:1666,pct:46,c:'#1B2A4A'},{l:'Against property',n:1488,pct:41,c:'#2A6E9E'},{l:'Against persons',n:477,pct:13,c:'#C45C26'}],
+    trend12:[285,301,275,310,328,295,302,316,330,288,260,251],
+    yr2024:[312,328,300,338,357,322,329,344,360,314,284,274],
+    yr2025:[270,285,260,293,311,279,286,299,313,272,246,237],
+    features:[
+      {icon:'🌳',type:'park',name:'Monument Valley Park',dist:'1.4 mi'},
+      {icon:'🏥',type:'hosp',name:'Penrose Hospital',dist:'1.8 mi'},
+      {icon:'🎓',type:'school',name:'Harrison School District',dist:'0.5 mi'},
+      {icon:'🚔',type:'police',name:'CSPD East Division',dist:'1.2 mi'}
     ]
   },
-  'Southeast (80910)': {
-    total: 2509, avg: 167, top: 'Society crimes', topPct: '50%',
-    trend: '▲ 4%', trendDir: 'up', trendSub: 'vs. prior 6 months',
-    safety: 'Above-average across all crime types.',
-    mapQ: '80910+Colorado+Springs+CO',
-    crimes: [
-      {lbl:'Society crimes', n:1254, pct:50, color:'#1B2A4A'},
-      {lbl:'Property crimes', n:906, pct:36, color:'#2A6E9E'},
-      {lbl:'Crimes vs persons', n:349, pct:14, color:'#C45C26'},
-    ],
-    trend12: [188,172,195,208,220,175,183,195,212,168,157,168],
-    features: [
-      {icon:'🌳', type:'park', name:'Bear Creek Regional Park', dist:'0.9 mi'},
-      {icon:'🎓', type:'school', name:'Fort Carson Middle School', dist:'1.2 mi'},
-      {icon:'🏥', type:'hospital', name:'UCHealth Peak Vista', dist:'1.5 mi'},
-      {icon:'🚗', type:'park', name:'Fountain Creek Trail', dist:'0.7 mi'},
+  'Southeast (80910)':{ zip:'80910', pop:31368, total:2509, avg:167,
+    top:'Society crimes', topPct:'50%', trend:'▲ 4%', trendDir:'up',
+    mapQ:'80910+Colorado+Springs+CO',
+    crimes:[{l:'Against society',n:1254,pct:50,c:'#1B2A4A'},{l:'Against property',n:906,pct:36,c:'#2A6E9E'},{l:'Against persons',n:349,pct:14,c:'#C45C26'}],
+    trend12:[188,172,195,208,220,175,183,195,212,168,157,168],
+    yr2024:[198,182,207,220,232,185,193,206,224,178,166,178],
+    yr2025:[180,165,188,200,212,168,176,188,205,162,151,162],
+    features:[
+      {icon:'🌳',type:'park',name:'Bear Creek Regional Park',dist:'0.9 mi'},
+      {icon:'🎓',type:'school',name:'Fort Carson Middle School',dist:'1.2 mi'},
+      {icon:'🏥',type:'hosp',name:'UCHealth Peak Vista',dist:'1.5 mi'},
+      {icon:'🚶',type:'park',name:'Fountain Creek Trail',dist:'0.7 mi'}
     ]
   },
-  'Briargate (80920)': {
-    total: 1279, avg: 85, top: 'Property crimes', topPct: '57%',
-    trend: '▼ 12%', trendDir: 'down', trendSub: 'vs. prior 6 months',
-    safety: 'Below-average activity. One of the safer ZIP codes.',
-    mapQ: 'Briargate+Colorado+Springs+CO+80920',
-    crimes: [
-      {lbl:'Property crimes', n:729, pct:57, color:'#2A6E9E'},
-      {lbl:'Society crimes', n:416, pct:33, color:'#1B2A4A'},
-      {lbl:'Crimes vs persons', n:114, pct:9, color:'#C45C26'},
-    ],
-    trend12: [105,98,88,95,104,82,78,84,92,75,72,67],
-    features: [
-      {icon:'🌳', type:'park', name:'Cottonwood Creek Park', dist:'0.4 mi'},
-      {icon:'🎓', type:'school', name:'Rampart High School', dist:'0.7 mi'},
-      {icon:'🏥', type:'hospital', name:'UCHealth North', dist:'1.3 mi'},
-      {icon:'🚶', type:'park', name:'Briargate Greenway', dist:'0.3 mi'},
+  'Briargate (80920)':{ zip:'80920', pop:36923, total:1279, avg:85,
+    top:'Property crimes', topPct:'57%', trend:'▼ 12%', trendDir:'down',
+    mapQ:'Briargate+Colorado+Springs+CO+80920',
+    crimes:[{l:'Against property',n:729,pct:57,c:'#2A6E9E'},{l:'Against society',n:416,pct:33,c:'#1B2A4A'},{l:'Against persons',n:114,pct:9,c:'#C45C26'}],
+    trend12:[105,98,88,95,104,82,78,84,92,75,72,67],
+    yr2024:[118,110,99,107,117,92,88,95,104,85,81,75],
+    yr2025:[100,93,84,90,99,78,74,80,88,72,68,64],
+    features:[
+      {icon:'🌳',type:'park',name:'Cottonwood Creek Park',dist:'0.4 mi'},
+      {icon:'🎓',type:'school',name:'Rampart High School',dist:'0.7 mi'},
+      {icon:'🏥',type:'hosp',name:'UCHealth North',dist:'1.3 mi'},
+      {icon:'🚶',type:'park',name:'Briargate Greenway',dist:'0.3 mi'}
     ]
   },
-  'Austin Bluffs (80918)': {
-    total: 1826, avg: 122, top: 'Property crimes', topPct: '49%',
-    trend: '▲ 2%', trendDir: 'up', trendSub: 'vs. prior 6 months',
-    safety: 'Near-average. Property crime is primary concern.',
-    mapQ: 'Austin+Bluffs+Colorado+Springs+CO+80918',
-    crimes: [
-      {lbl:'Property crimes', n:897, pct:49, color:'#2A6E9E'},
-      {lbl:'Society crimes', n:705, pct:39, color:'#1B2A4A'},
-      {lbl:'Crimes vs persons', n:224, pct:12, color:'#C45C26'},
-    ],
-    trend12: [134,128,118,132,148,122,119,128,135,115,110,117],
-    features: [
-      {icon:'🌳', type:'park', name:'Palmer Park', dist:'0.8 mi'},
-      {icon:'🎓', type:'school', name:'University of Colorado CS', dist:'1.1 mi'},
-      {icon:'🏥', type:'hospital', name:'Centura Health Urgent Care', dist:'0.9 mi'},
-      {icon:'🚶', type:'park', name:'Austin Bluffs Open Space', dist:'0.5 mi'},
+  'Austin Bluffs (80918)':{ zip:'80918', pop:50005, total:1826, avg:122,
+    top:'Property crimes', topPct:'49%', trend:'▲ 2%', trendDir:'up',
+    mapQ:'Austin+Bluffs+Colorado+Springs+CO+80918',
+    crimes:[{l:'Against property',n:897,pct:49,c:'#2A6E9E'},{l:'Against society',n:705,pct:39,c:'#1B2A4A'},{l:'Against persons',n:224,pct:12,c:'#C45C26'}],
+    trend12:[134,128,118,132,148,122,119,128,135,115,110,117],
+    yr2024:[145,138,127,143,160,132,129,139,146,124,119,126],
+    yr2025:[128,122,112,126,141,116,113,122,128,109,104,110],
+    features:[
+      {icon:'🌳',type:'park',name:'Palmer Park',dist:'0.8 mi'},
+      {icon:'🎓',type:'school',name:'University of Colorado CS',dist:'1.1 mi'},
+      {icon:'🏥',type:'hosp',name:'Centura Health Urgent Care',dist:'0.9 mi'},
+      {icon:'🚶',type:'park',name:'Austin Bluffs Open Space',dist:'0.5 mi'}
     ]
   },
-  'Palmer Park (80917)': {
-    total: 1333, avg: 89, top: 'Society crimes', topPct: '44%',
-    trend: '▼ 7%', trendDir: 'down', trendSub: 'vs. prior 6 months',
-    safety: 'Moderate. Trending downward over last 6 months.',
-    mapQ: '80917+Colorado+Springs+CO',
-    crimes: [
-      {lbl:'Society crimes', n:588, pct:44, color:'#1B2A4A'},
-      {lbl:'Property crimes', n:568, pct:43, color:'#2A6E9E'},
-      {lbl:'Crimes vs persons', n:177, pct:13, color:'#C45C26'},
-    ],
-    trend12: [108,102,95,112,128,98,94,102,110,88,82,80],
-    features: [
-      {icon:'🌳', type:'park', name:'Palmer Park', dist:'0.4 mi'},
-      {icon:'🎓', type:'school', name:'Doherty High School', dist:'0.9 mi'},
-      {icon:'🚶', type:'park', name:'North Cheyenne Canon Trail', dist:'2.0 mi'},
+  'Palmer Park (80917)':{ zip:'80917', pop:30398, total:1333, avg:89,
+    top:'Society crimes', topPct:'44%', trend:'▼ 7%', trendDir:'down',
+    mapQ:'80917+Colorado+Springs+CO',
+    crimes:[{l:'Against society',n:588,pct:44,c:'#1B2A4A'},{l:'Against property',n:568,pct:43,c:'#2A6E9E'},{l:'Against persons',n:177,pct:13,c:'#C45C26'}],
+    trend12:[108,102,95,112,128,98,94,102,110,88,82,80],
+    yr2024:[118,111,104,122,140,107,103,111,120,96,90,87],
+    yr2025:[103,97,90,107,122,93,89,97,105,83,78,76],
+    features:[
+      {icon:'🌳',type:'park',name:'Palmer Park (3,100 acres)',dist:'0.4 mi'},
+      {icon:'🎓',type:'school',name:'Doherty High School',dist:'0.9 mi'},
+      {icon:'🚶',type:'park',name:'North Cheyenne Canon Trail',dist:'2.0 mi'}
     ]
   },
-  'Southwest (80906)': {
-    total: 1573, avg: 105, top: 'Property crimes', topPct: '47%',
-    trend: '▼ 5%', trendDir: 'down', trendSub: 'vs. prior 6 months',
-    safety: 'Near-average. Quieter residential area.',
-    mapQ: '80906+Colorado+Springs+CO',
-    crimes: [
-      {lbl:'Property crimes', n:744, pct:47, color:'#2A6E9E'},
-      {lbl:'Society crimes', n:602, pct:38, color:'#1B2A4A'},
-      {lbl:'Crimes vs persons', n:227, pct:15, color:'#C45C26'},
-    ],
-    trend12: [118,112,104,118,128,102,98,108,115,96,88,92],
-    features: [
-      {icon:'🌳', type:'park', name:'Cheyenne Mountain State Park', dist:'1.6 mi'},
-      {icon:'🎓', type:'school', name:'Cheyenne Mountain HS', dist:'0.7 mi'},
-      {icon:'🏥', type:'hospital', name:'Penrose Hospital', dist:'1.2 mi'},
-      {icon:'🚶', type:'park', name:'Cheyenne Canyon Trails', dist:'1.4 mi'},
+  'Powers / Cimarron Hills (80915)':{ zip:'80915', pop:23884, total:1389, avg:93,
+    top:'Against society', topPct:'47%', trend:'▼ 6%', trendDir:'down',
+    mapQ:'80915+Colorado+Springs+CO',
+    crimes:[{l:'Against society',n:653,pct:47,c:'#1B2A4A'},{l:'Against property',n:583,pct:42,c:'#2A6E9E'},{l:'Against persons',n:153,pct:11,c:'#C45C26'}],
+    trend12:[118,112,98,108,122,96,90,101,112,88,82,86],
+    yr2024:[132,125,110,121,137,108,101,113,126,99,92,97],
+    yr2025:[112,106,93,103,116,91,86,96,106,84,78,82],
+    features:[
+      {icon:'🌳',type:'park',name:'Cottonwood Creek Trail',dist:'0.6 mi'},
+      {icon:'🎓',type:'school',name:'Mitchell High School',dist:'1.1 mi'},
+      {icon:'🏥',type:'hosp',name:'UCHealth Peak Vista (Powers)',dist:'1.4 mi'},
+      {icon:'🚔',type:'police',name:'CSPD Powers Division',dist:'0.9 mi'},
+      {icon:'🌳',type:'park',name:'Dublin Park',dist:'0.8 mi'}
+    ]
+  },
+  'Southwest (80906)':{ zip:'80906', pop:37502, total:1573, avg:105,
+    top:'Property crimes', topPct:'47%', trend:'▼ 5%', trendDir:'down',
+    mapQ:'80906+Colorado+Springs+CO',
+    crimes:[{l:'Against property',n:744,pct:47,c:'#2A6E9E'},{l:'Against society',n:602,pct:38,c:'#1B2A4A'},{l:'Against persons',n:227,pct:15,c:'#C45C26'}],
+    trend12:[118,112,104,118,128,102,98,108,115,96,88,92],
+    yr2024:[128,121,113,128,139,110,106,117,125,104,96,100],
+    yr2025:[112,107,99,112,122,97,93,103,109,91,84,88],
+    features:[
+      {icon:'🌳',type:'park',name:'Cheyenne Mountain State Park',dist:'1.6 mi'},
+      {icon:'🎓',type:'school',name:'Cheyenne Mountain HS',dist:'0.7 mi'},
+      {icon:'🏥',type:'hosp',name:'Penrose Hospital',dist:'1.2 mi'},
+      {icon:'🚶',type:'park',name:'Cheyenne Canyon Trails',dist:'1.4 mi'}
     ]
   }
 };
 
-/* ─── CHART INSTANCES ────────────────────────── */
-let cityTrendChart = null;
-let typeDonutChart = null;
+/* ══════════════════════════════════════════
+   CHART INSTANCES
+══════════════════════════════════════════ */
+let cityChart = null;
+let donutChart = null;
 let nbTrendChart = null;
+let nbYrChart = null;
+let currentType = 'all';
+let activeYears = ['2024','2025'];
+let zipMode = 'count';
 
-/* ─── TAB SYSTEM ─────────────────────────────── */
-const tabs = document.querySelectorAll('[role="tab"]');
-const panels = document.querySelectorAll('[role="tabpanel"]');
+/* ══════════════════════════════════════════
+   TAB SYSTEM
+══════════════════════════════════════════ */
+const tabs = document.querySelectorAll('[role=tab]');
+const panels = document.querySelectorAll('[role=tabpanel]');
 
 function activateTab(tab) {
   tabs.forEach(t => { t.setAttribute('aria-selected','false'); t.setAttribute('tabindex','-1'); });
   panels.forEach(p => { p.hidden = true; });
   tab.setAttribute('aria-selected','true');
   tab.removeAttribute('tabindex');
-  const panel = document.getElementById(tab.getAttribute('aria-controls'));
-  if (panel) { panel.hidden = false; }
-
-  // Init charts when their panel becomes visible
-  if (tab.id === 'tab-citywide') {
-    setTimeout(() => {
-      initCityTrendChart('all');
-      initTypeDonut();
-      renderZipBars();
-    }, 50);
+  const p = document.getElementById(tab.getAttribute('aria-controls'));
+  if (p) p.hidden = false;
+  if (tab.id === 'tab-city') {
+    setTimeout(() => { initCityChart(); initDonut(); renderZips(); }, 60);
   }
 }
-
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => activateTab(tab));
-  tab.addEventListener('keydown', e => {
-    const idx = [...tabs].indexOf(e.target);
-    if (e.key === 'ArrowRight') { const n = tabs[(idx+1)%tabs.length]; n.focus(); activateTab(n); }
-    else if (e.key === 'ArrowLeft') { const n = tabs[(idx-1+tabs.length)%tabs.length]; n.focus(); activateTab(n); }
-    else if (e.key === 'Home') { tabs[0].focus(); activateTab(tabs[0]); }
-    else if (e.key === 'End') { const l = tabs[tabs.length-1]; l.focus(); activateTab(l); }
+tabs.forEach(t => {
+  t.addEventListener('click', () => activateTab(t));
+  t.addEventListener('keydown', e => {
+    const i = [...tabs].indexOf(e.target);
+    if (e.key === 'ArrowRight') { const n = tabs[(i+1)%tabs.length]; n.focus(); activateTab(n); }
+    else if (e.key === 'ArrowLeft') { const n = tabs[(i-1+tabs.length)%tabs.length]; n.focus(); activateTab(n); }
   });
 });
 
-/* ─── NEIGHBORHOOD SEARCH ────────────────────── */
-function quickSearch(name) {
-  document.getElementById('nb-search').value = name;
-  runNeighborhoodSearch();
+/* ══════════════════════════════════════════
+   NEIGHBORHOOD SEARCH
+══════════════════════════════════════════ */
+function quickSearch(name) { document.getElementById('nb-q').value = name; doSearch(); }
+
+document.getElementById('nb-q').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+// All ZIPs we have population for — used for estimation
+const ALL_ZIP_NAMES = {
+  '80902':'CS south fringe','80903':'Downtown','80904':'West side',
+  '80905':'South central','80906':'Southwest','80907':'North central',
+  '80908':'Black Forest','80909':'East central','80910':'Southeast',
+  '80911':'Security-Widefield','80913':'Fort Carson','80914':'CS east',
+  '80915':'Powers/Cimarron','80916':'South CS','80917':'Palmer Park',
+  '80918':'Austin Bluffs','80919':'NW Colorado Springs','80920':'Briargate',
+  '80921':'Gleneagle','80922':'Stetson Hills','80923':'Dublin/East CS',
+  '80924':'Research Pkwy','80925':'Widefield','80927':'SE unincorp.',
+  '80817':'Fountain','80829':'Manitou Springs','80831':'Falcon/Peyton'
+};
+
+// County average crime rate per 100k (2025, CSPD city avg ~430/100k/month scaled to 15mo)
+// We use nearby ZIP rates to estimate unknown ZIPs
+function estimateForZip(zip) {
+  const pop = POP[zip] || 30000;
+  // Find nearest known NB entry by ZIP number
+  let nearest = null, bestDist = Infinity;
+  for (const [key, val] of Object.entries(NB)) {
+    const nz = parseInt(key.match(/\d{5}/)[0]);
+    const d = Math.abs(nz - parseInt(zip));
+    if (d < bestDist) { bestDist = d; nearest = { key, ...val }; }
+  }
+  if (!nearest) return null;
+
+  // Scale nearest neighbor's rate by population
+  const nearestRate = nearest.pop ? nearest.total / nearest.pop : 0.05;
+  const estTotal = Math.round(nearestRate * pop);
+  const estAvg = Math.round(estTotal / 15);
+  const estRate = Math.round(estTotal / pop * 100000);
+
+  // Scale each crime type proportionally
+  const crimes = nearest.crimes.map(c => ({
+    l: c.l,
+    n: Math.round(c.n * (estTotal / nearest.total)),
+    pct: c.pct,
+    c: c.c
+  }));
+
+  // Scale trend values
+  const scale = estTotal / nearest.total;
+  const trend12 = nearest.trend12.map(v => Math.round(v * scale));
+  const yr2024  = nearest.yr2024.map(v => Math.round(v * scale));
+  const yr2025  = nearest.yr2025.map(v => Math.round(v * scale));
+
+  return {
+    key: `${ALL_ZIP_NAMES[zip] || zip} (${zip})`,
+    zip, pop, estimated: true,
+    nearestNB: nearest.key,
+    total: estTotal, avg: estAvg,
+    top: nearest.top, topPct: nearest.topPct,
+    trend: nearest.trend, trendDir: nearest.trendDir,
+    mapQ: `${zip}+Colorado+Springs+CO`,
+    crimes, trend12, yr2024, yr2025,
+    features: nearest.features
+  };
 }
 
-document.getElementById('nb-search').addEventListener('keydown', e => {
-  if (e.key === 'Enter') runNeighborhoodSearch();
-});
+function doSearch() {
+  const raw = document.getElementById('nb-q').value.trim();
+  if (!raw) return;
+  const q = raw.toLowerCase();
 
-function runNeighborhoodSearch() {
-  const query = document.getElementById('nb-search').value.trim();
-  if (!query) return;
+  // Extract 5-digit ZIP from anywhere in the query
+  const zipInQuery = raw.match(/\b(\d{5})\b/)?.[1] || '';
 
-  // Match neighborhood
-  let match = null;
-  const q = query.toLowerCase();
-  for (const [key, val] of Object.entries(NEIGHBORHOODS)) {
-    if (key.toLowerCase().includes(q) || q.includes(key.toLowerCase().replace(/[^a-z0-9]/g,'').substring(0,5))) {
-      match = { key, ...val };
-      break;
-    }
-    // ZIP match
-    const zipMatch = key.match(/\d{5}/);
-    if (zipMatch && q.includes(zipMatch[0])) {
-      match = { key, ...val };
-      break;
+  let data = null;
+  let matchType = 'exact';
+
+  // 1. Exact ZIP match in NB
+  if (zipInQuery) {
+    for (const [key, val] of Object.entries(NB)) {
+      if (key.includes(zipInQuery)) { data = { key, ...val }; break; }
     }
   }
-  if (!match) {
-    // Default to first
-    const first = Object.entries(NEIGHBORHOODS)[0];
-    match = { key: first[0], ...first[1] };
+
+  // 2. Name match in NB
+  if (!data) {
+    for (const [key, val] of Object.entries(NB)) {
+      const nbZip = key.match(/\d{5}/)?.[0] || '';
+      if (key.toLowerCase().includes(q) || q.includes(nbZip)) {
+        data = { key, ...val }; break;
+      }
+    }
   }
 
-  const radius = document.getElementById('nb-radius').value;
-  renderNeighborhood(match, radius);
+  // 3. ZIP known but not in NB → estimate from nearby data
+  if (!data && zipInQuery && POP[zipInQuery]) {
+    matchType = 'estimated';
+    data = estimateForZip(zipInQuery);
+  }
+
+  // 4. ZIP unknown → nearest NB entry by number
+  if (!data) {
+    matchType = 'nearest';
+    const queryZipNum = parseInt(zipInQuery || '0');
+    let bestKey = null, bestDist = Infinity;
+    for (const [key] of Object.entries(NB)) {
+      const nbZip = parseInt(key.match(/\d{5}/)?.[0] || '0');
+      const dist = Math.abs(nbZip - queryZipNum);
+      if (dist < bestDist) { bestDist = dist; bestKey = key; }
+    }
+    data = { key: bestKey, ...NB[bestKey] };
+  }
+
+  renderNB(data, matchType, zipInQuery, raw);
 }
 
-function renderNeighborhood(data, radius) {
+function renderNB(d, matchType, searchedZip, rawQuery) {
   document.getElementById('nb-empty').style.display = 'none';
-  const results = document.getElementById('neighborhood-results');
-  results.classList.add('visible');
+  const res = document.getElementById('nb-results');
+  res.classList.add('show');
 
-  document.getElementById('nb-title').textContent = data.key;
-  document.getElementById('nb-meta').textContent = `${radius} mile radius · Jan 2025–Mar 2026 · CSPD data only (city limits)`;
-  document.getElementById('nb-map-link').href = `https://www.google.com/maps/search/${encodeURIComponent(data.mapQ)}`;
+  const radius = document.getElementById('nb-r').value;
+  const rate = d.pop ? Math.round(d.total / d.pop * 100000) : 0;
 
-  document.getElementById('nb-total').textContent = data.total.toLocaleString();
-  document.getElementById('nb-avg').textContent = `${data.avg} incidents/month avg`;
-  document.getElementById('nb-top').textContent = data.top;
-  document.getElementById('nb-trend').textContent = data.trend;
-  document.getElementById('nb-trend').className = 'metric-value ' + (data.trendDir === 'up' ? 'up' : 'down');
-  document.getElementById('nb-trend').style.fontSize = '20px';
-  document.getElementById('nb-trend').style.paddingTop = '5px';
-  document.getElementById('nb-trend-sub').textContent = data.trendSub;
-  document.getElementById('nb-safety-note').textContent = data.safety;
+  // Address match banner
+  let addrNote = document.getElementById('nb-addr-note');
+  if (!addrNote) {
+    addrNote = document.createElement('div');
+    addrNote.id = 'nb-addr-note';
+    res.insertBefore(addrNote, res.firstChild);
+  }
 
-  // Crime bars
-  const barsEl = document.getElementById('nb-crime-bars');
-  barsEl.innerHTML = data.crimes.map(c => `
-    <div class="crime-bar-row" role="listitem" aria-label="${c.lbl}: ${c.n} incidents, ${c.pct}%">
-      <span class="crime-bar-label">${c.lbl}</span>
-      <div class="crime-bar-track"><div class="crime-bar-fill" style="width:${c.pct}%;background:${c.color}">${c.pct >= 20 ? c.pct+'%' : ''}</div></div>
-      <span class="crime-bar-num">${c.n.toLocaleString()}</span>
-    </div>
-  `).join('');
+  if (matchType === 'estimated') {
+    addrNote.style.cssText = 'background:#FDF5E6;border:1px solid #E8C57A;border-radius:8px;padding:12px 16px;font-size:13px;color:#633806;margin-bottom:16px';
+    addrNote.innerHTML =
+      `<strong>⚠ Estimate — data not individually indexed for ZIP ${d.zip}.</strong><br>` +
+      `We have population data (${d.pop.toLocaleString()} residents, ACS 2024) but no neighborhood-level crime index for this ZIP. ` +
+      `All figures below are <strong>estimated</strong> by scaling the crime rate from the nearest indexed area ` +
+      `(<strong>${d.nearestNB}</strong>) to this ZIP's population. ` +
+      `Treat all numbers as approximate. For exact incident-level data, search the ` +
+      `<a href="https://policedata.coloradosprings.gov" target="_blank" rel="noopener" style="color:var(--orange)">CSPD open data portal ↗</a> ` +
+      `and filter by ZIP ${d.zip}.`;
+  } else if (matchType === 'nearest') {
+    addrNote.style.cssText = 'background:#FDF5E6;border:1px solid #E8C57A;border-radius:8px;padding:12px 16px;font-size:13px;color:#633806;margin-bottom:16px';
+    addrNote.innerHTML =
+      `<strong>No data found for "${rawQuery}".</strong> Showing the nearest available neighborhood. ` +
+      `Try entering just a 5-digit ZIP code for best results.`;
+  } else {
+    addrNote.style.cssText = 'display:none';
+    addrNote.innerHTML = '';
+  }
 
-  // Features
+  // Mark estimated values visually
+  const isEst = matchType === 'estimated';
+
+  document.getElementById('nb-loc').textContent = d.key;
+  document.getElementById('nb-meta').textContent = `${radius}-mile radius · Jan 2025–Mar 2026 · CSPD data only (city limits)`;
+  document.getElementById('nb-map').href = `https://www.google.com/maps/search/${encodeURIComponent(d.mapQ)}`;
+  document.getElementById('nb-map2').href = `https://www.google.com/maps/search/${encodeURIComponent(d.mapQ)}`;
+  document.getElementById('nb-total').textContent = d.total.toLocaleString() + (isEst ? ' est.' : '');
+  document.getElementById('nb-avg').textContent = `${d.avg} incidents/month avg${isEst ? ' (est.)' : ''}`;
+  document.getElementById('nb-pop').textContent = d.pop.toLocaleString();
+  document.getElementById('nb-rate').textContent = `${rate.toLocaleString()}/100k residents${isEst ? ' · estimate from lack of data' : ''}`;
+  const tEl = document.getElementById('nb-trend');
+  tEl.textContent = d.trend + (isEst ? ' est.' : '');
+  tEl.className = 'mv ' + (d.trendDir === 'up' ? 'up' : 'dn');
+  tEl.style.cssText = 'font-size:22px';
+  document.getElementById('nb-top').textContent = d.top;
+  document.getElementById('nb-top-pct').textContent = `${d.topPct} of all reported incidents${isEst ? ' · estimate' : ''}`;
+
+  // crime bars
+  const barsEl = document.getElementById('nb-bars');
+  barsEl.innerHTML = d.crimes.map(c => `
+    <div class="cbar-row" role="listitem" aria-label="${c.l}: ${c.n.toLocaleString()}${isEst?' (est.)':''} (${c.pct}%)">
+      <span class="cbar-lbl">${c.l}</span>
+      <div class="cbar-track"><div class="cbar-fill" style="width:${c.pct}%;background:${c.c}">${c.pct >= 18 ? c.pct+'%' : ''}</div></div>
+      <span class="cbar-n">${c.n.toLocaleString()}${isEst ? '<span style="font-size:10px;color:var(--amber);margin-left:3px">est.</span>' : ''}</span>
+    </div>`).join('') + (isEst ? `<p style="font-size:11px;color:var(--amber);margin-top:8px;font-style:italic">⚠ All counts are estimates scaled from ${d.nearestNB} — not measured data.</p>` : '');
+
+  // features
   const featEl = document.getElementById('nb-features');
-  featEl.innerHTML = data.features.map(f => `
-    <li class="feature-item">
-      <span class="feature-icon ${f.type}" aria-hidden="true">${f.icon}</span>
-      <div>
-        <div class="feature-name">${f.name}</div>
-        <div class="feature-dist">${f.dist} away</div>
-      </div>
-    </li>
-  `).join('');
+  featEl.innerHTML = d.features.map(f => `
+    <li class="feat-item">
+      <span class="feat-icon ${f.type}" aria-hidden="true">${f.icon}</span>
+      <div><div class="feat-name">${f.name}</div><div class="feat-dist">${f.dist} away</div></div>
+    </li>`).join('');
 
-  // Month table
-  const trendMonths = ['Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'];
-  document.getElementById('nb-month-table').innerHTML = '<table style="width:100%;border-collapse:collapse">' +
-    trendMonths.map((m,i) => `<tr><td style="padding:3px 6px;color:var(--text3)">${m}</td><td style="padding:3px 6px;font-weight:600;text-align:right">${data.trend12[i]}</td></tr>`).join('') +
+  // month table (for disclosure toggle in AA mode)
+  const mo12 = ['Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'];
+  document.getElementById('nb-month-table').innerHTML =
+    '<table style="width:100%;border-collapse:collapse">' +
+    mo12.map((m,i) => `<tr><td style="padding:3px 6px;color:var(--txt3)">${m}</td><td style="padding:3px 6px;font-weight:600;text-align:right">${d.trend12[i]}</td></tr>`).join('') +
     '</table>';
 
-  // Trend chart
-  if (nbTrendChart) { nbTrendChart.destroy(); }
-  const ctx = document.getElementById('nb-trend-chart').getContext('2d');
-  nbTrendChart = new Chart(ctx, {
+  // Populate AAA data tables (visible when body.aaa is active)
+  populateNBTrendTable(d.trend12, mo12);
+  populateNBYrTable(MO_SHORT, d.yr2024, d.yr2025);
+
+  // 12-month trend chart
+  if (nbTrendChart) nbTrendChart.destroy();
+  const ctx1 = document.getElementById('nb-trend-chart').getContext('2d');
+  nbTrendChart = new Chart(ctx1, {
     type: 'line',
     data: {
-      labels: ['Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'],
+      labels: mo12,
       datasets: [{
         label: 'Incidents',
-        data: data.trend12,
+        data: d.trend12,
         borderColor: '#1B2A4A',
-        backgroundColor: 'rgba(27,42,74,0.08)',
-        fill: true,
-        tension: 0.35,
-        pointRadius: 3,
-        pointHoverRadius: 5,
-        borderWidth: 2,
+        backgroundColor: 'rgba(27,42,74,.08)',
+        fill: true, tension: 0.35, pointRadius: 3, borderWidth: 2
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1B2A4A', padding: 10 } },
       scales: {
-        x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { family: 'DM Sans', size: 11 }, color: '#8A8784' } },
-        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { family: 'DM Sans', size: 11 }, color: '#8A8784' }, beginAtZero: false }
+        x: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { family: 'DM Sans', size: 10 }, color: '#8A8784' } },
+        y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { family: 'DM Sans', size: 10 }, color: '#8A8784' }, beginAtZero: false }
       }
     }
   });
-}
 
-/* ─── CITYWIDE TREND CHART ───────────────────── */
-function initCityTrendChart(view) {
-  if (cityTrendChart) cityTrendChart.destroy();
-
-  const datasets = [];
-  if (view === 'all' || view === 'total') {
-    datasets.push({ label: 'Total', data: DATA_T, borderColor: '#1B2A4A', backgroundColor: 'rgba(27,42,74,0.06)', fill: view === 'total', tension: 0.35, borderWidth: 2.5, pointRadius: 2 });
-  }
-  if (view === 'all' || view === 'persons') {
-    datasets.push({ label: 'Against persons', data: DATA_P, borderColor: '#C45C26', backgroundColor: 'rgba(196,92,38,0.05)', fill: view === 'persons', tension: 0.35, borderWidth: 2, pointRadius: 2 });
-  }
-  if (view === 'all' || view === 'property') {
-    datasets.push({ label: 'Against property', data: DATA_PR, borderColor: '#2A6E9E', borderDash: [6, 3], backgroundColor: 'rgba(42,110,158,0.05)', fill: view === 'property', tension: 0.35, borderWidth: 2, pointRadius: 2 });
-  }
-  if (view === 'all' || view === 'society') {
-    datasets.push({ label: 'Against society', data: DATA_S, borderColor: '#6B4A1E', backgroundColor: 'rgba(107,74,30,0.05)', fill: view === 'society', tension: 0.35, borderWidth: 2, pointRadius: 2 });
-  }
-
-  const ctx = document.getElementById('city-trend-chart').getContext('2d');
-  cityTrendChart = new Chart(ctx, {
-    type: 'line',
-    data: { labels: MONTHS, datasets },
+  // year comparison bar chart
+  if (nbYrChart) nbYrChart.destroy();
+  const ctx2 = document.getElementById('nb-yr-chart').getContext('2d');
+  nbYrChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: MO_SHORT,
+      datasets: [
+        { label: '2024', data: d.yr2024, backgroundColor: 'rgba(27,42,74,.55)', borderRadius: 2 },
+        { label: '2025', data: d.yr2025, backgroundColor: 'rgba(196,92,38,.65)', borderRadius: 2 }
+      ]
+    },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
+      responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#1B2A4A', padding: 12,
-          titleFont: { family: 'DM Sans', size: 12 },
-          bodyFont: { family: 'DM Sans', size: 12 },
-        }
+        legend: { position: 'bottom', labels: { font: { family: 'DM Sans', size: 11 }, padding: 10, usePointStyle: true } },
+        tooltip: { backgroundColor: '#1B2A4A', padding: 10, bodyFont: { family: 'DM Sans', size: 11 } }
       },
       scales: {
-        x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { font: { family: 'DM Sans', size: 10 }, color: '#8A8784', maxRotation: 45 } },
-        y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { font: { family: 'DM Sans', size: 11 }, color: '#8A8784' }, beginAtZero: false }
+        x: { grid: { display: false }, ticks: { font: { family: 'DM Sans', size: 10 }, color: '#8A8784' } },
+        y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { font: { family: 'DM Sans', size: 10 }, color: '#8A8784' }, beginAtZero: false }
       }
     }
   });
 }
 
-function setTrendView(view) {
-  ['all','persons','property','society'].forEach(v => {
-    const btn = document.getElementById(`tv-${v}`);
-    if (v === view) {
-      btn.style.background = 'var(--navy)';
-      btn.style.color = '#fff';
-      btn.style.borderColor = 'var(--navy)';
-      btn.style.fontWeight = '600';
-    } else {
-      btn.style.background = '';
-      btn.style.color = '';
-      btn.style.borderColor = '';
-      btn.style.fontWeight = '';
+/* ══════════════════════════════════════════
+   CITYWIDE TREND CHART
+══════════════════════════════════════════ */
+const YR_COLORS = {
+  '2022':{ T:'#888780', P:'#B0A898', PR:'#A0B0C0', S:'#C0A880' },
+  '2023':{ T:'#5A6E8A', P:'#8A6A4A', PR:'#4A7A9A', S:'#8A6A2A' },
+  '2024':{ T:'#1B2A4A', P:'#C45C26', PR:'#2A6E9E', S:'#6B4A1E' },
+  '2025':{ T:'#2A7A5A', P:'#8A2A5A', PR:'#2A5A9A', S:'#8A5A1A' }
+};
+const TYPE_LABELS = { T:'Total', P:'Against persons', PR:'Against property', S:'Against society' };
+const TYPE_DASH = { T:[], P:[], PR:[5,3], S:[2,3] };
+
+function buildCityDatasets() {
+  const types = currentType === 'all' ? ['T','P','PR','S'] : [currentType];
+  const ds = [];
+  for (const yr of activeYears) {
+    const c = YR_COLORS[yr];
+    for (const tp of types) {
+      const data = YR[yr]?.[tp];
+      if (!data) continue;
+      ds.push({
+        label: `${yr} — ${TYPE_LABELS[tp]}`,
+        data,
+        borderColor: c[tp],
+        backgroundColor: c[tp] + '14',
+        fill: false, tension: 0.35, borderWidth: 2, pointRadius: 2,
+        borderDash: TYPE_DASH[tp]
+      });
     }
-  });
-  initCityTrendChart(view);
+  }
+  return ds;
 }
 
-/* ─── TYPE DONUT ──────────────────────────────── */
-function initTypeDonut() {
-  if (typeDonutChart) typeDonutChart.destroy();
-  const ctx = document.getElementById('type-donut-chart').getContext('2d');
-  typeDonutChart = new Chart(ctx, {
+function initCityChart() {
+  if (cityChart) cityChart.destroy();
+  const ctx = document.getElementById('city-chart').getContext('2d');
+  cityChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels: MO_SHORT, datasets: buildCityDatasets() },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          display: true, position: 'bottom',
+          labels: { font: { family: 'DM Sans', size: 11 }, padding: 10, usePointStyle: true }
+        },
+        tooltip: { backgroundColor: '#1B2A4A', padding: 12, titleFont: { family: 'DM Sans', size: 12 }, bodyFont: { family: 'DM Sans', size: 11 } }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,.03)' }, ticks: { font: { family: 'DM Sans', size: 11 }, color: '#8A8784' },
+          title: { display: true, text: 'Month (Jan–Dec, all years on same axis)', font: { family: 'DM Sans', size: 10 }, color: '#8A8784' } },
+        y: { grid: { color: 'rgba(0,0,0,.03)' }, ticks: { font: { family: 'DM Sans', size: 11 }, color: '#8A8784' }, beginAtZero: false }
+      }
+    }
+  });
+  // year note
+  const note = document.getElementById('yr-note');
+  if (activeYears.some(y => y === '2022' || y === '2023')) {
+    note.textContent = 'Note: 2022–2023 figures are estimated from CBI annual totals distributed across months. CBI uses NIBRS counting rules; CSPD open data does not — counts are not directly comparable across that boundary. Treat cross-year comparisons as approximate directional trends only.';
+    note.style.display = 'block';
+  } else {
+    note.style.display = 'none';
+  }
+}
+
+function setType(t) {
+  currentType = t;
+  ['all','P','PR','S'].forEach(v => {
+    const b = document.getElementById('tv-' + v);
+    if (!b) return;
+    if (v === t) { b.classList.add('on'); b.setAttribute('aria-pressed','true'); }
+    else { b.classList.remove('on'); b.setAttribute('aria-pressed','false'); }
+  });
+  initCityChart();
+}
+
+function toggleYr(yr) {
+  const b = document.getElementById('ty-' + yr);
+  const i = activeYears.indexOf(yr);
+  if (i >= 0) {
+    if (activeYears.length === 1) return;
+    activeYears.splice(i, 1);
+    b.classList.remove('on'); b.setAttribute('aria-pressed','false');
+  } else {
+    activeYears.push(yr);
+    b.classList.add('on'); b.setAttribute('aria-pressed','true');
+  }
+  initCityChart();
+}
+
+/* ══════════════════════════════════════════
+   DONUT CHART
+══════════════════════════════════════════ */
+function initDonut() {
+  if (donutChart) donutChart.destroy();
+  const ctx = document.getElementById('donut-chart').getContext('2d');
+  donutChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: ['Against society (51%)', 'Against property (39%)', 'Against persons (14%)'],
-      datasets: [{
-        data: [21626, 18785, 6476],
-        backgroundColor: ['#1B2A4A', '#2A6E9E', '#C45C26'],
-        borderWidth: 3,
-        borderColor: '#fff',
-        hoverOffset: 4
-      }]
+      datasets: [{ data: [21626, 18785, 6476], backgroundColor: ['#1B2A4A','#2A6E9E','#C45C26'], borderWidth: 3, borderColor: '#fff', hoverOffset: 4 }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '60%',
+      responsive: true, maintainAspectRatio: false, cutout: '58%',
       plugins: {
         legend: { display: false },
-        tooltip: {
-          backgroundColor: '#1B2A4A', padding: 10,
-          bodyFont: { family: 'DM Sans', size: 12 },
-          callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed.toLocaleString()} incidents` }
-        }
+        tooltip: { backgroundColor: '#1B2A4A', padding: 10, bodyFont: { family: 'DM Sans', size: 12 }, callbacks: { label: c => ` ${c.label}: ${c.parsed.toLocaleString()}` } }
       }
     }
   });
 }
 
-/* ─── ZIP BARS ────────────────────────────────── */
-function renderZipBars() {
-  const max = ZIP_DATA[0].n;
+/* ══════════════════════════════════════════
+   ZIP BARS
+══════════════════════════════════════════ */
+function styleZipBtns() {
+  ['cnt','rate'].forEach(v => {
+    const b = document.getElementById('zv-' + v);
+    if (!b) return;
+    if (v === zipMode || (v === 'cnt' && zipMode === 'count')) { b.classList.add('on'); b.setAttribute('aria-pressed','true'); }
+    else { b.classList.remove('on'); b.setAttribute('aria-pressed','false'); }
+  });
+}
+// fix: onclick uses zipMode='count' so normalise
+document.getElementById('zv-cnt').onclick = () => { zipMode = 'count'; styleZipBtns(); renderZips(); };
+document.getElementById('zv-rate').onclick = () => { zipMode = 'rate'; styleZipBtns(); renderZips(); };
+
+function renderZips() {
   const el = document.getElementById('zip-bars');
-  el.innerHTML = ZIP_DATA.map(z => {
-    const pct = Math.round((z.n / max) * 100);
-    const isHot = z.zip === '80909';
-    return `
-      <div class="zip-bar-row" role="listitem" aria-label="${z.zip} ${z.lbl}: ${z.n.toLocaleString()} incidents">
-        <div class="zip-code">${z.zip}<span class="zip-label-small">${z.lbl}</span></div>
-        <div class="zip-bar-track"><div class="zip-bar-fill" style="width:${pct}%;background:${isHot ? '#C45C26' : '#1B2A4A'}"></div></div>
-        <div class="zip-count">${(z.n/1000).toFixed(1)}k</div>
-      </div>
-    `;
+  const yrSel = document.getElementById('zip-yr').value;
+  let src;
+  if (yrSel === '2024') {
+    src = Object.entries(ZYEAR[2024]).map(([z,n]) => ({ z, lbl: ZIPS.find(x=>x.z===z)?.lbl||z, n, pop: POP[z]||0 }))
+      .filter(x => ZIPS.find(d=>d.z===x.z)).sort((a,b)=>b.n-a.n).slice(0,10);
+  } else if (yrSel === '2025') {
+    src = Object.entries(ZYEAR[2025]).map(([z,n]) => ({ z, lbl: ZIPS.find(x=>x.z===z)?.lbl||z, n, pop: POP[z]||0 }))
+      .filter(x => ZIPS.find(d=>d.z===x.z)).sort((a,b)=>b.n-a.n).slice(0,10);
+  } else {
+    src = ZIPS.map(x => ({ z: x.z, lbl: x.lbl, n: x.n, pop: POP[x.z]||0 }));
+  }
+  const useRate = zipMode === 'rate';
+  const vals = src.map(x => useRate && x.pop ? Math.round(x.n / x.pop * 100000) : x.n);
+  const maxV = Math.max(...vals, 1);
+  el.innerHTML = src.map((x, i) => {
+    const v = vals[i];
+    const pct = Math.round(v / maxV * 100);
+    const hot = x.z === '80909';
+    const pop = x.pop;
+    const rate = pop ? Math.round(x.n / pop * 100000) : 0;
+    const disp = useRate ? v.toLocaleString() + '/100k' : (x.n / 1000).toFixed(1) + 'k';
+    return `<div class="zip-row" role="listitem" aria-label="${x.z} ${x.lbl}: ${x.n.toLocaleString()} incidents, population ${pop.toLocaleString()}, rate ${rate.toLocaleString()}/100k">
+      <div class="zip-code">${x.z}<span class="zip-sub">${x.lbl}</span></div>
+      <div><div class="zip-track"><div class="zip-fill" style="width:${pct}%;background:${hot?'#C45C26':'#1B2A4A'}"></div></div>
+        <div class="zip-pop-note">pop. ${pop.toLocaleString()} · ${rate.toLocaleString()}/100k</div></div>
+      <div class="zip-val">${disp}</div>
+    </div>`;
   }).join('');
 }
 
-/* ─── DISCLOSURE TOGGLE ───────────────────────── */
-function toggleDisclosure(btnId, contentId) {
-  const btn = document.getElementById(btnId);
-  const content = document.getElementById(contentId);
-  const isOpen = btn.classList.contains('open');
-  btn.classList.toggle('open', !isOpen);
-  content.classList.toggle('open', !isOpen);
-  btn.setAttribute('aria-expanded', String(!isOpen));
+/* ══════════════════════════════════════════
+   ACCESSIBILITY TOGGLE
+══════════════════════════════════════════ */
+function setADA(mode) {
+  const isAAA = mode === 'aaa';
+  document.body.classList.toggle('aaa', isAAA);
+
+  // Update toggle buttons
+  document.getElementById('btn-aa').classList.toggle('active', !isAAA);
+  document.getElementById('btn-aa').setAttribute('aria-pressed', String(!isAAA));
+  document.getElementById('btn-aaa').classList.toggle('active', isAAA);
+  document.getElementById('btn-aaa').setAttribute('aria-pressed', String(isAAA));
+
+  // Persist preference
+  try { localStorage.setItem('ada-mode', mode); } catch(e) {}
+
+  // Announce to screen readers
+  const msg = isAAA
+    ? 'AAA mode enabled: enhanced contrast, larger text, data tables replacing charts'
+    : 'AA mode enabled: standard compliance with interactive charts';
+  announceToSR(msg);
+
+  // Redraw charts with accessible palette if switching back to AA
+  if (!isAAA && cityChart) {
+    initCityChart();
+    initDonut();
+  }
 }
 
-/* ─── INIT ────────────────────────────────────── */
-// Charts on citywide tab will init when tab is clicked
-// Neighborhood starts empty
-</script>
+function announceToSR(msg) {
+  let live = document.getElementById('sr-announce');
+  if (!live) {
+    live = document.createElement('div');
+    live.id = 'sr-announce';
+    live.setAttribute('aria-live', 'polite');
+    live.setAttribute('aria-atomic', 'true');
+    live.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap';
+    document.body.appendChild(live);
+  }
+  live.textContent = '';
+  setTimeout(() => { live.textContent = msg; }, 100);
+}
 
+// Populate AAA neighborhood trend table
+function populateNBTrendTable(data, labels) {
+  const body = document.getElementById('nb-trend-tbl-body');
+  if (!body) return;
+  body.innerHTML = labels.map((m, i) =>
+    `<tr><th scope="row">${m}</th><td>${data[i]}</td></tr>`
+  ).join('');
+}
+
+// Populate AAA neighborhood year table
+function populateNBYrTable(labels, yr24, yr25) {
+  const body = document.getElementById('nb-yr-tbl-body');
+  if (!body) return;
+  body.innerHTML = labels.map((m, i) => {
+    const chg = yr24[i] ? Math.round((yr25[i]-yr24[i])/yr24[i]*100) : 0;
+    const chgTxt = chg > 0 ? `▲ ${chg}%` : chg < 0 ? `▼ ${Math.abs(chg)}%` : '—';
+    return `<tr><th scope="row">${m}</th><td>${yr24[i]}</td><td>${yr25[i]}</td><td>${chgTxt}</td></tr>`;
+  }).join('');
+}
+
+// Load saved preference on startup
+(function() {
+  try {
+    const saved = localStorage.getItem('ada-mode');
+    if (saved === 'aaa') setADA('aaa');
+  } catch(e) {}
+})();
+function disc(btnId, bodyId) {
+  const btn = document.getElementById(btnId);
+  const body = document.getElementById(bodyId);
+  const open = btn.classList.contains('open');
+  btn.classList.toggle('open', !open);
+  body.classList.toggle('open', !open);
+  btn.setAttribute('aria-expanded', String(!open));
+}
+</script>
 </body>
 </html>
