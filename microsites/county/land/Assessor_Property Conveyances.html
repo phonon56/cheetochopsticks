@@ -3,34 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Property conveyance records for zip code 80915 in El Paso County, Colorado. January 2022 through March 2026. 2,909 records from the El Paso County Assessor. Free public data, searchable and sortable.">
 <title>80915 Property Conveyances — El Paso County Assessor</title>
 <style>
 /* ============================================================
    CSS CUSTOM PROPERTIES — AA defaults, AAA overrides via class
    ============================================================ */
 :root {
-  /* AA palette: 4.5:1 min contrast on white */
+  /* AA palette — verified WCAG 2.1 AA (4.5:1 text, 3:1 non-text) on #ffffff
+     Contrast ratios (measured):
+       text         #1a1a2e  → 17.1  AAA
+       text-muted   #4a5568  →  7.5  AAA  (bumped from earlier #718096 ~4.6)
+       accent       #1a4f8a  →  8.3  AAA
+       focus-ring   #b45309  →  5.0  AA   (was #d97706 3.2 non-text pass only)
+       badge-w txt  #134074 / #dbeafe bg → 8.6 AAA  (was #1a4f8a 6.8 AA)
+       badge-q txt  #6b21a8 / #f3e8ff bg → 7.4 AAA
+       badge-o txt  #7a2a0a / #fef3c7 bg → 8.7 AAA  (was #9a3412 6.6 AA)
+  */
   --bg:          #ffffff;
   --bg-alt:      #f5f5f5;
   --bg-row-alt:  #eef2f7;
   --text:        #1a1a2e;
   --text-muted:  #4a5568;
   --border:      #c0c8d8;
-  --accent:      #1a4f8a;      /* 7.1:1 on white — already AAA */
+  --accent:      #1a4f8a;      /* 8.3:1 on white — AAA */
   --accent-hover:#0f3460;
-  --focus-ring:  #d97706;
-  --badge-w:     #1a4f8a;
+  --focus-ring:  #b45309;      /* 5.0:1 on white — AA; AAA mode goes darker */
+  --badge-w:     #134074;      /* was #1a4f8a — AAA on bg #dbeafe */
   --badge-w-bg:  #dbeafe;
   --badge-q:     #6b21a8;
   --badge-q-bg:  #f3e8ff;
-  --badge-o:     #9a3412;
+  --badge-o:     #7a2a0a;      /* was #9a3412 — AAA on bg #fef3c7 */
   --badge-o-bg:  #fef3c7;
   --focus-size:  3px;
   --focus-offset:2px;
-  --line-height: 1.5;
+  --line-height: 1.6;
   --body-font:   'Segoe UI', system-ui, sans-serif;
   --mono-font:   'Courier New', monospace;
-  --font-size:   1rem;
+  --font-size:   1.0625rem;    /* 17px — above 16px floor per WCAG body guidance */
   --max-line:    none;         /* AAA sets this to 80ch */
   --spacing:     1rem;
 }
@@ -205,7 +215,7 @@ body {
 }
 
 .compliance-status {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;    /* was .75rem — now ≥ 13px */
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-weight: 700;
@@ -213,11 +223,11 @@ body {
   border: 2px solid currentColor;
 }
 
-.status-aa  { color: #1a4f8a; }
-.status-aaa { color: #003580; }
+.status-aa  { color: #1a4f8a; }  /* 8.3:1 on white — AAA */
+.status-aaa { color: #003580; }  /* 12.5:1 on white — AAA */
 
 .contrast-info {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;    /* was .72rem — now ≥ 13px */
   color: var(--text-muted);
   font-family: var(--mono-font);
 }
@@ -386,8 +396,8 @@ thead th {
 
 thead th[aria-sort]::after {
   content: ' ↕';
-  opacity: 0.5;
-  font-size: 0.7rem;
+  opacity: 0.7;        /* was .5 — raised for better visibility */
+  font-size: 0.8125rem; /* was .7rem */
 }
 
 thead th[aria-sort="ascending"]::after  { content: ' ↑'; opacity: 1; }
@@ -420,15 +430,17 @@ td.date    { font-family: var(--mono-font); font-size: 0.8rem;  white-space: now
 td.address { font-size: 0.82rem; }
 td.people  { font-size: 0.78rem; color: var(--text-muted); }
 
-/* WCAG 1.4.1: don't use color alone — badges use text + color + shape */
+/* WCAG 1.4.1: don't use color alone — badges use text + color + shape
+   WCAG 1.4.4: minimum legible badge text size (was .68rem = ~10.9px, now .8125rem = 13px) */
 .badge {
   display: inline-block;
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: 12px;
-  font-size: 0.68rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   white-space: nowrap;
+  line-height: 1.4;
 }
 
 .badge-warranty  { background: var(--badge-w-bg);  color: var(--badge-w);  border: 1px solid var(--badge-w); }
@@ -522,7 +534,7 @@ td.people  { font-size: 0.78rem; color: var(--text-muted); }
 .detail-key {
   font-weight: 700;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;  /* was .75rem — bumped to ≥13px */
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding-top: 1px;
@@ -598,12 +610,13 @@ footer {
   margin: 2rem auto 0;
   padding: 1rem 1.5rem;
   border-top: 1px solid var(--border);
-  font-size: 0.72rem;
+  font-size: 0.8125rem;   /* was .72rem — now ≥13px */
   color: var(--text-muted);
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.5rem;
+  line-height: 1.6;
 }
 
 /* ============================================================
@@ -630,6 +643,23 @@ footer {
 @media (forced-colors: active) {
   .badge { border: 2px solid ButtonText; }
   .toggle-btn[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+}
+
+/* WCAG 2.3.3 — Animation from interactions (AAA) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* Ensure a universal focus-visible fallback for any element not covered earlier */
+*:focus-visible {
+  outline: var(--focus-size) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
 }
 </style>
 </head>
@@ -668,7 +698,7 @@ footer {
       </button>
     </div>
     <span class="compliance-status status-aa" id="compliance-status" aria-live="polite">
-      ● WCAG 2.1 Level AA Active
+      <span aria-hidden="true">●</span> WCAG 2.1 Level AA Active
     </span>
     <span class="contrast-info" id="contrast-info" aria-live="polite">
       Min contrast: 4.5:1 · Focus: 3px solid
@@ -773,12 +803,12 @@ footer {
       </caption>
       <thead>
         <tr>
-          <th scope="col" tabindex="0" aria-sort="none" data-col="account" onclick="sortBy('account')">Account #</th>
-          <th scope="col" tabindex="0" aria-sort="none" data-col="date"    onclick="sortBy('date')"    aria-sort="descending">Date</th>
-          <th scope="col" tabindex="0" aria-sort="none" data-col="address" onclick="sortBy('address')">Address</th>
-          <th scope="col" tabindex="0" aria-sort="none" data-col="deed"    onclick="sortBy('deed')">Deed Type</th>
-          <th scope="col" tabindex="0" aria-sort="none" data-col="grantor" onclick="sortBy('grantor')">Grantor</th>
-          <th scope="col" tabindex="0" aria-sort="none" data-col="grantee" onclick="sortBy('grantee')">Grantee</th>
+          <th scope="col" tabindex="0" aria-sort="none"       data-col="account" onclick="sortBy('account')">Account #</th>
+          <th scope="col" tabindex="0" aria-sort="descending"  data-col="date"    onclick="sortBy('date')">Date</th>
+          <th scope="col" tabindex="0" aria-sort="none"       data-col="address" onclick="sortBy('address')">Address</th>
+          <th scope="col" tabindex="0" aria-sort="none"       data-col="deed"    onclick="sortBy('deed')">Deed Type</th>
+          <th scope="col" tabindex="0" aria-sort="none"       data-col="grantor" onclick="sortBy('grantor')">Grantor</th>
+          <th scope="col" tabindex="0" aria-sort="none"       data-col="grantee" onclick="sortBy('grantee')">Grantee</th>
         </tr>
       </thead>
       <tbody id="table-body" aria-live="polite">
@@ -801,8 +831,8 @@ footer {
      aria-labelledby="detail-title"
      aria-describedby="detail-body">
   <div class="detail-panel" id="detail-panel">
-    <button class="close-btn" onclick="closeDetail()" 
-            aria-label="Close property detail panel">×</button>
+    <button type="button" class="close-btn" onclick="closeDetail()"
+            aria-label="Close property detail panel"><span aria-hidden="true">×</span></button>
     <h2 id="detail-title">Property Detail</h2>
     <div id="detail-body">
       <!-- populated by JS -->
@@ -1060,7 +1090,7 @@ function openDetail(idx) {
     <div class="detail-row"><span class="detail-key">Grantee</span><span class="detail-val">${esc(r.grantee)}</span></div>
     <div class="detail-row" style="margin-top:0.5rem;border-top:2px solid var(--border);">
       <span class="detail-key">Record</span>
-      <span class="detail-val" style="color:var(--text-muted);font-size:0.75rem;">
+      <span class="detail-val" style="color:var(--text-muted);font-size:0.8125rem;">
         ${(idx+1)} of ${filtered.length} matching records
       </span>
     </div>

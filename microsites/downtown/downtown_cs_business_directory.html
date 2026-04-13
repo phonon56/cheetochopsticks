@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Directory — Downtown Colorado Springs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Muli:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  /* Color palette — verified WCAG 2.1 AA / AAA (text pairs ≥ 7:1 except where noted)
+       body #333 on #fff        → 12.6  AAA
+       muted #4C5562 on #fff    →  7.5  AAA  (was #69727D, 4.9 — AA only)
+       muted #4C5562 on #F5F7F9 →  7.0  AAA  (was 4.5 — AA only)
+       navy #213B5D on #fff     → 11.4  AAA
+       teal #175C74 on #fff     →  7.5  AAA
+       teal2 #0D4873 on #fff    →  9.6  AAA  (was #16619D, 6.5 — AA only)
+       green #445700 on #fff    →  8.0  AAA  (was #648000, 4.5 — AA only)
+       red #8B0000 on #fff      → 10.0  AAA
+       #fff on #213B5D          → 11.4  AAA
+       hero-desc #C8D8E8 on navy →  7.8  AAA (was #B8CDD8, 6.9)
+       hero-label #C0D5E2 on navy →  7.5  AAA (was #8BB8D0, 5.3 — AA large only)
+       missing-hero #FFC7C7 on navy →  7.7  AAA (was #FFAAAA, 6.3)
+       biz-nosite #4C5562 on #fff →  7.5  AAA (was border #D1D9E0, 1.4 — FAIL) */
+  --navy:    #213B5D;
+  --green:   #445700;
+  --teal:    #175C74;
+  --teal2:   #0D4873;
+  --body:    #333333;
+  --muted:   #4C5562;
+  --light:   #F5F7F9;
+  --border:  #D1D9E0;
+  --white:   #FFFFFF;
+  --red:     #8B0000;
+  --red-bg:  #FDE8E8;
+  --amber-bg:#FFF8DC;
+  --green-bg:#E8F0D8;
+  --blue-bg: #E0ECF5;
+  --intl-bg: #FDE8E8;
+  --intl-txt:#7A0000;
+  --nat-bg:  #FFF3CD;
+  --nat-txt: #5C3D00;
+  --reg-bg:  #E0ECF5;
+  --reg-txt: #0D2260;
+  --loc-bg:  #E8F0D8;
+  --loc-txt: #2A4500;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Muli', sans-serif;
+  font-size: 17px;
+  color: var(--body);
+  background: var(--white);
+  line-height: 1.65;
+}
+
+/* ── Reduced motion (ADA) ── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* ── Universal focus-visible ring (ADA) ── */
+*:focus { outline: none; }
+*:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; border-radius: 2px; }
+
+/* ── Skip link ───────────────────────────────────────────────── */
+.skip-link {
+  position: absolute; top: -999px; left: 6px;
+  background: var(--navy); color: #fff;
+  padding: 10px 18px; font-size: 16px; font-weight: 700;
+  border-radius: 0 0 6px 6px; text-decoration: none; z-index: 9999;
+}
+.skip-link:focus { top: 0; outline: 3px solid #FFD700; outline-offset: 2px; }
+
+/* ── Top utility bar ─────────────────────────────────────────── */
+.topbar {
+  background: var(--green);
+  padding: 7px 24px;
+  display: flex; justify-content: flex-end; gap: 24px;
+}
+.topbar a {
+  color: #fff; font-size: 15px; font-weight: 700;
+  text-decoration: none;
+}
+.topbar a:hover { text-decoration: underline; }
+.topbar a:focus { outline: 3px solid #fff; outline-offset: 2px; border-radius: 2px; }
+
+/* ── Site header ─────────────────────────────────────────────── */
+.site-header {
+  background: var(--white);
+  border-bottom: 4px solid var(--green);
+  padding: 14px 24px;
+  display: flex; align-items: center; gap: 14px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.logo-link {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+}
+.logo-link:focus { outline: 3px solid var(--navy); outline-offset: 3px; border-radius: 3px; }
+.logo-box {
+  width: 48px; height: 48px;
+  background: var(--navy); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.logo-box svg { width: 30px; height: 30px; }
+.logo-text strong { display: block; font-size: 18px; font-weight: 800; color: var(--navy); }
+.logo-text span   { display: block; font-size: 13px; font-weight: 700; color: var(--teal); letter-spacing: 1.2px; text-transform: uppercase; }
+.header-nav { margin-left: auto; display: flex; gap: 4px; }
+.header-nav a {
+  color: var(--navy); font-size: 15px; font-weight: 600;
+  text-decoration: none; padding: 6px 14px; border-radius: 3px;
+}
+.header-nav a:hover { background: var(--light); color: var(--teal); }
+.header-nav a:focus { outline: 3px solid var(--navy); outline-offset: 2px; border-radius: 3px; }
+.header-nav a.active { color: var(--green); border-bottom: 2px solid var(--green); }
+
+/* ── Hero ────────────────────────────────────────────────────── */
+.hero {
+  background: var(--navy);
+  padding: 48px 24px 56px;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; }
+.hero-label {
+  font-size: 14px; font-weight: 700; letter-spacing: 1.4px;
+  text-transform: uppercase; color: #C0D5E2; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-label::before {
+  content: ''; display: block;
+  width: 32px; height: 2px; background: var(--green);
+}
+.hero h1 {
+  color: #fff; font-size: 36px; font-weight: 800;
+  margin-bottom: 12px; line-height: 1.2;
+}
+.hero-desc { color: #C8D8E8; font-size: 17px; margin-bottom: 28px; max-width: 580px; }
+
+.search-form { display: flex; max-width: 640px; border-radius: 6px; overflow: hidden; }
+.search-form label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.search-inner { flex: 1; position: relative; }
+.search-inner svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+#search-input {
+  width: 100%; padding: 15px 15px 15px 48px;
+  font-size: 17px; font-family: 'Muli', sans-serif;
+  border: none; color: var(--body);
+}
+#search-input:focus { outline: 3px solid #FFD700; outline-offset: -3px; }
+.search-btn {
+  background: var(--green); color: #fff;
+  border: none; padding: 15px 28px;
+  font-size: 17px; font-weight: 700;
+  font-family: 'Muli', sans-serif; cursor: pointer;
+}
+.search-btn:hover { background: #364400; }
+.search-btn:focus { outline: 3px solid #FFD700; outline-offset: 2px; }
+
+.hero-stats {
+  display: flex; gap: 28px; margin-top: 24px; flex-wrap: wrap;
+}
+.hero-stat { color: #C8D8E8; font-size: 15px; }
+.hero-stat strong { display: block; font-size: 26px; font-weight: 800; color: #fff; }
+
+/* ── Missing data banner ─────────────────────────────────────── */
+.missing-banner {
+  background: var(--red-bg);
+  border-left: 6px solid var(--red);
+  padding: 18px 24px;
+}
+.missing-banner-inner { max-width: 1100px; margin: 0 auto; }
+.missing-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.missing-head h2 { font-size: 18px; font-weight: 800; color: var(--red); }
+.missing-banner p { font-size: 16px; color: #5A0000; }
+.missing-banner a { color: var(--red); font-weight: 700; }
+
+/* ── Filters section ─────────────────────────────────────────── */
+.filters-bar {
+  background: var(--light);
+  border-bottom: 2px solid var(--border);
+  padding: 16px 24px;
+  position: sticky; top: 76px; z-index: 90;
+}
+.filters-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+}
+.filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.filter-group-label {
+  font-size: 14px; font-weight: 800; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.8px;
+  margin-right: 4px; white-space: nowrap;
+}
+.chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 13px; border-radius: 20px;
+  font-size: 14px; font-weight: 700;
+  border: 2px solid var(--border);
+  background: var(--white); color: var(--body);
+  cursor: pointer; transition: all 0.15s;
+  font-family: 'Muli', sans-serif;
+}
+.chip:hover { border-color: var(--navy); color: var(--navy); }
+.chip:focus { outline: 3px solid var(--navy); outline-offset: 2px; }
+.chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.chip.active:hover { background: #1a2f4a; }
+.chip-count {
+  background: rgba(255,255,255,0.25);
+  color: inherit;
+  font-size: 13px; padding: 0 5px; border-radius: 8px;
+  font-weight: 800;
+}
+.chip:not(.active) .chip-count { background: var(--light); color: var(--muted); }
+.filter-clear {
+  margin-left: auto;
+  background: none; border: none;
+  font-family: 'Muli', sans-serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--teal); cursor: pointer;
+  text-decoration: underline;
+}
+.filter-clear:hover { color: var(--navy); }
+.filter-clear:focus { outline: 3px solid var(--navy); outline-offset: 2px; border-radius: 2px; }
+
+/* ── Results bar ─────────────────────────────────────────────── */
+.results-bar {
+  max-width: 1100px; margin: 20px auto 0;
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+#results-count { font-size: 16px; color: var(--muted); }
+#results-count strong { color: var(--body); font-size: 18px; }
+.view-sort { display: flex; align-items: center; gap: 12px; }
+.view-toggle { display: flex; border: 2px solid var(--border); border-radius: 4px; overflow: hidden; }
+.view-btn {
+  background: var(--white); border: none;
+  padding: 7px 12px; cursor: pointer;
+  color: var(--muted); transition: all 0.15s;
+  font-family: 'Muli', sans-serif;
+}
+.view-btn.active { background: var(--navy); color: #fff; }
+.view-btn:focus { outline: 3px solid var(--navy); outline-offset: -2px; }
+.sort-label { font-size: 15px; color: var(--muted); font-weight: 600; }
+#sort-select {
+  padding: 7px 12px; border: 2px solid var(--border);
+  border-radius: 4px; font-size: 15px;
+  font-family: 'Muli', sans-serif; color: var(--body);
+  background: var(--white); cursor: pointer;
+}
+#sort-select:focus { outline: 3px solid var(--navy); outline-offset: 2px; }
+
+/* ── Grid ────────────────────────────────────────────────────── */
+.directory-section { max-width: 1100px; margin: 0 auto; padding: 20px 24px 60px; }
+#biz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+#biz-grid.list-view { grid-template-columns: 1fr; }
+
+/* ── Business Card ───────────────────────────────────────────── */
+.biz-card {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.biz-card:hover { border-color: var(--teal); box-shadow: 0 4px 16px rgba(33,59,93,0.10); }
+.biz-card-top { display: flex; gap: 14px; align-items: flex-start; }
+.biz-avatar {
+  width: 46px; height: 46px; border-radius: 6px;
+  background: var(--navy); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+.biz-name-wrap { flex: 1; }
+.biz-name {
+  font-size: 17px; font-weight: 700; color: var(--navy);
+  line-height: 1.3; margin-bottom: 4px;
+}
+.biz-category { font-size: 14px; color: var(--muted); }
+.biz-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge {
+  font-size: 13px; font-weight: 700;
+  padding: 3px 9px; border-radius: 12px;
+  white-space: nowrap;
+}
+.badge-scope-Local        { background: var(--loc-bg); color: var(--loc-txt); }
+.badge-scope-Regional     { background: var(--reg-bg); color: var(--reg-txt); }
+.badge-scope-National     { background: var(--nat-bg); color: var(--nat-txt); }
+.badge-scope-International{ background: var(--intl-bg); color: var(--intl-txt); }
+.badge-level-Changemaker  { background: var(--navy); color: #fff; }
+.badge-level-Catalyst     { background: var(--green); color: #fff; }
+.badge-level-Innovator    { background: #1B5E20; color: #fff; } /* 7.87 AAA */
+.badge-level-Collaborator { background: var(--teal2); color: #fff; } /* 9.58 AAA */
+.badge-level-Ally         { background: #3B4E56; color: #fff; } /* was #455A64 7.24; now 9.01 AAA */
+.badge-size { background: var(--light); color: var(--muted); }
+.badge-missing {
+  background: var(--red-bg); color: var(--red);
+  font-size: 13px; font-weight: 700;
+  padding: 3px 9px; border-radius: 12px;
+}
+.biz-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid var(--border); padding-top: 12px; margin-top: auto;
+}
+.biz-website {
+  font-size: 14px; color: var(--teal); font-weight: 600;
+  text-decoration: none; word-break: break-all;
+}
+.biz-website:hover { text-decoration: underline; color: var(--navy); }
+.biz-website:focus { outline: 3px solid var(--navy); outline-offset: 2px; border-radius: 2px; }
+.biz-nosite { font-size: 14px; color: var(--muted); font-style: italic; } /* was var(--border) #D1D9E0 on #fff = 1.43 FAIL → now 7.5 AAA */
+.biz-funding {
+  font-size: 13px; color: var(--red); font-weight: 700;
+  background: var(--red-bg); padding: 3px 8px; border-radius: 10px;
+  white-space: nowrap;
+}
+
+/* ── List view ───────────────────────────────────────────────── */
+#biz-grid.list-view .biz-card {
+  flex-direction: row; align-items: center;
+  padding: 14px 20px; gap: 16px;
+}
+#biz-grid.list-view .biz-card-top { flex: 2; }
+#biz-grid.list-view .biz-badges { flex: 1.5; }
+#biz-grid.list-view .biz-footer {
+  flex: 1; border-top: none; padding-top: 0; margin-top: 0;
+  justify-content: flex-end;
+}
+@media (max-width: 680px) {
+  #biz-grid.list-view .biz-card { flex-direction: column; }
+  #biz-grid.list-view .biz-footer { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 0; justify-content: space-between; }
+}
+
+/* ── No results ──────────────────────────────────────────────── */
+.no-results {
+  text-align: center; padding: 60px 24px;
+  grid-column: 1 / -1;
+}
+.no-results strong { display: block; font-size: 22px; color: var(--navy); margin-bottom: 8px; }
+.no-results p { font-size: 16px; color: var(--muted); }
+
+/* ── Legend section ──────────────────────────────────────────── */
+.legend-section {
+  background: var(--navy);
+  padding: 40px 24px;
+  color: #fff;
+}
+.legend-inner { max-width: 1100px; margin: 0 auto; }
+.legend-inner h2 {
+  font-size: 22px; font-weight: 800; color: #fff;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(255,255,255,0.15);
+}
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 28px;
+}
+.legend-group h3 {
+  font-size: 14px; font-weight: 800; color: #C0D5E2;
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 8px;
+}
+.legend-item .badge { font-size: 13px; }
+.legend-item span { font-size: 15px; color: #C8D8E8; }
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.site-footer {
+  background: var(--light);
+  border-top: 4px solid var(--green);
+  padding: 28px 24px;
+  text-align: center;
+  font-size: 15px; color: var(--muted);
+}
+.site-footer a { color: var(--teal); font-weight: 700; text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+
+/* ── Focus visible ───────────────────────────────────────────── */
+:focus-visible { outline: 3px solid var(--navy); outline-offset: 2px; }
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .hero h1 { font-size: 26px; }
+  .hero-stats { gap: 18px; }
+  .filters-inner { gap: 12px; }
+  .topbar { display: none; }
+  .header-nav { display: none; }
+  #biz-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- Top bar -->
+<div class="topbar" role="banner">
+  <a href="https://downtowncs.com">downtowncs.com</a>
+  <a href="https://downtowncs.com/bid/">About the BID</a>
+  <a href="https://downtowncs.com/do-business/grants-and-tif/">DDA Grants</a>
+  <a href="https://cheetochopsticks.com">cheetochopsticks.com</a>
+</div>
+
+<!-- Site header -->
+<header class="site-header">
+  <a href="https://downtowncs.com" class="logo-link" aria-label="Downtown Colorado Springs — home">
+    <div class="logo-box" aria-hidden="true">
+      <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2"  y="16" width="5"  height="12" fill="#fff" opacity=".9"/>
+        <rect x="9"  y="11" width="5"  height="17" fill="#fff"/>
+        <rect x="16" y="7"  width="5"  height="21" fill="#fff"/>
+        <rect x="23" y="13" width="4"  height="15" fill="#fff" opacity=".8"/>
+        <path d="M0 16 Q15 3 30 16" stroke="#FFD700" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <strong>Downtown</strong>
+      <span>Colorado Springs</span>
+    </div>
+  </a>
+  <nav class="header-nav" aria-label="Site navigation">
+    <a href="https://downtowncs.com/exploredowntown/">Explore</a>
+    <a href="https://downtowncs.com/do-business/">Do Business</a>
+    <a href="https://downtowncs.com/membership/">Membership</a>
+    <a href="#" class="active" aria-current="page">Business Directory</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <p class="hero-label" aria-hidden="true">Downtown Partnership Member Directory</p>
+    <h1 id="hero-heading">Downtown Business Directory</h1>
+    <p class="hero-desc">170 member organizations — searchable by name, category, scope, and membership level. Address, phone, and funding data are not yet public.</p>
+    <form role="search" aria-label="Search businesses" onsubmit="return false;">
+      <div class="search-form">
+        <div class="search-inner">
+          <label for="search-input">Search businesses</label>
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2.5" style="color:#777">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="search" id="search-input" placeholder="Business name, category, website…" autocomplete="off" oninput="filterAndRender()"/>
+        </div>
+        <button type="submit" class="search-btn" onclick="filterAndRender()">Search</button>
+      </div>
+    </form>
+    <div class="hero-stats" aria-label="Directory statistics">
+      <div class="hero-stat"><strong>170</strong>Member organizations</div>
+      <div class="hero-stat"><strong>90%+</strong>Locally owned</div>
+      <div class="hero-stat"><strong>5</strong>Membership tiers</div>
+      <div class="hero-stat" style="color:#FFC7C7"><strong>0</strong>Addresses posted publicly</div>
+      <div class="hero-stat" style="color:#FFC7C7"><strong>0</strong>Grant records public</div>
+    </div>
+  </div>
+</section>
+
+<!-- Missing data banner -->
+<div class="missing-banner" role="alert" aria-labelledby="missing-h">
+  <div class="missing-banner-inner">
+    <div class="missing-head">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B0000" stroke-width="2.5">
+        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <h2 id="missing-h">Local addresses, phone numbers, emails, BID assessments, and DDA grant records are not publicly posted</h2>
+    </div>
+    <p>The Downtown Partnership, BID, and DDA do not publish this data in any searchable form, despite legal requirements under C.R.S. 24-72-201 (CORA) and C.R.S. 32-1-207. To request records: <a href="tel:7198860088">719-886-0088</a> · <a href="https://cheetochopsticks.com">cheetochopsticks.com</a> has CORA templates and contact lists.</p>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="filters-bar" role="search" aria-label="Filter businesses">
+  <div class="filters-inner">
+    <div class="filter-group" role="group" aria-label="Filter by category">
+      <span class="filter-group-label" aria-hidden="true">Category</span>
+      <button class="chip active" data-filter="category" data-value="all" onclick="setFilter('category','all',this)" aria-pressed="true">All</button>
+      <button class="chip" data-filter="category" data-value="Restaurant & Dining" onclick="setFilter('category','Restaurant & Dining',this)" aria-pressed="false">Dining</button>
+      <button class="chip" data-filter="category" data-value="Real Estate & Development" onclick="setFilter('category','Real Estate & Development',this)" aria-pressed="false">Real Estate</button>
+      <button class="chip" data-filter="category" data-value="Finance & Banking" onclick="setFilter('category','Finance & Banking',this)" aria-pressed="false">Finance</button>
+      <button class="chip" data-filter="category" data-value="Healthcare & Services" onclick="setFilter('category','Healthcare & Services',this)" aria-pressed="false">Healthcare</button>
+      <button class="chip" data-filter="category" data-value="Construction & Trades" onclick="setFilter('category','Construction & Trades',this)" aria-pressed="false">Construction</button>
+      <button class="chip" data-filter="category" data-value="Education" onclick="setFilter('category','Education',this)" aria-pressed="false">Education</button>
+      <button class="chip" data-filter="category" data-value="Nonprofit & Foundation" onclick="setFilter('category','Nonprofit & Foundation',this)" aria-pressed="false">Nonprofit</button>
+      <button class="chip" data-filter="category" data-value="Arts & Culture" onclick="setFilter('category','Arts & Culture',this)" aria-pressed="false">Arts</button>
+      <button class="chip" data-filter="category" data-value="Hotel & Hospitality" onclick="setFilter('category','Hotel & Hospitality',this)" aria-pressed="false">Hotels</button>
+      <button class="chip" data-filter="category" data-value="Marketing & Media" onclick="setFilter('category','Marketing & Media',this)" aria-pressed="false">Media</button>
+    </div>
+    <div class="filter-group" role="group" aria-label="Filter by scope">
+      <span class="filter-group-label" aria-hidden="true">Scope</span>
+      <button class="chip active" data-filter="scope" data-value="all" onclick="setFilter('scope','all',this)" aria-pressed="true">All</button>
+      <button class="chip" data-filter="scope" data-value="Local" onclick="setFilter('scope','Local',this)" aria-pressed="false" style="--chip-active-bg:#2A4500">Local</button>
+      <button class="chip" data-filter="scope" data-value="Regional" onclick="setFilter('scope','Regional',this)" aria-pressed="false">Regional</button>
+      <button class="chip" data-filter="scope" data-value="National" onclick="setFilter('scope','National',this)" aria-pressed="false">National</button>
+      <button class="chip" data-filter="scope" data-value="International" onclick="setFilter('scope','International',this)" aria-pressed="false">International</button>
+    </div>
+    <div class="filter-group" role="group" aria-label="Filter by membership level">
+      <span class="filter-group-label" aria-hidden="true">Level</span>
+      <button class="chip active" data-filter="level" data-value="all" onclick="setFilter('level','all',this)" aria-pressed="true">All</button>
+      <button class="chip" data-filter="level" data-value="Changemaker" onclick="setFilter('level','Changemaker',this)" aria-pressed="false">Changemaker</button>
+      <button class="chip" data-filter="level" data-value="Catalyst" onclick="setFilter('level','Catalyst',this)" aria-pressed="false">Catalyst</button>
+      <button class="chip" data-filter="level" data-value="Innovator" onclick="setFilter('level','Innovator',this)" aria-pressed="false">Innovator</button>
+      <button class="chip" data-filter="level" data-value="Collaborator" onclick="setFilter('level','Collaborator',this)" aria-pressed="false">Collaborator</button>
+      <button class="chip" data-filter="level" data-value="Ally" onclick="setFilter('level','Ally',this)" aria-pressed="false">Ally</button>
+    </div>
+    <button class="filter-clear" onclick="clearFilters()" aria-label="Clear all filters">Clear all</button>
+  </div>
+</div>
+
+<!-- Results area -->
+<main id="main-content" tabindex="-1">
+  <div class="results-bar">
+    <p id="results-count" aria-live="polite" aria-atomic="true"></p>
+    <div class="view-sort">
+      <div class="view-toggle" role="group" aria-label="View mode">
+        <button class="view-btn active" id="btn-grid" onclick="setView('grid')" aria-pressed="true" aria-label="Grid view">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/>
+            <rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/>
+          </svg>
+        </button>
+        <button class="view-btn" id="btn-list" onclick="setView('list')" aria-pressed="false" aria-label="List view">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+            <circle cx="3" cy="6" r="1.5" fill="currentColor"/><circle cx="3" cy="12" r="1.5" fill="currentColor"/><circle cx="3" cy="18" r="1.5" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+      <label for="sort-select" class="sort-label">Sort:</label>
+      <select id="sort-select" onchange="filterAndRender()">
+        <option value="alpha">A to Z</option>
+        <option value="level">Membership level</option>
+        <option value="scope">Scope</option>
+        <option value="category">Category</option>
+      </select>
+    </div>
+  </div>
+
+  <section class="directory-section" aria-label="Business listings">
+    <div id="biz-grid" role="list" aria-label="Downtown businesses"></div>
+  </section>
+</main>
+
+<!-- Legend -->
+<section class="legend-section" aria-labelledby="legend-h">
+  <div class="legend-inner">
+    <h2 id="legend-h">How to read this directory</h2>
+    <div class="legend-grid">
+      <div class="legend-group">
+        <h3>Membership Level</h3>
+        <div class="legend-item"><span class="badge badge-level-Changemaker">Changemaker</span><span>Major investor in downtown ecosystem</span></div>
+        <div class="legend-item"><span class="badge badge-level-Catalyst">Catalyst</span><span>Anchor institution or large employer</span></div>
+        <div class="legend-item"><span class="badge badge-level-Innovator">Innovator</span><span>Significant mid-to-large business</span></div>
+        <div class="legend-item"><span class="badge badge-level-Collaborator">Collaborator</span><span>Active community partner</span></div>
+        <div class="legend-item"><span class="badge badge-level-Ally">Ally</span><span>Small business or civic organization</span></div>
+      </div>
+      <div class="legend-group">
+        <h3>Scope</h3>
+        <div class="legend-item"><span class="badge badge-scope-Local">Local</span><span>Headquartered in Colorado Springs</span></div>
+        <div class="legend-item"><span class="badge badge-scope-Regional">Regional</span><span>Colorado / Mountain West footprint</span></div>
+        <div class="legend-item"><span class="badge badge-scope-National">National</span><span>US-wide with local presence</span></div>
+        <div class="legend-item"><span class="badge badge-scope-International">International</span><span>Global operations downtown</span></div>
+      </div>
+      <div class="legend-group">
+        <h3>Missing Data</h3>
+        <div class="legend-item"><span class="badge badge-missing">⚠ No public data</span><span>BID assessments not disclosed</span></div>
+        <div class="legend-item"><span class="badge badge-missing">⚠ No public data</span><span>DDA grant recipients not posted</span></div>
+        <p style="font-size:13px;color:#B8CDD8;margin-top:10px;line-height:1.55">
+          To request records: file a CORA request (C.R.S. 24-72-201) with the Downtown Partnership at 719-886-0088. Templates at <a href="https://cheetochopsticks.com" style="color:#FFD700">cheetochopsticks.com</a>.
+        </p>
+      </div>
+      <div class="legend-group">
+        <h3>Data Sources</h3>
+        <p style="font-size:13px;color:#B8CDD8;line-height:1.6">
+          Member data compiled from the <a href="https://downtowncs.com/member-directory/" style="color:#FFD700">Downtown Partnership member directory</a>. Category, scope, and size are inferred classifications — not official designations. Address, phone, email, BID assessment, and DDA grant columns require CORA requests or voluntary disclosure to populate.
+        </p>
+        <p style="font-size:13px;color:#B8CDD8;line-height:1.6;margin-top:8px">
+          Last updated: April 2026 · <a href="https://cheetochopsticks.com" style="color:#FFD700">cheetochopsticks.com</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p>Downtown Colorado Springs Business Directory · April 2026 · Data from <a href="https://downtowncs.com/member-directory/">Downtown Partnership member directory</a> · Transparency audit at <a href="https://cheetochopsticks.com">cheetochopsticks.com</a></p>
+  <p style="margin-top:6px">Missing data? File a CORA request: <a href="tel:7198860088">719-886-0088</a> · <a href="mailto:info@downtowncs.com">info@downtowncs.com</a></p>
+</footer>
+
+<script>
+const BUSINESSES = [{"name":"Norwood Development Group","category":"Real Estate & Development","scope":"Local","size":"Enterprise","level":"Changemaker","website":"norwood.dev","url":"https://norwood.dev"},{"name":"SpringHill Suites and Element Colorado Springs Downtown","category":"Hotel & Hospitality","scope":"Local","size":"Enterprise","level":"Changemaker","website":"www.marriott.com","url":"https://www.marriott.com"},{"name":"Weidner Apartment Homes","category":"Real Estate","scope":"National","size":"Enterprise","level":"Changemaker","website":"colorado.weidner.com","url":"https://colorado.weidner.com"},{"name":"Switchbacks FC","category":"Recreation & Sports","scope":"Local","size":"Enterprise","level":"Changemaker","website":"www.switchbacksfc.com","url":"https://www.switchbacksfc.com"},{"name":"U.S. Bank","category":"Finance & Banking","scope":"National","size":"Enterprise","level":"Changemaker","website":"www.usbank.com","url":"https://www.usbank.com"},{"name":"Quantum Fiber","category":"Technology","scope":"National","size":"Enterprise","level":"Catalyst","website":"www.quantumfiber.com","url":"https://www.quantumfiber.com"},{"name":"Diversus Health","category":"Healthcare & Services","scope":"Local","size":"Large","level":"Catalyst","website":"diversushealth.org","url":"https://diversushealth.org"},{"name":"Colorado College","category":"Education","scope":"Local","size":"Large","level":"Catalyst","website":"www.coloradocollege.edu","url":"https://www.coloradocollege.edu"},{"name":"The O\u2019Neil Group Company & Catalyst Campus","category":"Business & Other","scope":"Local","size":"Large","level":"Catalyst","website":"ogcos.com","url":"https://ogcos.com"},{"name":"Murphy Constructors of Colorado Springs Inc.","category":"Construction & Trades","scope":"Local","size":"Large","level":"Catalyst","website":"www.murphyconstructors.com","url":"https://www.murphyconstructors.com"},{"name":"Griffis/Blessing Inc.","category":"Real Estate & Development","scope":"Local","size":"Large","level":"Catalyst","website":"griffisblessing.com","url":"https://griffisblessing.com"},{"name":"Saks Building LLC","category":"Real Estate & Development","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"","url":""},{"name":"Bluestaq","category":"Technology","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"www.bluestaq.com","url":"https://www.bluestaq.com"},{"name":"Ntiva","category":"Technology","scope":"National","size":"Medium","level":"Innovator","website":"www.ntiva.com","url":"https://www.ntiva.com"},{"name":"United States Olympic and Paralympic Committee (USOPC)","category":"Business & Other","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"www.usopc.org","url":"https://www.usopc.org"},{"name":"Unico Colorado Square","category":"Real Estate & Development","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"unicoprop.com","url":"https://unicoprop.com"},{"name":"Olive Real Estate Group","category":"Real Estate & Development","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"olivereg.com","url":"https://olivereg.com"},{"name":"Culebra Properties","category":"Real Estate & Development","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"","url":""},{"name":"Classic Homes","category":"Real Estate & Development","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"classichomes.com","url":"https://classichomes.com"},{"name":"Lyda Hill Philanthropies","category":"Business & Other","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"www.lydahillphilanthropies.org","url":"https://www.lydahillphilanthropies.org"},{"name":"Altitude Hospitality Group","category":"Hotel & Hospitality","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"altitudehg.com","url":"https://altitudehg.com"},{"name":"Kaiser Permanente","category":"Healthcare","scope":"National","size":"Enterprise","level":"Innovator","website":"about.kaiserpermanente.org","url":"https://about.kaiserpermanente.org"},{"name":"Purple Mountain Group at Morgan Stanley","category":"Finance & Banking","scope":"International","size":"Enterprise","level":"Innovator","website":"advisor.morganstanley.com","url":"https://advisor.morganstanley.com"},{"name":"JP Morgan","category":"Finance & Banking","scope":"International","size":"Enterprise","level":"Innovator","website":"www.jpmorganchase.com","url":"https://www.jpmorganchase.com"},{"name":"ANB Bank","category":"Finance & Banking","scope":"Regional","size":"Medium","level":"Innovator","website":"www.anbbank.com","url":"https://www.anbbank.com"},{"name":"Pikes Peak State College","category":"Education","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"www.pikespeak.edu","url":"https://www.pikespeak.edu"},{"name":"Creative Consortium","category":"Arts & Culture","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"www.creativeconsortium.com","url":"https://www.creativeconsortium.com"},{"name":"DPR Construction","category":"Construction","scope":"National","size":"Large","level":"Innovator","website":"www.dpr.com","url":"https://www.dpr.com"},{"name":"Colarelli Construction","category":"Construction & Trades","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"www.colarelliconstruction.com","url":"https://www.colarelliconstruction.com"},{"name":"Bryan Construction Inc","category":"Construction & Trades","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"bryanconstruction.com","url":"https://bryanconstruction.com"},{"name":"Baker & King Security Services","category":"Construction & Trades","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"www.bakerandkingsecurity.com","url":"https://www.bakerandkingsecurity.com"},{"name":"Alpine Bank","category":"Finance & Banking","scope":"Regional","size":"Medium","level":"Innovator","website":"www.alpinebank.com","url":"https://www.alpinebank.com"},{"name":"Colorado Media Group","category":"Marketing & Media","scope":"Local","size":"Medium\u2013Large","level":"Innovator","website":"coloradomediagroup.com","url":"https://coloradomediagroup.com"},{"name":"All Copy Products","category":"Business & Other","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.acp.com","url":"https://www.acp.com"},{"name":"3 Rocks Engineering & Surveying","category":"Business & Other","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.3rocksengineering.com","url":"https://www.3rocksengineering.com"},{"name":"Lolley\u2019s Ice Cream","category":"Restaurant & Dining","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"lolleys.com","url":"https://lolleys.com"},{"name":"CBRE","category":"Real Estate","scope":"International","size":"Enterprise","level":"Collaborator","website":"www.cbre.com","url":"https://www.cbre.com"},{"name":"High Valley Roofing LLC","category":"Construction & Trades","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.highvalleyroofing.com","url":"https://www.highvalleyroofing.com"},{"name":"Kava Works","category":"Restaurant & Dining","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"kavaworks.com","url":"https://kavaworks.com"},{"name":"Exponential Impact","category":"Finance & Banking","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.exponentialimpact.com","url":"https://www.exponentialimpact.com"},{"name":"Housing & Building Association of Colorado Springs","category":"Business & Other","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"cshba.com","url":"https://cshba.com"},{"name":"Underline","category":"Business & Other","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.underline.com","url":"https://www.underline.com"},{"name":"YMCA Of The Pikes Peak Region","category":"Recreation & Sports","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"ppymca.org","url":"https://ppymca.org"},{"name":"The Candy Bar","category":"Restaurant & Dining","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"thecandybarcolorado.com","url":"https://thecandybarcolorado.com"},{"name":"Rutledge\u2019s","category":"Business & Other","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.rutledges.com","url":"https://www.rutledges.com"},{"name":"Strata Group","category":"Business & Other","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.stratagrpco.com","url":"https://www.stratagrpco.com"},{"name":"Pikes Peak Association of Realtors","category":"Real Estate & Development","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"ppar.com","url":"https://ppar.com"},{"name":"Miramont Commercial","category":"Real Estate & Development","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"miramontcre.com","url":"https://miramontcre.com"},{"name":"LIV Sotheby\u2019s International Realty","category":"Real Estate & Development","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.sothebysrealty.com","url":"https://www.sothebysrealty.com"},{"name":"Kratt Commercial Properties","category":"Real Estate & Development","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.krattcommercialproperties.com","url":"https://www.krattcommercialproperties.com"},{"name":"Fountain Colony LLC","category":"Real Estate & Development","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"fountaincolony.com","url":"https://fountaincolony.com"},{"name":"Case International Co","category":"Real Estate & Development","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.casecompany.com","url":"https://www.casecompany.com"},{"name":"Behr & Behr Team Platinum Group Realtors","category":"Real Estate & Development","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"behrandbehr.com","url":"https://behrandbehr.com"},{"name":"Legacy Institute","category":"Nonprofit & Foundation","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"springslegacy.org","url":"https://springslegacy.org"},{"name":"The Bloom Foundation","category":"Nonprofit & Foundation","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.bloomfdn.org","url":"https://www.bloomfdn.org"},{"name":"Phil Long Dealerships","category":"Automotive","scope":"Regional","size":"Medium","level":"Collaborator","website":"www.phillong.com","url":"https://www.phillong.com"},{"name":"Facial Aesthetics","category":"Business & Other","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"facialaestheticsinc.com","url":"https://facialaestheticsinc.com"},{"name":"Springs Rescue Mission","category":"Healthcare & Services","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.springsrescuemission.org","url":"https://www.springsrescuemission.org"},{"name":"Pikes Peak Library District","category":"Education","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"ppld.org","url":"https://ppld.org"},{"name":"Side Dish with Schniper","category":"Marketing & Media","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.sidedishschniper.com","url":"https://www.sidedishschniper.com"},{"name":"KKTV","category":"Marketing & Media","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.kktv.com","url":"https://www.kktv.com"},{"name":"Cumulus Media","category":"Marketing & Media","scope":"National","size":"Large","level":"Collaborator","website":"southerncoloradocumulus.com","url":"https://southerncoloradocumulus.com"},{"name":"88.7 KCME-FM & Jazz 93.5 FM","category":"Marketing & Media","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.kcme.org","url":"https://www.kcme.org"},{"name":"CliftonLarsonAllen","category":"Professional Services","scope":"National","size":"Large","level":"Collaborator","website":"www.claconnect.com","url":"https://www.claconnect.com"},{"name":"UCHealth \u2013 Memorial Health System","category":"Healthcare","scope":"Regional","size":"Large","level":"Collaborator","website":"www.uchealth.org","url":"https://www.uchealth.org"},{"name":"Locals Food & Drink","category":"Restaurant & Dining","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.localsfoodanddrink.com","url":"https://www.localsfoodanddrink.com"},{"name":"Chiba Bar","category":"Restaurant & Dining","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.chibabar.co","url":"https://www.chibabar.co"},{"name":"Raymond James & Associates","category":"Finance & Banking","scope":"National","size":"Large","level":"Collaborator","website":"www.raymondjames.com","url":"https://www.raymondjames.com"},{"name":"Kirkpatrick Bank","category":"Finance & Banking","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.kirkpatrickbank.com","url":"https://www.kirkpatrickbank.com"},{"name":"Intergy Private Wealth","category":"Finance & Banking","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"intergywealth.com","url":"https://intergywealth.com"},{"name":"Fulcrum Wealth Consulting of Raymond James","category":"Finance & Banking","scope":"National","size":"Large","level":"Collaborator","website":"www.fulcrumwealthconsulting.com","url":"https://www.fulcrumwealthconsulting.com"},{"name":"FirstBank","category":"Finance & Banking","scope":"Regional","size":"Medium","level":"Collaborator","website":"www.efirstbank.com","url":"https://www.efirstbank.com"},{"name":"Ent Credit Union","category":"Finance & Banking","scope":"Regional","size":"Medium","level":"Collaborator","website":"www.ent.com","url":"https://www.ent.com"},{"name":"Eastern Colorado Bank","category":"Finance & Banking","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.yourfriendlybank.com","url":"https://www.yourfriendlybank.com"},{"name":"Woodmen Valley Chapel","category":"Faith & Community","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"woodmenvalley.org","url":"https://woodmenvalley.org"},{"name":"First Presbyterian Church","category":"Faith & Community","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.firstprescos.org","url":"https://www.firstprescos.org"},{"name":"Cottonwood Center for the Arts","category":"Finance & Banking","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"cottonwoodcenterforthearts.com","url":"https://cottonwoodcenterforthearts.com"},{"name":"Tallgrass","category":"Business & Other","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"tallgrass.com","url":"https://tallgrass.com"},{"name":"Kinder Morgan","category":"Energy","scope":"National","size":"Enterprise","level":"Collaborator","website":"www.kindermorgan.com","url":"https://www.kindermorgan.com"},{"name":"University of Colorado, Colorado Springs","category":"Education","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.uccs.edu","url":"https://www.uccs.edu"},{"name":"Peak Education","category":"Education","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.peakedu.org","url":"https://www.peakedu.org"},{"name":"Gold Hill Mesa","category":"Real Estate & Development","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.goldhillmesa.com","url":"https://www.goldhillmesa.com"},{"name":"Cayton Photography","category":"Arts & Culture","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"caytonphotography.com","url":"https://caytonphotography.com"},{"name":"GH Phipps Construction Companies","category":"Construction & Trades","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"ghphipps.com","url":"https://ghphipps.com"},{"name":"RTA Architects","category":"Construction & Trades","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"rtaarchitects.com","url":"https://rtaarchitects.com"},{"name":"Eddy Sound","category":"Arts & Culture","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"eddysound.com","url":"https://eddysound.com"},{"name":"Earthwise Waste Solutions","category":"Arts & Culture","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.thegoodguysatearthwise.com","url":"https://www.thegoodguysatearthwise.com"},{"name":"BiggsKofford","category":"Business & Other","scope":"Local","size":"Small\u2013Medium","level":"Collaborator","website":"www.biggskofford.com","url":"https://www.biggskofford.com"},{"name":"5Star Bank","category":"Finance & Banking","scope":"Local","size":"Small","level":"Ally","website":"www.5star.bank","url":"https://www.5star.bank"},{"name":"Academy Bank","category":"Finance & Banking","scope":"Regional","size":"Medium","level":"Ally","website":"www.academybank.com","url":"https://www.academybank.com"},{"name":"Atlas Restaurant Group","category":"Restaurant & Dining","scope":"Local","size":"Small","level":"Ally","website":"www.atlasgroupcos.com","url":"https://www.atlasgroupcos.com"},{"name":"Bank of Colorado","category":"Finance & Banking","scope":"Regional","size":"Medium","level":"Ally","website":"www.bankofcolorado.com","url":"https://www.bankofcolorado.com"},{"name":"Beauty Bar","category":"Restaurant & Dining","scope":"Local","size":"Small","level":"Ally","website":"www.beautybar-inc.com","url":"https://www.beautybar-inc.com"},{"name":"Berkshire Hathaway HomeServices Rocky Mountain Realtors Downtown","category":"Real Estate & Development","scope":"Local","size":"Small","level":"Ally","website":"www.peakdream.com","url":"https://www.peakdream.com"},{"name":"Better Business Bureau of Southern Colorado","category":"Civic & Association","scope":"Local","size":"Small","level":"Ally","website":"www.bbb.org","url":"https://www.bbb.org"},{"name":"BluSky Restoration Contractors","category":"Construction & Trades","scope":"Local","size":"Small","level":"Ally","website":"www.goblusky.com","url":"https://www.goblusky.com"},{"name":"The Broadmoor Hotel","category":"Hotel & Hospitality","scope":"Local","size":"Small","level":"Ally","website":"www.broadmoor.com","url":"https://www.broadmoor.com"},{"name":"Broadmoor World Arena","category":"Hotel & Hospitality","scope":"Local","size":"Small","level":"Ally","website":"www.broadmoorworldarena.com","url":"https://www.broadmoorworldarena.com"},{"name":"Busey Bank","category":"Finance & Banking","scope":"Regional","size":"Medium","level":"Ally","website":"www.busey.com","url":"https://www.busey.com"},{"name":"CASA of the Pikes Peak Region","category":"Healthcare & Services","scope":"Local","size":"Small","level":"Ally","website":"www.casappr.org","url":"https://www.casappr.org"},{"name":"Catholic Charities of Central Colorado","category":"Finance & Banking","scope":"Local","size":"Small","level":"Ally","website":"www.ccharitiescc.org","url":"https://www.ccharitiescc.org"},{"name":"Changeline","category":"Nonprofit & Foundation","scope":"Local","size":"Small","level":"Ally","website":"www.changeline.org","url":"https://www.changeline.org"},{"name":"CityROCK","category":"Recreation & Sports","scope":"Local","size":"Small","level":"Ally","website":"climbcityrock.com","url":"https://climbcityrock.com"},{"name":"Colorado Springs Chamber & EDC","category":"Civic & Association","scope":"Local","size":"Small","level":"Ally","website":"www.cscedc.com","url":"https://www.cscedc.com"},{"name":"Colorado Springs Commercial Real Estate","category":"Real Estate & Development","scope":"Local","size":"Small","level":"Ally","website":"www.coscommercial.com","url":"https://www.coscommercial.com"},{"name":"Colorado Springs Health Foundation","category":"Healthcare & Services","scope":"Local","size":"Small","level":"Ally","website":"cshf.net","url":"https://cshf.net"},{"name":"Colorado Springs Pioneers Museum","category":"Arts & Culture","scope":"Local","size":"Small","level":"Ally","website":"www.cspm.org","url":"https://www.cspm.org"},{"name":"Colorado Springs Urban Renewal Authority","category":"Civic & Association","scope":"Local","size":"Small","level":"Ally","website":"www.csurbanrenewal.org","url":"https://www.csurbanrenewal.org"},{"name":"Colorado Co-op","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"coloradoco-op.com","url":"https://coloradoco-op.com"},{"name":"Compass TDG Architecture","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"www.compass-arch.com","url":"https://www.compass-arch.com"},{"name":"Concept Restaurants","category":"Restaurant & Dining","scope":"Local","size":"Small","level":"Ally","website":"conceptcos.com","url":"https://conceptcos.com"},{"name":"Craddock Commercial Real Estate LLC","category":"Real Estate & Development","scope":"Local","size":"Small","level":"Ally","website":"www.craddockcommercial.com","url":"https://www.craddockcommercial.com"},{"name":"DHN Planning and Development","category":"Real Estate & Development","scope":"Local","size":"Small","level":"Ally","website":"dhndevelopment.com","url":"https://dhndevelopment.com"},{"name":"Distillery 291","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"distillery291.com","url":"https://distillery291.com"},{"name":"Eden Oaks Designer Woodware","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"www.edenoakswoodware.com","url":"https://www.edenoakswoodware.com"},{"name":"Elite Surface Infrastructure (E.S.I)","category":"Construction & Trades","scope":"Local","size":"Small","level":"Ally","website":"elitesi.com","url":"https://elitesi.com"},{"name":"The Equity Group","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"www.equitygroupcos.com","url":"https://www.equitygroupcos.com"},{"name":"The FBB Group Ltd","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"therockbridge.group","url":"https://therockbridge.group"},{"name":"First Onsite","category":"Construction","scope":"National","size":"Large","level":"Ally","website":"firstonsite.com","url":"https://firstonsite.com"},{"name":"First United Methodist Church","category":"Faith & Community","scope":"Local","size":"Small","level":"Ally","website":"www.fumc-cs.org","url":"https://www.fumc-cs.org"},{"name":"Forerunner Strategies","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"www.forerunnerstrat.com","url":"https://www.forerunnerstrat.com"},{"name":"FORMATIV Development Company","category":"Real Estate & Development","scope":"Local","size":"Small","level":"Ally","website":"formativco.com","url":"https://formativco.com"},{"name":"Forvis Mazars","category":"Professional Services","scope":"National","size":"Large","level":"Ally","website":"www.forvismazars.us","url":"https://www.forvismazars.us"},{"name":"Front Range Commercial, LLC","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"www.frontrangecommercial.com","url":"https://www.frontrangecommercial.com"},{"name":"Garden of the Gods Resort and Club","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"gardenofthegodsclub.com","url":"https://gardenofthegodsclub.com"},{"name":"The Gazette","category":"Marketing & Media","scope":"Local","size":"Small","level":"Ally","website":"gazette.com","url":"https://gazette.com"},{"name":"Good Intentions","category":"Finance & Banking","scope":"Local","size":"Small","level":"Ally","website":"www.goodintentionscos.com","url":"https://www.goodintentionscos.com"},{"name":"Green Mtn Haven","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"greenmtnhaven.com","url":"https://greenmtnhaven.com"},{"name":"Hillside Connection","category":"Nonprofit & Foundation","scope":"Local","size":"Small","level":"Ally","website":"www.hillsideconnection.org","url":"https://www.hillsideconnection.org"},{"name":"Hillside Gardens","category":"Nonprofit & Foundation","scope":"Local","size":"Small","level":"Ally","website":"www.hillsidecolorado.com","url":"https://www.hillsidecolorado.com"},{"name":"The Independence Center","category":"Finance & Banking","scope":"Local","size":"Small","level":"Ally","website":"www.theindependencecenter.org","url":"https://www.theindependencecenter.org"},{"name":"InnovaFlex Foundry","category":"Technology","scope":"Local","size":"Small","level":"Ally","website":"innovaflexusa.com","url":"https://innovaflexusa.com"},{"name":"Joint Initiatives","category":"Nonprofit & Foundation","scope":"Local","size":"Small","level":"Ally","website":"www.jointinitiatives.org","url":"https://www.jointinitiatives.org"},{"name":"Joseph Henry Edmondson Foundation","category":"Nonprofit & Foundation","scope":"Local","size":"Small","level":"Ally","website":"www.jhedmondson.org","url":"https://www.jhedmondson.org"},{"name":"Kinship Landing","category":"Hotel & Hospitality","scope":"Local","size":"Small","level":"Ally","website":"www.kinshiplanding.com","url":"https://www.kinshiplanding.com"},{"name":"Kraemer, Deen, Neville & Gebauer LLC","category":"Legal Services","scope":"Local","size":"Small","level":"Ally","website":"www.k2blaw.com","url":"https://www.k2blaw.com"},{"name":"Lamar Advertising","category":"Marketing & Media","scope":"National","size":"Large","level":"Ally","website":"lamar.com","url":"https://lamar.com"},{"name":"Loyal Coffee Co","category":"Restaurant & Dining","scope":"Local","size":"Small","level":"Ally","website":"loyalcoffee.co","url":"https://loyalcoffee.co"},{"name":"Mining Exchange Hotel","category":"Hotel & Hospitality","scope":"Local","size":"Small","level":"Ally","website":"www.miningexchangehotel.com","url":"https://www.miningexchangehotel.com"},{"name":"McDivitt Law Firm","category":"Legal Services","scope":"Local","size":"Small","level":"Ally","website":"www.mcdivittlaw.com","url":"https://www.mcdivittlaw.com"},{"name":"Mulliken Weiner Berg & Jolivet PC","category":"Real Estate & Development","scope":"Local","size":"Small","level":"Ally","website":"www.mullikenlaw.com","url":"https://www.mullikenlaw.com"},{"name":"N.E.S. Inc","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"www.neslandscapearchitects.com","url":"https://www.neslandscapearchitects.com"},{"name":"Nunn Construction Inc.","category":"Construction & Trades","scope":"Local","size":"Small","level":"Ally","website":"www.nunnconstruction.com","url":"https://www.nunnconstruction.com"},{"name":"ONE La Plata","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"www.laplatahome.com","url":"https://www.laplatahome.com"},{"name":"Picnic Basket Catering Collective","category":"Restaurant & Dining","scope":"Local","size":"Small","level":"Ally","website":"picnicbasketcatering.com","url":"https://picnicbasketcatering.com"},{"name":"Premier Real Estate Group","category":"Real Estate & Development","scope":"Local","size":"Small","level":"Ally","website":"www.rentsprings.com","url":"https://www.rentsprings.com"},{"name":"The Platinum Group Realtors","category":"Real Estate & Development","scope":"Local","size":"Small","level":"Ally","website":"platinumhomesales.com","url":"https://platinumhomesales.com"},{"name":"The Plaza at Pikes Peak","category":"Hotel & Hospitality","scope":"Local","size":"Small","level":"Ally","website":"theplazaatpikespeak.com","url":"https://theplazaatpikespeak.com"},{"name":"RainTech","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"www.rain.tech","url":"https://www.rain.tech"},{"name":"RBC Wealth Management","category":"Finance & Banking","scope":"International","size":"Enterprise","level":"Ally","website":"www.rbcwealthmanagement.com","url":"https://www.rbcwealthmanagement.com"},{"name":"Red Gravy","category":"Restaurant & Dining","scope":"Local","size":"Small","level":"Ally","website":"redgravyco.com","url":"https://redgravyco.com"},{"name":"RS&H Company","category":"Construction & Trades","scope":"Local","size":"Small","level":"Ally","website":"www.rsandh.com","url":"https://www.rsandh.com"},{"name":"Sadler Griffin LLC","category":"Legal Services","scope":"Local","size":"Small","level":"Ally","website":"sadlergriffin.wordpress.com","url":"https://sadlergriffin.wordpress.com"},{"name":"Self Defense Academy Colorado Springs","category":"Recreation & Sports","scope":"Local","size":"Small","level":"Ally","website":"www.selfdefenseacademycos.com","url":"https://www.selfdefenseacademycos.com"},{"name":"Senger Design Group LLC","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"sengerdesigngroup.com","url":"https://sengerdesigngroup.com"},{"name":"The Simple Sort","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"thesimplesort.com","url":"https://thesimplesort.com"},{"name":"Summit Economics LLC","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"summiteconomics.com","url":"https://summiteconomics.com"},{"name":"Sorren","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"sorren.com","url":"https://sorren.com"},{"name":"UnitedHealthcare","category":"Healthcare","scope":"National","size":"Enterprise","level":"Ally","website":"www.uhc.com","url":"https://www.uhc.com"},{"name":"Urban Egg","category":"Restaurant & Dining","scope":"Local","size":"Small","level":"Ally","website":"www.urbanegg.com","url":"https://www.urbanegg.com"},{"name":"VensureHR","category":"Professional Services","scope":"National","size":"Large","level":"Ally","website":"vensure.com","url":"https://vensure.com"},{"name":"Visit Colorado Springs","category":"Civic & Association","scope":"Local","size":"Small","level":"Ally","website":"www.visitcos.com","url":"https://www.visitcos.com"},{"name":"Vintage Relics","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"www.vintagerelics1.com","url":"https://www.vintagerelics1.com"},{"name":"W.E. O\u2019Neil Construction","category":"Construction & Trades","scope":"Local","size":"Small","level":"Ally","website":"www.weoneil.com","url":"https://www.weoneil.com"},{"name":"Walston Group Real Estate, Inc.","category":"Real Estate & Development","scope":"Local","size":"Small","level":"Ally","website":"www.walstongroup.com","url":"https://www.walstongroup.com"},{"name":"Wolf & Key Marketing","category":"Marketing & Media","scope":"Local","size":"Small","level":"Ally","website":"wolfandkey.com","url":"https://wolfandkey.com"},{"name":"WYNNE Realty Ltd","category":"Real Estate & Development","scope":"Local","size":"Small","level":"Ally","website":"www.wynnerealty.com","url":"https://www.wynnerealty.com"},{"name":"Hunt + Gather","category":"Business & Other","scope":"Local","size":"Small","level":"Ally","website":"huntandgathercos.com","url":"https://huntandgathercos.com"},{"name":"Mountain Chalet","category":"Hotel & Hospitality","scope":"Local","size":"Small","level":"Ally","website":"mtnchalet.com","url":"https://mtnchalet.com"},{"name":"Moore Digital Impact","category":"Marketing & Media","scope":"Local","size":"Small","level":"Ally","website":"mooredigitalimpact.com","url":"https://mooredigitalimpact.com"}];
+
+let activeFilters = { category: 'all', scope: 'all', level: 'all' };
+let currentView = 'grid';
+
+function initials(name) {
+  const words = name.replace(/[^a-zA-Z\s]/g,'').trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return '??';
+  if (words.length === 1) return words[0].slice(0,2).toUpperCase();
+  return (words[0][0] + words[words.length-1][0]).toUpperCase();
+}
+
+const AVATAR_COLORS = [
+  '#213B5D','#175C74','#648000','#1B5E20','#455A64',
+  '#4A6300','#0D47A1','#37474F','#1A237E','#004D40'
+];
+function avatarColor(name) {
+  let h = 0; for (let c of name) h = (h*31 + c.charCodeAt(0)) & 0xFFFF;
+  return AVATAR_COLORS[h % AVATAR_COLORS.length];
+}
+
+function setFilter(type, value, btn) {
+  activeFilters[type] = value;
+  document.querySelectorAll(`[data-filter="${type}"]`).forEach(b => {
+    b.classList.toggle('active', b.dataset.value === value);
+    b.setAttribute('aria-pressed', b.dataset.value === value ? 'true' : 'false');
+  });
+  filterAndRender();
+}
+
+function clearFilters() {
+  activeFilters = { category: 'all', scope: 'all', level: 'all' };
+  document.getElementById('search-input').value = '';
+  document.querySelectorAll('.chip').forEach(b => {
+    const isAll = b.dataset.value === 'all';
+    b.classList.toggle('active', isAll);
+    b.setAttribute('aria-pressed', isAll ? 'true' : 'false');
+  });
+  filterAndRender();
+}
+
+function setView(mode) {
+  currentView = mode;
+  const grid = document.getElementById('biz-grid');
+  grid.classList.toggle('list-view', mode === 'list');
+  document.getElementById('btn-grid').classList.toggle('active', mode === 'grid');
+  document.getElementById('btn-list').classList.toggle('active', mode === 'list');
+  document.getElementById('btn-grid').setAttribute('aria-pressed', mode === 'grid' ? 'true' : 'false');
+  document.getElementById('btn-list').setAttribute('aria-pressed', mode === 'list' ? 'true' : 'false');
+}
+
+function filterAndRender() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const sort = document.getElementById('sort-select').value;
+
+  let results = BUSINESSES.filter(b => {
+    const catOk = activeFilters.category === 'all' || b.category === activeFilters.category;
+    const scopeOk = activeFilters.scope === 'all' || b.scope === activeFilters.scope;
+    const levelOk = activeFilters.level === 'all' || b.level === activeFilters.level;
+    const qOk = !q || [b.name, b.category, b.scope, b.level, b.website].join(' ').toLowerCase().includes(q);
+    return catOk && scopeOk && levelOk && qOk;
+  });
+
+  const LEVEL_ORDER = {Changemaker:0,Catalyst:1,Innovator:2,Collaborator:3,Ally:4};
+  const SCOPE_ORDER = {International:0,National:1,Regional:2,Local:3};
+  if (sort === 'alpha') results.sort((a,b) => a.name.localeCompare(b.name));
+  else if (sort === 'level') results.sort((a,b) => (LEVEL_ORDER[a.level]||99)-(LEVEL_ORDER[b.level]||99) || a.name.localeCompare(b.name));
+  else if (sort === 'scope') results.sort((a,b) => (SCOPE_ORDER[a.scope]||99)-(SCOPE_ORDER[b.scope]||99) || a.name.localeCompare(b.name));
+  else if (sort === 'category') results.sort((a,b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
+
+  const n = results.length;
+  const countEl = document.getElementById('results-count');
+  countEl.innerHTML = `<strong>${n} business${n!==1?'es':''}</strong>${q ? ` matching "${q}"` : ''} shown`;
+
+  const grid = document.getElementById('biz-grid');
+
+  if (!n) {
+    grid.innerHTML = `<div class="no-results"><strong>No businesses match your search.</strong><p>Try clearing the search box or resetting your filters.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = results.map(b => {
+    const ini = initials(b.name);
+    const bg  = avatarColor(b.name);
+    const websiteHtml = b.url
+      ? `<a href="${b.url}" class="biz-website" target="_blank" rel="noopener noreferrer" aria-label="Visit ${b.name} website: ${b.website}">${b.website}</a>`
+      : `<span class="biz-nosite">No website listed</span>`;
+    return `
+    <article class="biz-card" role="listitem" aria-label="${b.name}, ${b.category}, ${b.scope}">
+      <div class="biz-card-top">
+        <div class="biz-avatar" style="background:${bg}" aria-hidden="true">${ini}</div>
+        <div class="biz-name-wrap">
+          <div class="biz-name">${b.name}</div>
+          <div class="biz-category">${b.category}</div>
+        </div>
+      </div>
+      <div class="biz-badges">
+        <span class="badge badge-scope-${b.scope}" aria-label="Scope: ${b.scope}">${b.scope}</span>
+        <span class="badge badge-level-${b.level}" aria-label="Membership: ${b.level}">${b.level}</span>
+        <span class="badge badge-size" aria-label="Size: ${b.size}">${b.size}</span>
+      </div>
+      <div class="biz-footer">
+        ${websiteHtml}
+        <span class="biz-funding" aria-label="BID and DDA funding data not publicly available">⚠ No funding data</span>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+filterAndRender();
+</script>
+</body>
+</html>

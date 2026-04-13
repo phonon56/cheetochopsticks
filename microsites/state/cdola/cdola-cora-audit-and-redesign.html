@@ -16,11 +16,11 @@
   --navy-dark:  #0d1b2e;
   --ink:        #1a1a2e;
   --ink-mid:    #2e3a4a;
-  --ink-mute:   #4a5a6a; /* 6.4:1 on white — AA PASS */
+  --ink-mute:   #3a4a5c; /* 6.4:1 on white — AA PASS */
   --white:      #ffffff;
   --off-white:  #f7f8fa;
   --rule:       #d8dde4;
-  --red:        #b91c1c;
+  --red:        #991b1b;
   --red-bg:     #fef2f2;
   --amber:      #92400e;
   --amber-bg:   #fffbeb;
@@ -28,7 +28,7 @@
   --green-bg:   #ecfdf5;
   --blue-light: #1d4ed8;
   --gold:       #b45309;
-  --teal:       #0e6990; /* 5.9:1 on white — AA PASS */
+  --teal:       #0a5578; /* 5.9:1 on white — AA PASS */
   --focus:      #1d4ed8; /* 6.7:1 on white — AA PASS */
 
   /* Level badges */
@@ -76,9 +76,9 @@ body {
   max-width: 900px; margin: 0 auto;
 }
 .audit-eyebrow {
-  font-family: var(--font-mono); font-size: 10px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .2em; text-transform: uppercase;
-  color: #8ab4c8; margin-bottom: 12px;
+  color: #a8c8d8; margin-bottom: 12px;
 }
 .audit-band h1 {
   font-family: var(--font-serif); font-size: clamp(22px,3.5vw,32px);
@@ -90,7 +90,7 @@ body {
   margin-top: 16px; padding: 6px 14px;
   border: 1px solid rgba(196,213,80,.3);
   border-radius: 20px;
-  font-family: var(--font-mono); font-size: 11px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .1em; text-transform: uppercase;
   color: #c4d550;
 }
@@ -101,7 +101,7 @@ body {
 
 /* ── SECTION LABELS ── */
 .eyebrow {
-  font-family: var(--font-mono); font-size: 10px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .2em; text-transform: uppercase;
   color: var(--ink-mute); display: block; margin-bottom: 6px;
 }
@@ -138,7 +138,7 @@ h3.section-h3 {
 details[open] .finding-summary { border-bottom: 1px solid var(--rule); }
 
 .badge {
-  font-family: var(--font-mono); font-size: 9px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .1em; text-transform: uppercase;
   padding: 3px 7px; border-radius: 2px; flex-shrink: 0; margin-top: 2px;
 }
@@ -148,7 +148,7 @@ details[open] .finding-summary { border-bottom: 1px solid var(--rule); }
 .badge-pass     { background: var(--green-bg);  color: var(--green); }
 
 .finding-title { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.3; }
-.finding-wcag  { font-family: var(--font-mono); font-size: 10px; color: var(--ink-mute); margin-top: 3px; }
+.finding-wcag  { font-family: var(--font-mono); font-size: 13px; color: var(--ink-mute); margin-top: 3px; }
 .finding-toggle { margin-left: auto; flex-shrink: 0; font-size: 16px; color: var(--ink-mute); line-height: 1; padding-top:2px; }
 details[open] .finding-toggle::after { content: '−'; }
 .finding-toggle::after { content: '+'; }
@@ -161,7 +161,7 @@ details[open] .finding-toggle::after { content: '−'; }
 /* ── CODE BLOCKS ── */
 .code-wrap { margin: 12px 0; }
 .code-label {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em;
+  font-family: var(--font-mono); font-size: 13px; letter-spacing: .12em;
   text-transform: uppercase; padding: 4px 10px;
   border-radius: 3px 3px 0 0; display: inline-block; margin-bottom: 0;
 }
@@ -169,7 +169,7 @@ details[open] .finding-toggle::after { content: '−'; }
 .code-label.good { background: #064e3b; color: #6ee7b7; }
 pre {
   background: #1e293b; color: #e2e8f0;
-  font-family: var(--font-mono); font-size: 12.5px;
+  font-family: var(--font-mono); font-size: 13px;
   line-height: 1.7; padding: 14px 16px;
   border-radius: 0 3px 3px 3px; overflow-x: auto;
   margin: 0;
@@ -187,7 +187,7 @@ pre code .r { color: #fca5a5; }  /* bad highlight */
   display: inline-flex; align-items: center; gap: 5px;
   margin-top: 10px; padding: 4px 10px;
   background: var(--green-bg); color: var(--green);
-  font-family: var(--font-mono); font-size: 10px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .08em; border-radius: 2px;
 }
 
@@ -209,7 +209,7 @@ pre code .r { color: #fca5a5; }  /* bad highlight */
 .num.green { color: var(--green); }
 .num.blue  { color: var(--navy); }
 .summary-cell p {
-  font-family: var(--font-mono); font-size: 9px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
 }
 
@@ -246,7 +246,7 @@ pre code .r { color: #fca5a5; }  /* bad highlight */
   padding: 18px; background: var(--off-white);
 }
 .jcard-label {
-  font-family: var(--font-mono); font-size: 9px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .15em; text-transform: uppercase;
   color: var(--ink-mute); margin-bottom: 6px; display: block;
 }
@@ -267,7 +267,7 @@ pre code .r { color: #fca5a5; }  /* bad highlight */
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--navy); color: #fff; text-decoration: none;
   padding: 13px 28px; border-radius: 3px;
-  font-family: var(--font-mono); font-size: 12px;
+  font-family: var(--font-mono); font-size: 13px;
   font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
   transition: background .15s;
 }
@@ -279,7 +279,7 @@ pre code .r { color: #fca5a5; }  /* bad highlight */
 /* ── REDESIGNED ACCORDION ── */
 .faq-section { margin: 32px 0; }
 .faq-section h3.faq-group-label {
-  font-family: var(--font-mono); font-size: 10px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .18em; text-transform: uppercase;
   color: var(--ink-mute); padding: 0 0 8px;
   border-bottom: 1px solid var(--rule); margin-bottom: 12px;
@@ -333,7 +333,7 @@ pre code .r { color: #fca5a5; }  /* bad highlight */
 /* Jurisdiction mini-tag */
 .juris-tag {
   display: inline-block; margin: 0 3px 3px 0;
-  font-family: var(--font-mono); font-size: 10px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .06em; padding: 2px 7px; border-radius: 2px;
 }
 .juris-city   { background: #dbeafe; color: #1e3a8a; }
@@ -351,7 +351,7 @@ pre code .r { color: #fca5a5; }  /* bad highlight */
 .expand-all-btn {
   background: none; border: 1px solid var(--rule);
   border-radius: 3px; padding: 8px 16px; cursor: pointer;
-  font-family: var(--font-mono); font-size: 10px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
   margin-bottom: 12px; transition: border-color .15s;
 }
@@ -367,7 +367,7 @@ pre code .r { color: #fca5a5; }  /* bad highlight */
   background: var(--off-white); border: 1px solid var(--rule);
   border-bottom: none; border-radius: 3px 3px 0 0;
   padding: 8px 16px; cursor: pointer;
-  font-family: var(--font-mono); font-size: 11px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .06em; color: var(--ink-mute);
 }
 .tab-btn.active { background: #1e293b; color: #e2e8f0; border-color: #1e293b; }
@@ -393,7 +393,7 @@ pre code .r { color: #fca5a5; }  /* bad highlight */
   border-radius: 4px; margin-top: 64px;
 }
 .audit-footer p {
-  font-family: var(--font-mono); font-size: 10px;
+  font-family: var(--font-mono); font-size: 13px;
   letter-spacing: .08em; color: rgba(255,255,255,.35);
   line-height: 1.7;
 }

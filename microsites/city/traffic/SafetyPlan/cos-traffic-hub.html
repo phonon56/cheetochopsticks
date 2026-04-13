@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colorado Springs · Traffic Safety Intelligence · StorySeed / The Dais</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ===== DESIGN TOKENS =====
+   Palette verified for WCAG 2.1 AA/AAA on card backgrounds (--off #f8fafc, --white)
+   ink        #0f172a → 17.06 AAA · navy #001a4d → 15.99 AAA
+   muted      #3d5166 →  7.82 AAA · blue #0049b1 → 7.76 AAA
+   green      #065f46 →  7.34 AAA · purple #5b21b6 → 8.59 AAA
+   red        #b91c1c →  6.18 AA
+   gold-ink   #735504 →  6.62 AA   (text-safe; --gold #c8a84b kept for borders only, 2.19 FAIL as text)
+   amber-ink  #92400e →  6.78 AA   (text-safe; --amber #d97706 kept for borders only, 3.04 FAIL as text) */
+:root {
+  --navy:#001a4d; --blue:#0049b1; --sky:#1d6fa4; --teal:#0b7a75;
+  --red:#991b1b; --amber:#d97706; --gold:#c8a84b; --green:#065f46;
+  --amber-ink:#92400e; --gold-ink:#735504;
+  --purple:#5b21b6; --ink:#0f172a; --muted:#3d5166; --rule:#e2e8f0;
+  --off:#f8fafc; --white:#ffffff;
+  --mono:'Courier New',monospace; --sans:system-ui,-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:15px;scroll-behavior:smooth;}
+body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
+.skip{position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;
+  padding:8px 16px;border-radius:3px;font-family:var(--mono);font-size:13px;text-decoration:none;z-index:999;}
+.skip:focus{left:8px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:2px;box-shadow:0 0 0 5px rgba(0,0,0,0.55);}
+
+/* ===== HEADER ===== */
+.dashboard-header{
+  background:linear-gradient(135deg,#001030 0%,#00205c 60%,#0d3d6e 100%);
+  border-bottom:2px solid var(--gold);padding:22px 28px 18px;
+}
+.header-inner{max-width:1400px;margin:0 auto;}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:#c8a84b;margin-bottom:6px;}
+.dashboard-header h1{font-size:clamp(16px,2.5vw,24px);font-weight:700;color:#fff;margin-bottom:3px;}
+.sub{font-size:13px;color:#a8bbd4;margin-bottom:14px;}
+.header-meta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.meta-pill{font-family:var(--mono);font-size:13px;letter-spacing:.06em;padding:3px 10px;
+  border-radius:10px;border:1px solid rgba(255,255,255,.25);color:#a8bbd4;}
+.meta-pill.live{border-color:rgba(100,200,100,.5);color:#86efac;}
+.arcgis-btn{margin-left:auto;display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.1);color:#fff;padding:6px 12px;border-radius:4px;
+  text-decoration:none;font-family:var(--mono);font-size:13px;letter-spacing:.06em;
+  border:1px solid rgba(255,255,255,.2);}
+.arcgis-btn:hover{background:rgba(255,255,255,.18);}
+
+/* ===== DISNEY+-STYLE BRAND BAR ===== */
+.brand-bar{
+  background:linear-gradient(180deg,#00082a 0%,#000d35 100%);
+  border-bottom:1px solid rgba(200,168,75,.25);
+  padding:0 28px;
+}
+.brand-inner{max-width:1400px;margin:0 auto;}
+.brand-pills{display:flex;gap:0;overflow-x:auto;}
+
+.brand-pill{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:14px 28px 12px;
+  background:none;border:none;cursor:pointer;
+  font-family:var(--sans);
+  position:relative;transition:all .2s;
+  border-bottom:3px solid transparent;
+  min-width:110px;
+}
+.brand-pill:hover{background:rgba(255,255,255,.07);}
+.brand-pill:focus{outline:3px solid var(--gold);outline-offset:-2px;box-shadow:0 0 0 5px rgba(0,0,0,0.6);}
+
+.brand-pill .bp-icon{font-size:20px;line-height:1;filter:grayscale(0.4);transition:filter .2s;}
+.brand-pill .bp-name{
+  font-family:var(--mono);font-size:13px;letter-spacing:.15em;text-transform:uppercase;
+  color:#8fa8c8;font-weight:600;transition:color .2s;
+}
+.brand-pill .bp-sub{
+  font-size:13px;color:#7a8fa8;text-align:center;
+  white-space:nowrap;font-family:var(--mono);letter-spacing:.04em;
+}
+
+.brand-pill:hover .bp-icon{filter:grayscale(0);}
+.brand-pill:hover .bp-name{color:#d4e4f4;}
+
+.brand-pill.active .bp-icon{filter:grayscale(0);}
+.brand-pill.active .bp-name{color:#fff;font-weight:700;}
+.brand-pill.active .bp-sub{color:#a8bbd4;}
+.brand-pill.active{border-bottom-color:var(--gold-ink);}
+
+/* Brand-specific accent colors when active */
+.brand-pill[data-brand="city"].active{border-bottom-color:#4a9eff;}
+.brand-pill[data-brand="county"].active{border-bottom-color:#2dd4bf;}
+.brand-pill[data-brand="state"].active{border-bottom-color:#a78bfa;}
+.brand-pill[data-brand="plus"].active{border-bottom-color:var(--gold-ink);}
+
+/* ===== SCOPE DEFINITION BAR ===== */
+.scope-bar{
+  background:rgba(0,0,0,.35);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding:10px 28px;
+}
+.scope-bar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+.scope-type-badge{
+  font-family:var(--mono);font-size:13px;letter-spacing:.15em;text-transform:uppercase;
+  padding:2px 8px;border-radius:2px;font-weight:700;white-space:nowrap;flex-shrink:0;
+}
+.scope-type-badge.city{background:rgba(74,158,255,.2);color:#7dc8ff;border:1px solid rgba(74,158,255,.3);}
+.scope-type-badge.county{background:rgba(45,212,191,.15);color:#5eead4;border:1px solid rgba(45,212,191,.25);}
+.scope-type-badge.state{background:rgba(167,139,250,.15);color:#c4b5fd;border:1px solid rgba(167,139,250,.25);}
+.scope-type-badge.plus{background:rgba(200,168,75,.15);color:var(--gold-ink);border:1px solid rgba(200,168,75,.25);}
+
+.scope-divider{width:1px;height:14px;background:rgba(255,255,255,.2);flex-shrink:0;}
+.scope-def-text{font-size:13px;color:#9ab0c8;line-height:1.5;font-family:var(--mono);}
+.scope-def-text strong{color:#e2e8f0;}
+
+/* ===== TAB BAR ===== */
+.tab-bar{background:linear-gradient(180deg,#001030 0%,#001440 100%);border-bottom:1px solid #1e3a6e;padding-top:6px;}
+.tab-nav{max-width:1400px;margin:0 auto;display:flex;gap:0;padding:0 16px;position:relative;}
+.tab-btn{
+  padding:11px 22px;font-size:13px;font-weight:500;
+  background:rgba(255,255,255,.06);color:#9ab0c8;
+  border:none;border-bottom:2px solid transparent;cursor:pointer;
+  font-family:var(--sans);letter-spacing:.01em;
+  transition:all .15s;border-radius:4px 4px 0 0;margin-right:2px;
+}
+.tab-btn:hover{background:rgba(255,255,255,.1);color:#d4e4f4;}
+.tab-btn.active{background:var(--off);color:var(--ink);border-bottom-color:var(--gold-ink);}
+.tab-btn:focus{outline:3px solid var(--gold);outline-offset:2px;box-shadow:0 0 0 5px rgba(0,0,0,0.55);}
+
+/* ===== TAB PANELS ===== */
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ===== COMING SOON PANEL ===== */
+.coming-soon-wrap{
+  max-width:1400px;margin:0 auto;padding:60px 24px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+}
+.coming-soon-icon{font-size:56px;margin-bottom:20px;line-height:1;}
+.coming-soon-wrap h2{font-size:22px;font-weight:700;color:#fff;margin-bottom:10px;}
+.coming-soon-wrap p{font-size:14px;color:#9ab0c8;line-height:1.8;max-width:600px;}
+.coming-soon-wrap .cs-badge{
+  margin-top:20px;font-family:var(--mono);font-size:13px;letter-spacing:.15em;
+  text-transform:uppercase;padding:5px 14px;border-radius:10px;
+  background:rgba(200,168,75,.15);color:#c8a84b;border:1px solid rgba(200,168,75,.35);
+}
+.coming-soon-items{
+  display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+  margin-top:28px;width:100%;max-width:700px;
+}
+.cs-feature{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);
+  border-radius:6px;padding:14px 18px;text-align:left;flex:1;min-width:160px;
+}
+.cs-feature .csf-icon{font-size:18px;margin-bottom:6px;}
+.cs-feature .csf-label{font-family:var(--mono);font-size:13px;letter-spacing:.1em;color:#7a8fa8;
+  text-transform:uppercase;margin-bottom:4px;}
+.cs-feature .csf-text{font-size:13px;color:#9ab0c8;line-height:1.6;}
+
+/* ===== DASHBOARD BODY (Local tab) ===== */
+.dashboard-body{max-width:1400px;margin:0 auto;padding:20px 16px 60px;}
+
+/* STAT CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;}
+@media(max-width:1100px){.stat-row{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:640px){.stat-row{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:#fff;border-radius:6px;padding:14px;border:1px solid var(--rule);border-top:3px solid var(--rule);}
+.stat-card.red{border-top-color:var(--red);}.stat-card.amber{border-top-color:var(--amber-ink);}
+.stat-card.blue{border-top-color:var(--blue);}.stat-card.green{border-top-color:var(--green);}
+.stat-card.purple{border-top-color:var(--purple);}.stat-card.teal{border-top-color:var(--teal);}
+.stat-label{font-family:var(--mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.stat-num{font-size:clamp(20px,2.5vw,30px);font-weight:700;line-height:1;color:var(--ink);}
+.stat-num.red{color:var(--red);}.stat-num.amber{color:var(--amber-ink);}.stat-num.green{color:var(--green);}
+.stat-sub{font-size:13px;color:var(--muted);margin-top:3px;}
+
+/* SECTION HEADS */
+.section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;margin-top:28px;}
+.section-head h2{font-size:15px;font-weight:600;color:#e2e8f0;}
+.section-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border-radius:10px;background:rgba(255,255,255,.1);color:#a8bbd4;}
+
+/* CHART GRIDS */
+.chart-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px;}
+.chart-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px;}
+.chart-grid-full{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px;}
+@media(max-width:900px){.chart-grid-3,.chart-grid-2{grid-template-columns:1fr;}}
+.chart-card{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:18px;}
+.chart-card.span2{grid-column:span 2;}
+@media(max-width:900px){.chart-card.span2{grid-column:span 1;}}
+.chart-card h3{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.chart-card .csub{font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.5;}
+.chart-wrap{position:relative;height:230px;}
+.chart-wrap.tall{height:270px;}
+.chart-wrap.short{height:170px;}
+
+/* NARRATIVE */
+.narrative{background:linear-gradient(135deg,#0f1c3f 0%,#1a2e5e 100%);
+  border-radius:6px;padding:24px 28px;margin:20px 0;border-left:4px solid var(--gold);}
+.narrative h2{font-size:18px;font-weight:700;color:#fff;margin-bottom:10px;}
+.narrative p{font-size:13px;line-height:1.75;margin-bottom:8px;color:#d0dcea;}
+.narrative strong{color:#fff;}
+.insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px;}
+@media(max-width:700px){.insight-grid{grid-template-columns:1fr;}}
+.insight-item{background:rgba(255,255,255,.09);border-radius:4px;padding:14px;border-top:2px solid var(--gold);}
+.ins-num{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--gold-ink);line-height:1;}
+.ins-label{font-size:13px;color:#a8bbd4;margin-top:4px;}
+
+/* FUNDING */
+.funding-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+@media(max-width:900px){.funding-grid{grid-template-columns:1fr;}}
+.fbar-row{margin-bottom:9px;}
+.fbar-label{font-size:13px;color:var(--ink);margin-bottom:2px;display:flex;justify-content:space-between;}
+.fbar-label span{font-family:var(--mono);font-size:13px;color:var(--muted);}
+.fbar-track{height:9px;background:#f1f5f9;border-radius:5px;overflow:hidden;}
+.fbar-fill{height:100%;border-radius:5px;}
+
+/* RATIO BOX */
+.ratio-box{display:flex;gap:18px;align-items:center;background:#fff8f0;
+  border:1px solid #fed7aa;border-radius:6px;padding:18px;margin-top:12px;flex-wrap:wrap;}
+.ratio-num{font-family:var(--mono);font-size:48px;font-weight:700;color:var(--amber-ink);line-height:1;}
+.ratio-text h4{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.ratio-text p{font-size:13px;color:var(--muted);line-height:1.6;max-width:600px;}
+
+/* NATIONAL TAB */
+.natavg-body{max-width:1400px;margin:0 auto;padding:24px 16px 60px;}
+.na-hero{background:linear-gradient(135deg,#0f1c3f 0%,#1a2e5e 100%);
+  border-radius:8px;padding:28px 32px;margin-bottom:24px;border-left:4px solid var(--gold);}
+.na-hero h2{font-size:20px;font-weight:700;color:#fff;margin-bottom:8px;}
+.na-hero p{font-size:13px;line-height:1.75;color:rgba(255,255,255,.75);max-width:800px;}
+.na-hero strong{color:#fff;}
+
+.ratio-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+@media(max-width:800px){.ratio-grid{grid-template-columns:1fr;}}
+.ratio-card{background:#fff;border-radius:8px;padding:24px;border:1px solid var(--rule);overflow:hidden;position:relative;}
+.ratio-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+.ratio-card.national::before{background:var(--blue);}
+.ratio-card.cos::before{background:var(--amber);}
+.ratio-card h3{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:16px;text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono);}
+.big-ratio{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.ratio-visual{display:flex;gap:4px;align-items:flex-end;height:60px;}
+.ratio-bar{border-radius:3px 3px 0 0;min-width:28px;display:flex;align-items:flex-end;justify-content:center;}
+.ratio-bar span{font-family:var(--mono);font-size:13px;font-weight:600;color:#fff;padding:2px 0;writing-mode:horizontal-tb;}
+.ratio-label{font-family:var(--mono);font-size:40px;font-weight:700;line-height:1;}
+.ratio-sublabel{font-size:13px;color:var(--muted);margin-top:2px;}
+
+.plain-english{background:var(--off);border-radius:6px;padding:14px 16px;margin-bottom:14px;}
+.plain-english .pe-label{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.plain-english p{font-size:13px;line-height:1.65;color:var(--ink);}
+.plain-english strong{color:var(--navy);}
+.analogy-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:12px 14px;}
+.analogy-box .ae-label{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:5px;}
+.analogy-box p{font-size:13px;line-height:1.65;color:#14532d;}
+.cos-flag{background:#fff8f0;border:1px solid #fed7aa;border-radius:6px;padding:12px 14px;}
+.cos-flag .cf-label{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber-ink);margin-bottom:5px;}
+.cos-flag p{font-size:13px;line-height:1.65;color:#78350f;}
+
+.compare-section{background:#fff;border-radius:8px;border:1px solid var(--rule);overflow:hidden;margin-bottom:24px;}
+.compare-section h2{font-size:15px;font-weight:600;color:var(--ink);padding:18px 20px 0;}
+.compare-section .cs-sub{font-size:13px;color:var(--muted);padding:4px 20px 16px;}
+.compare-table{width:100%;border-collapse:collapse;font-size:13px;}
+.compare-table thead th{background:var(--navy);color:#fff;padding:10px 16px;text-align:left;font-weight:600;font-size:13px;letter-spacing:.04em;}
+.compare-table thead th:not(:first-child){text-align:center;}
+.compare-table tbody tr{border-bottom:1px solid var(--rule);}
+.compare-table tbody tr:last-child{border:none;}
+.compare-table tbody tr:nth-child(even){background:#fafbfd;}
+.compare-table td{padding:12px 16px;vertical-align:top;}
+.compare-table td:not(:first-child){text-align:center;font-family:var(--mono);}
+.metric-name{font-weight:600;color:var(--ink);display:block;margin-bottom:2px;}
+.metric-explain{font-size:13px;color:var(--muted);line-height:1.4;}
+.nat-val{color:var(--blue);}
+.cos-val-good{color:var(--green);font-weight:700;}
+.cos-val-warn{color:var(--amber-ink);font-weight:700;}
+.cos-val-bad{color:var(--red);font-weight:700;}
+.verdict{font-size:13px;padding:2px 8px;border-radius:10px;display:inline-block;font-family:var(--mono);}
+.verdict.below{background:#ecfdf5;color:var(--green);}
+.verdict.above{background:#fff8f0;color:var(--amber-ink);}
+.verdict.inverse{background:#fef2f2;color:var(--red);}
+.verdict.match{background:#eff6ff;color:var(--blue);}
+.takeaway-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+@media(max-width:800px){.takeaway-row{grid-template-columns:1fr;}}
+.takeaway-card{background:#fff;border-radius:8px;padding:18px;border:1px solid var(--rule);border-top:3px solid var(--rule);}
+.takeaway-card.good{border-top-color:var(--green);}
+.takeaway-card.warn{border-top-color:var(--amber-ink);}
+.takeaway-card.info{border-top-color:var(--blue);}
+.tk-icon{font-size:24px;margin-bottom:8px;}
+.tk-head{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.tk-body{font-size:13px;color:var(--muted);line-height:1.65;}
+
+/* ===== SEARCH TAB STYLES (from zipcode tool) ===== */
+.search-panel-wrap{max-width:1100px;margin:0 auto;padding:24px 20px 60px;}
+.callout{background:#eff6ff;border:1px solid #bfdbfe;border-left:4px solid var(--blue);
+  border-radius:0 3px 3px 0;padding:12px 16px;margin-bottom:16px;font-size:14px;color:var(--ink);line-height:1.7;}
+.callout strong{color:var(--navy);}
+.callout a{color:var(--sky);}
+.callout-amber{background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #d97706;
+  border-radius:0 3px 3px 0;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#78350f;line-height:1.7;}
+.callout-amber strong{color:#451a03;}
+.callout-purple{background:#f5f3ff;border:1px solid #ddd6fe;border-left:4px solid #7c3aed;
+  border-radius:0 3px 3px 0;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#3b0764;line-height:1.7;}
+.callout-purple strong{color:#2e1065;}
+
+.status-bar{background:#fff;border:1px solid var(--rule);border-radius:3px;padding:12px 16px;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.status-badge{font-size:13px;font-family:var(--mono);letter-spacing:.08em;padding:3px 10px;
+  border-radius:2px;text-transform:uppercase;}
+.badge-live{background:#ecfdf5;color:var(--green);}
+.badge-loading{background:#fffbeb;color:#92400e;}
+.badge-error{background:#fef2f2;color:var(--red);}
+.status-text{font-size:14px;color:var(--muted);}
+
+.zip-summary{display:none;margin-bottom:20px;}
+.zip-summary.visible{display:block;}
+.zip-title{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--rule);}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:12px;}
+.sum-card{background:#fff;border:1px solid var(--rule);border-radius:4px;padding:12px;text-align:center;}
+.sum-card.fatal{border-top:3px solid var(--red);}
+.sum-card.serious{border-top:3px solid #d97706;}
+.sum-card.total{border-top:3px solid var(--navy);}
+.sum-card.dry{border-top:3px solid var(--green);}
+.sum-card.rear{border-top:3px solid var(--purple);}
+.sum-num{font-size:28px;font-weight:700;color:var(--ink);line-height:1;}
+.sum-num.red{color:var(--red);}.sum-num.amber{color:#d97706;}.sum-num.navy{color:var(--navy);}
+.sum-label{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.3;}
+
+.legend{background:var(--off);border:1px solid var(--rule);border-radius:3px;padding:12px 16px;
+  margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+.legend-label{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-right:4px;}
+.sev-badge{display:inline-flex;align-items:center;gap:4px;font-size:13px;padding:2px 8px;border-radius:2px;font-family:var(--mono);}
+.sev-fatal{background:#fecaca;color:#7f1d1d;}
+.sev-serious{background:#fed7aa;color:#7c2d12;}
+.sev-minor{background:#fef08a;color:#713f12;}
+.sev-possible{background:#bbf7d0;color:#14532d;}
+.sev-pdo{background:#e0e7ff;color:#1e1b4b;}
+
+.filter-panel{background:#fff;border:1px solid var(--rule);border-radius:3px;padding:20px;margin-bottom:20px;}
+.filter-panel h2{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:16px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;}
+.zip-filter-row{background:#f0f7ff;border:1px solid #bfdbfe;border-radius:4px;padding:14px 16px;
+  margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.zip-filter-row label{font-size:13px;font-weight:600;color:var(--navy);white-space:nowrap;}
+.zip-select{padding:8px 10px;border:2px solid var(--blue);border-radius:3px;font-size:14px;
+  color:var(--ink);background:#fff;font-family:inherit;min-width:200px;}
+.zip-select:focus{outline:3px solid #1d4ed8;outline-offset:1px;border-color:transparent;}
+.zip-hint{font-size:13px;color:var(--sky);}
+.filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:16px;}
+.filter-group{display:flex;flex-direction:column;gap:5px;}
+.filter-group label{font-size:13px;font-weight:600;color:var(--muted);}
+.filter-group select,.filter-group input[type=text],.search-input-field{
+  padding:8px 10px;border:1px solid var(--rule);border-radius:3px;font-size:14px;
+  color:var(--ink);background:#fff;font-family:inherit;width:100%;}
+.filter-group select:focus,.filter-group input:focus,.search-input-field:focus{
+  outline:3px solid #1d4ed8;outline-offset:1px;border-color:transparent;}
+.search-bar-row{display:flex;gap:8px;margin-bottom:16px;}
+.search-input-field{flex:1;}
+.btn{padding:8px 18px;border:none;border-radius:3px;cursor:pointer;font-size:14px;font-weight:500;font-family:inherit;}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{background:#001040;}
+.btn-primary:focus{outline:3px solid #1d4ed8;outline-offset:2px;}
+.btn-secondary{background:var(--off);color:var(--ink);border:1px solid var(--rule);}
+.btn-secondary:hover{background:#e8ecf2;}
+.btn-export{background:#ecfdf5;color:var(--green);border:1px solid #a7f3d0;}
+.btn-export:hover{background:#d1fae5;}
+.filter-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.record-count{font-size:13px;color:var(--muted);margin-left:auto;}
+
+.table-wrap{background:#fff;border:1px solid var(--rule);border-radius:3px;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{background:var(--navy);color:#fff;text-align:left;padding:10px 12px;font-weight:600;white-space:nowrap;position:sticky;top:0;}
+thead th button{background:none;border:none;color:inherit;cursor:pointer;font:inherit;font-weight:600;font-size:13px;
+  display:flex;align-items:center;gap:4px;padding:0;white-space:nowrap;}
+thead th button:focus{outline:2px solid #c8a84b;outline-offset:2px;border-radius:1px;}
+thead th button[aria-sort="ascending"]::after{content:' ↑';}
+thead th button[aria-sort="descending"]::after{content:' ↓';}
+thead th button[aria-sort="none"]::after{content:' ↕';opacity:.4;}
+tbody tr{border-bottom:1px solid var(--rule);}
+tbody tr:last-child{border:none;}
+tbody tr:nth-child(even){background:#fafbfd;}
+tbody tr:hover{background:#eef2ff;}
+td{padding:8px 12px;vertical-align:top;}
+td.date{font-family:var(--mono);font-size:13px;white-space:nowrap;}
+td.loc{max-width:200px;}
+td.num{text-align:right;font-family:var(--mono);}
+
+.pagination{display:flex;align-items:center;gap:8px;padding:16px 20px;border-top:1px solid var(--rule);flex-wrap:wrap;}
+.page-btn{min-width:36px;height:36px;padding:0 10px;border:1px solid var(--rule);border-radius:3px;
+  background:#fff;color:var(--ink);cursor:pointer;font-size:13px;font-family:var(--mono);
+  display:flex;align-items:center;justify-content:center;}
+.page-btn:hover{background:var(--off);}
+.page-btn:focus{outline:3px solid #1d4ed8;outline-offset:2px;}
+.page-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.page-btn:disabled{opacity:.4;cursor:not-allowed;}
+.page-info{font-size:13px;color:var(--muted);margin-left:auto;}
+
+.empty-state{padding:60px 20px;text-align:center;color:var(--muted);}
+.empty-state p{font-size:15px;}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--rule);
+  border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.tool-footer{margin-top:32px;padding:16px;background:#fff;border:1px solid var(--rule);
+  border-radius:3px;font-size:13px;color:var(--muted);line-height:1.7;}
+.tool-footer strong{color:var(--ink);}
+
+/* ===== FOOTER ===== */
+.dash-footer{background:#0d1117;border-top:1px solid #1e293b;padding:16px 24px;text-align:center;}
+.dash-footer p{font-family:var(--mono);font-size:13px;color:#475569;letter-spacing:.04em;}
+
+@media(max-width:640px){
+  .filter-grid{grid-template-columns:1fr 1fr;}
+  .zip-filter-row{flex-direction:column;align-items:flex-start;}
+  .summary-grid{grid-template-columns:1fr 1fr;}
+  .brand-pill{min-width:80px;padding:12px 14px 10px;}
+  .brand-pill .bp-name{font-size:13px;}
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to main content</a>
+<div id="live-region" role="status" aria-live="polite" class="sr-only"></div>
+<div id="live-announce" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+<!-- ===== HEADER ===== -->
+<header class="dashboard-header" role="banner">
+  <div class="header-inner">
+    <p class="eyebrow">StorySeed Studios · The Dais · Civic Intelligence Platform</p>
+    <h1>Colorado Springs — Traffic Safety &amp; Funding</h1>
+    <p class="sub">2017–2025 crash records · FHWA Form 536 local highway finance · 64,434 crashes · All data verified from live ArcGIS API</p>
+    <div class="header-meta">
+      <span class="meta-pill live">● Live Data</span>
+      <span class="meta-pill">9 Years</span>
+      <span class="meta-pill">64,434 Crashes</span>
+      <span class="meta-pill">El Paso County · City of Colorado Springs</span>
+      <a href="https://www.arcgis.com/apps/dashboards/2d2b29f62bcb466a9b0b193a05a67d42"
+         class="arcgis-btn" target="_blank" rel="noopener noreferrer"
+         aria-label="View interactive map dashboard on ArcGIS (opens in new window)">
+        🗺 View Map Dashboard <span class="sr-only">(opens in new window)</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== BRAND SELECTOR (Disney+ style) ===== -->
+<div class="brand-bar" role="navigation" aria-label="Geographic scope selector">
+  <div class="brand-inner">
+    <div class="brand-pills" role="tablist" aria-label="Data scope level">
+      <button class="brand-pill active" data-brand="city"
+        onclick="switchBrand('city')" role="tab" aria-selected="true"
+        aria-controls="brand-panel-city" id="brand-btn-city">
+        <span class="bp-icon">🏙️</span>
+        <span class="bp-name">City</span>
+        <span class="bp-sub">Colorado Springs</span>
+      </button>
+      <button class="brand-pill" data-brand="county"
+        onclick="switchBrand('county')" role="tab" aria-selected="false"
+        aria-controls="brand-panel-county" id="brand-btn-county">
+        <span class="bp-icon">🗺️</span>
+        <span class="bp-name">County</span>
+        <span class="bp-sub">El Paso County</span>
+      </button>
+      <button class="brand-pill" data-brand="state"
+        onclick="switchBrand('state')" role="tab" aria-selected="false"
+        aria-controls="brand-panel-state" id="brand-btn-state">
+        <span class="bp-icon">🏔️</span>
+        <span class="bp-name">State</span>
+        <span class="bp-sub">Colorado</span>
+      </button>
+      <button class="brand-pill" data-brand="plus"
+        onclick="switchBrand('plus')" role="tab" aria-selected="false"
+        aria-controls="brand-panel-plus" id="brand-btn-plus">
+        <span class="bp-icon">✦</span>
+        <span class="bp-name">Plus</span>
+        <span class="bp-sub">Extended Network</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCOPE DEFINITION BAR ===== -->
+<div class="scope-bar" id="scope-bar" role="note" aria-label="Current data scope definition">
+  <div class="scope-bar-inner">
+    <span class="scope-type-badge city" id="scope-badge">City</span>
+    <div class="scope-divider" aria-hidden="true"></div>
+    <p class="scope-def-text" id="scope-def-text">
+      <strong>City of Colorado Springs, CO</strong> — Incorporated city limits only. Data sourced from the City of Colorado Springs public ArcGIS crash feature service and FHWA Form 536 Local Highway Finance Report. Records span 2017–2025.
+    </p>
+  </div>
+</div>
+
+<!-- ===== CITY PANEL ===== -->
+<div id="brand-panel-city">
+
+  <!-- Tab bar (City only) -->
+  <div class="tab-bar" role="navigation" aria-label="Dashboard navigation">
+    <div class="tab-nav" role="tablist" aria-label="Dashboard sections">
+      <button class="tab-btn active" id="tab-btn-search"
+        onclick="switchTab('search')" aria-selected="true" role="tab"
+        aria-controls="tab-panel-search">
+        🔍 Search Records
+      </button>
+      <button class="tab-btn" id="tab-btn-data"
+        onclick="switchTab('data')" aria-selected="false" role="tab"
+        aria-controls="tab-panel-data">
+        📊 Local Dashboard
+      </button>
+      <button class="tab-btn" id="tab-btn-national"
+        onclick="switchTab('national')" aria-selected="false" role="tab"
+        aria-controls="tab-panel-national">
+        🇺🇸 National Averages
+      </button>
+    </div>
+  </div>
+
+  <!-- ── SEARCH TAB ── -->
+  <div id="tab-panel-search" class="tab-panel active" role="tabpanel" aria-labelledby="tab-btn-search" tabindex="0">
+  <div class="search-panel-wrap">
+
+    <div class="callout" role="note">
+      <strong>About this tool:</strong> Search crash records for Colorado Springs by zip code and other filters.
+      Data comes directly from the City's public crash data service — no login required, no map required.
+      Built by two residents at a kitchen table while waiting for USAA to call back.
+      Part of the <strong>cheetochopsticks.com</strong> spec — offered to the city for use by residents and staff.
+    </div>
+
+    <div class="callout-amber" role="note" aria-label="Note about danger ratings">
+      <strong>About road danger ratings (LOSS):</strong>
+      The Safety Action Plan assigns each road corridor a danger rating using a method called Level of Service of Safety.
+      Those ratings are not yet available as public data — they live in the city's internal GIS files and the plan PDF.
+      A records request for that internal data was filed April 2026 and is pending.
+      This tool will add danger ratings by corridor when that data becomes available.
+    </div>
+
+    <div class="status-bar" role="region" aria-label="Data load status">
+      <div>
+        <span class="status-badge badge-loading" id="status-badge">Loading</span>
+        <span class="status-text" id="status-text">Fetching crash records…</span>
+      </div>
+      <div id="last-updated" style="font-size:13px;color:var(--muted);">Data updated: March 2026</div>
+    </div>
+
+    <div class="zip-summary" id="zip-summary" role="region" aria-labelledby="zip-summary-title">
+      <div class="zip-title" id="zip-summary-title">Zip code summary</div>
+      <div class="summary-grid" id="summary-grid"></div>
+      <div class="callout-purple" id="zip-pattern" role="note" style="margin-bottom:0;"></div>
+    </div>
+
+    <div class="legend" role="note" aria-label="Crash severity colour key">
+      <span class="legend-label">Severity:</span>
+      <span class="sev-badge sev-fatal">Fatal</span>
+      <span class="sev-badge sev-serious">Serious Injury</span>
+      <span class="sev-badge sev-minor">Minor Injury</span>
+      <span class="sev-badge sev-possible">Possible Injury</span>
+      <span class="sev-badge sev-pdo">Property Damage Only</span>
+    </div>
+
+    <section class="filter-panel" aria-labelledby="filters-heading">
+      <h2 id="filters-heading">Search &amp; Filter</h2>
+      <div class="zip-filter-row" role="group" aria-labelledby="zip-filter-label">
+        <label id="zip-filter-label" for="filter-zip">Filter by zip code</label>
+        <select id="filter-zip" class="zip-select" aria-describedby="zip-hint">
+          <option value="">All of Colorado Springs</option>
+          <optgroup label="Central / Downtown">
+            <option value="80901">80901 — Downtown core</option>
+            <option value="80903">80903 — Downtown / Old Colorado City area</option>
+            <option value="80905">80905 — Southwest / near Broadmoor</option>
+          </optgroup>
+          <optgroup label="West">
+            <option value="80904">80904 — West side / Manitou Springs border</option>
+            <option value="80906">80906 — South / Broadmoor / Cheyenne Mountain</option>
+            <option value="80926">80926 — South rural / Penrose area</option>
+          </optgroup>
+          <optgroup label="North / Northwest">
+            <option value="80907">80907 — North central / UCCS area</option>
+            <option value="80918">80918 — Northwest / Briargate south</option>
+            <option value="80919">80919 — Northwest / Flying Horse south</option>
+            <option value="80920">80920 — North / Briargate</option>
+            <option value="80921">80921 — Far north / Monument border</option>
+          </optgroup>
+          <optgroup label="East">
+            <option value="80909">80909 — East central / Powers corridor</option>
+            <option value="80910">80910 — Southeast central</option>
+            <option value="80915">80915 — East / Cimarron Hills</option>
+            <option value="80916">80916 — Southeast</option>
+            <option value="80917">80917 — East central / Austin Bluffs</option>
+            <option value="80922">80922 — East / Powers &amp; Research</option>
+            <option value="80923">80923 — Northeast</option>
+            <option value="80924">80924 — Northeast / Banning Lewis</option>
+          </optgroup>
+          <optgroup label="South / Southeast">
+            <option value="80911">80911 — South / Security-Widefield</option>
+            <option value="80914">80914 — Southeast</option>
+            <option value="80925">80925 — Southeast rural</option>
+          </optgroup>
+          <optgroup label="Rural / Northeast">
+            <option value="80908">80908 — Northeast rural / Black Forest</option>
+            <option value="80927">80927 — East rural</option>
+            <option value="80928">80928 — Far east rural</option>
+            <option value="80929">80929 — Northeast rural</option>
+          </optgroup>
+        </select>
+        <span class="zip-hint" id="zip-hint">Select a zip to see a summary and filter results</span>
+      </div>
+
+      <div class="search-bar-row" role="search">
+        <label for="search-input" class="sr-only">Search by location, crash type, or road name</label>
+        <input type="text" id="search-input" class="search-input-field"
+               placeholder="Search location, road name, crash type…"
+               aria-label="Search by location, crash type, or road name"
+               autocomplete="off">
+        <button class="btn btn-primary" id="search-btn" type="button" aria-label="Apply search">Search</button>
+        <button class="btn btn-secondary" id="clear-btn" type="button">Clear</button>
+      </div>
+
+      <div class="filter-grid" role="group" aria-label="Additional filters">
+        <div class="filter-group">
+          <label for="filter-year">Year</label>
+          <select id="filter-year">
+            <option value="">All years</option>
+            <option>2025</option><option>2024</option><option>2023</option>
+            <option>2022</option><option>2021</option><option>2020</option>
+            <option>2019</option><option>2018</option><option>2017</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-severity">Severity</label>
+          <select id="filter-severity">
+            <option value="">All severities</option>
+            <option value="K">Fatal</option>
+            <option value="A">Serious Injury</option>
+            <option value="B">Minor Injury</option>
+            <option value="C">Possible Injury</option>
+            <option value="O">Property Damage Only</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-impaired">Impaired driver</label>
+          <select id="filter-impaired">
+            <option value="">All</option>
+            <option value="Y">Impaired involved</option>
+            <option value="N">Not impaired</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-vru">Vulnerable road users</label>
+          <select id="filter-vru">
+            <option value="">All crashes</option>
+            <option value="Y">Pedestrian / bike / motorcycle</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-month">Month</label>
+          <select id="filter-month">
+            <option value="">All months</option>
+            <option value="01-January">January</option><option value="02-February">February</option>
+            <option value="03-March">March</option><option value="04-April">April</option>
+            <option value="05-May">May</option><option value="06-June">June</option>
+            <option value="07-July">July</option><option value="08-August">August</option>
+            <option value="09-September">September</option><option value="10-October">October</option>
+            <option value="11-November">November</option><option value="12-December">December</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-day">Day of week</label>
+          <select id="filter-day">
+            <option value="">All days</option>
+            <option value="1-Sunday">Sunday</option><option value="2-Monday">Monday</option>
+            <option value="3-Tuesday">Tuesday</option><option value="4-Wednesday">Wednesday</option>
+            <option value="5-Thursday">Thursday</option><option value="6-Friday">Friday</option>
+            <option value="7-Saturday">Saturday</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn btn-primary" id="apply-btn" type="button">Apply Filters</button>
+        <button class="btn btn-secondary" id="reset-btn" type="button">Reset All</button>
+        <button class="btn btn-export" id="export-btn" type="button" aria-label="Export current results as CSV file">↓ Export CSV</button>
+        <span class="record-count" id="record-count" aria-live="polite" aria-atomic="true"></span>
+      </div>
+    </section>
+
+    <div class="table-wrap" role="region" aria-label="Crash records table" aria-describedby="table-desc">
+      <p id="table-desc" class="sr-only">Crash records table. Use column header buttons to sort. Results are paginated.</p>
+      <table id="crash-table" aria-label="Colorado Springs crash records">
+        <thead>
+          <tr>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Date">Date</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Time">Time</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Location">Location</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Type">Type</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Severity">Severity</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Road_Conditions">Road</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Lighting_Conditions">Lighting</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Impaired">Impaired</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="F__Fatalities">Fatalities</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="F__Susp__Serious_Injury">Serious Inj.</button></th>
+          </tr>
+        </thead>
+        <tbody id="crash-tbody">
+          <tr>
+            <td colspan="10" style="text-align:center;padding:40px;">
+              <span class="spinner" aria-hidden="true"></span>
+              <span class="sr-only">Loading crash records…</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination" id="pagination" role="navigation" aria-label="Table pagination">
+        <button class="page-btn" id="prev-btn" type="button" aria-label="Previous page" disabled>‹ Prev</button>
+        <span id="page-numbers" role="list"></span>
+        <button class="page-btn" id="next-btn" type="button" aria-label="Next page" disabled>Next ›</button>
+        <span class="page-info" id="page-info" aria-live="polite"></span>
+      </div>
+    </div>
+
+    <div class="tool-footer" role="contentinfo">
+      <strong>Data source:</strong> City of Colorado Springs public ArcGIS crash feature service · CDOT crash records 2017–2025.<br>
+      <strong>Zip code boundaries:</strong> Approximate — based on lat/lng coordinate ranges. A small number of crashes near zip boundaries may appear in adjacent zip results.<br>
+      <strong>Road danger ratings (LOSS):</strong> Pending public records request filed April 2026. Will be added when data is received.<br>
+      <strong>Built by:</strong> Two residents at a kitchen table. Offered to the City of Colorado Springs. No invoice attached.<br>
+      Questions or corrections: see <a href="https://www.thedais.com" target="_blank" rel="noopener noreferrer">The Dais</a>.
+    </div>
+
+  </div><!-- /search-panel-wrap -->
+  </div><!-- /tab-panel-search -->
+
+  <!-- ── LOCAL DASHBOARD TAB ── -->
+  <div id="tab-panel-data" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-data" tabindex="0">
+  <main id="main" tabindex="-1" role="main">
+  <div class="dashboard-body">
+
+    <div class="section-head" style="margin-top:18px;">
+      <h2>At a Glance</h2>
+      <span class="section-tag">2017–2025 totals · Live ArcGIS statistics API</span>
+    </div>
+    <div class="stat-row" role="list">
+      <div class="stat-card blue" role="listitem">
+        <div class="stat-label">Total crashes</div>
+        <div class="stat-num">64,434</div>
+        <div class="stat-sub">2017–2025, city limits</div>
+      </div>
+      <div class="stat-card red" role="listitem">
+        <div class="stat-label">Fatalities</div>
+        <div class="stat-num red">390</div>
+        <div class="stat-sub">Confirmed fatal crashes</div>
+      </div>
+      <div class="stat-card amber" role="listitem">
+        <div class="stat-label">Serious injuries</div>
+        <div class="stat-num amber">2,209</div>
+        <div class="stat-sub">Suspected serious injury</div>
+      </div>
+      <div class="stat-card purple" role="listitem">
+        <div class="stat-label">VRU crashes</div>
+        <div class="stat-num" style="color:var(--purple)">1,924</div>
+        <div class="stat-sub">Pedestrian, bike, motorcycle</div>
+      </div>
+      <div class="stat-card amber" role="listitem">
+        <div class="stat-label">Expansion spend</div>
+        <div class="stat-num amber">$7.45M</div>
+        <div class="stat-sub">Capacity improvements (FY)</div>
+      </div>
+      <div class="stat-card green" role="listitem">
+        <div class="stat-label">Preservation spend</div>
+        <div class="stat-num green">$1.33M</div>
+        <div class="stat-sub">System maintenance (FY)</div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>Crashes Over Time</h2>
+      <span class="section-tag">All 64,434 records · 2017–2025</span>
+    </div>
+    <div class="chart-grid-full">
+      <div class="chart-card">
+        <h3>Annual crash counts with fatality &amp; serious injury overlay</h3>
+        <div class="csub">COVID visible in 2020. Note the divergence: total crashes declining but serious injuries rising sharply — crashes are becoming more severe per incident.</div>
+        <div class="chart-wrap tall">
+          <canvas id="yearChart" aria-label="Bar and line chart: crash counts, fatalities and serious injuries by year 2017-2025"><p class="sr-only">Bar and line chart showing annual crash counts, fatalities, and serious injuries from 2017 to 2025. Total crashes peaked in 2018 at 8,978 and declined to 5,567 in 2025. Fatalities ranged from 36 to 53. Serious injuries rose from 180 in 2017 to 315 in 2024. JavaScript required to view this chart.</p></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>What's Happening</h2>
+      <span class="section-tag">Severity &amp; crash type</span>
+    </div>
+    <div class="chart-grid-3">
+      <div class="chart-card">
+        <h3>Severity breakdown</h3>
+        <div class="csub">All 64,434 crashes</div>
+        <div class="chart-wrap">
+          <canvas id="sevChart" aria-label="Donut chart of crash severity distribution"><p class="sr-only">Donut chart: 43,335 Property Damage Only (67%), 13,558 Possible Injury (21%), 5,282 Minor Injury (8%), 1,884 Serious Injury (3%), 375 Fatal (less than 1%). JavaScript required.</p></canvas>
+        </div>
+      </div>
+      <div class="chart-card span2">
+        <h3>Top crash types</h3>
+        <div class="csub">Rear-end collisions at 31% — signature of high-speed arterials with frequent stops. Exactly the corridors being widened.</div>
+        <div class="chart-wrap">
+          <canvas id="typeChart" aria-label="Horizontal bar chart of top 10 crash types"><p class="sr-only">Horizontal bar chart: top crash types are Rear-End 20,259, Broadside 10,978, Run Off Road 8,045, Approach Turn 7,275, Sideswipe Same Direction 7,265, Parked Vehicle 4,050, Pedestrian 1,182, Overtaking Turn 1,074, Other 857, Overturning 850. JavaScript required.</p></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>When Crashes Happen</h2>
+      <span class="section-tag">Month and day of week</span>
+    </div>
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <h3>Crashes by month</h3>
+        <div class="csub">September–October peak: back-to-school traffic + pre-winter transitions</div>
+        <div class="chart-wrap">
+          <canvas id="monthChart" aria-label="Bar chart of crashes by month"><p class="sr-only">Bar chart: crashes by month. Highest months are September (5,755), October (5,713), and August (5,623). Lowest is February (5,156). JavaScript required.</p></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Crashes by day of week</h3>
+        <div class="csub">Friday highest — commuter fatigue + Friday-evening impaired driving. Weekends drop sharply.</div>
+        <div class="chart-wrap">
+          <canvas id="dayChart" aria-label="Bar chart of crashes by day of week"><p class="sr-only">Bar chart: crashes by day. Friday highest at 10,759. Wednesday 10,268, Thursday 10,009, Tuesday 10,000, Monday 8,980, Saturday 8,026, Sunday lowest at 6,392. JavaScript required.</p></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>Who &amp; Why</h2>
+      <span class="section-tag">Impaired driving · Vulnerable road users · Lighting</span>
+    </div>
+    <div class="chart-grid-3">
+      <div class="chart-card">
+        <h3>Impaired driving by year</h3>
+        <div class="csub">Peaked 2020 — reduced enforcement during COVID. Declining since but still 391 in 2025.</div>
+        <div class="chart-wrap short">
+          <canvas id="impairedChart" aria-label="Line chart of impaired driving crashes by year"><p class="sr-only">Line chart: impaired driving crashes peaked in 2020 at 827, declining to 391 in 2025. Values: 2017=719, 2018=749, 2019=756, 2020=827, 2021=799, 2022=618, 2023=587, 2024=463, 2025=391. JavaScript required.</p></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Vulnerable road user crashes</h3>
+        <div class="csub">Pedestrians, cyclists, motorcyclists — 1,924 crashes, 101 fatalities over 9 years</div>
+        <div class="chart-wrap short">
+          <canvas id="vruChart" aria-label="Bar chart of VRU crashes by year"><p class="sr-only">Bar chart: vulnerable road user crashes (pedestrian, cyclist, motorcycle) by year. Values range from 184 (2020) to 249 (2019). 2025: 190. Total 1,924 over 9 years. JavaScript required.</p></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Lighting conditions</h3>
+        <div class="csub">70% in daylight — but dark crashes carry higher fatality rates per incident</div>
+        <div class="chart-wrap short">
+          <canvas id="lightChart" aria-label="Donut chart of lighting conditions at crash time"><p class="sr-only">Donut chart: lighting conditions at crash time. Daylight 45,206 (70%), Dark-Lighted 14,245 (22%), Dawn/Dusk 2,604 (4%), Dark-Unlighted 2,357 (4%). JavaScript required.</p></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="narrative" role="region" aria-labelledby="narrative-head">
+      <h2 id="narrative-head">The Pattern Hidden in Plain Sight</h2>
+      <p>These two datasets — crash locations and highway finance — are telling the same story from opposite ends. <strong>Crashes are becoming more severe</strong> even as total counts decline. <strong>Serious injuries nearly doubled</strong> between 2020 and 2024. Meanwhile the city is spending <strong>5.6× more on road expansion</strong> than on maintenance of existing roads, funded by a sales tax base that contracts in recessions.</p>
+      <p>The rear-end crash dominance (20,259 crashes — 31% of all incidents) is a direct signature of high-speed arterials with frequent stops. Those are exactly the corridors being widened. Wider roads at higher speeds produce more severe rear-ends, not fewer. The Safety Action Plan identifies this. The finance data shows spending isn't yet following the diagnosis.</p>
+      <p>Federal Transit Admin received <strong>$7.34M</strong> — 17% of total revenue. But crash patterns show no corresponding shift toward safer, multi-modal infrastructure. That gap is the question the Safety Action Plan should be answering.</p>
+      <div class="insight-grid">
+        <div class="insight-item"><div class="ins-num">5.6×</div><div class="ins-label">Expansion vs. preservation spending (FHWA Form 536)</div></div>
+        <div class="insight-item"><div class="ins-num">+75%</div><div class="ins-label">Serious injuries 2020→2024, as total crashes declined</div></div>
+        <div class="insight-item"><div class="ins-num">31%</div><div class="ins-label">Rear-end crashes — signature of high-speed stop-and-go arterials</div></div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>The Severity Trend</h2>
+      <span class="section-tag">Per 1,000 crashes — the real story</span>
+    </div>
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <h3>Fatalities per 1,000 crashes</h3>
+        <div class="csub">Rising even as total crashes fall — each crash is more likely to be fatal</div>
+        <div class="chart-wrap">
+          <canvas id="fatalRateChart" aria-label="Line chart of fatality rate per 1000 crashes by year"><p class="sr-only">Line chart: fatalities per 1,000 crashes. Rising trend from 4.0 in 2017 to 7.7 in 2022, with recent values around 7.1-7.7. Each crash is increasingly more likely to be fatal despite total crashes declining. JavaScript required.</p></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Serious injuries per 1,000 crashes</h3>
+        <div class="csub">2024: 53.4 per 1,000 — nearly 2.6× the 2017 rate of 20.2. The roads are getting more dangerous per crash.</div>
+        <div class="chart-wrap">
+          <canvas id="seriousRateChart" aria-label="Line chart of serious injury rate per 1000 crashes by year"><p class="sr-only">Line chart: serious injuries per 1,000 crashes. Rose from 20.2 in 2017 to 53.4 in 2024 — a 164% increase. The rate of serious harm per crash is climbing sharply even as total crashes decline. JavaScript required.</p></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>Where the Money Comes From &amp; Goes</h2>
+      <span class="section-tag">FHWA Form 536 · Local Highway Finance Report</span>
+    </div>
+    <div class="funding-grid">
+      <div class="chart-card">
+        <h3>Revenue sources</h3>
+        <div class="csub">$42.3M total. 74% from local taxes — making road funding consumption-driven and recession-vulnerable.</div>
+        <div style="margin-top:14px;">
+          <div class="fbar-row"><div class="fbar-label">Sales taxes <span>$17.45M · 41%</span></div><div class="fbar-track"><div class="fbar-fill" style="width:100%;background:var(--amber);"></div></div></div>
+          <div class="fbar-row"><div class="fbar-label">Highway-user taxes <span>$13.8M · 33%</span></div><div class="fbar-track"><div class="fbar-fill" style="width:79%;background:var(--blue);"></div></div></div>
+          <div class="fbar-row"><div class="fbar-label">Federal Transit Admin <span>$7.34M · 17%</span></div><div class="fbar-track"><div class="fbar-fill" style="width:42%;background:var(--teal);"></div></div></div>
+          <div class="fbar-row"><div class="fbar-label">Property taxes <span>$3.1M · 7%</span></div><div class="fbar-track"><div class="fbar-fill" style="width:18%;background:var(--green);"></div></div></div>
+          <div class="fbar-row"><div class="fbar-label">CDOT grant <span>$570K · 1%</span></div><div class="fbar-track"><div class="fbar-fill" style="width:3%;background:var(--purple);"></div></div></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Expenditures by category</h3>
+        <div class="csub">Capacity expansion outpaces maintenance 5.6 to 1</div>
+        <div class="chart-wrap"><canvas id="spendChart" aria-label="Bar chart of highway expenditure categories"><p class="sr-only">Bar chart: highway expenditures. Capacity Expansion $7.45M, System Preservation $1.33M, Engineering $920K, New Facilities $1,217. Expansion outpaces preservation 5.6 to 1. JavaScript required.</p></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Revenue mix</h3>
+        <div class="csub">Federal Transit present but not dominant — $7.34M of $42.3M total</div>
+        <div class="chart-wrap"><canvas id="revenueChart" aria-label="Donut chart of revenue sources"><p class="sr-only">Donut chart: revenue sources. Sales Tax $17.45M (41%), Highway-User Tax $13.8M (33%), Federal Transit $7.34M (17%), Property Tax $3.1M (7%), CDOT Grant $570K (1%). Total $42.3M. JavaScript required.</p></canvas></div>
+      </div>
+    </div>
+
+    <div class="ratio-box" role="note" aria-label="Key finding: 5.6 to 1 spending ratio">
+      <div class="ratio-num">5.6×</div>
+      <div class="ratio-text">
+        <h4>Road expansion vs. system preservation spending</h4>
+        <p>$7.45M on capacity improvements · $1.33M on system preservation · $1,217 on new facilities (essentially zero). Every road widened without a corresponding preservation budget increase adds long-term maintenance liability. The $7.34M in Federal Transit funding is present in the revenue — but not yet visible in the safety outcomes. That gap is the question.</p>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>Road Conditions at Time of Crash</h2>
+      <span class="section-tag">Where the dry road finding changes everything</span>
+    </div>
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <h3>Crashes by road condition</h3>
+        <div class="csub">88.2% of all crashes happen on dry roads — when conditions are perfect</div>
+        <div class="chart-wrap"><canvas id="roadCondChart" aria-label="Bar chart of crashes by road surface condition"><p class="sr-only">Bar chart: crashes by road condition. Dry 56,847 (88.2%), Wet 4,186 (6.5%), Icy 1,564 (2.4%), Snowy 1,239 (1.9%), Slushy 258 (0.4%). Most crashes occur in perfect conditions. JavaScript required.</p></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Serious injury rate by road condition</h3>
+        <div class="csub">Dry roads produce more serious injuries per crash than wet, icy, or snowy — drivers go faster when conditions look safe</div>
+        <div class="chart-wrap"><canvas id="roadSevChart" aria-label="Bar chart of serious injury rate per 1000 crashes by road condition"><p class="sr-only">Bar chart: serious injuries per 1,000 crashes by road condition. Dry roads produce the highest rate at 35.5, followed by Wet 29.6, Slushy 15.5, Icy 17.3, Snowy 10.5. Drivers go faster on dry roads, making crashes more violent. JavaScript required.</p></canvas></div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>What the Data Is Actually Saying</h2>
+      <span class="section-tag">Three observations · One economic connection</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
+      <div class="chart-card" style="border-top:3px solid var(--red);">
+        <div style="font-size:22px;margin-bottom:8px;">📱</div>
+        <h3 style="margin-bottom:8px;">Cell phones are likely the core issue</h3>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">88% of crashes on dry roads. 70% in daylight. Low impairment. Rear-end dominant. Serious injuries rising as total crashes fall — meaning crashes are hitting harder, not more often. That pattern doesn't fit road design. It fits distracted driving at speed on clear roads in good light.</p>
+      </div>
+      <div class="chart-card" style="border-top:3px solid var(--amber);">
+        <div style="font-size:22px;margin-bottom:8px;">🚦</div>
+        <h3 style="margin-bottom:8px;">Small fixes matter — signs, signals, potholes</h3>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">Signal timing that catches drivers off guard. Potholes that cause sudden swerves. Faded lane markings. Poorly lit intersections. These aren't headline projects — they're $500 fixes buried in a preservation budget that gets 15 cents of every road dollar.</p>
+      </div>
+      <div class="chart-card" style="border-top:3px solid var(--green);">
+        <div style="font-size:22px;margin-bottom:8px;">🏪</div>
+        <h3 style="margin-bottom:8px;">Safe, maintained corridors grow small businesses</h3>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">Road funding here runs 41% on local sales tax. Corridors where people feel safe stopping support the kind of foot traffic that small businesses need. More small businesses mean more local sales tax. The loop closes.</p>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#0f1c3f 0%,#1a2e5e 100%);border-radius:6px;padding:24px 28px;margin-bottom:24px;border-left:4px solid var(--gold);" role="note">
+      <p style="font-size:14px;color:rgba(255,255,255,.85);line-height:1.8;margin:0;">
+        <strong style="color:#fff;">The case in one paragraph:</strong> Colorado Springs crashes at a below-average rate for its population size — the roads aren't the primary danger. What's rising is severity per crash, which tracks with distracted driving at speed on dry, clear roads. The most cost-effective response isn't more lane miles — it's keeping existing signals timed correctly, lane markings visible, and surfaces smooth enough that a distracted driver who looks up at the last second has a chance to brake.
+        <strong style="color:var(--gold-ink);">Infrastructure maintenance and small business growth are the same investment, approached from opposite ends.</strong>
+      </p>
+    </div>
+
+  </div><!-- /dashboard-body -->
+  </main>
+  </div><!-- /tab-panel-data -->
+
+  <!-- ── NATIONAL AVERAGES TAB ── -->
+  <div id="tab-panel-national" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-national" tabindex="0">
+  <div class="natavg-body">
+
+    <div class="na-hero" role="note">
+      <h2>How Colorado Springs compares to the national average</h2>
+      <p>Most of these numbers come from NHTSA and FHWA — the two federal agencies that track crash fatalities and highway spending across all 50 states. The comparisons below use the most recent available year of national data (2022–2023) matched against Colorado Springs data from the same period.</p>
+    </div>
+
+    <div class="section-head">
+      <h2>Understanding the Spending Ratios</h2>
+      <span class="section-tag">What do these numbers actually mean?</span>
+    </div>
+
+    <div class="ratio-grid">
+      <div class="ratio-card national">
+        <h3>National Average — Local Road Spending</h3>
+        <div class="big-ratio">
+          <div class="ratio-visual" aria-hidden="true">
+            <div class="ratio-bar" style="height:55px;background:var(--green);"><span style="writing-mode:vertical-lr;transform:rotate(180deg);padding:4px 6px;font-size:13px;">PRESERVE</span></div>
+            <div class="ratio-bar" style="height:55px;background:var(--green);"></div>
+            <div class="ratio-bar" style="height:55px;background:var(--green);"></div>
+            <div class="ratio-bar" style="height:55px;background:var(--green);"></div>
+            <div class="ratio-bar" style="height:55px;background:var(--green);"></div>
+            <div class="ratio-bar" style="height:11px;background:var(--amber);"><span style="writing-mode:vertical-lr;transform:rotate(180deg);padding:1px 4px;font-size:13px;">EXP</span></div>
+          </div>
+          <div><div class="ratio-label" style="color:var(--green);">5:1</div><div class="ratio-sublabel">Preservation wins — national norm</div></div>
+        </div>
+        <div class="plain-english">
+          <div class="pe-label">Plain English</div>
+          <p>For every <strong>$1 spent building or widening roads</strong>, the national average local government spends <strong>$5 maintaining and repairing roads that already exist</strong> — fixing potholes, repaving worn surfaces, repairing bridges.</p>
+        </div>
+        <div class="analogy-box">
+          <div class="ae-label">Think of it like a house</div>
+          <p>The typical American city acts like a homeowner who spends $5 on fixing the plumbing, roof, and foundation for every $1 they spend building a new room. Keep what you have in good shape first.</p>
+        </div>
+      </div>
+      <div class="ratio-card cos">
+        <h3>Colorado Springs — Local Road Spending</h3>
+        <div class="big-ratio">
+          <div class="ratio-visual" aria-hidden="true">
+            <div class="ratio-bar" style="height:55px;background:var(--amber);"><span style="writing-mode:vertical-lr;transform:rotate(180deg);padding:4px 6px;font-size:13px;">EXPAND</span></div>
+            <div class="ratio-bar" style="height:55px;background:var(--amber);"></div>
+            <div class="ratio-bar" style="height:55px;background:var(--amber);"></div>
+            <div class="ratio-bar" style="height:55px;background:var(--amber);"></div>
+            <div class="ratio-bar" style="height:55px;background:var(--amber);"></div>
+            <div class="ratio-bar" style="height:55px;background:var(--amber);"></div>
+            <div class="ratio-bar" style="height:10px;background:var(--green);"><span style="writing-mode:vertical-lr;transform:rotate(180deg);padding:1px 4px;font-size:13px;">PRE</span></div>
+          </div>
+          <div><div class="ratio-label" style="color:var(--amber-ink);">5.6:1</div><div class="ratio-sublabel">Expansion wins — opposite direction</div></div>
+        </div>
+        <div class="plain-english">
+          <div class="pe-label">Plain English</div>
+          <p>For every <strong>$1 spent maintaining existing roads</strong>, Colorado Springs spends <strong>$5.60 expanding road capacity</strong> — widening lanes, adding intersections, building new connections. That's the reverse of the national pattern.</p>
+        </div>
+        <div class="cos-flag">
+          <div class="cf-label">The house analogy, flipped</div>
+          <p>Colorado Springs is acting like a homeowner who keeps adding new rooms — a sunroom, a garage, a deck — while barely fixing the roof, the pipes, or the foundation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="compare-section">
+      <h2>Full Side-by-Side: Colorado Springs vs. National Average</h2>
+      <p class="cs-sub">Sources: NHTSA 2023, FHWA Form 536, FHWA Highway Statistics. COS population: ~500,000.</p>
+      <table class="compare-table" aria-label="Metric comparison between Colorado Springs and national averages">
+        <thead>
+          <tr>
+            <th scope="col" style="width:35%">Metric</th>
+            <th scope="col">National Average</th>
+            <th scope="col">Colorado Springs</th>
+            <th scope="col">Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="metric-name">Fatality rate per 100,000 people</span><span class="metric-explain">Of every 100,000 residents, how many die in crashes per year. Lower is safer.</span></td>
+            <td class="nat-val">12.21</td><td class="cos-val-good">~8.6</td>
+            <td><span class="verdict below">30% below avg ✓</span></td>
+          </tr>
+          <tr>
+            <td><span class="metric-name">Fatality rate per 100M miles driven</span><span class="metric-explain">Of every 100 million miles driven in a city, how many deaths occur.</span></td>
+            <td class="nat-val">1.26 (2023)</td><td class="cos-val-good">Est. similar</td>
+            <td><span class="verdict match">On trend ≈</span></td>
+          </tr>
+          <tr>
+            <td><span class="metric-name">Serious injury rate trend</span><span class="metric-explain">How often crashes result in serious injury per 1,000 crashes. National rate is flat; COS is rising sharply.</span></td>
+            <td class="nat-val">75 injuries / 100M VMT — stable</td><td class="cos-val-bad">20.2 → 53.4 per 1,000 crashes (+164%)</td>
+            <td><span class="verdict inverse">Rising ↑ vs. flat</span></td>
+          </tr>
+          <tr>
+            <td><span class="metric-name">Rear-end crash percentage</span><span class="metric-explain">What share of all crashes are rear-end collisions. The signature of both distracted driving and high-speed stop-and-go roads.</span></td>
+            <td class="nat-val">28.4%</td><td class="cos-val-warn">31%</td>
+            <td><span class="verdict above">2.6 pts above ↑</span></td>
+          </tr>
+          <tr>
+            <td><span class="metric-name">Impaired driving — share of fatalities</span><span class="metric-explain">Nationally, 30% of all deaths involve a drunk driver. COS trend is declining.</span></td>
+            <td class="nat-val">30% of all fatalities</td><td class="cos-val-good">~8% of all crashes, declining</td>
+            <td><span class="verdict below">Trending down ↓</span></td>
+          </tr>
+          <tr>
+            <td><span class="metric-name">Preservation share of road spending</span><span class="metric-explain">What portion of road money goes to maintaining what already exists. Higher is more sustainable.</span></td>
+            <td class="nat-val">~65% (national norm)</td><td class="cos-val-bad">~15%</td>
+            <td><span class="verdict inverse">50 pts below ↓</span></td>
+          </tr>
+          <tr>
+            <td><span class="metric-name">Expansion share of road spending</span><span class="metric-explain">What portion of road money goes to widening or adding new roads. Lower is more fiscally sustainable.</span></td>
+            <td class="nat-val">~13%</td><td class="cos-val-bad">~85%</td>
+            <td><span class="verdict inverse">72 pts above ↑</span></td>
+          </tr>
+          <tr>
+            <td><span class="metric-name">Expansion:preservation spending ratio</span><span class="metric-explain">The clearest single number. A 1:5 national ratio means maintenance wins. COS's 5.6:1 is nearly the mirror image.</span></td>
+            <td class="nat-val">1:5 — preservation wins</td><td class="cos-val-bad">5.6:1 — expansion wins</td>
+            <td><span class="verdict inverse">Inverse of national norm</span></td>
+          </tr>
+          <tr>
+            <td><span class="metric-name">Sales tax share of road revenue</span><span class="metric-explain">How dependent road funding is on consumer spending. High reliance = funding drops in recessions.</span></td>
+            <td class="nat-val">Varies — gas tax typically dominant</td><td class="cos-val-warn">41% ($17.45M of $42.3M)</td>
+            <td><span class="verdict above">High volatility risk</span></td>
+          </tr>
+          <tr>
+            <td><span class="metric-name">CDOT/state grant share of road revenue</span><span class="metric-explain">What percentage of road funding comes from the state. Low means the city is on its own.</span></td>
+            <td class="nat-val">State funds typically 30–40%</td><td class="cos-val-bad">1.3% ($570K of $42.3M)</td>
+            <td><span class="verdict inverse">Far below typical</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-head">
+      <h2>What This Means in Plain Terms</h2>
+      <span class="section-tag">Three things to know</span>
+    </div>
+    <div class="takeaway-row">
+      <div class="takeaway-card good">
+        <div class="tk-icon">✅</div>
+        <div class="tk-head">The roads aren't killing people at an above-average rate</div>
+        <div class="tk-body">Colorado Springs' fatality rate per 100,000 residents (~8.6) is about 30% below the national average of 12.21. By the most important measure — how many people die — the city is doing better than most of America.</div>
+      </div>
+      <div class="takeaway-card warn">
+        <div class="tk-icon">⚠️</div>
+        <div class="tk-head">But crashes are getting more violent, not less</div>
+        <div class="tk-body">The serious injury rate per 1,000 crashes went from 20.2 in 2017 to 53.4 in 2024 — a 164% increase while the national rate stayed flat. Fewer total crashes, but each one is more likely to seriously hurt someone.</div>
+      </div>
+      <div class="takeaway-card warn" style="border-top-color:var(--red);">
+        <div class="tk-icon">🏗️</div>
+        <div class="tk-head">The spending pattern is building a future problem</div>
+        <div class="tk-body">The 5.6:1 expansion-to-preservation ratio is the inverse of the national norm. Every road that gets widened today will need maintenance in 10–15 years. With road funding 41% dependent on sales tax, a recession could create a serious maintenance funding gap.</div>
+      </div>
+    </div>
+
+  </div><!-- /natavg-body -->
+  </div><!-- /tab-panel-national -->
+
+</div><!-- /brand-panel-city -->
+
+<!-- ===== COUNTY PANEL ===== -->
+<div id="brand-panel-county" style="display:none;">
+  <div class="coming-soon-wrap">
+    <div class="coming-soon-icon">🗺️</div>
+    <h2>El Paso County — Coming Soon</h2>
+    <p>The County view will expand coverage beyond Colorado Springs city limits to include all jurisdictions within El Paso County — Fountain, Manitou Springs, Palmer Lake, Monument, and unincorporated areas. This requires pulling from multiple agency data feeds and harmonizing them into a single view.</p>
+    <div class="cs-badge">In Development</div>
+    <div class="coming-soon-items">
+      <div class="cs-feature">
+        <div class="csf-icon">🏘️</div>
+        <div class="csf-label">Jurisdictions</div>
+        <div class="csf-text">All incorporated cities and unincorporated El Paso County</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">📍</div>
+        <div class="csf-label">Coverage</div>
+        <div class="csf-text">~2,130 sq miles · ~730,000 residents</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">🔗</div>
+        <div class="csf-label">Data Sources</div>
+        <div class="csf-text">CDOT, El Paso County Sheriff, CSPD, multiple municipal feeds</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">📊</div>
+        <div class="csf-label">New Metrics</div>
+        <div class="csf-text">Rural vs. urban crash rate comparison, unincorporated road funding analysis</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STATE PANEL ===== -->
+<div id="brand-panel-state" style="display:none;">
+  <div class="coming-soon-wrap">
+    <div class="coming-soon-icon">🏔️</div>
+    <h2>State of Colorado — Coming Soon</h2>
+    <p>The State view will draw from CDOT's statewide crash database across all 64 counties, enabling Colorado Springs to be compared against similarly-sized Front Range cities, rural counties, and resort corridors. It will also pull CDOT's full project spending database — not just the local FHWA Form 536 data.</p>
+    <div class="cs-badge">In Development</div>
+    <div class="coming-soon-items">
+      <div class="cs-feature">
+        <div class="csf-icon">🛣️</div>
+        <div class="csf-label">Road Network</div>
+        <div class="csf-text">94,000+ miles of state and local roads · all 64 counties</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">🏙️</div>
+        <div class="csf-label">City Comparison</div>
+        <div class="csf-text">Denver, Aurora, Fort Collins, Pueblo — apples-to-apples peer benchmarks</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">💰</div>
+        <div class="csf-label">CDOT Spending</div>
+        <div class="csf-text">Full STIP project database — where state dollars actually flow</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">🎿</div>
+        <div class="csf-label">Special Context</div>
+        <div class="csf-text">Mountain corridor crash patterns, resort traffic, I-25 & I-70 corridors</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PLUS PANEL ===== -->
+<div id="brand-panel-plus" style="display:none;">
+  <div class="coming-soon-wrap">
+    <div class="coming-soon-icon">✦</div>
+    <h2>The Dais Plus — Extended Network</h2>
+    <p>Plus is where the story gets bigger. It connects local crash patterns to federal policy, regional economics, and cross-jurisdictional data that no single agency dashboard shows. Think of it as the view from 30,000 feet — grounded in the same street-level data, but mapped against forces that shape every city simultaneously.</p>
+    <div class="cs-badge">Planned · No ETA</div>
+    <div class="coming-soon-items">
+      <div class="cs-feature">
+        <div class="csf-icon">🇺🇸</div>
+        <div class="csf-label">Federal Flows</div>
+        <div class="csf-text">IIJA / BIL funding flowing into Colorado — what was promised vs. what arrived</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">📡</div>
+        <div class="csf-label">Regional Patterns</div>
+        <div class="csf-text">Mountain West peer cities — Albuquerque, Boise, Salt Lake, Tucson</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">🔬</div>
+        <div class="csf-label">Deep Analysis</div>
+        <div class="csf-text">Corridor-level LOSS ratings, conflict zone mapping, pedestrian equity gaps</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">🤝</div>
+        <div class="csf-label">Who knows</div>
+        <div class="csf-text">This is the room we haven't built yet. If you have ideas, reach out.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="dash-footer" role="contentinfo">
+  <p>StorySeed Studios · The Dais · El Paso County, Colorado · April 2026 &nbsp;·&nbsp; Crash data: City of Colorado Springs ArcGIS (live API, 64,434 records) &nbsp;·&nbsp; Finance: FHWA Form 536 Local Highway Finance Report &nbsp;·&nbsp; For informational purposes. Not legal advice.</p>
+</footer>
+
+<script>
+// ====== BRAND SWITCHING ======
+const BRAND_DEFS = {
+  city: {
+    badge: 'city', badgeText: 'City',
+    text: '<strong>City of Colorado Springs, CO</strong> — Incorporated city limits only. Data sourced from the City of Colorado Springs public ArcGIS crash feature service and FHWA Form 536 Local Highway Finance Report. Records span 2017–2025.'
+  },
+  county: {
+    badge: 'county', badgeText: 'County',
+    text: '<strong>El Paso County, CO</strong> — All jurisdictions within El Paso County, including Colorado Springs, Fountain, Manitou Springs, Palmer Lake, Monument, and all unincorporated areas. Population ~730,000.'
+  },
+  state: {
+    badge: 'state', badgeText: 'State',
+    text: '<strong>State of Colorado</strong> — All 64 counties statewide. Data from CDOT\'s crash database and the Colorado Department of Transportation full project spending database.'
+  },
+  plus: {
+    badge: 'plus', badgeText: 'Plus',
+    text: '<strong>The Dais + StorySeed Extended Network</strong> — Regional, federal, and cross-jurisdictional datasets connecting local crash patterns to national policy, peer-city benchmarks, and long-horizon funding analysis.'
+  }
+};
+
+function switchBrand(brand) {
+  // Update brand pills
+  document.querySelectorAll('.brand-pill').forEach(btn => {
+    const active = btn.dataset.brand === brand;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-selected', active);
+  });
+
+  // Update scope bar
+  const def = BRAND_DEFS[brand];
+  const badge = document.getElementById('scope-badge');
+  badge.className = 'scope-type-badge ' + def.badge;
+  badge.textContent = def.badgeText;
+  document.getElementById('scope-def-text').innerHTML = def.text;
+
+  // Show/hide brand panels
+  ['city','county','state','plus'].forEach(b => {
+    const panel = document.getElementById('brand-panel-' + b);
+    panel.style.display = b === brand ? '' : 'none';
+  });
+
+  // Announce to screen readers
+  const liveRegion = document.getElementById('live-region');
+  liveRegion.textContent = '';
+  requestAnimationFrame(() => {
+    liveRegion.textContent = def.badgeText + ' view loaded.';
+  });
+
+  // Move focus to the panel heading so screen reader users land somewhere meaningful
+  requestAnimationFrame(() => {
+    const panel = document.getElementById('brand-panel-' + brand);
+    const heading = panel.querySelector('h2, [tabindex="-1"]');
+    if (heading) {
+      if (!heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1');
+      heading.focus({ preventScroll: false });
+    }
+  });
+}
+
+// ====== BRAND PILL ARROW-KEY NAVIGATION ======
+const brandPills = Array.from(document.querySelectorAll('.brand-pill'));
+brandPills.forEach((pill, idx) => {
+  pill.addEventListener('keydown', e => {
+    let next = null;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      next = brandPills[(idx + 1) % brandPills.length];
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      next = brandPills[(idx - 1 + brandPills.length) % brandPills.length];
+    } else if (e.key === 'Home') {
+      next = brandPills[0];
+    } else if (e.key === 'End') {
+      next = brandPills[brandPills.length - 1];
+    }
+    if (next) {
+      e.preventDefault();
+      next.focus();
+      switchBrand(next.dataset.brand);
+    }
+  });
+});
+
+// ====== TAB SWITCHING (City tabs) ======
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected','false');
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-btn-'+id).classList.add('active');
+  document.getElementById('tab-btn-'+id).setAttribute('aria-selected','true');
+  document.getElementById('tab-panel-'+id).classList.add('active');
+  const labels = {search:'Search Records tab loaded.',data:'Local Dashboard tab loaded.',national:'National Averages tab loaded.'};
+  document.getElementById('live-region').textContent = labels[id] || id+' tab loaded.';
+}
+
+// ====== TAB KEYBOARD NAVIGATION ======
+document.querySelectorAll('.tab-btn').forEach((btn, idx, all) => {
+  btn.addEventListener('keydown', e => {
+    let next = null;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = all[(idx+1) % all.length];
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = all[(idx-1+all.length) % all.length];
+    else if (e.key === 'Home') next = all[0];
+    else if (e.key === 'End') next = all[all.length-1];
+    if (next) { e.preventDefault(); next.focus(); switchTab(next.id.replace('tab-btn-','')); }
+  });
+});
+
+// ====== CHART.JS SETUP ======
+const YEARS=[2017,2018,2019,2020,2021,2022,2023,2024,2025];
+const counts=[8914,8978,8379,5570,7594,6973,6563,5896,5567];
+const fatals=[36,44,36,48,44,53,44,42,43];
+const serious=[180,217,172,164,292,309,291,315,269];
+Chart.defaults.font.family="system-ui,-apple-system,sans-serif";
+Chart.defaults.color="#5e7087";
+Chart.defaults.plugins.legend.labels.boxWidth=11;
+const GRID={color:"rgba(0,0,0,.08)"};
+const TICK={color:"#5e7087",font:{size:11}};
+
+new Chart(document.getElementById("yearChart"),{
+  data:{labels:YEARS,datasets:[
+    {type:"bar",label:"Total Crashes",data:counts,backgroundColor:"rgba(0,73,177,0.18)",borderColor:"rgba(0,73,177,0.5)",borderWidth:1,yAxisID:"y"},
+    {type:"line",label:"Fatalities",data:fatals,borderColor:"#b91c1c",backgroundColor:"rgba(185,28,28,0.08)",pointBackgroundColor:"#b91c1c",pointRadius:4,tension:0.3,fill:false,yAxisID:"y2"},
+    {type:"line",label:"Serious Injuries",data:serious,borderColor:"#d97706",backgroundColor:"rgba(217,119,6,0.08)",pointBackgroundColor:"#d97706",pointRadius:4,tension:0.3,fill:false,yAxisID:"y2"}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"},tooltip:{mode:"index"}},
+    scales:{y:{grid:GRID,ticks:TICK,title:{display:true,text:"Total Crashes",font:{size:11},color:"#94a3b8"}},
+      y2:{position:"right",grid:{display:false},ticks:TICK,title:{display:true,text:"Fatalities / Serious",font:{size:11},color:"#94a3b8"}},
+      x:{grid:{display:false},ticks:TICK}}}
+});
+new Chart(document.getElementById("sevChart"),{
+  type:"doughnut",
+  data:{labels:["Property Damage Only","Possible Injury","Minor Injury","Serious Injury","Fatal"],
+    datasets:[{data:[43335,13558,5282,1884,375],backgroundColor:["#dbeafe","#fef08a","#fed7aa","#fca5a5","#7f1d1d"],borderWidth:2,borderColor:"#fff"}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{font:{size:10}}},tooltip:{callbacks:{label:c=>c.label+": "+c.raw.toLocaleString()}}}}
+});
+new Chart(document.getElementById("typeChart"),{
+  type:"bar",
+  data:{labels:["Rear-End","Broadside","Run Off Road","Approach Turn","Sideswipe Same Dir.","Parked Veh.","Pedestrian","Overtaking Turn","Other","Overturning"],
+    datasets:[{label:"Crashes",data:[20259,10978,8045,7275,7265,4050,1182,1074,857,850],backgroundColor:["#d97706","#0049b1","#0049b1","#0049b1","#0049b1","#64748b","#5b21b6","#64748b","#64748b","#64748b"],borderRadius:3}]},
+  options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:GRID,ticks:{...TICK,callback:v=>v.toLocaleString()}},y:{grid:{display:false},ticks:{...TICK,font:{size:11}}}}}
+});
+new Chart(document.getElementById("monthChart"),{
+  type:"bar",
+  data:{labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+    datasets:[{data:[5681,5156,5285,4962,5433,5120,5363,5623,5755,5713,5271,5072],backgroundColor:c=>{const v=c.dataset.data[c.dataIndex];return v>5700?"#0049b1":"rgba(0,73,177,0.35)";},borderRadius:3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:GRID,ticks:TICK},x:{grid:{display:false},ticks:TICK}}}
+});
+new Chart(document.getElementById("dayChart"),{
+  type:"bar",
+  data:{labels:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+    datasets:[{data:[6392,8980,10000,10268,10009,10759,8026],backgroundColor:(_,i)=>i===5?"#b91c1c":i===0||i===6?"rgba(0,73,177,0.2)":"rgba(0,73,177,0.55)",borderRadius:3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:GRID,ticks:TICK},x:{grid:{display:false},ticks:TICK}}}
+});
+new Chart(document.getElementById("impairedChart"),{
+  type:"line",
+  data:{labels:YEARS,datasets:[{label:"Impaired crashes",data:[719,749,756,827,799,618,587,463,391],borderColor:"#b91c1c",backgroundColor:"rgba(185,28,28,0.08)",fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:"#b91c1c"}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:GRID,ticks:TICK},x:{grid:{display:false},ticks:TICK}}}
+});
+new Chart(document.getElementById("vruChart"),{
+  type:"bar",
+  data:{labels:YEARS,datasets:[{label:"VRU crashes",data:[236,231,249,184,192,214,201,227,190],backgroundColor:"rgba(91,33,182,0.55)",borderRadius:3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:GRID,ticks:TICK},x:{grid:{display:false},ticks:TICK}}}
+});
+new Chart(document.getElementById("lightChart"),{
+  type:"doughnut",
+  data:{labels:["Daylight","Dark-Lighted","Dawn/Dusk","Dark-Unlighted"],
+    datasets:[{data:[45206,14245,2604,2357],backgroundColor:["#fef08a","#1e3a5f","#f97316","#0f172a"],borderWidth:2,borderColor:"#fff"}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:"55%",plugins:{legend:{position:"bottom",labels:{font:{size:10}}}}}
+});
+new Chart(document.getElementById("spendChart"),{
+  type:"bar",
+  data:{labels:["Capacity\nExpansion","System\nPreservation","Engineering","New\nFacilities"],
+    datasets:[{data:[7450000,1330000,920000,1217],backgroundColor:["#d97706","#065f46","#0049b1","#94a3b8"],borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{y:{grid:GRID,ticks:{...TICK,callback:v=>"$"+(v>=1000000?(v/1000000).toFixed(1)+"M":(v/1000).toFixed(0)+"K")}},x:{grid:{display:false},ticks:{...TICK,font:{size:10}}}}}
+});
+new Chart(document.getElementById("revenueChart"),{
+  type:"doughnut",
+  data:{labels:["Sales Tax","Highway-User Tax","Federal Transit","Property Tax","CDOT Grant"],
+    datasets:[{data:[17450000,13800000,7340000,3100000,570000],backgroundColor:["#d97706","#0049b1","#0b7a75","#065f46","#5b21b6"],borderWidth:2,borderColor:"#fff"}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:"58%",plugins:{legend:{position:"bottom",labels:{font:{size:10}}},tooltip:{callbacks:{label:c=>c.label+": $"+(c.raw/1000000).toFixed(2)+"M"}}}}
+});
+const fatalRates=YEARS.map((_,i)=>+(fatals[i]/counts[i]*1000).toFixed(1));
+new Chart(document.getElementById("fatalRateChart"),{
+  type:"line",
+  data:{labels:YEARS,datasets:[{label:"Fatalities per 1,000",data:fatalRates,borderColor:"#b91c1c",backgroundColor:"rgba(185,28,28,0.08)",fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:"#b91c1c"}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:GRID,ticks:TICK,beginAtZero:false},x:{grid:{display:false},ticks:TICK}}}
+});
+const seriousRates=YEARS.map((_,i)=>+(serious[i]/counts[i]*1000).toFixed(1));
+new Chart(document.getElementById("seriousRateChart"),{
+  type:"line",
+  data:{labels:YEARS,datasets:[{label:"Serious injuries per 1,000",data:seriousRates,borderColor:"#d97706",backgroundColor:"rgba(217,119,6,0.08)",fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:"#d97706"}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:GRID,ticks:TICK,beginAtZero:false},x:{grid:{display:false},ticks:TICK}}}
+});
+new Chart(document.getElementById('roadCondChart'),{
+  type:'bar',
+  data:{labels:['Dry','Wet','Icy','Snowy','Slushy'],
+    datasets:[{data:[56847,4186,1564,1239,258],backgroundColor:['#d97706','rgba(0,73,177,0.5)','rgba(0,73,177,0.35)','rgba(0,73,177,0.25)','rgba(0,73,177,0.15)'],borderRadius:3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString()+' crashes ('+(c.raw/64434*100).toFixed(1)+'%)'}}},
+    scales:{y:{grid:{color:'rgba(0,0,0,.08)'},ticks:{color:'#5e7087',font:{size:11}},title:{display:true,text:'Crashes',font:{size:11},color:'#5e7087'}},x:{grid:{display:false},ticks:{color:'#5e7087',font:{size:11}}}}}
+});
+new Chart(document.getElementById('roadSevChart'),{
+  type:'bar',
+  data:{labels:['Dry','Wet','Icy','Snowy','Slushy'],
+    datasets:[{label:'Serious injuries per 1,000 crashes',data:[35.5,29.6,17.3,10.5,15.5],
+      backgroundColor:c=>{const vals=[35.5,29.6,17.3,10.5,15.5];return vals[c.dataIndex]===35.5?'#d97706':'rgba(0,73,177,0.4)';},borderRadius:3}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+' serious injuries per 1,000 crashes'}}},
+    scales:{y:{grid:{color:'rgba(0,0,0,.08)'},ticks:{color:'#5e7087',font:{size:11}},title:{display:true,text:'Serious injuries per 1,000 crashes',font:{size:11},color:'#5e7087'}},x:{grid:{display:false},ticks:{color:'#5e7087',font:{size:11}}}}}
+});
+
+document.getElementById("live-region").textContent="Dashboard loaded: 12 charts covering 64,434 crash records and FHWA Form 536 funding data.";
+
+// ====== ZIP CODE SEARCH ENGINE ======
+const ZIP_BOUNDS = {
+  '80901':[38.820,38.865,-104.840,-104.790],'80903':[38.820,38.865,-104.840,-104.790],
+  '80904':[38.840,38.915,-104.910,-104.840],'80905':[38.795,38.840,-104.870,-104.800],
+  '80906':[38.760,38.820,-104.880,-104.790],'80907':[38.860,38.925,-104.845,-104.785],
+  '80908':[38.940,39.110,-104.770,-104.540],'80909':[38.840,38.885,-104.795,-104.720],
+  '80910':[38.795,38.840,-104.795,-104.720],'80911':[38.715,38.800,-104.795,-104.720],
+  '80914':[38.778,38.825,-104.725,-104.640],'80915':[38.840,38.885,-104.725,-104.640],
+  '80916':[38.795,38.840,-104.795,-104.720],'80917':[38.880,38.925,-104.795,-104.720],
+  '80918':[38.895,38.965,-104.850,-104.790],'80919':[38.920,38.990,-104.910,-104.845],
+  '80920':[38.960,39.025,-104.850,-104.790],'80921':[39.020,39.110,-104.880,-104.785],
+  '80922':[38.878,38.960,-104.725,-104.640],'80923':[38.920,38.985,-104.725,-104.640],
+  '80924':[38.958,39.025,-104.725,-104.640],'80925':[38.715,38.800,-104.660,-104.540],
+  '80926':[38.630,38.770,-104.940,-104.820],'80927':[38.920,38.985,-104.660,-104.540],
+  '80928':[38.770,38.965,-104.570,-104.380],'80929':[38.958,39.025,-104.660,-104.540]
+};
+
+const BASE='https://services1.arcgis.com/V0JDguEsaeBdf94U/arcgis/rest/services/COS_Crash_Points/FeatureServer/0';
+const FIELDS='CUID,Crash_Date,Year,Month,Day,Crash_Time,Crash_Location,Crash_Type,Severity,Road_Conditions,Lighting_Conditions,Weather_Condition,Impaired,VRU_Related,Ped_Bike,Motorcycle,F__Fatalities,F__Susp__Serious_Injury,F__Susp__Minor_Injury,Latitude,Longitude';
+const PAGE_SIZE=50;
+const MAX_FETCH=2000;
+
+let allData=[], filtered=[], currentPage=1, sortCol='Crash_Date', sortDir='desc', dataLoaded=false;
+const SEV_LABEL={K:'Fatal',A:'Serious Injury',B:'Minor Injury',C:'Possible Injury',O:'Property Damage Only','':'Unknown'};
+const SEV_CLASS={K:'sev-fatal',A:'sev-serious',B:'sev-minor',C:'sev-possible',O:'sev-pdo'};
+
+function announce(msg){
+  const el=document.getElementById('live-announce');
+  el.textContent='';
+  requestAnimationFrame(()=>{el.textContent=msg;});
+}
+
+async function loadAll(){
+  const badge=document.getElementById('status-badge');
+  const statusText=document.getElementById('status-text');
+  badge.className='status-badge badge-loading';
+  badge.textContent='Loading';
+  statusText.textContent='Fetching crash records…';
+  let offset=0, records=[];
+  try{
+    while(true){
+      const url=`${BASE}/query?where=1%3D1&outFields=${FIELDS}&returnGeometry=false&resultOffset=${offset}&resultRecordCount=1000&orderByFields=Crash_Date+DESC&f=json`;
+      const res=await fetch(url);
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const data=await res.json();
+      if(data.error) throw new Error(data.error.message);
+      const features=data.features||[];
+      records.push(...features.map(f=>f.attributes));
+      if(!data.exceededTransferLimit||records.length>=MAX_FETCH) break;
+      offset+=1000;
+    }
+    allData=records;
+    filtered=[...allData];
+    badge.className='status-badge badge-live';
+    badge.textContent='Live';
+    statusText.textContent=`${allData.length.toLocaleString()} crash records loaded`;
+    document.getElementById('record-count').textContent=`${allData.length.toLocaleString()} records`;
+    dataLoaded=true;
+    sortData();
+    renderTable();
+    announce(`${allData.length.toLocaleString()} crash records loaded from ArcGIS.`);
+  } catch(err){
+    badge.className='status-badge badge-error';
+    badge.textContent='Error';
+    statusText.textContent='Could not load data — check connection';
+    document.getElementById('crash-tbody').innerHTML=`<tr><td colspan="10" style="text-align:center;padding:40px;color:#b91c1c;">Failed to load crash records: ${err.message}</td></tr>`;
+  }
+}
+
+function sortData(){
+  filtered.sort((a,b)=>{
+    let av=a[sortCol],bv=b[sortCol];
+    if(av===null||av===undefined) av='';
+    if(bv===null||bv===undefined) bv='';
+    if(typeof av==='number'&&typeof bv==='number') return sortDir==='asc'?av-bv:bv-av;
+    return sortDir==='asc'?String(av).localeCompare(String(bv)):String(bv).localeCompare(String(av));
+  });
+}
+
+function applyFilters(){
+  const zip=document.getElementById('filter-zip').value;
+  const year=document.getElementById('filter-year').value;
+  const sev=document.getElementById('filter-severity').value;
+  const imp=document.getElementById('filter-impaired').value;
+  const vru=document.getElementById('filter-vru').value;
+  const month=document.getElementById('filter-month').value;
+  const day=document.getElementById('filter-day').value;
+  const search=document.getElementById('search-input').value.trim().toLowerCase();
+
+  filtered=allData.filter(r=>{
+    if(zip){
+      const b=ZIP_BOUNDS[zip];
+      if(!b) return false;
+      const lat=parseFloat(r.Latitude),lng=parseFloat(r.Longitude);
+      if(isNaN(lat)||isNaN(lng)) return false;
+      if(lat<b[0]||lat>b[1]||lng<b[2]||lng>b[3]) return false;
+    }
+    if(year&&String(r.Year)!==year) return false;
+    if(sev&&r.Severity!==sev) return false;
+    if(imp&&r.Impaired!==imp) return false;
+    if(vru==='Y'&&r.VRU_Related!=='Y') return false;
+    if(month&&r.Month!==month) return false;
+    if(day&&r.Day!==day) return false;
+    if(search){
+      const loc=(r.Crash_Location||'').toLowerCase();
+      const type=(r.Crash_Type||'').toLowerCase();
+      const road=(r.Road_Conditions||'').toLowerCase();
+      if(!loc.includes(search)&&!type.includes(search)&&!road.includes(search)) return false;
+    }
+    return true;
+  });
+
+  sortData();
+  currentPage=1;
+  document.getElementById('record-count').textContent=`${filtered.length.toLocaleString()} of ${allData.length.toLocaleString()} records`;
+  renderTable();
+  announce(`${filtered.length.toLocaleString()} records match your filters.`);
+
+  if(zip&&ZIP_BOUNDS[zip]){
+    showZipSummary(zip);
+  } else {
+    document.getElementById('zip-summary').classList.remove('visible');
+  }
+}
+
+function showZipSummary(zip){
+  const b=ZIP_BOUNDS[zip];
+  const zipData=allData.filter(r=>{
+    const lat=parseFloat(r.Latitude),lng=parseFloat(r.Longitude);
+    return !isNaN(lat)&&!isNaN(lng)&&lat>=b[0]&&lat<=b[1]&&lng>=b[2]&&lng<=b[3];
+  });
+  if(!zipData.length){document.getElementById('zip-summary').classList.remove('visible');return;}
+  const total=zipData.length;
+  const fatal=zipData.reduce((s,r)=>s+(r.F__Fatalities||0),0);
+  const ser=zipData.reduce((s,r)=>s+(r.F__Susp__Serious_Injury||0),0);
+  const dry=zipData.filter(r=>(r.Road_Conditions||'').includes('Dry')).length;
+  const rear=zipData.filter(r=>(r.Crash_Type||'').includes('Rear')).length;
+  document.getElementById('summary-grid').innerHTML=`
+    <div class="sum-card total"><div class="sum-num navy">${total.toLocaleString()}</div><div class="sum-label">Total Crashes</div></div>
+    <div class="sum-card fatal"><div class="sum-num red">${fatal}</div><div class="sum-label">Fatalities</div></div>
+    <div class="sum-card serious"><div class="sum-num amber">${ser}</div><div class="sum-label">Serious Injuries</div></div>
+    <div class="sum-card dry"><div class="sum-num">${(dry/total*100).toFixed(0)}%</div><div class="sum-label">Dry Road Crashes</div></div>
+    <div class="sum-card rear"><div class="sum-num">${(rear/total*100).toFixed(0)}%</div><div class="sum-label">Rear-End</div></div>
+  `;
+  document.getElementById('zip-summary-title').textContent=`Zip code ${zip} summary (${total.toLocaleString()} crashes, 2017–2025)`;
+  document.getElementById('zip-pattern').innerHTML=`<strong>Pattern note:</strong> ${(dry/total*100).toFixed(0)}% of crashes in ${zip} happen on dry roads, ${(rear/total*100).toFixed(0)}% are rear-end collisions. ${fatal>0?`There have been ${fatal} fatalities recorded in this zip code.`:'No fatalities recorded in this zip code.'}`;
+  document.getElementById('zip-summary').classList.add('visible');
+}
+
+function renderTable(){
+  const start=(currentPage-1)*PAGE_SIZE;
+  const end=Math.min(start+PAGE_SIZE,filtered.length);
+  if(!filtered.length){
+    document.getElementById('crash-tbody').innerHTML='<tr><td colspan="10" class="empty-state"><p>No records match your filters. Try resetting.</p></td></tr>';
+    document.getElementById('page-info').textContent='0 records';
+    document.getElementById('prev-btn').disabled=true;
+    document.getElementById('next-btn').disabled=true;
+    document.getElementById('page-numbers').innerHTML='';
+    return;
+  }
+  document.getElementById('crash-tbody').innerHTML=filtered.slice(start,end).map(r=>{
+    const sevClass=SEV_CLASS[r.Severity]||'sev-pdo';
+    const sevLabel=SEV_LABEL[r.Severity]||r.Severity||'—';
+    const date=r.Crash_Date?new Date(r.Crash_Date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
+    const fatalities=r.F__Fatalities>0?`<strong style="color:var(--red)">${r.F__Fatalities}</strong>`:'0';
+    const seriousInj=r.F__Susp__Serious_Injury>0?`<strong style="color:#d97706">${r.F__Susp__Serious_Injury}</strong>`:'0';
+    const impaired=r.Impaired==='Y'?'<span style="color:var(--red)">Yes</span>':r.Impaired==='N'?'No':'—';
+    return `<tr><td class="date">${date}</td><td class="date">${r.Crash_Time||'—'}</td><td class="loc">${r.Crash_Location||'—'}</td><td>${r.Crash_Type||'—'}</td><td><span class="sev-badge ${sevClass}" role="img" aria-label="Severity: ${sevLabel}">${sevLabel}</span></td><td>${r.Road_Conditions||'—'}</td><td>${r.Lighting_Conditions||'—'}</td><td>${impaired}</td><td class="num">${fatalities}</td><td class="num">${seriousInj}</td></tr>`;
+  }).join('');
+  renderPagination();
+  document.getElementById('page-info').textContent=`Showing ${start+1}–${end} of ${filtered.length.toLocaleString()} records`;
+}
+
+function renderPagination(){
+  const totalPages=Math.ceil(filtered.length/PAGE_SIZE);
+  document.getElementById('prev-btn').disabled=currentPage<=1;
+  document.getElementById('next-btn').disabled=currentPage>=totalPages;
+  const delta=2;
+  let s=Math.max(1,currentPage-delta),e=Math.min(totalPages,currentPage+delta);
+  if(currentPage-delta<1) e=Math.min(totalPages,e+(delta-currentPage+1));
+  if(currentPage+delta>totalPages) s=Math.max(1,s-(currentPage+delta-totalPages));
+  const pn=document.getElementById('page-numbers');
+  pn.innerHTML='';
+  for(let i=s;i<=e;i++){
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='page-btn'+(i===currentPage?' active':'');
+    btn.textContent=i;
+    btn.setAttribute('aria-label',`Page ${i}${i===currentPage?', current page':''}`);
+    btn.setAttribute('aria-current',i===currentPage?'page':'false');
+    btn.addEventListener('click',()=>{currentPage=i;renderTable();window.scrollTo(0,0);});
+    pn.appendChild(btn);
+  }
+}
+
+function exportCSV(){
+  const headers=['Date','Time','Year','Month','Day','Location','Type','Severity','Road Conditions','Lighting','Weather','Impaired','Ped/Bike','Motorcycle','Fatalities','Serious Injuries','Minor Injuries','Latitude','Longitude'];
+  const esc=v=>'"'+String(v||'').replace(/"/g,'""')+'"';
+  const rows=filtered.map(r=>[r.Crash_Date?new Date(r.Crash_Date).toLocaleDateString('en-US'):'',r.Crash_Time,r.Year,r.Month,r.Day,r.Crash_Location,r.Crash_Type,SEV_LABEL[r.Severity]||r.Severity,r.Road_Conditions,r.Lighting_Conditions,r.Weather_Condition,r.Impaired,r.Ped_Bike,r.Motorcycle,r.F__Fatalities,r.F__Susp__Serious_Injury,r.F__Susp__Minor_Injury,r.Latitude,r.Longitude].map(esc).join(','));
+  const csv=[headers.map(esc).join(','),...rows].join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`cos-crash-${document.getElementById('filter-zip').value||'all'}-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();URL.revokeObjectURL(url);
+  announce(`Exporting ${filtered.length.toLocaleString()} records as CSV.`);
+}
+
+function resetFilters(){
+  ['filter-zip','filter-year','filter-severity','filter-impaired','filter-vru','filter-month','filter-day'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('search-input').value='';
+  document.getElementById('zip-summary').classList.remove('visible');
+  filtered=[...allData];
+  sortCol='Crash_Date';sortDir='desc';currentPage=1;
+  document.querySelectorAll('thead th button').forEach(b=>b.setAttribute('aria-sort','none'));
+  document.getElementById('record-count').textContent=`${allData.length.toLocaleString()} records`;
+  renderTable();announce('All filters cleared.');
+}
+
+document.getElementById('apply-btn').addEventListener('click',applyFilters);
+document.getElementById('search-btn').addEventListener('click',applyFilters);
+document.getElementById('clear-btn').addEventListener('click',()=>{document.getElementById('search-input').value='';applyFilters();});
+document.getElementById('reset-btn').addEventListener('click',resetFilters);
+document.getElementById('export-btn').addEventListener('click',exportCSV);
+document.getElementById('prev-btn').addEventListener('click',()=>{currentPage--;renderTable();window.scrollTo(0,0);});
+document.getElementById('next-btn').addEventListener('click',()=>{currentPage++;renderTable();window.scrollTo(0,0);});
+document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')applyFilters();});
+document.getElementById('filter-zip').addEventListener('change',applyFilters);
+['filter-year','filter-severity','filter-impaired','filter-vru','filter-month','filter-day'].forEach(id=>{document.getElementById(id).addEventListener('change',applyFilters);});
+document.querySelectorAll('thead th button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const col=btn.dataset.col;
+    if(sortCol===col){sortDir=sortDir==='asc'?'desc':'asc';}else{sortCol=col;sortDir='desc';}
+    document.querySelectorAll('thead th button').forEach(b=>b.setAttribute('aria-sort','none'));
+    btn.setAttribute('aria-sort',sortDir==='asc'?'ascending':'descending');
+    sortData();currentPage=1;renderTable();
+    announce(`Sorted by ${btn.textContent.trim()}, ${sortDir==='asc'?'ascending':'descending'}.`);
+  });
+});
+
+loadAll();
+</script>
+</body>
+</html>

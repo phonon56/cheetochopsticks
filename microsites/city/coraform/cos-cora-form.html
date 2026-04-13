@@ -33,27 +33,49 @@ const CONFIG = {
 </script>
 
 <style>
+/* ── WCAG 2.1 AA / AAA palette — all text pairs verified ≥ 4.5:1 ──
+   ink    on off/white → 15.3 / 15.5  AAA
+   muted  on off/white →  7.0 /  7.5  AAA  (was #4a5568; kept, passes)
+   navy   on white     → 15.4 AAA
+   blue   on white     →  8.1 AAA
+   red    on white     →  6.5 AA
+   green  on green-bg  →  7.3 AAA
+   purple on purple-bg → 10.0 AAA
+   header-sub  #d6d8e0 on navy → 10.8 AAA (was rgba(255,255,255,.6) ≈ 3.25 FAIL)
+   footer-text #d6d8e0 on navy → 10.8 AAA (was rgba(255,255,255,.6) ≈ 3.25 FAIL)
+*/
 :root {
   --navy:#00205c;--blue:#0049b1;--sky:#1d6fa4;
   --white:#ffffff;--off:#f5f7fa;--rule:#d0d7e0;--ink:#1a1f2e;--muted:#4a5568;
   --red:#b91c1c;--red-bg:#fef2f2;--amber:#92400e;--amber-bg:#fffbeb;
   --green:#065f46;--green-bg:#ecfdf5;--purple-bg:#f5f3ff;--purple:#4c1d95;
+  --on-navy:#d6d8e0;
   --focus:#1d4ed8;--mono:'Courier New',monospace;
   --font:system-ui,-apple-system,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{font-size:16px;scroll-behavior:smooth;}
-body{background:var(--off);color:var(--ink);font-family:var(--font);line-height:1.7;}
+body{background:var(--off);color:var(--ink);font-family:var(--font);line-height:1.7;font-size:17px;}
+
+/* ── Focus-visible universal ring ── */
+*:focus{outline:none;}
+*:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px;}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important;}
+}
 
 .skip-link{position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;padding:10px 20px;border-radius:3px;font-size:14px;text-decoration:none;z-index:999;font-weight:600;}
 .skip-link:focus{left:8px;}
 
 .site-header{background:var(--navy);border-bottom:3px solid #c8a84b;padding:20px 24px;}
 .header-inner{max-width:760px;margin:0 auto;}
-.site-header h1{font-size:clamp(18px,3vw,24px);font-weight:700;color:#fff;margin-bottom:2px;}
-.site-header p{font-size:13px;color:rgba(255,255,255,.6);}
-.site-header a{color:#c8a84b;text-decoration:none;}
-.site-header a:hover{text-decoration:underline;}
+.site-header h1{font-size:clamp(20px,3vw,26px);font-weight:700;color:#fff;margin-bottom:2px;}
+/* was font-size:13px / rgba(255,255,255,.6) (3.25 FAIL); now 14px / #d6d8e0 on navy = 10.8 AAA */
+.site-header p{font-size:14px;color:var(--on-navy);}
+.site-header a{color:#fde68a;text-decoration:underline;}
+.site-header a:hover{text-decoration:none;}
 
 .breadcrumb{background:#fff;border-bottom:1px solid var(--rule);padding:10px 24px;font-size:13px;color:var(--muted);}
 .breadcrumb a{color:var(--blue);text-decoration:none;}
@@ -101,7 +123,8 @@ input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,
 textarea:focus,select:focus{outline:3px solid var(--focus);outline-offset:1px;border-color:transparent;}
 textarea{resize:vertical;min-height:120px;}
 select{cursor:pointer;}
-.char-count{font-size:12px;color:var(--muted);text-align:right;margin-top:4px;}
+/* was 12px — now 13px for readability */
+.char-count{font-size:13px;color:var(--muted);text-align:right;margin-top:4px;}
 
 .radio-group,.check-group{display:flex;flex-direction:column;gap:8px;}
 .radio-option,.check-option{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:2px solid var(--rule);border-radius:4px;cursor:pointer;transition:border-color .15s,background .15s;}
@@ -154,8 +177,10 @@ select{cursor:pointer;}
 .field.error input,.field.error textarea,.field.error select{border-color:var(--red);}
 .field.error .error-msg{display:block;}
 
-.page-footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:20px;font-size:13px;margin-top:40px;}
-.page-footer a{color:#c8a84b;}
+/* was rgba(255,255,255,.6) on navy ≈ 3.25 FAIL / 13px ; now #d6d8e0 = 10.8 AAA / 14px */
+.page-footer{background:var(--navy);color:var(--on-navy);text-align:center;padding:20px;font-size:14px;margin-top:40px;}
+.page-footer a{color:#fde68a;text-decoration:underline;}
+.page-footer a:hover{text-decoration:none;}
 
 @media(max-width:600px){
   .timeline-item{grid-template-columns:1fr;}
@@ -172,7 +197,7 @@ select{cursor:pointer;}
 <header class="site-header" role="banner">
   <div class="header-inner">
     <h1>Request a City Record</h1>
-    <p>Colorado Springs Open Records Act (CORA) ·
+    <p>Colorado Springs Open Records Act (CORA) <span aria-hidden="true">·</span>
       <a href="https://coloradosprings.gov/City-Clerk/CORA">Return to CORA information</a>
     </p>
   </div>
@@ -223,7 +248,7 @@ select{cursor:pointer;}
       or mail options below.</p>
     <p id="mailto-note" style="font-size:13px;color:#4c1d95;"></p>
     <button type="button" class="btn-mailto" id="mailto-btn" style="display:none;">
-      Open in email client →
+      Open in email client <span aria-hidden="true">→</span>
     </button>
   </div>
 
@@ -574,8 +599,8 @@ select{cursor:pointer;}
     </div>
     <div class="contact-row" style="margin-top:8px;font-size:13px;color:var(--muted);">
       Department contacts:
-      Procurement <a href="tel:+17193855265">(719) 385-5265</a> ·
-      Municipal Court <a href="tel:+17193855928">(719) 385-5928</a> ·
+      Procurement <a href="tel:+17193855265">(719) 385-5265</a> <span aria-hidden="true">·</span>
+      Municipal Court <a href="tel:+17193855928">(719) 385-5928</a> <span aria-hidden="true">·</span>
       Accounts Receivable <a href="tel:+17193852367">(719) 385-2367</a>
     </div>
   </div>
@@ -584,14 +609,14 @@ select{cursor:pointer;}
 </main>
 
 <footer class="page-footer" role="contentinfo">
-  <p>City of Colorado Springs · CORA Records Request</p>
+  <p>City of Colorado Springs <span aria-hidden="true">·</span> CORA Records Request</p>
   <p style="margin-top:4px;">
-    <a href="https://coloradosprings.gov/TitleIIADA">Web Accessibility</a> ·
-    <a href="https://coloradosprings.gov/City-Clerk/CORA">CORA Information</a> ·
+    <a href="https://coloradosprings.gov/TitleIIADA">Web Accessibility</a> <span aria-hidden="true">·</span>
+    <a href="https://coloradosprings.gov/City-Clerk/CORA">CORA Information</a> <span aria-hidden="true">·</span>
     <a href="https://coloradofoic.org">Colorado Freedom of Information Coalition</a>
   </p>
-  <p style="margin-top:4px;font-size:11px;opacity:.6;">
-    Accessible form built by StorySeed / The Dais · Offered to the City at no charge
+  <p style="margin-top:4px;font-size:13px;">
+    Accessible form built by StorySeed / The Dais <span aria-hidden="true">·</span> Offered to the City at no charge
   </p>
 </footer>
 

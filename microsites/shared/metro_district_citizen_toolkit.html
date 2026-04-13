@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <meta name="description" content="Sample CORA letters, BOCC templates, DOJ complaint drafts, and every contact you need to push for change in El Paso County.">
+  <title>Metro District Citizen Toolkit — cheetochopsticks</title>
+  <style>
+    /* Palette verified WCAG 2.1 AA/AAA on --bg #0c1220
+       text   #ede8dc → 15.3 AAA · muted #96adc4 → 8.08 AAA
+       quiet  #8ca3b8 → 7.16 AAA (was #506070, 2.89 — FAIL AA)
+       red    #fca5a5 → 9.85 AAA (was #f87171, 6.76 AA only)
+       gold   #c8a84b → 8.16 AAA · blue #60a5fa → 7.36 AAA
+       amber  #fbbf24 → 11.2 AAA · green #4ade80 → 10.7 AAA */
+    :root{--bg:#0c1220;--surface:#141e2e;--surface2:#1c2a3e;--surface3:#233045;--border:rgba(255,255,255,.09);--border-hi:rgba(255,255,255,.18);--gold:#c8a84b;--gold-dim:rgba(200,168,75,.18);--gold-faint:rgba(200,168,75,.07);--gold-lt:#fde68a;--text:#ede8dc;--muted:#96adc4;--quiet:#8ca3b8;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',Georgia,serif;--red:#fca5a5;--red-dim:rgba(252,165,165,.14);--green:#4ade80;--green-dim:rgba(74,222,128,.11);--blue:#60a5fa;--blue-dim:rgba(96,165,250,.11);--amber:#fbbf24;--amber-dim:rgba(251,191,36,.13);}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{font-size:100%;scroll-behavior:smooth;}
+    body{font-family:var(--sans);font-size:17px;line-height:1.65;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+    .z1{position:relative;z-index:1;}
+    .container{max-width:900px;margin:0 auto;padding:0 24px;}
+    a{color:var(--blue);text-decoration:none;}
+    a:hover{color:var(--gold);text-decoration:underline;}
+    .skip-link{position:absolute;top:-100px;left:16px;background:var(--gold);color:#0c1220;font-family:var(--mono);font-size:.78rem;font-weight:700;letter-spacing:.08em;padding:10px 18px;border-radius:3px;text-decoration:none;z-index:9999;transition:top .2s;}
+    .skip-link:focus{top:16px;}
+    *:focus{outline:none;}
+    *:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:2px;}
+    .site-nav{border-bottom:1px solid var(--border);padding:14px 0;position:sticky;top:0;background:rgba(12,18,32,.94);backdrop-filter:blur(14px);z-index:200;}
+    .nav-inner{display:flex;align-items:center;}
+    .nav-logo{text-decoration:none;display:flex;align-items:baseline;gap:1px;margin-right:28px;flex-shrink:0;}
+    .nav-logo:hover{text-decoration:none;}
+    .nav-logo-word{font-family:var(--sans);font-weight:600;font-size:.95rem;color:var(--text);}
+    .nav-logo-dot{color:var(--gold);font-size:.95rem;}
+    .nav-links{display:flex;align-items:center;gap:2px;flex:1;}
+    .nav-link{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:6px 11px;border-radius:3px;border:1px solid transparent;transition:all .18s;white-space:nowrap;}
+    .nav-link:hover{color:var(--text);background:rgba(255,255,255,.04);}
+    .nav-link.you-link{color:var(--gold);border-color:var(--gold-dim);background:var(--gold-faint);}
+    .nav-crumb{font-family:var(--mono);font-size:.78rem;color:var(--quiet);margin-left:auto;}
+    @media(max-width:660px){.nav-links{display:none;}}
+    .page-hd{padding:52px 0 36px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+    .page-hd::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),rgba(200,168,75,.1));}
+    .page-eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+    .page-eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--gold);opacity:.5;}
+    .page-hd h1{font-family:var(--serif);font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:700;line-height:1.15;color:var(--text);margin-bottom:14px;font-style:normal;}
+    .page-sub{font-size:1rem;color:var(--muted);max-width:580px;line-height:1.7;}
+    .page-sub strong{color:var(--text);font-weight:500;}
+    .page-body{padding:36px 0 60px;}
+    .tab-row{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap;}
+    .tab{font-size:.88rem;padding:8px 16px;border-radius:8px;border:1px solid var(--border-hi);cursor:pointer;background:transparent;color:var(--muted);transition:all .18s;font-family:var(--sans);}
+    .tab:hover{color:var(--text);background:rgba(255,255,255,.04);}
+    .tab.active{background:var(--gold-dim);color:var(--text);border-color:rgba(200,168,75,.4);}
+    .panel{display:none;}.panel.active{display:block;}
+    .section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.4rem;margin-bottom:1rem;}
+    .section-title{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border);font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;}
+    .step-row{display:flex;gap:12px;align-items:flex-start;margin:10px 0;font-size:.9rem;color:var(--muted);}
+    .step-num{width:24px;height:24px;border-radius:50%;border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;flex-shrink:0;color:var(--muted);}
+    .contact-row{display:flex;justify-content:space-between;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border);gap:14px;flex-wrap:wrap;}
+    .contact-row:last-child{border-bottom:none;}
+    .contact-name{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:3px;}
+    .contact-detail{font-size:.85rem;color:var(--muted);line-height:1.5;}
+    .email-pill{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;background:var(--blue-dim);color:var(--text);padding:5px 12px;border-radius:20px;cursor:pointer;border:1px solid rgba(96,165,250,.2);text-decoration:none;transition:all .18s;word-break:break-all;}
+    .email-pill:hover{background:rgba(96,165,250,.2);color:var(--text);text-decoration:none;}
+    .email-pill.copied{background:var(--green-dim);color:var(--green);border-color:rgba(74,222,128,.25);}
+    .url-link{color:var(--blue);font-size:.88rem;word-break:break-all;}
+    .url-link:hover{color:var(--gold);}
+    .info-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:.9rem;color:var(--muted);}
+    .tab-desc{font-size:.95rem;color:var(--muted);line-height:1.7;margin-bottom:1.25rem;max-width:660px;}
+    .tab-desc strong{color:var(--text);}
+    .letter-meta{font-size:.9rem;color:var(--muted);margin-bottom:12px;line-height:1.65;}
+    .letter-meta strong{color:var(--text);}
+    .letter-note{background:var(--amber-dim);border-left:3px solid var(--amber);border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:.9rem;color:var(--text);line-height:1.65;}
+    .infobox{background:var(--blue-dim);border-left:3px solid var(--blue);border-radius:8px;padding:12px 16px;margin:10px 0;font-size:.9rem;color:var(--text);line-height:1.65;}
+    .warnbox{background:var(--amber-dim);border-left:3px solid var(--amber);border-radius:8px;padding:12px 16px;margin:10px 0;font-size:.9rem;color:var(--text);line-height:1.65;}
+    .successbox{background:var(--green-dim);border-left:3px solid var(--green);border-radius:8px;padding:12px 16px;margin:10px 0;font-size:.9rem;color:var(--text);line-height:1.65;}
+    .letter-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:20px;font-size:.88rem;line-height:1.85;color:var(--text);white-space:pre-wrap;font-family:var(--mono);margin:12px 0;max-height:520px;overflow-y:auto;}
+    .fill-field{background:var(--amber-dim);color:var(--amber);padding:2px 6px;border-radius:3px;}
+    .copy-btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-hi);border-radius:8px;padding:9px 18px;font-size:.88rem;cursor:pointer;background:transparent;color:var(--text);margin:6px 6px 0 0;font-family:var(--sans);transition:all .18s;}
+    .copy-btn:hover{background:var(--surface2);border-color:var(--gold);}
+    .copy-btn.copied{border-color:rgba(74,222,128,.4);color:var(--green);}
+    .site-footer{border-top:1px solid var(--border);padding:28px 0;}
+    .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+    .footer-inner p{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;color:var(--quiet);line-height:1.7;}
+    .footer-inner a{color:var(--muted);}
+    .footer-inner a:hover{color:var(--gold);}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="site-nav z1" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home"><span class="nav-logo-word">cheetochopsticks</span><span class="nav-logo-dot">.com</span></a>
+      <nav class="nav-links" aria-label="Site sections">
+        <a class="nav-link you-link" href="/#you">You</a>
+        <a class="nav-link active" href="/#shared" aria-current="true">Shared</a>
+        <a class="nav-link" href="/#land">Land</a>
+        <a class="nav-link" href="/#building">Building</a>
+        <a class="nav-link" href="/#people">People</a>
+        <a class="nav-link" href="/#events">Events</a>
+      </nav>
+      <span class="nav-crumb" aria-hidden="true">Shared &middot; Citizen Toolkit</span>
+    </div>
+  </div>
+</header>
+
+<section class="page-hd z1" role="region" aria-labelledby="page-h1">
+  <div class="container">
+    <p class="page-eyebrow" aria-hidden="true">Shared &middot; Citizen action &middot; El Paso County</p>
+    <h1 id="page-h1">Metro District Citizen Toolkit</h1>
+    <p class="page-sub">Five letters. All the contacts. Plain language. <strong>No lawyer required.</strong> Everything you need to push for real data, ADA compliance, and district transparency. This is not legaly advice, seriously.</p>
+  </div>
+</section>
+
+<main id="main-content" class="page-body z1" tabindex="-1">
+  <div class="container">
+
+    <div class="tab-row" role="tablist" aria-label="Toolkit sections">
+      <button class="tab active" role="tab" aria-selected="true"  id="tab-btn-find"     aria-controls="panel-find">Find my district</button>
+      <button class="tab"        role="tab" aria-selected="false" id="tab-btn-contacts"  aria-controls="panel-contacts">All contacts</button>
+      <button class="tab"        role="tab" aria-selected="false" id="tab-btn-bocc"      aria-controls="panel-bocc">BOCC &mdash; ADA &amp; Platform</button>
+      <button class="tab"        role="tab" aria-selected="false" id="tab-btn-data"      aria-controls="panel-data">BOCC &mdash; Real Data Request</button>
+      <button class="tab"        role="tab" aria-selected="false" id="tab-btn-doj"       aria-controls="panel-doj">DOJ &mdash; ADA Complaint</button>
+    </div>
+
+    <!-- FIND MY DISTRICT -->
+    <div id="panel-find" class="panel active" role="tabpanel" aria-labelledby="tab-btn-find">
+      <p class="tab-desc">Most residents are in at least one metro district without knowing it. Work through these steps to find yours.</p>
+      <div class="section">
+        <div class="section-title">Step-by-step: Find your district</div>
+        <div class="step-row"><div class="step-num" aria-hidden="true">1</div><div>Go to <a class="url-link" href="https://www.elpasoco.com/assessor/" target="_blank" rel="noopener">elpasoco.com/assessor</a> and search your address. Look for "Special District" entries in the property detail.</div></div>
+        <div class="step-row"><div class="step-num" aria-hidden="true">2</div><div>Try <a class="url-link" href="https://dola.colorado.gov/lgis/" target="_blank" rel="noopener">dola.colorado.gov/lgis/</a> &mdash; the Colorado Local Government Information System. Search El Paso County to see all registered special districts.</div></div>
+        <div class="step-row"><div class="step-num" aria-hidden="true">3</div><div>Use the <a class="url-link" href="cos-find-my-jurisdiction.html">cheetochopsticks jurisdiction finder</a> &mdash; type your address, see every government layer touching your parcel.</div></div>
+        <div class="step-row"><div class="step-num" aria-hidden="true">4</div><div>File a CORA request with the EPC Assessor at <a class="url-link" href="mailto:asrweb@elpasoco.com">asrweb@elpasoco.com</a> asking which metro districts your parcel falls within. Response required within 3 business days.</div></div>
+        <div class="step-row"><div class="step-num" aria-hidden="true">5</div><div>Check your property tax bill. Special district mill levies appear as separate line items with the district name listed.</div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">What to look for &mdash; and why it matters</div>
+        <div class="info-row"><div style="color:var(--gold);flex-shrink:0" aria-hidden="true">&#9656;</div><div><strong style="color:var(--text)">Mill levy</strong> &mdash; a property tax assessed each year. No EPC district publicly explains its rate, basis, or history. You are paying it regardless.</div></div>
+        <div class="info-row"><div style="color:var(--gold);flex-shrink:0" aria-hidden="true">&#9656;</div><div><strong style="color:var(--text)">Bond debt</strong> &mdash; secured against your property. Outstanding balances and maturity dates are not publicly posted by any audited EPC district.</div></div>
+        <div class="info-row"><div style="color:var(--gold);flex-shrink:0" aria-hidden="true">&#9656;</div><div><strong style="color:var(--text)">Service plan</strong> &mdash; required by C.R.S. &sect;32-1-202. None of the 8 audited EPC district websites post theirs publicly.</div></div>
+        <div class="info-row"><div style="color:var(--gold);flex-shrink:0" aria-hidden="true">&#9656;</div><div><strong style="color:var(--text)">Annual audit</strong> &mdash; required by &sect;32-1-106, due to the State Auditor by July 31. Not one audited district posts this publicly.</div></div>
+      </div>
+    </div>
+
+    <!-- ALL CONTACTS -->
+    <div id="panel-contacts" class="panel" role="tabpanel" aria-labelledby="tab-btn-contacts">
+      <p class="tab-desc">Click any email address to copy it. All addresses verified April 2026.</p>
+      <div class="section">
+        <div class="section-title">El Paso County Board of County Commissioners</div>
+        <div class="contact-row"><div><div class="contact-name">Jackie Allred &mdash; Clerk to the Board Manager</div><div class="contact-detail">Direct: (719) 520-6432 &nbsp;&middot;&nbsp; Board general: (719) 520-6430 &nbsp;&middot;&nbsp; Fax: (719) 520-7533<br>1675 W. Garden of the Gods Rd, Suite 2201, Colorado Springs, CO 80907</div></div><div><a class="email-pill" href="mailto:JackieAllred@elpasoco.com" onclick="copyEmail('JackieAllred@elpasoco.com',this)">JackieAllred@elpasoco.com</a></div></div>
+        <div class="contact-row"><div><div class="contact-name">Carrie Geitner &mdash; Chair, District 2</div><div class="contact-detail">NE EPC: Cimarron Hills, Falcon, Peyton &nbsp;&middot;&nbsp; 719-520-6412</div></div><div><a class="email-pill" href="mailto:CarrieGeitner@elpasoco.com" onclick="copyEmail('CarrieGeitner@elpasoco.com',this)">CarrieGeitner@elpasoco.com</a></div></div>
+        <div class="contact-row"><div><div class="contact-name">Holly Williams &mdash; Vice Chair, District 1</div><div class="contact-detail">Northern EPC &nbsp;&middot;&nbsp; 719-520-6411</div></div><div><a class="email-pill" href="mailto:HollyWilliams@elpasoco.com" onclick="copyEmail('HollyWilliams@elpasoco.com',this)">HollyWilliams@elpasoco.com</a></div></div>
+        <div class="contact-row"><div><div class="contact-name">Bill Wysong &mdash; District 3</div><div class="contact-detail">Western EPC: Palmer Lake, Manitou Springs &nbsp;&middot;&nbsp; 719-520-6413</div></div><div><a class="email-pill" href="mailto:BillWysong@elpasoco.com" onclick="copyEmail('BillWysong@elpasoco.com',this)">BillWysong@elpasoco.com</a></div></div>
+        <div class="contact-row"><div><div class="contact-name">Cory Applegate &mdash; District 4</div><div class="contact-detail">Eastern/southern EPC &nbsp;&middot;&nbsp; 719-520-6414</div></div><div><a class="email-pill" href="mailto:CoryApplegate@elpasoco.com" onclick="copyEmail('CoryApplegate@elpasoco.com',this)">CoryApplegate@elpasoco.com</a></div></div>
+        <div class="contact-row"><div><div class="contact-name">Lauren Nelson &mdash; District 5</div><div class="contact-detail">Central EPC &nbsp;&middot;&nbsp; 719-520-6415</div></div><div><a class="email-pill" href="mailto:LaurenNelson@elpasoco.com" onclick="copyEmail('LaurenNelson@elpasoco.com',this)">LaurenNelson@elpasoco.com</a></div></div>
+        <div class="contact-row"><div><div class="contact-name">BOCC main line</div><div class="contact-detail">200 S Cascade Ave &nbsp;&middot;&nbsp; Tue/Thu 9am</div></div><div><div class="contact-detail">719-520-7276</div></div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">EPC Digital Accessibility &amp; Assessor</div>
+        <div class="contact-row"><div><div class="contact-name">EPC ADA Compliance &mdash; Pamela Preston, Accessibility &amp; Compliance Webmaster</div><div class="contact-detail">ADA complaints, accommodation requests, grievance forms &nbsp;&middot;&nbsp; (719) 520-6866</div></div><div style="display:flex;flex-direction:column;gap:4px"><a class="email-pill" href="mailto:ADACompliance@elpasoco.com" onclick="copyEmail('ADACompliance@elpasoco.com',this)">ADACompliance@elpasoco.com</a><a class="email-pill" href="mailto:PamelaPreston2@elpasoco.com" onclick="copyEmail('PamelaPreston2@elpasoco.com',this)">PamelaPreston2@elpasoco.com</a></div></div>
+                <div class="contact-row">
+          <div><div class="contact-name">City of Colorado Springs &mdash; ADA Compliance</div>
+          <div class="contact-detail">City facilities, city websites, city programs &nbsp;&middot;&nbsp; coloradosprings.gov/ada</div></div>
+          <div><a class="email-pill" href="mailto:ADAcompliance@coloradosprings.gov" onclick="copyEmail('ADAcompliance@coloradosprings.gov',this)">ADAcompliance@coloradosprings.gov</a></div>
+        </div>
+        <div class="contact-row"><div><div class="contact-name">EPC Assessor</div><div class="contact-detail">Parcel data, district lookup &nbsp;&middot;&nbsp; 719-520-6600</div></div><div><a class="email-pill" href="mailto:asrweb@elpasoco.com" onclick="copyEmail('asrweb@elpasoco.com',this)">asrweb@elpasoco.com</a></div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">U.S. Department of Justice &mdash; Civil Rights Division</div>
+        <div class="contact-row"><div><div class="contact-name">ADA online complaint portal &mdash; use this first</div><div class="contact-detail">Free, no lawyer needed</div></div><div><a class="url-link" href="https://ada.gov/filing-a-complaint/" target="_blank" rel="noopener">ada.gov/filing-a-complaint</a></div></div>
+        <div class="contact-row"><div><div class="contact-name">DOJ ADA complaint email</div><div class="contact-detail">Disability Rights Section &nbsp;&middot;&nbsp; 1-800-514-0301 &nbsp;&middot;&nbsp; TTY: 1-800-514-0383</div></div><div><a class="email-pill" href="mailto:Section508ProgramManager@usdoj.gov" onclick="copyEmail('Section508ProgramManager@usdoj.gov',this)">Section508ProgramManager@usdoj.gov</a></div></div>
+        <div class="contact-row"><div><div class="contact-name">DOJ mailing address</div></div><div><div class="contact-detail">U.S. DOJ, Civil Rights Division<br>Disability Rights Section &mdash; 4CON<br>950 Pennsylvania Ave NW<br>Washington, DC 20530</div></div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">State of Colorado</div>
+        <div class="contact-row"><div><div class="contact-name">Colorado Division of Local Government &mdash; Special Districts</div><div class="contact-detail">dola.colorado.gov/lgis/</div></div><div><a class="email-pill" href="mailto:dlg_specialdistricts@state.co.us" onclick="copyEmail('dlg_specialdistricts@state.co.us',this)">dlg_specialdistricts@state.co.us</a></div></div>
+        <div class="contact-row"><div><div class="contact-name">Colorado Civil Rights Division &mdash; HB 21-1110</div><div class="contact-detail">State-level web accessibility enforcement &nbsp;&middot;&nbsp; DORA</div></div><div><a class="email-pill" href="mailto:DORA_CCRDintake@state.co.us" onclick="copyEmail('DORA_CCRDintake@state.co.us',this)">DORA_CCRDintake@state.co.us</a></div></div>
+      </div>
+    </div>
+
+    <!-- BOCC ADA & PLATFORM LETTER -->
+    <div id="panel-bocc" class="panel" role="tabpanel" aria-labelledby="tab-btn-bocc">
+      <p class="tab-desc">This letter asks the BOCC to require all 284 districts to publish required documents on a single ADA-compliant government platform already available to them &mdash; and to do it before the April 24, 2026 federal deadline. <strong>Fill in the yellow fields.</strong></p>
+      <div class="letter-note"><strong>Why the unified platform matters:</strong> Colorado already operates a free, WCAG 2.1 AA-compliant website template for special districts (the colorado.gov state template). Streamline Government hosts 4 EPC sites covering 13 districts with solid ADA compliance. A single BOCC resolution could bring all 284 districts under one of these platforms. One policy decision. 284 districts covered.</div>
+      <div class="letter-meta"><strong>Send to:</strong> <a class="email-pill" href="mailto:JackieAllred@elpasoco.com" onclick="copyEmail('JackieAllred@elpasoco.com',this)" style="margin-left:8px">JackieAllred@elpasoco.com</a> &mdash; reaches all five commissioners.</div>
+      <div class="letter-box" id="bocc-ada-letter" aria-label="BOCC ADA and platform letter template">Subject: Request for BOCC Resolution &mdash; Metro District ADA Compliance and Unified Government Platform by January 31, 2027
+
+Date: [TODAY'S DATE]
+
+To: El Paso County Board of County Commissioners
+Chair Carrie Geitner, Vice Chair Holly Williams,
+Commissioner Bill Wysong, Commissioner Cory Applegate, Commissioner Lauren Nelson
+
+200 S. Cascade Avenue, Colorado Springs, CO 80903
+JackieAllred@elpasoco.com
+
+Re: Request for BOCC Resolution &mdash; ADA Compliance for All 284 EPC Metro Districts and Adoption of Unified ADA-Compliant Web Platform
+
+Dear Chair Geitner and Members of the Board,
+
+My name is [YOUR NAME]. I am a resident of El Paso County at [YOUR ADDRESS] and a constituent of [DISTRICT NAME] Metropolitan District. I am writing to request that the Board take action on digital accessibility for El Paso County's metropolitan districts before the April 24, 2026 federal deadline under ADA Title II.
+
+THE PROBLEM
+
+El Paso County has 284 registered metropolitan districts. A public audit conducted in April 2026 found:
+
+  -- 249 of 284 districts (88%) have no public website of any kind
+  -- The only way a resident can access those districts' records is to file a formal CORA request
+  -- Of the 35 districts with websites, not one publicly posts its service plan, annual audit, or mill levy explanation
+  -- Every PDF document posted across all audited sites is almost certainly untagged and fails WCAG 1.3.1, making them inaccessible to screen reader users
+  -- The federal ADA Title II compliance deadline (April 24, 2026) is weeks away
+
+WHAT ALREADY WORKS AND IS AVAILABLE AT NO COST
+
+Colorado operates a free, WCAG 2.1 AA-compliant website template for special districts through the state's web infrastructure. Three EPC districts (Bent Grass, Ellston Park, Woodmen Heights) already use it. It costs nothing. It is maintained by the state. It meets federal standards.
+
+Streamline Government hosts 4 EPC district sites covering 13 districts and has demonstrated solid ADA compliance at the homepage level. It is already in use.
+
+One BOCC resolution directing all 284 EPC districts to establish a web presence under one of these two platforms would accomplish more than any amount of individual district enforcement. It is the right tool for a systemic problem.
+
+THE ASK
+
+I respectfully request that the Board adopt a resolution requiring:
+
+1. All 284 EPC metropolitan districts to establish a compliant web presence on the colorado.gov state template or a BOCC-approved ADA-compliant platform by January 31, 2027.
+
+2. Each district's site to include, at minimum: current-year budget, most recent annual audit, board meeting minutes, transparency notice (C.R.S. ss 32-1-809), service plan (ss 32-1-202), and mill levy rate with history.
+
+3. All posted documents to meet WCAG 2.1 Level AA standards, including properly tagged PDFs, under HB 21-1110 and ADA Title II (28 C.F.R. Part 35).
+
+4. EPC Digital Accessibility staff to conduct annual compliance verification for all 284 districts and report findings to the Board.
+
+One resolution. A free, proven platform. 284 districts brought into compliance.
+
+I am available to provide supporting documentation at your convenience.
+
+Respectfully,
+
+[YOUR FULL NAME]
+[YOUR ADDRESS]
+[YOUR PHONE / EMAIL]</div>
+      <div>
+        <button class="copy-btn" onclick="copyLetter('bocc-ada-letter',this)" aria-label="Copy BOCC ADA letter">Copy letter</button>
+        <button class="copy-btn" onclick="copyEmail('JackieAllred@elpasoco.com',this)" aria-label="Copy email address">Copy email</button>
+      </div>
+    </div>
+
+    <!-- BOCC REAL DATA LETTER -->
+    <div id="panel-data" class="panel" role="tabpanel" aria-labelledby="tab-btn-data">
+      <p class="tab-desc">This letter asks the BOCC to require that military housing and population data used in district planning be based on <strong>real administrative records</strong> &mdash; not census estimates or survey samples &mdash; and that verified numbers be publicly available by January 2027.</p>
+      <div class="infobox"><strong>Why this matters:</strong> Census and survey data are sample-based estimates. Real unit counts exist in Fort Carson administrative records, the EPC Assessor database, school district enrollment systems, and utility connection data. These are actual counts &mdash; not projections. Metro district bond sizes and mill levies should be based on actual numbers. So should decisions about who needs to be served.</div>
+      <div class="warnbox"><strong>The current gap:</strong> District service plans and bond documents cite market research firms and census projections to justify debt levels secured against your property. If an estimate is 15% high on a $90M bond, that is $13.5M of debt sized on a guess. The real data exists. We are not currently requiring its use.</div>
+      <div class="letter-meta"><strong>Send to:</strong> <a class="email-pill" href="mailto:JackieAllred@elpasoco.com" onclick="copyEmail('JackieAllred@elpasoco.com',this)" style="margin-left:8px">JackieAllred@elpasoco.com</a></div>
+      <div class="letter-box" id="bocc-data-letter" aria-label="BOCC real data request letter template">Subject: Request for BOCC Policy Resolution &mdash; Real Administrative Data for Metro District Planning by January 31, 2027
+
+Date: [TODAY'S DATE]
+
+To: El Paso County Board of County Commissioners
+Chair Carrie Geitner, Vice Chair Holly Williams,
+Commissioner Bill Wysong, Commissioner Cory Applegate, Commissioner Lauren Nelson
+
+200 S. Cascade Avenue, Colorado Springs, CO 80903
+JackieAllred@elpasoco.com
+
+Re: Request for Policy Resolution &mdash; Use of Verified Administrative Data (Not Census Estimates) in Metro District Planning, Bond Justification, and Public Reporting &mdash; Published by January 31, 2027
+
+Dear Chair Geitner and Members of the Board,
+
+My name is [YOUR NAME]. I am a resident of El Paso County at [YOUR ADDRESS]. I write about a data quality issue that affects every major decision made about El Paso County's 284 metropolitan districts &mdash; how much debt they issue, what mill levies they charge, and what services they claim to provide.
+
+THE PROBLEM &mdash; DECISIONS MADE ON SAMPLE DATA WHEN REAL DATA EXISTS
+
+Metropolitan district service plans, bond documents, and planning submissions routinely cite:
+
+  -- U.S. Census Bureau estimates (American Community Survey &mdash; 5-year sample data)
+  -- Third-party market research projections (Zonda Colorado, CBRE, CoStar)
+  -- Regional housing surveys conducted on sample populations
+
+These are estimates. They are not counts. They are not verified. They are used to justify financial obligations &mdash; bonds, mill levies, and infrastructure commitments &mdash; that are secured against the property of actual residents.
+
+Real administrative data already exists and is available to the county at no cost:
+
+  FORT CARSON / JBLK: Actual military household unit counts, family housing occupancy records, and personnel assignment data are maintained by the installation and available through intergovernmental agreement. This is not a survey. It is a roster.
+
+  EPC ASSESSOR: Actual parcel counts, ownership records, improvement values, and tax unit data by district. An administrative record, not an estimate.
+
+  SCHOOL DISTRICTS: Actual enrollment by school zone and feeder area. Real children. Real addresses.
+
+  UTILITY PROVIDERS (Colorado Springs Utilities, Black Hills Energy, Fountain Valley Authority): Actual service connections and meter counts. Real units. Real addresses.
+
+  PPRTA AND TRANSIT: Actual ridership and stop-level counts in military and suburban corridors.
+
+None of this requires a new study. It requires an intergovernmental data-sharing request and a willingness to use data that already exists.
+
+WHY THIS MATTERS FOR QUALITY DECISIONS
+
+When a metro district issues $90 million in bonds based on projected population growth &mdash; and that projection is a census estimate with a known margin of error &mdash; the bond is sized on a sample. If the sample is 15% high, the debt is $13.5 million larger than the actual population justifies. Residents pay that difference through higher mill levies or reduced services for longer than necessary.
+
+Data-driven decisions require actual data. Census and survey estimates are appropriate when administrative records do not exist. In El Paso County, they do exist. We simply are not requiring their use.
+
+THE ASK
+
+I respectfully request that the Board adopt a resolution requiring:
+
+1. All EPC metro district service plan submissions, bond justification documents, and annual reports cite actual administrative data sources &mdash; EPC Assessor records, verified utility connection counts, school district enrollment figures, and intergovernmental data from Fort Carson &mdash; rather than census estimates or market research projections alone.
+
+2. The BOCC initiate an intergovernmental data-sharing agreement with Fort Carson / JBLK to obtain verified military household unit counts for planning documents affecting districts in the Fountain Valley and southeastern EPC corridors.
+
+3. The EPC Assessor publish, by January 31, 2027, a publicly accessible dashboard showing verified parcel counts, unit counts, and district boundaries for all 284 EPC metro districts &mdash; updated annually &mdash; so residents, planners, and officials make decisions from the same verified baseline.
+
+4. Any bond submission for a new or expanded EPC metro district that relies on projected rather than verified population figures include a plain-language disclosure of that fact and its stated margin of error.
+
+This is not a request to stop using projections. It is a request to use real data first &mdash; and to make the gap between real data and projections visible to everyone who lives with the consequences.
+
+Respectfully,
+
+[YOUR FULL NAME]
+[YOUR ADDRESS]
+[YOUR PHONE / EMAIL]</div>
+      <div>
+        <button class="copy-btn" onclick="copyLetter('bocc-data-letter',this)" aria-label="Copy BOCC data request letter">Copy letter</button>
+        <button class="copy-btn" onclick="copyEmail('JackieAllred@elpasoco.com',this)" aria-label="Copy email address">Copy email</button>
+      </div>
+    </div>
+
+    <!-- DOJ COMPLAINT -->
+    <div id="panel-doj" class="panel" role="tabpanel" aria-labelledby="tab-btn-doj">
+      <p class="tab-desc">File this with the U.S. DOJ. No lawyer needed. No filing fee. The online portal is the fastest route. Your report contributes to the evidentiary record even if your district alone is small &mdash; the DOJ investigates patterns.</p>
+      <div class="successbox"><strong>Best method:</strong> Submit online at <a class="url-link" href="https://ada.gov/filing-a-complaint/" target="_blank" rel="noopener">ada.gov/filing-a-complaint</a> &mdash; paste this letter into the complaint description field.</div>
+      <div class="letter-note">Be specific about what you personally tried to access. Name the district. Name the website. Describe exactly what failed. The DOJ investigates from your documented account.</div>
+      <div class="letter-meta"><strong>Or email:</strong> <a class="email-pill" href="mailto:Section508ProgramManager@usdoj.gov" onclick="copyEmail('Section508ProgramManager@usdoj.gov',this)" style="margin-left:8px">Section508ProgramManager@usdoj.gov</a></div>
+      <div class="letter-box" id="doj-letter" aria-label="DOJ ADA complaint letter template">Subject: ADA Title II Complaint &mdash; El Paso County Metropolitan Districts &mdash; Systemic Digital Accessibility Failures
+
+Date: [TODAY'S DATE]
+
+Disability Rights Section
+Civil Rights Division, U.S. Department of Justice
+950 Pennsylvania Ave NW, 4CON
+Washington, DC 20530
+Section508ProgramManager@usdoj.gov
+
+Re: ADA Title II / WCAG 2.1 Failures &mdash; 284 El Paso County Metropolitan Districts (Colorado) &mdash; Request for Systemic Investigation and Platform Consolidation Order
+
+To the Disability Rights Section:
+
+I am filing this complaint under Title II of the Americans with Disabilities Act (42 U.S.C. ss 12132). I am a resident of El Paso County, Colorado and a constituent of one or more metropolitan districts that are public entities subject to Title II.
+
+COMPLAINANT INFORMATION
+Name: [YOUR FULL NAME]
+Address: [YOUR ADDRESS]
+Phone: [YOUR PHONE]
+Email: [YOUR EMAIL]
+
+RESPONDENT(S)
+Primary: [DISTRICT NAME] Metropolitan District
+Website: [DISTRICT WEBSITE, or "none &mdash; no public website exists"]
+El Paso County, Colorado
+
+Pattern respondent: El Paso County Board of County Commissioners &mdash; oversight body for all 284 EPC metro districts under C.R.S. ss 32-1-207.
+
+This complaint addresses a systemic pattern across all 284 registered EPC metropolitan districts. A public audit (April 2026) found: 249 of 284 districts (88%) have no public website; every audited district with a website fails WCAG 1.3.1 through untagged PDF documents; no audited district publicly posts its service plan, annual audit, or mill levy explanation.
+
+WHAT I PERSONALLY OBSERVED
+
+On or about [DATE], I attempted to:
+
+[DESCRIBE SPECIFICALLY &mdash; examples:
+
+"I searched for the website of [DISTRICT] Metropolitan District to access its annual budget, which is legally required under C.R.S. ss 32-1-809. The district has no public website. The only access path is a formal CORA request."
+
+OR
+
+"I navigated to [WEBSITE] and opened the 2024 Annual Budget PDF. The file is a scanned image with no text layer. My screen reader returned no content. The document is completely inaccessible to assistive technology."
+
+OR
+
+"I attempted to navigate [WEBSITE] by keyboard only. Tab focus is invisible at every point on the page. I could not determine where focus was located or activate any navigation element."]
+
+LEGAL BASIS
+
+Metropolitan districts are public entities under 42 U.S.C. ss 12131(1), fully subject to Title II (42 U.S.C. ss 12132) and 28 C.F.R. Part 35.
+
+Specific violations:
+  -- 28 C.F.R. ss 35.160: Communications must be as effective for people with disabilities. No website = no effective communication.
+  -- 28 C.F.R. ss 35.163: Public entities must provide information in accessible formats. Untagged PDFs are not accessible formats.
+  -- WCAG 2.1 AA (1.3.1): Content conveyed through formatting must be available through text. Scanned image PDFs fail universally.
+  -- Colorado HB 21-1110: All Colorado government websites must meet WCAG 2.1 AA. Federal compliance deadline: April 24, 2026.
+
+REQUESTED RELIEF
+
+I request that the Department:
+
+1. Investigate the systemic pattern of digital accessibility failures across all 284 EPC metropolitan districts, with particular attention to the 249 districts with no public web presence.
+
+2. Require El Paso County and its districts to adopt a unified, ADA-compliant web platform &mdash; such as the colorado.gov state template already in use by 3 EPC districts &mdash; under a specific compliance deadline.
+
+3. Require all legally mandated public documents (budgets, audits, meeting minutes, transparency notices, service plans) to be published in WCAG 2.1 AA-compliant formats, including properly tagged PDFs.
+
+4. Require that a publicly accessible tool allow any resident to identify their districts and the financial obligations those districts carry &mdash; without requiring a formal legal records request.
+
+I am available to provide supporting documentation, including the April 2026 district website audit data, upon request.
+
+Respectfully submitted,
+
+[YOUR FULL NAME]
+[YOUR ADDRESS]
+[YOUR PHONE / EMAIL]</div>
+      <div>
+        <button class="copy-btn" onclick="copyLetter('doj-letter',this)" aria-label="Copy DOJ complaint letter">Copy letter</button>
+        <button class="copy-btn" onclick="copyEmail('Section508ProgramManager@usdoj.gov',this)" aria-label="Copy DOJ email">Copy DOJ email</button>
+        <button class="copy-btn" onclick="window.open('https://ada.gov/filing-a-complaint/','_blank')" aria-label="Open DOJ complaint portal (opens in new tab)">Open DOJ portal &nbsp;&#8599;</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer z1" role="contentinfo">
+  <div class="container">
+    <div class="footer-inner">
+      <p>&#169; 2026 StorySeed Studios &nbsp;&middot;&nbsp; The Dais &nbsp;&middot;&nbsp; El Paso County, Colorado &nbsp;&middot;&nbsp; For informational purposes only. Built from public records.</p>
+      <p><a href="https://www.thedais.com" target="_blank" rel="noopener">The Dais</a> &nbsp;&middot;&nbsp; <a href="/">Home</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); p.setAttribute('aria-hidden','true'); });
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+    var panel = document.getElementById('panel-'+id);
+    var btn   = document.getElementById('tab-btn-'+id);
+    if(panel){ panel.classList.add('active'); panel.removeAttribute('aria-hidden'); }
+    if(btn)  { btn.classList.add('active');   btn.setAttribute('aria-selected','true'); }
+  }
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click', function(){ showTab(t.id.replace('tab-btn-','')); });
+  });
+  document.querySelectorAll('.tab-row').forEach(function(row){
+    row.addEventListener('keydown', function(e){
+      var tabs=Array.from(row.querySelectorAll('.tab')), idx=tabs.indexOf(document.activeElement);
+      if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();tabs[(idx+1)%tabs.length].focus();}
+      if(e.key==='ArrowLeft' ||e.key==='ArrowUp')  {e.preventDefault();tabs[(idx-1+tabs.length)%tabs.length].focus();}
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();document.activeElement.click();}
+    });
+  });
+  function copyEmail(email,el){
+    navigator.clipboard.writeText(email).then(function(){
+      var orig=el.textContent; el.classList.add('copied'); el.textContent='Copied!';
+      setTimeout(function(){el.classList.remove('copied');el.textContent=orig;},1800);
+    }).catch(function(){ var ta=document.createElement('textarea'); ta.value=email; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); });
+  }
+  function copyLetter(id,btn){
+    var box=document.getElementById(id); if(!box)return;
+    navigator.clipboard.writeText(box.innerText||box.textContent).then(function(){
+      btn.classList.add('copied'); btn.textContent='Copied!';
+      setTimeout(function(){btn.classList.remove('copied');btn.textContent='Copy letter';},2000);
+    }).catch(function(){ var ta=document.createElement('textarea'); ta.value=box.innerText||box.textContent; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); });
+  }
+</script>
+</body>
+</html>

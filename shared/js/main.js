@@ -268,6 +268,106 @@ function initSmoothScroll() {
 }
 
 
+/* ── Mobile nav toggle (simple version for microsites) ──── */
+
+function toggleMobileNav() {
+  const nav = document.getElementById('nav-links');
+  const btn = document.querySelector('.nav-menu-btn');
+  if (!nav || !btn) return;
+  const open = nav.classList.toggle('mobile-open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  btn.textContent = open ? 'Close' : 'Menu';
+}
+
+
+/* ── Notifications panel ────────────────────────────────── */
+
+var _notifLastFocus;
+
+function openNotif() {
+  _notifLastFocus = document.activeElement;
+  var overlay = document.getElementById('notif-overlay');
+  var panel   = document.getElementById('notif-panel');
+  var btn     = document.querySelector('.notif-btn');
+  if (!overlay || !panel) return;
+  overlay.classList.add('open');
+  overlay.removeAttribute('aria-hidden');
+  panel.classList.add('open');
+  if (btn) btn.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() { panel.focus(); }, 50);
+}
+
+function closeNotif() {
+  var overlay = document.getElementById('notif-overlay');
+  var panel   = document.getElementById('notif-panel');
+  var btn     = document.querySelector('.notif-btn');
+  if (!overlay || !panel) return;
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+  panel.classList.remove('open');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+  if (_notifLastFocus) _notifLastFocus.focus();
+}
+
+function filterNotif(tier, btn) {
+  document.querySelectorAll('.nf-btn').forEach(function(b) {
+    b.classList.remove('active');
+    b.removeAttribute('aria-pressed');
+  });
+  if (btn) {
+    btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
+  }
+  document.querySelectorAll('.notif-item').forEach(function(item) {
+    if (tier === 'all') {
+      item.classList.remove('hidden');
+      item.removeAttribute('aria-hidden');
+    } else {
+      var hide = item.dataset.tier !== tier;
+      item.classList.toggle('hidden', hide);
+      hide ? item.setAttribute('aria-hidden','true') : item.removeAttribute('aria-hidden');
+    }
+  });
+  document.querySelectorAll('.notif-group-label').forEach(function(label) {
+    label.style.display = tier === 'all' ? '' : 'none';
+  });
+}
+
+
+/* ── Data table toggle ──────────────────────────────────── */
+
+function toggleDT(id) {
+  var w = document.getElementById(id);
+  if (!w) return;
+  var open = w.classList.toggle('open');
+  document.querySelectorAll('[aria-controls="' + id + '"]').forEach(function(b) {
+    b.setAttribute('aria-expanded', open);
+    b.textContent = open ? 'Hide table' : 'View table';
+  });
+}
+
+
+/* ── Notification panel keyboard handlers ───────────────── */
+
+function initNotifKeyboard() {
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeNotif();
+    var panel = document.getElementById('notif-panel');
+    if (panel && e.key === 'Tab' && panel.classList.contains('open')) {
+      var focusable = panel.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+}
+
+
 /* ── Boot ────────────────────────────────────────────────── */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -278,4 +378,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initTicker();
   initActiveNav();
   initSmoothScroll();
+  initNotifKeyboard();
 });
