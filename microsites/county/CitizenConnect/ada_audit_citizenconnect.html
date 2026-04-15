@@ -290,6 +290,81 @@
       .wcag-tag { margin-top: 4px; justify-self: start; }
     }
 
+    /* ── Top callout: functional issues beyond WCAG ─────────────────
+       Verified WCAG 2.1 AAA on #FEF2F2:
+         title #791F1F → 9.46 AAA · body #374151 → 9.42 AAA
+         fix   #4b5563 → 6.91 AA  · ink   #111827 → 16.22 AAA */
+    .top-callout {
+      background: #FEF2F2;
+      border: 1px solid rgba(153, 27, 27, 0.2);
+      border-left: 4px solid #991b1b;
+      border-radius: var(--border-radius-lg);
+      padding: 1.125rem 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    .callout-label {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #791F1F;
+      margin-bottom: 0.4rem;
+    }
+    .callout-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #791F1F;
+      margin: 0 0 0.4rem;
+      line-height: 1.3;
+    }
+    .callout-intro {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.75rem;
+      line-height: 1.55;
+    }
+    .callout-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 0.9rem;
+    }
+    .callout-list li {
+      font-size: 14px;
+      color: var(--color-text-primary);
+      line-height: 1.55;
+      padding: 0.4rem 0 0.4rem 1.3rem;
+      position: relative;
+    }
+    .callout-list li + li {
+      border-top: 1px solid rgba(153, 27, 27, 0.12);
+    }
+    .callout-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      color: #991b1b;
+      font-size: 13px;
+    }
+    .callout-list strong {
+      color: var(--color-text-primary);
+      font-weight: 600;
+    }
+    .callout-fix {
+      background: #ffffff;
+      border: 1px solid rgba(153, 27, 27, 0.2);
+      border-radius: var(--border-radius-md);
+      padding: 0.85rem 1rem;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+    .callout-fix strong {
+      color: var(--color-text-primary);
+      font-weight: 600;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * { transition: none !important; }
     }
@@ -306,6 +381,20 @@
   </header>
 
   <main id="main" class="wrap" aria-labelledby="page-title">
+
+    <aside class="top-callout" role="region" aria-labelledby="functional-h">
+      <p class="callout-label">Functional issues beyond WCAG</p>
+      <h2 class="callout-title" id="functional-h">The ticket system loses residents' submissions</h2>
+      <p class="callout-intro">These problems don't violate accessibility rules, but they break the service for residents who rely on it. They're at least as urgent as the WCAG findings below.</p>
+      <ul class="callout-list" role="list">
+        <li><strong>No history of the original submission.</strong> After a service request is filed, the ticket view does not show the original details the resident submitted. There is no way to confirm what was sent, when, or against which address — which also makes it impossible to dispute a miscategorization.</li>
+        <li><strong>Previous email correspondence can disappear.</strong> Follow-up emails between a resident and the county are not reliably attached to the ticket thread. Residents lose the audit trail of what was communicated, and staff can't easily pick up a case handed off from another department.</li>
+        <li><strong>Pothole submission is broken.</strong> The pothole-reporting form does not complete submission. Residents receive no confirmation, and no ticket appears in the system. The defect is silent — users believe their report was filed when it was not.</li>
+      </ul>
+      <div class="callout-fix">
+        <strong>Recommended fix:</strong> Replace or supplement the automated ticket system with a monitored intake inbox staffed by a real person who routes each request to the right department. Email preserves the full thread automatically, gives residents a durable receipt, and re-introduces a human who can read the first sentence of a broken pothole report and still get it to Public Works.
+      </div>
+    </aside>
 
     <section class="scorerow" aria-label="Summary of findings">
       <div class="sc fail"><span class="sc-n">1</span><span class="sc-l">Serious</span></div>
