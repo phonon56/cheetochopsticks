@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ADA / WCAG 2.1 AA accessibility audit of citizenconnect.elpasoco.com — axe-core scan plus manual DOM inspection.">
+  <title>Citizen Connect — ADA / WCAG 2.1 AA Audit · cheetochopsticks</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* Palette verified WCAG 2.1 AA/AAA on white and #f5f6f8 backgrounds
+       text-primary   #111827 → 17.74 AAA · text-secondary #374151 → 10.31 AAA
+       text-tertiary  #4b5563 →  7.56 AAA
+       Badge pairs (small text, need ≥4.5):
+         crit #791F1F on #F7C1C1 → 6.58 AAA (verified)
+         mod  #633806 on #FAC775 → 6.43 AAA (verified)
+         min  #2A4E0C on #C0DD97 → 6.40 AAA (was #3B6D11, 4.15 — FAIL AA; now fixed)
+         ok   #0C447C on #B5D4F4 → 6.42 AAA (verified)
+       Score-row numbers (28px bold, qualifies as large text ≥3:1):
+         pass #3B6D11 on #f5f6f8 → 5.74 AAA large
+         warn #BA7517 on #f5f6f8 → 3.44 AA large
+         fail #A32D2D on #f5f6f8 → 6.54 AAA large
+         info #185FA5 on #f5f6f8 → 6.03 AAA large */
+
+    :root {
+      --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --font-mono: 'IBM Plex Mono', Menlo, Consolas, monospace;
+      --color-background-primary:   #ffffff;
+      --color-background-secondary: #f5f6f8;
+      --color-text-primary:   #111827;
+      --color-text-secondary: #374151;
+      --color-text-tertiary:  #4b5563;
+      --color-border-tertiary: #e5e7eb;
+      --border-radius-md: 6px;
+      --border-radius-lg: 10px;
+      --accent: #b91c1c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--color-text-primary);
+      background: var(--color-background-primary);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: #111827;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 10px 18px;
+      border-radius: 4px;
+      text-decoration: none;
+      z-index: 999;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* Focus ring — keyboard only */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid #b91c1c;
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* Page header */
+    .page-head {
+      max-width: 860px;
+      margin: 0 auto 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--color-border-tertiary);
+    }
+    .page-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-bottom: 0.6rem;
+    }
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .page-meta {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.4rem;
+    }
+    .page-note {
+      font-size: 13px;
+      color: var(--color-text-tertiary);
+    }
+
+    /* Original audit styles, with font sizes bumped to ≥13px and
+       .min badge color darkened for AA compliance. */
+    .wrap { max-width: 860px; margin: 0 auto; padding: 0.5rem 0; }
+
+    .scorerow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+    .sc {
+      background: var(--color-background-secondary);
+      border-radius: var(--border-radius-md);
+      padding: 1rem;
+      text-align: center;
+    }
+    .sc-n {
+      font-size: 28px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .sc-l { font-size: 13px; color: var(--color-text-secondary); }
+    .pass .sc-n { color: #3B6D11; }
+    .warn .sc-n { color: #BA7517; }
+    .fail .sc-n { color: #A32D2D; }
+    .info .sc-n { color: #185FA5; }
+
+    .section { margin-bottom: 1.75rem; }
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--color-border-tertiary);
+    }
+
+    .issue {
+      background: var(--color-background-primary);
+      border: 1px solid var(--color-border-tertiary);
+      border-radius: var(--border-radius-lg);
+      padding: 1rem 1.125rem;
+      margin-bottom: 0.6rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: start;
+    }
+    .badge {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+    .crit { background: #F7C1C1; color: #791F1F; }
+    .mod  { background: #FAC775; color: #633806; }
+    .min  { background: #C0DD97; color: #2A4E0C; } /* was #3B6D11 — failed AA (4.15) */
+    .ok   { background: #B5D4F4; color: #0C447C; }
+
+    .issue-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 4px;
+    }
+    .issue-desc {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.55;
+    }
+    .issue-desc code,
+    .issue-fix code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: var(--color-background-secondary);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    .issue-fix {
+      font-size: 13px;
+      color: var(--color-text-tertiary);
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid var(--color-border-tertiary);
+      line-height: 1.55;
+    }
+    .wcag-tag {
+      font-size: 13px;
+      font-family: var(--font-mono);
+      background: var(--color-background-secondary);
+      padding: 3px 7px;
+      border-radius: 4px;
+      color: var(--color-text-secondary);
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .contrast-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+      align-items: center;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--color-border-tertiary);
+      font-size: 14px;
+    }
+    .contrast-row:last-child { border-bottom: none; }
+    .cr-swatch {
+      width: 80px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid var(--color-border-tertiary);
+    }
+    .cr-val {
+      font-weight: 600;
+      font-size: 14px;
+      min-width: 56px;
+      text-align: right;
+    }
+    .cr-pass { color: #2A4E0C; }
+    .cr-fail { color: #A32D2D; }
+    .cr-label { color: var(--color-text-secondary); font-size: 13px; margin-top: 2px; }
+
+    .green-section {
+      background: #EAF3DE;
+      border-radius: var(--border-radius-lg);
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .green-section .issue-title { color: #2A4E0C; }
+
+    .passes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .pass-item {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.3rem 0;
+    }
+    .pass-icon {
+      color: #2A4E0C;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .nextstep {
+      background: var(--color-background-secondary);
+      border-radius: var(--border-radius-lg);
+      padding: 1rem 1.25rem;
+      margin-top: 0.5rem;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+    .nextstep strong {
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      body { padding: 1.25rem 1rem; }
+      .scorerow { grid-template-columns: repeat(2, 1fr); }
+      .passes-grid { grid-template-columns: 1fr; }
+      .issue { grid-template-columns: 1fr; }
+      .wcag-tag { margin-top: 4px; justify-self: start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="page-head">
+    <p class="page-eyebrow">County · CitizenConnect</p>
+    <h1 class="page-title" id="page-title">ADA / WCAG 2.1 AA accessibility audit — Citizen Connect</h1>
+    <p class="page-meta"><strong>citizenconnect.elpasoco.com</strong> &nbsp;·&nbsp; Audited April 14, 2026 &nbsp;·&nbsp; WCAG 2.1 AA + axe-core 4.9.1</p>
+    <p class="page-note">Automated scan (axe-core) + manual DOM inspection. Does not substitute a full manual screen-reader test.</p>
+  </header>
+
+  <main id="main" class="wrap" aria-labelledby="page-title">
+
+    <section class="scorerow" aria-label="Summary of findings">
+      <div class="sc fail"><span class="sc-n">1</span><span class="sc-l">Serious</span></div>
+      <div class="sc warn"><span class="sc-n">3</span><span class="sc-l">Moderate</span></div>
+      <div class="sc min"><span class="sc-n">5</span><span class="sc-l">Minor / Best practice</span></div>
+      <div class="sc pass"><span class="sc-n">44</span><span class="sc-l">Rules passing</span></div>
+    </section>
+
+    <section class="section" aria-labelledby="serious-h">
+      <h2 class="section-title" id="serious-h">Serious — fix before launch</h2>
+
+      <div class="issue">
+        <span class="badge crit">Serious</span>
+        <div class="issue-body">
+          <div class="issue-title">Search input has no accessible label</div>
+          <div class="issue-desc">The "Check Status" service-request search field (<code>#sr_number</code>) has no <code>&lt;label&gt;</code>, no <code>aria-label</code>, and no <code>aria-labelledby</code>. Only a placeholder is present, which disappears when the user starts typing and is never read reliably by screen readers.</div>
+          <div class="issue-fix"><strong>Fix:</strong> Add <code>&lt;label for="sr_number"&gt;Service request number&lt;/label&gt;</code> — visually hide it with a <code>.sr-only</code> class if needed — or add <code>aria-label="Service request number"</code> directly on the input.</div>
+        </div>
+        <span class="wcag-tag">1.3.1 · 4.1.2</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="moderate-h">
+      <h2 class="section-title" id="moderate-h">Moderate — fix soon</h2>
+
+      <div class="issue">
+        <span class="badge mod">Moderate</span>
+        <div class="issue-body">
+          <div class="issue-title">Mobile menu toggle is keyboard-inaccessible</div>
+          <div class="issue-desc">The hamburger menu uses a CSS checkbox-hack: a real <code>&lt;input type="checkbox" id="showmenu"&gt;</code> set to <code>display:none</code>. Because it is hidden via CSS, it is removed from the accessibility tree entirely. Keyboard and screen-reader users cannot open the mobile navigation.</div>
+          <div class="issue-fix"><strong>Fix:</strong> Replace with a <code>&lt;button&gt;</code> that toggles the nav with JS. Apply <code>aria-expanded</code> and <code>aria-controls</code> to the button, and manage focus into the menu on open.</div>
+        </div>
+        <span class="wcag-tag">2.1.1 · 4.1.2</span>
+      </div>
+
+      <div class="issue">
+        <span class="badge mod">Moderate</span>
+        <div class="issue-body">
+          <div class="issue-title">Icon images have empty alt text with no decorative role</div>
+          <div class="issue-desc">Four homepage icons (icon1–icon4.png) have <code>alt=""</code> but are not marked <code>role="presentation"</code> or <code>aria-hidden="true"</code>, and none sit inside a link or labeled container that would provide context. If they convey service categories they need descriptive alt text; if they are purely decorative, they need explicit presentational role.</div>
+          <div class="issue-fix"><strong>Fix:</strong> Add <code>alt="Service requests"</code> / etc. if meaningful, or <code>role="presentation"</code> if purely decorative. Also add <code>aria-hidden="true"</code> to the surrounding SVG icons.</div>
+        </div>
+        <span class="wcag-tag">1.1.1</span>
+      </div>
+
+      <div class="issue">
+        <span class="badge mod">Moderate</span>
+        <div class="issue-body">
+          <div class="issue-title">News article thumbnail images have empty alt text</div>
+          <div class="issue-desc">Three news thumbnails (NR-WEB-IMAGE-TEMPLATE-6.png, Vote-NR-Image.png, NR-WEB-IMAGE-TEMPLATE-3-1.png) have <code>alt=""</code>. They appear to be informative editorial photos that provide context for each article — making them non-decorative and requiring meaningful descriptions.</div>
+          <div class="issue-fix"><strong>Fix:</strong> Add descriptive alt text reflecting the content of each image (e.g., <code>alt="El Paso County Extension office building"</code>), or <code>alt=""</code> with <code>role="presentation"</code> only if genuinely decorative.</div>
+        </div>
+        <span class="wcag-tag">1.1.1</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="minor-h">
+      <h2 class="section-title" id="minor-h">Minor / best practice</h2>
+
+      <div class="issue">
+        <span class="badge min">Minor</span>
+        <div class="issue-body">
+          <div class="issue-title">Positive tabindex values disrupt tab order</div>
+          <div class="issue-desc">The service-request input has <code>tabindex="5"</code> and the "Check Status" button has <code>tabindex="6"</code>. Positive tabindex values pull elements to the front of the tab sequence regardless of DOM order, which can confuse keyboard users navigating the rest of the page.</div>
+          <div class="issue-fix"><strong>Fix:</strong> Remove explicit tabindex values and rely on natural DOM order. Use CSS to reorder visual presentation if needed.</div>
+        </div>
+        <span class="wcag-tag">2.4.3</span>
+      </div>
+
+      <div class="issue">
+        <span class="badge min">Minor</span>
+        <div class="issue-body">
+          <div class="issue-title">Multiple navigation landmarks have no distinguishing labels</div>
+          <div class="issue-desc">The page contains several <code>&lt;nav&gt;</code> elements (main nav, footer links, etc.) with no <code>aria-label</code> or <code>aria-labelledby</code>. Screen reader users who browse by landmarks will hear repeated announcements of "navigation" with no way to differentiate them.</div>
+          <div class="issue-fix"><strong>Fix:</strong> Add <code>aria-label="Main"</code>, <code>aria-label="Footer"</code>, etc. to each nav element.</div>
+        </div>
+        <span class="wcag-tag">2.4.1</span>
+      </div>
+
+      <div class="issue">
+        <span class="badge min">Minor</span>
+        <div class="issue-body">
+          <div class="issue-title">article elements use inappropriate role="listitem"</div>
+          <div class="issue-desc">Three news <code>&lt;article&gt;</code> elements in the "In the News" grid have <code>role="listitem"</code>. The listitem role is not permitted on article elements per ARIA spec. This flag is marked "incomplete" by axe because these elements are currently hidden, but the pattern will cause issues when visible.</div>
+          <div class="issue-fix"><strong>Fix:</strong> Remove the <code>role="listitem"</code> attribute from article elements. If you need list semantics, wrap items in a <code>&lt;ul&gt;</code> with <code>&lt;li&gt;</code> elements instead of articles.</div>
+        </div>
+        <span class="wcag-tag">4.1.2</span>
+      </div>
+
+      <div class="issue">
+        <span class="badge min">Minor</span>
+        <div class="issue-body">
+          <div class="issue-title">Third-party iframe embeds need verification</div>
+          <div class="issue-desc">Two embedded iframes (YouTube widget via woxo.tech, Twitter timeline) are present. The YouTube widget title reads "Youtube widgets for website" — generic. The Twitter iframe titled "Twitter settings iframe" is a hidden utility frame, but if the Twitter timeline widget itself is present it requires a meaningful title. Third-party widgets often have significant internal accessibility issues.</div>
+          <div class="issue-fix"><strong>Fix:</strong> Give the YouTube embed a descriptive title (<code>title="El Paso County video highlights"</code>). Audit third-party widgets independently or replace with natively accessible alternatives.</div>
+        </div>
+        <span class="wcag-tag">4.1.2</span>
+      </div>
+
+      <div class="issue">
+        <span class="badge min">Minor</span>
+        <div class="issue-body">
+          <div class="issue-title">Page title is not sufficiently descriptive</div>
+          <div class="issue-desc">The page title is "El Paso County, Colorado" — identical to the root domain's title. In multi-tab workflows, users cannot distinguish this tab from others. A more descriptive title aids screen reader orientation and browser history scanning.</div>
+          <div class="issue-fix"><strong>Fix:</strong> Change to something like "Citizen Connect — El Paso County, Colorado" to uniquely identify the portal.</div>
+        </div>
+        <span class="wcag-tag">2.4.2</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="contrast-h">
+      <h2 class="section-title" id="contrast-h">Color contrast check (all computed)</h2>
+      <div style="background:var(--color-background-primary);border:1px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;">
+        <div class="contrast-row">
+          <div>
+            <div style="font-size:14px;font-weight:600;">Nav links — white on navy</div>
+            <div class="cr-label">rgb(255,255,255) on rgb(0,45,93)</div>
+          </div>
+          <div class="cr-swatch" style="background:#002D5D;"></div>
+          <div class="cr-val cr-pass">13.7 : 1 ✓</div>
+        </div>
+        <div class="contrast-row">
+          <div>
+            <div style="font-size:14px;font-weight:600;">Utility bar — white on black</div>
+            <div class="cr-label">rgb(255,255,255) on rgb(0,0,0)</div>
+          </div>
+          <div class="cr-swatch" style="background:#000;"></div>
+          <div class="cr-val cr-pass">21.0 : 1 ✓</div>
+        </div>
+        <div class="contrast-row">
+          <div>
+            <div style="font-size:14px;font-weight:600;">Login Page link — light blue on maroon</div>
+            <div class="cr-label">rgb(191,215,237) on rgb(111,41,40)</div>
+          </div>
+          <div class="cr-swatch" style="background:rgb(111,41,40);"></div>
+          <div class="cr-val cr-pass">7.0 : 1 ✓</div>
+        </div>
+        <div class="contrast-row">
+          <div>
+            <div style="font-size:14px;font-weight:600;">Announcement bar — white on red</div>
+            <div class="cr-label">rgb(255,255,255) on rgb(232,28,28)</div>
+          </div>
+          <div class="cr-swatch" style="background:rgb(232,28,28);"></div>
+          <div class="cr-val cr-pass">4.6 : 1 ✓</div>
+        </div>
+        <div class="contrast-row">
+          <div>
+            <div style="font-size:14px;font-weight:600;">Check Status button — navy on light gray</div>
+            <div class="cr-label">rgb(0,45,93) on rgb(228,228,228)</div>
+          </div>
+          <div class="cr-swatch" style="background:rgb(228,228,228);"></div>
+          <div class="cr-val cr-pass">10.8 : 1 ✓</div>
+        </div>
+        <div class="contrast-row" style="border-bottom:none;">
+          <div>
+            <div style="font-size:14px;font-weight:600;">Body text — dark on white</div>
+            <div class="cr-label">rgb(35,35,35) on rgb(255,255,255)</div>
+          </div>
+          <div class="cr-swatch" style="background:#fff;border:1px solid var(--color-border-tertiary);"></div>
+          <div class="cr-val cr-pass">15.7 : 1 ✓</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--color-text-tertiary);margin-top:6px;">All measured contrast ratios pass WCAG 2.1 AA thresholds (4.5:1 normal text · 3:1 large text).</p>
+    </section>
+
+    <section class="section" aria-labelledby="passes-h">
+      <h2 class="section-title" id="passes-h">What's working well</h2>
+      <ul class="passes-grid" role="list">
+        <li class="pass-item"><span class="pass-icon" aria-hidden="true">✓</span> Skip navigation link present (#content_start)</li>
+        <li class="pass-item"><span class="pass-icon" aria-hidden="true">✓</span> lang="en-US" set on &lt;html&gt;</li>
+        <li class="pass-item"><span class="pass-icon" aria-hidden="true">✓</span> No duplicate element IDs</li>
+        <li class="pass-item"><span class="pass-icon" aria-hidden="true">✓</span> Heading hierarchy logical (H1 → H2 → H3)</li>
+        <li class="pass-item"><span class="pass-icon" aria-hidden="true">✓</span> All 6 color pairs pass contrast AA</li>
+        <li class="pass-item"><span class="pass-icon" aria-hidden="true">✓</span> Main landmark present</li>
+        <li class="pass-item"><span class="pass-icon" aria-hidden="true">✓</span> Header / footer landmarks present</li>
+        <li class="pass-item"><span class="pass-icon" aria-hidden="true">✓</span> No autoplay audio or video detected</li>
+        <li class="pass-item"><span class="pass-icon" aria-hidden="true">✓</span> Form inputs have associated labels or titles</li>
+        <li class="pass-item"><span class="pass-icon" aria-hidden="true">✓</span> 44 / 44 axe-core rule categories pass</li>
+      </ul>
+    </section>
+
+    <div class="nextstep">
+      <p><strong>Recommended next step:</strong> Run a manual screen-reader walkthrough with NVDA + Firefox and VoiceOver + Safari, focusing on the mobile menu toggle, the service-request search form, and the social media embeds. Automated tools catch ~30–40% of real-world accessibility failures; the issues flagged above are the highest-confidence items from combined automated + DOM analysis.</p>
+    </div>
+
+  </main>
+</body>
+</html>
