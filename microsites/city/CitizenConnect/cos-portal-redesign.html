@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tell us what you need | City of Colorado Springs</title>
+<meta name="description" content="Describe what you need in plain language. We'll point you to the right City department — no guessing required.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:       #0d2340;  /* COS deep blue */
+  --navy-mid:   #1a3a5c;
+  --navy-soft:  #243d5c;
+  --ink:        #1a1a2e;
+  --ink-mid:    #3a4a5c;
+  --ink-mute:   #3a4a5c;
+  --on-navy:    #a8c8d8;
+  --white:      #ffffff;
+  --off-white:  #f7f8fa;
+  --rule:       rgba(13,35,64,.1);
+  --red:        #991b1b;         /* COS mountain red */
+  --red-bg:     #fef2f2;
+  --yellow:     #e8b547;         /* COS mountain yellow */
+  --teal:       #0b5f78;
+  --teal-bg:    #f0f9ff;
+  --green:      #065f46;
+  --green-bg:   #ecfdf5;
+  --focus:      #1d4ed8;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--off-white);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── SKIP LINK ── */
+.skip {
+  position: absolute; left: -9999px; top: 4px;
+  background: var(--navy); color: #fff;
+  padding: 8px 16px; font-size: 13px;
+  font-family: 'IBM Plex Mono', monospace;
+  border-radius: 2px; z-index: 999; text-decoration: none;
+}
+.skip:focus-visible { left: 8px; }
+
+/* ── EMERGENCY / ROUTING BAR ── */
+.emergency-bar {
+  background: var(--red);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.emergency-bar p {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: .01em;
+  font-family: 'IBM Plex Mono', monospace;
+  text-align: center;
+}
+.emergency-bar a {
+  color: #fde68a;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(253,230,138,.4);
+}
+.emergency-bar a:hover { border-color: #fde68a; }
+.emergency-bar a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--navy);
+  padding: 0 24px;
+  border-bottom: 2px solid var(--yellow);
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.logo-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+.logo-seal {
+  width: 44px; height: 44px;
+  background: var(--yellow);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; font-weight: 500;
+  color: var(--navy);
+  letter-spacing: .05em;
+  flex-shrink: 0;
+}
+.logo-text { color: #fff; }
+.logo-text strong {
+  display: block;
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: .02em;
+}
+.logo-text span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--on-navy);
+}
+.header-secure {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--on-navy);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lock-icon {
+  width: 12px; height: 12px;
+  border: 1.5px solid var(--on-navy);
+  border-radius: 2px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.lock-icon::before {
+  content: '';
+  position: absolute;
+  top: -5px; left: 2px;
+  width: 6px; height: 5px;
+  border: 1.5px solid var(--on-navy);
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--navy);
+  padding: 56px 24px 72px;
+}
+.hero-inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::after {
+  content: '';
+  flex: 1;
+  max-width: 48px;
+  height: 1px;
+  background: var(--yellow);
+  opacity: .4;
+}
+.hero h1 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 14px;
+  letter-spacing: -.01em;
+}
+.hero p {
+  font-size: 15px;
+  color: rgba(255,255,255,.78);
+  line-height: 1.75;
+  font-weight: 300;
+  max-width: 480px;
+}
+.hero p strong { color: #fff; font-weight: 500; }
+
+/* ── ROUTING NOTE ── */
+.routing-note {
+  background: rgba(232,181,71,.1);
+  border: 1px solid rgba(232,181,71,.25);
+  border-radius: 3px;
+  padding: 12px 16px;
+  margin-top: 24px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.routing-note-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+.routing-note p {
+  font-size: 13px;
+  color: #6b4000; /* was var(--yellow), fails on light bg → #6b4000 8.03 AAA */
+  font-family: 'IBM Plex Mono', monospace;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── MAIN FORM CARD ── */
+.form-section {
+  padding: 0 24px 24px;
+  margin-top: -2px;
+}
+.form-card {
+  max-width: 640px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 40px rgba(13,35,64,.1), 0 1px 4px rgba(13,35,64,.06);
+  overflow: hidden;
+  position: relative;
+  top: -32px;
+}
+.form-card-header {
+  padding: 28px 32px 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.form-card-header h2 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.form-card-header p {
+  font-size: 13px;
+  color: var(--ink-mute);
+  font-weight: 300;
+  line-height: 1.6;
+}
+.form-body { padding: 28px 32px; }
+
+/* ── FIELD STYLES ── */
+.field { margin-bottom: 20px; }
+.field label {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 6px;
+}
+.field textarea, .field input {
+  width: 100%;
+  border: 1px solid rgba(13,35,64,.18);
+  border-radius: 3px;
+  padding: 12px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  background: #fff;
+  line-height: 1.6;
+  transition: border-color .15s, box-shadow .15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+.field textarea:focus-visible, .field input:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 0;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(14,116,144,.15);
+}
+.field .hint {
+  margin-top: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.55;
+  letter-spacing: .02em;
+}
+.field-error {
+  margin-top: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--red);
+  font-weight: 500;
+  min-height: 0;
+}
+.field-error:empty { display: none; }
+textarea[aria-invalid="true"] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(196,58,58,.12);
+}
+
+.field-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.char-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  letter-spacing: .06em;
+}
+.char-count.near { color: var(--teal); }
+
+/* ── EXAMPLE CHIPS ── */
+.example-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.example-chip {
+  padding: 5px 10px;
+  border: 1px solid rgba(13,35,64,.15);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--ink-mid);
+  background: #fff;
+  cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s;
+  font-family: 'Inter', sans-serif;
+}
+.example-chip:hover {
+  background: var(--teal-bg);
+  border-color: rgba(14,116,144,.3);
+  color: var(--teal);
+}
+.example-chip:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ── SUBMIT ROW ── */
+.submit-row {
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.btn-submit {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-submit:hover { background: var(--navy-mid); }
+.btn-submit:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.btn-submit:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+.submit-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.6;
+  letter-spacing: .04em;
+}
+
+/* ── LOADING ── */
+.loading {
+  display: none;
+  text-align: center;
+  padding: 32px;
+}
+.loading.visible { display: block; }
+.loading-dots {
+  display: inline-flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.loading-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--navy);
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+.loading-dot:nth-child(1) { animation-delay: -.32s; }
+.loading-dot:nth-child(2) { animation-delay: -.16s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); opacity: .3; }
+  40% { transform: scale(1); opacity: 1; }
+}
+.loading-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  letter-spacing: .06em;
+}
+
+/* ── RESULT ── */
+.result {
+  display: none;
+}
+.result.visible { display: block; }
+
+.result-card {
+  max-width: 640px;
+  margin: -16px auto 24px;
+  padding: 0 24px;
+}
+.result-inner {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 40px rgba(13,35,64,.08), 0 1px 4px rgba(13,35,64,.04);
+  overflow: hidden;
+  border-top: 3px solid var(--teal);
+}
+.result-inner.confidence-high { border-top-color: var(--green); }
+.result-inner.confidence-medium { border-top-color: var(--teal); }
+.result-inner.confidence-low { border-top-color: var(--yellow); }
+.result-inner.warning-path { border-top-color: var(--red); }
+
+.result-header {
+  padding: 22px 32px 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.result-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.confidence-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  letter-spacing: .12em;
+  font-weight: 500;
+}
+.confidence-pill.high { background: var(--green-bg); color: var(--green); }
+.confidence-pill.medium { background: var(--teal-bg); color: var(--teal); }
+.confidence-pill.low { background: #fef9e8; color: #8a6b1c; }
+
+.result-header h3 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.result-reason {
+  font-size: 14px;
+  color: var(--ink-mid);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.result-warning {
+  background: var(--red-bg);
+  border-left: 3px solid var(--red);
+  padding: 14px 20px;
+  margin: 0;
+}
+.result-warning p {
+  font-size: 13px;
+  color: var(--red);
+  line-height: 1.6;
+  font-weight: 500;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: .02em;
+}
+
+.result-actions {
+  padding: 20px 32px 24px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn-primary-link, .btn-secondary-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 3px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all .15s;
+}
+.btn-primary-link {
+  background: var(--navy);
+  color: #fff;
+}
+.btn-primary-link:hover { background: var(--navy-mid); }
+.btn-secondary-link {
+  background: #fff;
+  color: var(--navy);
+  border: 1px solid rgba(13,35,64,.18);
+}
+.btn-secondary-link:hover {
+  background: var(--off-white);
+  border-color: var(--navy);
+}
+.btn-primary-link:focus-visible, .btn-secondary-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ── ALTERNATES ── */
+.alternates {
+  padding: 0 32px 24px;
+  border-top: 1px solid var(--rule);
+  padding-top: 18px;
+  margin-top: 4px;
+}
+.alternates-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 12px;
+}
+.alt-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.alt-item:last-child { border-bottom: none; }
+.alt-item-text {
+  flex: 1;
+}
+.alt-item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+.alt-item-reason {
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.5;
+  font-weight: 300;
+}
+.alt-item-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .1em;
+  color: var(--teal);
+  text-decoration: none;
+  white-space: nowrap;
+  padding-top: 3px;
+}
+.alt-item-link:hover { text-decoration: underline; }
+.alt-item-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.retry-row {
+  padding: 18px 32px;
+  background: var(--off-white);
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.retry-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  letter-spacing: .04em;
+}
+.retry-btn {
+  background: #fff;
+  color: var(--navy);
+  border: 1px solid rgba(13,35,64,.18);
+  padding: 8px 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.retry-btn:hover { background: var(--off-white); }
+.retry-btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ── REFERENCE GRID ── */
+.ref-section {
+  max-width: 640px;
+  margin: 12px auto 0;
+  padding: 0 24px 16px;
+}
+.ref-section h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.ref-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 520px) {
+  .ref-grid { grid-template-columns: 1fr; }
+}
+.ref-card {
+  background: #fff;
+  padding: 14px 16px;
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color .15s, box-shadow .15s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ref-card:hover {
+  border-color: var(--teal);
+  box-shadow: 0 2px 8px rgba(14,116,144,.08);
+}
+.ref-card:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.ref-card-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.ref-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy);
+}
+.ref-card-desc {
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.5;
+  font-weight: 300;
+  margin-top: 2px;
+}
+.ref-card.pprbd {
+  border-left: 3px solid var(--red);
+}
+
+/* ── AUDIT SECTION ── */
+.audit-section {
+  max-width: 640px;
+  margin: 32px auto;
+  padding: 0 24px;
+}
+.audit-toggle-btn {
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--rule);
+  padding: 16px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .08em;
+  color: var(--ink-mid);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 3px;
+  transition: background .15s;
+}
+.audit-toggle-btn:hover { background: var(--off-white); }
+.audit-toggle-btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.toggle-arrow {
+  transition: transform .2s ease;
+}
+.audit-toggle-btn[aria-expanded="true"] .toggle-arrow {
+  transform: rotate(180deg);
+}
+.audit-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+  background: #fff;
+  border-radius: 0 0 3px 3px;
+}
+.audit-body.open { max-height: 2000px; }
+.audit-inner {
+  padding: 20px 24px 24px;
+  border: 1px solid var(--rule);
+  border-top: none;
+  border-radius: 0 0 3px 3px;
+}
+.audit-intro {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-mid);
+  margin-bottom: 18px;
+  font-weight: 300;
+}
+.audit-intro strong { color: var(--navy); font-weight: 500; }
+.audit-intro code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  background: var(--off-white);
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+
+.audit-finding {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+}
+.audit-finding:first-of-type { border-top: none; padding-top: 4px; }
+.finding-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+.dot-critical { background: var(--red); }
+.dot-arch { background: var(--teal); }
+.finding-text { flex: 1; }
+.finding-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.finding-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-mute);
+  font-weight: 300;
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  background: var(--navy);
+  color: rgba(255,255,255,.6);
+  padding: 32px 24px;
+  margin-top: 32px;
+}
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .06em;
+  text-align: center;
+  line-height: 1.8;
+}
+.footer-inner a {
+  color: var(--on-navy);
+  text-decoration: none;
+}
+.footer-inner a:hover { color: #fff; text-decoration: underline; }
+.footer-inner a:focus-visible {
+  outline: 2px solid var(--on-navy);
+  outline-offset: 2px;
+}
+
+/* ── LIVE STATUS SR-ONLY ── */
+[role="status"].sr-only {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  overflow: hidden;
+}
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to main content</a>
+<div role="status" class="sr-only" id="live-status" aria-atomic="true"></div>
+
+<!-- EMERGENCY / KEY ROUTING BAR -->
+<div role="region" aria-label="Important routing notice">
+  <div class="emergency-bar">
+    <p>
+      <strong>Home building permits (decks, roofs, water heaters, basement finishes):</strong>
+      &nbsp;·&nbsp; Call <a href="tel:17193272880" aria-label="Call PPRBD at 719-327-2880">PPRBD 719-327-2880</a>
+      &nbsp;·&nbsp; <a href="https://www.pprbd.org" target="_blank" rel="noopener noreferrer">pprbd.org →</a>
+      &nbsp;·&nbsp; (separate agency — not this portal)
+    </p>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#" class="logo-block" aria-label="Colorado Springs homepage">
+      <div class="logo-seal" aria-hidden="true">COS</div>
+      <div class="logo-text">
+        <strong>City of Colorado Springs</strong>
+        <span>Permits, licenses &amp; records</span>
+      </div>
+    </a>
+    <div class="header-secure" aria-label="This is a secure government website">
+      <span class="lock-icon" aria-hidden="true"></span>
+      <span>secure .gov</span>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero" role="region" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <p class="hero-eyebrow" aria-hidden="true">Plain-language routing</p>
+    <h1 id="hero-heading">Tell us what you need.<br>We'll point you to the right place.</h1>
+    <p>
+      Describe your situation in your own words.
+      <strong>You do not need to know which City department handles it.</strong>
+      We'll match you to the correct service and give you a direct link.
+    </p>
+    <div class="routing-note" role="note" aria-label="How this works">
+      <span class="routing-note-icon" aria-hidden="true">→</span>
+      <p>No 31-option dropdowns. No "Contact Type" jargon. No guessing which tab to click. Just tell us what happened, and we handle the routing.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<main id="main" class="form-section" role="main">
+  <div class="form-card" role="region" aria-labelledby="form-heading">
+    <div class="form-card-header">
+      <h2 id="form-heading">What do you need to do?</h2>
+      <p>Describe it in your own words. One sentence is enough.</p>
+    </div>
+
+    <form class="form-body" id="request-form" action="#" method="post" aria-label="Plain-language request form" novalidate>
+
+      <div class="field">
+        <div class="field-meta">
+          <label for="request-text">
+            Your situation
+            <span class="sr-only">(required)</span>
+          </label>
+          <span class="char-count" id="char-count" aria-live="polite" aria-atomic="true">0 / 500</span>
+        </div>
+        <textarea
+          id="request-text"
+          name="request_description"
+          required
+          aria-required="true"
+          aria-describedby="request-hint request-error"
+          maxlength="500"
+          placeholder="e.g. 'My neighbor's grass is three feet tall.' &#10;&#10;Or: 'I want to close Tejon Street for a street fair on June 15.' &#10;&#10;Or: 'I need a copy of a police report from a fender-bender last month.'"
+        ></textarea>
+        <p class="hint" id="request-hint">Be as specific as you can. Addresses, dates, and what you're trying to accomplish all help.</p>
+        <p class="field-error" id="request-error" role="alert" aria-atomic="true"></p>
+
+        <div class="example-chips" role="group" aria-label="Example scenarios">
+          <button type="button" class="example-chip" data-example="My neighbor hasn't mowed their lawn in two months and the HOA isn't doing anything.">Tall grass complaint</button>
+          <button type="button" class="example-chip" data-example="I want to add a deck to the back of my house.">Add a deck</button>
+          <button type="button" class="example-chip" data-example="I want to run a 5K through Old Colorado City on a Saturday morning.">Organize a race</button>
+          <button type="button" class="example-chip" data-example="I'm opening a small coffee shop and need to know what licenses I need.">Start a business</button>
+          <button type="button" class="example-chip" data-example="I need a copy of the police report from a car accident I was in last Tuesday.">Get a crash report</button>
+          <button type="button" class="example-chip" data-example="My landlord is operating a short-term rental next door and I don't think it's permitted.">Report an STR</button>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn-submit" id="submit-btn" aria-describedby="submit-note">
+          Find the right place →
+        </button>
+        <p class="submit-note" id="submit-note">Takes about 3 seconds.<br>We'll give you a direct link.</p>
+      </div>
+    </form>
+
+    <!-- LOADING -->
+    <div class="loading" id="loading" aria-live="polite" aria-atomic="true">
+      <div class="loading-dots" aria-hidden="true">
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+      </div>
+      <p class="loading-text" id="loading-text">Figuring out where this goes…</p>
+    </div>
+  </div>
+</main>
+
+<!-- RESULT -->
+<div class="result" id="result" aria-live="polite">
+  <div class="result-card">
+    <div class="result-inner" id="result-inner">
+      <div id="result-warning-container"></div>
+      <div class="result-header">
+        <div class="result-label">
+          <span>Suggested department</span>
+          <span class="confidence-pill" id="confidence-pill"></span>
+        </div>
+        <h3 id="result-dept">—</h3>
+        <p class="result-reason" id="result-reason">—</p>
+      </div>
+      <div class="result-actions" id="result-actions"></div>
+      <div id="alternates-container"></div>
+      <div class="retry-row">
+        <span class="retry-text">Not what you meant?</span>
+        <button type="button" class="retry-btn" id="retry-btn">Try again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REFERENCE GRID -->
+<section class="ref-section" aria-labelledby="ref-heading">
+  <h2 id="ref-heading">All departments &amp; direct links</h2>
+  <div class="ref-grid">
+
+    <a class="ref-card pprbd" href="https://www.pprbd.org" target="_blank" rel="noopener noreferrer"
+       aria-label="PPRBD - residential building permits (opens in new tab)">
+      <div class="ref-card-label">Most residents</div>
+      <div class="ref-card-title">PPRBD (separate site)</div>
+      <div class="ref-card-desc">All residential building permits: decks, roofs, HVAC, plumbing, electrical, basement finishes. 719-327-2880.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Enforcement" target="_blank" rel="noopener noreferrer"
+       aria-label="Neighborhood Services / code enforcement (opens in new tab)">
+      <div class="ref-card-label">Complaints &amp; violations</div>
+      <div class="ref-card-title">Neighborhood Services</div>
+      <div class="ref-card-desc">Tall grass, junk vehicles, nuisances, zoning violations, unpermitted short-term rentals.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=PublicWorks" target="_blank" rel="noopener noreferrer"
+       aria-label="Public Works - street permits (opens in new tab)">
+      <div class="ref-card-label">Streets &amp; events</div>
+      <div class="ref-card-title">Public Works</div>
+      <div class="ref-card-desc">Right-of-way work, traffic control, special events, parades, block parties, street closures.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Licensing" target="_blank" rel="noopener noreferrer"
+       aria-label="Business Licensing (opens in new tab)">
+      <div class="ref-card-label">Starting a business</div>
+      <div class="ref-card-title">Business Licensing</div>
+      <div class="ref-card-desc">City business licenses, renewals, changes to existing licenses.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Police" target="_blank" rel="noopener noreferrer"
+       aria-label="Police Records (opens in new tab)">
+      <div class="ref-card-label">Police reports</div>
+      <div class="ref-card-title">Police Records</div>
+      <div class="ref-card-desc">Crash reports, background checks, clearance letters, public records requests.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Planning" target="_blank" rel="noopener noreferrer"
+       aria-label="Planning (opens in new tab)">
+      <div class="ref-card-label">Land use &amp; zoning</div>
+      <div class="ref-card-title">Planning</div>
+      <div class="ref-card-desc">Rezoning, subdivision, conditional use, plats. For development, not home remodels.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Fire" target="_blank" rel="noopener noreferrer"
+       aria-label="Fire Department permits (opens in new tab)">
+      <div class="ref-card-label">Commercial fire safety</div>
+      <div class="ref-card-title">Fire</div>
+      <div class="ref-card-desc">Alarms, sprinklers, hazmat, commercial kitchens, liquor licenses, commercial plan review.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=StormWater" target="_blank" rel="noopener noreferrer"
+       aria-label="Stormwater compliance (opens in new tab)">
+      <div class="ref-card-label">Developers &amp; contractors</div>
+      <div class="ref-card-title">Stormwater</div>
+      <div class="ref-card-desc">Erosion control, stormwater plans, outfall compliance. Mostly for construction sites.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Building" target="_blank" rel="noopener noreferrer"
+       aria-label="City Building - infrastructure permits (opens in new tab)">
+      <div class="ref-card-label">Infrastructure work</div>
+      <div class="ref-card-title">City "Building" tab</div>
+      <div class="ref-card-desc">Concrete, excavation, CSU utility permits. NOT residential — that's PPRBD.</div>
+    </a>
+
+  </div>
+</section>
+
+<!-- AUDIT -->
+<section class="audit-section" aria-labelledby="audit-toggle">
+  <button
+    class="audit-toggle-btn"
+    id="audit-toggle"
+    aria-expanded="false"
+    aria-controls="audit-body"
+    type="button"
+  >
+    <span>Why this exists — problems with the current portal</span>
+    <span class="toggle-arrow" aria-hidden="true">↓</span>
+  </button>
+  <div class="audit-body" id="audit-body" role="region" aria-labelledby="audit-toggle">
+    <div class="audit-inner">
+      <p class="audit-intro">
+        The current Colorado Springs permit portal runs on <strong>Accela Citizen Access</strong> — a hybrid of 2008-era ASP.NET WebForms and a newer Angular layer. Its front door asks residents to pick from <strong>nine department tabs</strong> organized around the City's org chart, then forces them through a <strong>31-option "Contact Type" dropdown</strong> with options like <code>Fire - Billing - DO NOT CHANGE</code> (an internal admin note leaked into public UI). The top-nav link colors fail WCAG contrast at 2.16:1, no focus indicator exists on form fields, and validation errors never announce to screen readers. This demo is a sketch of what the front door <em>could</em> look like: one plain-language textarea, AI routing to the right department, and a visible fallback grid if the suggestion is wrong.
+      </p>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-critical" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Residents don't think in departments</div>
+          <div class="finding-desc">A resident's intent is "my neighbor's grass is too tall" — not "I need the Enforcement module." The current portal makes the citizen do the translation. Plain-language routing moves that work to the system.</div>
+        </div>
+      </div>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-critical" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">PPRBD is the biggest invisible fork</div>
+          <div class="finding-desc">Most residents who want a permit want a <em>residential building permit</em> — which is PPRBD, a completely separate agency at pprbd.org. The current COS portal has a "Building" tab that suggests otherwise. Anyone adding a deck, replacing a water heater, or finishing a basement should be at PPRBD. Surfacing that branch at the top is the single highest-impact fix.</div>
+        </div>
+      </div>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-critical" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">The "Contact Type" step is a user-hostile routing tax</div>
+          <div class="finding-desc">Asking a resident to classify themselves as "Resident Agent for Service" or "Fire - Billing - DO NOT CHANGE" with no help text is WCAG 3.3.2 failure and a UX disaster. A routing system should infer contact type from parcel ownership, verified identity, and action — not ask.</div>
+        </div>
+      </div>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-arch" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Reversible identity creation</div>
+          <div class="finding-desc">The current system commits your username to the database before email confirmation, creating orphan accounts that only staff can delete. This demo has no account creation — you land, ask, get a link. Login happens on the destination, only if needed.</div>
+        </div>
+      </div>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-arch" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Always-visible alternatives</div>
+          <div class="finding-desc">The AI suggestion can be wrong. The reference grid below the result shows all nine paths at all times so a resident is never trapped in a bad routing decision. WCAG 2.4.5 — multiple ways to navigate.</div>
+        </div>
+      </div>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-arch" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Architectural note</div>
+          <div class="finding-desc">This is a front-door prototype, not a full system. In the civic-Jira architecture this maps onto the "Public Layer" — plain-language output, property card, notifications — sitting above the Parcel Engine and the Record/Ticket system. The routing intelligence lives here; the actual records stay wherever they already live (Accela, PPRBD, or anywhere else).</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <p>City of Colorado Springs · Permit portal redesign — prototype</p>
+    <p>
+      <a href="#">Accessibility</a>
+      &nbsp;·&nbsp;
+      <a href="#">Privacy policy</a>
+      &nbsp;·&nbsp;
+      <a href="#">Contact</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+// ── CONFIG ──
+const DEPARTMENTS = {
+  'PPRBD': {
+    title: 'PPRBD (Pikes Peak Regional Building Department)',
+    url: 'https://www.pprbd.org',
+    phone: '719-327-2880',
+    scope: 'Residential building permits: decks, roofs, water heaters, furnaces, basement finishes, electrical, plumbing, mechanical. This is a SEPARATE agency from Colorado Springs — different website, different login.',
+    warning: true
+  },
+  'Neighborhood Services': {
+    title: 'Neighborhood Services',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Enforcement',
+    phone: null,
+    scope: 'Code enforcement — tall grass, junk vehicles, abandoned cars, nuisances, zoning violations, unpermitted short-term rentals.'
+  },
+  'Public Works': {
+    title: 'Public Works',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=PublicWorks',
+    phone: null,
+    scope: 'Street and right-of-way permits: traffic control, road closures, parades, races, block parties, sidewalk work.'
+  },
+  'Business Licensing': {
+    title: 'Business Licensing',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Licensing',
+    phone: null,
+    scope: 'City business licenses, renewals, new businesses, changes to existing licenses.'
+  },
+  'Police Records': {
+    title: 'Police Records',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Police',
+    phone: null,
+    scope: 'Crash reports, background checks, clearance letters, public records requests from Colorado Springs Police.'
+  },
+  'Planning': {
+    title: 'Planning',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Planning',
+    phone: null,
+    scope: 'Zoning, subdivision, rezoning, conditional-use applications, land-use decisions, plats. For development scale — not home remodels.'
+  },
+  'Fire': {
+    title: 'Fire',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Fire',
+    phone: null,
+    scope: 'Commercial fire-safety permits: alarm systems, sprinklers, hazmat, commercial kitchens, liquor licenses, commercial plan review.'
+  },
+  'Stormwater': {
+    title: 'Stormwater',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=StormWater',
+    phone: null,
+    scope: 'Stormwater compliance for construction sites — erosion control, stormwater management plans, outfall inspections.'
+  },
+  'Building': {
+    title: 'Building (infrastructure only)',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Building',
+    phone: null,
+    scope: 'NOT residential. Infrastructure work in public rights-of-way — concrete, excavation, CSU utility permits, city internal projects. For home improvement, use PPRBD instead.'
+  },
+  'Uncertain': {
+    title: 'Not sure — multiple paths',
+    url: null,
+    phone: '719-385-5169',
+    scope: 'Your request could go to more than one department. Consider calling the general City number below, or browse the full list of departments.'
+  }
+};
+
+// ── DOM ──
+const form        = document.getElementById('request-form');
+const requestText = document.getElementById('request-text');
+const charCount   = document.getElementById('char-count');
+const errEl       = document.getElementById('request-error');
+const submitBtn   = document.getElementById('submit-btn');
+const loading     = document.getElementById('loading');
+const loadingText = document.getElementById('loading-text');
+const result      = document.getElementById('result');
+const resultInner = document.getElementById('result-inner');
+const resultDept  = document.getElementById('result-dept');
+const resultReason = document.getElementById('result-reason');
+const resultActions = document.getElementById('result-actions');
+const alternatesContainer = document.getElementById('alternates-container');
+const confidencePill = document.getElementById('confidence-pill');
+const warningContainer = document.getElementById('result-warning-container');
+const retryBtn    = document.getElementById('retry-btn');
+const liveStatus  = document.getElementById('live-status');
+
+// ── CHAR COUNT ──
+requestText.addEventListener('input', () => {
+  const n = requestText.value.length;
+  charCount.textContent = n + ' / 500';
+  charCount.classList.toggle('near', n > 450);
+  if (requestText.getAttribute('aria-invalid') === 'true') {
+    requestText.removeAttribute('aria-invalid');
+    errEl.textContent = '';
+  }
+});
+
+// ── EXAMPLE CHIPS ──
+document.querySelectorAll('.example-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    requestText.value = chip.dataset.example;
+    requestText.dispatchEvent(new Event('input'));
+    requestText.focus();
+  });
+});
+
+// ── AUDIT ACCORDION ──
+const auditBtn = document.getElementById('audit-toggle');
+const auditBody = document.getElementById('audit-body');
+auditBtn.addEventListener('click', () => {
+  const open = auditBtn.getAttribute('aria-expanded') === 'true';
+  auditBtn.setAttribute('aria-expanded', String(!open));
+  auditBody.classList.toggle('open', !open);
+});
+
+// ── RETRY ──
+retryBtn.addEventListener('click', () => {
+  result.classList.remove('visible');
+  form.style.display = '';
+  requestText.focus();
+  requestText.select();
+});
+
+// ── LOADING MESSAGES ──
+const loadingMessages = [
+  'Reading what you wrote…',
+  'Checking which department handles this…',
+  'Making sure PPRBD isn\'t the real answer…',
+  'Almost there…'
+];
+let loadingInterval = null;
+function startLoadingAnimation() {
+  let i = 0;
+  loadingText.textContent = loadingMessages[0];
+  loadingInterval = setInterval(() => {
+    i = (i + 1) % loadingMessages.length;
+    loadingText.textContent = loadingMessages[i];
+  }, 1400);
+}
+function stopLoadingAnimation() {
+  if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; }
+}
+
+// ── FORM SUBMIT ──
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const text = requestText.value.trim();
+  if (!text) {
+    requestText.setAttribute('aria-invalid', 'true');
+    errEl.textContent = 'Please describe what you need before continuing.';
+    liveStatus.textContent = 'Error: please describe what you need before continuing.';
+    requestText.focus();
+    return;
+  }
+
+  // Show loading, hide form
+  form.style.display = 'none';
+  loading.classList.add('visible');
+  startLoadingAnimation();
+  liveStatus.textContent = 'Finding the right department. Please wait.';
+
+  try {
+    const routing = await routeRequest(text);
+    stopLoadingAnimation();
+    loading.classList.remove('visible');
+    renderResult(routing);
+    result.classList.add('visible');
+    // Scroll into view
+    setTimeout(() => {
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      resultInner.focus();
+    }, 100);
+  } catch (err) {
+    stopLoadingAnimation();
+    loading.classList.remove('visible');
+    form.style.display = '';
+    errEl.textContent = 'Something went wrong. Please try again, or browse the departments directly below.';
+    liveStatus.textContent = 'Error occurred. You can try again or use the department list below.';
+  }
+});
+
+// ── ROUTING VIA CLAUDE API ──
+async function routeRequest(userText) {
+  const systemPrompt = `You are a routing assistant for the City of Colorado Springs permit and records portal. Given a resident's plain-language description of what they need, identify which department best handles it.
+
+AVAILABLE DEPARTMENTS:
+
+- PPRBD: Pikes Peak Regional Building Department. SEPARATE AGENCY. Handles ALL residential building permits — decks, roofs, water heaters, HVAC, basement finishes, electrical, plumbing, mechanical. If user describes home improvement or residential construction, the answer is PPRBD. Website: pprbd.org. Phone: 719-327-2880.
+
+- Neighborhood Services: Code enforcement. Tall grass, junk/abandoned vehicles, nuisances, zoning violations, unpermitted short-term rentals, trash issues.
+
+- Public Works: Street and right-of-way permits. Traffic control, road closures, parades, races, block parties, special events affecting streets, sidewalk work.
+
+- Business Licensing: Starting a business, city business licenses, renewals, changes to existing licenses.
+
+- Police Records: Crash reports, background checks, clearance letters, public records requests from police.
+
+- Planning: Zoning, subdivision, rezoning, conditional-use, land-use decisions, plats. DEVELOPMENT scale only, not home remodels.
+
+- Fire: COMMERCIAL fire-safety permits only — alarm systems, sprinklers, hazmat, commercial kitchens, liquor licenses, commercial plan review. Home fires = 911.
+
+- Stormwater: Construction-site stormwater compliance — erosion control, stormwater plans. Mostly contractors and developers.
+
+- Building: NOT residential. Infrastructure in public rights-of-way — concrete, excavation, CSU utility permits. If they describe home construction, send to PPRBD instead.
+
+- Uncertain: Only if the request is truly ambiguous across multiple departments.
+
+RESPOND WITH ONLY THIS JSON (no prose, no markdown):
+{
+  "primary": {
+    "department": "<one of the department names above, exactly>",
+    "reason": "<one short plain-English sentence explaining why, addressed to the resident (you/your). Don't mention 'the system' or 'the classifier'. Be warm, not robotic.>",
+    "confidence": "high" | "medium" | "low"
+  },
+  "alternates": [
+    { "department": "<dept>", "reason": "<short reason>" }
+  ],
+  "warning": "<optional string if there's an important caveat — especially if residential construction is mentioned, warn them PPRBD is a separate agency>"
+}
+
+Include 0-2 alternates only if they're genuinely plausible. Confidence is "high" when one department clearly fits, "medium" when it fits but isn't obvious, "low" when you're guessing.`;
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userText }]
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error('API error: ' + response.status);
+  }
+
+  const data = await response.json();
+  const raw = data.content
+    .filter(item => item.type === 'text')
+    .map(item => item.text)
+    .join('')
+    .trim();
+
+  // Strip potential markdown fences
+  const cleaned = raw.replace(/```json|```/g, '').trim();
+  return JSON.parse(cleaned);
+}
+
+// ── RENDER RESULT ──
+function renderResult(routing) {
+  const primary = routing.primary || {};
+  const deptKey = primary.department || 'Uncertain';
+  const dept = DEPARTMENTS[deptKey] || DEPARTMENTS['Uncertain'];
+  const confidence = primary.confidence || 'medium';
+
+  // Clear prior state
+  resultInner.className = 'result-inner';
+  warningContainer.innerHTML = '';
+  resultActions.innerHTML = '';
+  alternatesContainer.innerHTML = '';
+
+  // Confidence styling
+  resultInner.classList.add('confidence-' + confidence);
+
+  // PPRBD gets special treatment
+  if (deptKey === 'PPRBD') {
+    resultInner.classList.add('warning-path');
+  }
+
+  // Warning banner
+  if (routing.warning) {
+    warningContainer.innerHTML = `
+      <div class="result-warning" role="note">
+        <p>⚠ ${escapeHtml(routing.warning)}</p>
+      </div>
+    `;
+  }
+
+  // Primary content
+  resultDept.textContent = dept.title;
+  resultReason.textContent = primary.reason || dept.scope;
+  confidencePill.textContent = confidence;
+  confidencePill.className = 'confidence-pill ' + confidence;
+
+  // Actions
+  const actions = [];
+  if (dept.url) {
+    actions.push(`<a class="btn-primary-link" href="${escapeHtml(dept.url)}" target="_blank" rel="noopener noreferrer">Go to ${escapeHtml(deptKey === 'PPRBD' ? 'PPRBD' : dept.title.split(' (')[0])} →</a>`);
+  }
+  if (dept.phone) {
+    actions.push(`<a class="btn-secondary-link" href="tel:${dept.phone.replace(/\D/g,'')}">☎ ${escapeHtml(dept.phone)}</a>`);
+  }
+  if (deptKey !== 'Uncertain' && deptKey !== 'PPRBD') {
+    actions.push(`<a class="btn-secondary-link" href="https://aca-prod.accela.com/cosprings/Default.aspx" target="_blank" rel="noopener noreferrer">Sign in / Register</a>`);
+  }
+  resultActions.innerHTML = actions.join('');
+
+  // Alternates
+  if (routing.alternates && routing.alternates.length) {
+    const altItems = routing.alternates
+      .filter(a => DEPARTMENTS[a.department])
+      .map(a => {
+        const d = DEPARTMENTS[a.department];
+        const linkHref = d.url || 'https://aca-prod.accela.com/cosprings/Default.aspx';
+        return `
+          <div class="alt-item">
+            <div class="alt-item-text">
+              <div class="alt-item-title">${escapeHtml(d.title)}</div>
+              <div class="alt-item-reason">${escapeHtml(a.reason)}</div>
+            </div>
+            <a class="alt-item-link" href="${escapeHtml(linkHref)}" target="_blank" rel="noopener noreferrer">Open →</a>
+          </div>
+        `;
+      }).join('');
+    if (altItems) {
+      alternatesContainer.innerHTML = `
+        <div class="alternates">
+          <div class="alternates-label">Could also be</div>
+          ${altItems}
+        </div>
+      `;
+    }
+  }
+
+  liveStatus.textContent = 'Suggested: ' + dept.title + '. ' + (primary.reason || '');
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+</script>
+
+</body>
+</html>
