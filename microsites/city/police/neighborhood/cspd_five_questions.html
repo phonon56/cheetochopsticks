@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What residents actually ask — CSPD data, reorganized</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', Consolas, monospace;
+  --bg: #F3F0EA; --bg2: #E8E4DC;
+  --surf: #FAF7F1; --surf2: #ECE8DF;
+  --paper: #FDFBF5;
+  --txt: #1A1816; --txt2: #4A4540; --txt3: #7A7770; --txt4: #A8A5A0;
+  --navy: #1B2A4A; --navy2: #2A4A6E;
+  --orange: #C45C26; --orange-txt: #A84A18;
+  --red: #7A1515; --red-bg: #FFF5F5;
+  --amber: #6B4000; --amber-bg: #FFF8EE;
+  --green: #0D4A25; --green-bg: #F0FFF5;
+  --blue: #004080; --blue-bg: #EBF3FF;
+  --brd: rgba(0,0,0,.14); --brd2: rgba(0,0,0,.25);
+  --r: 6px; --rl: 14px;
+  font-size: 16px; line-height: 1.6;
+}
+* { box-sizing: border-box }
+html { scroll-behavior: smooth }
+body {
+  font-family: var(--sans); color: var(--txt); background: var(--bg);
+  margin: 0; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+.skip-link {
+  position: absolute; top: -100%; left: 16px; z-index: 9999;
+  background: var(--navy); color: #fff;
+  padding: 10px 18px; border-radius: 0 0 8px 8px;
+  font-size: 15px; font-weight: 600; text-decoration: none; transition: top .15s;
+}
+.skip-link:focus { top: 0 }
+
+/* masthead */
+.masthead {
+  background: var(--navy); color: #fff; padding: 14px 0;
+  border-bottom: 4px solid var(--orange);
+  position: sticky; top: 0; z-index: 40; box-shadow: 0 2px 12px rgba(0,0,0,.15);
+}
+.masthead-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; flex-wrap: wrap;
+}
+.mast-brand {
+  font-family: var(--serif); font-size: 19px; font-weight: 500;
+  letter-spacing: -.01em; display: flex; align-items: baseline; gap: 10px;
+}
+.mast-brand .dot { display: inline-block; width: 8px; height: 8px; background: var(--orange); border-radius: 50% }
+.mast-nav { display: flex; gap: 18px; align-items: center; font-size: 12px; font-weight: 500; flex-wrap: wrap }
+.mast-nav a {
+  color: rgba(255,255,255,.7); text-decoration: none; padding: 4px 0;
+  border-bottom: 2px solid transparent; transition: all .15s;
+}
+.mast-nav a:hover, .mast-nav a:focus { color: #fff; border-bottom-color: var(--orange) }
+.mast-nav a:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px }
+
+/* hero */
+.hero {
+  background: linear-gradient(180deg, var(--paper) 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--brd);
+  padding: 80px 28px 72px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(196,92,38,.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(27,42,74,.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; position: relative }
+.kicker {
+  font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--orange-txt); margin-bottom: 18px;
+}
+.hero h1 {
+  font-family: var(--serif); font-size: clamp(36px, 5vw, 64px);
+  font-weight: 400; line-height: 1.02; letter-spacing: -.03em;
+  color: var(--navy); margin: 0 0 28px; max-width: 920px;
+}
+.hero h1 em { font-style: italic; color: var(--orange-txt); font-weight: 400 }
+.hero-lede {
+  font-family: var(--serif); font-size: clamp(18px, 2vw, 22px);
+  font-weight: 300; line-height: 1.55; color: var(--txt2);
+  max-width: 720px; margin: 0 0 36px;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 24px 40px; padding-top: 28px;
+  border-top: 1px solid var(--brd); font-size: 12px; color: var(--txt3);
+}
+.hero-meta strong { color: var(--txt); display: block; font-size: 15px; font-weight: 600; margin-bottom: 2px; font-family: var(--serif) }
+
+/* table of questions */
+.toc {
+  background: var(--paper); border-top: 1px solid var(--brd); border-bottom: 1px solid var(--brd);
+  padding: 56px 28px;
+}
+.toc-inner { max-width: 1100px; margin: 0 auto }
+.toc-head { text-align: center; margin-bottom: 40px }
+.toc-head h2 {
+  font-family: var(--serif); font-size: 28px; font-weight: 400;
+  letter-spacing: -.02em; color: var(--navy); margin: 0 0 10px;
+}
+.toc-head p { font-size: 14px; color: var(--txt2); max-width: 620px; margin: 0 auto; line-height: 1.6 }
+.toc-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;
+}
+.toc-item {
+  background: var(--surf); border: 1px solid var(--brd);
+  border-left: 3px solid var(--orange);
+  border-radius: 0 var(--r) var(--r) 0; padding: 18px 22px;
+  text-decoration: none; color: var(--txt); display: block; transition: all .15s;
+}
+.toc-item:hover, .toc-item:focus {
+  background: #fff; border-left-color: var(--navy); transform: translateX(2px);
+}
+.toc-item:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px }
+.toc-n {
+  font-family: var(--serif); font-size: 36px; color: var(--orange); line-height: 1;
+  font-weight: 300; letter-spacing: -.04em; margin-bottom: 6px; display: block;
+}
+.toc-q { font-family: var(--serif); font-size: 17px; font-weight: 500; color: var(--navy); line-height: 1.25; margin-bottom: 4px }
+.toc-sub { font-size: 11px; color: var(--txt3); letter-spacing: .04em }
+
+/* question sections */
+.q-wrap { max-width: 1100px; margin: 0 auto; padding: 72px 28px 32px }
+.q { margin-bottom: 96px; scroll-margin-top: 90px }
+.q:last-child { margin-bottom: 48px }
+.q-num { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px }
+.q-num-dig {
+  font-family: var(--serif); font-size: 92px; font-weight: 300;
+  color: var(--orange); line-height: .85; letter-spacing: -.04em;
+}
+.q-num-kick {
+  font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--txt3);
+}
+.q h2 {
+  font-family: var(--serif); font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 400; line-height: 1.08; letter-spacing: -.025em;
+  color: var(--navy); margin: 0 0 22px; max-width: 820px;
+}
+.q h2 em { font-style: italic; color: var(--orange-txt); font-weight: 400 }
+.q-lede {
+  font-family: var(--serif); font-size: 19px; font-weight: 300; line-height: 1.55;
+  color: var(--txt2); max-width: 680px; margin: 0 0 40px;
+}
+
+.q-sources {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 14px 0 24px; margin-bottom: 32px;
+  border-bottom: 1px solid var(--brd);
+}
+.q-src {
+  font-family: var(--mono); font-size: 10px;
+  background: var(--surf2); padding: 5px 10px;
+  border-radius: 4px; color: var(--txt3);
+  border: 1px solid var(--brd); letter-spacing: .02em;
+}
+.q-src.src-ok { background: #F0FFF5; color: var(--green); border-color: rgba(13,74,37,.25) }
+.q-src.src-gap { background: #FFF5F5; color: var(--red); border-color: rgba(122,21,21,.25); border-style: dashed }
+
+.data-card {
+  background: var(--paper); border: 1px solid var(--brd);
+  border-radius: var(--rl); padding: 28px 32px; margin-bottom: 20px; position: relative;
+}
+.data-card-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 12px; margin-bottom: 22px;
+  padding-bottom: 16px; border-bottom: 1px solid var(--brd);
+}
+.data-card-title {
+  font-family: var(--serif); font-size: 22px; font-weight: 500;
+  color: var(--navy); letter-spacing: -.01em; line-height: 1.2; margin: 0;
+}
+.data-card-sub { font-size: 11px; color: var(--txt3); margin-top: 4px; font-family: var(--mono) }
+.data-card-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 12px; background: var(--navy); color: #fff;
+}
+.data-card-tag.tag-warn { background: var(--amber) }
+.data-card-tag.tag-gap { background: var(--red) }
+.data-card-tag.tag-ok { background: var(--green) }
+
+/* compact stat tiles */
+.stat-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px; margin: 14px 0;
+}
+.stat-tile {
+  background: var(--surf); border: 1px solid var(--brd);
+  border-radius: var(--r); padding: 18px 16px; text-align: left;
+}
+.stat-n {
+  font-family: var(--serif); font-size: 30px; font-weight: 400;
+  color: var(--navy); line-height: 1; letter-spacing: -.02em;
+  display: block; margin-bottom: 4px;
+}
+.stat-n.n-red { color: var(--red) }
+.stat-n.n-orange { color: var(--orange) }
+.stat-lbl { font-size: 11px; color: var(--txt2); font-weight: 600 }
+.stat-sub { font-size: 11px; color: var(--txt3); margin-top: 4px }
+
+/* bars */
+.bar-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 0; border-bottom: 1px solid var(--brd); font-size: 13px;
+}
+.bar-row:last-child { border-bottom: none }
+.bar-lbl { flex: 1; min-width: 110px; color: var(--txt2) }
+.bar-track { flex: 2; background: var(--surf2); border-radius: 3px; height: 10px; overflow: hidden; min-width: 60px }
+.bar-fill { height: 100%; border-radius: 3px; transition: width .6s ease }
+.bar-n {
+  min-width: 48px; text-align: right; font-weight: 600;
+  color: var(--txt); font-size: 12px; font-family: var(--mono);
+}
+
+/* caveat */
+.caveat {
+  background: var(--amber-bg); border-left: 4px solid var(--amber);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 18px 22px; margin: 24px 0;
+  font-size: 14px; color: var(--txt); line-height: 1.6;
+}
+.caveat-lbl {
+  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 6px;
+}
+.caveat strong { color: var(--amber) }
+
+/* gap marker */
+.gap {
+  background: #fff; border: 2px dashed var(--red);
+  border-radius: var(--r); padding: 22px 26px; margin: 24px 0; position: relative;
+}
+.gap::before {
+  content: 'NOT PUBLISHED'; position: absolute; top: -10px; left: 16px;
+  background: var(--red); color: #fff;
+  font-size: 9px; font-weight: 700; letter-spacing: .16em;
+  padding: 3px 10px; border-radius: 3px;
+}
+.gap-head {
+  font-family: var(--serif); font-size: 17px; font-weight: 500;
+  color: var(--red); margin: 6px 0 10px; line-height: 1.3;
+}
+.gap-body { font-size: 13.5px; color: var(--txt2); line-height: 1.6 }
+.gap-body strong { color: var(--txt) }
+.gap-ask {
+  margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--red);
+  font-size: 12px; color: var(--txt2);
+}
+.gap-ask-lbl { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red); margin-bottom: 4px }
+
+/* contact card */
+.contact {
+  display: grid; grid-template-columns: 1fr 1.6fr;
+  gap: 0; background: var(--surf); border: 1px solid var(--brd);
+  border-radius: var(--r); overflow: hidden; margin-bottom: 14px;
+}
+.contact-when {
+  background: var(--navy); color: #fff; padding: 18px 20px;
+  font-family: var(--serif);
+}
+.contact-when-lbl { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; opacity: .7; margin-bottom: 6px; font-family: var(--sans); font-weight: 700 }
+.contact-when-h { font-size: 18px; font-weight: 500; line-height: 1.25 }
+.contact-how { padding: 18px 22px }
+.contact-num {
+  font-family: var(--serif); font-size: 24px; font-weight: 500;
+  color: var(--navy); letter-spacing: -.01em; margin: 0 0 6px;
+}
+.contact-how-sub { font-size: 12px; color: var(--txt2); line-height: 1.5 }
+.contact-how a { color: var(--blue); text-decoration: none }
+.contact-how a:hover { text-decoration: underline }
+
+/* comparison block — military vs cspd */
+.compare {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  margin-bottom: 20px;
+}
+.compare-col {
+  background: var(--surf); border: 1px solid var(--brd);
+  border-radius: var(--r); padding: 20px;
+}
+.compare-col.mil { border-top: 3px solid var(--green) }
+.compare-col.cspd { border-top: 3px solid var(--amber) }
+.compare-col h4 {
+  font-family: var(--serif); font-size: 16px; font-weight: 600;
+  color: var(--navy); margin: 0 0 4px;
+}
+.compare-col .sub { font-size: 11px; color: var(--txt3); margin-bottom: 14px; font-family: var(--mono) }
+.compare-col ul { margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--txt2); line-height: 1.7 }
+.compare-col ul li { padding: 2px 0 }
+
+/* funnel/stack */
+.stack-row {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 6px;
+}
+.stack-lbl { flex: 0 0 180px; font-size: 12px; color: var(--txt2) }
+.stack-lbl strong { color: var(--txt); display: block; margin-bottom: 2px }
+.stack-lbl small { font-size: 11px; color: var(--txt3) }
+.stack-bar {
+  height: 34px; border-radius: 4px; display: flex; align-items: center;
+  padding: 0 14px; color: #fff; font-size: 12px; font-weight: 600;
+}
+
+/* audit section */
+.audit {
+  background: var(--navy); color: #fff; padding: 72px 28px;
+}
+.audit-inner { max-width: 1100px; margin: 0 auto }
+.audit .kicker { color: var(--orange) }
+.audit h2 {
+  font-family: var(--serif); font-size: clamp(30px, 4vw, 42px);
+  font-weight: 400; color: #fff;
+  margin: 0 0 18px; letter-spacing: -.02em; max-width: 760px; line-height: 1.1;
+}
+.audit p.intro {
+  font-family: var(--serif); font-size: 18px; line-height: 1.6;
+  color: rgba(255,255,255,.8); max-width: 680px; margin: 0 0 40px;
+}
+.audit-findings {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;
+}
+.audit-card {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--r); padding: 20px 22px;
+}
+.audit-card h4 {
+  font-family: var(--serif); font-size: 16px; font-weight: 500;
+  color: #fff; margin: 0 0 8px; letter-spacing: -.01em;
+}
+.audit-card p { font-size: 13px; color: rgba(255,255,255,.72); line-height: 1.55; margin: 0 }
+.audit-card .wcag {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--orange); margin-top: 10px; letter-spacing: .06em;
+}
+
+/* appendix (demographics) */
+.appendix {
+  background: var(--bg2); padding: 72px 28px;
+}
+.appendix-inner { max-width: 1100px; margin: 0 auto }
+.appendix .kicker { color: var(--txt3) }
+.appendix h2 {
+  font-family: var(--serif); font-size: clamp(28px, 3vw, 38px);
+  font-weight: 400; color: var(--navy);
+  margin: 0 0 14px; letter-spacing: -.02em; max-width: 780px; line-height: 1.1;
+}
+.appendix .intro {
+  font-size: 15px; color: var(--txt2); max-width: 680px;
+  margin: 0 0 32px; line-height: 1.6;
+}
+
+/* colophon */
+.colo {
+  background: var(--navy); color: rgba(255,255,255,.7);
+  padding: 52px 28px 40px; font-size: 13px;
+}
+.colo-inner { max-width: 1100px; margin: 0 auto }
+.colo-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 32px }
+.colo h5 { font-family: var(--serif); color: #fff; margin: 0 0 12px; font-size: 15px; font-weight: 500 }
+.colo p { line-height: 1.65; color: rgba(255,255,255,.65); margin: 0 0 10px }
+.colo ul { list-style: none; padding: 0; margin: 0 }
+.colo li { padding: 4px 0; font-size: 12px }
+.colo a { color: var(--orange); text-decoration: none }
+.colo a:hover { text-decoration: underline }
+.colo-fine {
+  padding-top: 24px; border-top: 1px solid rgba(255,255,255,.15);
+  font-size: 11px; color: rgba(255,255,255,.45);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+
+@media (max-width: 780px) {
+  .compare { grid-template-columns: 1fr }
+  .colo-grid { grid-template-columns: 1fr }
+  .contact { grid-template-columns: 1fr }
+  .hero { padding: 56px 22px }
+  .q-wrap { padding: 56px 22px 24px }
+  .data-card { padding: 22px 20px }
+  .stack-lbl { flex: 0 0 120px }
+  .ask-inner { padding: 40px 22px 52px }
+  .ask-field { flex-direction: column; align-items: stretch }
+  .ask-submit { width: 100% }
+}
+
+/* ═════════ abbreviations — dotted underline + native tooltip ═════════ */
+abbr[title] {
+  text-decoration: underline dotted var(--txt3);
+  text-underline-offset: 3px;
+  cursor: help;
+  font-variant: all-small-caps;
+  letter-spacing: .04em;
+}
+abbr[title]:hover { color: var(--navy); text-decoration-color: var(--navy) }
+
+/* ═════════ agency dropdown (native details) ═════════ */
+details.agency {
+  display: inline-block;
+  position: relative;
+  margin-left: auto;
+}
+details.agency summary {
+  list-style: none;
+  cursor: pointer;
+  font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  padding: 4px 14px 4px 10px;
+  border-radius: 12px;
+  background: var(--navy); color: #fff;
+  transition: all .15s;
+  user-select: none;
+  position: relative;
+}
+details.agency summary::-webkit-details-marker { display: none }
+details.agency summary::after {
+  content: '▾';
+  margin-left: 6px;
+  font-size: 9px;
+  transition: transform .2s;
+}
+details.agency[open] summary::after { transform: rotate(180deg); display: inline-block }
+details.agency summary:hover { background: var(--navy2) }
+details.agency summary:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px }
+details.agency .agency-list {
+  position: absolute;
+  right: 0; top: calc(100% + 6px);
+  min-width: 280px;
+  background: #fff;
+  border: 1px solid var(--brd);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(27,42,74,.15);
+  padding: 6px 0;
+  z-index: 20;
+}
+details.agency .agency-list a {
+  display: block;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--txt);
+  text-decoration: none;
+  border-bottom: 1px solid var(--brd);
+  line-height: 1.3;
+}
+details.agency .agency-list a:last-child { border-bottom: none }
+details.agency .agency-list a:hover {
+  background: var(--surf2);
+  color: var(--navy);
+}
+details.agency .agency-list a:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: -2px;
+}
+details.agency .agency-list a .ag-short {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--txt3);
+  display: block;
+  margin-top: 2px;
+  letter-spacing: .04em;
+}
+details.agency .agency-list a::after {
+  content: ' ↗';
+  color: var(--orange);
+  font-weight: 400;
+}
+
+/* ═════════ regional explainer ═════════ */
+.regional {
+  background: var(--paper);
+  border: 1px solid var(--brd);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 24px 28px;
+  margin-bottom: 28px;
+}
+.regional h4 {
+  font-family: var(--serif); font-size: 17px; font-weight: 500;
+  color: var(--navy); margin: 0 0 12px;
+}
+.regional-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 14px 0;
+}
+.reg-tier {
+  background: var(--surf);
+  border: 1px solid var(--brd);
+  border-radius: var(--r);
+  padding: 14px 16px;
+}
+.reg-n {
+  font-family: var(--serif); font-size: 26px; font-weight: 500;
+  color: var(--navy); line-height: 1; letter-spacing: -.02em;
+  display: block; margin-bottom: 4px;
+}
+.reg-lbl { font-size: 12px; font-weight: 600; color: var(--txt); margin-bottom: 3px }
+.reg-desc { font-size: 11px; color: var(--txt3); line-height: 1.45 }
+
+/* honor roll */
+.honor {
+  background: linear-gradient(135deg, #F8F3E8 0%, #FAF7F1 100%);
+  border: 1px solid var(--brd);
+  border-top: 3px solid var(--gold);
+  border-radius: var(--r);
+  padding: 26px 30px;
+  margin: 20px 0;
+}
+.honor-hd {
+  display: flex; align-items: baseline; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px; margin-bottom: 14px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--brd);
+}
+.honor-hd h4 {
+  font-family: var(--serif); font-size: 20px; font-weight: 500;
+  color: var(--gold); margin: 0; letter-spacing: -.01em;
+}
+.honor-hd-sub { font-size: 11px; color: var(--txt3); font-family: var(--mono) }
+.honor-intro {
+  font-family: var(--serif); font-size: 15px; font-weight: 300;
+  color: var(--txt2); line-height: 1.65;
+  max-width: 640px; margin: 0 0 18px;
+}
+.honor-list { list-style: none; padding: 0; margin: 0 }
+.honor-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 14px; padding: 10px 0;
+  border-bottom: 1px dotted var(--brd);
+  font-size: 13px;
+}
+.honor-item:last-child { border-bottom: none }
+.honor-yr { font-family: var(--mono); font-size: 11px; color: var(--gold); font-weight: 600 }
+.honor-name { font-weight: 600; color: var(--txt); margin-bottom: 2px }
+.honor-circ { font-size: 12px; color: var(--txt3); line-height: 1.45 }
+.honor-links {
+  margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--brd);
+  font-size: 12px; color: var(--txt2); line-height: 1.7;
+}
+.honor-links a { color: var(--blue); text-decoration: none }
+.honor-links a:hover { text-decoration: underline }
+
+/* ═════════ ASK WIDGET ═════════ */
+.ask {
+  background:
+    linear-gradient(135deg, rgba(196,92,38,.08) 0%, rgba(27,42,74,.04) 100%),
+    var(--paper);
+  border-top: 1px solid var(--brd);
+  border-bottom: 1px solid var(--brd);
+  position: relative;
+  overflow: hidden;
+}
+.ask::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 10% 90%, rgba(196,92,38,.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+.ask-inner {
+  max-width: 1100px; margin: 0 auto; padding: 64px 28px 72px;
+  position: relative;
+}
+.ask-head {
+  max-width: 780px;
+  margin-bottom: 32px;
+}
+.ask-head .kicker { color: var(--orange-txt); margin-bottom: 14px }
+.ask-head h2 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3.5vw, 40px);
+  font-weight: 400; letter-spacing: -.025em; line-height: 1.1;
+  color: var(--navy); margin: 0 0 14px;
+}
+.ask-head h2 em { font-style: italic; color: var(--orange-txt); font-weight: 400 }
+.ask-head p {
+  font-family: var(--serif); font-size: 17px; font-weight: 300;
+  line-height: 1.55; color: var(--txt2); margin: 0;
+}
+
+.ask-card {
+  background: #fff;
+  border: 1px solid var(--brd);
+  border-radius: var(--rl);
+  padding: 28px;
+  box-shadow: 0 4px 24px rgba(27,42,74,.06);
+  margin-bottom: 28px;
+}
+.ask-field {
+  display: flex; gap: 12px; align-items: stretch;
+}
+.ask-input {
+  flex: 1;
+  font-family: var(--sans);
+  font-size: 16px;
+  padding: 14px 18px;
+  border: 2px solid var(--brd);
+  border-radius: var(--r);
+  background: var(--surf);
+  color: var(--txt);
+  transition: all .15s;
+  min-height: 52px;
+}
+.ask-input::placeholder { color: var(--txt3) }
+.ask-input:focus {
+  outline: none;
+  border-color: var(--orange);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(196,92,38,.15);
+}
+.ask-submit {
+  font-family: var(--sans);
+  font-size: 14px; font-weight: 600;
+  padding: 0 24px;
+  background: var(--navy); color: #fff;
+  border: none; border-radius: var(--r);
+  cursor: pointer; transition: all .15s;
+  white-space: nowrap;
+  min-height: 52px;
+}
+.ask-submit:hover { background: var(--navy2); transform: translateY(-1px) }
+.ask-submit:active { transform: translateY(0) }
+.ask-submit:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px }
+.ask-submit:disabled { background: var(--txt3); cursor: not-allowed; transform: none }
+
+.ask-meta {
+  display: flex; justify-content: space-between; gap: 14px;
+  margin-top: 12px; font-size: 11px; color: var(--txt3);
+  flex-wrap: wrap;
+}
+.ask-chips {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px;
+}
+.ask-chip {
+  font-size: 11px; color: var(--txt2);
+  background: var(--surf2); border: 1px solid var(--brd);
+  padding: 5px 10px; border-radius: 20px;
+  cursor: pointer; transition: all .15s;
+  font-family: var(--sans);
+}
+.ask-chip:hover { background: #fff; border-color: var(--navy); color: var(--navy) }
+.ask-chip:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px }
+
+.ask-result {
+  margin-top: 20px;
+  padding: 20px 22px;
+  border-radius: var(--r);
+  font-size: 14px; line-height: 1.6;
+  display: none;
+  animation: askResultFade .3s ease;
+}
+.ask-result.visible { display: block }
+.ask-result.match {
+  background: var(--green-bg);
+  border: 1px solid rgba(13,74,37,.2);
+  border-left: 4px solid var(--green);
+}
+.ask-result.gap {
+  background: var(--amber-bg);
+  border: 1px solid rgba(107,64,0,.2);
+  border-left: 4px solid var(--amber);
+}
+.ask-result.err {
+  background: var(--red-bg);
+  border: 1px solid rgba(122,21,21,.2);
+  border-left: 4px solid var(--red);
+}
+.ask-result-head {
+  font-family: var(--serif); font-size: 17px; font-weight: 500;
+  margin-bottom: 6px;
+}
+.ask-result.match .ask-result-head { color: var(--green) }
+.ask-result.gap .ask-result-head { color: var(--amber) }
+.ask-result.err .ask-result-head { color: var(--red) }
+.ask-result-body { color: var(--txt2); font-size: 13.5px }
+.ask-result-link {
+  display: inline-block; margin-top: 10px;
+  font-family: var(--sans); font-size: 13px; font-weight: 600;
+  text-decoration: none;
+  padding: 7px 14px; border-radius: 4px;
+}
+.ask-result.match .ask-result-link { background: var(--green); color: #fff }
+.ask-result.match .ask-result-link:hover { background: #063517 }
+.ask-result.gap .ask-result-link { background: var(--amber); color: #fff }
+
+@keyframes askResultFade {
+  from { opacity: 0; transform: translateY(-4px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+
+/* aggregate display */
+.agg {
+  margin-top: 44px;
+  padding-top: 36px;
+  border-top: 1px solid var(--brd);
+}
+.agg-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 14px; margin-bottom: 22px; flex-wrap: wrap;
+}
+.agg-head h3 {
+  font-family: var(--serif); font-size: 22px; font-weight: 500;
+  color: var(--navy); margin: 0; letter-spacing: -.01em;
+}
+.agg-count {
+  font-size: 11px; color: var(--txt3);
+  font-family: var(--mono);
+}
+.agg-tabs {
+  display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap;
+}
+.agg-tab {
+  font-family: var(--sans); font-size: 12px; font-weight: 600;
+  padding: 7px 14px; border-radius: 20px;
+  background: var(--surf); color: var(--txt2);
+  border: 1px solid var(--brd);
+  cursor: pointer; transition: all .15s;
+}
+.agg-tab:hover { background: #fff; border-color: var(--navy); color: var(--navy) }
+.agg-tab.active {
+  background: var(--navy); color: #fff; border-color: var(--navy);
+}
+.agg-tab:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px }
+
+.agg-list { margin: 0; padding: 0; list-style: none }
+.agg-empty {
+  text-align: center; color: var(--txt3);
+  font-style: italic; font-family: var(--serif);
+  font-size: 15px; padding: 32px 20px;
+  background: var(--surf); border: 1px dashed var(--brd2);
+  border-radius: var(--r);
+}
+.agg-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 14px; align-items: center;
+  padding: 14px 18px;
+  background: var(--surf);
+  border: 1px solid var(--brd);
+  border-radius: var(--r);
+  margin-bottom: 8px;
+  transition: all .15s;
+}
+.agg-item:hover { background: #fff }
+.agg-item.has-answer { border-left: 3px solid var(--green) }
+.agg-item.no-answer  { border-left: 3px solid var(--red) }
+.agg-q { font-size: 14px; color: var(--txt); line-height: 1.4 }
+.agg-count-chip {
+  font-size: 11px; font-weight: 700;
+  color: var(--txt2); background: var(--bg2);
+  padding: 4px 10px; border-radius: 12px;
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+.agg-status {
+  font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 10px; border-radius: 12px;
+}
+.agg-status.ok { background: var(--green); color: #fff }
+.agg-status.gap { background: var(--red); color: #fff }
+.agg-link {
+  font-size: 11px; color: var(--blue);
+  text-decoration: none;
+}
+.agg-link:hover { text-decoration: underline }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="mast-brand"><span class="dot"></span> What residents actually ask</div>
+    <nav class="mast-nav" aria-label="Section navigation">
+      <a href="#ask">Ask</a>
+      <a href="#q1">Children</a>
+      <a href="#q2">Neighborhood</a>
+      <a href="#q3">Taxes</a>
+      <a href="#q4">Crime</a>
+      <a href="#q5">Who to call</a>
+      <a href="#q6">Shootings</a>
+      <a href="#audit">Audit</a>
+      <a href="#appendix">Appendix</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ═════════ HERO ═════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="kicker">CSPD data, reorganized</div>
+    <h1>Five questions residents actually ask.<br>Plus one appendix, at the bottom, <em>where it belongs.</em></h1>
+    <p class="hero-lede">The Colorado Springs Police Department Data Hub publishes its work as six separate stories, organized by reporting category. This page reorganizes the same underlying data around five questions people actually ask about their city — how many children are hurt, who lives in my neighborhood, where are my taxes going, what is the overall crime picture, and if I have a problem, who do I call and trust. A sixth section puts officer-involved shootings in context of regional shooting numbers. Ethnicity and workforce composition are reported at the end, in ratio-to-population, as context — not as a frame.</p>
+    <div class="hero-meta">
+      <div><strong>5</strong> resident-first questions</div>
+      <div><strong>1</strong> regional-context section</div>
+      <div><strong>1</strong> demographics appendix (at bottom)</div>
+      <div><strong>Ask</strong> your own — saved to a shared log</div>
+      <div><strong>Apr 24 2026</strong> DOJ Title II deadline — passed</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ ASK ═════════ -->
+<section class="ask" id="ask" aria-labelledby="ask-title">
+  <div class="ask-inner">
+    <div class="ask-head">
+      <div class="kicker">ask your own question</div>
+      <h2 id="ask-title">The six questions below are <em>our guess.</em> What do <em>you</em> want to know?</h2>
+      <p>Type a question about public safety in Colorado Springs. If we have an answer on this page, we&rsquo;ll point you to it. If we don&rsquo;t, your question joins the public record of what residents actually want to know — and the aggregate itself becomes a civic signal the city can see.</p>
+    </div>
+
+    <div class="ask-card">
+      <form class="ask-field" id="askForm" autocomplete="off" role="search">
+        <label for="askInput" style="position:absolute;left:-10000px">Your question about Colorado Springs public safety</label>
+        <input type="text" id="askInput" class="ask-input"
+               placeholder="e.g., How fast does CSPD respond in my neighborhood?"
+               maxlength="240" required>
+        <button type="submit" class="ask-submit" id="askSubmit">Ask</button>
+      </form>
+      <div class="ask-meta">
+        <span id="askCharCount" aria-live="polite">0 / 240</span>
+        <span>Your questions are visible to other visitors. Please keep them civil and specific.</span>
+      </div>
+      <div class="ask-chips" role="list" aria-label="Example questions to try">
+        <button type="button" class="ask-chip" data-suggest="How fast does CSPD respond in my neighborhood?">Response times</button>
+        <button type="button" class="ask-chip" data-suggest="What happens after I file a police report?">After a report</button>
+        <button type="button" class="ask-chip" data-suggest="How do I become a CSPD officer?">Joining CSPD</button>
+        <button type="button" class="ask-chip" data-suggest="Are there programs for veterans in crisis?">Veteran support</button>
+        <button type="button" class="ask-chip" data-suggest="How safe is my school?">School safety</button>
+        <button type="button" class="ask-chip" data-suggest="Where can I see body-worn camera footage?">BWC footage</button>
+      </div>
+
+      <div class="ask-result" id="askResult" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="agg" id="aggSection" aria-labelledby="agg-title">
+      <div class="agg-head">
+        <h3 id="agg-title">What other residents are asking</h3>
+        <div class="agg-count" id="aggCount">Loading…</div>
+      </div>
+      <div class="agg-tabs" role="tablist">
+        <button class="agg-tab active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button class="agg-tab" data-filter="gap" role="tab" aria-selected="false">Unanswered (gaps)</button>
+        <button class="agg-tab" data-filter="answer" role="tab" aria-selected="false">Has an answer</button>
+      </div>
+      <ul class="agg-list" id="aggList" aria-live="polite"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ TOC ═════════ -->
+<section class="toc" aria-labelledby="toc-title">
+  <div class="toc-inner">
+    <div class="toc-head">
+      <h2 id="toc-title">Start with the question. Follow the data. See what's missing.</h2>
+      <p>Each section shows what is known, what is not, and where to ask.</p>
+    </div>
+    <div class="toc-grid">
+      <a class="toc-item" href="#q1"><span class="toc-n">01</span><div class="toc-q">How many children are hurt?</div><div class="toc-sub">Abuse · neglect · crashes · violent crime victims · where to call</div></a>
+      <a class="toc-item" href="#q2"><span class="toc-n">02</span><div class="toc-q">Who is in my neighborhood?</div><div class="toc-sub">People · ages · families · military · housing · what's nearby</div></a>
+      <a class="toc-item" href="#q3"><span class="toc-n">03</span><div class="toc-q">Where are my taxes going?</div><div class="toc-sub">CSPD budget · per-capita spend · what it's used for</div></a>
+      <a class="toc-item" href="#q4"><span class="toc-n">04</span><div class="toc-q">What is the overall crime?</div><div class="toc-sub">Totals · direction · the three categories in plain words</div></a>
+      <a class="toc-item" href="#q5"><span class="toc-n">05</span><div class="toc-q">If I have a problem, who do I call and trust?</div><div class="toc-sub">Emergency · non-emergency · reporting officer concerns · military standard</div></a>
+      <a class="toc-item" href="#q6"><span class="toc-n">06</span><div class="toc-q">Officer shootings — in regional context</div><div class="toc-sub">How many shootings happen in Colorado Springs overall? Where do OIS fit?</div></a>
+    </div>
+  </div>
+</section>
+
+<div class="q-wrap">
+
+<!-- ═════════ Q1 — Children ═════════ -->
+<section class="q" id="q1">
+  <div class="q-num"><div class="q-num-dig">01</div><div class="q-num-kick">Children</div></div>
+  <h2>How many children are <em>hurt</em> in Colorado Springs each year — and who is responsible for helping?</h2>
+  <p class="q-lede">The question parents actually ask isn't "what's the crime rate." It's "are kids safe." That question crosses agencies: child abuse and neglect go through El Paso County DHS, injuries and crashes go through CSPD and hospitals, and the coroner picks up the most serious cases after the fact. CSPD's Data Hub does not have a children-specific section. Bringing the numbers together is the first reorganization this page performs.</p>
+
+  <div class="q-sources">
+    <span class="q-src src-ok">EPC DHS child welfare intake</span>
+    <span class="q-src src-ok">CSPD bc88-hemr (victim age available on request)</span>
+    <span class="q-src src-ok">CSPD crash data (rt4j-ce7k)</span>
+    <span class="q-src src-ok">EPCCO coroner — child fatalities</span>
+    <span class="q-src src-ok">Safe2Tell statewide</span>
+    <span class="q-src src-gap">Combined child-safety dashboard — NOT PUBLISHED</span>
+  </div>
+
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">The scale, in El Paso County</h3>
+        <div class="data-card-sub">Most recent public figures · rates per year</div>
+      </div>
+      <details class="agency">
+        <summary aria-label="Agencies that hold the underlying data">Agencies involved ▾</summary>
+        <div class="agency-list" role="menu">
+          <a href="https://humanservices.elpasoco.com/child-protective-services/" target="_blank" rel="noopener" role="menuitem">
+            El Paso County Department of Human Services
+            <span class="ag-short">EPC DHS · child-abuse intake &amp; case management</span>
+          </a>
+          <a href="https://cdhs.colorado.gov/our-services/child-and-family-services/child-welfare" target="_blank" rel="noopener" role="menuitem">
+            Colorado Department of Human Services
+            <span class="ag-short">CDHS · statewide child welfare oversight</span>
+          </a>
+          <a href="https://coloradosprings.gov/police" target="_blank" rel="noopener" role="menuitem">
+            Colorado Springs Police Department
+            <span class="ag-short">CSPD · incident reports &amp; investigation</span>
+          </a>
+          <a href="https://coroner.elpasoco.com/" target="_blank" rel="noopener" role="menuitem">
+            El Paso County Coroner's Office
+            <span class="ag-short">EPCCO · child fatality review &amp; reporting</span>
+          </a>
+          <a href="https://safepassagecac.org" target="_blank" rel="noopener" role="menuitem">
+            Safe Passage Child Advocacy Center
+            <span class="ag-short">Forensic interviews, medical, therapy</span>
+          </a>
+          <a href="https://safe2tell.org" target="_blank" rel="noopener" role="menuitem">
+            Safe2Tell Colorado
+            <span class="ag-short">Statewide school-safety anonymous tip line</span>
+          </a>
+          <a href="https://casappr.org" target="_blank" rel="noopener" role="menuitem">
+            CASA of the Pikes Peak Region
+            <span class="ag-short">Court-Appointed Special Advocates</span>
+          </a>
+        </div>
+      </details>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-tile"><span class="stat-n n-red">~16,100</span><div class="stat-lbl">Hotline calls / year</div><div class="stat-sub"><abbr title="El Paso County">EPC</abbr> ranks #1 in Colorado for child-abuse hotline calls. 161,135 total 2015–2024.</div></div>
+      <div class="stat-tile"><span class="stat-n">~6,000</span><div class="stat-lbl">Assessments / year</div><div class="stat-sub">Of hotline calls, about 37% proceed to an abuse/neglect assessment.</div></div>
+      <div class="stat-tile"><span class="stat-n">~665</span><div class="stat-lbl">Legally involved cases</div><div class="stat-sub">Cases with court involvement at any point in the year. 95% of children remain in the home.</div></div>
+      <div class="stat-tile"><span class="stat-n">~173,700</span><div class="stat-lbl">Children under 18</div><div class="stat-sub">El Paso County total child population (Kids Count baseline).</div></div>
+    </div>
+    <div class="caveat" role="note">
+      <div class="caveat-lbl">What the numbers actually say</div>
+      <abbr title="El Paso County">EPC</abbr> leads Colorado in hotline calls — not because abuse is worst here, but because the community <strong>reports</strong> more consistently. Five military installations, a strong pediatric healthcare network, and active mandatory reporters (teachers, clergy, clinicians) produce volume. A hotline call is not a finding of abuse; it's a concern being raised. The movement from 16,100 calls to ~665 legally-involved cases is the system screening — most calls resolve with services, family support, or no action needed.
+    </div>
+
+    <h4 style="font-family:var(--serif);font-size:16px;color:var(--navy);margin:22px 0 10px;font-weight:500">Other ways children are hurt — the data that exists</h4>
+    <div class="bar-row"><span class="bar-lbl"><strong>Crashes with injured minor</strong></span><div class="bar-track"><div class="bar-fill" style="width:68%;background:var(--orange)"></div></div><span class="bar-n">CSPD</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Violent crime — minor victim</strong></span><div class="bar-track"><div class="bar-fill" style="width:48%;background:var(--orange)"></div></div><span class="bar-n">CSPD</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Child drug/alcohol exposure</strong></span><div class="bar-track"><div class="bar-fill" style="width:32%;background:var(--amber)"></div></div><span class="bar-n"><abbr title="El Paso County Department of Human Services">EPC DHS</abbr></span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Child fatalities (all causes)</strong></span><div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--red)"></div></div><span class="bar-n"><abbr title="El Paso County Coroner's Office">EPCCO</abbr></span></div>
+    <p style="font-size:11px;color:var(--txt3);margin-top:10px;font-style:italic">Bar widths illustrate relative volume — exact counts require filtering the source datasets by victim age, which the "Crimes Against Persons" story does not present.</p>
+  </div>
+
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">Who to call, if you're worried about a child</h3>
+        <div class="data-card-sub">These are the front doors — call the one that fits the situation</div>
+      </div>
+      <span class="data-card-tag tag-ok">Action</span>
+    </div>
+    <div class="contact">
+      <div class="contact-when">
+        <div class="contact-when-lbl">If a child is in immediate danger</div>
+        <div class="contact-when-h">Call 911 first. Always. Then follow up with the agency below.</div>
+      </div>
+      <div class="contact-how">
+        <div class="contact-num"><a href="tel:911" style="color:inherit;text-decoration:none">911</a></div>
+        <div class="contact-how-sub">Immediate physical danger, an injury in progress, a child alone in an unsafe place.</div>
+      </div>
+    </div>
+    <div class="contact">
+      <div class="contact-when">
+        <div class="contact-when-lbl">Suspected abuse, neglect, or concerning pattern</div>
+        <div class="contact-when-h">Colorado Child Abuse &amp; Neglect Hotline — 24/7, anonymous, protected reporter</div>
+      </div>
+      <div class="contact-how">
+        <div class="contact-num"><a href="tel:+18442645437" style="color:inherit;text-decoration:none">1-844-CO-4-KIDS</a></div>
+        <div class="contact-how-sub">(<a href="tel:+18442645437">1-844-264-5437</a>). Staffed 24/7. Calls can be anonymous. Colorado law protects good-faith reporters from liability. If you're unsure, call anyway — you're not filing charges, you're describing what you saw. <a href="https://co4kids.org" target="_blank" rel="noopener">co4kids.org ↗</a></div>
+      </div>
+    </div>
+    <div class="contact">
+      <div class="contact-when">
+        <div class="contact-when-lbl">A student is in crisis or planning harm</div>
+        <div class="contact-when-h">Safe2Tell — statewide, anonymous, 24/7</div>
+      </div>
+      <div class="contact-how">
+        <div class="contact-num"><a href="tel:+18775427233" style="color:inherit;text-decoration:none">1-877-542-7233</a></div>
+        <div class="contact-how-sub">Threats, bullying, suicide concerns, school incidents. Used by Colorado K-12 for 20+ years. <a href="https://safe2tell.org/make-report" target="_blank" rel="noopener">Submit a report online ↗</a> · <a href="https://safe2tell.org" target="_blank" rel="noopener">safe2tell.org ↗</a></div>
+      </div>
+    </div>
+    <div class="contact">
+      <div class="contact-when">
+        <div class="contact-when-lbl">Your own child is a victim, and you need services</div>
+        <div class="contact-when-h">Safe Passage — El Paso County's child advocacy center</div>
+      </div>
+      <div class="contact-how">
+        <div class="contact-num"><a href="tel:+17196362460" style="color:inherit;text-decoration:none">(719) 636-2460</a></div>
+        <div class="contact-how-sub">2335 Robinson St, Colorado Springs. Forensic interviews, medical exams, advocacy, therapy — one place, coordinated with <abbr title="Colorado Springs Police Department">CSPD</abbr>, <abbr title="El Paso County Department of Human Services">EPC DHS</abbr>, and the <abbr title="District Attorney">DA</abbr>. <a href="https://safepassagecac.org" target="_blank" rel="noopener">safepassagecac.org ↗</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gap" role="region" aria-label="Missing data: child-specific safety view">
+    <div class="gap-head">A child-safety view that pulls from every agency in one place</div>
+    <div class="gap-body">Parents don't think in terms of "<abbr title="Colorado Springs Police Department">CSPD</abbr> datasets" or "<abbr title="El Paso County Department of Human Services">EPC DHS</abbr> referrals" or "coroner categories." They think in terms of <strong>my child</strong>. A single dashboard — by neighborhood, by age group, by year — that combines abuse assessments, violent-crime victimization, crash injuries, and child fatality data would answer the parent question without requiring anyone to know which agency owns which number.
+      <div class="gap-ask">
+        <div class="gap-ask-lbl">What to request</div>
+        A joint quarterly child-safety brief from <a href="https://coloradosprings.gov/police" target="_blank" rel="noopener">Colorado Springs Police Department (CSPD) ↗</a>, <a href="https://humanservices.elpasoco.com/child-protective-services/" target="_blank" rel="noopener">El Paso County Department of Human Services (EPC DHS) ↗</a>, and <a href="https://coroner.elpasoco.com/" target="_blank" rel="noopener">El Paso County Coroner's Office (EPCCO) ↗</a>, published on coloradosprings.gov/police with a companion dataset on <a href="https://policedata.coloradosprings.gov" target="_blank" rel="noopener">policedata.coloradosprings.gov ↗</a>. All three agencies already collect the underlying data. The publication is the missing piece.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ Q2 — Neighborhood ═════════ -->
+<section class="q" id="q2">
+  <div class="q-num"><div class="q-num-dig">02</div><div class="q-num-kick">Neighborhood</div></div>
+  <h2>Who <em>is</em> in my neighborhood?</h2>
+  <p class="q-lede">Before "is it safe" comes "who lives here." This section describes the people of the Pikes Peak region — not by agency jurisdiction, but as residents would describe their own area. The CSPD Data Hub reports crime by city ZIP and never introduces the people themselves. This section does, because population is context, and context changes what the crime numbers mean.</p>
+
+  <div class="q-sources">
+    <span class="q-src src-ok">U.S. Census ACS 2024 5-year · cited as source</span>
+    <span class="q-src src-ok"><abbr title="Bureau of Labor Statistics">BLS</abbr> Occupational Employment (May 2024)</span>
+    <span class="q-src src-ok">El Paso County Assessor (parcel &amp; dwelling counts)</span>
+    <span class="q-src src-ok"><abbr title="Department of Defense">DoD</abbr> base population</span>
+    <span class="q-src src-gap">Hyper-local neighborhood-level data — fragmented</span>
+  </div>
+
+  <!-- ── REGIONAL EXPLAINER — why there are multiple population numbers ── -->
+  <div class="regional">
+    <h4>About the numbers you'll see on this page — &ldquo;how big is the area?&rdquo;</h4>
+    <p style="font-size:14px;color:var(--txt2);line-height:1.65;margin:0 0 14px">You'll see three different populations on this page, and each one answers a different question. None is wrong. They describe the same place from different distances.</p>
+    <div class="regional-grid">
+      <div class="reg-tier">
+        <span class="reg-n">~810,000</span>
+        <div class="reg-lbl">Pikes Peak region</div>
+        <div class="reg-desc">El Paso + Teller counties. This is what most people mean when they say "the area." <a href="https://ppacg.org" target="_blank" rel="noopener">PPACG</a> regional planning.</div>
+      </div>
+      <div class="reg-tier">
+        <span class="reg-n">~740,000</span>
+        <div class="reg-lbl">El Paso County</div>
+        <div class="reg-desc">The county. Includes Colorado Springs, Fountain, Manitou Springs, Monument, Security-Widefield, and unincorporated areas.</div>
+      </div>
+      <div class="reg-tier">
+        <span class="reg-n">~493,500</span>
+        <div class="reg-lbl">Colorado Springs (city)</div>
+        <div class="reg-desc">City limits only. This is where <abbr title="Colorado Springs Police Department">CSPD</abbr> has jurisdiction. Largest city in Colorado.</div>
+      </div>
+      <div class="reg-tier">
+        <span class="reg-n">~240,000</span>
+        <div class="reg-lbl">Working residents</div>
+        <div class="reg-desc">Not a separate place — a <em>subset</em> of city residents. Employed adults. Used only when describing what people do for a living.</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--txt3);margin:14px 0 0;line-height:1.6"><strong>Which number to use:</strong> For crime rates within city limits, use ~493,500. For &ldquo;is it safe in my area&rdquo; when your area crosses city lines (Security-Widefield, Black Forest, Monument), think at the county level (~740k) — and remember that <abbr title="El Paso County Sheriff's Office">EPSO</abbr>, not <abbr title="Colorado Springs Police Department">CSPD</abbr>, responds. For broader trends and comparisons, use the regional number (~810k).</p>
+  </div>
+
+  <!-- BY AGE — sums to 100%, Colorado Springs city -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">Everyone in Colorado Springs, by age</h3>
+        <div class="data-card-sub">Source: U.S. Census <abbr title="American Community Survey">ACS</abbr> 2024 5-year · shares sum to 100% · city limits</div>
+      </div>
+      <span class="data-card-tag">Age composition</span>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-tile"><span class="stat-n">23%</span><div class="stat-lbl">Under 18</div><div class="stat-sub">~113,500 children and teens — about one in four residents.</div></div>
+      <div class="stat-tile"><span class="stat-n">28%</span><div class="stat-lbl">Age 18–34</div><div class="stat-sub">~138,000 young adults — college, young professionals, young military.</div></div>
+      <div class="stat-tile"><span class="stat-n">36%</span><div class="stat-lbl">Age 35–64</div><div class="stat-sub">~178,000 prime working age — raising families, mid-career.</div></div>
+      <div class="stat-tile"><span class="stat-n">13%</span><div class="stat-lbl">Age 65+</div><div class="stat-sub">~64,000 retirees — concentrated in established neighborhoods.</div></div>
+    </div>
+    <p style="font-size:11px;color:var(--txt3);margin-top:10px;line-height:1.55"><strong>Median age 35.8</strong> — younger than the US median (38.8), older than the Denver metro median. A family city, but not exclusively.</p>
+  </div>
+
+  <!-- WHAT PEOPLE DO -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">What the ~240,000 working residents actually do</h3>
+        <div class="data-card-sub">Source: <abbr title="Bureau of Labor Statistics">BLS</abbr> Occupational Employment May 2024 · Data USA 2024 · shares of employed residents</div>
+      </div>
+      <span class="data-card-tag">Work</span>
+    </div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Health care &amp; social assistance</strong></span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--navy)"></div></div><span class="bar-n">~34,400</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Retail trade</strong></span><div class="bar-track"><div class="bar-fill" style="width:79%;background:var(--navy)"></div></div><span class="bar-n">~27,200</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Professional, scientific &amp; technical</strong><br><small style="color:var(--txt3);font-size:11px">Tech, aerospace, defense contractors, engineers, lawyers, consultants</small></span><div class="bar-track"><div class="bar-fill" style="width:75%;background:var(--navy)"></div></div><span class="bar-n">~25,900</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Educational services</strong><br><small style="color:var(--txt3);font-size:11px">Teachers, administrators, college staff</small></span><div class="bar-track"><div class="bar-fill" style="width:58%;background:var(--navy2)"></div></div><span class="bar-n">~20,000</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Accommodation &amp; food service</strong><br><small style="color:var(--txt3);font-size:11px">Restaurants, hotels, tourism</small></span><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--navy2)"></div></div><span class="bar-n">~19,000</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Construction</strong><br><small style="color:var(--txt3);font-size:11px">A growing city builds</small></span><div class="bar-track"><div class="bar-fill" style="width:52%;background:var(--navy2)"></div></div><span class="bar-n">~18,000</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Public administration</strong><br><small style="color:var(--txt3);font-size:11px">City, county, state, federal (civilian)</small></span><div class="bar-track"><div class="bar-fill" style="width:46%;background:var(--navy2)"></div></div><span class="bar-n">~16,000</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Military — active duty</strong><br><small style="color:var(--txt3);font-size:11px">Fort Carson · Peterson · Schriever · <abbr title="United States Air Force Academy">USAFA</abbr> · Cheyenne Mtn</small></span><div class="bar-track"><div class="bar-fill" style="width:46%;background:var(--orange)"></div></div><span class="bar-n">~40,000*</span></div>
+    <p style="font-size:11px;color:var(--txt3);margin-top:10px;line-height:1.55">* Active-duty military live on and off base; not all are counted in civilian workforce surveys. An additional <strong>~85,000 veterans</strong> — about 1 in 6 adults — live across the city in all industries above. Combined military-connected households (active + veteran + immediate family) reach roughly <strong>25–30% of households</strong>, but most military-connected residents work in one of the civilian industries above.</p>
+    <div class="caveat" role="note">
+      <div class="caveat-lbl">The honest description</div>
+      Colorado Springs is often called &ldquo;a military city.&rdquo; It is <strong>a diverse working city with an unusually large military presence</strong>. Healthcare is the largest single employer. Tech and aerospace are the fastest-growing. Retail and service jobs employ more residents than the military. The military is a defining feature, not the whole picture. When you read CSPD crime data against city demographics, you are reading it against nurses, contractors, teachers, Airmen, restaurant workers, retirees, and families — in that order of numerical weight.
+    </div>
+  </div>
+
+  <!-- HOW WE LIVE — with explicit source marking -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">Where and how we live — housing in Colorado Springs</h3>
+        <div class="data-card-sub">Source: U.S. Census <abbr title="American Community Survey">ACS</abbr> 2024 5-year · Data USA 2024 · city limits</div>
+      </div>
+      <span class="data-card-tag tag-warn">Federal estimates</span>
+    </div>
+    <p style="font-size:13px;color:var(--txt2);line-height:1.6;margin:0 0 14px"><strong>What follows is Census estimates, not local records.</strong> The El Paso County Assessor has the real parcel and dwelling-unit data; the city's Planning Department has building-permit records. Neither publishes current totals in a format that residents can easily access. Until that happens, Census <abbr title="American Community Survey">ACS</abbr> 5-year estimates — averaged over 2020–2024, updated annually — are the best publicly-available source. They are reliable at the city level. At the neighborhood level they get imprecise.</p>
+    <div class="stat-grid">
+      <div class="stat-tile"><span class="stat-n">~198,000</span><div class="stat-lbl">Occupied housing units</div><div class="stat-sub">Census ACS 2024. Local assessor count likely higher once vacancies are included.</div></div>
+      <div class="stat-tile"><span class="stat-n">2.47</span><div class="stat-lbl">People per household</div><div class="stat-sub">Slightly larger than US average (2.5).</div></div>
+      <div class="stat-tile"><span class="stat-n">61%</span><div class="stat-lbl">Owner-occupied</div><div class="stat-sub">Slightly below US average (65%); affordability gap is growing.</div></div>
+      <div class="stat-tile"><span class="stat-n">39%</span><div class="stat-lbl">Renter-occupied</div><div class="stat-sub">Higher share in 80903, 80909, 80910; lower in Briargate and northeast.</div></div>
+      <div class="stat-tile"><span class="stat-n">$452,600</span><div class="stat-lbl">Median home value</div><div class="stat-sub">2024 · up 7.6% from 2023 · 1.36× US median.</div></div>
+      <div class="stat-tile"><span class="stat-n">$1,562</span><div class="stat-lbl">Median gross rent</div><div class="stat-sub">Monthly · rising faster than wages 2020–2024.</div></div>
+      <div class="stat-tile"><span class="stat-n">~$77K</span><div class="stat-lbl">Median household income</div><div class="stat-sub">Near US median ($75K); below Colorado ($89K).</div></div>
+      <div class="stat-tile"><span class="stat-n">22.7 min</span><div class="stat-lbl">Average commute</div><div class="stat-sub">Shorter than US (26.4 min); 70% drive alone, 18% work from home.</div></div>
+    </div>
+    <div class="gap" style="margin-top:20px" role="region" aria-label="Missing: real local housing data">
+      <div class="gap-head">Real local household data — not yet published for public use</div>
+      <div class="gap-body">The El Paso County Assessor has the actual parcel and dwelling-unit data, by address. The city's Planning Department has building-permit records, by neighborhood. Together they could answer &ldquo;how many homes are there in my neighborhood, what type, when built, and what is the current occupancy&rdquo; — far more accurately than Census estimates. Neither publishes this in an accessible, queryable format.
+        <div class="gap-ask">
+          <div class="gap-ask-lbl">What to request</div>
+          A public housing dataset from the <a href="https://assessor.elpasoco.com/" target="_blank" rel="noopener">El Paso County Assessor ↗</a> and city Planning Department: parcels, dwelling units, housing type, year built, by neighborhood. The data exists in their systems; the public view is missing. Until then, this page cites Census <abbr title="American Community Survey">ACS</abbr> estimates and flags them as such.
+        </div>
+      </div>
+    </div>
+    <div class="caveat" role="note">
+      <div class="caveat-lbl">What this says about neighborhoods, before any crime number</div>
+      A neighborhood's character — family-heavy, senior-heavy, renter-heavy, newly-built versus established — changes what counts as normal. Downtown (80903) has ~16,500 residents but tens of thousands of daytime workers, so its crime rate <em>per resident</em> looks extreme while its crime rate <em>per person-actually-there</em> looks ordinary. Briargate has a young-family profile that reads as &ldquo;quiet&rdquo; in the numbers because the numbers don't know it's a young-family profile. A high-renter ZIP may show more noise and property calls without that being a sign of danger — renters move more often, call more often, and have less neighborhood social cohesion by default. <strong>Population is context. Crime without context is just noise.</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ Q3 — Taxes ═════════ -->
+<section class="q" id="q3">
+  <div class="q-num"><div class="q-num-dig">03</div><div class="q-num-kick">Taxes</div></div>
+  <h2>Where are my taxes going — <em>a detailed look at how the $180M is spent.</em></h2>
+  <p class="q-lede">The <abbr title="Colorado Springs Police Department">CSPD</abbr> Data Hub doesn't show the budget. It lives on the city budget site, across several <abbr title="Portable Document Format">PDF</abbr>s and tabs. This section brings the money to the front — not to judge it, but to show it. $180 million is a lot. Residents pay for it. They deserve to see exactly where it goes: which divisions, which programs, which outreach, which equipment, which training. This is a line-by-line walk-through.</p>
+
+  <div class="q-sources">
+    <span class="q-src src-ok"><a href="https://coloradosprings.gov/budget" target="_blank" rel="noopener" style="color:inherit">City of Colorado Springs 2026 Budget ↗</a></span>
+    <span class="q-src src-ok"><a href="https://coloradosprings.gov/system/files/2023-09/2024pbudget-21-01-police.pdf" target="_blank" rel="noopener" style="color:inherit">2024 Police Budget detail (PDF) ↗</a></span>
+    <span class="q-src src-ok">Public Safety Sales Tax allocation</span>
+    <span class="q-src src-gap">Neighborhood-level spend — NOT PUBLISHED</span>
+  </div>
+
+  <!-- Headline numbers — unchanged -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">The headline numbers</h3>
+        <div class="data-card-sub">FY2026 proposed · ≈ $180M total · ≈ 41% of the $438M General Fund</div>
+      </div>
+      <span class="data-card-tag">Scale</span>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-tile"><span class="stat-n n-orange">$180M</span><div class="stat-lbl">CSPD 2026 budget</div><div class="stat-sub">Up 3.6% from 2025 ($174M).</div></div>
+      <div class="stat-tile"><span class="stat-n">~41%</span><div class="stat-lbl">Share of General Fund</div><div class="stat-sub">The largest single department in the City's General Fund.</div></div>
+      <div class="stat-tile"><span class="stat-n">$367</span><div class="stat-lbl">Per resident / year</div><div class="stat-sub">$180M ÷ 493,500 residents. About $30/month per person.</div></div>
+      <div class="stat-tile"><span class="stat-n">~780</span><div class="stat-lbl">Sworn officers</div><div class="stat-sub">+20 new sworn positions added in 2025; pace-of-growth with city.</div></div>
+      <div class="stat-tile"><span class="stat-n">~$231K</span><div class="stat-lbl">Per-sworn-officer cost</div><div class="stat-sub">Total budget ÷ total sworn. Includes equipment, training, facilities, civilian support.</div></div>
+      <div class="stat-tile"><span class="stat-n">~$10M</span><div class="stat-lbl">Public Safety Sales Tax share</div><div class="stat-sub">Voter-approved tax that supplements the General Fund budget for CSPD.</div></div>
+    </div>
+  </div>
+
+  <!-- DIVISION-BY-DIVISION: what the money actually does -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">Where the $180M actually goes — by division and program</h3>
+        <div class="data-card-sub">Allocations from the 2024 Police Budget document, carried forward with approximate 2026 scaling</div>
+      </div>
+      <span class="data-card-tag">Line by line</span>
+    </div>
+
+    <h4 style="font-family:var(--serif);font-size:16px;color:var(--navy);margin:6px 0 10px;font-weight:500">Patrol Bureau — the uniformed work that touches most residents</h4>
+    <div class="bar-row"><span class="bar-lbl"><strong>Patrol Operations</strong><br><small style="color:var(--txt3);font-size:11px">4 area commands · answering 911 and non-emergency calls across the city 24/7</small></span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--navy)"></div></div><span class="bar-n">~$78M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Traffic Section</strong><br><small style="color:var(--txt3);font-size:11px">Crash response, <abbr title="Driving Under the Influence">DUI</abbr> enforcement, major-collision investigations, photo enforcement</small></span><div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--navy)"></div></div><span class="bar-n">~$8M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Homeless Outreach Team (HOT)</strong><br><small style="color:var(--txt3);font-size:11px">Street-level outreach and service navigation — not arrests</small></span><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--orange)"></div></div><span class="bar-n">~$1.5M</span></div>
+
+    <h4 style="font-family:var(--serif);font-size:16px;color:var(--navy);margin:22px 0 10px;font-weight:500">Investigations Bureau — detectives and specialized units</h4>
+    <div class="bar-row"><span class="bar-lbl"><strong>Investigations Division</strong><br><small style="color:var(--txt3);font-size:11px">Homicide, sex crimes, robbery, burglary, financial crimes, domestic violence</small></span><div class="bar-track"><div class="bar-fill" style="width:44%;background:var(--navy)"></div></div><span class="bar-n">~$34M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Metro / VNI</strong><br><small style="color:var(--txt3);font-size:11px">Multi-agency narcotics + violent crime — with <abbr title="El Paso County Sheriff's Office">EPSO</abbr>, Fountain, Monument</small></span><div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--navy)"></div></div><span class="bar-n">~$8M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Crime Prevention</strong><br><small style="color:var(--txt3);font-size:11px">Neighborhood watch, home/business security consults, fraud prevention outreach</small></span><div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--navy2)"></div></div><span class="bar-n">~$2M</span></div>
+
+    <h4 style="font-family:var(--serif);font-size:16px;color:var(--navy);margin:22px 0 10px;font-weight:500">Operations Support Bureau — the behind-the-scenes work</h4>
+    <div class="bar-row"><span class="bar-lbl"><strong>Training Academy</strong><br><small style="color:var(--txt3);font-size:11px">Recruit academy, annual in-service, firearms requalification, de-escalation</small></span><div class="bar-track"><div class="bar-fill" style="width:11%;background:var(--navy2)"></div></div><span class="bar-n">~$8.5M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Records &amp; Identification</strong><br><small style="color:var(--txt3);font-size:11px">Report management, fingerprinting, records requests, <abbr title="Colorado Open Records Act">CORA</abbr> responses</small></span><div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--navy2)"></div></div><span class="bar-n">~$4.5M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Evidence &amp; Impound</strong><br><small style="color:var(--txt3);font-size:11px">40,000–70,000 evidence items/year; chain of custody; property release</small></span><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--navy2)"></div></div><span class="bar-n">~$4M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Police Logistics (fleet, facilities, IT)</strong><br><small style="color:var(--txt3);font-size:11px">Vehicles, buildings, communications, technology</small></span><div class="bar-track"><div class="bar-fill" style="width:15%;background:var(--navy2)"></div></div><span class="bar-n">~$12M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Body-Worn Camera program</strong><br><small style="color:var(--txt3);font-size:11px">Cameras, cloud storage, redaction, <abbr title="Public Records Act">PRA</abbr>/<abbr title="Colorado Open Records Act">CORA</abbr> processing</small></span><div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--orange)"></div></div><span class="bar-n">~$3M</span></div>
+
+    <h4 style="font-family:var(--serif);font-size:16px;color:var(--navy);margin:22px 0 10px;font-weight:500">Professional Standards &amp; Community Relations</h4>
+    <div class="bar-row"><span class="bar-lbl"><strong>Internal Affairs (IA)</strong><br><small style="color:var(--txt3);font-size:11px">Investigates complaints of <abbr title="Colorado Springs Police Department">CSPD</abbr> employee misconduct</small></span><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--navy2)"></div></div><span class="bar-n">~$1.5M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Public Affairs / <abbr title="Public Information Office">PIO</abbr></strong><br><small style="color:var(--txt3);font-size:11px">Official spokesperson, media coordination, press releases</small></span><div class="bar-track"><div class="bar-fill" style="width:1%;background:var(--navy2)"></div></div><span class="bar-n">~$0.7M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Community Relations — PLAY <abbr title="Colorado Springs">COS</abbr></strong><br><small style="color:var(--txt3);font-size:11px">Youth outreach, Police Cadet Explorer, neighborhood community engagement</small></span><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--orange)"></div></div><span class="bar-n">~$1.5M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Planning &amp; Compliance</strong><br><small style="color:var(--txt3);font-size:11px">Grants, accreditation (<abbr title="Commission on Accreditation for Law Enforcement Agencies">CALEA</abbr>), legislative analysis, audits</small></span><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--navy2)"></div></div><span class="bar-n">~$1.3M</span></div>
+
+    <h4 style="font-family:var(--serif);font-size:16px;color:var(--navy);margin:22px 0 10px;font-weight:500">Administration &amp; other</h4>
+    <div class="bar-row"><span class="bar-lbl"><strong>Command staff + administration</strong><br><small style="color:var(--txt3);font-size:11px">Chief, Deputy Chiefs, Commanders, HR, budget office</small></span><div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--navy2)"></div></div><span class="bar-n">~$3M</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Overtime, benefits, contingency</strong><br><small style="color:var(--txt3);font-size:11px">Court overtime, callbacks, health &amp; pension, unanticipated</small></span><div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--navy2)"></div></div><span class="bar-n">~$8M</span></div>
+
+    <p style="font-size:11px;color:var(--txt3);margin-top:14px;line-height:1.6;font-style:italic">Approximate allocations derived from the 2024 Police Budget document, scaled roughly to 2026 totals. Exact line items are in the City Budget Book (<a href="https://coloradosprings.gov/budget" target="_blank" rel="noopener">coloradosprings.gov/budget</a>). Note: <strong>jail and prison are not in this budget</strong> — jails are <abbr title="El Paso County Sheriff's Office">EPSO</abbr> (county) responsibility; state prisons are Colorado <abbr title="Department of Corrections">DOC</abbr>. <abbr title="Colorado Springs Police Department">CSPD</abbr> arrests; it doesn't house.</p>
+
+    <div class="caveat" role="note">
+      <div class="caveat-lbl">What these categories tell you</div>
+      About two-thirds of <abbr title="Colorado Springs Police Department">CSPD</abbr>'s budget is Patrol and Investigations — uniformed response and detectives. The rest supports them: training new officers, processing evidence, managing records, running background systems, and handling the specialized programs (body cameras, homeless outreach, community relations, internal affairs). Community-facing programs like PLAY COS and the Homeless Outreach Team are small fractions of the budget but highly visible. The largest civilian-support cost is logistics — fleet, buildings, and technology — which keep the department operating.
+    </div>
+  </div>
+
+  <!-- Peer comparison card -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">For perspective — what peer cities spend</h3>
+        <div class="data-card-sub">2024/2025 published budgets · per-resident policing cost</div>
+      </div>
+      <span class="data-card-tag">Peer context</span>
+    </div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Denver</strong></span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--navy)"></div></div><span class="bar-n">~$850/resident</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Aurora</strong></span><div class="bar-track"><div class="bar-fill" style="width:66%;background:var(--navy)"></div></div><span class="bar-n">~$560/resident</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Fort Collins</strong></span><div class="bar-track"><div class="bar-fill" style="width:56%;background:var(--navy)"></div></div><span class="bar-n">~$480/resident</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Colorado Springs</strong></span><div class="bar-track"><div class="bar-fill" style="width:43%;background:var(--orange)"></div></div><span class="bar-n">~$367/resident</span></div>
+    <p style="font-size:12px;color:var(--txt2);margin-top:10px;line-height:1.6">Colorado Springs spends less per resident on policing than most peer Colorado cities. That's not a verdict — it's a fact. Whether the right number is higher, lower, or about the same depends on what residents want: faster response, more detectives, more school resource officers, more mental-health co-response, more community engagement. The budget is the input. How it maps to outcomes is a separate civic conversation.</p>
+  </div>
+
+  <div class="gap" role="region" aria-label="Missing data: neighborhood-level spend">
+    <div class="gap-head">Neighborhood-level spending detail</div>
+    <div class="gap-body">The current budget shows the department as a whole. A resident asking &ldquo;what is being spent in <em>my</em> neighborhood&rdquo; — on patrol hours, on investigator time, on community programs — cannot answer that from the published materials. The underlying data exists (officers are assigned to area commands; calls are logged by geography; investigations are tracked by case location). What's missing is the aggregation and the publication.
+      <div class="gap-ask">
+        <div class="gap-ask-lbl">What to request</div>
+        A &ldquo;spend by area command&rdquo; companion dataset on <a href="https://policedata.coloradosprings.gov" target="_blank" rel="noopener">policedata.coloradosprings.gov ↗</a>: officer-hours, investigator-hours, and community-program dollars by geography. No new data collection — only a new view.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ Q4 — Overall crime ═════════ -->
+<section class="q" id="q4">
+  <div class="q-num"><div class="q-num-dig">04</div><div class="q-num-kick">Crime</div></div>
+  <h2>What is the overall crime picture — <em>in plain words?</em></h2>
+  <p class="q-lede"><abbr title="Colorado Springs Police Department">CSPD</abbr> organizes crime data into three categories with names most residents have never heard: &ldquo;Crimes Against Persons,&rdquo; &ldquo;Crimes Against Property,&rdquo; &ldquo;Crimes Against Society.&rdquo; The categories come from <abbr title="National Incident-Based Reporting System">NIBRS</abbr> — the federal reporting standard — and they're useful to analysts. They're opaque to residents. This section translates the three buckets and then shows the specific offenses inside each one, so you can see what's actually being reported.</p>
+
+  <div class="q-sources">
+    <span class="q-src src-ok">bc88-hemr (<abbr title="Records Management System">RMS</abbr> — actual incident reports)</span>
+    <span class="q-src src-ok"><abbr title="Colorado Bureau of Investigation">CBI</abbr> / <abbr title="Federal Bureau of Investigation">FBI</abbr> (different counting rules; for cross-city comparison)</span>
+    <span class="q-src src-gap"><abbr title="Computer-Aided Dispatch">CAD</abbr> calls not resulting in report — NOT PUBLISHED</span>
+  </div>
+
+  <!-- Three categories in plain words -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">The three categories, in plain English</h3>
+        <div class="data-card-sub">2024 <abbr title="Colorado Springs Police Department">CSPD</abbr> totals · incident reports, not calls for service</div>
+      </div>
+      <span class="data-card-tag">Translated</span>
+    </div>
+    <div class="compare" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="compare-col">
+        <h4 style="color:var(--red)">Crimes against persons</h4>
+        <div class="sub">~6,400 incidents · 2024</div>
+        <p style="font-size:13px;color:var(--txt2);line-height:1.55;margin:0 0 10px"><strong>Plain:</strong> someone was hurt, threatened, or physically harmed.</p>
+        <p style="font-size:12px;color:var(--txt3);line-height:1.55;margin:0">Aggravated assault, simple assault, intimidation, kidnapping, sex offenses, homicide, human trafficking.</p>
+      </div>
+      <div class="compare-col">
+        <h4 style="color:var(--orange)">Crimes against property</h4>
+        <div class="sub">~25,000 incidents · 2024</div>
+        <p style="font-size:13px;color:var(--txt2);line-height:1.55;margin:0 0 10px"><strong>Plain:</strong> something was taken, broken, or damaged.</p>
+        <p style="font-size:12px;color:var(--txt3);line-height:1.55;margin:0">Theft, burglary, vehicle theft, vandalism, fraud, arson, counterfeiting, bad checks.</p>
+      </div>
+      <div class="compare-col">
+        <h4 style="color:var(--amber)">Crimes against society</h4>
+        <div class="sub">~20,200 incidents · 2024</div>
+        <p style="font-size:13px;color:var(--txt2);line-height:1.55;margin:0 0 10px"><strong>Plain:</strong> no specific victim, but the behavior is illegal.</p>
+        <p style="font-size:12px;color:var(--txt3);line-height:1.55;margin:0">Drug offenses, weapons offenses, <abbr title="Driving Under the Influence">DUI</abbr>, disorderly conduct, prostitution, city ordinance violations.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sub-category breakdown: persons -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">Inside &ldquo;Crimes against persons&rdquo; — what's in the 6,400</h3>
+        <div class="data-card-sub">Top offense types · 2024 approximate counts from bc88-hemr</div>
+      </div>
+      <span class="data-card-tag">Sub-breakdown</span>
+    </div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Simple assault</strong><br><small style="color:var(--txt3);font-size:11px">Physical attack without weapon or serious injury</small></span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div><span class="bar-n">~3,200</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Aggravated assault</strong><br><small style="color:var(--txt3);font-size:11px">With weapon or causing serious bodily injury</small></span><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--red)"></div></div><span class="bar-n">~1,750</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Intimidation</strong><br><small style="color:var(--txt3);font-size:11px">Threats placing someone in fear of physical harm</small></span><div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--red)"></div></div><span class="bar-n">~950</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Forcible sex offenses</strong><br><small style="color:var(--txt3);font-size:11px">Rape, sodomy, sexual assault with object, fondling</small></span><div class="bar-track"><div class="bar-fill" style="width:11%;background:var(--red)"></div></div><span class="bar-n">~350</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Kidnapping / abduction</strong></span><div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--red)"></div></div><span class="bar-n">~100</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Homicide</strong><br><small style="color:var(--txt3);font-size:11px">Murder and non-negligent manslaughter</small></span><div class="bar-track"><div class="bar-fill" style="width:1%;background:var(--red)"></div></div><span class="bar-n">~25</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Human trafficking</strong><br><small style="color:var(--txt3);font-size:11px">Commercial sex acts &amp; involuntary servitude</small></span><div class="bar-track"><div class="bar-fill" style="width:1%;background:var(--red)"></div></div><span class="bar-n">~20</span></div>
+  </div>
+
+  <!-- Sub-category breakdown: property -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">Inside &ldquo;Crimes against property&rdquo; — what's in the 25,000</h3>
+        <div class="data-card-sub">Top offense types · 2024 approximate counts from bc88-hemr</div>
+      </div>
+      <span class="data-card-tag">Sub-breakdown</span>
+    </div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Theft from motor vehicle</strong><br><small style="color:var(--txt3);font-size:11px">Items stolen from parked cars</small></span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--orange)"></div></div><span class="bar-n">~6,800</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Shoplifting</strong></span><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--orange)"></div></div><span class="bar-n">~3,700</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>All other theft</strong><br><small style="color:var(--txt3);font-size:11px">Bicycles, packages, identity, personal items</small></span><div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--orange)"></div></div><span class="bar-n">~3,400</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Motor vehicle theft</strong><br><small style="color:var(--txt3);font-size:11px">Entire vehicle stolen</small></span><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--orange)"></div></div><span class="bar-n">~2,700</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Vandalism / destruction of property</strong></span><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--orange)"></div></div><span class="bar-n">~2,700</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Fraud</strong><br><small style="color:var(--txt3);font-size:11px">Credit card, wire, impersonation, false pretenses</small></span><div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--orange)"></div></div><span class="bar-n">~2,400</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Burglary — residential</strong></span><div class="bar-track"><div class="bar-fill" style="width:22%;background:var(--orange)"></div></div><span class="bar-n">~1,500</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Burglary — commercial</strong></span><div class="bar-track"><div class="bar-fill" style="width:12%;background:var(--orange)"></div></div><span class="bar-n">~800</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Robbery</strong><br><small style="color:var(--txt3);font-size:11px">Taking property by force or threat</small></span><div class="bar-track"><div class="bar-fill" style="width:9%;background:var(--orange)"></div></div><span class="bar-n">~600</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Arson</strong></span><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--orange)"></div></div><span class="bar-n">~100</span></div>
+  </div>
+
+  <!-- Sub-category breakdown: society -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">Inside &ldquo;Crimes against society&rdquo; — what's in the 20,200</h3>
+        <div class="data-card-sub">Top offense types · 2024 approximate counts from bc88-hemr</div>
+      </div>
+      <span class="data-card-tag">Sub-breakdown</span>
+    </div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Drug / narcotic violations</strong><br><small style="color:var(--txt3);font-size:11px">Possession and distribution combined</small></span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--amber)"></div></div><span class="bar-n">~6,400</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>City ordinance violations</strong><br><small style="color:var(--txt3);font-size:11px">All-caps municipal statutes (trespass, camping, etc.)</small></span><div class="bar-track"><div class="bar-fill" style="width:75%;background:var(--amber)"></div></div><span class="bar-n">~4,800</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Driving Under the Influence (<abbr title="Driving Under the Influence">DUI</abbr>)</strong></span><div class="bar-track"><div class="bar-fill" style="width:53%;background:var(--amber)"></div></div><span class="bar-n">~3,400</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Disorderly conduct</strong></span><div class="bar-track"><div class="bar-fill" style="width:45%;background:var(--amber)"></div></div><span class="bar-n">~2,900</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Weapons law violations</strong><br><small style="color:var(--txt3);font-size:11px">Unlawful possession, carrying, discharge</small></span><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--amber)"></div></div><span class="bar-n">~1,600</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Liquor law violations</strong></span><div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--amber)"></div></div><span class="bar-n">~650</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Prostitution offenses</strong></span><div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--amber)"></div></div><span class="bar-n">~250</span></div>
+    <div class="bar-row"><span class="bar-lbl"><strong>Other (pornography, gambling, etc.)</strong></span><div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--amber)"></div></div><span class="bar-n">~200</span></div>
+
+    <div class="caveat" role="note">
+      <div class="caveat-lbl">About that total of ~51,600</div>
+      <abbr title="Colorado Springs Police Department">CSPD</abbr>'s open-data total (~51,600 incidents in 2024) is about 2.4× the <abbr title="Federal Bureau of Investigation">FBI</abbr>/<abbr title="Colorado Bureau of Investigation">CBI</abbr> headline figure (~21,000). Both are &ldquo;correct.&rdquo; The <abbr title="Federal Bureau of Investigation">FBI</abbr> counts only index crimes under strict hierarchy rules. <abbr title="Colorado Springs Police Department">CSPD</abbr>'s dataset includes every incident report with an offense code, including municipal ordinance violations and unfounded reports. When you hear a crime number about Colorado Springs, the first question to ask is: <strong>which counting rules?</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ Q5 — Who to call and trust ═════════ -->
+<section class="q" id="q5">
+  <div class="q-num"><div class="q-num-dig">05</div><div class="q-num-kick">Trust &amp; accountability</div></div>
+  <h2>If I have a problem, <em>who do I call — and how do I report an officer if I need to?</em></h2>
+  <p class="q-lede">The most overlooked resident question, and the most important. Most people will never need to report an officer. But they deserve to know the channel exists, who receives the complaint, what happens next, and how retaliation is prevented. Colorado Springs is a deeply military city. Service members already know this system — the military has had a structured, protected, escalatable grievance process for decades. Civilian policing can learn from that standard.</p>
+
+  <div class="q-sources">
+    <span class="q-src src-ok">CSPD Internal Affairs (719-444-7417)</span>
+    <span class="q-src src-ok">Professional Standards Division</span>
+    <span class="q-src src-ok">Colorado POST complaint process</span>
+    <span class="q-src src-ok">UCMJ Article 138 (military comparison)</span>
+    <span class="q-src src-gap">Complaint outcomes by category — NOT PUBLISHED</span>
+    <span class="q-src src-gap">Independent monitor / civilian oversight — DOES NOT EXIST</span>
+  </div>
+
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">Who to call, sorted by what happened</h3>
+        <div class="data-card-sub">Keep this list handy. Most people use 911 or the non-emergency line. The others exist when those aren't enough.</div>
+      </div>
+      <span class="data-card-tag tag-ok">Action</span>
+    </div>
+
+    <div class="contact">
+      <div class="contact-when">
+        <div class="contact-when-lbl">Emergency — in progress</div>
+        <div class="contact-when-h">Someone is hurt or in danger right now</div>
+      </div>
+      <div class="contact-how">
+        <div class="contact-num">911</div>
+        <div class="contact-how-sub">Fire · medical · police · active threat. Dispatchers can reach all three.</div>
+      </div>
+    </div>
+
+    <div class="contact">
+      <div class="contact-when">
+        <div class="contact-when-lbl">Non-emergency CSPD</div>
+        <div class="contact-when-h">Report a crime that's not in progress, noise, suspicious activity, or ask a question</div>
+      </div>
+      <div class="contact-how">
+        <div class="contact-num">(719) 444-7000</div>
+        <div class="contact-how-sub">24/7 staffed. Online reporting also available at <a href="https://coloradosprings.gov/gocos" target="_blank" rel="noopener">coloradosprings.gov/gocos</a> for minor property crimes.</div>
+      </div>
+    </div>
+
+    <div class="contact">
+      <div class="contact-when">
+        <div class="contact-when-lbl">Mental-health or crisis co-response</div>
+        <div class="contact-when-h">Someone is in crisis, not a criminal situation</div>
+      </div>
+      <div class="contact-how">
+        <div class="contact-num">844-493-8255</div>
+        <div class="contact-how-sub">Colorado Crisis Services, 24/7 · text "TALK" to 38255. County co-responders (BHCON) dispatched alongside deputies when appropriate.</div>
+      </div>
+    </div>
+
+    <div class="contact">
+      <div class="contact-when">
+        <div class="contact-when-lbl">Concern about a CSPD employee</div>
+        <div class="contact-when-h">You were treated unfairly, witnessed misconduct, or want to file a compliment</div>
+      </div>
+      <div class="contact-how">
+        <div class="contact-num">(719) 444-7417</div>
+        <div class="contact-how-sub">CSPD Internal Affairs, M-F 8am-5pm. Walk-ins welcome as schedules allow; appointment preferred. Complaints accepted in person, by phone, mail, email, or online. <strong>You may file anonymously.</strong> Third parties may file on behalf of others. <a href="https://coloradosprings.gov/police-department/page/police-service-compliments-complaints" target="_blank" rel="noopener">Full instructions ↗</a></div>
+      </div>
+    </div>
+
+    <div class="contact">
+      <div class="contact-when">
+        <div class="contact-when-lbl">Certification-level concern</div>
+        <div class="contact-when-h">Allegation that rises to decertification standard — criminal conduct, untruthfulness, serious misuse of force</div>
+      </div>
+      <div class="contact-how">
+        <div class="contact-num">Colorado POST</div>
+        <div class="contact-how-sub">Peace Officer Standards and Training Board. Handles officer certification statewide. For non-criminal matters, POST directs you to the officer's supervisor, Internal Affairs, or an independent monitor. <a href="https://post.colorado.gov/certification-inquiries-officer-complaints" target="_blank" rel="noopener">post.colorado.gov ↗</a></div>
+      </div>
+    </div>
+
+    <div class="caveat" role="note">
+      <div class="caveat-lbl">What happens after you file — the five outcomes</div>
+      CSPD classifies every completed complaint into one of five findings: <strong>Sustained</strong> (misconduct did occur; discipline follows), <strong>Not Sustained</strong> (cannot be proved or disproved), <strong>Unfounded</strong> (facts show misconduct did not occur), <strong>Exonerated</strong> (the act happened and was justified and legal), or Policy Failure (the act was within policy but the policy should change). Sustained cases carry eight possible discipline levels, from documented counseling to termination. The aggregate counts by finding category are <strong>not published</strong> — they are collected internally.
+    </div>
+  </div>
+
+  <!-- MILITARY COMPARISON -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">How the military does it — Article 138, UCMJ, and the IG</h3>
+        <div class="data-card-sub">Colorado Springs has five military installations. Many residents know this system already.</div>
+      </div>
+      <span class="data-card-tag">Benchmark</span>
+    </div>
+    <p style="font-size:14px;color:var(--txt2);line-height:1.65;margin:0 0 18px">The military is not a model of perfection on every front, but on one specific thing — how a service member raises a grievance against a commanding officer — the system is more structured, more published, more protected from retaliation, and more auditable than what most civilian police departments offer. Comparing the two makes clear where the civilian gap actually is.</p>
+
+    <div class="compare">
+      <div class="compare-col mil">
+        <h4 style="color:var(--green)">Military — Article 138 UCMJ + IG</h4>
+        <div class="sub">Fort Carson · Peterson · Schriever · USAFA · Cheyenne Mountain</div>
+        <ul>
+          <li><strong>Written pathway.</strong> Service member first files a written request for redress with the commander. The commander has <strong>15 days</strong> to respond.</li>
+          <li><strong>Escalation guaranteed.</strong> If denied, service member files a formal Article 138 complaint, which <strong>must be forwarded</strong> up to the general court-martial convening authority (GCMCA).</li>
+          <li><strong>Finding is investigated.</strong> GCMCA is required to investigate and take action. The outcome becomes part of the command record.</li>
+          <li><strong>Retaliation is prohibited by law.</strong> Commanders cannot restrict filings or retaliate. Retaliation has its own complaint channel (IG + DoD Hotline).</li>
+          <li><strong>Separate IG channel.</strong> Inspector General handles broader issues — violations of law, policy, or ethics — including systemic problems and whistleblower protections.</li>
+          <li><strong>Timeline is published.</strong> 90-day filing window (180 for Air Force). Each branch publishes its full procedure (AR 27-10 for Army, AFI 51-904 for Air Force, etc.).</li>
+          <li><strong>Resources are free.</strong> Judge Advocate General (JAG) attorneys provide guidance at no cost to the service member.</li>
+        </ul>
+      </div>
+      <div class="compare-col cspd">
+        <h4 style="color:var(--amber)">CSPD — Internal Affairs</h4>
+        <div class="sub">Professional Standards Division · 705 S Nevada Ave</div>
+        <ul>
+          <li><strong>Intake channels exist.</strong> Phone, email, in-person, online, mail, anonymous. Good — the front door is open.</li>
+          <li><strong>No published response timeline.</strong> No equivalent to the military's 15-day window or 90-day filing cap. Investigations "take as long as they take."</li>
+          <li><strong>No required escalation.</strong> If you are dissatisfied with the IA finding, there is no external review body in Colorado Springs. Denver and Boulder have independent monitors; Colorado Springs does not.</li>
+          <li><strong>Five outcome categories exist</strong> — but aggregate counts by category, by year, by division, are <strong>not published</strong>.</li>
+          <li><strong>No public sustain rate.</strong> A resident cannot see how often IA sustains complaints versus finds them unfounded. This is the single number that tells the public whether the process works.</li>
+          <li><strong>Procedure is partly published</strong> on PowerDMS (public.powerdms.com/CSPD2). The front-door complaint instructions are on coloradosprings.gov, but the full investigation, discipline, and appeal procedure is in scattered SOP documents.</li>
+          <li><strong>Retaliation protection is implied but not statutory.</strong> No equivalent to 10 U.S.C. § 938.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="caveat" role="note">
+      <div class="caveat-lbl">The point of this comparison</div>
+      Many Colorado Springs residents — active-duty, retired, spouses, adult children of service members — already know Article 138 and the IG system. They bring that expectation to civilian life. When the civilian equivalent is less transparent, slower, and has no external review, the gap is not "civilians don't trust police" — it's "civilians used to a working system notice when a system is weaker." CSPD is not uniquely bad here; <strong>most civilian police departments in the US fall short of the military standard on this specific dimension.</strong> Colorado Springs, with the military density it has, is unusually well positioned to lead the fix.
+    </div>
+  </div>
+
+  <div class="gap" role="region" aria-label="Missing: aggregate complaint data + independent monitor">
+    <div class="gap-head">Aggregate complaint data + an independent review channel</div>
+    <div class="gap-body">Two things would close most of the gap: <strong>(1)</strong> publish an annual aggregate report — complaints filed, investigation outcomes by category, discipline imposed, median time to close — and <strong>(2)</strong> create an independent review channel so residents dissatisfied with IA findings have a meaningful escalation. Denver and Boulder have adopted this model; Colorado Springs has not. The aggregate data already exists in the Early Intervention Program that CSPD monitors internally. Publication is a format decision, not a collection decision.
+      <div class="gap-ask">
+        <div class="gap-ask-lbl">What to request</div>
+        (1) An annual aggregate IA report on the CSPD Data Hub. (2) A City Council-led review of civilian oversight models in peer Colorado cities (Denver, Boulder, Fort Collins) to determine whether Colorado Springs would benefit from a similar structure.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ Q6 — Shootings in regional context ═════════ -->
+<section class="q" id="q6">
+  <div class="q-num"><div class="q-num-dig">06</div><div class="q-num-kick">Shootings in context</div></div>
+  <h2>Officer-involved shootings — <em>in the context of all shootings</em> in the region</h2>
+  <p class="q-lede">CSPD publishes officer-involved shootings as a separate story, which makes OIS feel like its own category of public-safety concern. The honest framing is different. OIS is one slice of a much larger picture of firearm violence in El Paso County — a slice that draws specific oversight attention, but that is numerically dwarfed by firearm suicides and by homicides involving firearms not fired by officers. Both contexts matter. Neither should be looked at alone.</p>
+
+  <div class="q-sources">
+    <span class="q-src src-ok">jmq7-sp2e OIS 2010-2025</span>
+    <span class="q-src src-ok">acxg-fq23 OIS by year</span>
+    <span class="q-src src-ok">EPCCO coroner 2024 (firearm deaths)</span>
+    <span class="q-src src-ok">CSPD bc88-hemr (firearm-involved incidents)</span>
+    <span class="q-src src-gap">DA review outcome per OIS — NOT PUBLISHED</span>
+    <span class="q-src src-gap">Officer status post-OIS — NOT PUBLISHED</span>
+    <span class="q-src src-gap">Civil settlements — NOT PUBLISHED</span>
+  </div>
+
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">Regional shootings — where OIS sits in the picture</h3>
+        <div class="data-card-sub">El Paso County · 2024 · coroner-confirmed firearm deaths + CSPD OIS count</div>
+      </div>
+      <span class="data-card-tag tag-warn">Context matters</span>
+    </div>
+
+    <div class="stack-row"><div class="stack-lbl"><strong>Firearm suicides</strong><br><small>Coroner 2024</small></div><div class="stack-bar" style="background:var(--navy); width:72%">~93 deaths</div></div>
+    <div class="stack-row"><div class="stack-lbl"><strong>Firearm homicides</strong><br><small>Coroner 2024 · non-OIS</small></div><div class="stack-bar" style="background:var(--red); width:25%">~36 deaths</div></div>
+    <div class="stack-row"><div class="stack-lbl"><strong>Officer-involved shootings</strong><br><small>CSPD 2024 · fatal + non-fatal</small></div><div class="stack-bar" style="background:var(--orange); width:4%">~4 incidents</div></div>
+
+    <p style="font-size:11px;color:var(--txt3);margin-top:14px;line-height:1.55;font-style:italic">Not every firearm homicide in the county involves CSPD jurisdiction. Not every OIS results in a death. This is an order-of-magnitude view, not a precise overlap. The point: <strong>OIS accounts for roughly 2–5% of firearm-related deaths in El Paso County in a typical year</strong>. It draws outsize attention because of the oversight questions it raises, not because of its share of the total.</p>
+
+    <div class="caveat" role="note">
+      <div class="caveat-lbl">Both contexts are correct, and both are needed</div>
+      OIS is rightly held to a higher scrutiny standard than civilian shootings — officers carry state authority and taxpayer-funded weapons. Publishing OIS as its own story acknowledges that. But when the OIS story sits on a page with no link to the larger shooting picture, residents can walk away thinking police shootings are the city's main firearm problem. They are not. Firearm suicide is roughly 20× more common. Telling both truths, in the same place, is how honest public-safety reporting works.
+    </div>
+  </div>
+
+  <!-- OIS record schema gap — the piece the user explicitly said matters -->
+  <div class="data-card">
+    <div class="data-card-head">
+      <div>
+        <h3 class="data-card-title">What the OIS record contains — and what it doesn't</h3>
+        <div class="data-card-sub">From the three published OIS datasets · 2010–2025 · follow-through is the gap</div>
+      </div>
+      <span class="data-card-tag tag-gap">Follow-through matters</span>
+    </div>
+    <div class="compare">
+      <div class="compare-col">
+        <h4 style="color:var(--green)">Published in CSPD datasets</h4>
+        <div class="sub">What you can find on the Data Hub</div>
+        <ul>
+          <li>Year of incident</li>
+          <li>Number of shootings per year</li>
+          <li>Primary basis (CDCJ category — e.g., suspect armed, suspect fleeing)</li>
+          <li>Subject armed: yes / no / unknown</li>
+          <li>Type of weapon involved</li>
+          <li>Whether the shooting was fatal</li>
+          <li>Subject demographics (on CDCJ state reporting)</li>
+        </ul>
+      </div>
+      <div class="compare-col" style="border:1px dashed var(--red); background: #fff">
+        <h4 style="color:var(--red)">Not published anywhere</h4>
+        <div class="sub">What residents actually need to know — follow-through</div>
+        <ul>
+          <li>District Attorney's ruling (justified / not justified / pending)</li>
+          <li>Date of DA decision, and time-to-decision</li>
+          <li>Whether the involved officer was disciplined, and how</li>
+          <li>Whether the involved officer is still employed by CSPD</li>
+          <li>Whether a civil suit was filed</li>
+          <li>Civil settlement amount (if any)</li>
+          <li>Whether the officer had prior force complaints on record</li>
+          <li>Independent monitor / review panel findings (if any existed)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="caveat" role="note">
+      <div class="caveat-lbl">Why follow-through matters — to everyone</div>
+      The silence on outcomes helps no one. Shootings that were cleared by the DA look identical in the public record to ones that were not. Officers with clean findings get tarred alongside officers who were disciplined. Families of those killed don't know whether the system took the case seriously. Residents cannot distinguish between "handled well" and "buried." The published data is a list of events. Residents need the consequences.
+    </div>
+  </div>
+
+  <div class="gap" role="region" aria-label="Missing: OIS outcome register">
+    <div class="gap-head">Outcome register for every officer-involved shooting since 2010</div>
+    <div class="gap-body">A single Socrata dataset with one row per <abbr title="Officer-Involved Shooting">OIS</abbr> and columns for: <abbr title="District Attorney">DA</abbr> finding, date of finding, officer discipline, officer employment status, civil suit filed (Y/N), settlement amount, review outcome. The 4th Judicial District Attorney reviews every <abbr title="Officer-Involved Shooting">OIS</abbr> in El Paso County — the data <strong>exists</strong>. What's missing is the publication step and the cross-agency agreement to link <abbr title="District Attorney">DA</abbr> outcomes to <abbr title="Colorado Springs Police Department">CSPD</abbr> incident records.
+      <div class="gap-ask">
+        <div class="gap-ask-lbl">What to request</div>
+        An <abbr title="Memorandum of Understanding">MOU</abbr> between <abbr title="Colorado Springs Police Department">CSPD</abbr> and the 4th Judicial <abbr title="District Attorney">DA</abbr> to publish a joint annual <abbr title="Officer-Involved Shooting">OIS</abbr> outcome register, maintained on the <abbr title="Colorado Springs Police Department">CSPD</abbr> Data Hub using the existing Tyler/Socrata platform.
+      </div>
+    </div>
+  </div>
+
+  <!-- HONOR ROLL — officers killed in the line of duty -->
+  <div class="honor" role="region" aria-labelledby="honor-title">
+    <div class="honor-hd">
+      <h4 id="honor-title">Honoring those killed in the line of duty</h4>
+      <div class="honor-hd-sub"><abbr title="Colorado Springs Police Department">CSPD</abbr> &amp; the Pikes Peak region</div>
+    </div>
+    <p class="honor-intro">The officer-involved-shooting data above is about accountability — tracking what happens when an officer fires a weapon, and ensuring the outcome reaches the public record. Accountability and honor sit together. Colorado Springs Police Department and neighboring regional agencies have lost officers in the line of duty — some to violence, some to accidents on duty, some to illness contracted in service. Their service mattered. So does remembering them.</p>
+
+    <h5 style="font-family:var(--serif);font-size:15px;color:var(--navy);margin:20px 0 8px;font-weight:500">Colorado Springs Police Department — fallen officers</h5>
+    <ul class="honor-list">
+      <li class="honor-item"><span class="honor-yr">Dec 2006</span><div><div class="honor-name">Officer Kenneth Jordan</div><div class="honor-circ">Shot during a drunken-driving traffic stop. Served the citizens of Colorado Springs for seven years.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Feb 2006</span><div><div class="honor-name">Detective Jared Jensen</div><div class="honor-circ">Shot while attempting to make contact with a fugitive wanted for attempted murder.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Jul 2012</span><div><div class="honor-name">Officer Matt Tyner</div><div class="honor-circ">Died in a motorcycle crash while attempting a traffic stop on Austin Bluffs Boulevard.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Mar 1981</span><div><div class="honor-name">Officer Michael Hurley</div><div class="honor-circ">Stabbed trying to break up a fight while off duty.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Apr 1980</span><div><div class="honor-name">Officer Augustus Perreira</div><div class="honor-circ">Shot by a customer at a convenience store.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Dec 1975</span><div><div class="honor-name">Officer Harry Allen</div><div class="honor-circ">Hit by a car while investigating a traffic crash.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Aug 1975</span><div><div class="honor-name">Officer Dennis Ives</div><div class="honor-circ">Killed in a single-vehicle motorcycle wreck.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">May 1975</span><div><div class="honor-name">Officer Bernard Carter</div><div class="honor-circ">Died in a crash of the police helicopter he was flying.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Nov 1953</span><div><div class="honor-name">Officer Richard Burchfield</div><div class="honor-circ">Found shot in his patrol car on Thanksgiving night while investigating armed robberies.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Jun 1941</span><div><div class="honor-name">Det. Sgt. George Kaltenberger</div><div class="honor-circ">Died from an accidental discharge of his own sidearm.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Jul 1918</span><div><div class="honor-name">Chief of Detectives John Rowan</div><div class="honor-circ">Shot by a member of the Lewis-Jones bank-robbery gang.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Jun 1896</span><div><div class="honor-name">Officer Benjamin Bish</div><div class="honor-circ">Shot by men caught breaking into a store.</div></div></li>
+    </ul>
+
+    <h5 style="font-family:var(--serif);font-size:15px;color:var(--navy);margin:24px 0 8px;font-weight:500">Pikes Peak region — neighboring agencies</h5>
+    <ul class="honor-list">
+      <li class="honor-item"><span class="honor-yr">Aug 2022</span><div><div class="honor-name">Deputy Andrew Peery</div><div class="honor-circ">El Paso County Sheriff's Office — shot while responding to a shooting in Security-Widefield.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Feb 2018</span><div><div class="honor-name">Deputy Micah Flick</div><div class="honor-circ">El Paso County Sheriff's Office — shot while responding to a stolen vehicle case.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Nov 2015</span><div><div class="honor-name">Officer Garrett Swasey</div><div class="honor-circ">University of Colorado Colorado Springs (<abbr title="University of Colorado Colorado Springs">UCCS</abbr>) Police — shot responding to the Planned Parenthood attack.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Dec 1975</span><div><div class="honor-name">Officer Donald Laabs</div><div class="honor-circ">Manitou Springs Police Department — undercover narcotics officer, found shot along I-25. Unsolved.</div></div></li>
+      <li class="honor-item"><span class="honor-yr">Apr 1921</span><div><div class="honor-name">Officer John Lindamood</div><div class="honor-circ">Fountain Police Department — shot during burglary of Fountain National Bank.</div></div></li>
+    </ul>
+
+    <div class="honor-links">
+      <strong>Official memorials and records of service:</strong><br>
+      <a href="https://coloradosprings.gov/police-department/page/fallen-officers" target="_blank" rel="noopener">CSPD Fallen Officers memorial ↗</a> (named tributes, full circumstances, photos)<br>
+      <a href="https://www.odmp.org/agency/783-colorado-springs-police-department-colorado" target="_blank" rel="noopener">Officer Down Memorial Page — CSPD honor roll ↗</a><br>
+      <a href="https://post.colorado.gov/le-resources/fallen-officers-tribute" target="_blank" rel="noopener">Colorado <abbr title="Peace Officer Standards and Training">POST</abbr> Fallen Officers video tributes ↗</a><br>
+      <a href="https://csp.colorado.gov/about-csp/colorado-law-enforcement-memorial" target="_blank" rel="noopener">Colorado Law Enforcement Memorial — all Colorado officers 1881–present ↗</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /q-wrap -->
+
+<!-- ═════════ AUDIT ═════════ -->
+<section class="audit" id="audit" aria-labelledby="audit-title">
+  <div class="audit-inner">
+    <div class="kicker">accessibility audit</div>
+    <h2 id="audit-title">Six story pages. Six empty HTML shells. One broken accessibility link.</h2>
+    <p class="intro">Every story page on policedata.coloradosprings.gov returns the same HTML: a title, the portal chrome, zero content. The substance loads via JavaScript after the browser parses the markup. A screen reader, a text browser, a slow connection, or a JavaScript-disabled environment sees a blank page with the right title. Under the DOJ April 2024 Title II rule — effective April 24, 2026 for Colorado Springs — this is a Level A structural failure, on the city's primary open-data transparency surface.</p>
+
+    <div class="audit-findings">
+      <article class="audit-card">
+        <h4>Empty server-rendered HTML on all 6 story URLs</h4>
+        <p>Arrests, Officer-Involved Shootings, Demographics of Sworn Officers, Crashes, Crimes Against Persons/Property/Society, and the portal home — every one returns the portal chrome and nothing else. Content appears only after JS executes. No noscript fallback.</p>
+        <div class="wcag">WCAG 2.1 SC 4.1.1, 4.1.2, 1.3.1</div>
+      </article>
+      <article class="audit-card">
+        <h4>Skip link targets #content — which doesn't exist in the DOM</h4>
+        <p>Every story includes <code>&lt;a href="#content"&gt;Skip to main content&lt;/a&gt;</code>. The #content element is never rendered in the server-sent HTML. The skip link fails silently for AT users.</p>
+        <div class="wcag">WCAG 2.1 SC 2.4.1 Bypass Blocks (Level A)</div>
+      </article>
+      <article class="audit-card">
+        <h4>"Accessibility" footer link: HTTP, empty response</h4>
+        <p>The footer on every page of the portal links to <code>http://www.socrata.com/accessibility</code>. HTTPS is not offered. The response body is empty. The actual Tyler statement lives at support.socrata.com/hc/en-us/articles/360019056614 — not linked from anywhere on the portal.</p>
+        <div class="wcag">WCAG 2.4.4 · Principle: trust &amp; security</div>
+      </article>
+      <article class="audit-card">
+        <h4>/browse blocked by robots.txt</h4>
+        <p>The dataset browse page — the only way to discover what datasets exist — is blocked from search engines and automated accessibility tooling. Manual navigation through the JS interface is the only entry path.</p>
+        <div class="wcag">WCAG 2.4.5 Multiple Ways (Level AA)</div>
+      </article>
+      <article class="audit-card">
+        <h4>VPAT available only "upon request"</h4>
+        <p>Tyler's own statement says VPAT "assessment documents are available upon request." Under the 2024 DOJ rule, a public-entity deployment of a third-party platform should have a VPAT publicly posted. The city can request Tyler's current VPAT at datainsights-support@tylertech.com and publish it themselves.</p>
+        <div class="wcag">Best practice · DOJ rule preamble</div>
+      </article>
+      <article class="audit-card">
+        <h4>Tyler itself acknowledges its JS interferes with AT</h4>
+        <p>Tyler's statement: "For pages where the use of AJAX and JavaScript would interfere with the use of accessible technologies, alternate versions of those pages are provided." Those alternate versions do not exist on the CSPD deployment.</p>
+        <div class="wcag">WCAG 2.1 SC 1.3.1, 4.1.1, 4.1.2</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ APPENDIX — Demographics ═════════ -->
+<section class="appendix" id="appendix" aria-labelledby="appendix-title">
+  <div class="appendix-inner">
+    <div class="kicker">appendix · context</div>
+    <h2 id="appendix-title">Demographics appendix — workforce and community composition, as context</h2>
+    <p class="intro">This section presents CSPD sworn-officer composition alongside Colorado Springs population, as ratios. It is at the bottom of the page because it is context — not a lead frame, not a polarization device. The numbers are what they are; how to interpret them depends on the civic question being asked. Where data exists to support a specific concern, that concern belongs in the relevant question section above, not in a generic demographic chart.</p>
+
+    <div class="data-card">
+      <div class="data-card-head">
+        <div>
+          <h3 class="data-card-title">Sworn officers vs. city population — by ratio</h3>
+          <div class="data-card-sub">CSPD sworn roster (~780) · city population (~490,000) · 2024</div>
+        </div>
+        <span class="data-card-tag">Ratio to population</span>
+      </div>
+
+      <div class="compare">
+        <div class="compare-col">
+          <h4>Population — Colorado Springs</h4>
+          <div class="sub">Census ACS 2024 5-year</div>
+          <div class="bar-row"><span class="bar-lbl">White (non-Hispanic)</span><div class="bar-track"><div class="bar-fill" style="width:65%;background:var(--navy)"></div></div><span class="bar-n">65%</span></div>
+          <div class="bar-row"><span class="bar-lbl">Hispanic / Latino</span><div class="bar-track"><div class="bar-fill" style="width:19%;background:var(--navy)"></div></div><span class="bar-n">19%</span></div>
+          <div class="bar-row"><span class="bar-lbl">Black</span><div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--navy)"></div></div><span class="bar-n">6%</span></div>
+          <div class="bar-row"><span class="bar-lbl">Asian</span><div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--navy)"></div></div><span class="bar-n">3%</span></div>
+          <div class="bar-row"><span class="bar-lbl">Two or more / Other</span><div class="bar-track"><div class="bar-fill" style="width:7%;background:var(--navy)"></div></div><span class="bar-n">7%</span></div>
+          <div class="bar-row"><span class="bar-lbl">Female (all ethnicities)</span><div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--navy2)"></div></div><span class="bar-n">50%</span></div>
+        </div>
+        <div class="compare-col">
+          <h4>CSPD sworn officers</h4>
+          <div class="sub">Dataset a75c-nkr7 · approximate 2024</div>
+          <div class="bar-row"><span class="bar-lbl">White (non-Hispanic)</span><div class="bar-track"><div class="bar-fill" style="width:79%;background:var(--orange)"></div></div><span class="bar-n">~79%</span></div>
+          <div class="bar-row"><span class="bar-lbl">Hispanic / Latino</span><div class="bar-track"><div class="bar-fill" style="width:13%;background:var(--orange)"></div></div><span class="bar-n">~13%</span></div>
+          <div class="bar-row"><span class="bar-lbl">Black</span><div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--orange)"></div></div><span class="bar-n">~4%</span></div>
+          <div class="bar-row"><span class="bar-lbl">Asian</span><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--orange)"></div></div><span class="bar-n">~2%</span></div>
+          <div class="bar-row"><span class="bar-lbl">Two or more / Other</span><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--orange)"></div></div><span class="bar-n">~2%</span></div>
+          <div class="bar-row"><span class="bar-lbl">Female (all ethnicities)</span><div class="bar-track"><div class="bar-fill" style="width:15%;background:var(--orange)"></div></div><span class="bar-n">~15%</span></div>
+        </div>
+      </div>
+
+      <div class="caveat" role="note">
+        <div class="caveat-lbl">How to read this honestly</div>
+        City population includes children, who cannot be sworn officers. The meaningful labor-pool comparison is the regional working-age adult population, which the CSPD story page doesn't show. Both adjustments reduce the apparent ratio differences, but don't eliminate them for women or for some underrepresented groups. <strong>This is context, not verdict.</strong> A ratio gap is a hiring / retention dataset, not a claim about individual officers or about enforcement. If and when the underlying data (stop outcomes, sustained-complaint rates, promotion pipelines) shows a problem attributable to demographics, the problem belongs to that specific dataset — not to this chart.
+      </div>
+    </div>
+
+    <div class="gap" role="region" aria-label="Missing: demographics by rank, hiring, attrition">
+      <div class="gap-head">Officer demographics by rank, hiring year, and attrition — time series, not snapshot</div>
+      <div class="gap-body">The single snapshot above is the entire Demographics of Sworn Officers story on the CSPD Data Hub. Missing: how the composition shifts by rank (patrol → sergeant → lieutenant → commander), how it has moved over the last 5 and 10 years, and what the hiring and attrition trend says about direction. The HR data already tracks all three. The snapshot hides the trend.
+        <div class="gap-ask">
+          <div class="gap-ask-lbl">What to request</div>
+          Replace the snapshot with a time series and a rank breakdown. Both can be generated from existing HR data without collecting anything new.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="colo">
+  <div class="colo-inner">
+    <div class="colo-grid">
+      <div>
+        <h5>About this reorganization</h5>
+        <p>This page is a companion to the Public Safety Dashboard at <a href="./public_safety_dashboard.html">public_safety_dashboard.html</a>. It reframes the CSPD Data Hub stories around questions residents actually ask — children, neighborhood, taxes, overall crime, who to call and trust — and contextualizes officer-involved shootings against regional firearm numbers. Demographics are reported as context in an appendix, not as a lead frame.</p>
+        <p>Where data is labeled "approximate" or "illustrative," the underlying join has not been published by CSPD and figures are order-of-magnitude from related public reports (Census ACS, EPCCO Annual Report, EPC Kids Count, 2024 Police Budget, city budget books).</p>
+      </div>
+      <div>
+        <h5>Original CSPD stories</h5>
+        <ul>
+          <li><a href="https://policedata.coloradosprings.gov/stories/s/Arrests/kh4i-nmaz" target="_blank" rel="noopener">Arrests ↗</a></li>
+          <li><a href="https://policedata.coloradosprings.gov/stories/s/fgam-vejh" target="_blank" rel="noopener">OIS 2010–2025 ↗</a></li>
+          <li><a href="https://policedata.coloradosprings.gov/stories/s/Demographics-of-Sworn-Officers/aj6b-dkun/" target="_blank" rel="noopener">Officer demographics ↗</a></li>
+          <li><a href="https://policedata.coloradosprings.gov/stories/s/58nk-wiu5" target="_blank" rel="noopener">Crashes ↗</a></li>
+          <li><a href="https://policedata.coloradosprings.gov/stories/s/Crimes-Against-Persons-Property-and-Society/mzip-3wv3/" target="_blank" rel="noopener">Crime categories ↗</a></li>
+          <li><a href="https://policedata.coloradosprings.gov/" target="_blank" rel="noopener">CSPD Data Hub ↗</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Key contacts</h5>
+        <ul>
+          <li>911 — emergency</li>
+          <li>(719) 444-7000 — CSPD non-emergency</li>
+          <li>(719) 444-7417 — CSPD Internal Affairs</li>
+          <li>1-844-CO-4-KIDS — child abuse/neglect</li>
+          <li>1-877-542-7233 — Safe2Tell</li>
+          <li>844-493-8255 — CO Crisis Services</li>
+          <li>(719) 636-2460 — Safe Passage</li>
+        </ul>
+      </div>
+    </div>
+
+    <details style="margin-bottom:24px;padding:18px 22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px">
+      <summary style="cursor:pointer;font-family:var(--serif);color:#fff;font-size:15px;font-weight:500;list-style:none;padding:2px 0;">
+        Glossary — what all those acronyms mean <span style="color:var(--orange);font-size:11px;margin-left:8px">▾ expand</span>
+      </summary>
+      <div style="columns:2;column-gap:28px;margin-top:14px;font-size:12px;line-height:1.7;color:rgba(255,255,255,.72)">
+        <div><strong style="color:#fff">ACS</strong> — American Community Survey (U.S. Census Bureau)</div>
+        <div><strong style="color:#fff">ADA</strong> — Americans with Disabilities Act</div>
+        <div><strong style="color:#fff">BHCON</strong> — Behavioral Health Connect (co-responder program)</div>
+        <div><strong style="color:#fff">BLS</strong> — Bureau of Labor Statistics</div>
+        <div><strong style="color:#fff">BWC</strong> — Body-Worn Camera</div>
+        <div><strong style="color:#fff">CAD</strong> — Computer-Aided Dispatch (call-for-service system)</div>
+        <div><strong style="color:#fff">CALEA</strong> — Commission on Accreditation for Law Enforcement Agencies</div>
+        <div><strong style="color:#fff">CASA</strong> — Court Appointed Special Advocates</div>
+        <div><strong style="color:#fff">CBI</strong> — Colorado Bureau of Investigation</div>
+        <div><strong style="color:#fff">CDHS</strong> — Colorado Department of Human Services</div>
+        <div><strong style="color:#fff">CDCJ / DCJ</strong> — Colorado Division of Criminal Justice</div>
+        <div><strong style="color:#fff">CHP+</strong> — Child Health Plan Plus (Colorado Medicaid)</div>
+        <div><strong style="color:#fff">CORA</strong> — Colorado Open Records Act</div>
+        <div><strong style="color:#fff">CCJRA</strong> — Colorado Criminal Justice Records Act</div>
+        <div><strong style="color:#fff">CSPD</strong> — Colorado Springs Police Department</div>
+        <div><strong style="color:#fff">DA</strong> — District Attorney (4th Judicial District)</div>
+        <div><strong style="color:#fff">DoD</strong> — Department of Defense</div>
+        <div><strong style="color:#fff">DOJ</strong> — U.S. Department of Justice</div>
+        <div><strong style="color:#fff">DOC</strong> — Department of Corrections</div>
+        <div><strong style="color:#fff">DUI</strong> — Driving Under the Influence</div>
+        <div><strong style="color:#fff">EPC</strong> — El Paso County</div>
+        <div><strong style="color:#fff">EPC DHS</strong> — El Paso County Department of Human Services</div>
+        <div><strong style="color:#fff">EPCCO</strong> — El Paso County Coroner's Office</div>
+        <div><strong style="color:#fff">EPSO</strong> — El Paso County Sheriff's Office</div>
+        <div><strong style="color:#fff">FBI</strong> — Federal Bureau of Investigation</div>
+        <div><strong style="color:#fff">GCMCA</strong> — General Court-Martial Convening Authority (military)</div>
+        <div><strong style="color:#fff">HOT</strong> — Homeless Outreach Team (CSPD)</div>
+        <div><strong style="color:#fff">HOP</strong> — Homeless Outreach Program (CS Fire Dept)</div>
+        <div><strong style="color:#fff">IA</strong> — Internal Affairs</div>
+        <div><strong style="color:#fff">IG</strong> — Inspector General (military/federal)</div>
+        <div><strong style="color:#fff">JAG</strong> — Judge Advocate General (military attorneys)</div>
+        <div><strong style="color:#fff">MOU</strong> — Memorandum of Understanding</div>
+        <div><strong style="color:#fff">NIBRS</strong> — National Incident-Based Reporting System (FBI standard)</div>
+        <div><strong style="color:#fff">OIS</strong> — Officer-Involved Shooting</div>
+        <div><strong style="color:#fff">PIO</strong> — Public Information Officer</div>
+        <div><strong style="color:#fff">POST</strong> — Peace Officer Standards and Training Board</div>
+        <div><strong style="color:#fff">PPACG</strong> — Pikes Peak Area Council of Governments</div>
+        <div><strong style="color:#fff">RMS</strong> — Records Management System (incident reports)</div>
+        <div><strong style="color:#fff">UCCS</strong> — University of Colorado Colorado Springs</div>
+        <div><strong style="color:#fff">UCMJ</strong> — Uniform Code of Military Justice</div>
+        <div><strong style="color:#fff">USAFA</strong> — United States Air Force Academy</div>
+        <div><strong style="color:#fff">VPAT</strong> — Voluntary Product Accessibility Template</div>
+        <div><strong style="color:#fff">WCAG</strong> — Web Content Accessibility Guidelines</div>
+      </div>
+    </details>
+
+    <div class="colo-fine">
+      <span>Companion to the El Paso County Public Safety Dashboard. Verified April 17, 2026.</span>
+      <span>Demographics appear in the appendix by design — as context, not as frame.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ══════════════════════════════════════════
+// ASK WIDGET — resident question capture & aggregate
+// Uses artifact persistent shared storage (visible to all visitors).
+// Falls back to in-memory only if storage is unavailable.
+// ══════════════════════════════════════════
+
+const STORAGE_KEY = 'resident_questions_v1';
+const MAX_Q_LENGTH = 240;
+const MIN_Q_LENGTH = 10;
+
+// category keyword map — each question gets matched to one or "other"
+const CATEGORIES = [
+  { id: 'q1', label: 'Children & families', anchor: '#q1',
+    keywords: ['child', 'kid', 'baby', 'youth', 'teen', 'student', 'school', 'abuse',
+               'neglect', 'family', 'parent', 'minor', 'juvenile', 'daycare'] },
+  { id: 'q2', label: 'Neighborhood context', anchor: '#q2',
+    keywords: ['neighborhood', 'neighbourhood', 'zip', 'area', 'population', 'who lives',
+               'my street', 'my block', 'community', 'veteran', 'military', 'fort carson',
+               'peterson', 'schriever', 'senior', 'elderly', 'housing'] },
+  { id: 'q3', label: 'Budget & taxes', anchor: '#q3',
+    keywords: ['tax', 'budget', 'money', 'spend', 'cost', 'fund', 'dollar', 'salary',
+               'pay', 'fiscal', 'appropriat', 'revenue', 'expense'] },
+  { id: 'q4', label: 'Overall crime', anchor: '#q4',
+    keywords: ['crime', 'crimes', 'offense', 'theft', 'robbery', 'burglary', 'assault',
+               'violence', 'overall', 'property', 'vandalism', 'drug', 'dui'] },
+  { id: 'q5', label: 'Who to call & trust', anchor: '#q5',
+    keywords: ['call', 'report', 'trust', 'complaint', 'officer', 'cop', 'misconduct',
+               'concern', 'file', 'internal affairs', 'ia ', 'contact', 'phone', 'number',
+               '911', 'non-emergency', 'accountab', 'complain', 'discipline'] },
+  { id: 'q6', label: 'Shootings (context)', anchor: '#q6',
+    keywords: ['shoot', 'shooting', 'gun', 'firearm', 'ois', 'weapon', 'officer-involved',
+               'officer involved', 'deadly force'] }
+];
+
+function normalize(text) {
+  return text.toLowerCase()
+    .replace(/[^\w\s']/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function categorize(text) {
+  const norm = normalize(text);
+  const scores = CATEGORIES.map(cat => {
+    let score = 0;
+    for (const kw of cat.keywords) {
+      if (norm.includes(kw)) score += kw.length >= 5 ? 2 : 1;
+    }
+    return { cat, score };
+  });
+  scores.sort((a, b) => b.score - a.score);
+  if (scores[0].score === 0) return null; // "other" — a gap
+  return scores[0].cat;
+}
+
+// basic sanitization — strip HTML tags, limit length, collapse whitespace
+function sanitize(text) {
+  return String(text)
+    .replace(/<[^>]*>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, MAX_Q_LENGTH);
+}
+
+// simple spam/low-quality filter
+function isAcceptable(text) {
+  if (text.length < MIN_Q_LENGTH) return { ok: false, reason: 'Please write at least a full sentence (10+ characters).' };
+  if (text.length > MAX_Q_LENGTH) return { ok: false, reason: 'Please keep your question under 240 characters.' };
+  // mostly uppercase
+  const upperRatio = (text.match(/[A-Z]/g) || []).length / Math.max(1, (text.match(/[A-Za-z]/g) || []).length);
+  if (upperRatio > 0.6 && text.length > 15) return { ok: false, reason: 'Please use normal sentence case, not all caps.' };
+  // contains URLs
+  if (/https?:\/\/|www\./i.test(text)) return { ok: false, reason: 'Please don\'t include links — describe your question in words.' };
+  // repetition
+  if (/(.)\1{6,}/.test(text)) return { ok: false, reason: 'That looks like a spam pattern. Please rephrase.' };
+  return { ok: true };
+}
+
+// fuzzy match by shared significant-word count
+function similarityScore(a, b) {
+  const STOPWORDS = new Set(['the', 'and', 'for', 'are', 'is', 'in', 'to', 'of', 'a', 'an',
+                              'how', 'what', 'where', 'when', 'why', 'who', 'which', 'do',
+                              'does', 'did', 'i', 'my', 'me', 'you', 'your', 'we', 'us', 'our',
+                              'on', 'at', 'by', 'with', 'from', 'about', 'can', 'would', 'will',
+                              'should', 'could', 'it', 'its', 'this', 'that', 'these', 'those',
+                              'be', 'been', 'being', 'have', 'has', 'had', 'not']);
+  const words = s => new Set(normalize(s).split(' ').filter(w => w.length > 2 && !STOPWORDS.has(w)));
+  const wa = words(a), wb = words(b);
+  if (!wa.size || !wb.size) return 0;
+  let overlap = 0;
+  wa.forEach(w => { if (wb.has(w)) overlap++; });
+  return overlap / Math.max(wa.size, wb.size);
+}
+
+// ─── storage wrapper with graceful fallback ───
+let inMemoryQuestions = null;
+
+async function loadQuestions() {
+  try {
+    if (!window.storage) throw new Error('storage unavailable');
+    const res = await window.storage.get(STORAGE_KEY, true);
+    if (res && res.value) return JSON.parse(res.value);
+  } catch (e) {
+    // get() throws when key doesn't exist; that's OK
+  }
+  return [];
+}
+
+async function saveQuestions(questions) {
+  // cap at 500 most recent unique questions to stay well under 5MB
+  if (questions.length > 500) {
+    questions.sort((a, b) => b.lastAsked - a.lastAsked);
+    questions = questions.slice(0, 500);
+  }
+  try {
+    if (!window.storage) throw new Error('storage unavailable');
+    const res = await window.storage.set(STORAGE_KEY, JSON.stringify(questions), true);
+    return !!res;
+  } catch (e) {
+    console.warn('Save failed:', e);
+    inMemoryQuestions = questions;
+    return false;
+  }
+}
+
+// ─── submission handler ───
+async function submitQuestion(rawText) {
+  const text = sanitize(rawText);
+  const check = isAcceptable(text);
+  if (!check.ok) return { status: 'reject', message: check.reason };
+
+  const cat = categorize(text);
+  const now = Date.now();
+
+  let questions = await loadQuestions();
+  if (inMemoryQuestions) questions = inMemoryQuestions;
+
+  // find similar existing question (fuzzy)
+  let matched = null;
+  let bestSim = 0;
+  for (const q of questions) {
+    const sim = similarityScore(text, q.text);
+    if (sim > bestSim) { bestSim = sim; matched = q; }
+  }
+
+  if (matched && bestSim >= 0.6) {
+    matched.count = (matched.count || 1) + 1;
+    matched.lastAsked = now;
+  } else {
+    questions.push({
+      text, categoryId: cat ? cat.id : 'other',
+      count: 1, firstAsked: now, lastAsked: now
+    });
+  }
+
+  const saved = await saveQuestions(questions);
+
+  const totalCount = matched ? matched.count : 1;
+  return {
+    status: cat ? 'match' : 'gap',
+    category: cat,
+    text,
+    count: totalCount,
+    saved,
+    matched: !!matched
+  };
+}
+
+// ─── aggregate rendering ───
+let currentFilter = 'all';
+
+function renderAggregate(questions) {
+  const list = document.getElementById('aggList');
+  const countEl = document.getElementById('aggCount');
+
+  const total = questions.reduce((s, q) => s + (q.count || 1), 0);
+  const uniqueCount = questions.length;
+  countEl.textContent = uniqueCount === 0
+    ? 'No questions yet — be the first to ask'
+    : `${total.toLocaleString()} total questions · ${uniqueCount.toLocaleString()} unique`;
+
+  // filter
+  let filtered = questions.slice();
+  if (currentFilter === 'gap') filtered = filtered.filter(q => q.categoryId === 'other');
+  else if (currentFilter === 'answer') filtered = filtered.filter(q => q.categoryId !== 'other');
+
+  // sort by count desc, then lastAsked desc
+  filtered.sort((a, b) => (b.count || 1) - (a.count || 1) || (b.lastAsked || 0) - (a.lastAsked || 0));
+  filtered = filtered.slice(0, 20);
+
+  list.innerHTML = '';
+  if (filtered.length === 0) {
+    list.innerHTML = `<li class="agg-empty">${currentFilter === 'gap'
+      ? 'No unanswered questions yet. Ask something we don\u2019t cover above — the aggregate of gaps becomes a civic signal.'
+      : currentFilter === 'answer'
+        ? 'No questions yet that match the sections above. As residents ask, this list will populate.'
+        : 'No questions yet. Be the first.'
+    }</li>`;
+    return;
+  }
+
+  for (const q of filtered) {
+    const cat = CATEGORIES.find(c => c.id === q.categoryId);
+    const hasAnswer = !!cat;
+    const li = document.createElement('li');
+    li.className = 'agg-item ' + (hasAnswer ? 'has-answer' : 'no-answer');
+    const qText = escapeHTML(q.text);
+    const count = q.count || 1;
+    li.innerHTML = `
+      <div class="agg-q">${qText}${hasAnswer ? ` <a class="agg-link" href="${cat.anchor}">&rarr; ${escapeHTML(cat.label)}</a>` : ''}</div>
+      <span class="agg-count-chip">${count === 1 ? '1 ask' : count.toLocaleString() + ' asks'}</span>
+      <span class="agg-status ${hasAnswer ? 'ok' : 'gap'}">${hasAnswer ? 'Has answer' : 'Gap'}</span>
+    `;
+    list.appendChild(li);
+  }
+}
+
+function escapeHTML(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// ─── UI wiring ───
+document.addEventListener('DOMContentLoaded', async () => {
+  const form = document.getElementById('askForm');
+  const input = document.getElementById('askInput');
+  const submit = document.getElementById('askSubmit');
+  const result = document.getElementById('askResult');
+  const charCount = document.getElementById('askCharCount');
+
+  input.addEventListener('input', () => {
+    charCount.textContent = `${input.value.length} / ${MAX_Q_LENGTH}`;
+  });
+
+  document.querySelectorAll('.ask-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      input.value = chip.dataset.suggest;
+      charCount.textContent = `${input.value.length} / ${MAX_Q_LENGTH}`;
+      input.focus();
+    });
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+
+    submit.disabled = true;
+    submit.textContent = 'Sending…';
+    result.className = 'ask-result';
+    result.innerHTML = '';
+
+    try {
+      const res = await submitQuestion(text);
+      if (res.status === 'reject') {
+        result.className = 'ask-result err visible';
+        result.innerHTML = `
+          <div class="ask-result-head">One moment</div>
+          <div class="ask-result-body">${escapeHTML(res.message)}</div>`;
+      } else if (res.status === 'match') {
+        const msg = res.matched && res.count > 1
+          ? `<strong>${res.count.toLocaleString()} residents</strong> have asked about this. We have a section below.`
+          : `Good question — we have a section on this.`;
+        result.className = 'ask-result match visible';
+        result.innerHTML = `
+          <div class="ask-result-head">We have an answer for this</div>
+          <div class="ask-result-body">${msg}${res.saved ? '' : '<br><em>(saved locally only — shared log unavailable)</em>'}</div>
+          <a class="ask-result-link" href="${res.category.anchor}">Go to ${escapeHTML(res.category.label)} &rarr;</a>`;
+        setTimeout(() => { document.querySelector(res.category.anchor)?.scrollIntoView({ behavior: 'smooth' }); }, 800);
+      } else {
+        // gap — uncovered question
+        const msg = res.matched && res.count > 1
+          ? `<strong>${res.count.toLocaleString()} residents</strong> have asked this kind of question — and we don\u2019t have a curated section for it yet. Your question is logged as a data gap.`
+          : `You\u2019re the first to ask this, or the first to phrase it this way. We don\u2019t have a curated section for it yet. Your question is logged as a data gap — the aggregate of gaps is itself a civic signal for what to publish next.`;
+        result.className = 'ask-result gap visible';
+        result.innerHTML = `
+          <div class="ask-result-head">This is a gap — logged</div>
+          <div class="ask-result-body">${msg}${res.saved ? '' : '<br><em>(saved locally only — shared log unavailable)</em>'}</div>
+          <a class="ask-result-link" href="#aggSection">See what others are asking &rarr;</a>`;
+      }
+
+      input.value = '';
+      charCount.textContent = `0 / ${MAX_Q_LENGTH}`;
+      // refresh aggregate
+      const questions = inMemoryQuestions || await loadQuestions();
+      renderAggregate(questions);
+    } catch (err) {
+      console.error(err);
+      result.className = 'ask-result err visible';
+      result.innerHTML = `
+        <div class="ask-result-head">Something went wrong</div>
+        <div class="ask-result-body">${escapeHTML(err.message || 'Unknown error')}. Your question wasn\u2019t saved.</div>`;
+    } finally {
+      submit.disabled = false;
+      submit.textContent = 'Ask';
+    }
+  });
+
+  // aggregate tab filtering
+  document.querySelectorAll('.agg-tab').forEach(tab => {
+    tab.addEventListener('click', async () => {
+      document.querySelectorAll('.agg-tab').forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      currentFilter = tab.dataset.filter;
+      const questions = inMemoryQuestions || await loadQuestions();
+      renderAggregate(questions);
+    });
+  });
+
+  // initial aggregate load
+  try {
+    const questions = await loadQuestions();
+    renderAggregate(questions);
+  } catch (err) {
+    console.warn('Could not load aggregate:', err);
+    renderAggregate([]);
+  }
+});
+</script>
+
+</body>
+</html>
