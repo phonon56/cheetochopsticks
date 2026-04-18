@@ -204,10 +204,10 @@ body {
 
 /* ── ROUTING NOTE ── */
 .routing-note {
-  background: rgba(232,181,71,.1);
-  border: 1px solid rgba(232,181,71,.25);
+  background: var(--navy);
+  border: 1px solid var(--navy-mid);
   border-radius: 3px;
-  padding: 12px 16px;
+  padding: 14px 18px;
   margin-top: 24px;
   display: flex;
   gap: 10px;
@@ -217,10 +217,11 @@ body {
   font-size: 14px;
   flex-shrink: 0;
   line-height: 1.6;
+  color: var(--yellow);
 }
 .routing-note p {
   font-size: 13px;
-  color: #6b4000; /* was var(--yellow), fails on light bg → #6b4000 8.03 AAA */
+  color: #ffffff; /* white on navy #0d2340 → 15.77 AAA */
   font-family: 'IBM Plex Mono', monospace;
   line-height: 1.6;
   margin: 0;
@@ -1319,72 +1320,120 @@ form.addEventListener('submit', async e => {
   }
 });
 
-// ── ROUTING VIA CLAUDE API ──
-async function routeRequest(userText) {
-  const systemPrompt = `You are a routing assistant for the City of Colorado Springs permit and records portal. Given a resident's plain-language description of what they need, identify which department best handles it.
-
-AVAILABLE DEPARTMENTS:
-
-- PPRBD: Pikes Peak Regional Building Department. SEPARATE AGENCY. Handles ALL residential building permits — decks, roofs, water heaters, HVAC, basement finishes, electrical, plumbing, mechanical. If user describes home improvement or residential construction, the answer is PPRBD. Website: pprbd.org. Phone: 719-327-2880.
-
-- Neighborhood Services: Code enforcement. Tall grass, junk/abandoned vehicles, nuisances, zoning violations, unpermitted short-term rentals, trash issues.
-
-- Public Works: Street and right-of-way permits. Traffic control, road closures, parades, races, block parties, special events affecting streets, sidewalk work.
-
-- Business Licensing: Starting a business, city business licenses, renewals, changes to existing licenses.
-
-- Police Records: Crash reports, background checks, clearance letters, public records requests from police.
-
-- Planning: Zoning, subdivision, rezoning, conditional-use, land-use decisions, plats. DEVELOPMENT scale only, not home remodels.
-
-- Fire: COMMERCIAL fire-safety permits only — alarm systems, sprinklers, hazmat, commercial kitchens, liquor licenses, commercial plan review. Home fires = 911.
-
-- Stormwater: Construction-site stormwater compliance — erosion control, stormwater plans. Mostly contractors and developers.
-
-- Building: NOT residential. Infrastructure in public rights-of-way — concrete, excavation, CSU utility permits. If they describe home construction, send to PPRBD instead.
-
-- Uncertain: Only if the request is truly ambiguous across multiple departments.
-
-RESPOND WITH ONLY THIS JSON (no prose, no markdown):
-{
-  "primary": {
-    "department": "<one of the department names above, exactly>",
-    "reason": "<one short plain-English sentence explaining why, addressed to the resident (you/your). Don't mention 'the system' or 'the classifier'. Be warm, not robotic.>",
-    "confidence": "high" | "medium" | "low"
+// ── LOCAL KEYWORD ROUTING ──
+// Maps each department to keywords drawn from its scope + the ref-card tags.
+// Matching is case-insensitive, whole-word where practical, scored by hits.
+const KEYWORD_INDEX = {
+  'PPRBD': {
+    keywords: ['deck','roof','roofing','water heater','hvac','furnace','air conditioning','basement','finish','electrical','plumbing','mechanical','remodel','renovation','addition','permit','residential','house','home','building permit','pprbd','shed','garage','kitchen','bathroom','window','door','siding','insulation','solar panel','hot tub','fence','retaining wall','patio','pergola','carport'],
+    reason: 'That sounds like a residential building project — PPRBD handles all home permits. They\'re a separate agency from the city.',
+    warning: 'Important: PPRBD is a separate agency from Colorado Springs with its own website (pprbd.org) and its own login. The city portal cannot process residential building permits.'
   },
-  "alternates": [
-    { "department": "<dept>", "reason": "<short reason>" }
-  ],
-  "warning": "<optional string if there's an important caveat — especially if residential construction is mentioned, warn them PPRBD is a separate agency>"
-}
-
-Include 0-2 alternates only if they're genuinely plausible. Confidence is "high" when one department clearly fits, "medium" when it fits but isn't obvious, "low" when you're guessing.`;
-
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userText }]
-    })
-  });
-
-  if (!response.ok) {
-    throw new Error('API error: ' + response.status);
+  'Neighborhood Services': {
+    keywords: ['tall grass','weeds','overgrown','mow','lawn','junk','abandoned vehicle','abandoned car','nuisance','noise','trash','garbage','dumping','zoning violation','code enforcement','short-term rental','str','airbnb','vrbo','complaint','blight','graffiti','parking','neighbor','eyesore','condemned','boarded'],
+    reason: 'That sounds like a code enforcement or neighborhood complaint — Neighborhood Services handles those.'
+  },
+  'Public Works': {
+    keywords: ['street','road','pothole','sidewalk','curb','right-of-way','traffic control','road closure','parade','race','5k','10k','marathon','block party','special event','barricade','detour','construction zone','crosswalk','sign','stop sign','traffic sign','street light','median'],
+    reason: 'That involves streets or a public event — Public Works handles right-of-way permits and traffic control.'
+  },
+  'Business Licensing': {
+    keywords: ['business license','start a business','open a business','coffee shop','restaurant','retail','store','shop','license renewal','vendor','food truck','mobile vendor','contractor license','liquor license','cannabis','marijuana','dispensary','salon','barber','tattoo'],
+    reason: 'That\'s about starting or licensing a business — Business Licensing is your path.'
+  },
+  'Police Records': {
+    keywords: ['police report','crash report','accident report','background check','clearance letter','police records','arrest record','incident report','body cam','body camera','911','dispatch','detective','theft report','car accident','hit and run','vin check'],
+    reason: 'That\'s a police records request — you can get crash reports, background checks, and clearance letters here.'
+  },
+  'Planning': {
+    keywords: ['zoning','rezone','rezoning','subdivision','plat','land use','conditional use','variance','annexation','comprehensive plan','overlay','setback','density','development','commercial development','mixed use','planned unit'],
+    reason: 'That\'s a land-use or zoning question — the Planning department handles those at the development scale.'
+  },
+  'Fire': {
+    keywords: ['fire permit','fire alarm','sprinkler','sprinkler system','hazmat','hazardous material','commercial kitchen','hood suppression','fire inspection','fire safety','fire marshal','commercial plan review','assembly permit','pyrotechnics','fireworks','fire suppression'],
+    reason: 'That\'s a commercial fire-safety matter — the Fire department handles permits for alarms, sprinklers, and commercial plan reviews.'
+  },
+  'Stormwater': {
+    keywords: ['stormwater','storm water','erosion','erosion control','sediment','runoff','drainage','outfall','swmp','construction site','grading','bmp','best management practice','ms4','stormwater management'],
+    reason: 'That\'s stormwater compliance — typically for construction sites needing erosion control or drainage plans.'
+  },
+  'Building': {
+    keywords: ['excavation','right of way permit','utility permit','csu','concrete','infrastructure','city project','public infrastructure','telecom','fiber','conduit','trench','boring'],
+    reason: 'That\'s infrastructure work in the public right-of-way — the Building module handles city-scale permits (not residential).'
   }
+};
 
-  const data = await response.json();
-  const raw = data.content
-    .filter(item => item.type === 'text')
-    .map(item => item.text)
-    .join('')
-    .trim();
+// Score user text against each department's keywords
+function routeRequest(userText) {
+  return new Promise(resolve => {
+    const input = userText.toLowerCase();
+    const scores = {};
+    let bestDept = 'Uncertain';
+    let bestScore = 0;
+    const runners = [];
 
-  // Strip potential markdown fences
-  const cleaned = raw.replace(/```json|```/g, '').trim();
-  return JSON.parse(cleaned);
+    // Check for PPRBD-triggering residential keywords first (highest priority)
+    const residentialSignals = ['deck','roof','basement','water heater','hvac','furnace','remodel','addition','permit','plumbing','electrical','solar','shed','garage','patio','fence','kitchen','bathroom'];
+    const hasResidential = residentialSignals.some(kw => input.includes(kw));
+    const mentionsHome = /\b(house|home|my home|residential|my yard)\b/i.test(input);
+
+    for (const [dept, entry] of Object.entries(KEYWORD_INDEX)) {
+      let score = 0;
+      for (const kw of entry.keywords) {
+        if (input.includes(kw)) {
+          // Multi-word keywords get bonus weight
+          score += kw.includes(' ') ? 3 : 1;
+        }
+      }
+      scores[dept] = score;
+      if (score > bestScore) {
+        bestScore = score;
+        bestDept = dept;
+      }
+    }
+
+    // If residential signals + home context → force PPRBD even if Building scored higher
+    if (hasResidential && mentionsHome && bestDept === 'Building') {
+      bestDept = 'PPRBD';
+    }
+
+    // Confidence
+    const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    let confidence = 'low';
+    if (bestScore >= 4) confidence = 'high';
+    else if (bestScore >= 2) confidence = 'medium';
+
+    // Alternates: any dept with score > 0 that isn't the primary
+    const alternates = sortedScores
+      .filter(([d, s]) => d !== bestDept && s > 0)
+      .slice(0, 2)
+      .map(([d]) => ({
+        department: d,
+        reason: KEYWORD_INDEX[d] ? KEYWORD_INDEX[d].reason : ''
+      }));
+
+    // Build result in the same shape renderResult() expects
+    const entry = KEYWORD_INDEX[bestDept];
+    const result = {
+      primary: {
+        department: bestDept,
+        reason: entry ? entry.reason : 'Your request could match multiple departments. Browse the list below or call the general city number.',
+        confidence: confidence
+      },
+      alternates: alternates,
+      warning: entry && entry.warning ? entry.warning : null
+    };
+
+    // No score at all → Uncertain
+    if (bestScore === 0) {
+      result.primary.department = 'Uncertain';
+      result.primary.reason = 'We couldn\'t confidently match your description to one department. Browse the full list below, or call 719-385-5169.';
+      result.primary.confidence = 'low';
+    }
+
+    // Small delay to show loading animation naturally
+    setTimeout(() => resolve(result), 600);
+  });
 }
 
 // ── RENDER RESULT ──
