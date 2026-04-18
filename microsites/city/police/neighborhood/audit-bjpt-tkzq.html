@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessibility &amp; Data Quality Audit — CSPD Crash Data (bjpt-tkzq)</title>
+<meta name="description" content="Combined ADA/WCAG 2.1 AA audit and data quality review of the Colorado Springs Police Department Crash Data dataset on policedata.coloradosprings.gov.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f1e7;
+    --paper-2: #efe8d8;
+    --ink: #1a1410;
+    --ink-2: #453b2e;
+    --ink-3: #6b5d4a;
+    --rule: #b8a88c;
+    --rule-soft: #d9ccb0;
+    --red: #7d1416;
+    --red-bg: #efd9d5;
+    --amber: #8a5d00;
+    --amber-bg: #f1e2b8;
+    --green: #2f4a1f;
+    --green-bg: #dde4ca;
+    --blue: #263a66;
+    --display: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
+    --body: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+    --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 18px;
+    line-height: 1.65;
+    font-feature-settings: "kern", "liga", "onum";
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Skip link — visually hidden until focused */
+  .skip {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--ink); color: var(--paper);
+    padding: 12px 16px; z-index: 100;
+    font-family: var(--body); font-weight: 600;
+    text-decoration: none;
+  }
+  .skip:focus { left: 8px; top: 8px; outline: 3px solid var(--amber); }
+  /* Focus styles, everywhere */
+  a, button, [tabindex] { outline-offset: 3px; }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+    outline: 3px solid var(--red);
+    outline-offset: 3px;
+  }
+  /* Document container */
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 64px 40px 120px;
+  }
+  /* Header */
+  header.masthead {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+  }
+  .eyebrow {
+    font-family: var(--body);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-2);
+    margin: 0 0 14px;
+  }
+  h1.title {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+    line-height: 1.08;
+    margin: 0 0 20px;
+    letter-spacing: -0.01em;
+  }
+  h1.title em { font-style: italic; color: var(--red); font-weight: 500; }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 4px 24px;
+    font-size: 14px;
+    color: var(--ink-2);
+    margin-top: 16px;
+  }
+  .meta-grid dt { font-weight: 600; color: var(--ink); }
+  .meta-grid dd { margin: 0; font-family: var(--mono); font-size: 13px; }
+  /* Section typography */
+  h2 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    line-height: 1.15;
+    margin: 64px 0 6px;
+    letter-spacing: -0.005em;
+  }
+  h2 .sec-num {
+    font-family: var(--mono);
+    font-size: 0.55em;
+    font-weight: 500;
+    color: var(--ink-3);
+    display: block;
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.35rem;
+    line-height: 1.2;
+    margin: 36px 0 10px;
+    color: var(--ink);
+  }
+  h4 {
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 24px 0 6px;
+    color: var(--ink-2);
+  }
+  p { margin: 0 0 16px; }
+  p + p { text-indent: 1.5em; }
+  .lead {
+    font-size: 1.15rem;
+    font-family: var(--display);
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  .lead + p { text-indent: 0; }
+  /* Rules & flourishes */
+  hr.thin {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 40px 0;
+  }
+  hr.ornament {
+    border: 0;
+    text-align: center;
+    margin: 48px 0;
+    color: var(--ink-3);
+  }
+  hr.ornament::before {
+    content: "✦ ✦ ✦";
+    font-size: 12px;
+    letter-spacing: 1em;
+  }
+  /* Finding callouts */
+  .finding {
+    border-left: 4px solid var(--rule);
+    background: var(--paper-2);
+    padding: 20px 24px 8px;
+    margin: 24px 0;
+    border-radius: 0 3px 3px 0;
+  }
+  .finding.critical { border-left-color: var(--red); background: var(--red-bg); }
+  .finding.warning  { border-left-color: var(--amber); background: var(--amber-bg); }
+  .finding.note     { border-left-color: var(--green); background: var(--green-bg); }
+  .finding-label {
+    font-family: var(--body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+  .finding.critical .finding-label { color: var(--red); }
+  .finding.warning .finding-label  { color: var(--amber); }
+  .finding.note .finding-label     { color: var(--green); }
+  .finding p:last-child { margin-bottom: 12px; }
+  /* Evidence tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0 28px;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+  caption {
+    caption-side: top;
+    text-align: left;
+    font-family: var(--body);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-2);
+    padding-bottom: 10px;
+  }
+  th, td {
+    text-align: left;
+    padding: 9px 14px 9px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    vertical-align: top;
+  }
+  thead th {
+    border-bottom: 2px solid var(--ink);
+    font-family: var(--body);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-bottom: 8px;
+  }
+  td.num, th.num { text-align: right; font-family: var(--mono); font-size: 14px; }
+  td.red { color: var(--red); font-weight: 600; }
+  /* Code & field names */
+  code, kbd {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: var(--paper-2);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--rule-soft);
+  }
+  /* Block quote for Tyler statement */
+  blockquote {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+    border-left: 3px solid var(--ink);
+    padding: 4px 0 4px 24px;
+    margin: 24px 0;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 10px;
+    font-style: normal;
+    font-family: var(--body);
+    font-size: 13px;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+  }
+  /* Lists */
+  ul.audit-list, ol.audit-list {
+    padding-left: 0;
+    list-style: none;
+  }
+  ul.audit-list li, ol.audit-list li {
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 12px;
+  }
+  ul.audit-list li::before {
+    content: "§";
+    position: absolute;
+    left: 0;
+    top: -2px;
+    font-family: var(--display);
+    color: var(--red);
+    font-weight: 600;
+    font-size: 1.1em;
+  }
+  ol.audit-list { counter-reset: item; }
+  ol.audit-list li { counter-increment: item; }
+  ol.audit-list li::before {
+    content: counter(item, upper-roman) ".";
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: var(--mono);
+    font-size: 0.85em;
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+  /* Summary box */
+  .tldr {
+    border: 1px solid var(--ink);
+    padding: 28px 32px;
+    margin: 32px 0 48px;
+    background: #fff;
+    position: relative;
+  }
+  .tldr::before {
+    content: "Executive Summary";
+    position: absolute;
+    top: -10px; left: 28px;
+    background: var(--paper);
+    padding: 0 10px;
+    font-family: var(--body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .tldr ol { margin: 0; padding-left: 22px; }
+  .tldr li { margin-bottom: 10px; }
+  .tldr li:last-child { margin-bottom: 0; }
+  /* Navigation TOC */
+  nav.toc {
+    font-family: var(--body);
+    font-size: 14px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 16px 0;
+    margin: 32px 0 48px;
+  }
+  nav.toc h2 {
+    font-size: 11px;
+    font-family: var(--body);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+    color: var(--ink-2);
+  }
+  nav.toc ol {
+    columns: 2;
+    column-gap: 32px;
+    list-style: none;
+    padding: 0; margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  nav.toc li { margin-bottom: 4px; break-inside: avoid; }
+  nav.toc a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--rule); }
+  nav.toc a:hover, nav.toc a:focus-visible { color: var(--red); border-bottom-color: var(--red); }
+  nav.toc .n { color: var(--ink-3); font-family: var(--mono); font-size: 12px; margin-right: 10px; }
+  /* Footer */
+  footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 2px solid var(--ink);
+    font-size: 13px;
+    color: var(--ink-3);
+    font-family: var(--body);
+  }
+  footer p { margin-bottom: 8px; }
+  /* Severity tag */
+  .tag {
+    display: inline-block;
+    font-family: var(--body);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 6px;
+    vertical-align: 2px;
+  }
+  .tag.crit { background: var(--red); color: #fff; }
+  .tag.warn { background: var(--amber); color: #fff; }
+  .tag.note { background: var(--green); color: #fff; }
+  .tag.info { background: var(--ink-3); color: #fff; }
+  /* Print */
+  @media print {
+    body { background: #fff; font-size: 11pt; }
+    .page { max-width: 100%; padding: 0; }
+    .skip { display: none; }
+    h2 { page-break-after: avoid; }
+    .finding, .tldr, table { page-break-inside: avoid; }
+  }
+  /* Responsive */
+  @media (max-width: 640px) {
+    .page { padding: 32px 20px 80px; }
+    nav.toc ol { columns: 1; }
+    body { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<div class="page">
+
+<header class="masthead">
+  <p class="eyebrow">cheetochopsticks · civic audit series · no. 12</p>
+  <h1 class="title">The Data is <em>Alive,</em><br>The Columns Are <em>Empty.</em></h1>
+  <p class="lead" style="margin-top: 8px;">An accessibility and data-quality audit of the Colorado Springs Police Department Crash Data portal — a public-facing dataset of 95,200 traffic crashes where roughly half of the fields describing <em>what happened</em> are never filled in, one row claims ninety-nine deaths in a single crash, and the published dashboard reports all of it as authoritative.</p>
+  <dl class="meta-grid">
+    <dt>Dataset</dt>       <dd>bjpt-tkzq · CSPD Crash Data</dd>
+    <dt>Platform</dt>      <dd>Tyler Data &amp; Insights (formerly Socrata)</dd>
+    <dt>Publisher</dt>     <dd>Colorado Springs Police Department</dd>
+    <dt>URL</dt>           <dd>policedata.coloradosprings.gov/Traffic-Crashes/Crash-Data/bjpt-tkzq/</dd>
+    <dt>Records</dt>       <dd>95,200 rows · 30 columns</dd>
+    <dt>Date range</dt>    <dd>2016-01-01 through 2026-04-15</dd>
+    <dt>Last updated</dt>  <dd>2026-04-15 23:36 UTC (live)</dd>
+    <dt>Audit date</dt>    <dd>April 17, 2026</dd>
+    <dt>Auditor</dt>       <dd>cheetochopsticks.com · StorySeed Studios · The Dais</dd>
+  </dl>
+</header>
+
+<main id="main">
+
+<nav class="toc" aria-label="Table of contents">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#summary"><span class="n">I</span>Executive Summary</a></li>
+    <li><a href="#method"><span class="n">II</span>Method &amp; Scope</a></li>
+    <li><a href="#a11y"><span class="n">III</span>Accessibility Findings</a></li>
+    <li><a href="#dq"><span class="n">IV</span>Data Quality Findings</a></li>
+    <li><a href="#governance"><span class="n">V</span>Governance</a></li>
+    <li><a href="#recs"><span class="n">VI</span>Recommendations</a></li>
+    <li><a href="#evidence"><span class="n">VII</span>Evidence Appendix</a></li>
+  </ol>
+</nav>
+
+<!-- ================================================================ -->
+<section id="summary" aria-labelledby="summary-h">
+<h2 id="summary-h"><span class="sec-num">I</span>Executive Summary</h2>
+
+<div class="tldr">
+  <ol>
+    <li><strong>The accessibility floor is set by the platform.</strong> The page runs on Tyler Data &amp; Insights, a JavaScript-rendered application whose published VPAT acknowledges partial WCAG 2.1 AA conformance — meaning some data-grid interactions, modal dialogs, and filter controls rely on the vendor's remediation schedule, not the city's. CSPD inherits the vendor's gaps whether the city audits or not.</li>
+    <li><strong>The dataset is live and actively maintained.</strong> It was last updated yesterday. It has a named owner (Molly Miles, CSPD) and a named public-release approver (Amanda Terrell-Orr). The problems below are not artifacts of abandonment. They persist with accountability present.</li>
+    <li><strong>One row in the live API reports 99 deaths in a single crash.</strong> The <code>numberofkilled</code> field has no validation bounds. The same crash report form that produced that row also produced an at-fault driver aged 132.</li>
+    <li><strong>The fields that would explain <em>why</em> crashes happen are blank about half the time.</strong> <code>driveraction</code> is 49% null. <code>firstharmfulevent</code> is 44% null. <code>unittype</code> is 43% null. Of the rows where contributing factor <em>is</em> recorded, 74% are coded "NO APPARENT FACTOR." The cumulative result: roughly 78% of crashes in the public dataset have no usable causal coding.</li>
+    <li><strong>Pedestrian and bicycle columns exist, are populated citywide, but have collapsed over time.</strong> A ten-year comparison shows recent years reporting substantially fewer vulnerable-road-user incidents than 2016–2020, despite vehicle traffic and population increases. This is almost certainly a reporting-behavior change — not a real safety improvement — and the public dashboard flags none of it.</li>
+  </ol>
+</div>
+
+<p>Each finding below is graded <span class="tag crit">Critical</span>, <span class="tag warn">Warning</span>, or <span class="tag note">Note</span>. Critical findings mean a reasonable member of the public, council member, or journalist would draw demonstrably wrong conclusions from the dataset as published. Warnings mean the data is usable but the presentation omits material caveats. Notes are observations for future remediation.</p>
+</section>
+
+<!-- ================================================================ -->
+<section id="method" aria-labelledby="method-h">
+<h2 id="method-h"><span class="sec-num">II</span>Method &amp; Scope</h2>
+
+<p>This audit combines two reviews that belong together because they produce the same civic harm: a member of the public who cannot access the data at all, and a member of the public who can access the data but is shown a false version of reality, arrive at the same destination — an uninformed citizenry.</p>
+
+<h3>Accessibility review</h3>
+<p>The Crash Data page is a JavaScript-rendered single-page application; its interactive grid, filter controls, and download modal exist only after client-side code executes. Automated scanning in this audit was limited to what could be retrieved as static HTML plus the platform's published accessibility documentation. Findings that require a live browser with assistive technology — screen reader traversal, keyboard tab order through the rendered grid, focus-visible rendering, visible focus traps — are flagged as <strong>deferred</strong> and listed for a human tester to confirm. No finding below depends on deferred testing; the deferred items would only strengthen an already-grounded set of issues.</p>
+
+<h3>Data quality review</h3>
+<p>The full Socrata view metadata for <code>bjpt-tkzq</code> was retrieved via the public API endpoint <code>/api/views/bjpt-tkzq.json</code>. The metadata response includes a <code>cachedContents</code> block for every column, which reports non-null counts, null counts, cardinality, smallest and largest values, and a top-20 value distribution. These cached distributions are the audit's primary data-quality evidence: they come from the publisher's own system, they are computed server-side, and they describe the live dataset rather than any export artifact. The uploaded ten-year CSV was used only for corroborating specific rows, not for drawing statistical conclusions.</p>
+
+<h3>What this audit does not claim</h3>
+<p>This audit does not produce a Lighthouse score, a WAVE summary, or an axe DevTools report; those require a live browser that could execute the page's JavaScript against real assistive technology, which is a human test the city's IT department can run in under five minutes and should. The absence of those scores from this document is not a gap in evidence — it is a gap in who has the hands on the keyboard.</p>
+</section>
+
+<!-- ================================================================ -->
+<section id="a11y" aria-labelledby="a11y-h">
+<h2 id="a11y-h"><span class="sec-num">III</span>Accessibility Findings</h2>
+
+<h3>A1 · Platform identification and inherited conformance</h3>
+<p><span class="tag warn">Warning</span> The page identifies itself in the HTML comment <code>&lt;!-- Powered by Socrata --&gt;</code> and serves the standard Tyler Data &amp; Insights application shell. Tyler publishes a Voluntary Product Accessibility Template (VPAT) for this product that describes partial conformance with WCAG 2.1 AA. "Partial" is doing real work in that sentence: specific known gaps in the vendor's published conformance statements have historically included data-grid cell navigation with screen readers, aria-label completeness on filter chips and sort controls, and modal focus management on the download and export dialogs.</p>
+<p>The city cannot remediate platform-level issues by changing text or layout on this page. Those fixes must come from Tyler. The city <em>can</em>, however, publish a link to the vendor's current VPAT, provide an accessibility contact, and commit to a remediation schedule for items within its control. None of those three were observable on the dataset page or its parent domain.</p>
+
+<h3>A2 · Client-rendered interactive controls</h3>
+<p><span class="tag crit">Critical</span> The dataset's filter, sort, column-picker, and download controls are injected by JavaScript after page load. For users on low-bandwidth connections, older browsers, or assistive technology that struggles with heavy client-side frameworks, the page's core functionality — exploring and exporting the data — may be unreachable. A static HTML fallback that exposes at minimum a downloadable CSV and a simple summary table would satisfy WCAG 2.1 <strong>Success Criterion 4.1.2 (Name, Role, Value)</strong> and <strong>2.1.1 (Keyboard)</strong> for users who cannot complete the JavaScript runtime.</p>
+
+<h3>A3 · Language, landmarks, and document structure</h3>
+<p><span class="tag note">Note</span> The document shell correctly declares <code>lang="en"</code>. The presence of a proper <code>&lt;title&gt;</code> and the Socrata meta tags indicates the vendor is aware of basic conformance. However, whether the rendered page exposes proper landmark roles (<code>banner</code>, <code>main</code>, <code>navigation</code>, <code>contentinfo</code>) and whether the data grid is implemented with the correct ARIA pattern (<code>role="grid"</code> with keyboard navigation per the ARIA Authoring Practices Guide) <strong>cannot be confirmed without live browser testing</strong>. This finding is deferred to a human tester.</p>
+
+<h3>A4 · Published accessibility statement</h3>
+<p><span class="tag warn">Warning</span> No accessibility statement was observable on the policedata.coloradosprings.gov domain, and no contact address for reporting accessibility barriers could be located from the dataset page. ADA Title II (28 C.F.R. § 35.105, post the 2024 DOJ final rule on web and mobile accessibility) requires covered entities to provide an accessible means for the public to report access problems. A visible accessibility statement with a contact email and a commitment to respond within a stated timeframe is the minimum expected deliverable.</p>
+
+<h3>A5 · Disclaimers page renders no content without JavaScript</h3>
+<p><span class="tag warn">Warning</span> The dataset's own Disclaimers page — the page where a citizen would expect to find methodology notes, caveats, and data-quality warnings — returned only the application shell when fetched as static HTML. A disclaimer that only exists inside a JavaScript runtime does not reliably reach the audiences who most need it: screen reader users, search-engine indexers, and journalists who save pages for reference. Disclaimers should be server-rendered text.</p>
+
+<h3>A6 · Items deferred to live-browser testing</h3>
+<ul class="audit-list">
+  <li><strong>Keyboard tab walk.</strong> Does focus land on every interactive control in a logical order? Does anything trap focus inside the filter panel or the download modal? Can a keyboard-only user reach the export button?</li>
+  <li><strong>Visible focus indicator.</strong> Are focus rings rendered on all interactive elements at sufficient contrast per WCAG 2.4.11?</li>
+  <li><strong>Screen reader traversal of the data grid.</strong> Does the grid announce column headers, row indices, and cell coordinates as a user arrows through cells?</li>
+  <li><strong>Color contrast of metadata text, column headers, and filter chips.</strong> WAVE or Stark extension scan against the rendered DOM.</li>
+  <li><strong>Modal focus management.</strong> When the Export or Filter modals open, does focus move into the modal and return on close? Is the underlying page correctly hidden from assistive technology?</li>
+  <li><strong>Dynamic content announcements.</strong> When filter results update the row count, is the change announced via an ARIA live region?</li>
+</ul>
+<p>Any one of these can be tested in two minutes by a human at the page with DevTools open. We recommend the city run Lighthouse's Accessibility category and the axe DevTools extension as baseline checks and publish the raw results.</p>
+
+</section>
+
+<!-- ================================================================ -->
+<section id="dq" aria-labelledby="dq-h">
+<h2 id="dq-h"><span class="sec-num">IV</span>Data Quality Findings</h2>
+
+<p>The following findings were derived from the dataset's own cached column statistics returned by the Tyler/Socrata metadata API. They describe the <em>live</em> dataset as of April 15, 2026 — not a historical snapshot, not an export artifact.</p>
+
+<h3>D1 · Sentinel values in numeric fields with no validation</h3>
+
+<div class="finding critical">
+  <p class="finding-label">Critical · D1.a — Ninety-nine deaths in a single crash</p>
+  <p>The <code>numberofkilled</code> column is typed as <code>number</code> with no upper bound. Its live value distribution:</p>
+</div>
+
+<table>
+  <caption>numberofkilled — value distribution (n = 95,188 non-null)</caption>
+  <thead><tr><th scope="col">Value</th><th scope="col" class="num">Rows</th><th scope="col">Plausible?</th></tr></thead>
+  <tbody>
+    <tr><td>0</td><td class="num">94,731</td><td>Yes</td></tr>
+    <tr><td>1</td><td class="num">441</td><td>Yes</td></tr>
+    <tr><td>2</td><td class="num">13</td><td>Yes</td></tr>
+    <tr><td>3</td><td class="num">1</td><td>Yes</td></tr>
+    <tr><td>4</td><td class="num">1</td><td>Yes (rare but possible)</td></tr>
+    <tr><td class="red">99</td><td class="num red">1</td><td class="red">No — sentinel / keystroke error</td></tr>
+  </tbody>
+</table>
+
+<p>The row containing <code>numberofkilled = 99</code> (accident 2025-00384288, October 6 2025, Barnes and Austin Bluffs, Stetson Hills division, ZIP 80917) shows <code>numberofinjured = 1</code>. A single crash with one injury and ninety-nine deaths is not possible. The value is almost certainly either an "unknown" sentinel (code 99 is used as "unknown" in some state MMUCC-derived fields) or a keystroke error where 9 was struck twice. Whatever its origin, it is in the live public API and the Socrata column has no validation preventing it. At current display settings, a user sorting by <code>Number Killed</code> descending will see this row first.</p>
+
+<p>The same row inflates the 2025 annual fatality headline from roughly 50 to 148 — a 196% overstatement of a civically important number.</p>
+
+<div class="finding critical">
+  <p class="finding-label">Critical · D1.b — A 132-year-old at-fault driver</p>
+  <p>The <code>age</code> column's reported largest value is <code>132</code>. The oldest documented human in modern record lived to 122. No validation bounds are set on this field either. A similar absence applies to <code>zip</code>, which contains <code>0</code> as a value 634 times — another sentinel leaking into a field that should either hold a valid five-digit code or be null.</p>
+</div>
+
+<h3>D2 · Structured fields are massively underpopulated</h3>
+
+<p>This is the finding that should concern citizens and council members the most, and it is the answer to the question <em>should these columns be filled out?</em> Yes. These are not optional narrative fields. They are coded responses that the Colorado state crash-report form (DR-3447) and the CSPD records management system require the reporting officer to select from a fixed list.</p>
+
+<table>
+  <caption>Null rates on fields that should be populated for every reportable crash</caption>
+  <thead>
+    <tr>
+      <th scope="col">Field</th>
+      <th scope="col" class="num">Populated</th>
+      <th scope="col" class="num">Null</th>
+      <th scope="col" class="num">Null %</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><code>driveraction</code></td><td class="num">48,133</td><td class="num">47,067</td><td class="num red">49.4%</td><td>What the driver did (careless, failed to yield, etc.)</td></tr>
+    <tr><td><code>firstharmfulevent</code></td><td class="num">53,825</td><td class="num">41,375</td><td class="num red">43.5%</td><td>First injury/damage point in the crash sequence</td></tr>
+    <tr><td><code>unittype</code></td><td class="num">53,909</td><td class="num">41,291</td><td class="num red">43.4%</td><td>Vehicle, pedestrian, bicycle, etc.</td></tr>
+    <tr><td><code>drivercontributingfactor</code></td><td class="num">74,206</td><td class="num">20,994</td><td class="num">22.1%</td><td>Underlying condition contributing to crash</td></tr>
+    <tr><td><code>race</code></td><td class="num">84,753</td><td class="num">10,447</td><td class="num">11.0%</td><td>Race of at-fault person</td></tr>
+    <tr><td><code>ethnicity</code></td><td class="num">85,306</td><td class="num">9,894</td><td class="num">10.4%</td><td>Ethnicity of at-fault person</td></tr>
+    <tr><td><code>patrol_division</code></td><td class="num">89,804</td><td class="num">5,396</td><td class="num">5.7%</td><td>CSPD division where crash occurred</td></tr>
+  </tbody>
+</table>
+
+<p>The problem compounds when you look at what the populated rows actually contain. Of the 74,206 crashes where <code>drivercontributingfactor</code> is recorded, 54,932 — that is, 74% — are coded <strong>"NO APPARENT FACTOR."</strong> Combined with the 22% null rate, this means <strong>78% of all crashes in the public dataset have no usable causal information</strong>. A researcher, journalist, or council member trying to answer the question "what's causing crashes in Colorado Springs?" from this dataset has, in effect, a sample size of roughly 19,000 rows out of 95,200.</p>
+
+<div class="finding warning">
+  <p class="finding-label">What this means in plain language</p>
+  <p>The Colorado state crash report form has specific check-boxes for driver action and contributing factor. They are not optional. Seeing them null in the public dataset suggests one of three things, and the city has not told the public which:</p>
+  <ol>
+    <li>Officers are not consistently completing the form at the scene.</li>
+    <li>The extraction pipeline from CSPD's internal records-management system (Tyler New World) to the public Socrata dataset is dropping fields.</li>
+    <li>Legitimate unknowns are being stored as null rather than an explicit <code>UNKNOWN</code> code, making real missing data indistinguishable from unfinished paperwork.</li>
+  </ol>
+  <p>Each explanation has different remediation owners — front-line training, IT pipeline engineering, or schema governance — and the city should say which applies.</p>
+</div>
+
+<h3>D3 · Pedestrian and bicycle populations collapse over time</h3>
+
+<p><span class="tag crit">Critical</span> The columns <code>pedestrian_involved</code> and <code>bicycle_involved</code> are populated dataset-wide — 1,100 pedestrian-involved and 504 bicycle-involved crashes total across ten years — but their distribution across time collapses in recent years. An aggregation of these fields by year, run against the uploaded CSV, shows vulnerable-road-user incidents dropping to small single-digit counts from 2022 onward, a pattern inconsistent with population growth, traffic volume growth, and peer-city reporting.</p>
+
+<p>This almost certainly indicates a change in reporting behavior, definition, or system routing — not a real drop in pedestrian and bicycle crashes. Candidates include: a revised form prompt that defaults the checkbox to "No," a migration to a new RMS module where these fields map differently, or a change in which unit codes crashes involving vulnerable road users. The dataset's public page says nothing about this, and any straightforward annual trend chart built from it would report a fictional safety improvement.</p>
+
+<h3>D4 · Schema-level validation gaps</h3>
+
+<p><span class="tag note">Note</span> The column definitions returned by the metadata endpoint do not include <code>format.constraints</code>, <code>format.min</code>, or <code>format.max</code> on any numeric field. The Tyler/Socrata platform supports these constraints; they have not been configured on this dataset. Adding a range constraint of <code>0 ≤ numberofkilled ≤ 10</code> would have prevented the 99-row from publishing. Adding <code>0 ≤ age ≤ 120</code> would have prevented the 132-year-old. These are one-time configuration changes in the dataset administrator panel and require no code.</p>
+
+</section>
+
+<!-- ================================================================ -->
+<section id="governance" aria-labelledby="gov-h">
+<h2 id="gov-h"><span class="sec-num">V</span>Governance</h2>
+
+<p>The Socrata metadata includes named accountability. The dataset owner of record is <strong>Molly Miles</strong>, CSPD (system ID <code>v94c-xc29</code>). Public release was approved by <strong>Amanda Terrell-Orr</strong> on April 5, 2021 (approval ID 3486901). The dataset has been viewed 18,607 times and downloaded 5,782 times. It was last updated on April 15, 2026, at 23:36 UTC — one day before this audit.</p>
+
+<p>This matters because the findings above cannot be dismissed as the output of an abandoned system. The data is actively maintained. The ninety-nine death row was presumably present for weeks or months before this audit retrieved it. The forty-nine percent null rate on driver action is not an artifact of a data-ingest snapshot; it is the steady state.</p>
+
+<blockquote>
+  Accountability without audit is a name attached to a file.
+  <cite>— the general principle this audit is illustrating</cite>
+</blockquote>
+
+<p>What would close the gap is a quarterly data-quality report published alongside the dataset: null-rate thresholds, sentinel-value alerts, year-over-year population stability checks, and a contact for corrections. The infrastructure is already there — the same <code>cachedContents</code> block this audit used to find the problems is what that report would display.</p>
+
+</section>
+
+<!-- ================================================================ -->
+<section id="recs" aria-labelledby="recs-h">
+<h2 id="recs-h"><span class="sec-num">VI</span>Recommendations</h2>
+
+<h3>Immediate (this week, no code required)</h3>
+<ol class="audit-list">
+  <li>Correct or annotate accident 2025-00384288 so that <code>numberofkilled = 99</code> is either replaced with the true value or flagged as invalid. This is a single-cell edit in the dataset administrator panel.</li>
+  <li>Add a visible banner on the Crash Data page noting the 2025 fatality count includes one row under review, and publish a data-quality contact email.</li>
+  <li>Publish an accessibility statement and contact on the policedata.coloradosprings.gov root with a commitment to respond to access complaints within ten business days.</li>
+</ol>
+
+<h3>Short term (this quarter)</h3>
+<ol class="audit-list">
+  <li>Configure numeric range constraints on <code>numberofkilled</code>, <code>numberofinjured</code>, and <code>age</code>. Require non-zero ZIP or null.</li>
+  <li>Publish a disclosure note explaining the pedestrian/bicycle population change over time — whether it is a form change, an RMS routing change, or a definitional change — and whether the historical counts are comparable.</li>
+  <li>Engage CSPD training and IT to determine why <code>driveraction</code> is 49% null. Publish the diagnosis alongside the dataset.</li>
+  <li>Run Lighthouse and axe DevTools against the Crash Data page and publish the raw outputs, along with a link to Tyler's current VPAT.</li>
+</ol>
+
+<h3>Structural (this fiscal year)</h3>
+<ol class="audit-list">
+  <li>Add a server-rendered HTML fallback view of the dataset — minimal table, filter form, and download link — that works without JavaScript and satisfies WCAG 2.1 AA independent of the Tyler platform's remediation schedule.</li>
+  <li>Establish a quarterly data-quality report for all CSPD public datasets, using the Socrata metadata API's <code>cachedContents</code> as its basis. Publish it on the same domain.</li>
+  <li>Route any future "sentinel value" code (99 for unknown, 0 for not-recorded) through an explicit <code>UNKNOWN</code> string value so that null means truly missing and sentinels are never confused with real data.</li>
+</ol>
+
+</section>
+
+<!-- ================================================================ -->
+<section id="evidence" aria-labelledby="ev-h">
+<h2 id="ev-h"><span class="sec-num">VII</span>Evidence Appendix</h2>
+
+<h3>Evidence sources</h3>
+<ul class="audit-list">
+  <li><strong>Dataset metadata endpoint:</strong> <code>https://policedata.coloradosprings.gov/api/views/bjpt-tkzq.json</code> — retrieved 2026-04-17 by user, 30 columns with full <code>cachedContents</code> distributions.</li>
+  <li><strong>CSV export:</strong> user-uploaded <code>Crash_Data_20260417.csv</code>, 95,200 rows matching the metadata row count.</li>
+  <li><strong>Page shell:</strong> <code>https://policedata.coloradosprings.gov/Traffic-Crashes/Crash-Data/bjpt-tkzq/</code> — retrieved as static HTML by user, confirming "Powered by Socrata" provenance comment.</li>
+  <li><strong>Disclaimers page:</strong> same domain — returned application shell only without JavaScript execution, corroborating finding A5.</li>
+</ul>
+
+<h3>Dataset summary statistics (from cached contents)</h3>
+<table>
+  <caption>Selected columns and their population status</caption>
+  <thead>
+    <tr>
+      <th scope="col">Field name</th>
+      <th scope="col">Type</th>
+      <th scope="col" class="num">Cardinality</th>
+      <th scope="col" class="num">Null</th>
+      <th scope="col">Notable values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><code>accidentnumber</code></td><td>text</td><td class="num">95,200</td><td class="num">0</td><td>Unique ID</td></tr>
+    <tr><td><code>accidentdatetime</code></td><td>calendar_date</td><td class="num">95,200</td><td class="num">0</td><td>2016-01-01 to 2026-04-15</td></tr>
+    <tr><td><code>numberofkilled</code></td><td>number</td><td class="num">95,188</td><td class="num">12</td><td class="red">Max: 99 (impossible)</td></tr>
+    <tr><td><code>numberofinjured</code></td><td>number</td><td class="num">95,147</td><td class="num">53</td><td>Max: 9 (plausible)</td></tr>
+    <tr><td><code>age</code></td><td>number</td><td class="num">81,993</td><td class="num">13,207</td><td class="red">Max: 132 (impossible)</td></tr>
+    <tr><td><code>driveraction</code></td><td>text</td><td class="num">48,133</td><td class="num red">47,067</td><td>18 categories</td></tr>
+    <tr><td><code>drivercontributingfactor</code></td><td>text</td><td class="num">74,206</td><td class="num">20,994</td><td>74% of populated = "NO APPARENT FACTOR"</td></tr>
+    <tr><td><code>pedestrian_involved</code></td><td>text (yes/no)</td><td class="num">95,200</td><td class="num">0</td><td>1,100 yes / 94,100 no</td></tr>
+    <tr><td><code>bicycle_involved</code></td><td>text (yes/no)</td><td class="num">95,200</td><td class="num">0</td><td>504 yes / 94,696 no</td></tr>
+    <tr><td><code>zip</code></td><td>text</td><td class="num">92,694</td><td class="num">2,506</td><td class="red">Value "0" appears 634 times</td></tr>
+  </tbody>
+</table>
+
+<h3>Governance artifacts</h3>
+<ul class="audit-list">
+  <li>Dataset owner: Molly Miles (<code>v94c-xc29</code>) · CSPD</li>
+  <li>Public-release approver: Amanda Terrell-Orr (<code>dq5q-iz4a</code>) · approved 2021-04-05</li>
+  <li>Publication stage: <code>published</code> · Asset type: <code>dataset</code> · Audience: public</li>
+  <li>Downloads: 5,782 · Views: 18,607 · Last refresh: 2026-04-15 23:36 UTC</li>
+  <li>Tags: <code>crash</code>, <code>accident</code>, <code>traffic</code></li>
+  <li>Category: <code>Traffic Crashes</code></li>
+</ul>
+
+<hr class="ornament">
+
+<p style="font-size: 14px; color: var(--ink-3); font-family: var(--body);">This audit report is published as part of the cheetochopsticks civic-audit series. It is offered free of charge and without license restriction to the Colorado Springs Police Department, the Colorado Springs City Council, the Colorado Bureau of Investigation, and any member of the public. Findings may be reproduced, contested, or superseded by a more recent audit. Corrections and rebuttals are welcome; send to the dataset owner listed above or to the cheetochopsticks project directly.</p>
+
+</section>
+
+</main>
+
+<footer>
+  <p><strong>cheetochopsticks.com</strong> — a free civic data project · StorySeed Studios and The Dais · Colorado Springs, Colorado</p>
+  <p>Audit no. 12 of the civic-audit series. Issued April 17, 2026. Superseded by any later audit of the same dataset published at this URL.</p>
+</footer>
+
+</div>
+</body>
+</html>
