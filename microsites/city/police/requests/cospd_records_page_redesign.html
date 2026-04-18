@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Request police records from the Colorado Springs Police Department. Police reports, traffic accidents, 911 audio, body-worn camera video, background checks, and more.">
+<meta name="theme-color" content="#1E3A5F">
+<title>Request police records — Colorado Springs Police Department</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   Design tokens
+   ============================================================ */
+:root {
+  --ink: #1A1C23;
+  --ink-muted: #55595F;
+  --ink-subtle: #7C8088;
+  --paper: #FAF7F2;
+  --paper-warm: #F2EEE5;
+  --paper-edge: #EAE4D6;
+  --rule: #D4CEC0;
+  --rule-soft: #E5DFD0;
+  --accent: #1E3A5F;
+  --accent-deep: #122540;
+  --accent-soft: #E8EDF3;
+  --accent-faint: #F4F6FA;
+  --amber: #8E5B11;
+  --amber-soft: #F8EFDC;
+  --crimson: #8B2635;
+  --crimson-soft: #F4E4E7;
+  --success: #2D6A4F;
+  --success-soft: #E4EFEA;
+
+  --serif: "Fraunces", "Georgia", serif;
+  --sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --container: 1160px;
+  --measure: 68ch;
+
+  --focus-ring: 0 0 0 3px var(--paper), 0 0 0 6px var(--accent);
+  --transition: 160ms cubic-bezier(.2,.6,.3,1);
+}
+
+/* ============================================================
+   Reset and base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--paper);
+  font-feature-settings: "kern", "liga", "calt";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; cursor: pointer; }
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--transition);
+}
+a:hover { color: var(--accent-deep); text-decoration-thickness: 2px; }
+
+:focus { outline: none; }
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   Layout primitives
+   ============================================================ */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+@media (min-width: 768px) {
+  .container { padding: 0 var(--space-6); }
+}
+@media (min-width: 1024px) {
+  .container { padding: 0 var(--space-7); }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-4);
+  background: var(--ink);
+  color: var(--paper);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 500;
+  z-index: 1000;
+  transition: top var(--transition);
+}
+.skip-link:focus {
+  top: var(--space-4);
+  color: var(--paper);
+}
+
+/* ============================================================
+   Typography
+   ============================================================ */
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: var(--ink);
+  font-feature-settings: "ss01", "ss02";
+}
+h1 {
+  font-size: clamp(2rem, 1.4rem + 3vw, 3.25rem);
+  font-variation-settings: "opsz" 72, "wght" 500;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  font-variation-settings: "opsz" 48, "wght" 500;
+}
+h3 {
+  font-size: 1.1875rem;
+  font-variation-settings: "opsz" 24, "wght" 600;
+  letter-spacing: -0.005em;
+}
+h4 {
+  font-size: 1rem;
+  font-family: var(--sans);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+p { margin: 0 0 var(--space-4); max-width: var(--measure); }
+.lead {
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.3125rem);
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 52ch;
+  font-weight: 400;
+}
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 var(--space-3);
+}
+.muted { color: var(--ink-muted); }
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header {
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  background-color: color-mix(in srgb, var(--paper) 92%, transparent);
+}
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 72px;
+  padding: var(--space-3) 0;
+}
+.city-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: var(--ink);
+}
+.city-logo:hover { color: var(--ink); }
+.monogram {
+  font-family: var(--serif);
+  font-variation-settings: "opsz" 144, "wght" 600;
+  font-size: 1.625rem;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  line-height: 1;
+}
+.city-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.city-logo-text span:first-child {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.city-logo-text span:last-child {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+}
+.utility-nav {
+  display: none;
+}
+.utility-nav ul {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex;
+  gap: var(--space-5);
+}
+.utility-nav a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+.utility-nav a:hover { color: var(--accent); text-decoration: underline; }
+@media (min-width: 768px) {
+  .utility-nav { display: block; }
+}
+
+/* ============================================================
+   Breadcrumb
+   ============================================================ */
+.breadcrumb {
+  border-bottom: 1px solid var(--rule-soft);
+  background: var(--paper-warm);
+  font-size: 0.875rem;
+}
+.breadcrumb ol {
+  list-style: none;
+  margin: 0; padding: var(--space-3) 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  color: var(--ink-muted);
+}
+.breadcrumb li:not(:last-child)::after {
+  content: "/";
+  margin-left: var(--space-2);
+  color: var(--ink-subtle);
+}
+.breadcrumb a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+.breadcrumb a:hover { color: var(--accent); text-decoration: underline; }
+.breadcrumb [aria-current="page"] { color: var(--ink); font-weight: 500; }
+
+/* ============================================================
+   Page hero
+   ============================================================ */
+.page-hero {
+  padding: var(--space-8) 0 var(--space-7);
+  border-bottom: 1px solid var(--rule);
+}
+@media (min-width: 768px) {
+  .page-hero { padding: var(--space-9) 0 var(--space-8); }
+}
+.page-hero h1 {
+  margin-bottom: var(--space-5);
+  max-width: 18ch;
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+.hero-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.hero-meta-item svg {
+  width: 16px; height: 16px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   Section
+   ============================================================ */
+section.page-section {
+  padding: var(--space-8) 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+@media (min-width: 768px) {
+  section.page-section { padding: var(--space-9) 0; }
+}
+.section-header {
+  max-width: 60ch;
+  margin-bottom: var(--space-6);
+}
+.section-header h2 { margin-bottom: var(--space-3); }
+
+/* ============================================================
+   Quick action cards
+   ============================================================ */
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+@media (min-width: 720px) {
+  .action-grid { grid-template-columns: 1fr 1fr; }
+}
+.action-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: border-color var(--transition), transform var(--transition);
+}
+.action-card:hover { border-color: var(--ink-subtle); }
+.action-card h3 {
+  font-family: var(--serif);
+  font-variation-settings: "opsz" 36, "wght" 500;
+  font-size: 1.5rem;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+.action-card p {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+  margin: 0;
+}
+.action-card-footer {
+  margin-top: auto;
+  display: flex;
+  gap: var(--space-2);
+  align-items: stretch;
+}
+.action-card-footer input { flex: 1; }
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  padding: 12px 20px;
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition), color var(--transition);
+  white-space: nowrap;
+  letter-spacing: -0.005em;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--paper);
+  border-color: var(--accent);
+}
+.btn-primary:hover {
+  background: var(--accent-deep);
+  border-color: var(--accent-deep);
+  color: var(--paper);
+}
+.btn-primary:active { transform: translateY(1px); }
+.btn-secondary {
+  background: var(--paper);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.btn-secondary:hover {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--rule);
+  font-weight: 500;
+}
+.btn-ghost:hover {
+  background: var(--accent-faint);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn-full { width: 100%; }
+.btn svg { width: 16px; height: 16px; }
+
+/* ============================================================
+   Form
+   ============================================================ */
+.form-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+@media (min-width: 980px) {
+  .form-wrapper { grid-template-columns: minmax(0, 1fr) 280px; gap: var(--space-7); }
+}
+.form-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+@media (min-width: 768px) {
+  .form-card { padding: var(--space-7); }
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 var(--space-5);
+}
+fieldset + fieldset {
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--rule-soft);
+}
+legend {
+  font-family: var(--serif);
+  font-variation-settings: "opsz" 24, "wght" 500;
+  font-size: 1.1875rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  padding: 0;
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+@media (min-width: 640px) {
+  .field-row { grid-template-columns: 1fr 1fr; }
+  .field-row.three-col { grid-template-columns: 2fr 1fr; }
+}
+label {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+.required-marker {
+  color: var(--crimson);
+  font-weight: 600;
+}
+.field-hint {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="time"],
+input[type="search"],
+select,
+textarea {
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
+  padding: 11px 14px;
+  min-height: 44px;
+  width: 100%;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+textarea {
+  min-height: 96px;
+  resize: vertical;
+  font-family: var(--sans);
+  line-height: 1.5;
+}
+input:hover, select:hover, textarea:hover {
+  border-color: var(--ink-subtle);
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5L6 6.5L11 1.5' stroke='%2355595F' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.checkbox {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  cursor: pointer;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  transition: background var(--transition);
+}
+.checkbox:hover { background: var(--paper-warm); }
+.checkbox input {
+  margin: 4px 0 0;
+  width: 18px; height: 18px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+.checkbox-text {
+  font-size: 0.9375rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.checkbox-text strong { font-weight: 600; }
+.checkbox-hint {
+  display: block;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  margin-top: 2px;
+}
+
+/* Notice blocks */
+.notice {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border-left: 3px solid;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  margin-top: var(--space-3);
+}
+.notice svg { flex-shrink: 0; width: 18px; height: 18px; margin-top: 2px; }
+.notice-info { background: var(--accent-faint); border-color: var(--accent); color: var(--accent-deep); }
+.notice-warning { background: var(--amber-soft); border-color: var(--amber); color: #5A3A0B; }
+.notice strong { font-weight: 600; }
+
+/* ============================================================
+   Form sidebar (progress / help)
+   ============================================================ */
+.form-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.sidebar-card {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  background: var(--paper-warm);
+}
+.sidebar-card h3 {
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-3);
+}
+.sidebar-card p {
+  font-size: 0.9375rem;
+  color: var(--ink);
+  margin: 0 0 var(--space-3);
+  line-height: 1.55;
+}
+.sidebar-card p:last-child { margin-bottom: 0; }
+.sidebar-card a { font-weight: 500; }
+
+.progress-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: step;
+}
+.progress-list li {
+  position: relative;
+  padding-left: 36px;
+  padding-bottom: var(--space-4);
+  font-size: 0.9375rem;
+  counter-increment: step;
+  line-height: 1.4;
+}
+.progress-list li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: -2px;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  font-family: var(--sans);
+}
+.progress-list li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 11.5px;
+  top: 26px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--rule);
+}
+.progress-list li.active::before {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+.progress-list li.active { font-weight: 500; }
+
+/* ============================================================
+   Record type cards
+   ============================================================ */
+.type-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+@media (min-width: 640px) {
+  .type-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 980px) {
+  .type-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+.type-card {
+  padding: var(--space-5);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: border-color var(--transition), transform var(--transition);
+}
+.type-card:hover { border-color: var(--ink-subtle); }
+.type-card h3 {
+  font-family: var(--serif);
+  font-variation-settings: "opsz" 24, "wght" 500;
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
+}
+.type-card p {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+.type-card .retention {
+  font-size: 0.8125rem;
+  color: var(--ink-subtle);
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--rule-soft);
+}
+
+/* ============================================================
+   Contact table
+   ============================================================ */
+.contact-table-wrap {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--paper);
+}
+/* Scroll wrapper for mobile */
+.contact-table-scroll { overflow-x: auto; }
+table.contact-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  min-width: 600px;
+}
+table.contact-table caption {
+  padding: var(--space-4) var(--space-5);
+  text-align: left;
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--rule-soft);
+  background: var(--paper-warm);
+  caption-side: top;
+}
+table.contact-table th,
+table.contact-table td {
+  padding: var(--space-4) var(--space-5);
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid var(--rule-soft);
+}
+table.contact-table thead th {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  background: var(--paper-warm);
+  border-top: none;
+  border-bottom: 1px solid var(--rule);
+}
+table.contact-table tbody th {
+  font-weight: 600;
+  color: var(--ink);
+}
+table.contact-table td.purpose { color: var(--ink-muted); }
+table.contact-table .contact-methods {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+table.contact-table .contact-methods a { font-size: 0.9375rem; }
+table.contact-table .phone { font-variant-numeric: tabular-nums; font-weight: 500; color: var(--ink); }
+
+/* ============================================================
+   Fees & rights
+   ============================================================ */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+@media (min-width: 720px) {
+  .info-grid { grid-template-columns: 1fr 1fr; }
+}
+.info-card {
+  padding: var(--space-6);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+}
+.info-card .label {
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  margin-bottom: var(--space-3);
+}
+.info-card .figure {
+  font-family: var(--serif);
+  font-variation-settings: "opsz" 72, "wght" 500;
+  font-size: 3rem;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: var(--space-3);
+}
+.info-card .tagline {
+  font-family: var(--serif);
+  font-variation-settings: "opsz" 36, "wght" 500;
+  font-size: 1.5rem;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: var(--space-3);
+  line-height: 1.2;
+}
+.info-card p {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.site-footer {
+  background: var(--paper-warm);
+  border-top: 1px solid var(--rule);
+  padding: var(--space-7) 0 var(--space-6);
+  margin-top: var(--space-8);
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+.footer-grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 1fr;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--rule);
+}
+@media (min-width: 768px) {
+  .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+}
+.footer-col h4 {
+  font-family: var(--sans);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: var(--space-3);
+}
+.footer-col ul {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.footer-col a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+.footer-col a:hover { color: var(--accent); text-decoration: underline; }
+.footer-about p { font-size: 0.9375rem; line-height: 1.55; max-width: 38ch; }
+.footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8125rem;
+}
+
+/* ============================================================
+   Hidden state machinery
+   ============================================================ */
+[hidden] { display: none !important; }
+
+/* Screen-reader-only live region */
+.visually-hidden-live {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+/* Print */
+@media print {
+  .site-header, .site-footer, .quick-actions, .form-sidebar, .skip-link { display: none; }
+  body { background: white; color: black; }
+  a { color: black; text-decoration: underline; }
+  section.page-section, .page-hero { padding: 1.5rem 0; border: none; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="container">
+    <div class="masthead">
+      <a href="/" class="city-logo" aria-label="City of Colorado Springs, home">
+        <span class="monogram" aria-hidden="true">COS</span>
+        <span class="city-logo-text">
+          <span>City of Colorado Springs</span>
+          <span>Police Department</span>
+        </span>
+      </a>
+      <nav class="utility-nav" aria-label="Utility">
+        <ul>
+          <li><a href="#translate">Translate</a></li>
+          <li><a href="#accessibility">Accessibility</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <div class="container">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/police">Police</a></li>
+      <li><a href="/police/transparency">Transparency, records &amp; data</a></li>
+      <li aria-current="page">Request records</li>
+    </ol>
+  </div>
+</nav>
+
+<main id="main">
+  <article>
+
+    <header class="page-hero">
+      <div class="container">
+        <p class="eyebrow">Records release</p>
+        <h1>Request police records</h1>
+        <p class="lead">Get a copy of a police report, traffic accident, 911 call, body-worn camera video, background check, or other criminal justice record. Released under the Colorado Criminal Justice Records Act.</p>
+        <div class="hero-meta">
+          <span class="hero-meta-item">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l2.5 2.5" stroke-linecap="round"/></svg>
+            Base fee $10
+          </span>
+          <span class="hero-meta-item">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h10" stroke-linecap="round"/></svg>
+            9 record types available
+          </span>
+          <span class="hero-meta-item">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 9l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Free for crime victims
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <section class="page-section quick-actions" aria-labelledby="actions-heading">
+      <div class="container">
+        <h2 id="actions-heading" class="sr-only">Quick actions</h2>
+        <div class="action-grid">
+          <div class="action-card">
+            <p class="eyebrow" style="margin:0;">New request</p>
+            <h3>Start here</h3>
+            <p>Submit a new records request. You'll get a tracking number by email right away.</p>
+            <div class="action-card-footer">
+              <a href="#request-form" class="btn btn-primary btn-full">
+                Begin a request
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 8h12M10 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="action-card">
+            <p class="eyebrow" style="margin:0;">Existing request</p>
+            <h3>Check status</h3>
+            <p>Already submitted a request? Look up its progress using your tracking number.</p>
+            <form class="action-card-footer" onsubmit="event.preventDefault(); alert('Prototype: would look up tracking number.')">
+              <label for="tracking" class="sr-only">Tracking number</label>
+              <input type="search" id="tracking" name="tracking" placeholder="CSPD-2026-00000" autocomplete="off">
+              <button type="submit" class="btn btn-secondary">Look up</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" id="request-form" aria-labelledby="form-heading">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Request form</p>
+          <h2 id="form-heading">Submit a records request</h2>
+          <p class="muted">Fields marked with <span class="required-marker" aria-hidden="true">*</span> are required. Required fields change based on the record you select.</p>
+        </div>
+
+        <div class="form-wrapper">
+          <form class="form-card" id="records-form" novalidate onsubmit="handleSubmit(event)">
+            <div class="visually-hidden-live" aria-live="polite" id="form-announce"></div>
+
+            <fieldset>
+              <legend><span class="step-num" aria-hidden="true">1</span>What record do you need?</legend>
+              <div class="field">
+                <label for="record-type">
+                  Record type <span class="required-marker" aria-hidden="true">*</span>
+                </label>
+                <select id="record-type" name="record-type" required aria-required="true" onchange="updateForm()">
+                  <option value="">— Select a record type —</option>
+                  <option value="report">Police case report</option>
+                  <option value="traffic">Traffic accident report</option>
+                  <option value="audio">911 call or radio audio</option>
+                  <option value="dispatch">Dispatch log (call for service)</option>
+                  <option value="background">Background check (local)</option>
+                  <option value="bwc">Body-worn camera video</option>
+                  <option value="mugshot">Booking photograph</option>
+                  <option value="forensic">Forensic lab photos</option>
+                  <option value="ia">Internal affairs investigation</option>
+                </select>
+                <span class="field-hint">Not sure which to pick? See the record-type descriptions below, or call 719-444-7463.</span>
+              </div>
+            </fieldset>
+
+            <fieldset id="step-2" hidden>
+              <legend><span class="step-num" aria-hidden="true">2</span>Details</legend>
+              <div id="step-2-fields"></div>
+              <div id="context-notice" hidden></div>
+            </fieldset>
+
+            <fieldset id="step-3" hidden>
+              <legend><span class="step-num" aria-hidden="true">3</span>Your contact info</legend>
+              <div class="field-row">
+                <div class="field">
+                  <label for="your-name">Full name <span class="required-marker" aria-hidden="true">*</span></label>
+                  <input type="text" id="your-name" name="your-name" autocomplete="name" required aria-required="true">
+                </div>
+                <div class="field">
+                  <label for="your-phone">Phone</label>
+                  <input type="tel" id="your-phone" name="your-phone" autocomplete="tel" inputmode="tel">
+                </div>
+              </div>
+              <div class="field">
+                <label for="your-email">Email <span class="required-marker" aria-hidden="true">*</span></label>
+                <input type="email" id="your-email" name="your-email" autocomplete="email" required aria-required="true" aria-describedby="email-hint">
+                <span id="email-hint" class="field-hint">Your tracking number and record will be emailed here.</span>
+              </div>
+              <label class="checkbox">
+                <input type="checkbox" id="is-victim" name="is-victim">
+                <span class="checkbox-text">
+                  <strong>I am a victim of a crime</strong> eligible for a free copy under the Colorado Victim's Rights Act.
+                  <span class="checkbox-hint">Records staff will verify eligibility. See <a href="#">eligible crimes</a>.</span>
+                </span>
+              </label>
+            </fieldset>
+
+            <fieldset id="step-4" hidden>
+              <legend class="sr-only">Submit</legend>
+              <p class="muted" style="margin-bottom:var(--space-4); font-size:0.9375rem;">Base fee is $10. Additional time or record volume may increase the cost — you'll be notified before any further charges are made.</p>
+              <button type="submit" class="btn btn-primary btn-full">
+                Submit request
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 8h12M10 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </fieldset>
+
+          </form>
+
+          <aside class="form-sidebar" aria-label="Request help and guidance">
+            <div class="sidebar-card">
+              <h3>Progress</h3>
+              <ol class="progress-list" id="progress-list">
+                <li class="active">Choose record type</li>
+                <li>Provide details</li>
+                <li>Enter contact info</li>
+                <li>Submit and receive tracking number</li>
+              </ol>
+            </div>
+            <div class="sidebar-card">
+              <h3>Need help?</h3>
+              <p>Records &amp; Identification Section is open weekdays 8 a.m. – 4 p.m.</p>
+              <p><strong>719-444-7463</strong></p>
+              <p><a href="#contact">All ways to contact us</a></p>
+            </div>
+          </aside>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="page-section" aria-labelledby="types-heading">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Reference</p>
+          <h2 id="types-heading">What each record type is</h2>
+          <p class="muted">Pick the one that matches what you need. If you're unsure, the Records Unit can help over the phone.</p>
+        </div>
+        <div class="type-grid">
+          <article class="type-card">
+            <h3>Police case report</h3>
+            <p>A written report about a non-traffic incident. Some sections may be redacted.</p>
+          </article>
+          <article class="type-card">
+            <h3>Traffic accident report</h3>
+            <p>Officer-completed report of a vehicle accident.</p>
+            <p class="retention">If you filed online with the state, contact Colorado State Patrol instead.</p>
+          </article>
+          <article class="type-card">
+            <h3>911 call or radio audio</h3>
+            <p>Audio of a 911 call or police/fire radio transmission.</p>
+            <p class="retention">Kept 3 years plus the current year.</p>
+          </article>
+          <article class="type-card">
+            <h3>Dispatch log</h3>
+            <p>Dispatcher's record of units sent to a call. Not a police report.</p>
+          </article>
+          <article class="type-card">
+            <h3>Background check (local)</h3>
+            <p>Your CSPD arrest history only.</p>
+            <p class="retention">For statewide history, contact the Colorado Bureau of Investigation.</p>
+          </article>
+          <article class="type-card">
+            <h3>Body-worn camera video</h3>
+            <p>Officer body-camera footage.</p>
+            <p class="retention">Redaction handled by a third-party vendor since January 23, 2026. The vendor will contact you with pricing.</p>
+          </article>
+          <article class="type-card">
+            <h3>Booking photograph</h3>
+            <p>Requires the subject's full name and date of birth by state law.</p>
+          </article>
+          <article class="type-card">
+            <h3>Forensic lab photos</h3>
+            <p>Photographs from the Metro Forensic Laboratory.</p>
+            <p class="retention">CSPD and El Paso County Sheriff's Office only. A separate form will be emailed.</p>
+          </article>
+          <article class="type-card">
+            <h3>Internal affairs investigation</h3>
+            <p>CSPD employee conduct investigations.</p>
+            <p class="retention">Only investigations initiated after April 12, 2019 are releasable under CRS 24-72-303.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" id="contact" aria-labelledby="contacts-heading">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">If the form doesn't fit</p>
+          <h2 id="contacts-heading">Contact the records unit directly</h2>
+          <p class="muted">Some requests need to go to a specific person, or to another agency entirely. Here's every way to reach us.</p>
+        </div>
+        <div class="contact-table-wrap">
+          <div class="contact-table-scroll">
+            <table class="contact-table">
+              <caption>Records request contacts</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Who</th>
+                  <th scope="col">For</th>
+                  <th scope="col">How to reach them</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Records &amp; Identification</th>
+                  <td class="purpose">General questions, status updates, fee questions</td>
+                  <td><span class="phone">719-444-7463</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">Internal affairs</th>
+                  <td class="purpose">Employee conduct records</td>
+                  <td class="contact-methods">
+                    <span class="phone">719-444-7417</span>
+                    <a href="mailto:CSPD.InternalAffairs@coloradosprings.gov">CSPD.InternalAffairs@coloradosprings.gov</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Public information office</th>
+                  <td class="purpose">News and entertainment media requests</td>
+                  <td><a href="mailto:pio@coloradosprings.gov">pio@coloradosprings.gov</a></td>
+                </tr>
+                <tr>
+                  <th scope="row">Forensic photo unit</th>
+                  <td class="purpose">Lab photos (cannot be requested online)</td>
+                  <td><a href="#">Photo request form (PDF)</a></td>
+                </tr>
+                <tr>
+                  <th scope="row">Colorado State Patrol</th>
+                  <td class="purpose">Traffic accidents filed online with the state</td>
+                  <td><a href="https://csp.colorado.gov">csp.colorado.gov</a></td>
+                </tr>
+                <tr>
+                  <th scope="row">Colorado Bureau of Investigation</th>
+                  <td class="purpose">Statewide criminal history</td>
+                  <td><a href="https://cbi.colorado.gov">cbi.colorado.gov</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" aria-labelledby="fees-heading">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Good to know</p>
+          <h2 id="fees-heading">Fees &amp; your rights</h2>
+        </div>
+        <div class="info-grid">
+          <article class="info-card">
+            <p class="label">Base fee</p>
+            <p class="figure">$10</p>
+            <p>Charged per request. Cost may increase based on record size or processing time. You'll be notified and can cancel before further charges are applied.</p>
+          </article>
+          <article class="info-card">
+            <p class="label">Victim's rights</p>
+            <p class="tagline">Free for victims of certain crimes</p>
+            <p>If you are the victim of a qualifying crime, your report copy is free. Check the victim's rights box on the request form. Eligibility is verified by Records staff.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-about">
+        <h4>Colorado Springs Police</h4>
+        <p>The Records Request Unit releases criminal justice records under the Colorado Criminal Justice Records Act, 24-72-301 et seq.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Records</h4>
+        <ul>
+          <li><a href="#request-form">Request a record</a></li>
+          <li><a href="#">Check status</a></li>
+          <li><a href="#">Schedule of fees</a></li>
+          <li><a href="#">CCJRA overview</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Accessibility</h4>
+        <ul>
+          <li><a href="#">Web accessibility</a></li>
+          <li><a href="#">Request an accommodation</a></li>
+          <li><a href="#">Title II ADA notice</a></li>
+          <li><a href="#">Language access</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>City</h4>
+        <ul>
+          <li><a href="/">coloradosprings.gov</a></li>
+          <li><a href="#">Non-discrimination</a></li>
+          <li><a href="#">Privacy policy</a></li>
+          <li><a href="#">Webmaster</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© 2026 City of Colorado Springs. All rights reserved.</span>
+      <span>Prototype — not a live service</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const recordFields = {
+  report: {
+    legend: "Case report details",
+    fields: [
+      { row: [
+        { name: "case-no", label: "Case or report number", type: "text", hint: "If known. Format: 26-000000" },
+        { name: "date", label: "Date of incident", type: "date", required: true }
+      ]},
+      { row: [
+        { name: "location", label: "Location of incident", type: "text", required: true },
+        { name: "involved", label: "Names of people involved", type: "text" }
+      ]}
+    ]
+  },
+  traffic: {
+    fields: [
+      { row: [
+        { name: "case-no", label: "Case or report number", type: "text", hint: "If known" },
+        { name: "date", label: "Date of accident", type: "date", required: true }
+      ]},
+      { row: [
+        { name: "location", label: "Location", type: "text", required: true },
+        { name: "involved", label: "Drivers involved", type: "text" }
+      ]}
+    ]
+  },
+  audio: {
+    fields: [
+      { row: [
+        { name: "date", label: "Date of call", type: "date", required: true },
+        { name: "time", label: "Approximate time", type: "time" }
+      ]},
+      { single: { name: "context", label: "Location or phone number involved", type: "textarea", required: true, hint: "Help us identify the specific call or transmission." } }
+    ]
+  },
+  dispatch: {
+    fields: [
+      { row: [
+        { name: "date", label: "Date", type: "date", required: true },
+        { name: "address", label: "Address", type: "text", required: true }
+      ]}
+    ]
+  },
+  background: {
+    fields: [
+      { row: [
+        { name: "legal-name", label: "Your full legal name", type: "text", required: true },
+        { name: "dob", label: "Your date of birth", type: "date", required: true }
+      ]},
+      { single: { name: "purpose", label: "Purpose of request", type: "textarea", hint: "e.g. work visa, travel clearance, employment." } }
+    ]
+  },
+  bwc: {
+    fields: [
+      { row: [
+        { name: "case-no", label: "Case or incident number", type: "text", required: true },
+        { name: "date", label: "Date of incident", type: "date", required: true }
+      ]},
+      { single: { name: "bwc-details", label: "What footage you are requesting", type: "textarea", required: true, hint: "Officer name if known, location, time window." } }
+    ],
+    notice: { type: "info", title: "Third-party redaction", text: "Body-worn camera videos are redacted by a third-party vendor. The vendor will contact you directly with a quote and payment instructions after you submit. Payment goes to the vendor — not CSPD." }
+  },
+  mugshot: {
+    fields: [
+      { row: [
+        { name: "subject-name", label: "Subject's full name", type: "text", required: true },
+        { name: "subject-dob", label: "Subject's date of birth", type: "date", required: true }
+      ]}
+    ],
+    notice: { type: "warning", title: "Identity verification required", text: "State law requires positive identification before a booking photograph is released." }
+  },
+  forensic: {
+    fields: [
+      { row: [
+        { name: "case-no", label: "Case number", type: "text", required: true },
+        { name: "date", label: "Date", type: "date", required: true }
+      ]}
+    ],
+    notice: { type: "info", title: "Separate form required", text: "Forensic photos are submitted via a separate form. We'll email it to you after you submit this request." }
+  },
+  ia: {
+    fields: [
+      { single: { name: "ia-details", label: "Describe the investigation or officer involved", type: "textarea", required: true, hint: "Include dates if known." } }
+    ],
+    notice: { type: "warning", title: "Eligibility window", text: "Only investigations initiated after April 12, 2019 are subject to release under CRS 24-72-303(4)(a)." }
+  }
+};
+
+function buildField(f) {
+  const required = f.required ? ' required aria-required="true"' : '';
+  const marker = f.required ? ' <span class="required-marker" aria-hidden="true">*</span>' : '';
+  const hintId = f.hint ? `${f.name}-hint` : '';
+  const describedBy = hintId ? ` aria-describedby="${hintId}"` : '';
+  const hint = f.hint ? `<span id="${hintId}" class="field-hint">${f.hint}</span>` : '';
+  let input;
+  if (f.type === 'textarea') {
+    input = `<textarea id="${f.name}" name="${f.name}" rows="3"${required}${describedBy}></textarea>`;
+  } else {
+    input = `<input type="${f.type}" id="${f.name}" name="${f.name}"${required}${describedBy}>`;
+  }
+  return `<div class="field"><label for="${f.name}">${f.label}${marker}</label>${input}${hint}</div>`;
+}
+
+function renderNotice(notice) {
+  if (!notice) return '';
+  const icon = notice.type === 'warning'
+    ? '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 3L2 17h16L10 3z" stroke-linejoin="round"/><path d="M10 8v4M10 14.5v.5" stroke-linecap="round"/></svg>'
+    : '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="M10 9v4M10 6.5v.5" stroke-linecap="round"/></svg>';
+  return `<div class="notice notice-${notice.type}" role="note">${icon}<div><strong>${notice.title}.</strong> ${notice.text}</div></div>`;
+}
+
+function updateForm() {
+  const type = document.getElementById('record-type').value;
+  const step2 = document.getElementById('step-2');
+  const step3 = document.getElementById('step-3');
+  const step4 = document.getElementById('step-4');
+  const fieldsContainer = document.getElementById('step-2-fields');
+  const noticeContainer = document.getElementById('context-notice');
+  const announce = document.getElementById('form-announce');
+  const progress = document.querySelectorAll('#progress-list li');
+
+  if (!type) {
+    step2.hidden = true;
+    step3.hidden = true;
+    step4.hidden = true;
+    progress.forEach((li, i) => li.classList.toggle('active', i === 0));
+    return;
+  }
+
+  const spec = recordFields[type];
+  let html = '';
+  spec.fields.forEach(group => {
+    if (group.row) {
+      html += '<div class="field-row">' + group.row.map(buildField).join('') + '</div>';
+    } else if (group.single) {
+      html += buildField(group.single);
+    }
+  });
+  fieldsContainer.innerHTML = html;
+
+  if (spec.notice) {
+    noticeContainer.innerHTML = renderNotice(spec.notice);
+    noticeContainer.hidden = false;
+  } else {
+    noticeContainer.innerHTML = '';
+    noticeContainer.hidden = true;
+  }
+
+  step2.hidden = false;
+  step3.hidden = false;
+  step4.hidden = false;
+
+  progress.forEach((li, i) => li.classList.toggle('active', i <= 1));
+  announce.textContent = `Form updated for ${document.querySelector('#record-type option:checked').textContent}. Three more steps to complete.`;
+}
+
+function handleSubmit(event) {
+  event.preventDefault();
+  const announce = document.getElementById('form-announce');
+  announce.textContent = 'Request submitted. A tracking number has been emailed to you.';
+  alert('Prototype: in production, this would submit the request, generate a tracking number (e.g. CSPD-2026-00482), email the requester, and create a record in the back-office system.');
+}
+</script>
+
+</body>
+</html>

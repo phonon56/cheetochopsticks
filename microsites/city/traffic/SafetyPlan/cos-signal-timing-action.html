@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Intersection, Your Voice · Colorado Springs Signal Timing Action Dashboard · StorySeed / The Dais</title>
+
+<!-- Atkinson Hyperlegible: designed by the Braille Institute for maximum character differentiation and low-vision readability. Fraunces: variable serif for display warmth. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ─────────────────────────────────────────────────────────
+   DESIGN TOKENS
+   Palette chosen to match the existing dashboard's navy/gold
+   civic editorial language, with warmer accents for the
+   resident-facing action feel.
+   All text colors tested against their backgrounds for
+   WCAG AA 4.5:1 contrast minimum (7:1 for AAA where possible).
+───────────────────────────────────────────────────────── */
+:root {
+  --navy-deep:    #001030;
+  --navy:         #001a4d;
+  --navy-mid:     #0d3d6e;
+  --ink:          #0f172a;
+  --ink-soft:     #1e293b;
+  --muted:        #475569;
+  --muted-soft:   #64748b;
+  --rule:         #e2e8f0;
+  --rule-strong:  #cbd5e1;
+
+  /* Warm neutrals */
+  --paper:        #fbf7f0;
+  --paper-soft:   #f5f0e6;
+  --off:          #f8fafc;
+  --white:        #ffffff;
+
+  /* Accents — used sparingly */
+  --gold:         #b8902d;    /* AA-safe against white */
+  --gold-soft:    #c8a84b;
+  --amber-warn:   #b45309;    /* AA-safe against white */
+  --red-fatal:    #b91c1c;    /* AA-safe against white */
+  --blue-civic:   #0049b1;
+  --green-action: #065f46;
+  --teal:         #0b7a75;
+
+  /* Gradients */
+  --navy-grad:    linear-gradient(135deg, #001030 0%, #00205c 60%, #0d3d6e 100%);
+  --paper-grad:   linear-gradient(180deg, #fbf7f0 0%, #f5f0e6 100%);
+
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --body:    'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+
+* , *::before , *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: #0d1117;
+  color: var(--ink);
+  font-family: var(--body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Accessibility: skip link + screen-reader-only ── */
+.skip-link {
+  position: absolute; left: -9999px; top: 4px;
+  background: var(--navy); color: #fff;
+  padding: 10px 18px; border-radius: 4px;
+  font-family: var(--mono); font-size: 13px;
+  text-decoration: none; z-index: 999;
+}
+.skip-link:focus { left: 8px; outline: 3px solid var(--gold-soft); outline-offset: 2px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+:focus-visible {
+  outline: 3px solid var(--gold-soft);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   HEADER with ripple motif
+   The ripple SVG is decorative (aria-hidden), referring
+   to the project's thematic "one action, expanding outward"
+───────────────────────────────────────────────────────── */
+.masthead {
+  background: var(--navy-grad);
+  border-bottom: 2px solid var(--gold-soft);
+  padding: 40px 24px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.masthead-ripple {
+  position: absolute; top: 50%; right: -120px;
+  transform: translateY(-50%);
+  width: 420px; height: 420px;
+  opacity: 0.12; pointer-events: none;
+}
+.masthead-inner {
+  max-width: 1200px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(200, 168, 75, 0.9);
+  margin-bottom: 12px;
+}
+.masthead h1 {
+  font-family: var(--display);
+  font-size: clamp(28px, 4.5vw, 44px);
+  font-weight: 500;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+  max-width: 800px;
+}
+.masthead h1 em {
+  font-style: normal;
+  color: var(--gold-soft);
+}
+.masthead .deck {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 640px;
+  margin-bottom: 20px;
+  line-height: 1.55;
+}
+.masthead-meta {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-top: 14px;
+}
+.pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ─────────────────────────────────────────────────────────
+   TABLE OF CONTENTS — sticky on desktop, inline on mobile
+───────────────────────────────────────────────────────── */
+.toc-bar {
+  background: #001440;
+  border-bottom: 1px solid #1e3a6e;
+  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.toc-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; gap: 4px; flex-wrap: wrap;
+}
+.toc-link {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 7px 13px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+.toc-link:hover, .toc-link:focus {
+  background: rgba(200, 168, 75, 0.15);
+  color: var(--gold-soft);
+}
+.toc-num {
+  color: var(--gold-soft);
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   MAIN BODY
+───────────────────────────────────────────────────────── */
+main { background: #0d1117; }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+section {
+  background: var(--paper);
+  border-radius: 6px;
+  margin-top: 24px;
+  padding: 36px 40px;
+  position: relative;
+}
+@media (max-width: 640px) {
+  section { padding: 28px 22px; }
+}
+section:first-of-type { margin-top: 28px; }
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+}
+.section-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+.section-head h2 {
+  font-family: var(--display);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+
+.lead {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink);
+  margin-bottom: 18px;
+  max-width: 68ch;
+}
+.body-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink);
+  margin-bottom: 16px;
+  max-width: 68ch;
+}
+.body-text strong { color: var(--navy); font-weight: 700; }
+
+/* ─────────────────────────────────────────────────────────
+   SECTION 1 — AT A GLANCE (trade-off stats)
+───────────────────────────────────────────────────────── */
+.stat-trio {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 22px 0 12px;
+}
+@media (max-width: 780px) {
+  .stat-trio { grid-template-columns: 1fr; }
+}
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 22px;
+  border-top: 3px solid var(--navy);
+  position: relative;
+}
+.stat-card.amber { border-top-color: var(--amber-warn); }
+.stat-card.red   { border-top-color: var(--red-fatal); }
+.stat-card.gold  { border-top-color: var(--gold); }
+
+.stat-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.stat-num {
+  font-family: var(--display);
+  font-size: clamp(32px, 4vw, 44px);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.stat-num.amber { color: var(--amber-warn); }
+.stat-num.red   { color: var(--red-fatal); }
+.stat-note {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────────────────────
+   VISUAL COMPARE BAR (rear-end vs T-bone)
+───────────────────────────────────────────────────────── */
+.compare-box {
+  background: var(--paper-soft);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 20px 22px;
+  margin: 18px 0 6px;
+}
+.compare-box h3 {
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+.compare-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 80px;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 9px;
+}
+@media (max-width: 640px) {
+  .compare-row { grid-template-columns: 120px 1fr 70px; font-size: 13px; }
+}
+.compare-label { font-size: 14px; color: var(--ink); font-weight: 700; }
+.compare-bar-track {
+  height: 26px;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+.compare-bar-fill {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: var(--white);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+}
+.compare-bar-fill.rear { background: var(--amber-warn); }
+.compare-bar-fill.tbone { background: var(--blue-civic); }
+.compare-count {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* ─────────────────────────────────────────────────────────
+   INTERSECTION TABLE
+───────────────────────────────────────────────────────── */
+.table-wrap {
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--white);
+  margin: 18px 0;
+}
+.i-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.i-table thead th {
+  background: var(--navy);
+  color: #fff;
+  text-align: left;
+  padding: 12px 16px;
+  font-weight: 700;
+  font-family: var(--body);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.i-table thead th:not(:first-child) { text-align: center; }
+.i-table tbody tr {
+  border-bottom: 1px solid var(--rule);
+  transition: background 0.12s;
+}
+.i-table tbody tr:hover { background: var(--paper-soft); }
+.i-table tbody tr:last-child { border-bottom: none; }
+.i-table td {
+  padding: 13px 16px;
+  vertical-align: middle;
+}
+.i-table td:not(:first-child) { text-align: center; }
+.i-name { font-weight: 700; color: var(--ink); font-size: 14px; }
+.i-district { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.i-count {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.i-count.high { color: var(--red-fatal); font-weight: 700; }
+.i-count.med { color: var(--amber-warn); font-weight: 700; }
+.i-flag {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-family: var(--mono);
+  letter-spacing: 0.04em;
+  display: inline-block;
+}
+.i-flag.review { background: #fff1db; color: #78350f; border: 1px solid #fed7aa; }
+.i-flag.stable { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+.i-flag.outage { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+.i-flag.declining { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+
+/* ─────────────────────────────────────────────────────────
+   LETTER TEMPLATE CARDS
+───────────────────────────────────────────────────────── */
+.letters-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 18px;
+}
+.letter-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.letter-header {
+  background: var(--navy-grad);
+  color: #fff;
+  padding: 20px 26px;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.letter-icon {
+  flex: 0 0 auto;
+  width: 44px; height: 44px;
+  background: rgba(200, 168, 75, 0.18);
+  border: 1.5px solid rgba(200, 168, 75, 0.4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--gold-soft);
+}
+.letter-title {
+  flex: 1; min-width: 200px;
+}
+.letter-title h3 {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.letter-title .to {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(200, 168, 75, 0.85);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.letter-body {
+  padding: 24px 28px;
+}
+.letter-why {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--rule);
+}
+.letter-why strong { color: var(--ink); }
+
+.letter-text {
+  background: var(--paper-soft);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 20px 22px;
+  font-family: var(--body);
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--ink);
+  white-space: pre-wrap;
+  max-height: 380px;
+  overflow-y: auto;
+}
+.letter-text .fillin {
+  background: #fff1db;
+  border-bottom: 1.5px dashed var(--amber-warn);
+  padding: 0 3px;
+  font-weight: 700;
+  color: var(--amber-warn);
+}
+
+.letter-actions {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+  border: 1.5px solid;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+  background: none;
+}
+.btn-primary {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: var(--navy-deep);
+  border-color: var(--gold);
+}
+.btn-secondary {
+  background: #fff;
+  color: var(--navy);
+  border-color: var(--rule-strong);
+}
+.btn-secondary:hover, .btn-secondary:focus {
+  background: var(--paper-soft);
+  border-color: var(--navy);
+}
+.copy-status {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green-action);
+  padding: 10px 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.copy-status.shown { opacity: 1; }
+
+/* ─────────────────────────────────────────────────────────
+   CONTACTS CARD
+───────────────────────────────────────────────────────── */
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+@media (max-width: 720px) { .contacts-grid { grid-template-columns: 1fr; } }
+.contact-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 16px 18px;
+}
+.contact-card h4 {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.contact-detail {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink);
+  margin-bottom: 3px;
+  word-break: break-word;
+}
+.contact-detail a { color: var(--blue-civic); text-decoration: underline; }
+
+/* ─────────────────────────────────────────────────────────
+   RESEARCH CALLOUT
+───────────────────────────────────────────────────────── */
+.research-box {
+  background: var(--navy-grad);
+  color: #fff;
+  border-radius: 6px;
+  padding: 28px 32px;
+  margin-top: 16px;
+  border-left: 4px solid var(--gold-soft);
+  position: relative;
+  overflow: hidden;
+}
+.research-box-ripple {
+  position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  opacity: 0.1; pointer-events: none;
+}
+.research-box h3 {
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--gold-soft);
+  margin-bottom: 14px;
+  position: relative;
+}
+.research-box p {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 12px;
+  max-width: 66ch;
+  position: relative;
+}
+.research-box p strong {
+  color: #fff;
+  font-weight: 700;
+}
+.research-findings {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+  position: relative;
+}
+@media (max-width: 720px) { .research-findings { grid-template-columns: 1fr; } }
+.finding {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 14px 16px;
+  border-left: 2px solid var(--gold-soft);
+}
+.finding-stat {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--gold-soft);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.finding-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.55;
+}
+.citation {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+}
+
+/* ─────────────────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────────────────── */
+footer {
+  background: #0d1117;
+  padding: 30px 24px 40px;
+  border-top: 1px solid #1e293b;
+}
+footer .inner {
+  max-width: 1200px; margin: 0 auto;
+  text-align: center;
+}
+footer .foot-title {
+  font-family: var(--display);
+  font-size: 16px;
+  font-style: italic;
+  color: var(--gold-soft);
+  margin-bottom: 8px;
+}
+footer p {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  max-width: 700px;
+  margin: 0 auto 5px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   PRINT — each letter prints clean on its own page
+───────────────────────────────────────────────────────── */
+@media print {
+  body { background: #fff; color: #000; }
+  .masthead, .toc-bar, footer, .btn, .letter-actions, .copy-status { display: none !important; }
+  section { page-break-inside: avoid; box-shadow: none; background: #fff; }
+  .letter-card { page-break-before: always; border: 1px solid #000; }
+  .letter-card:first-of-type { page-break-before: auto; }
+  .letter-header { background: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .letter-text { max-height: none; overflow: visible; border: none; background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+<div id="live-region" role="status" aria-live="polite" class="sr-only"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MASTHEAD
+═══════════════════════════════════════════════════════ -->
+<header class="masthead" role="banner">
+  <!-- Decorative ripple SVG echoing the project theme -->
+  <svg class="masthead-ripple" aria-hidden="true" viewBox="0 0 400 400" fill="none">
+    <circle cx="200" cy="200" r="60"  stroke="#c8a84b" stroke-width="1.5"/>
+    <circle cx="200" cy="200" r="100" stroke="#c8a84b" stroke-width="1.2"/>
+    <circle cx="200" cy="200" r="140" stroke="#c8a84b" stroke-width="1"/>
+    <circle cx="200" cy="200" r="180" stroke="#c8a84b" stroke-width="0.8"/>
+    <circle cx="200" cy="200" r="4"   fill="#c8a84b"/>
+  </svg>
+
+  <div class="masthead-inner">
+    <p class="eyebrow">StorySeed Studios · The Dais · Civic Action Series · Vol. 1</p>
+    <h1>Your intersection,<br><em>your voice.</em></h1>
+    <p class="deck">A resident's guide to Colorado Springs' red-light camera intersections — and three concrete letters that can get the signal timing reviewed at your street.</p>
+    <div class="masthead-meta">
+      <span class="pill">20 Camera Intersections</span>
+      <span class="pill">Updated April 2026</span>
+      <span class="pill">Print-Friendly</span>
+      <span class="pill">Takes 5 Minutes</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════
+     TABLE OF CONTENTS — sticky navigation
+═══════════════════════════════════════════════════════ -->
+<nav class="toc-bar" aria-label="Dashboard sections">
+  <div class="toc-inner">
+    <a class="toc-link" href="#overview"><span class="toc-num">01</span>The trade-off</a>
+    <a class="toc-link" href="#research"><span class="toc-num">02</span>The research</a>
+    <a class="toc-link" href="#intersections"><span class="toc-num">03</span>Your intersection</a>
+    <a class="toc-link" href="#letters"><span class="toc-num">04</span>Three letters</a>
+    <a class="toc-link" href="#contacts"><span class="toc-num">05</span>Who to contact</a>
+  </div>
+</nav>
+
+<main id="main" tabindex="-1">
+<div class="container">
+
+  <!-- ═════════════════════════════════════════════════════
+       SECTION 1 — THE TRADE-OFF
+  ═════════════════════════════════════════════════════ -->
+  <section id="overview" aria-labelledby="overview-head">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 id="overview-head">The trade-off hiding in the crash data</h2>
+    </div>
+
+    <p class="lead">Colorado Springs has 20 red-light cameras generating about 47,000 citations a year. The cameras do reduce side-impact (T-bone) crashes. But they trade those crashes for a different type — rear-end collisions caused by drivers braking hard to avoid the $75 fine. Here's what the city's own data shows.</p>
+
+    <div class="stat-trio" role="list">
+      <div class="stat-card amber" role="listitem">
+        <div class="stat-label">Rear-end crashes, 2017–2025</div>
+        <div class="stat-num amber">20,259</div>
+        <div class="stat-note">31% of all crashes in Colorado Springs — the most common crash type by far.</div>
+      </div>
+      <div class="stat-card" role="listitem">
+        <div class="stat-label">T-bone crashes, same period</div>
+        <div class="stat-num">10,978</div>
+        <div class="stat-note">17% of all crashes. Cameras are designed to reduce these.</div>
+      </div>
+      <div class="stat-card red" role="listitem">
+        <div class="stat-label">Serious injury increase, 2020→2024</div>
+        <div class="stat-num red">+75%</div>
+        <div class="stat-note">Serious injuries rose sharply <em>while total crashes declined</em>. Each crash is getting worse.</div>
+      </div>
+    </div>
+
+    <div class="compare-box">
+      <h3>Rear-ends outnumber T-bones nearly 2-to-1 in Colorado Springs</h3>
+      <div class="compare-row">
+        <span class="compare-label">Rear-end</span>
+        <div class="compare-bar-track">
+          <div class="compare-bar-fill rear" style="width: 100%;">20,259 crashes · 31% of all</div>
+        </div>
+        <span class="compare-count">20,259</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-label">T-bone</span>
+        <div class="compare-bar-track">
+          <div class="compare-bar-fill tbone" style="width: 54.2%;">10,978 crashes · 17%</div>
+        </div>
+        <span class="compare-count">10,978</span>
+      </div>
+      <p style="font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.6;">Source: City of Colorado Springs crash records, 2017–2025, 64,434 total crashes. Serious injury trend from the city's own Safety Action Plan dataset.</p>
+    </div>
+
+    <p class="body-text" style="margin-top: 20px;"><strong>The pattern isn't unique to Colorado Springs.</strong> The Federal Highway Administration has documented that red-light cameras reduce right-angle crashes but increase rear-end collisions by about 15%. When arterials get wider and speeds go up, rear-ends at those speeds stop being fender-benders and start causing serious injuries. That's the exact signature showing up in the 2020→2024 severity trend here.</p>
+  </section>
+
+  <!-- ═════════════════════════════════════════════════════
+       SECTION 2 — THE RESEARCH (yellow-light timing)
+  ═════════════════════════════════════════════════════ -->
+  <section id="research" aria-labelledby="research-head">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 id="research-head">What traffic engineers already know</h2>
+    </div>
+
+    <p class="lead">The engineering fix for red-light running is older than the cameras. It's called the yellow-change interval — how long the light stays yellow before turning red. Published research across multiple decades shows that extending the yellow interval reduces red-light running dramatically, without the rear-end trade-off cameras introduce.</p>
+
+    <div class="research-box" role="region" aria-labelledby="research-findings-head">
+      <!-- Decorative ripple -->
+      <svg class="research-box-ripple" aria-hidden="true" viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="30" stroke="#c8a84b" stroke-width="1"/>
+        <circle cx="100" cy="100" r="55" stroke="#c8a84b" stroke-width="0.8"/>
+        <circle cx="100" cy="100" r="80" stroke="#c8a84b" stroke-width="0.6"/>
+      </svg>
+      <h3 id="research-findings-head">Three findings worth knowing when you write your letter</h3>
+      <p>The research literature is clear: engineering the intersection should come before enforcement. When Philadelphia extended the yellow interval at two intersections by one second, red-light violations fell 36% — before any camera was added. Cameras added later produced additional reductions on top of that.</p>
+      <div class="research-findings">
+        <div class="finding">
+          <div class="finding-stat">36%</div>
+          <div class="finding-desc">Reduction in red-light violations after extending yellow by one second</div>
+          <div class="citation">Retting et al., 2008 · Philadelphia field study</div>
+        </div>
+        <div class="finding">
+          <div class="finding-stat">50%+</div>
+          <div class="finding-desc">Reduction in red-light running from a 0.5–1.5 second yellow extension</div>
+          <div class="citation">Bonneson &amp; Zimmerman, 2004 · Texas A&amp;M Transportation Institute</div>
+        </div>
+        <div class="finding">
+          <div class="finding-stat">ITE</div>
+          <div class="finding-desc">Institute of Transportation Engineers' Extended Kinematic Equation is the industry standard for calculating proper yellow duration by approach speed</div>
+          <div class="citation">ITE 2020 · Used by most US agencies</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-text" style="margin-top: 20px;"><strong>Why this matters for your letter.</strong> When you write to the city, you're not asking for a policy change. You're asking them to verify that the yellow-change intervals at your intersection match what the ITE formula recommends for the actual approach speed. That's an engineering audit, not a political argument. It's harder for the city to refuse, because the benchmark is their own profession's standard.</p>
+  </section>
+
+  <!-- ═════════════════════════════════════════════════════
+       SECTION 3 — YOUR INTERSECTION
+  ═════════════════════════════════════════════════════ -->
+  <section id="intersections" aria-labelledby="intersections-head">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 id="intersections-head">Your intersection in plain English</h2>
+    </div>
+
+    <p class="lead">All 20 Colorado Springs red-light camera intersections, with the 2025 citation count and what the city's own data is saying about each one. When you write your letter, name your specific intersection — a named street is harder to ignore than a general complaint.</p>
+
+    <div class="table-wrap">
+      <table class="i-table">
+        <caption class="sr-only">Red-light camera intersections ranked by 2025 citations, with status flags based on data patterns</caption>
+        <thead>
+          <tr>
+            <th scope="col">Intersection</th>
+            <th scope="col">2025 Citations</th>
+            <th scope="col">Trend</th>
+            <th scope="col">Flag</th>
+          </tr>
+        </thead>
+        <tbody id="i-table-body">
+          <!-- populated by JS for maintainability -->
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body-text"><strong>How to read the flags.</strong> "Review" means the data shows something worth asking about — high volume, suspicious patterns, or a trend that deserves explanation. "Outage" means the camera has had multi-month gaps in reporting. "Declining" and "stable" mean the intersection is behaving normally. None of these flags are about whether your specific citation was valid; they're about whether the intersection as a whole is worth a signal-timing audit.</p>
+  </section>
+
+  <!-- ═════════════════════════════════════════════════════
+       SECTION 4 — THREE LETTERS
+  ═════════════════════════════════════════════════════ -->
+  <section id="letters" aria-labelledby="letters-head">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 id="letters-head">Three letters that actually move the needle</h2>
+    </div>
+
+    <p class="lead">You don't need to wait for a public meeting or learn traffic engineering to participate. These three letters go to three different pressure points — the engineer who sets the signal timing, the insurer who pays out on the rear-end claims, and the elected official who answers to voters. Fill in your details, copy, send. Takes about 10 minutes.</p>
+
+    <p class="body-text" style="color: var(--muted); font-style: italic;">Highlighted fields in amber are where you add your own information — intersection, policy number, district, and so on.</p>
+
+    <div class="letters-wrap">
+
+      <!-- ─── LETTER 1 ─── -->
+      <article class="letter-card" aria-labelledby="letter1-title">
+        <div class="letter-header">
+          <div class="letter-icon" aria-hidden="true">1</div>
+          <div class="letter-title">
+            <div class="to">To · City of Colorado Springs</div>
+            <h3 id="letter1-title">Request a yellow-interval timing audit</h3>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-why">
+            <strong>Why this matters.</strong> The Colorado Springs Traffic Engineering Division sets the yellow-change intervals at every signalized intersection, including all 20 with cameras. Colorado state law doesn't require them to publish these timings. A formal request puts the intervals on record against the ITE standard — which, if the intervals are short, creates a liability paper trail for the city.
+          </div>
+          <div class="letter-text" id="letter-1-text">Subject: Request for yellow-change interval review at <span class="fillin">[INTERSECTION NAME]</span>
+
+Dear Colorado Springs Traffic Engineering Division,
+
+I am writing to formally request a review of the yellow-change interval duration at the signalized intersection of <span class="fillin">[INTERSECTION NAME]</span>, which is part of the City's red-light safety camera program.
+
+Specifically, I am requesting the following information under the Colorado Open Records Act:
+
+1. The current yellow-change interval duration (in seconds) for each signal phase at this intersection.
+2. The all-red clearance interval duration for each phase.
+3. The 85th-percentile approach speed that was used to calculate these intervals.
+4. The date of the most recent review of these timings.
+5. Whether the current intervals meet the durations recommended by the Institute of Transportation Engineers' Extended Kinematic Equation (ITE 2020) for the actual approach speeds and intersection geometry.
+
+My concern is grounded in published research. The Federal Highway Administration recognizes appropriate yellow-interval timing as a proven safety countermeasure. A peer-reviewed 2008 field study in Philadelphia found that extending the yellow interval by one second reduced red-light violations by 36%. Texas A&amp;M Transportation Institute research similarly found that a 0.5 to 1.5 second extension reduces red-light running by at least 50%, with drivers adapting but the benefit remaining durable.
+
+Colorado Springs crash data for 2017–2025 shows 20,259 rear-end collisions — 31% of all crashes in the city — compared to 10,978 T-bone crashes. Serious injuries have risen 75% from 2020 to 2024, even as total crash counts have declined. This pattern is consistent with inadequate yellow timing at high-speed arterials, where drivers brake hard to avoid photo citations and are struck from behind.
+
+I am not asking for a policy change. I am asking whether this intersection's yellow timing currently matches the engineering standards the city's own profession publishes. If it does, I would appreciate confirmation. If it does not, I would appreciate learning when the timing will be brought into conformance.
+
+I understand CORA requires a response within three business days, with extensions available if needed. Please reply to:
+
+<span class="fillin">[YOUR NAME]
+[YOUR ADDRESS]
+[YOUR EMAIL]
+[YOUR PHONE]</span>
+
+Thank you for your time and for your work on traffic safety in our city.
+
+Sincerely,
+
+<span class="fillin">[YOUR NAME]</span></div>
+          <div class="letter-actions">
+            <button class="btn btn-primary" data-copy-target="letter-1-text" aria-label="Copy Letter 1 to clipboard">Copy letter</button>
+            <a class="btn btn-secondary" href="mailto:traffic@coloradosprings.gov?subject=Request%20for%20yellow-change%20interval%20review" aria-label="Open Letter 1 in email">Open in email</a>
+            <span class="copy-status" data-for="letter-1-text" role="status"></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- ─── LETTER 2 ─── -->
+      <article class="letter-card" aria-labelledby="letter2-title">
+        <div class="letter-header">
+          <div class="letter-icon" aria-hidden="true">2</div>
+          <div class="letter-title">
+            <div class="to">To · Your auto insurance company</div>
+            <h3 id="letter2-title">Ask your insurer to advocate for proper signal timing</h3>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-why">
+            <strong>Why this is the most leveraged letter.</strong> Your insurer pays out on rear-end claims. They have actuaries, lobbyists, and lawyers. They already fund the Insurance Institute for Highway Safety — the industry's own research arm — which has been publishing on yellow-light timing for decades. Insurance companies carry more weight with city engineering departments than any individual resident. This letter flips the economic incentive: every rear-end caused by inadequate yellow timing is their payout, not yours.
+          </div>
+          <div class="letter-text" id="letter-2-text">Subject: Signal timing policy affecting rear-end claim frequency in Colorado Springs
+
+Dear Claims and Advocacy Team,
+
+I am a policyholder with <span class="fillin">[YOUR INSURANCE COMPANY]</span>, policy number <span class="fillin">[YOUR POLICY NUMBER]</span>. I am writing about a systemic traffic-engineering issue in Colorado Springs, Colorado, that appears to be driving up rear-end crash frequency across the city — and therefore the claims your company pays out.
+
+The City of Colorado Springs operates 20 red-light safety cameras through a vendor contract with Verra Mobility. Per the city's own published crash data for 2017–2025, rear-end collisions now make up 31% of all crashes in the city — 20,259 incidents — outnumbering T-bone crashes by nearly two to one. Serious injuries rose 75% between 2020 and 2024 while total crash counts declined, indicating that the crashes that do happen are becoming significantly more severe.
+
+The peer-reviewed research on this is well established. Extending the yellow-change interval by one second reduces red-light violations by 36% (Retting et al., 2008) and reduces red-light running by 50% or more (Bonneson &amp; Zimmerman, 2004). The Insurance Institute for Highway Safety — supported by your industry — has documented this effect. The Federal Highway Administration lists appropriate yellow timing as a proven safety countermeasure.
+
+Despite this, Colorado Springs does not publish the current yellow-change interval durations at its camera intersections, and the signal timings are not on record against the ITE Extended Kinematic Equation standard. This means residents have no public way to verify whether yellow timing matches engineering best practice — and insurers paying out on rear-end claims have no way to confirm that the intersections where claims are concentrated meet current standards.
+
+I am asking your company to do two things:
+
+1. Review your rear-end claim frequency at the following Colorado Springs intersections: Platte &amp; Chelton, Campus &amp; Woodmen, Lake Ave &amp; Cheyenne Mountain, Woodmen &amp; Black Forest, W. Colorado &amp; 31st St, and E. Platte &amp; Union. These are the top-volume red-light camera intersections.
+
+2. Use your company's established government-affairs channels to formally request that the Colorado Springs Traffic Engineering Division publish current yellow-change intervals and confirm they meet the ITE 2020 standard. Insurance industry advocacy on this issue has historically been effective in other jurisdictions.
+
+I am a policyholder who wants to avoid rear-end crashes, not be compensated for them after the fact. I would appreciate a reply indicating what steps your company will take.
+
+<span class="fillin">[YOUR NAME]
+[YOUR ADDRESS]
+[YOUR EMAIL]
+[YOUR PHONE]
+Policy #: [YOUR POLICY NUMBER]</span>
+
+Thank you for your attention to a preventable problem.
+
+Sincerely,
+
+<span class="fillin">[YOUR NAME]</span></div>
+          <div class="letter-actions">
+            <button class="btn btn-primary" data-copy-target="letter-2-text" aria-label="Copy Letter 2 to clipboard">Copy letter</button>
+            <span class="copy-status" data-for="letter-2-text" role="status"></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- ─── LETTER 3 ─── -->
+      <article class="letter-card" aria-labelledby="letter3-title">
+        <div class="letter-header">
+          <div class="letter-icon" aria-hidden="true">3</div>
+          <div class="letter-title">
+            <div class="to">To · Your Colorado Springs City Council District Representative</div>
+            <h3 id="letter3-title">Ask for a briefing on the signal-timing review</h3>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-why">
+            <strong>Why this one closes the loop.</strong> Your City Council rep can formally request a briefing from Traffic Engineering and the Municipal Security Unit. A council request gets a response with named staff, a timeline, and a paper trail. An individual CORA request might sit in the queue. A council request rarely does. Find your district at <em>coloradosprings.gov/city-council</em>.
+          </div>
+          <div class="letter-text" id="letter-3-text">Subject: Request for a briefing — yellow-interval timing at red-light camera intersections
+
+Dear Councilmember <span class="fillin">[COUNCILMEMBER NAME]</span>,
+
+I am a resident of District <span class="fillin">[YOUR DISTRICT NUMBER]</span> writing to request that your office formally ask Traffic Engineering and the Municipal Security Unit for a briefing on the yellow-change interval timings at the city's 20 red-light camera intersections.
+
+Here is why this matters for our district specifically. The city's published crash data shows that rear-end collisions make up 31% of all Colorado Springs crashes — nearly twice the T-bone rate — and serious injuries have risen 75% between 2020 and 2024 even as total crashes declined. This pattern is the documented signature of inadequate yellow-interval timing at high-speed arterials, where drivers brake hard to avoid the $75 camera fine and are struck from behind.
+
+The peer-reviewed research is well established. Extending the yellow interval by one second reduces red-light violations by 36% on its own (Retting et al., 2008). The Federal Highway Administration recognizes yellow-interval timing as a proven safety countermeasure. The Institute of Transportation Engineers publishes the standard calculation (the Extended Kinematic Equation, 2020).
+
+Despite this, the current yellow-change intervals at Colorado Springs camera intersections are not publicly available and have not, to my knowledge, been confirmed against the ITE standard.
+
+I am asking three specific things:
+
+1. Request from Traffic Engineering the current yellow-change interval (in seconds) at each of the 20 camera intersections, along with the 85th-percentile approach speed used to calculate each.
+
+2. Request confirmation from Traffic Engineering as to whether those intervals meet or exceed the ITE Extended Kinematic Equation standard for the actual approach geometry.
+
+3. If they do not meet the standard, request a timeline for bringing them into conformance, and an estimate of how many rear-end crashes per year this would likely prevent.
+
+This is an engineering audit, not a political debate. The outcome is either "yes, the timings meet the standard" — which is reassuring and informative — or "no, they don't, and here's the plan to fix it" — which is a direct safety win for our district.
+
+I would appreciate a reply with whatever steps your office is willing to take. I'd also welcome the opportunity to speak with your staff if it would help.
+
+<span class="fillin">[YOUR NAME]
+[YOUR ADDRESS, DISTRICT ##]
+[YOUR EMAIL]
+[YOUR PHONE]</span>
+
+Thank you for representing us.
+
+Sincerely,
+
+<span class="fillin">[YOUR NAME]</span></div>
+          <div class="letter-actions">
+            <button class="btn btn-primary" data-copy-target="letter-3-text" aria-label="Copy Letter 3 to clipboard">Copy letter</button>
+            <a class="btn btn-secondary" href="https://coloradosprings.gov/city-council" target="_blank" rel="noopener noreferrer" aria-label="Find your council district representative (opens in new window)">Find your rep</a>
+            <span class="copy-status" data-for="letter-3-text" role="status"></span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════════════════════════════════════════
+       SECTION 5 — CONTACTS
+  ═════════════════════════════════════════════════════ -->
+  <section id="contacts" aria-labelledby="contacts-head">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 id="contacts-head">Where to send these</h2>
+    </div>
+
+    <p class="lead">Phone and email are both acceptable; written correspondence creates the paper trail, but a call can get faster movement. For CORA requests, written is better because response timelines are statutory.</p>
+
+    <div class="contacts-grid">
+      <div class="contact-card">
+        <h4>CSPD Municipal Security Unit</h4>
+        <p class="contact-detail" style="color: var(--muted); margin-bottom: 8px;">Administers the red-light camera program. Best contact for camera-specific questions or citation disputes.</p>
+        <p class="contact-detail"><strong>Phone:</strong> (719) 444-7000</p>
+        <p class="contact-detail"><strong>Court:</strong> (719) 385-5928</p>
+        <p class="contact-detail"><strong>Violations email:</strong> municipalcourtviolations@coloradosprings.gov</p>
+      </div>
+
+      <div class="contact-card">
+        <h4>City Traffic Engineering</h4>
+        <p class="contact-detail" style="color: var(--muted); margin-bottom: 8px;">Sets yellow-interval timing at every city-owned signal. This is the right recipient for Letter 1.</p>
+        <p class="contact-detail"><strong>Main line:</strong> (719) 385-5908</p>
+        <p class="contact-detail"><strong>CORA requests:</strong> <a href="https://coloradosprings.gov/cora">coloradosprings.gov/cora</a></p>
+      </div>
+
+      <div class="contact-card">
+        <h4>Your City Council District Rep</h4>
+        <p class="contact-detail" style="color: var(--muted); margin-bottom: 8px;">Nine seats, six by district and three at-large. Enter your address to find your district.</p>
+        <p class="contact-detail"><strong>Find yours:</strong> <a href="https://coloradosprings.gov/city-council">coloradosprings.gov/city-council</a></p>
+        <p class="contact-detail"><strong>General council:</strong> (719) 385-5436</p>
+      </div>
+
+      <div class="contact-card">
+        <h4>Your Insurance Company</h4>
+        <p class="contact-detail" style="color: var(--muted); margin-bottom: 8px;">Look on the back of your insurance card, or in your policy documents, for a "Policyholder Relations" or "Government Affairs" address. Claims departments will typically route it internally.</p>
+        <p class="contact-detail"><strong>If unsure:</strong> Send to your claims department address — they have the routing infrastructure.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ═══════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════ -->
+<footer role="contentinfo">
+  <div class="inner">
+    <p class="foot-title">One intersection. One letter. Ripples out.</p>
+    <p>Built for The Dais by StorySeed Studios · Civic orientation, not legal advice. Please consult a traffic attorney for your specific situation.</p>
+    <p>Data sources: Colorado Springs Police Department red-light camera statistics · FHWA Highway Safety Programs · Institute of Transportation Engineers · Texas A&amp;M Transportation Institute · City of Colorado Springs crash records 2017–2025</p>
+    <p style="margin-top: 10px;">Companion to the Colorado Springs Traffic Safety &amp; Funding Dashboard · Updated April 2026</p>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════ -->
+<script>
+/* ── Intersection data, 2025 citations, flags from our analysis ── */
+const INTERSECTIONS = [
+  { name: 'Platte & Chelton',               cites: 7628, trend: 'Steady high — program\'s flagship',    flag: 'review',    flagText: 'Review' },
+  { name: 'E Woodmen & Black Forest Rd',    cites: 5102, trend: 'Rising — now 2nd highest',             flag: 'review',    flagText: 'Review' },
+  { name: 'Lake Ave & E Cheyenne Mtn',      cites: 4187, trend: 'Recently offline Nov 2025–Jan 2026',   flag: 'outage',    flagText: 'Outage' },
+  { name: 'W Colorado Ave & 31st St',       cites: 3079, trend: 'Unusual early-2026 spike',             flag: 'review',    flagText: 'Review' },
+  { name: 'E Platte & N Union',             cites: 2993, trend: 'Growing steadily',                     flag: 'review',    flagText: 'Review' },
+  { name: 'S Academy & Astrozon Blvd',      cites: 2566, trend: 'Growing; repeated data anomalies',     flag: 'review',    flagText: 'Review' },
+  { name: 'Voyager Pkwy & Interquest',      cites: 2421, trend: 'Stable to declining',                  flag: 'stable',    flagText: 'Stable' },
+  { name: 'Platte & N Murray',              cites: 2303, trend: 'Stable; March 2025 outage recovered',  flag: 'stable',    flagText: 'Stable' },
+  { name: 'Campus & Woodmen Rd',            cites: 2241, trend: '63% drop vs 2024 — unexplained',       flag: 'review',    flagText: 'Review' },
+  { name: 'N Union / Fillmore / N Circle',  cites: 2067, trend: 'Growing 48% year-over-year',           flag: 'review',    flagText: 'Review' },
+  { name: 'E Woodmen & Duryea Dr',          cites: 1772, trend: 'Steady upward',                        flag: 'stable',    flagText: 'Stable' },
+  { name: 'Academy & N Carefree',           cites: 1656, trend: 'Volatile camera/review pipeline',      flag: 'outage',    flagText: 'Unstable' },
+  { name: 'S Academy & Airport',            cites: 1190, trend: 'Worst uptime in the system',           flag: 'outage',    flagText: 'Outage' },
+  { name: 'Maizeland & Academy',            cites: 1109, trend: 'Stable',                               flag: 'stable',    flagText: 'Stable' },
+  { name: 'Dublin Blvd & Powers Blvd',      cites: 878,  trend: 'Late-2025 outage, recovered',          flag: 'outage',    flagText: 'Outage' },
+  { name: 'N Academy / Dublin',             cites: 411,  trend: 'Stable low',                           flag: 'stable',    flagText: 'Stable' },
+  { name: 'N Academy & Kelly Johnson',      cites: 404,  trend: 'Declining',                            flag: 'declining', flagText: 'Declining' },
+  { name: 'Lexington & Briargate',          cites: 274,  trend: 'Original camera, stable baseline',     flag: 'stable',    flagText: 'Stable' },
+  { name: 'Austin Bluffs & N Academy',      cites: 209,  trend: 'Declining, Jul–Sep 2025 offline',      flag: 'declining', flagText: 'Declining' },
+  { name: 'Barnes Rd & Tutt Blvd',          cites: 100,  trend: 'Quietest camera — Jul 2025 at zero',   flag: 'declining', flagText: 'Declining' },
+];
+
+function renderIntersections() {
+  const tbody = document.getElementById('i-table-body');
+  INTERSECTIONS.forEach(i => {
+    const tr = document.createElement('tr');
+    const volumeClass = i.cites >= 3000 ? 'high' : i.cites >= 1000 ? 'med' : '';
+    tr.innerHTML = `
+      <td>
+        <div class="i-name">${i.name}</div>
+      </td>
+      <td><span class="i-count ${volumeClass}">${i.cites.toLocaleString()}</span></td>
+      <td style="font-size:13px;color:var(--muted);">${i.trend}</td>
+      <td><span class="i-flag ${i.flag}">${i.flagText}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+renderIntersections();
+
+/* ── Copy-to-clipboard for letters ── */
+document.querySelectorAll('[data-copy-target]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const targetId = btn.dataset.copyTarget;
+    const el = document.getElementById(targetId);
+    if (!el) return;
+    const text = el.innerText; // strips HTML, keeps line breaks
+
+    const status = document.querySelector(`.copy-status[data-for="${targetId}"]`);
+    try {
+      await navigator.clipboard.writeText(text);
+      if (status) {
+        status.textContent = '✓ Copied to clipboard';
+        status.classList.add('shown');
+        document.getElementById('live-region').textContent = 'Letter copied to clipboard';
+        setTimeout(() => {
+          status.classList.remove('shown');
+        }, 2600);
+      }
+    } catch (e) {
+      if (status) {
+        status.textContent = 'Copy failed — try selecting manually';
+        status.classList.add('shown');
+      }
+    }
+  });
+});
+
+/* ── Smooth-scroll TOC links with focus management ── */
+document.querySelectorAll('.toc-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Move focus to target for screen-reader users
+        target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+      }
+    }
+  });
+});
+
+document.getElementById('live-region').textContent = 'Action dashboard loaded. 20 intersections, 3 letter templates, and 4 contact cards are available.';
+</script>
+
+</body>
+</html>

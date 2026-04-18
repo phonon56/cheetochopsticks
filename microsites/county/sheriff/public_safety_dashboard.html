@@ -454,6 +454,57 @@ a{color:var(--blue)}
       </div>
     </div>
 
+    <!-- ── Case Outcomes (disposition + domestic) ── live from SODA API ── -->
+    <div class="card" id="nb-outcomes-card" aria-labelledby="nb-outcomes-title">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:10px">
+        <div>
+          <div class="card-title" id="nb-outcomes-title" style="margin-bottom:2px">Case outcomes &amp; context</div>
+          <div style="font-size:12px;color:var(--txt3)">What happened after the report was filed &middot; Domestic-violence share &middot; Live from CSPD open data</div>
+        </div>
+        <div id="nb-outcomes-status" style="font-size:11px;color:var(--txt3);padding:4px 8px;border-radius:4px;background:var(--surf2)">Loading&hellip;</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr;gap:16px" class="nb-out-grid">
+        <!-- disposition breakdown -->
+        <div>
+          <div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txt3);margin-bottom:8px">Disposition</div>
+          <div id="nb-disp-bars" role="list" aria-label="Disposition breakdown">
+            <div style="font-size:13px;color:var(--txt3);padding:12px 0;text-align:center" id="nb-disp-placeholder">Fetching disposition distribution from policedata.coloradosprings.gov &hellip;</div>
+          </div>
+          <table class="aaa-tbl" id="nb-disp-tbl" aria-label="Disposition breakdown data" style="margin-top:10px">
+            <caption>Disposition distribution for this ZIP &mdash; last 12 months</caption>
+            <thead><tr><th scope="col">Disposition</th><th scope="col">Incidents</th><th scope="col">Share</th></tr></thead>
+            <tbody id="nb-disp-tbl-body"></tbody>
+          </table>
+        </div>
+
+        <!-- domestic split -->
+        <div>
+          <div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txt3);margin-bottom:8px">Domestic-violence flag</div>
+          <div id="nb-dv-split" role="list" aria-label="Domestic violence breakdown"
+               style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div style="background:var(--surf2);border:1px solid var(--brd);border-radius:8px;padding:12px;text-align:center" role="listitem">
+              <div id="nb-dv-n" style="font-family:var(--serif);font-size:26px;color:var(--red);line-height:1">&mdash;</div>
+              <div style="font-size:11px;color:var(--txt2);margin-top:3px">Domestic-flagged</div>
+              <div id="nb-dv-pct" style="font-size:11px;color:var(--txt3);margin-top:2px">&mdash;</div>
+            </div>
+            <div style="background:var(--surf2);border:1px solid var(--brd);border-radius:8px;padding:12px;text-align:center" role="listitem">
+              <div id="nb-ndv-n" style="font-family:var(--serif);font-size:26px;color:var(--navy);line-height:1">&mdash;</div>
+              <div style="font-size:11px;color:var(--txt2);margin-top:3px">Non-domestic</div>
+              <div id="nb-ndv-pct" style="font-size:11px;color:var(--txt3);margin-top:2px">&mdash;</div>
+            </div>
+          </div>
+          <p style="font-size:11px;color:var(--txt3);margin-top:10px;line-height:1.5">
+            The <code>domestic</code> field marks incidents where the relationship between parties meets CSPD&rsquo;s domestic-violence criteria. This is distinct from the crime type; a DV-flagged incident may be assault, harassment, property crime, or other categories.
+          </p>
+        </div>
+      </div>
+
+      <p id="nb-outcomes-source" style="font-size:11px;color:var(--txt3);margin-top:14px;line-height:1.5">
+        Source: <a href="https://policedata.coloradosprings.gov/resource/bc88-hemr.json" target="_blank" rel="noopener" style="color:var(--blue)">CSPD open data bc88-hemr</a> &middot; Filter: ZIP, last 12 months &middot; Live query on ZIP change &middot; &ldquo;Cleared&rdquo; counts include both arrest and exceptional clearance; it does not mean a conviction.
+      </p>
+    </div>
+
     <!-- data coverage gauge -->
     <div class="card">
       <div class="card-title">How complete is this picture?</div>
@@ -710,7 +761,65 @@ a{color:var(--blue)}
       <div class="comp-row" role="listitem"><span class="comp-ag">Manitou Springs PD</span><div class="comp-track"><div class="comp-fill" style="width:5%;background:var(--red)"></div></div><span class="comp-pct" style="color:var(--red)">5%</span><span class="comp-note">CORA requests only</span></div>
       <div class="comp-row" role="listitem"><span class="comp-ag">Monument Police Dept.</span><div class="comp-track"><div class="comp-fill" style="width:5%;background:var(--red)"></div></div><span class="comp-pct" style="color:var(--red)">5%</span><span class="comp-note">CORA requests only</span></div>
       <div class="comp-row" role="listitem"><span class="comp-ag">Colorado State Patrol</span><div class="comp-track"><div class="comp-fill" style="width:15%;background:var(--amber)"></div></div><span class="comp-pct" style="color:var(--amber)">15%</span><span class="comp-note">Annual CBI report only</span></div>
+      <div class="comp-row" role="listitem"><span class="comp-ag">Corona Solutions (CSPD CAD feed)</span><div class="comp-track"><div class="comp-fill" style="width:8%;background:var(--red)"></div></div><span class="comp-pct" style="color:var(--red)">8%</span><span class="comp-note">Closed vendor; no API; 1,000-record cap</span></div>
     </div>
+    <p style="font-size:11px;color:var(--txt3);margin-top:10px">Percentages reflect public accessibility of data — not quality or quantity of police response. A low score means residents cannot reach the data in real time without filing a CORA request.</p>
+  </div>
+
+  <!-- ── Visible vs Actual — CAD vs RMS ── -->
+  <div class="card" aria-labelledby="visactual-title">
+    <div class="card-title" id="visactual-title">What this dashboard shows vs. what CSPD actually responds to</div>
+    <p style="font-size:13px;color:var(--txt2);margin-bottom:16px;max-width:720px">Every chart above counts <strong>incident reports</strong> — the records that exist after an officer investigates and writes it up. But CSPD is dispatched to far more calls than become reports. Most close on scene without a report. Those calls exist in CAD (Computer-Aided Dispatch) but are not published as a public dataset.</p>
+
+    <!-- headline ratio -->
+    <div style="background:var(--surf2);border-radius:10px;padding:22px 20px;border:1px solid var(--brd)">
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="font-family:var(--serif);font-size:56px;color:var(--red);line-height:1;letter-spacing:-.02em">13%</div>
+        <div style="font-size:13px;color:var(--txt2);margin-top:4px">of CSPD response activity is visible on this dashboard</div>
+      </div>
+
+      <!-- proportional bar -->
+      <div role="img" aria-label="Proportional bar: 52,000 reported incidents in navy represents 13 percent of approximately 400,000 calls for service in gray">
+        <div style="position:relative;height:48px;background:#fff;border-radius:6px;overflow:hidden;border:1px solid var(--brd2)">
+          <div style="position:absolute;top:0;left:0;bottom:0;width:13%;background:var(--navy);display:flex;align-items:center;padding-left:10px;color:#fff;font-size:12px;font-weight:700">52k</div>
+          <div style="position:absolute;top:0;left:13%;bottom:0;width:87%;background:repeating-linear-gradient(45deg,#E8E4DC,#E8E4DC 8px,#F3F0EA 8px,#F3F0EA 16px);display:flex;align-items:center;justify-content:flex-end;padding-right:14px;color:var(--txt2);font-size:12px;font-weight:700">~348k not publicly reported</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--txt3)">
+          <span>0</span>
+          <span>~400,000 CAD events / year</span>
+        </div>
+      </div>
+
+      <!-- legend -->
+      <div role="list" style="margin-top:18px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--brd);font-size:13px" role="listitem">
+          <span><span aria-hidden="true" style="display:inline-block;width:14px;height:14px;background:var(--navy);border-radius:3px;vertical-align:middle;margin-right:8px"></span><strong>RMS incident reports</strong> &mdash; the data on this dashboard (dataset bc88-hemr)</span>
+          <span style="font-weight:700;color:var(--navy)">~52,000 / yr</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:13px" role="listitem">
+          <span><span aria-hidden="true" style="display:inline-block;width:14px;height:14px;background:repeating-linear-gradient(45deg,#E8E4DC,#E8E4DC 3px,#F3F0EA 3px,#F3F0EA 6px);border:1px solid var(--brd);border-radius:3px;vertical-align:middle;margin-right:8px"></span>Calls dispatched but not resulting in a published report</span>
+          <span style="font-weight:700;color:var(--txt3)">~348,000 / yr</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AAA-compatible table -->
+    <table class="aaa-tbl" aria-label="Visible versus dispatched CSPD activity" style="margin-top:14px">
+      <caption>CSPD response activity: what is published vs. what is dispatched</caption>
+      <thead><tr><th scope="col">Category</th><th scope="col">Source system</th><th scope="col">Annual volume (2024)</th><th scope="col">% of total</th></tr></thead>
+      <tbody>
+        <tr><td>RMS incident reports (this dashboard)</td><td>Records Mgmt. System</td><td>52,192</td><td>13.0%</td></tr>
+        <tr><td>Calls dispatched without a public report</td><td>CAD (not published)</td><td>~347,808</td><td>87.0%</td></tr>
+        <tr><td><strong>Total CSPD calls for service</strong></td><td>CAD</td><td><strong>~400,000</strong></td><td><strong>100%</strong></td></tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:11px;color:var(--txt3);margin-top:14px;line-height:1.6">
+      <strong>Sources:</strong> CSPD annual report cites approximately 400,000 calls for service per year (CAD).
+      RMS figure: dataset bc88-hemr, 2024 calendar year, 52,192 records.
+      A third-party tool &mdash; <a href="https://myneighborhoodupdate.net" target="_blank" rel="noopener" style="color:var(--blue)">myneighborhoodupdate.net</a>, operated by Corona Solutions &mdash; displays a subset of CAD events, but is capped at 1,000 records per view, excludes sexual assaults, uses vendor-defined categories, shows only approximate locations, has no public API, and prohibits automated access in its terms of use.
+      The 87% gap is the public-transparency ceiling: no matter how good the RMS dashboard gets, the majority of police activity remains invisible to residents unless the CAD feed is opened.
+    </p>
   </div>
 
   <!-- findings -->
@@ -767,6 +876,30 @@ a{color:var(--blue)}
       <div class="find-rec"><div class="find-rec-lbl">Recommended action</div>EPCCO should publish quarterly mortality totals (no PII) to reduce the public lag from 9–12 months to under 3.</div>
     </div>
 
+    <div class="finding crit" role="listitem">
+      <div class="find-hdr"><div class="find-title">9. CSPD directs residents to a second crime feed that uses different data and different rules — with no reconciliation</div><span class="sev crit">Critical</span></div>
+      <div class="find-desc">The CSPD page "Crimes and Calls for Service in Your Neighborhood" (<a href="https://coloradosprings.gov/police-department/page/crimes-and-calls-service-your-neighborhood" target="_blank" rel="noopener" style="color:var(--blue)">coloradosprings.gov</a>) sends residents to <a href="https://myneighborhoodupdate.net" target="_blank" rel="noopener" style="color:var(--blue)">myneighborhoodupdate.net</a>, a Corona Solutions product showing CAD (dispatch) data — while the CSPD open data portal shows RMS (report) data. The two feeds measure different things: CAD includes non-crime calls but excludes sexual assaults; RMS includes all NIBRS-reportable offenses but excludes calls that closed without a report. Corona Solutions defines its own categories. Addresses are approximate, not real. No page on coloradosprings.gov tells residents which feed they are looking at or why the two disagree.</div>
+      <div><span class="find-stat bad">2 feeds · 2 taxonomies · 0 public reconciliation</span><span class="find-stat warn">Sexual assault excluded from CAD feed</span></div>
+      <div class="find-rec"><div class="find-rec-lbl">Required action</div>Add a single methodology page on coloradosprings.gov/police that explains: (a) what CAD data is, (b) what RMS data is, (c) which page shows which, (d) why the numbers differ, (e) what is excluded from each. This is a text deliverable — no engineering required.</div>
+      <div class="find-rec"><div class="find-rec-lbl">Applicable law</div>CRS 24-72-204(3)(a)(I) — accuracy of public record disclosures · CCJRA 24-72-301 et seq.</div>
+    </div>
+
+    <div class="finding crit" role="listitem">
+      <div class="find-hdr"><div class="find-title">10. Corona Solutions / myneighborhoodupdate.net — third-party Title II ADA exposure</div><span class="sev crit">Critical</span></div>
+      <div class="find-desc">The tool CSPD links to as its neighborhood-level crime interface has multiple WCAG 2.1 Level A failures and no published accessibility conformance statement. Specifics: served over <strong>HTTP (not HTTPS)</strong>; primary actions use <code>javascript:</code> pseudo-links with no accessible name/role; an interactive map with no keyboard-navigable or tabular alternative; charts rendered without text equivalents; the address input has no programmatic label visible in the markup; alt text on decorative icons is inconsistent or missing; the "About" page is two sentences with no VPAT link. The DOJ April 2024 final rule under ADA Title II covers third-party content used by a public entity to offer services to the public &mdash; the city cannot disclaim responsibility by pointing at the vendor. Colorado Springs' compliance deadline was <strong>April 24, 2026</strong>.</div>
+      <div><span class="find-stat bad">WCAG 2.1 Level A failures: multiple</span><span class="find-stat bad">No HTTPS</span><span class="find-stat warn">No VPAT published</span><span class="find-stat warn">DOJ deadline passed: Apr 24, 2026</span></div>
+      <div class="find-rec"><div class="find-rec-lbl">Required action</div>Either (a) remove the link from the CSPD page until the vendor provides a conformant release with a published VPAT, (b) build an accessible front-end on top of the same CSPD CAD feed (Tyler Data &amp; Insights already hosts CSPD's open data and can accept CAD), or (c) replace the tool. Option (b) is the lowest-cost path and eliminates the duplicate vendor spend.</div>
+      <div class="find-rec"><div class="find-rec-lbl">Applicable law</div>28 C.F.R. Part 35 Subpart H · 42 U.S.C. § 12132 · 28 C.F.R. § 35.107</div>
+    </div>
+
+    <div class="finding crit" role="listitem">
+      <div class="find-hdr"><div class="find-title">11. The CSPD open data portal itself fails WCAG 2.1 Level A — including a broken accessibility link</div><span class="sev crit">Critical</span></div>
+      <div class="find-desc"><a href="https://policedata.coloradosprings.gov" target="_blank" rel="noopener" style="color:var(--blue)">policedata.coloradosprings.gov</a> — the Tyler Data &amp; Insights (Socrata) portal where CSPD publishes its RMS crime data — has structural accessibility failures in its <strong>own</strong> chrome, independent of any dataset view. The home page, the "About" story, and dataset pages all render as empty HTML shells that require JavaScript to hydrate. A user or assistive technology that does not fully execute JavaScript receives a page with no content. The footer's "Accessibility" link points to <code>http://www.socrata.com/accessibility</code> — which (a) is served over unencrypted HTTP, and (b) returns an <strong>empty response body</strong>. The actual Tyler accessibility statement exists at <code>support.socrata.com/hc/en-us/articles/360019056614</code> but is not linked from the portal. Tyler's own accessibility statement acknowledges that "AJAX and JavaScript would interfere with the use of accessible technologies" and promises "alternate versions... made available via keyboard navigation skip links" — those alternate versions do not exist on the CSPD deployment. The VPAT is "available upon request" rather than published. This is the city's primary open-data transparency surface.</div>
+      <div><span class="find-stat bad">Empty server-rendered HTML (WCAG 4.1.1)</span><span class="find-stat bad">Skip link to nonexistent #content (WCAG 2.4.1)</span><span class="find-stat bad">Accessibility footer link: HTTP, blank body</span><span class="find-stat warn">VPAT on request only</span></div>
+      <div class="find-rec"><div class="find-rec-lbl">Required action</div>At minimum: (1) fix the footer "Accessibility" link to point to the correct, HTTPS URL of Tyler's actual statement, (2) require Tyler to publish the VPAT on the portal rather than "upon request," (3) publish an accessibility page on coloradosprings.gov/police describing the Tyler portal's conformance posture and offering an accessible alternative format on request. Request the current Tyler VPAT for Data &amp; Insights / Socrata directly from datainsights-support@tylertech.com and post it publicly. The city is the public entity; the procurement relationship with Tyler does not transfer the Title II obligation.</div>
+      <div class="find-rec"><div class="find-rec-lbl">Applicable law</div>28 C.F.R. Part 35 Subpart H · WCAG 2.1 SC 2.4.1, 4.1.1, 4.1.2, 1.3.1 · 42 U.S.C. § 12132</div>
+    </div>
+
   </div>
 
   <div class="div"></div>
@@ -781,6 +914,12 @@ a{color:var(--blue)}
   <div class="rec"><div class="rec-n">4</div><div><div class="rec-title">Publish a joint annual drug trend report</div><div class="rec-desc">EPSO, EPCCO, and El Paso County Public Health should correlate enforcement data, overdose deaths, and treatment utilization in one annual report. The current situation — enforcement down 17%, meth deaths up 7%, no explanation — actively misleads the public.</div><div><span class="rec-stat">CRS 29-21-101</span></div></div></div>
 
   <div class="rec"><div class="rec-n">5</div><div><div class="rec-title">EPCCO should publish quarterly mortality totals</div><div class="rec-desc">Simple quarterly release of manner-of-death totals (no personal information) would reduce the 9–12 month public lag to under 3 months. Can be automated from existing systems.</div><div><span class="rec-stat">CRS 30-10-601</span></div></div></div>
+
+  <div class="rec"><div class="rec-n">6</div><div><div class="rec-title">Publish a single CAD vs. RMS methodology page on coloradosprings.gov/police</div><div class="rec-desc">Residents currently see two CSPD crime feeds that disagree, with no explanation. A single public page should document: what CAD and RMS are, which tool shows which, what is excluded from each, and why the totals differ. This eliminates one of the most persistent sources of public confusion about crime data in Colorado Springs — at zero engineering cost.</div><div><span class="rec-stat">CRS 24-72-204(3)(a)(I)</span><span class="rec-stat" style="margin-left:6px">CCJRA 24-72-301</span></div></div></div>
+
+  <div class="rec"><div class="rec-n">7</div><div><div class="rec-title">Remediate or replace the Corona Solutions third-party tool</div><div class="rec-desc">myneighborhoodupdate.net fails multiple WCAG 2.1 Level A criteria, is served over HTTP rather than HTTPS, and has no published accessibility conformance statement. The April 24, 2026 DOJ Title II deadline covers third-party content used by public entities. The lowest-cost remediation is to expose CAD data through the existing Tyler Data &amp; Insights platform that already hosts bc88-hemr — the same platform, an additional dataset, no new vendor.</div><div><span class="rec-stat">28 C.F.R. Part 35 Subpart H</span><span class="rec-stat" style="margin-left:6px">42 U.S.C. § 12132</span></div></div></div>
+
+  <div class="rec"><div class="rec-n">8</div><div><div class="rec-title">Fix the CSPD open data portal's own accessibility posture</div><div class="rec-desc">The Tyler/Socrata portal where CSPD publishes its crime data has a broken accessibility link in its footer (HTTP, empty response) and no publicly-posted VPAT. The city should: (1) request and publish Tyler's current VPAT for the Data &amp; Insights platform, (2) replace the broken footer link with the correct HTTPS statement URL, (3) publish a short accessibility notice on coloradosprings.gov/police describing the portal's conformance and how residents who cannot use the JS-dependent interface can request an accessible alternative format (e.g., CSV by email). All three steps are text-only changes requiring no vendor engineering.</div><div><span class="rec-stat">28 C.F.R. Part 35 Subpart H</span><span class="rec-stat" style="margin-left:6px">42 U.S.C. § 12132</span></div></div></div>
 
   <div class="src">
     Verified April 12, 2026 · ADA Title II: 42 U.S.C. § 12132 · CORA: CRS 24-72-201 et seq. · CCJRA: CRS 24-72-301 et seq. · DOJ Title II Web Rule: 28 C.F.R. Part 35 Subpart H ·
@@ -1260,6 +1399,161 @@ function renderNB(d, matchType, searchedZip, rawQuery) {
       }
     }
   });
+
+  // kick off live outcomes fetch (async; UI above renders first)
+  fetchNBOutcomes(d.zip, d.key);
+}
+
+/* ══════════════════════════════════════════
+   LIVE CASE-OUTCOMES FETCH (disposition + domestic)
+   Hits CSPD open data SODA API directly from the browser.
+   Fails gracefully if CORS / network / rate limit blocks it.
+══════════════════════════════════════════ */
+const NB_OUT_API = 'https://policedata.coloradosprings.gov/resource/bc88-hemr.json';
+
+// disposition value → display label + color bucket
+// (actual CSPD vocabulary varies; we bucket anything unknown into "Other")
+function classifyDisposition(raw) {
+  if (!raw) return { label: 'Unreported / blank', color: '#888780', bucket: 'unknown' };
+  const s = String(raw).toUpperCase();
+  if (s.includes('CLEAR') && s.includes('ARREST')) return { label: 'Cleared by arrest', color: '#0D4A25', bucket: 'cleared' };
+  if (s.includes('CLEAR') && (s.includes('EXCEPT') || s.includes('EXCP'))) return { label: 'Cleared \u2014 exceptional', color: '#2A6E9E', bucket: 'cleared' };
+  if (s.includes('CLEAR')) return { label: 'Cleared', color: '#2A6E9E', bucket: 'cleared' };
+  if (s.includes('ARREST')) return { label: 'Cleared by arrest', color: '#0D4A25', bucket: 'cleared' };
+  if (s.includes('UNFOUND')) return { label: 'Unfounded', color: '#6B4000', bucket: 'unfounded' };
+  if (s.includes('INACTIV') || s.includes('SUSPEND')) return { label: 'Inactive / suspended', color: '#A84A18', bucket: 'inactive' };
+  if (s.includes('PEND') || s.includes('ACTIV') || s.includes('OPEN') || s.includes('INVEST')) return { label: 'Active / pending', color: '#C45C26', bucket: 'active' };
+  if (s.includes('REFER')) return { label: 'Referred to other agency', color: '#4A5A7A', bucket: 'referred' };
+  if (s.includes('ADMIN') || s.includes('CLOS')) return { label: 'Administratively closed', color: '#7A4A1A', bucket: 'admin' };
+  return { label: raw.length > 30 ? raw.slice(0, 30) + '\u2026' : raw, color: '#888780', bucket: 'other' };
+}
+
+function setOutcomesStatus(text, isError) {
+  const el = document.getElementById('nb-outcomes-status');
+  if (!el) return;
+  el.textContent = text;
+  el.style.background = isError ? 'var(--red-bg)' : 'var(--surf2)';
+  el.style.color = isError ? 'var(--red)' : 'var(--txt3)';
+}
+
+function renderDispositionRow(label, n, total, color) {
+  const pct = total > 0 ? Math.round((n / total) * 1000) / 10 : 0;
+  return `
+    <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--brd);font-size:13px" role="listitem">
+      <span style="flex:1;min-width:130px">${label}</span>
+      <div style="flex:2;background:var(--surf2);border-radius:3px;height:10px;overflow:hidden;min-width:60px">
+        <div style="width:${Math.min(100, pct)}%;height:100%;background:${color};border-radius:3px"></div>
+      </div>
+      <span style="min-width:50px;text-align:right;font-weight:600;color:var(--txt)">${n.toLocaleString()}</span>
+      <span style="min-width:44px;text-align:right;color:var(--txt3);font-size:12px">${pct}%</span>
+    </div>`;
+}
+
+function resetOutcomesUI() {
+  document.getElementById('nb-disp-placeholder').style.display = '';
+  document.getElementById('nb-disp-placeholder').textContent = 'Fetching disposition distribution from policedata.coloradosprings.gov \u2026';
+  document.getElementById('nb-disp-bars').querySelectorAll('[role="listitem"]').forEach(n => n.remove());
+  document.getElementById('nb-disp-tbl-body').innerHTML = '';
+  document.getElementById('nb-dv-n').textContent = '\u2014';
+  document.getElementById('nb-dv-pct').textContent = '\u2014';
+  document.getElementById('nb-ndv-n').textContent = '\u2014';
+  document.getElementById('nb-ndv-pct').textContent = '\u2014';
+}
+
+// concurrency guard so rapid ZIP changes don't cross
+let nbOutReq = 0;
+
+async function fetchNBOutcomes(zip, locKey) {
+  const myReq = ++nbOutReq;
+  resetOutcomesUI();
+  setOutcomesStatus('Loading \u2026', false);
+
+  // 12-month window ending today
+  const now = new Date();
+  const from = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+  const fromStr = from.toISOString().slice(0, 19);
+
+  const where = `zip='${String(zip).replace(/'/g, "''")}' AND occurredfromdate > '${fromStr}'`;
+
+  const dispQ = `${NB_OUT_API}?$select=disposition,count(*) as n&$group=disposition&$where=${encodeURIComponent(where)}&$order=n DESC&$limit=40`;
+  const dvQ   = `${NB_OUT_API}?$select=domestic,count(*) as n&$group=domestic&$where=${encodeURIComponent(where)}&$limit=10`;
+
+  try {
+    const [dispRes, dvRes] = await Promise.all([
+      fetch(dispQ, { headers: { 'Accept': 'application/json' } }),
+      fetch(dvQ,   { headers: { 'Accept': 'application/json' } })
+    ]);
+
+    if (myReq !== nbOutReq) return; // superseded
+
+    if (!dispRes.ok || !dvRes.ok) {
+      throw new Error(`HTTP ${dispRes.status} / ${dvRes.status}`);
+    }
+
+    const [dispData, dvData] = await Promise.all([dispRes.json(), dvRes.json()]);
+    if (myReq !== nbOutReq) return;
+
+    // ─── disposition render ───
+    const dispTotal = dispData.reduce((s, r) => s + Number(r.n || 0), 0);
+    const placeholder = document.getElementById('nb-disp-placeholder');
+    placeholder.style.display = 'none';
+
+    const barsHost = document.getElementById('nb-disp-bars');
+    const tbody = document.getElementById('nb-disp-tbl-body');
+
+    // collapse into buckets (duplicate raw values map to same display label)
+    const bucketed = {};
+    for (const r of dispData) {
+      const c = classifyDisposition(r.disposition);
+      if (!bucketed[c.label]) bucketed[c.label] = { n: 0, color: c.color, bucket: c.bucket };
+      bucketed[c.label].n += Number(r.n || 0);
+    }
+    const sorted = Object.entries(bucketed).sort((a, b) => b[1].n - a[1].n);
+
+    if (dispTotal === 0 || sorted.length === 0) {
+      placeholder.style.display = '';
+      placeholder.innerHTML = '<em>No incidents returned for this ZIP in the last 12 months. This can happen for ZIPs with very low population or ZIPs that aren\u2019t primarily residential.</em>';
+    } else {
+      let html = '';
+      for (const [label, v] of sorted) {
+        html += renderDispositionRow(label, v.n, dispTotal, v.color);
+        tbody.innerHTML += `<tr><td>${label}</td><td>${v.n.toLocaleString()}</td><td>${(v.n / dispTotal * 100).toFixed(1)}%</td></tr>`;
+      }
+      // append total row
+      tbody.innerHTML += `<tr><td><strong>Total</strong></td><td><strong>${dispTotal.toLocaleString()}</strong></td><td><strong>100%</strong></td></tr>`;
+      barsHost.insertAdjacentHTML('beforeend', html);
+    }
+
+    // ─── domestic render ───
+    let dvN = 0, ndvN = 0;
+    for (const r of dvData) {
+      const v = String(r.domestic || '').toUpperCase();
+      const n = Number(r.n || 0);
+      if (v === 'Y' || v === 'YES' || v === 'TRUE' || v === '1') dvN += n;
+      else ndvN += n;
+    }
+    const dvTotal = dvN + ndvN;
+    const dvPct = dvTotal > 0 ? (dvN / dvTotal * 100).toFixed(1) : '0.0';
+    const ndvPct = dvTotal > 0 ? (ndvN / dvTotal * 100).toFixed(1) : '0.0';
+
+    document.getElementById('nb-dv-n').textContent = dvN.toLocaleString();
+    document.getElementById('nb-dv-pct').textContent = `${dvPct}% of incidents`;
+    document.getElementById('nb-ndv-n').textContent = ndvN.toLocaleString();
+    document.getElementById('nb-ndv-pct').textContent = `${ndvPct}% of incidents`;
+
+    setOutcomesStatus(`Live \u00b7 ${dispTotal.toLocaleString()} records \u00b7 ${locKey}`, false);
+
+  } catch (err) {
+    if (myReq !== nbOutReq) return;
+    console.warn('NB outcomes fetch failed:', err);
+    const placeholder = document.getElementById('nb-disp-placeholder');
+    placeholder.style.display = '';
+    placeholder.innerHTML =
+      `<strong>Live fetch unavailable.</strong><br>` +
+      `The CSPD open data API did not respond. This can happen when (a) you are viewing the dashboard from a file:// URL that blocks cross-origin requests, (b) CSPD\u2019s rate limit has been hit, or (c) your network blocks external requests.<br>` +
+      `You can query the data directly: <a href="${NB_OUT_API}?$select=disposition,count(*) as n&$where=${encodeURIComponent(where)}&$group=disposition&$order=n DESC" target="_blank" rel="noopener" style="color:var(--blue)">open in CSPD portal</a>.`;
+    setOutcomesStatus('Offline', true);
+  }
 }
 
 /* ══════════════════════════════════════════
