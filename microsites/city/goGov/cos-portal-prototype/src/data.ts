@@ -1,5 +1,6 @@
 import raw from './data/classifications.json';
 import { groupContacts, topicContacts } from './data/contacts';
+import { mergeExtensions } from './data/extensions';
 import type { Catalog, Topic, Group, VisibleField, RawField, TopicContact } from './types';
 
 const rawCatalog = raw as unknown as Catalog;
@@ -68,16 +69,26 @@ function resolveContact(groupName: string, topicId: string): TopicContact | unde
   return Object.keys(merged).length ? merged : undefined;
 }
 
+const normalizedGroups = rawCatalog.groups.map((g: Group) => ({
+  ...g,
+  items: g.items.map((t) => ({
+    ...t,
+    visibleFields: normalizeFields(t),
+    contact: resolveContact(g.groupName, t.topicId),
+  })),
+}));
+
+const extendedGroups = mergeExtensions(normalizedGroups).map((g) => ({
+  ...g,
+  items: g.items.map((t) => ({
+    ...t,
+    contact: t.contact ?? resolveContact(g.groupName, t.topicId),
+  })),
+}));
+
 export const catalog: Catalog = {
   ...rawCatalog,
-  groups: rawCatalog.groups.map((g: Group) => ({
-    ...g,
-    items: g.items.map((t) => ({
-      ...t,
-      visibleFields: normalizeFields(t),
-      contact: resolveContact(g.groupName, t.topicId),
-    })),
-  })),
+  groups: extendedGroups,
 };
 
 export const allTopics: Array<Topic & { group: string }> = catalog.groups.flatMap(

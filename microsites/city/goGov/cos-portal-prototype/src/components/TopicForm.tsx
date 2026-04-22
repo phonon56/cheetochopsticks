@@ -69,6 +69,119 @@ export function TopicForm({
   onSharedDescriptionChange,
   onSubmitted,
 }: Props) {
+  const dest = topic.destination ?? { kind: 'form' as const };
+  if (dest.kind !== 'form') {
+    return <ExternalOrEmailView topic={topic} />;
+  }
+  return (
+    <InternalTopicForm
+      topic={topic}
+      sharedDescription={sharedDescription}
+      onSharedDescriptionChange={onSharedDescriptionChange}
+      onSubmitted={onSubmitted}
+    />
+  );
+}
+
+function ExternalOrEmailView({ topic }: { topic: Topic }) {
+  const d = topic.destination;
+  if (!d || d.kind === 'form') return null;
+  return (
+    <div className="max-w-2xl space-y-4">
+      <header className="space-y-1">
+        <p className="text-xs uppercase tracking-wide text-slate-600">
+          {d.kind === 'external' ? 'External destination' : 'Direct email'}
+        </p>
+        <h2
+          id="topic-heading"
+          tabIndex={-1}
+          className="text-2xl font-semibold text-slate-900 focus:outline-none"
+        >
+          {topic.name}
+        </h2>
+        {topic.description && (
+          <p className="text-sm text-slate-700">{topic.description}</p>
+        )}
+      </header>
+
+      {d.kind === 'external' && d.warning && (
+        <div
+          role="note"
+          className="rounded-md border border-amber-400 bg-amber-50 p-3 text-sm text-amber-900"
+        >
+          <strong>Heads up:</strong> {d.warning}
+        </div>
+      )}
+
+      {d.kind === 'external' ? (
+        <a
+          href={d.url}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 min-h-11"
+        >
+          {d.ctaLabel ?? `Continue to ${d.agency}`}
+          <span aria-hidden="true">↗</span>
+        </a>
+      ) : (
+        <a
+          href={`mailto:${d.address}${d.subjectTemplate ? '?subject=' + encodeURIComponent(d.subjectTemplate) : ''}`}
+          className="inline-flex items-center gap-2 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 min-h-11"
+        >
+          {d.ctaLabel ?? `Email ${d.address}`}
+        </a>
+      )}
+
+      {topic.contact && (
+        <aside className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+          <p className="font-medium text-slate-900 mb-1">Contact details</p>
+          <ul className="space-y-0.5">
+            {topic.contact.website && (
+              <li>
+                Website:{' '}
+                <a
+                  href={topic.contact.website}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-blue-700 underline"
+                >
+                  {topic.contact.website.replace(/^https?:\/\//, '')}
+                </a>
+              </li>
+            )}
+            {topic.contact.email && (
+              <li>
+                Email:{' '}
+                <a href={`mailto:${topic.contact.email}`} className="text-blue-700 underline">
+                  {topic.contact.email}
+                </a>
+              </li>
+            )}
+            {topic.contact.phone && (
+              <li>
+                Phone:{' '}
+                <a
+                  href={`tel:${topic.contact.phone.replace(/[^0-9+]/g, '')}`}
+                  className="text-blue-700 underline"
+                >
+                  {topic.contact.phone}
+                </a>
+              </li>
+            )}
+            {topic.contact.notes && <li className="text-slate-700">{topic.contact.notes}</li>}
+          </ul>
+        </aside>
+      )}
+    </div>
+  );
+}
+
+function InternalTopicForm({
+  topic,
+  sharedDescription,
+  onSharedDescriptionChange,
+  onSubmitted,
+}: Props) {
   const schema = useMemo(() => buildSchema(topic.visibleFields), [topic]);
   const fields = visibleRenderable(topic.visibleFields);
   const [honeypot, setHoneypot] = useState('');

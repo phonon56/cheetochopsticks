@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TopicNav } from './components/TopicNav';
 import { TopicForm, type SubmissionPayload } from './components/TopicForm';
+import { PlainLanguageSearch } from './components/PlainLanguageSearch';
 import { topicsById } from './data';
 import { ADA_CONTACT } from './data/contacts';
 
@@ -106,38 +107,20 @@ export default function App() {
               }}
             />
           ) : (
-            <WelcomeState />
+            <PlainLanguageSearch
+              onPickTopic={(id) => {
+                setSelectedId(id);
+                setSubmitted(null);
+                requestAnimationFrame(() => {
+                  document.getElementById('topic-heading')?.focus();
+                });
+              }}
+            />
           )}
         </main>
       </div>
 
       <AccessibilityFooter />
-    </div>
-  );
-}
-
-function WelcomeState() {
-  return (
-    <div className="max-w-2xl space-y-4">
-      <h1 className="text-3xl font-semibold text-slate-900">What can we help with?</h1>
-      <p className="text-slate-700">
-        Choose a topic from the left to file a report, ask a question, or contact a
-        department. Every submission is routed to the right team and you'll receive a
-        tracking number for follow-up.
-      </p>
-      <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-700">
-        <p className="font-medium text-slate-900 mb-1">Common topics</p>
-        <ul className="list-disc pl-5 space-y-1">
-          <li>Pothole, street, or sidewalk repair</li>
-          <li>Noise complaint or barking dog</li>
-          <li>Trash, illegal dumping, or graffiti</li>
-          <li>Colorado Open Records Act (CORA) request</li>
-          <li>Accessibility (ADA) issue</li>
-        </ul>
-      </div>
-      <p className="text-xs text-slate-600">
-        Prototype — architectural experiment. Not a production endpoint.
-      </p>
     </div>
   );
 }

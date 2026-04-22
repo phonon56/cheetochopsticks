@@ -4,11 +4,13 @@ import { AxeBuilder } from '@axe-core/playwright';
 const BASE = process.env.BASE_URL || 'http://localhost:5173';
 
 const pages = [
-  { name: 'welcome', url: BASE + '/' },
+  { name: 'welcome (plain-language search)', url: BASE + '/' },
   { name: 'pothole (shape-A)', url: BASE + '/?classificationId=61341' },
   { name: 'fire-code (dates + selects)', url: BASE + '/?classificationId=61712' },
   { name: 'neighborhood-services-cora (19 checkboxes)', url: BASE + '/?classificationId=61752' },
   { name: 'accessibility-ada', url: BASE + '/?classificationId=61723' },
+  { name: 'permit-pprbd (external)', url: BASE + '/?classificationId=permit-pprbd' },
+  { name: 'cora-police-records (email)', url: BASE + '/?classificationId=cora-police-records' },
 ];
 
 const browser = await chromium.launch();
