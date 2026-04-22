@@ -4,6 +4,7 @@ import { TopicForm, type SubmissionPayload } from './components/TopicForm';
 import { HomeTabs } from './components/HomeTabs';
 import { ModeBar, MODES, type Mode } from './components/ModeBar';
 import { GetInvolved } from './components/GetInvolved';
+import { Performance } from './components/Performance';
 import { topicsById } from './data';
 import { ADA_CONTACT } from './data/contacts';
 
@@ -155,6 +156,8 @@ export default function App() {
             />
           ) : mode === 'involved' ? (
             <GetInvolved />
+          ) : mode === 'performance' ? (
+            <Performance />
           ) : (
             <ComingSoon mode={mode} />
           )}
