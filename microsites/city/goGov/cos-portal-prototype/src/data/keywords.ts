@@ -55,13 +55,41 @@ export const KEYWORD_INDEX: KeywordEntry[] = [
   },
   {
     topicId: '63474',
-    keywords: ['abandoned vehicle', 'abandoned car', 'junk car', 'car on street', 'parked forever'],
+    keywords: [
+      'abandoned vehicle', 'abandoned vehicles', 'abandoned car', 'abandoned cars',
+      'junk car', 'junk cars', 'junk vehicle', 'car on street', 'cars on street',
+      'parked on the street', 'parked on street', 'hasn\'t moved', 'has not moved',
+      'flat tire', 'no plates', 'expired plates', 'parked forever',
+    ],
     reason: 'Abandoned vehicles on City streets — Neighborhood Services handles enforcement.',
   },
   {
+    topicId: '61749',
+    keywords: [
+      'blocking my driveway', 'blocking driveway', 'blocking the driveway',
+      'parked in front of', 'parked too close', 'illegally parked',
+      'parking complaint', 'parking issue', 'parking problem',
+    ],
+    reason: 'Neighborhood parking complaints — CSPD handles parking violations on public streets.',
+  },
+  {
     topicId: '61750',
-    keywords: ['tall grass', 'weeds', 'overgrown', 'mow', 'lawn', 'nuisance', 'short-term rental', 'str', 'airbnb', 'vrbo', 'blight', 'eyesore', 'condemned', 'boarded', 'code enforcement', 'zoning violation'],
-    reason: 'That sounds like a code enforcement complaint — Neighborhood Services handles these.',
+    keywords: [
+      // yard / property nuisance
+      'tall grass', 'weeds', 'overgrown', 'mow', 'lawn', 'nuisance',
+      'short-term rental', 'str', 'airbnb', 'vrbo', 'blight', 'eyesore',
+      'condemned', 'boarded', 'code enforcement', 'zoning violation',
+      // neighbor-driven complaints
+      'neighbor', 'neighbors', 'my neighbor', 'next door',
+      // too-many-vehicles-on-property (COS caps residential parking)
+      'cars in driveway', 'cars in the driveway', 'cars in their driveway',
+      'cars on lawn', 'cars on the lawn', 'cars on grass',
+      'vehicles on property', 'vehicles in driveway', 'too many cars',
+      'too many vehicles', 'front yard parking', 'parked on the grass',
+      'parked on the lawn', 'junk in yard', 'junk on property',
+      'trash in yard', 'inoperable vehicle', 'inoperable vehicles',
+    ],
+    reason: 'That sounds like a property or neighbor complaint — Neighborhood Services handles code enforcement, including limits on vehicles parked on residential property.',
   },
   {
     topicId: '61721',

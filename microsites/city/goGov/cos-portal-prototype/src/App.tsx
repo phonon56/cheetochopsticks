@@ -87,6 +87,24 @@ export default function App() {
           />
         </aside>
         <main id="main" tabIndex={-1} className="p-4 md:p-8">
+          {(topic || submitted) && (
+            <nav aria-label="Breadcrumb" className="mb-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedId(null);
+                  setSubmitted(null);
+                  setSharedDescription('');
+                  requestAnimationFrame(() => {
+                    document.getElementById('plain-language-heading')?.focus();
+                  });
+                }}
+                className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-800 hover:bg-slate-50 min-h-11"
+              >
+                <span aria-hidden="true">←</span> Home
+              </button>
+            </nav>
+          )}
           {submitted ? (
             <Confirmation
               payload={submitted}

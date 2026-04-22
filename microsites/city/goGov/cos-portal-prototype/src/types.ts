@@ -44,6 +44,44 @@ export type Destination =
       subjectTemplate?: string;
     };
 
+export type Intent = 'report' | 'permit' | 'records' | 'contact';
+
+export type Subject =
+  | 'property'
+  | 'street'
+  | 'vehicle'
+  | 'noise'
+  | 'animal'
+  | 'water'
+  | 'tree'
+  | 'business'
+  | 'event'
+  | 'homeless'
+  | 'fire-safety'
+  | 'police'
+  | 'accessibility'
+  | 'construction'
+  | 'environmental'
+  | 'parks'
+  | 'transit'
+  | 'court'
+  | 'people-records';
+
+export type Journey =
+  | 'building-a-home'
+  | 'opening-a-restaurant'
+  | 'hosting-a-block-party'
+  | 'just-moved-here'
+  | 'dealing-with-a-neighbor'
+  | 'recovering-from-a-crash'
+  | 'starting-a-business';
+
+export interface TopicFacets {
+  intent: Intent;
+  subjects: Subject[];
+  journeys: Journey[];
+}
+
 export interface Topic {
   topicId: string;
   name: string;
@@ -52,6 +90,7 @@ export interface Topic {
   rawFields?: RawField[];
   contact?: TopicContact;
   destination?: Destination; // defaults to { kind: 'form' }
+  facets?: TopicFacets;
 }
 
 export interface Group {
