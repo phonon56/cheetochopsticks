@@ -1,4 +1,4 @@
-import type { Intent, Journey, Subject, Topic, TopicFacets } from '../types';
+import type { Intent, Journey, Jurisdiction, Subject, Topic, TopicFacets } from '../types';
 
 /**
  * Facet inference: every topic carries an intent (one of 4), subjects (flat
@@ -209,11 +209,28 @@ const OVERRIDES: Record<string, Partial<TopicFacets>> = {
   },
 };
 
+function inferJurisdiction(topic: Topic, groupName: string): Jurisdiction {
+  // Explicit overrides by topicId
+  if (topic.topicId === 'permit-pprbd') return 'regional';
+  if (topic.topicId === 'cora-utilities') return 'utility';
+
+  // By group
+  if (groupName.startsWith('El Paso County')) return 'county';
+  if (groupName.startsWith('State of Colorado')) return 'state';
+  if (groupName.startsWith('Federal')) return 'federal';
+
+  // Text hints as a fallback
+  const h = `${topic.name} ${groupName}`;
+  if (/\bCSU\b|Colorado Springs Utilities/i.test(h)) return 'utility';
+  if (/\bPPRBD\b|Pikes Peak Regional Building/i.test(h)) return 'regional';
+  if (/\bEl Paso County\b/i.test(h)) return 'county';
+
+  // Default: City of Colorado Springs
+  return 'city';
+}
+
 export function inferFacets(topic: Topic, groupName: string): TopicFacets {
   const override = OVERRIDES[topic.topicId];
-  if (override && override.intent && override.subjects && override.journeys) {
-    return override as TopicFacets;
-  }
 
   const def = GROUP_DEFAULTS[groupName] ?? DEFAULT;
   let intent: Intent = def.intent;
@@ -232,13 +249,37 @@ export function inferFacets(topic: Topic, groupName: string): TopicFacets {
     }
   }
 
-  const merged: TopicFacets = {
+  return {
     intent: (override?.intent as Intent) ?? intent,
     subjects: override?.subjects ?? [...subjects],
     journeys: override?.journeys ?? [],
+    jurisdiction:
+      (override as Partial<TopicFacets> | undefined)?.jurisdiction ??
+      inferJurisdiction(topic, groupName),
   };
-  return merged;
 }
+
+export const JURISDICTION_LABELS: Record<Jurisdiction, string> = {
+  city: 'City of Colorado Springs',
+  county: 'El Paso County',
+  state: 'State of Colorado',
+  federal: 'Federal',
+  regional: 'Regional agency',
+  utility: 'Utility',
+  'special-district': 'Special district',
+  tribal: 'Tribal',
+};
+
+export const JURISDICTION_SHORT: Record<Jurisdiction, string> = {
+  city: 'City',
+  county: 'County',
+  state: 'State',
+  federal: 'Federal',
+  regional: 'Regional',
+  utility: 'Utility',
+  'special-district': 'District',
+  tribal: 'Tribal',
+};
 
 export const INTENT_LABELS: Record<Intent, string> = {
   report: 'Report a problem',

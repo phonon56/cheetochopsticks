@@ -46,6 +46,16 @@ export type Destination =
 
 export type Intent = 'report' | 'permit' | 'records' | 'contact';
 
+export type Jurisdiction =
+  | 'city'
+  | 'county'
+  | 'state'
+  | 'federal'
+  | 'regional'
+  | 'utility'
+  | 'special-district'
+  | 'tribal';
+
 export type Subject =
   | 'property'
   | 'street'
@@ -80,6 +90,7 @@ export interface TopicFacets {
   intent: Intent;
   subjects: Subject[];
   journeys: Journey[];
+  jurisdiction: Jurisdiction;
 }
 
 export interface Topic {
