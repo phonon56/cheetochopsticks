@@ -1,7 +1,18 @@
 import raw from './data/classifications.json';
 import { groupContacts, topicContacts } from './data/contacts';
 import { mergeExtensions } from './data/extensions';
-import type { Catalog, Topic, Group, VisibleField, RawField, TopicContact } from './types';
+import { inferFacets } from './data/facets';
+import type {
+  Catalog,
+  Topic,
+  Group,
+  VisibleField,
+  RawField,
+  TopicContact,
+  Intent,
+  Subject,
+  Journey,
+} from './types';
 
 const rawCatalog = raw as unknown as Catalog;
 
@@ -83,6 +94,7 @@ const extendedGroups = mergeExtensions(normalizedGroups).map((g) => ({
   items: g.items.map((t) => ({
     ...t,
     contact: t.contact ?? resolveContact(g.groupName, t.topicId),
+    facets: t.facets ?? inferFacets(t, g.groupName),
   })),
 }));
 
@@ -110,4 +122,42 @@ export function searchTopics(query: string) {
 
 export function topicRequiresLocation(t: Topic) {
   return t.visibleFields.some((f) => f.name === 'location');
+}
+
+// ── Faceted indexes ──────────────────────────────────────────────────
+export const topicsByIntent = groupBy(allTopics, (t) => t.facets?.intent);
+export const topicsBySubject = multiGroupBy(allTopics, (t) => t.facets?.subjects ?? []);
+export const topicsByJourney = multiGroupBy(allTopics, (t) => t.facets?.journeys ?? []);
+
+export function getTopicsByIntent(i: Intent) {
+  return topicsByIntent.get(i) ?? [];
+}
+export function getTopicsBySubject(s: Subject) {
+  return topicsBySubject.get(s) ?? [];
+}
+export function getTopicsByJourney(j: Journey) {
+  return topicsByJourney.get(j) ?? [];
+}
+
+function groupBy<T, K>(items: T[], key: (x: T) => K | undefined): Map<K, T[]> {
+  const m = new Map<K, T[]>();
+  for (const it of items) {
+    const k = key(it);
+    if (k === undefined) continue;
+    const list = m.get(k);
+    if (list) list.push(it);
+    else m.set(k, [it]);
+  }
+  return m;
+}
+function multiGroupBy<T, K>(items: T[], keys: (x: T) => K[]): Map<K, T[]> {
+  const m = new Map<K, T[]>();
+  for (const it of items) {
+    for (const k of keys(it)) {
+      const list = m.get(k);
+      if (list) list.push(it);
+      else m.set(k, [it]);
+    }
+  }
+  return m;
 }
