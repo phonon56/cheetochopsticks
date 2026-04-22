@@ -5,6 +5,7 @@ import { HomeTabs } from './components/HomeTabs';
 import { ModeBar, MODES, type Mode } from './components/ModeBar';
 import { GetInvolved } from './components/GetInvolved';
 import { Performance } from './components/Performance';
+import { RightNow } from './components/RightNow';
 import { topicsById } from './data';
 import { ADA_CONTACT } from './data/contacts';
 
@@ -158,6 +159,8 @@ export default function App() {
             <GetInvolved />
           ) : mode === 'performance' ? (
             <Performance />
+          ) : mode === 'now' ? (
+            <RightNow />
           ) : (
             <ComingSoon mode={mode} />
           )}
