@@ -6,6 +6,7 @@ import type { Topic, VisibleField } from '../types';
 import { ImageDropzone } from './ImageDropzone';
 import { MapPicker } from './MapPicker';
 import { topicRequiresLocation } from '../data';
+import { JURISDICTION_LABELS } from '../data/facets';
 
 interface Props {
   topic: Topic;
@@ -86,11 +87,18 @@ export function TopicForm({
 function ExternalOrEmailView({ topic }: { topic: Topic }) {
   const d = topic.destination;
   if (!d || d.kind === 'form') return null;
+  const jurisdiction = topic.facets?.jurisdiction;
   return (
     <div className="max-w-2xl space-y-4">
       <header className="space-y-1">
         <p className="text-xs uppercase tracking-wide text-slate-600">
           {d.kind === 'external' ? 'External destination' : 'Direct email'}
+          {jurisdiction && (
+            <>
+              {' · '}
+              <span>{JURISDICTION_LABELS[jurisdiction]}</span>
+            </>
+          )}
         </p>
         <h2
           id="topic-heading"
@@ -259,8 +267,14 @@ function InternalTopicForm({
       aria-labelledby="topic-heading"
     >
       <header className="space-y-1">
-        <p className="text-xs uppercase tracking-wide text-slate-500">
+        <p className="text-xs uppercase tracking-wide text-slate-600">
           Classification #{topic.topicId}
+          {topic.facets?.jurisdiction && (
+            <>
+              {' · '}
+              <span>{JURISDICTION_LABELS[topic.facets.jurisdiction]}</span>
+            </>
+          )}
         </p>
         <h2
           id="topic-heading"

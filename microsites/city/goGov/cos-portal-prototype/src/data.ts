@@ -12,6 +12,7 @@ import type {
   Intent,
   Subject,
   Journey,
+  Jurisdiction,
 } from './types';
 
 const rawCatalog = raw as unknown as Catalog;
@@ -137,6 +138,14 @@ export function getTopicsBySubject(s: Subject) {
 }
 export function getTopicsByJourney(j: Journey) {
   return topicsByJourney.get(j) ?? [];
+}
+
+export const topicsByJurisdiction = groupBy(
+  allTopics,
+  (t) => t.facets?.jurisdiction,
+);
+export function getTopicsByJurisdiction(j: Jurisdiction) {
+  return topicsByJurisdiction.get(j) ?? [];
 }
 
 function groupBy<T, K>(items: T[], key: (x: T) => K | undefined): Map<K, T[]> {

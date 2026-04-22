@@ -1,4 +1,4 @@
-import type { Group, Topic } from '../types';
+import type { Group, Journey, Subject, Topic } from '../types';
 
 /**
  * Topics that don't live in the GovOutreach scrape but *should* be reachable
@@ -10,6 +10,51 @@ import type { Group, Topic } from '../types';
  * - https://coloradosprings.gov/accessibility
  * - city-permits-licenses-records.html (keyword router prototype)
  */
+
+const EPC_PH_CONTACT = {
+  phone: '(719) 578-3199',
+  email: 'healthinfo@elpasoco.com',
+  address: '1675 W. Garden of the Gods, Colorado Springs, CO 80907',
+  website: 'https://www.elpasocountyhealth.org/licenses-permits-inspections-water-testing/',
+};
+
+function makeEpcHealth(
+  items: Array<{
+    id: string;
+    name: string;
+    desc: string;
+    subjects: Subject[];
+    journeys?: Journey[];
+  }>,
+): Array<Topic & { groupName: string }> {
+  return items.map((it) => ({
+    groupName: 'El Paso County — Environmental Health',
+    topicId: it.id,
+    name: it.name,
+    description: `${it.desc} Contact Environmental Health at ${EPC_PH_CONTACT.phone} or ${EPC_PH_CONTACT.email}.`,
+    visibleFields: [],
+    destination: {
+      kind: 'external',
+      url: EPC_PH_CONTACT.website,
+      agency: 'El Paso County Public Health — Environmental Health',
+      warning:
+        'This is an El Paso County service, not a City of Colorado Springs service.',
+      ctaLabel: 'Continue to El Paso County Public Health',
+    },
+    contact: {
+      phone: EPC_PH_CONTACT.phone,
+      email: EPC_PH_CONTACT.email,
+      website: EPC_PH_CONTACT.website,
+      notes: `${EPC_PH_CONTACT.address}. Main line covers all Environmental Health services.`,
+    },
+    facets: {
+      intent: it.name.includes('Test') ? 'records' : 'permit',
+      subjects: it.subjects,
+      journeys: it.journeys ?? [],
+      jurisdiction: 'county',
+    },
+  }));
+}
 
 const CORA_COMMON =
   'Colorado Open Records Act request. Response within 3 working days (up to 7 additional days with cause). Fees: $0.25 per printed page; $30/hour research after the first 2 hours. See policy: https://coloradosprings.gov/document/corapolicy-2023-04-192.pdf';
@@ -242,6 +287,77 @@ export const extraTopics: Array<Topic & { groupName: string }> = [
       phone: '(719) 385-5980',
     },
   },
+  // ── El Paso County — Environmental Health (county jurisdiction) ──
+  ...makeEpcHealth([
+    {
+      id: 'epc-ph-air-quality',
+      name: 'Air Quality',
+      desc: 'Environmental air monitoring and regulation in El Paso County.',
+      subjects: ['environmental'],
+    },
+    {
+      id: 'epc-ph-body-art',
+      name: 'Body Art Facility Licensing',
+      desc: 'Licensing and inspection of tattoo, piercing, and body art facilities.',
+      subjects: ['business'],
+    },
+    {
+      id: 'epc-ph-child-care',
+      name: 'Child Care Facility Licensing',
+      desc: 'Licensing and inspections of child care facilities in El Paso County.',
+      subjects: ['business'],
+    },
+    {
+      id: 'epc-ph-construction-land-use',
+      name: 'Construction & Land Use Public Health Review',
+      desc: 'Public health reviews for construction projects and land-use approvals.',
+      subjects: ['construction'],
+    },
+    {
+      id: 'epc-ph-construction-activity',
+      name: 'Construction Activity Permit',
+      desc: 'Permitting for specific construction activities that affect public health.',
+      subjects: ['construction'],
+    },
+    {
+      id: 'epc-ph-owts',
+      name: 'Septic System Permits (OWTS)',
+      desc: 'Onsite Wastewater Treatment System permits and oversight — required outside city sewer service.',
+      subjects: ['construction', 'water'],
+    },
+    {
+      id: 'epc-ph-open-burning',
+      name: 'Open Burning Permit',
+      desc: 'Regulation of open burning in unincorporated El Paso County.',
+      subjects: ['environmental', 'fire-safety'],
+    },
+    {
+      id: 'epc-ph-pools-spas',
+      name: 'Public Pool & Spa Licensing',
+      desc: 'Licensing and inspections for public swimming pools and spas.',
+      subjects: ['business'],
+    },
+    {
+      id: 'epc-ph-radon',
+      name: 'Radon Testing & Assessment',
+      desc: 'Home radon testing kits and assessment services.',
+      subjects: ['environmental'],
+    },
+    {
+      id: 'epc-ph-retail-food',
+      name: 'Retail Food License (Restaurants & Food Service)',
+      desc: 'Licensing and inspection of restaurants, food trucks, and retail food establishments.',
+      subjects: ['business'],
+      journeys: ['opening-a-restaurant'],
+    },
+    {
+      id: 'epc-ph-water-testing',
+      name: 'Drinking Water Testing',
+      desc: 'Private-well and drinking-water quality analysis for residents.',
+      subjects: ['water'],
+    },
+  ]),
+
   {
     groupName: 'Permits, Licenses & Records',
     topicId: 'permit-infrastructure',
