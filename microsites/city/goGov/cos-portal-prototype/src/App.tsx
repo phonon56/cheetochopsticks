@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { TopicNav } from './components/TopicNav';
 import { TopicForm, type SubmissionPayload } from './components/TopicForm';
 import { HomeTabs } from './components/HomeTabs';
+import { ModeBar, MODES, type Mode } from './components/ModeBar';
+import { GetInvolved } from './components/GetInvolved';
 import { topicsById } from './data';
 import { ADA_CONTACT } from './data/contacts';
 
@@ -11,29 +13,41 @@ function readIdFromUrl(): string | null {
   return id && topicsById.has(id) ? id : null;
 }
 
+function readModeFromUrl(): Mode {
+  if (typeof window === 'undefined') return 'do';
+  const m = new URLSearchParams(window.location.search).get('mode') as Mode | null;
+  return m && (MODES as readonly string[]).includes(m) ? m : 'do';
+}
+
 export default function App() {
+  const [mode, setMode] = useState<Mode>(() => readModeFromUrl());
   const [selectedId, setSelectedId] = useState<string | null>(() => readIdFromUrl());
   const [submitted, setSubmitted] = useState<SubmissionPayload | null>(null);
   const [sharedDescription, setSharedDescription] = useState('');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-  const topic = selectedId ? topicsById.get(selectedId) : null;
+  const topic = mode === 'do' && selectedId ? topicsById.get(selectedId) : null;
 
-  // Sync URL when topic changes
+  // Sync URL when mode or topic changes
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (selectedId) params.set('classificationId', selectedId);
+    if (mode !== 'do') params.set('mode', mode);
+    else params.delete('mode');
+    if (selectedId && mode === 'do') params.set('classificationId', selectedId);
     else params.delete('classificationId');
     const qs = params.toString();
     const next = `${window.location.pathname}${qs ? '?' + qs : ''}`;
     if (next !== window.location.pathname + window.location.search) {
       window.history.replaceState(null, '', next);
     }
-  }, [selectedId]);
+  }, [mode, selectedId]);
 
   // Respond to back/forward
   useEffect(() => {
-    const handler = () => setSelectedId(readIdFromUrl());
+    const handler = () => {
+      setMode(readModeFromUrl());
+      setSelectedId(readIdFromUrl());
+    };
     window.addEventListener('popstate', handler);
     return () => window.removeEventListener('popstate', handler);
   }, []);
@@ -49,21 +63,25 @@ export default function App() {
         Skip to main content
       </a>
 
-      <header className="md:hidden flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
-        <div>
-          <p className="text-sm font-semibold text-slate-900">City of Colorado Springs</p>
-          <p className="text-xs text-slate-600">Contact the City</p>
+      <header className="border-b border-slate-200 bg-white px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-semibold text-slate-900">City of Colorado Springs</p>
+            <p className="text-xs text-slate-600">Your Colorado Springs</p>
+          </div>
+          <button
+            type="button"
+            aria-expanded={mobileNavOpen}
+            aria-controls="topic-nav"
+            onClick={() => setMobileNavOpen((o) => !o)}
+            className="md:hidden rounded-md border border-slate-300 px-3 py-2 text-sm min-h-11"
+          >
+            {mobileNavOpen ? 'Close' : 'Choose topic'}
+          </button>
         </div>
-        <button
-          type="button"
-          aria-expanded={mobileNavOpen}
-          aria-controls="topic-nav"
-          onClick={() => setMobileNavOpen((o) => !o)}
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm min-h-11"
-        >
-          {mobileNavOpen ? 'Close' : 'Choose topic'}
-        </button>
       </header>
+
+      <ModeBar mode={mode} onChange={setMode} />
 
       <div className="flex-1 md:grid md:grid-cols-[320px_1fr]">
         <aside
@@ -76,6 +94,7 @@ export default function App() {
           <TopicNav
             selectedId={selectedId}
             onSelect={(id) => {
+              setMode('do');
               setSelectedId(id);
               setSubmitted(null);
               setMobileNavOpen(false);
@@ -105,7 +124,7 @@ export default function App() {
               </button>
             </nav>
           )}
-          {submitted ? (
+          {mode === 'do' && submitted ? (
             <Confirmation
               payload={submitted}
               onFileAnother={() => {
@@ -113,7 +132,7 @@ export default function App() {
                 setSelectedId(null);
               }}
             />
-          ) : topic ? (
+          ) : mode === 'do' && topic ? (
             <TopicForm
               key={topic.topicId}
               topic={topic}
@@ -124,7 +143,7 @@ export default function App() {
                 setSharedDescription('');
               }}
             />
-          ) : (
+          ) : mode === 'do' ? (
             <HomeTabs
               onPickTopic={(id) => {
                 setSelectedId(id);
@@ -134,12 +153,80 @@ export default function App() {
                 });
               }}
             />
+          ) : mode === 'involved' ? (
+            <GetInvolved />
+          ) : (
+            <ComingSoon mode={mode} />
           )}
         </main>
       </div>
 
       <AccessibilityFooter />
     </div>
+  );
+}
+
+function ComingSoon({ mode }: { mode: Mode }) {
+  const copy: Record<string, { title: string; body: string; notes?: string[] }> = {
+    now: {
+      title: 'Right now',
+      body: 'Live City status — active snow operations, current road closures, today\'s trash/recycling, active emergency alerts, council meetings tonight.',
+      notes: [
+        'Trash/recycling by address (requires address lookup)',
+        'Active closures from Public Works feed',
+        'CORA response-time median this week',
+        'Emergency alerts (OEM)',
+      ],
+    },
+    built: {
+      title: "What's being built",
+      body: 'Capital improvement projects near you, upcoming land-use hearings, metro-district filings, annexations. Scoped by address.',
+      notes: [
+        'CIP project list with status',
+        'Land-use hearings upcoming',
+        'Metro-district formation filings',
+      ],
+    },
+    performance: {
+      title: "How we're doing",
+      body: "Public receipts — the City's accountability surface. Audits, response times, ADA compliance scores, CORA fulfillment rates, service-request SLAs.",
+      notes: [
+        'goGov ADA audit (already published)',
+        'CORA response-time median',
+        '% of service requests closed within SLA',
+        'ADA compliance score per department',
+      ],
+    },
+    about: {
+      title: 'About',
+      body: 'Mayor, City Council, organization chart, official publications, annual reports.',
+    },
+  };
+  const c = copy[mode];
+  if (!c) return null;
+  return (
+    <section className="max-w-2xl space-y-4">
+      <div>
+        <p className="text-xs uppercase tracking-wide text-slate-600">
+          Coming next
+        </p>
+        <h1 className="text-3xl font-semibold text-slate-900">{c.title}</h1>
+      </div>
+      <p className="text-slate-700">{c.body}</p>
+      {c.notes && (
+        <div className="rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-800">
+          <p className="font-medium text-slate-900 mb-1">Planned surfaces</p>
+          <ul className="list-disc pl-5 space-y-1">
+            {c.notes.map((n) => (
+              <li key={n}>{n}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <p className="text-xs text-slate-600">
+        Not built yet. The mode bar exists so this lands in its right home when it ships.
+      </p>
+    </section>
   );
 }
 

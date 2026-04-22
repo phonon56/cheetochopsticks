@@ -104,6 +104,85 @@ export interface Topic {
   facets?: TopicFacets;
 }
 
+// ── Get Involved ──────────────────────────────────────────────────────
+export type Commitment =
+  | 'one-time'
+  | 'recurring-monthly'
+  | 'recurring-quarterly'
+  | 'annual-event'
+  | 'term-based'
+  | 'flexible';
+
+export type Skill =
+  | 'outdoors'
+  | 'construction'
+  | 'budget-finance'
+  | 'writing'
+  | 'teaching'
+  | 'public-speaking'
+  | 'data-tech'
+  | 'event-planning'
+  | 'hospitality'
+  | 'legal'
+  | 'planning-design'
+  | 'emergency-response'
+  | 'medical'
+  | 'language'
+  | 'arts'
+  | 'no-experience-needed';
+
+export type Interest =
+  | 'environment'
+  | 'arts-culture'
+  | 'youth'
+  | 'seniors'
+  | 'animals'
+  | 'housing-homelessness'
+  | 'public-safety'
+  | 'transportation'
+  | 'parks-recreation'
+  | 'history'
+  | 'disability-access'
+  | 'immigrants-language-access'
+  | 'government-policy'
+  | 'neighborhood';
+
+export type Compensation =
+  | 'unpaid'
+  | 'stipend'
+  | 'hourly-paid'
+  | 'salaried'
+  | 'expenses-reimbursed'
+  | 'benefits-provided'; // e.g. free training, certification, meals
+
+export type Audience =
+  | 'new-to-civics'
+  | 'veteran-transition'
+  | 'military-family'
+  | 'new-resident'
+  | 'senior'
+  | 'student'
+  | 'family-friendly'
+  | 'retiree'
+  | 'professional-development'
+  | 'mobility-accessible';
+
+export interface Opportunity {
+  id: string;
+  name: string;
+  sponsor: string;
+  description: string;
+  skills: Skill[];
+  interests: Interest[];
+  audiences: Audience[];
+  hoursPerYear: { min: number; max: number };
+  commitment: Commitment;
+  compensation: Compensation;
+  jurisdiction: Jurisdiction;
+  url: string;
+  applyWindow?: string; // e.g. "Apply by May 15" or "Rolling"
+}
+
 export interface Group {
   groupName: string;
   items: Topic[];

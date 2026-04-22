@@ -11,6 +11,9 @@ const pages = [
   { name: 'accessibility-ada', url: BASE + '/?classificationId=61723' },
   { name: 'permit-pprbd (external)', url: BASE + '/?classificationId=permit-pprbd' },
   { name: 'cora-police-records (email)', url: BASE + '/?classificationId=cora-police-records' },
+  { name: 'mode: get-involved', url: BASE + '/?mode=involved' },
+  { name: 'mode: right-now placeholder', url: BASE + '/?mode=now' },
+  { name: 'mode: performance placeholder', url: BASE + '/?mode=performance' },
 ];
 
 const browser = await chromium.launch();
