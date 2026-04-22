@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.vite
 *.local
 # build/ is committed — it is the deployed artifact for cheetochopsticks.com
 

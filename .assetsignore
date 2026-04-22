@@ -1,13 +1,13 @@
 # Keep source + tooling out of the Cloudflare Workers static bundle.
 # Only the built `build/` artifact is served for the portal prototype.
 **/node_modules/**
-microsites/city/cos-portal-prototype/src/**
-microsites/city/cos-portal-prototype/scripts/**
-microsites/city/cos-portal-prototype/public/**
-microsites/city/cos-portal-prototype/*.json
-microsites/city/cos-portal-prototype/*.ts
-microsites/city/cos-portal-prototype/*.js
-microsites/city/cos-portal-prototype/*.md
-microsites/city/cos-portal-prototype/.gitignore
-microsites/city/cos-portal-prototype/index.html
-microsites/city/cos-portal-prototype/eslint.config.*
+microsites/city/goGov/cos-portal-prototype/src/**
+microsites/city/goGov/cos-portal-prototype/scripts/**
+microsites/city/goGov/cos-portal-prototype/public/**
+microsites/city/goGov/cos-portal-prototype/*.json
+microsites/city/goGov/cos-portal-prototype/*.ts
+microsites/city/goGov/cos-portal-prototype/*.js
+microsites/city/goGov/cos-portal-prototype/*.md
+microsites/city/goGov/cos-portal-prototype/.gitignore
+microsites/city/goGov/cos-portal-prototype/index.html
+microsites/city/goGov/cos-portal-prototype/eslint.config.*
