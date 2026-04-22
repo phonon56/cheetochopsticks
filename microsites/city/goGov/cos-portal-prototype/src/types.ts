@@ -28,6 +28,22 @@ export interface TopicContact {
   notes?: string;
 }
 
+export type Destination =
+  | { kind: 'form' }
+  | {
+      kind: 'external';
+      url: string;
+      agency: string;
+      warning?: string;
+      ctaLabel?: string;
+    }
+  | {
+      kind: 'email';
+      address: string;
+      ctaLabel?: string;
+      subjectTemplate?: string;
+    };
+
 export interface Topic {
   topicId: string;
   name: string;
@@ -35,6 +51,7 @@ export interface Topic {
   visibleFields: VisibleField[];
   rawFields?: RawField[];
   contact?: TopicContact;
+  destination?: Destination; // defaults to { kind: 'form' }
 }
 
 export interface Group {
