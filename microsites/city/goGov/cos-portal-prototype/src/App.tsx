@@ -6,6 +6,9 @@ import { ModeBar, MODES, type Mode } from './components/ModeBar';
 import { GetInvolved } from './components/GetInvolved';
 import { Performance } from './components/Performance';
 import { RightNow } from './components/RightNow';
+import { WhatsBeingBuilt } from './components/WhatsBeingBuilt';
+import { About } from './components/About';
+import { NotificationCenter } from './components/NotificationCenter';
 import { topicsById } from './data';
 import { ADA_CONTACT } from './data/contacts';
 
@@ -161,6 +164,12 @@ export default function App() {
             <Performance />
           ) : mode === 'now' ? (
             <RightNow />
+          ) : mode === 'built' ? (
+            <WhatsBeingBuilt />
+          ) : mode === 'about' ? (
+            <About />
+          ) : mode === 'notifications' ? (
+            <NotificationCenter />
           ) : (
             <ComingSoon mode={mode} />
           )}
