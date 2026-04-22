@@ -1,7 +1,14 @@
 import type { KeyboardEvent } from 'react';
 import { useRef } from 'react';
 
-export type Mode = 'do' | 'involved' | 'now' | 'built' | 'performance' | 'about';
+export type Mode =
+  | 'do'
+  | 'involved'
+  | 'now'
+  | 'built'
+  | 'performance'
+  | 'notifications'
+  | 'about';
 
 export const MODE_LABELS: Record<Mode, { label: string; hint: string }> = {
   do: { label: 'Do something', hint: 'File, request, contact' },
@@ -9,10 +16,19 @@ export const MODE_LABELS: Record<Mode, { label: string; hint: string }> = {
   now: { label: 'Right now', hint: 'Live alerts & status' },
   built: { label: "What's being built", hint: 'Projects & hearings' },
   performance: { label: "How we're doing", hint: 'Receipts & response times' },
+  notifications: { label: 'Notifications', hint: 'Manage your subscriptions' },
   about: { label: 'About', hint: 'City, Council, Mayor' },
 };
 
-export const MODES: Mode[] = ['do', 'involved', 'now', 'built', 'performance', 'about'];
+export const MODES: Mode[] = [
+  'do',
+  'involved',
+  'now',
+  'built',
+  'performance',
+  'notifications',
+  'about',
+];
 
 interface Props {
   mode: Mode;
@@ -26,6 +42,7 @@ export function ModeBar({ mode, onChange }: Props) {
     now: null,
     built: null,
     performance: null,
+    notifications: null,
     about: null,
   });
 

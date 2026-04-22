@@ -12,8 +12,11 @@ const pages = [
   { name: 'permit-pprbd (external)', url: BASE + '/?classificationId=permit-pprbd' },
   { name: 'cora-police-records (email)', url: BASE + '/?classificationId=cora-police-records' },
   { name: 'mode: get-involved', url: BASE + '/?mode=involved' },
-  { name: 'mode: right-now placeholder', url: BASE + '/?mode=now' },
-  { name: 'mode: performance placeholder', url: BASE + '/?mode=performance' },
+  { name: 'mode: right-now', url: BASE + '/?mode=now' },
+  { name: 'mode: performance', url: BASE + '/?mode=performance' },
+  { name: 'mode: whats-being-built', url: BASE + '/?mode=built' },
+  { name: 'mode: about', url: BASE + '/?mode=about' },
+  { name: 'mode: notifications', url: BASE + '/?mode=notifications' },
 ];
 
 const browser = await chromium.launch();
