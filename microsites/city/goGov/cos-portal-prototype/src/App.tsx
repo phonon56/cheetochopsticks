@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TopicNav } from './components/TopicNav';
 import { TopicForm, type SubmissionPayload } from './components/TopicForm';
-import { PlainLanguageSearch } from './components/PlainLanguageSearch';
+import { HomeTabs } from './components/HomeTabs';
 import { topicsById } from './data';
 import { ADA_CONTACT } from './data/contacts';
 
@@ -125,7 +125,7 @@ export default function App() {
               }}
             />
           ) : (
-            <PlainLanguageSearch
+            <HomeTabs
               onPickTopic={(id) => {
                 setSelectedId(id);
                 setSubmitted(null);
