@@ -79,8 +79,9 @@ export const KEYWORD_INDEX: KeywordEntry[] = [
       'tall grass', 'weeds', 'overgrown', 'mow', 'lawn', 'nuisance',
       'short-term rental', 'str', 'airbnb', 'vrbo', 'blight', 'eyesore',
       'condemned', 'boarded', 'code enforcement', 'zoning violation',
-      // neighbor-driven complaints
-      'neighbor', 'neighbors', 'my neighbor', 'next door',
+      // neighbor-driven complaints (specific phrases only — plain "neighbor"
+      // collides too often with "neighborhood" in unrelated queries)
+      'my neighbor', 'next door', 'the neighbor is', 'neighbor is',
       // too-many-vehicles-on-property (COS caps residential parking)
       'cars in driveway', 'cars in the driveway', 'cars in their driveway',
       'cars on lawn', 'cars on the lawn', 'cars on grass',
@@ -181,23 +182,50 @@ export const KEYWORD_INDEX: KeywordEntry[] = [
   // ── CORA channels ──
   {
     topicId: 'cora-police-records',
-    keywords: ['cora police', 'police cora', 'crash report cora', 'incident report cora', 'body camera cora'],
-    reason: 'Police CORA requests go directly to CSPD Records by email.',
+    keywords: [
+      'cora police', 'police cora',
+      'crash report cora', 'incident report cora', 'body camera cora',
+      // aggregation / data-request language applied to police
+      'police data', 'crime data', 'crime stats', 'crime statistics',
+      'police statistics', 'police numbers', 'aggregate police',
+      'crime report', 'crime reports', 'police report data',
+      'cspd data', 'cspd records', 'cspd statistics', 'cspd',
+      'crime', 'crimes', 'crime rate',
+      'data from police', 'data from the police', 'data from cspd',
+      'how many crimes', 'how many arrests',
+    ],
+    reason:
+      'That sounds like a request for police records or data — CSPD Records fulfills these directly by email.',
   },
   {
     topicId: 'cora-municipal-court',
-    keywords: ['municipal court cora', 'court records', 'citation records', 'violation history'],
+    keywords: [
+      'municipal court cora',
+      'court records', 'citation records', 'violation history',
+      'municipal court data', 'court statistics',
+    ],
     reason: 'Municipal Court records go directly to the court email.',
   },
   {
     topicId: 'cora-utilities',
-    keywords: ['utilities cora', 'csu cora', 'electric records', 'water records', 'gas records'],
+    keywords: [
+      'utilities cora', 'csu cora',
+      'electric records', 'water records', 'gas records',
+      'utility data', 'csu data',
+    ],
     reason: 'Utility records are held by Colorado Springs Utilities (separate enterprise).',
   },
   {
     topicId: '61726',
-    keywords: ['cora', 'open records', 'records request', 'public records'],
-    reason: 'General CORA request — submit through the City form.',
+    keywords: [
+      'cora', 'open records', 'records request', 'public records',
+      // generic aggregation / data language — routes to general CORA when
+      // no specific department is named
+      'aggregate data', 'dataset', 'data request', 'open data',
+      'statistics', 'how many', 'year over year', 'public data',
+    ],
+    reason:
+      'General records or data request — submit through the City CORA form or start with City Communications.',
   },
 
   // ── Accessibility ──
@@ -241,11 +269,37 @@ export interface RouteMatch {
 export interface RouteResult {
   primary: RouteMatch | null;
   alternates: RouteMatch[];
+  /** Five-digit zip extracted from the user's sentence, if present. */
+  extractedZip?: string;
 }
+
+/**
+ * Extracts the first 5-digit zip code from user text. Returns undefined if none.
+ * Avoids matching 5-digit sequences that are obviously not zips (e.g. inside
+ * a longer 6+ digit number).
+ */
+export function extractZip(text: string): string | undefined {
+  const m = text.match(/(?<!\d)(\d{5})(?!\d)/);
+  return m ? m[1] : undefined;
+}
+
+/**
+ * Aggregation / dataset-request vocabulary. When this is present in the
+ * user's question, treat the query as a records-request even if no
+ * agency is named — we'd rather surface a CORA path than miss entirely.
+ */
+const AGGREGATION_SIGNALS = /\b(aggregate|dataset|data request|open data|statistics|how many|year over year|year-over-year|public data|open records|numbers for|crime stats|crime data|police data)\b/i;
+
+/**
+ * Residential signals that force PPRBD when the user mentions their own home.
+ */
 
 export function routeRequest(userText: string): RouteResult {
   const input = userText.toLowerCase();
   if (!input.trim()) return { primary: null, alternates: [] };
+
+  const extractedZip = extractZip(userText);
+  const isAggregationQuery = AGGREGATION_SIGNALS.test(userText);
 
   const scored: Array<{ entry: KeywordEntry; score: number }> = [];
   for (const entry of KEYWORD_INDEX) {
@@ -255,10 +309,21 @@ export function routeRequest(userText: string): RouteResult {
         score += kw.includes(' ') ? 3 : 1;
       }
     }
+    // Aggregation boost: if this is clearly a data/records request, elevate
+    // the CORA channels so a police-data question doesn't lose to a
+    // police-non-emergency generic match.
+    if (isAggregationQuery && entry.topicId.startsWith('cora-')) {
+      score += 2;
+    }
+    if (isAggregationQuery && entry.topicId === '61726') {
+      score += 1;
+    }
     if (score > 0) scored.push({ entry, score });
   }
 
-  if (!scored.length) return { primary: null, alternates: [] };
+  if (!scored.length) {
+    return extractedZip ? { primary: null, alternates: [], extractedZip } : { primary: null, alternates: [] };
+  }
 
   scored.sort((a, b) => b.score - a.score);
 
@@ -285,5 +350,6 @@ export function routeRequest(userText: string): RouteResult {
   return {
     primary: toMatch(scored[0]),
     alternates: scored.slice(1, 3).map(toMatch),
+    extractedZip,
   };
 }
