@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { routeRequest, type RouteMatch } from '../data/keywords';
 import { topicsById } from '../data';
+import { resolveJurisdictionsForZip } from '../data/notifications';
+import { JURISDICTION_LABELS } from '../data/facets';
 import type { Destination, Topic } from '../types';
 
 interface Props {
@@ -12,7 +14,7 @@ const EXAMPLES = [
   'I want to add a deck to the back of my house.',
   'I want to run a 5K through Old Colorado City on a Saturday morning.',
   "I'm opening a small coffee shop and need to know what licenses I need.",
-  'I need a copy of the police report from a car accident last Tuesday.',
+  'I need aggregate crime data from the police who cover 80915.',
   "There's a pothole on my street that hasn't been fixed in two weeks.",
 ];
 
@@ -76,6 +78,10 @@ export function PlainLanguageSearch({ onPickTopic }: Props) {
         </ul>
       </div>
 
+      {result.extractedZip && (
+        <ZipContext zip={result.extractedZip} />
+      )}
+
       {result.primary && (
         <RouteResultCard
           primary={result.primary}
@@ -97,6 +103,32 @@ export function PlainLanguageSearch({ onPickTopic }: Props) {
         </div>
       )}
     </section>
+  );
+}
+
+function ZipContext({ zip }: { zip: string }) {
+  const jurisdictions = resolveJurisdictionsForZip(zip);
+  if (jurisdictions.length === 0) return null;
+  const hasCity = jurisdictions.includes('city');
+  const hasCounty = jurisdictions.includes('county');
+  return (
+    <div
+      role="note"
+      aria-live="polite"
+      className="rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-800"
+    >
+      <p>
+        <span className="font-medium">We saw {zip} in your question.</span>{' '}
+        That zip is in: {jurisdictions.map((j) => JURISDICTION_LABELS[j]).join(' · ')}.
+      </p>
+      {hasCity && hasCounty && (
+        <p className="mt-1 text-xs text-slate-700">
+          Most of this zip is handled by City of Colorado Springs agencies. Small unincorporated
+          slivers fall under El Paso County — if you need the unincorporated side, add a street
+          address and we'll narrow further.
+        </p>
+      )}
+    </div>
   );
 }
 
