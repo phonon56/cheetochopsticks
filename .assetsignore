@@ -11,3 +11,9 @@ microsites/city/goGov/cos-portal-prototype/*.md
 microsites/city/goGov/cos-portal-prototype/.gitignore
 microsites/city/goGov/cos-portal-prototype/index.html
 microsites/city/goGov/cos-portal-prototype/eslint.config.*
+# Worker source — bundled separately by wrangler, never served as asset.
+worker/**
+wrangler.jsonc
+package.json
+package-lock.json
+tsconfig.json

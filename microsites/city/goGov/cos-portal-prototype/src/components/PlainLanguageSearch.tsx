@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { routeRequest, type RouteMatch } from '../data/keywords';
+import { useEffect, useRef, useState } from 'react';
+import { routeWithFallback, type RouterMatch, type RouterResult } from '../data/router-client';
 import { topicsById } from '../data';
 import { resolveJurisdictionsForZip } from '../data/notifications';
 import { JURISDICTION_LABELS } from '../data/facets';
@@ -20,9 +20,47 @@ const EXAMPLES = [
 
 const MAX = 500;
 
+const DEBOUNCE_MS = 450;
+
 export function PlainLanguageSearch({ onPickTopic }: Props) {
   const [text, setText] = useState('');
-  const result = useMemo(() => routeRequest(text), [text]);
+  const [result, setResult] = useState<RouterResult>({
+    primary: null,
+    alternates: [],
+    engine: 'keyword-only',
+  });
+  const [loading, setLoading] = useState(false);
+  const requestIdRef = useRef(0);
+
+  useEffect(() => {
+    const trimmed = text.trim();
+    if (trimmed.length === 0) {
+      setResult({ primary: null, alternates: [], engine: 'keyword-only' });
+      setLoading(false);
+      return;
+    }
+
+    const id = ++requestIdRef.current;
+    const controller = new AbortController();
+    setLoading(true);
+    const handle = setTimeout(() => {
+      routeWithFallback(trimmed, { signal: controller.signal })
+        .then((r) => {
+          if (requestIdRef.current !== id) return; // stale
+          setResult(r);
+          setLoading(false);
+        })
+        .catch(() => {
+          if (requestIdRef.current !== id) return;
+          setLoading(false);
+        });
+    }, DEBOUNCE_MS);
+
+    return () => {
+      clearTimeout(handle);
+      controller.abort();
+    };
+  }, [text]);
 
   return (
     <section aria-labelledby="plain-language-heading" className="max-w-2xl space-y-4">
@@ -78,9 +116,9 @@ export function PlainLanguageSearch({ onPickTopic }: Props) {
         </ul>
       </div>
 
-      {result.extractedZip && (
-        <ZipContext zip={result.extractedZip} />
-      )}
+      <EngineStatus engine={result.engine} loading={loading} />
+
+      {result.extractedZip && <ZipContext zip={result.extractedZip} />}
 
       {result.primary && (
         <RouteResultCard
@@ -90,7 +128,7 @@ export function PlainLanguageSearch({ onPickTopic }: Props) {
         />
       )}
 
-      {text.trim().length > 4 && !result.primary && (
+      {!loading && text.trim().length > 4 && !result.primary && (
         <div className="rounded-md border border-amber-400 bg-amber-50 p-4 text-sm text-amber-900">
           <p className="font-medium">We couldn't confidently match that.</p>
           <p className="mt-1">
@@ -103,6 +141,44 @@ export function PlainLanguageSearch({ onPickTopic }: Props) {
         </div>
       )}
     </section>
+  );
+}
+
+function EngineStatus({
+  engine,
+  loading,
+}: {
+  engine: RouterResult['engine'];
+  loading: boolean;
+}) {
+  if (loading) {
+    return (
+      <p role="status" aria-live="polite" className="text-xs text-slate-700">
+        Thinking…
+      </p>
+    );
+  }
+  if (engine === 'keyword-only') return null;
+  const label =
+    engine === 'claude'
+      ? 'Powered by Claude'
+      : engine === 'keyword-fallback'
+        ? 'Fallback: local keyword match (Claude unavailable)'
+        : '';
+  if (!label) return null;
+  return (
+    <p aria-live="polite" className="text-xs text-slate-600">
+      <span
+        className={[
+          'inline-block rounded-full px-2 py-0.5 border',
+          engine === 'claude'
+            ? 'border-blue-300 bg-blue-50 text-blue-900'
+            : 'border-amber-300 bg-amber-50 text-amber-900',
+        ].join(' ')}
+      >
+        {label}
+      </span>
+    </p>
   );
 }
 
@@ -137,8 +213,8 @@ function RouteResultCard({
   alternates,
   onPickTopic,
 }: {
-  primary: RouteMatch;
-  alternates: RouteMatch[];
+  primary: RouterMatch;
+  alternates: RouterMatch[];
   onPickTopic: (id: string) => void;
 }) {
   const topic = topicsById.get(primary.topicId);
@@ -235,7 +311,7 @@ function DestinationCta({
   );
 }
 
-function confidenceLabel(c: RouteMatch['confidence']) {
+function confidenceLabel(c: RouterMatch['confidence']) {
   if (c === 'high') return 'strong match';
   if (c === 'medium') return 'likely match';
   return 'possible match';
