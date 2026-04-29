@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Unsung Heroes — A CORA Project Anyone Can Do — The Dais</title>
+<meta name="description" content="A starter guide for students, teachers, and curious residents who want to investigate how well El Paso County supports its 911 dispatchers. Real public records project, real findings.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper:        #f8f5ef;
+  --white:        #ffffff;
+  --ink:          #18150f;
+  --mid:          #4a4540;
+  --faint:        #9a948c;
+  --rule:         rgba(0,0,0,0.09);
+  --brass:        #b8872e;
+  --brass-bg:     rgba(184,135,46,0.08);
+  --night:        #16130e;
+  --action:       #1a3a2a;
+  --action-light: rgba(26,58,42,0.07);
+  --warn:         #8a3a10;
+  --warn-bg:      rgba(180,80,30,0.06);
+  --care:         #4a3a6a;
+  --care-bg:      rgba(74,58,106,0.07);
+  --ff-head: 'Playfair Display', Georgia, serif;
+  --ff-body: 'Libre Franklin', system-ui, sans-serif;
+  --ff-mono: 'DM Mono', monospace;
+  --max: 780px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--ff-body);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 0 80px; }
+
+/* TOP BAR */
+.topbar {
+  height: 44px;
+  background: var(--night);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.topbar-logo {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: var(--brass);
+  text-transform: uppercase;
+}
+.topbar-meta {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  color: var(--faint);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* MASTHEAD */
+.masthead { padding: 56px 24px 32px; border-bottom: 1px solid var(--rule); }
+.kicker {
+  font-family: var(--ff-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 16px;
+}
+h1.title {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 2.6rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.subtitle {
+  font-family: var(--ff-head);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: var(--mid);
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+.lede {
+  font-size: 1.05rem;
+  color: var(--mid);
+  line-height: 1.7;
+  max-width: 640px;
+}
+
+/* SECTION LABELS */
+.section-label {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  padding: 48px 24px 0;
+  border-top: 1px solid var(--rule);
+  margin-top: 8px;
+}
+.section-label strong {
+  display: block;
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--ink);
+  margin-top: 4px;
+  line-height: 1.2;
+}
+.first-section { border-top: none; padding-top: 32px; }
+
+/* PROSE */
+.prose {
+  padding: 24px 24px 0;
+  max-width: 720px;
+}
+.prose p {
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+.prose p.callout {
+  font-family: var(--ff-head);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--mid);
+  border-left: 3px solid var(--brass);
+  padding-left: 18px;
+  margin: 24px 0;
+}
+
+/* QUESTION CARD */
+.question-card {
+  margin: 24px 24px 0;
+  padding: 28px;
+  background: var(--brass-bg);
+  border-left: 4px solid var(--brass);
+}
+.question-card .q-label {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 10px;
+}
+.question-card .q-text {
+  font-family: var(--ff-head);
+  font-weight: 400;
+  font-size: 1.35rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+/* THREE DOORS */
+.doors {
+  margin: 24px 24px 0;
+  display: grid;
+  gap: 16px;
+}
+.door {
+  padding: 20px 22px;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--action);
+}
+.door-num {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--action);
+  margin-bottom: 6px;
+}
+.door-name {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.door-role {
+  font-size: 0.95rem;
+  color: var(--mid);
+  font-style: italic;
+}
+
+/* CORA REQUEST BLOCKS */
+.cora-block {
+  margin: 24px 24px 0;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+.cora-header {
+  padding: 18px 22px;
+  background: var(--night);
+  color: var(--paper);
+}
+.cora-to {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 4px;
+}
+.cora-title {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--paper);
+}
+.cora-body {
+  padding: 22px;
+  font-family: var(--ff-mono);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--ink);
+  white-space: pre-wrap;
+}
+.cora-meta {
+  padding: 14px 22px;
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+  color: var(--mid);
+}
+.cora-meta strong { color: var(--ink); font-weight: 600; }
+
+/* ACTION CALLOUT */
+.action-callout {
+  margin: 24px 24px 0;
+  padding: 24px 26px;
+  background: var(--action-light);
+  border-left: 4px solid var(--action);
+}
+.action-callout .a-label {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--action);
+  margin-bottom: 8px;
+}
+.action-callout .a-title {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+.action-callout p { font-size: 0.98rem; margin-bottom: 12px; }
+.action-callout p:last-child { margin-bottom: 0; }
+
+/* WARN CALLOUT */
+.warn-callout {
+  margin: 24px 24px 0;
+  padding: 22px 26px;
+  background: var(--warn-bg);
+  border-left: 4px solid var(--warn);
+}
+.warn-callout .w-label {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--warn);
+  margin-bottom: 8px;
+}
+.warn-callout .w-title {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+.warn-callout p { font-size: 0.95rem; margin-bottom: 10px; }
+.warn-callout p:last-child { margin-bottom: 0; }
+
+/* CARE CALLOUT */
+.care-callout {
+  margin: 24px 24px 0;
+  padding: 22px 26px;
+  background: var(--care-bg);
+  border-left: 4px solid var(--care);
+}
+.care-callout .c-label {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--care);
+  margin-bottom: 8px;
+}
+.care-callout .c-title {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+.care-callout p { font-size: 0.97rem; margin-bottom: 10px; }
+.care-callout p:last-child { margin-bottom: 0; }
+
+/* TIMELINE */
+.timeline {
+  margin: 24px 24px 0;
+  padding: 0;
+  list-style: none;
+}
+.timeline li {
+  padding: 16px 0 16px 60px;
+  position: relative;
+  border-top: 1px solid var(--rule);
+}
+.timeline li:first-child { border-top: none; }
+.timeline .week {
+  position: absolute;
+  left: 0;
+  top: 16px;
+  font-family: var(--ff-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass);
+  font-weight: 500;
+}
+.timeline .what {
+  font-size: 0.98rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+/* DELIVERABLES LIST */
+.deliverables {
+  margin: 24px 24px 0;
+  padding: 0;
+  list-style: none;
+}
+.deliverables li {
+  padding: 14px 0 14px 32px;
+  position: relative;
+  font-size: 0.98rem;
+  border-bottom: 1px solid var(--rule);
+}
+.deliverables li:last-child { border-bottom: none; }
+.deliverables li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  color: var(--brass);
+  font-weight: 700;
+}
+
+/* INLINE LINKS */
+a { color: var(--action); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--brass); }
+
+/* FOOTER */
+.footer {
+  margin-top: 56px;
+  padding: 32px 24px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+  color: var(--mid);
+  line-height: 1.7;
+}
+.footer strong { color: var(--ink); }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  h1.title { font-size: 2rem; }
+  .subtitle { font-size: 1.05rem; }
+  .question-card .q-text { font-size: 1.15rem; }
+  .cora-body { font-size: 0.82rem; }
+}
+
+/* PRINT */
+@media print {
+  body { background: white; }
+  .topbar { display: none; }
+  .wrap { max-width: 100%; }
+  .cora-block, .door, .question-card, .action-callout, .warn-callout, .care-callout {
+    break-inside: avoid;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">The Dais</span>
+  <span class="topbar-meta">StorySeed Studios · Resource Guide</span>
+</div>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="kicker">A Starter CORA Project · For Students, Teachers, and Curious Residents</div>
+    <h1 class="title">The Unsung Heroes</h1>
+    <p class="subtitle">How well are we supporting the people who answer 911?</p>
+    <p class="lede">A semester-length public records project that produces real findings about how El Paso County supports its 911 dispatchers. Three records requests. Three agencies. One ratio that tells you whether the support matches the load. Whatever the answer, it belongs in the public record.</p>
+  </header>
+
+  <div class="section-label first-section">The Question <strong>What we are actually trying to answer</strong></div>
+
+  <div class="question-card">
+    <div class="q-label">The Research Question</div>
+    <div class="q-text">What does El Paso County actually invest in supporting the mental health and retention of its 911 dispatchers, and is it matched to the volume and severity of calls they handle?</div>
+  </div>
+
+  <div class="prose">
+    <p>That single question, broken down into the data points needed to answer it, becomes a public records project a student can complete in one semester. The skills are transferable to any future research, journalism, or civic work. The output is real. And the public record gets stronger because somebody asked.</p>
+    <p>The unsung heroes are the dispatchers who absorb the worst moments of other people&rsquo;s lives so the rest of us don&rsquo;t have to. Studies put PTSD rates among 911 dispatchers somewhere between 18 and 29 percent. That is a clinical diagnosis range, not burnout. The brain processes a screaming caller through the same fight-or-flight response a person on scene would have, except the dispatcher cannot move. They have to stay still at the console with a calm voice while their heart rate spikes. Researchers call this <em>static stress</em>.</p>
+    <p>The county provides a comfort room at the dispatch center. Beyond that, public information on dispatcher mental health support is thin. <strong>That thinness is itself a finding worth investigating.</strong></p>
+  </div>
+
+  <div class="section-label">What You'll Learn <strong>Skills this project teaches</strong></div>
+
+  <ul class="deliverables">
+    <li>How to read a county budget and identify line items by program</li>
+    <li>How to write and file a Colorado Open Records Act request</li>
+    <li>How to triangulate data from three different agencies</li>
+    <li>How to put findings into the public record so they cannot be ignored</li>
+    <li>How to recognize the difference between a transparency problem and a policy problem</li>
+  </ul>
+
+  <div class="section-label">Three Doors <strong>Know who owns what before you file</strong></div>
+
+  <div class="prose">
+    <p>The most common reason a CORA request gets rejected or rerouted is that the student sent it to the wrong agency. Sorting the data by which body actually holds it is the first lesson of the project.</p>
+  </div>
+
+  <div class="doors">
+    <div class="door">
+      <div class="door-num">Door One</div>
+      <div class="door-name">El Paso County Sheriff&rsquo;s Office</div>
+      <div class="door-role">Direct employer of most dispatchers. Holds budget line items for mental health programs, contracts with clinicians, internal post-incident protocols, and turnover data.</div>
+    </div>
+    <div class="door">
+      <div class="door-num">Door Two</div>
+      <div class="door-name">El Paso&ndash;Teller County 9-1-1 Authority</div>
+      <div class="door-role">Coordinates the broader 911 system across two counties. Holds aggregate call volume data, call type distribution, and any system-level wellness discussions reflected in board meetings.</div>
+    </div>
+    <div class="door">
+      <div class="door-num">Door Three</div>
+      <div class="door-name">Board of County Commissioners</div>
+      <div class="door-role">Approves the Sheriff&rsquo;s annual budget. Holds budget submissions and any discussion of dispatch wellness reflected in budget work sessions or hearings.</div>
+    </div>
+  </div>
+
+  <div class="section-label">The Four Requests <strong>Drop-in templates</strong></div>
+
+  <div class="prose">
+    <p>CORA requests do not need legal language. They need clarity. State exactly what records you want and what date range. The templates below can be sent as written, with the student&rsquo;s name and contact information added at the bottom. Three of the four requests target current operations and budget data. The fourth requests historical meeting records, which provide the longer arc of how — or whether — dispatcher wellness has been discussed at the Authority over time.</p>
+  </div>
+
+  <div class="cora-block">
+    <div class="cora-header">
+      <div class="cora-to">Request One · To</div>
+      <div class="cora-title">El Paso County Sheriff&rsquo;s Office</div>
+    </div>
+    <div class="cora-body">Under the Colorado Open Records Act, I am requesting the following records for fiscal years 2022 through 2025:
+
+1. Annual budget line items for any program providing mental health support, peer support, employee assistance, or wellness services to El Paso County Sheriff&rsquo;s Office dispatch personnel.
+
+2. Contracts or agreements with any clinical mental health providers who serve dispatch personnel, including the credentials and trauma specialization of those providers if reflected in the contract.
+
+3. Any internal policy documents describing post-critical-incident protocols for dispatchers, peer support team structure, or use of wellness or comfort rooms.
+
+4. Aggregate annual turnover and retention data for dispatch positions, including average length of service and number of departures per year.
+
+If any portion of this request is denied, please cite the specific statutory exemption.
+
+[Your name]
+[Your contact information]
+[Date]</div>
+    <div class="cora-meta">
+      <strong>How to file.</strong> Through the records request portal at epcsheriffsoffice.com, or by mailing the request to the Records Division. The Sheriff&rsquo;s Office must respond within three business days under CORA, with possible extensions if the records require gathering.
+    </div>
+  </div>
+
+  <div class="cora-block">
+    <div class="cora-header">
+      <div class="cora-to">Request Two · To</div>
+      <div class="cora-title">El Paso&ndash;Teller County 9-1-1 Authority</div>
+    </div>
+    <div class="cora-body">Under the Colorado Open Records Act, I am requesting the following records for calendar years 2022 through 2025:
+
+1. Aggregate annual call volume data, including total calls received, average daily call volume, and peak hourly volumes.
+
+2. Aggregate call type data showing the distribution of call categories (medical emergency, suicide and mental health crisis, violent crime in progress, traffic accident, etc.) without any personally identifying information.
+
+3. Any internal reports, studies, or quality assurance reviews discussing dispatcher workload, stress exposure, or mental health.
+
+4. The Authority&rsquo;s adopted budget documents and any board discussion of dispatcher wellness programs reflected in agendas or minutes.
+
+If any portion of this request is denied, please cite the specific statutory exemption.
+
+[Your name]
+[Your contact information]
+[Date]</div>
+    <div class="cora-meta">
+      <strong>How to file.</strong> Email <a href="mailto:info@elpasoteller911.org">info@elpasoteller911.org</a> or use the contact form at elpasoteller911.org. Same three-business-day response window applies.
+    </div>
+  </div>
+
+  <div class="cora-block">
+    <div class="cora-header">
+      <div class="cora-to">Request Three · To</div>
+      <div class="cora-title">Board of County Commissioners (via Clerk)</div>
+    </div>
+    <div class="cora-body">Under the Colorado Open Records Act, I am requesting the following:
+
+1. The Sheriff&rsquo;s Office annual budget submissions for fiscal years 2022 through 2025, with particular attention to any line items related to dispatch personnel support, employee assistance, mental health, or wellness programming.
+
+2. Minutes or transcripts of any BoCC budget work sessions or hearings where dispatch wellness or mental health was discussed.
+
+If any portion of this request is denied, please cite the specific statutory exemption.
+
+[Your name]
+[Your contact information]
+[Date]</div>
+    <div class="cora-meta">
+      <strong>How to file.</strong> Through the El Paso County Clerk&rsquo;s office records portal at clerkandrecorder.elpasoco.com, or by mail. Budget documents are sometimes already public on the county finance pages — check before filing.
+    </div>
+  </div>
+
+  <div class="cora-block">
+    <div class="cora-header">
+      <div class="cora-to">Request Four · To</div>
+      <div class="cora-title">El Paso&ndash;Teller County 9-1-1 Authority (Historical Archive)</div>
+    </div>
+    <div class="cora-body">Under the Colorado Open Records Act, I am requesting the following records for calendar years 2020 through 2025:
+
+1. Minutes of all regular and special meetings of the El Paso&ndash;Teller County 9-1-1 Authority Board.
+
+2. Any meeting recordings retained by the Authority, in whatever format currently stored (Zoom recordings, audio files, video files, or other).
+
+3. Agendas associated with each of those meetings.
+
+4. Any written reports or correspondence presented to the Authority Board during those meetings concerning dispatcher workload, mental health, wellness programming, or staff retention.
+
+If meeting minutes or recordings for any portion of this period do not exist or have not been retained, please state so explicitly and cite the relevant retention policy.
+
+If any portion of this request is denied, please cite the specific statutory exemption.
+
+[Your name]
+[Your contact information]
+[Date]</div>
+    <div class="cora-meta">
+      <strong>How to file.</strong> Email <a href="mailto:info@elpasoteller911.org">info@elpasoteller911.org</a> or use the contact form at elpasoteller911.org. Note: this request asks for what should already exist under Colorado&rsquo;s Open Meetings Law. If the Authority cannot produce a complete archive, that absence is itself a meaningful finding.
+    </div>
+  </div>
+
+  <div class="warn-callout">
+    <div class="w-label">A Note on Fees</div>
+    <div class="w-title">CORA can charge for staff time</div>
+    <p>Under Colorado law, agencies can charge a research and retrieval fee for CORA requests, currently capped at around $33 per hour after the first hour. For a focused request like the ones above, the cost is usually small or waived. If a fee notice arrives, the student can request a written explanation, narrow the request, or ask for a fee waiver based on public interest.</p>
+    <p>Most agencies waive small requests. None of the templates above should generate a large bill if filed as written.</p>
+  </div>
+
+  <div class="section-label">The Triangulation <strong>What the data tells you when you put it next to itself</strong></div>
+
+  <div class="prose">
+    <p>The point of multiple requests is comparison. Once the responses arrive, the student puts the numbers next to each other on a single page. The first three requests give the current snapshot. The fourth gives the historical arc — what was discussed, when, and what was not. Together they answer the question more completely than any single request could.</p>
+  </div>
+
+  <ul class="deliverables">
+    <li>How many calls came in last year</li>
+    <li>How many were trauma-exposing categories like suicide threats, child abuse, fatal accidents, or violence in progress</li>
+    <li>How many dispatchers handled that load</li>
+    <li>How long the average dispatcher stays in the job before leaving</li>
+    <li>How much money is allocated for their mental health support</li>
+    <li>Whether the clinicians involved are trauma-trained or generalist</li>
+    <li>Whether the comfort room is a single recognition piece or part of a broader program</li>
+  </ul>
+
+  <div class="prose">
+    <p class="callout">When those numbers land on one page next to each other, the question stops being abstract. The ratio of trauma exposure to support funding becomes visible. So does the turnover rate, which is the canary — when dispatchers leave faster than they can be replaced, that is the system telling you the support is not matched to the load.</p>
+  </div>
+
+  <div class="section-label">Where the Finding Goes <strong>A binder helps no one</strong></div>
+
+  <div class="action-callout">
+    <div class="a-label">The Three Public Channels</div>
+    <div class="a-title">How to put a finding into the record</div>
+    <p><strong>One. Public comment at a Board of County Commissioners meeting.</strong> Three minutes, sign in at the door, state the finding plainly. <em>I requested these records under CORA. Here is what they show. Here is the ratio. Here is the question.</em> Once it is in the minutes, it is public record.</p>
+    <p><strong>Two. A letter to the editor.</strong> The Gazette and the Independent both run student work. Cite the CORA request numbers as evidence. A clean piece of original public records reporting from a student is the kind of thing local papers actively want.</p>
+    <p><strong>Three. A short written report submitted to all three bodies simultaneously,</strong> with a request that it be entered as public correspondence. That puts the finding in the records of the Sheriff&rsquo;s Office, the 911 Authority, and the BoCC at the same time, on the same day. None of them can claim they did not see it.</p>
+  </div>
+
+  <div class="care-callout">
+    <div class="c-label">If the Answer Is Good News</div>
+    <div class="c-title">There is no losing version of this project</div>
+    <p>If the data comes back and shows the county is matching support to the trauma load — well-funded programs, trauma-trained clinicians, low turnover, a wellness program that actually works — that is also a finding worth publishing.</p>
+    <p>The county gets credit for doing it right. Other counties get a model to follow. The student&rsquo;s work has documented something useful either way. The point is not to expose a failure. The point is to know what is true, and to make what is true legible to other people.</p>
+  </div>
+
+  <div class="section-label">The Bigger Ask <strong>Transparency going forward, not just records looking back</strong></div>
+
+  <div class="prose">
+    <p>The CORA requests above ask the Authority for what already exists. There is a separate ask worth making — that the Authority change how it operates going forward.</p>
+    <p>The El Paso&ndash;Teller 911 Authority is a special district. Special districts often run lean, and the Authority&rsquo;s default for board meetings is Zoom. Zoom links are ephemeral. Once a meeting ends, the link is dead unless the host saves the recording and posts it somewhere durable. That is not equivalent to a public archive. Students cannot go back. Researchers cannot search. Hearing-impaired residents cannot rely on it. And nobody can verify findings without filing a records request for archives that may or may not exist.</p>
+    <p>Peer governing bodies in El Paso County already do better. The Board of County Commissioners and Colorado Springs City Council both post meeting recordings to public YouTube channels with multi-year retention and auto-captions. The 911 Authority does not, based on what is currently visible on its website. That is a transparency gap, not a budget problem — both platforms cost the same at this scale, which is to say, almost nothing.</p>
+    <p>The strongest advocacy ask combines two things: persistent public archives and accessible written transcripts. Auto-captions on YouTube are notoriously unreliable for proper names, technical terms, and audio with background noise. Human-reviewed transcription costs roughly one dollar per minute of audio, which means a typical ninety-minute meeting runs under one hundred dollars to transcribe properly. For a body coordinating emergency communications across two counties, that is a rounding error.</p>
+  </div>
+
+  <div class="cora-block">
+    <div class="cora-header">
+      <div class="cora-to">Advocacy Letter · To</div>
+      <div class="cora-title">El Paso&ndash;Teller County 9-1-1 Authority Board</div>
+    </div>
+    <div class="cora-body">Dear Members of the El Paso&ndash;Teller County 9-1-1 Authority Board:
+
+The Authority&rsquo;s board meetings are currently held on Zoom without persistent public archives. Other governing bodies in El Paso County, including the Board of County Commissioners and Colorado Springs City Council, post meeting recordings to public YouTube channels with multi-year retention and accompany those recordings with detailed minutes.
+
+We respectfully ask the Authority to consider adopting a similar archive practice, with two specific elements:
+
+1. Live streaming and persistent retention of board meeting recordings on a publicly accessible platform such as YouTube, with multi-year retention matching peer practice.
+
+2. Human-reviewed written transcripts or detailed minutes posted alongside each meeting agenda, to ensure compliance with ADA accessibility standards and to enable searchable, citable public records.
+
+Auto-generated captions alone do not meet accessibility standards for hearing-impaired residents. Human-reviewed transcription at industry rates of approximately one dollar per minute of audio represents a modest cost for a body coordinating emergency communications across two counties.
+
+This ask is not a complaint about current practice. It is a request to bring the Authority into parity with peer bodies in the region, and to make Authority proceedings as accessible to the public as the public expects of every other elected and appointed body that serves them.
+
+Respectfully,
+
+[Your name]
+[Your contact information]
+[Date]</div>
+    <div class="cora-meta">
+      <strong>How to send.</strong> Email <a href="mailto:info@elpasoteller911.org">info@elpasoteller911.org</a> with the subject line &ldquo;Public Comment &mdash; Board Meeting Archive Practice.&rdquo; Request that the letter be entered as public correspondence in the next regular meeting record. For maximum effect, also deliver the letter as spoken public comment at the next Authority Board meeting.
+    </div>
+  </div>
+
+  <div class="action-callout">
+    <div class="a-label">Why This Layer Matters</div>
+    <div class="a-title">A complete project leaves the system better than it found it</div>
+    <p>The CORA project produces a finding about current support levels for dispatchers. The advocacy letter changes the conditions under which the next student, journalist, or curious resident can investigate the same question. Without persistent archives, every future project starts from zero. With them, each project builds on the last.</p>
+    <p>That compounding effect is the point. Civic infrastructure improvements like meeting archives and transcripts are not glamorous, but they are how transparency actually works over time. A guide that only teaches students to file CORA requests teaches half the lesson. A guide that also teaches them to advocate for the structural conditions that make CORA less necessary teaches the whole one.</p>
+  </div>
+
+  <div class="section-label">Suggested Timeline <strong>One semester, manageable pacing</strong></div>
+
+  <ul class="timeline">
+    <li>
+      <div class="week">Week 1&ndash;2</div>
+      <div class="what">Read this guide. Watch a 911 Authority Board meeting live (or attempt to find a past recording — note what you find or do not find). Watch a recent BoCC meeting on the county YouTube channel for comparison. Get familiar with the language and the players. Write down questions you do not yet understand.</div>
+    </li>
+    <li>
+      <div class="week">Week 3</div>
+      <div class="what">File all four CORA requests on the same day. Save copies. Note the date and the assigned request number for each one.</div>
+    </li>
+    <li>
+      <div class="week">Week 4&ndash;6</div>
+      <div class="what">Wait for responses. Three business days is the statutory minimum, but extensions are common for documents that need gathering. Use this time to research comparable counties. Larimer County, Boulder County, and Denver all have public dispatch budgets you can use as benchmarks.</div>
+    </li>
+    <li>
+      <div class="week">Week 7&ndash;9</div>
+      <div class="what">Process the responses. Build a single comparison page. Identify the ratio. Identify what is missing or what was redacted. If anything was denied, note the exemption cited. Note especially whether the historical archive request (Request Four) produced a complete record or revealed gaps.</div>
+    </li>
+    <li>
+      <div class="week">Week 10&ndash;12</div>
+      <div class="what">Write the finding. Short. Plain. Cite the records by their CORA request numbers. Submit to all three public channels in the same week. Send the advocacy letter to the 911 Authority Board in parallel.</div>
+    </li>
+    <li>
+      <div class="week">Week 13&ndash;14</div>
+      <div class="what">Track the response. Did anyone reach out? Did any commissioner reference it? Did any policy change get proposed? The follow-up is part of the project, not optional.</div>
+    </li>
+  </ul>
+
+  <div class="section-label">For Teachers <strong>Why this works as a class project</strong></div>
+
+  <div class="prose">
+    <p>This project meets standards for civics, government, journalism, research methods, and statistics simultaneously. Students learn to read budget documents, distinguish between agencies, write formal correspondence, evaluate primary source data, and present findings to a non-academic audience.</p>
+    <p>It also teaches something most school projects do not — that public records are public, that ordinary citizens have the legal right to ask, and that the answers exist whether anyone bothers to request them. That muscle, once built, transfers to every future civic question a student will ever care about.</p>
+    <p>The project can be done individually or in teams of three, with each student owning one of the three doors. A team version produces a stronger comparison page and gives students experience coordinating across roles, which mirrors how actual public interest research works.</p>
+  </div>
+
+  <div class="section-label">Resources <strong>Where to learn more</strong></div>
+
+  <ul class="deliverables">
+    <li>Colorado Freedom of Information Coalition — <a href="https://coloradofoic.org/" target="_blank" rel="noopener">coloradofoic.org</a> — plain-language CORA guidance and sample request templates.</li>
+    <li>El Paso County Clerk&rsquo;s records portal — for BoCC documents and meeting minutes.</li>
+    <li>El Paso&ndash;Teller 911 Authority Board agendas and minutes — at elpasoteller911.org under Authority Board.</li>
+    <li>The Dais episode that started this guide — full audio and show notes at storyseedstudios.com.</li>
+  </ul>
+
+  <footer class="footer">
+    <p><strong>About this guide.</strong> Built by StorySeed Studios as a companion to <em>The Dais</em>, a local civic audio project covering El Paso County government for everyday people. Not affiliated with El Paso County government. Not legal advice — for formal legal questions about CORA, consult an attorney or the Colorado Freedom of Information Coalition.</p>
+    <p>I have a communications degree. It took seven years. I took Government twice. The second time I earned a D. The commissioners took it once and earn considerably more. We are all learning. <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener">storyseedstudios.com</a></p>
+  </footer>
+
+</div><!-- .wrap -->
+
+</body>
+</html>
