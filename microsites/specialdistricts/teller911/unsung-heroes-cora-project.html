@@ -20,7 +20,8 @@
   --faint:        #9a948c;
   --rule:         rgba(0,0,0,0.09);
   --brass:        #b8872e;
-  --brass-bg:     rgba(184,135,46,0.08);
+  --brass-bg:     rgba(184,135,46,0.10);
+  --brass-deep:   #6f4f18;
   --night:        #16130e;
   --action:       #1a3a2a;
   --action-light: rgba(26,58,42,0.07);
@@ -79,7 +80,8 @@ body {
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--brass);
+  color: var(--brass-deep);
+  font-weight: 500;
   margin-bottom: 16px;
 }
 h1.title {
@@ -113,7 +115,8 @@ h1.title {
   font-size: 0.7rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--brass);
+  color: var(--brass-deep);
+  font-weight: 500;
   padding: 48px 24px 0;
   border-top: 1px solid var(--rule);
   margin-top: 8px;
@@ -163,7 +166,8 @@ h1.title {
   font-size: 0.7rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--brass);
+  color: var(--brass-deep);
+  font-weight: 500;
   margin-bottom: 10px;
 }
 .question-card .q-text {
@@ -345,8 +349,8 @@ h1.title {
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--brass);
-  font-weight: 500;
+  color: var(--brass-deep);
+  font-weight: 600;
 }
 .timeline .what {
   font-size: 0.98rem;
@@ -372,13 +376,45 @@ h1.title {
   position: absolute;
   left: 0;
   top: 14px;
-  color: var(--brass);
+  color: var(--brass-deep);
   font-weight: 700;
+  speak: none;
 }
 
 /* INLINE LINKS */
 a { color: var(--action); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
-a:hover { color: var(--brass); }
+a:hover { color: var(--brass-deep); }
+a:focus-visible { outline: 2px solid var(--brass-deep); outline-offset: 2px; border-radius: 2px; }
+
+/* Accessibility utilities */
+:focus-visible { outline: 2px solid var(--brass-deep); outline-offset: 2px; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 16px;
+  font-family: var(--ff-mono);
+  font-size: 0.85rem;
+  text-decoration: none;
+  z-index: 100;
+}
+.skip-link:focus { left: 8px; top: 8px; }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Reset h2 used as section-label */
+h2.section-label { display: block; }
 
 /* FOOTER */
 .footer {
@@ -412,12 +448,14 @@ a:hover { color: var(--brass); }
 </head>
 <body>
 
-<div class="topbar">
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<div class="topbar" role="banner">
   <span class="topbar-logo">The Dais</span>
   <span class="topbar-meta">StorySeed Studios · Resource Guide</span>
 </div>
 
-<div class="wrap">
+<main id="main-content" class="wrap">
 
   <header class="masthead">
     <div class="kicker">A Starter CORA Project · For Students, Teachers, and Curious Residents</div>
@@ -426,7 +464,7 @@ a:hover { color: var(--brass); }
     <p class="lede">A semester-length public records project that produces real findings about how El Paso County supports its 911 dispatchers. Three records requests. Three agencies. One ratio that tells you whether the support matches the load. Whatever the answer, it belongs in the public record.</p>
   </header>
 
-  <div class="section-label first-section">The Question <strong>What we are actually trying to answer</strong></div>
+  <h2 class="section-label first-section">The Question <strong>What we are actually trying to answer</strong></h2>
 
   <div class="question-card">
     <div class="q-label">The Research Question</div>
@@ -439,7 +477,7 @@ a:hover { color: var(--brass); }
     <p>The county provides a comfort room at the dispatch center. Beyond that, public information on dispatcher mental health support is thin. <strong>That thinness is itself a finding worth investigating.</strong></p>
   </div>
 
-  <div class="section-label">What You'll Learn <strong>Skills this project teaches</strong></div>
+  <h2 class="section-label">What You'll Learn <strong>Skills this project teaches</strong></h2>
 
   <ul class="deliverables">
     <li>How to read a county budget and identify line items by program</li>
@@ -449,7 +487,7 @@ a:hover { color: var(--brass); }
     <li>How to recognize the difference between a transparency problem and a policy problem</li>
   </ul>
 
-  <div class="section-label">Three Doors <strong>Know who owns what before you file</strong></div>
+  <h2 class="section-label">Three Doors <strong>Know who owns what before you file</strong></h2>
 
   <div class="prose">
     <p>The most common reason a CORA request gets rejected or rerouted is that the student sent it to the wrong agency. Sorting the data by which body actually holds it is the first lesson of the project.</p>
@@ -473,7 +511,7 @@ a:hover { color: var(--brass); }
     </div>
   </div>
 
-  <div class="section-label">The Four Requests <strong>Drop-in templates</strong></div>
+  <h2 class="section-label">The Four Requests <strong>Drop-in templates</strong></h2>
 
   <div class="prose">
     <p>CORA requests do not need legal language. They need clarity. State exactly what records you want and what date range. The templates below can be sent as written, with the student&rsquo;s name and contact information added at the bottom. Three of the four requests target current operations and budget data. The fourth requests historical meeting records, which provide the longer arc of how — or whether — dispatcher wellness has been discussed at the Authority over time.</p>
@@ -584,7 +622,7 @@ If any portion of this request is denied, please cite the specific statutory exe
     <p>Most agencies waive small requests. None of the templates above should generate a large bill if filed as written.</p>
   </div>
 
-  <div class="section-label">The Triangulation <strong>What the data tells you when you put it next to itself</strong></div>
+  <h2 class="section-label">The Triangulation <strong>What the data tells you when you put it next to itself</strong></h2>
 
   <div class="prose">
     <p>The point of multiple requests is comparison. Once the responses arrive, the student puts the numbers next to each other on a single page. The first three requests give the current snapshot. The fourth gives the historical arc — what was discussed, when, and what was not. Together they answer the question more completely than any single request could.</p>
@@ -604,7 +642,7 @@ If any portion of this request is denied, please cite the specific statutory exe
     <p class="callout">When those numbers land on one page next to each other, the question stops being abstract. The ratio of trauma exposure to support funding becomes visible. So does the turnover rate, which is the canary — when dispatchers leave faster than they can be replaced, that is the system telling you the support is not matched to the load.</p>
   </div>
 
-  <div class="section-label">Where the Finding Goes <strong>A binder helps no one</strong></div>
+  <h2 class="section-label">Where the Finding Goes <strong>A binder helps no one</strong></h2>
 
   <div class="action-callout">
     <div class="a-label">The Three Public Channels</div>
@@ -621,7 +659,7 @@ If any portion of this request is denied, please cite the specific statutory exe
     <p>The county gets credit for doing it right. Other counties get a model to follow. The student&rsquo;s work has documented something useful either way. The point is not to expose a failure. The point is to know what is true, and to make what is true legible to other people.</p>
   </div>
 
-  <div class="section-label">The Bigger Ask <strong>Transparency going forward, not just records looking back</strong></div>
+  <h2 class="section-label">The Bigger Ask <strong>Transparency going forward, not just records looking back</strong></h2>
 
   <div class="prose">
     <p>The CORA requests above ask the Authority for what already exists. There is a separate ask worth making — that the Authority change how it operates going forward.</p>
@@ -666,7 +704,7 @@ Respectfully,
     <p>That compounding effect is the point. Civic infrastructure improvements like meeting archives and transcripts are not glamorous, but they are how transparency actually works over time. A guide that only teaches students to file CORA requests teaches half the lesson. A guide that also teaches them to advocate for the structural conditions that make CORA less necessary teaches the whole one.</p>
   </div>
 
-  <div class="section-label">Suggested Timeline <strong>One semester, manageable pacing</strong></div>
+  <h2 class="section-label">Suggested Timeline <strong>One semester, manageable pacing</strong></h2>
 
   <ul class="timeline">
     <li>
@@ -695,7 +733,7 @@ Respectfully,
     </li>
   </ul>
 
-  <div class="section-label">For Teachers <strong>Why this works as a class project</strong></div>
+  <h2 class="section-label">For Teachers <strong>Why this works as a class project</strong></h2>
 
   <div class="prose">
     <p>This project meets standards for civics, government, journalism, research methods, and statistics simultaneously. Students learn to read budget documents, distinguish between agencies, write formal correspondence, evaluate primary source data, and present findings to a non-academic audience.</p>
@@ -703,7 +741,7 @@ Respectfully,
     <p>The project can be done individually or in teams of three, with each student owning one of the three doors. A team version produces a stronger comparison page and gives students experience coordinating across roles, which mirrors how actual public interest research works.</p>
   </div>
 
-  <div class="section-label">Resources <strong>Where to learn more</strong></div>
+  <h2 class="section-label">Resources <strong>Where to learn more</strong></h2>
 
   <ul class="deliverables">
     <li>Colorado Freedom of Information Coalition — <a href="https://coloradofoic.org/" target="_blank" rel="noopener">coloradofoic.org</a> — plain-language CORA guidance and sample request templates.</li>
@@ -717,7 +755,7 @@ Respectfully,
     <p>I have a communications degree. It took seven years. I took Government twice. The second time I earned a D. The commissioners took it once and earn considerably more. We are all learning. <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener">storyseedstudios.com</a></p>
   </footer>
 
-</div><!-- .wrap -->
+</main><!-- .wrap -->
 
 </body>
 </html>
