@@ -187,6 +187,7 @@ fieldset.section .legend-help {
 .field input[type="text"],
 .field input[type="tel"],
 .field input[type="email"],
+.field input[type="file"],
 .field select,
 .field textarea {
   width: 100%; max-width: 540px;
@@ -365,6 +366,144 @@ fieldset.section .legend-help {
 
 /* ─── Disabled fieldset (hidden post-submit) ─────────────────── */
 .form-hidden { display: none; }
+
+/* ─── Photo dropzone & gallery ───────────────────────────────── */
+.legend-optional {
+  font-weight: 400; color: var(--slate); font-size: 14px; margin-left: 4px;
+}
+
+.dropzone {
+  position: relative;
+  border: 2px dashed var(--border-2);
+  border-radius: 8px;
+  background: var(--surf);
+  transition: border-color .15s, background-color .15s;
+}
+.dropzone:hover { border-color: var(--navy); background: var(--surf-2); }
+.dropzone.is-dragging {
+  border-color: var(--navy);
+  border-style: solid;
+  background: #E0EAFB;
+}
+.dropzone:focus-within {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* The label IS the visible drop UI; the file input is visually hidden
+   but keyboard-focusable so AT and Tab still reach it. */
+.dropzone-label {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 8px;
+  padding: 32px 24px;
+  cursor: pointer;
+  color: var(--txt);
+  margin: 0; font-weight: 400;
+}
+.dropzone-icon {
+  width: 48px; height: 48px; color: var(--navy);
+  flex-shrink: 0;
+}
+.dropzone-primary {
+  font-size: 16px; font-weight: 600;
+}
+.dropzone-link {
+  color: var(--burgundy); text-decoration: underline;
+}
+.dropzone-secondary {
+  font-size: 14px; color: var(--slate);
+}
+
+/* The file input — visually hidden but keyboard-accessible.
+   Using sr-only-style positioning, NOT display:none, so Tab still reaches it. */
+.dropzone-input {
+  position: absolute !important;
+  left: 0; top: 0;
+  width: 1px; height: 1px;
+  padding: 0; margin: 0;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+/* Inline error region for upload validation */
+.photo-error {
+  background: var(--red-bg); color: var(--red);
+  border-left: 4px solid var(--red);
+  padding: 10px 14px; border-radius: 4px;
+  font-size: 14px; font-weight: 600;
+  margin-top: 12px;
+}
+
+/* Grid of uploaded photo cards */
+.photo-grid {
+  list-style: none; padding: 0; margin: 16px 0 0;
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.photo-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.photo-thumb-wrap {
+  position: relative; aspect-ratio: 4 / 3;
+  background: var(--surf-2);
+  overflow: hidden;
+}
+.photo-thumb {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.photo-card-body {
+  padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 8px;
+  flex: 1;
+}
+.photo-meta {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 8px; font-size: 13px;
+}
+.photo-name {
+  font-weight: 600; color: var(--txt);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  flex: 1; min-width: 0;
+}
+.photo-size {
+  color: var(--slate); flex-shrink: 0;
+}
+.photo-caption-label {
+  display: block; font-weight: 600; color: var(--txt);
+  font-size: 13px; margin-bottom: 2px;
+}
+.photo-caption {
+  width: 100%; padding: 8px 10px;
+  font: inherit; font-size: 14px;
+  background: var(--bg); color: var(--txt);
+  border: 2px solid var(--border-2); border-radius: 4px;
+}
+.photo-caption:hover { border-color: var(--slate); }
+
+/* Remove button overlays the thumbnail — visible, keyboard-focusable */
+.photo-remove {
+  position: absolute; top: 6px; right: 6px;
+  background: rgba(0,0,0,0.75); color: #fff;
+  border: 2px solid transparent; border-radius: 4px;
+  padding: 4px 10px; font: inherit; font-size: 12px; font-weight: 600;
+  cursor: pointer; min-height: 28px;
+}
+.photo-remove:hover { background: var(--red); }
+.photo-remove:focus-visible {
+  background: var(--red);
+  outline: 3px solid var(--focus); outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .dropzone-label { padding: 24px 16px; }
+}
 
 /* ─── Footer ─────────────────────────────────────────────────── */
 footer.page-footer {
@@ -644,6 +783,47 @@ footer.page-footer a {
           </div>
         </div>
       </fieldset>
+
+      <fieldset class="section">
+        <legend>
+          <span data-i18n="photos.legend">Photos of the missing person</span>
+          <span class="legend-optional" data-i18n="photos.optional"> (optional)</span>
+          <span class="legend-help" data-i18n="photos.help">
+            Drop recent photos here, or click to choose them. Multiple photos and different
+            angles help. They're added straight to the case file — no lag, no waiting on us.
+          </span>
+        </legend>
+
+        <!-- Drop zone — keyboard, mouse, drag-drop all work; live region announces changes -->
+        <div class="dropzone" id="dropzone">
+          <label class="dropzone-label" for="photos-input">
+            <svg class="dropzone-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M19 13h-2v3h-3v2h3v3h2v-3h3v-2h-3z"/>
+              <path fill="currentColor" d="M5 5h14v6h2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7v-2H5z"/>
+              <path fill="currentColor" d="m9 13 3 4 3-4 4 5H5z"/>
+            </svg>
+            <span class="dropzone-primary" data-i18n="photos.dz.primary">
+              Drag photos here, or <span class="dropzone-link">choose files</span>
+            </span>
+            <span class="dropzone-secondary" data-i18n="photos.dz.secondary">
+              JPEG, PNG, or HEIC &middot; up to 10 photos &middot; 10 MB each
+            </span>
+          </label>
+          <input type="file" id="photos-input" name="photos"
+                 class="dropzone-input"
+                 accept="image/jpeg,image/png,image/heic,image/heif,image/webp"
+                 multiple>
+        </div>
+
+        <!-- Live region for AT — announces additions, removals, and errors -->
+        <div role="status" aria-live="polite" id="photo-status" class="sr-only"></div>
+
+        <!-- Photo error region (visible) -->
+        <div id="photo-error" class="photo-error" hidden role="alert"></div>
+
+        <!-- Photo grid — populated as files are added -->
+        <ul class="photo-grid" id="photo-grid" hidden aria-label="Uploaded photos"></ul>
+      </fieldset>
     </div>
 
     <!-- HONEYPOT — properly hidden from AT and visually -->
@@ -845,15 +1025,19 @@ footer.page-footer a {
     submitBtn.textContent = 'Submitting…';
     statusRegion.textContent = 'Submitting your information.';
 
-    const data = Object.fromEntries(new FormData(form).entries());
-    delete data.website; // strip honeypot before send
+    // Build multipart FormData so files attach. Strip honeypot before send.
+    let payload = new FormData(form);
+    payload.delete('website');
+    if (typeof window.__cbiGetPhotoFormData === 'function') {
+      payload = window.__cbiGetPhotoFormData(payload);
+    }
 
     try {
-      // PRODUCTION endpoint:
+      // PRODUCTION endpoint (Drupal Webform REST):
       // const res = await fetch('/webform_rest/missing_person_contact/submission', {
       //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': await getCsrfToken() },
-      //   body: JSON.stringify({ webform_id: 'missing_person_contact', ...data }),
+      //   headers: { 'X-CSRF-Token': await getCsrfToken() },  // no Content-Type — browser sets boundary
+      //   body: payload,
       // });
       // if (!res.ok) throw new Error(await res.text());
 
@@ -875,6 +1059,197 @@ footer.page-footer a {
     confirmation.focus();
     statusRegion.textContent = 'Your information has been received successfully.';
   }
+
+  // ─────────────────────────────────────────────────────────────
+  // PHOTO DROPZONE — drag-and-drop, click, and keyboard.
+  // WCAG 2.5.7 (Dragging Movements, AA): drag is enhancement only;
+  // click and keyboard alternatives are always available.
+  // WCAG 4.1.3 (Status Messages): aria-live region announces every
+  // add, remove, and validation error.
+  // ─────────────────────────────────────────────────────────────
+  const dropzone     = document.getElementById('dropzone');
+  const fileInput    = document.getElementById('photos-input');
+  const photoGrid    = document.getElementById('photo-grid');
+  const photoStatus  = document.getElementById('photo-status');
+  const photoError   = document.getElementById('photo-error');
+
+  const MAX_PHOTOS   = 10;
+  const MAX_BYTES    = 10 * 1024 * 1024; // 10 MB
+  const VALID_TYPES  = ['image/jpeg','image/jpg','image/png','image/heic','image/heif','image/webp'];
+
+  // Photos kept in a JS-level array so File objects survive caption edits.
+  // Each entry: { id, file, caption, dataUrl }
+  const photos = [];
+
+  function announce(msg) {
+    photoStatus.textContent = msg;
+  }
+  function showError(msg) {
+    photoError.hidden = false;
+    photoError.textContent = msg;
+    announce(msg);
+    setTimeout(() => { photoError.hidden = true; photoError.textContent = ''; }, 6000);
+  }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c =>
+      ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+  }
+
+  function addFiles(fileList) {
+    const list = Array.from(fileList);
+    if (!list.length) return;
+    let added = 0, rejected = [];
+
+    list.forEach(file => {
+      if (photos.length + added >= MAX_PHOTOS) {
+        rejected.push(`${file.name}: maximum ${MAX_PHOTOS} photos reached`);
+        return;
+      }
+      const type = (file.type || '').toLowerCase();
+      const looksLikeImage = type.startsWith('image/') ||
+                             /\.(jpe?g|png|heic|heif|webp)$/i.test(file.name);
+      if (!looksLikeImage) {
+        rejected.push(`${file.name}: not a supported image type`);
+        return;
+      }
+      if (file.size > MAX_BYTES) {
+        rejected.push(`${file.name}: exceeds 10 MB limit`);
+        return;
+      }
+
+      const id = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        photos.push({ id, file, caption: '', dataUrl: e.target.result });
+        renderPhotos();
+        announce(`${photos.length} photo${photos.length === 1 ? '' : 's'} added`);
+      };
+      reader.onerror = () => showError(`Could not read ${file.name}`);
+      reader.readAsDataURL(file);
+      added++;
+    });
+
+    if (rejected.length) {
+      showError(rejected.join(' · '));
+    }
+  }
+
+  function renderPhotos() {
+    photoGrid.hidden = photos.length === 0;
+    photoGrid.innerHTML = '';
+
+    photos.forEach((photo) => {
+      const li = document.createElement('li');
+      li.className = 'photo-card';
+      li.setAttribute('data-id', photo.id);
+
+      li.innerHTML = `
+        <div class="photo-thumb-wrap">
+          <img src="${photo.dataUrl}" alt="" class="photo-thumb">
+          <button type="button" class="photo-remove"
+                  aria-label="Remove ${escapeHtml(photo.file.name)}">
+            Remove
+          </button>
+        </div>
+        <div class="photo-card-body">
+          <div class="photo-meta">
+            <span class="photo-name" title="${escapeHtml(photo.file.name)}">${escapeHtml(photo.file.name)}</span>
+            <span class="photo-size">${formatSize(photo.file.size)}</span>
+          </div>
+          <label class="photo-caption-label" for="caption-${photo.id}">
+            <span class="photo-caption-text" data-i18n="photos.caption">Caption</span>
+            <span data-i18n="photos.optional" style="font-weight:400; color: var(--slate);"> (optional)</span>
+          </label>
+          <input type="text" id="caption-${photo.id}"
+                 class="photo-caption"
+                 value="${escapeHtml(photo.caption)}"
+                 placeholder="When taken, what's notable, etc."
+                 maxlength="200"
+                 aria-describedby="caption-${photo.id}-help">
+          <span class="sr-only" id="caption-${photo.id}-help">
+            Caption for ${escapeHtml(photo.file.name)}. 200 characters maximum.
+          </span>
+        </div>
+      `;
+
+      // Caption input
+      const captionInput = li.querySelector('.photo-caption');
+      captionInput.addEventListener('input', (e) => {
+        photo.caption = e.target.value;
+      });
+
+      // Remove button
+      const removeBtn = li.querySelector('.photo-remove');
+      removeBtn.addEventListener('click', () => removePhoto(photo.id));
+
+      photoGrid.appendChild(li);
+    });
+
+    // Apply current-language translations to the new dynamic content
+    const currentLang = document.documentElement.lang || 'en';
+    photoGrid.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (i18n[currentLang]?.[key]) el.innerHTML = i18n[currentLang][key];
+    });
+  }
+
+  function removePhoto(id) {
+    const idx = photos.findIndex(p => p.id === id);
+    if (idx === -1) return;
+    const removed = photos[idx].file.name;
+    photos.splice(idx, 1);
+    renderPhotos();
+    announce(`Removed ${removed}. ${photos.length} photo${photos.length === 1 ? '' : 's'} remaining.`);
+    // Move focus back to dropzone so keyboard users don't lose their place
+    fileInput.focus();
+  }
+
+  // File input change handler (click + keyboard path)
+  fileInput.addEventListener('change', (e) => {
+    addFiles(e.target.files);
+    e.target.value = ''; // allow re-selecting same file
+  });
+
+  // Drag-and-drop (enhancement only; click and keyboard always work)
+  ['dragenter', 'dragover'].forEach(evt => {
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.add('is-dragging');
+    });
+  });
+  ['dragleave', 'drop'].forEach(evt => {
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.remove('is-dragging');
+    });
+  });
+  dropzone.addEventListener('drop', (e) => {
+    if (e.dataTransfer?.files) addFiles(e.dataTransfer.files);
+  });
+
+  // Block the browser from navigating away when a stray drop misses the zone
+  ['dragover', 'drop'].forEach(evt => {
+    document.addEventListener(evt, (e) => { e.preventDefault(); }, false);
+  });
+
+  // Hook photo data into form submission. The form's submit handler runs
+  // first; we override the FormData assembly path here by exposing a getter.
+  window.__cbiGetPhotoFormData = function(formData) {
+    formData.delete('photos');
+    photos.forEach((p, i) => {
+      formData.append(`photos[${i}]`, p.file, p.file.name);
+    });
+    formData.append('photo_captions',
+      JSON.stringify(photos.map(p => ({ name: p.file.name, caption: p.caption }))));
+    return formData;
+  };
 
   // ─────────────────────────────────────────────────────────────
   // CLAUDE API ROUTING LAYER — narrative-based case triage
@@ -987,6 +1362,12 @@ footer.page-footer a {
       'mp.first.help': 'First or given name of the missing person.',
       'mp.last.label': "Missing person's last name",
       'mp.last.help':  'Last or family name of the missing person.',
+      'photos.legend':'Photos of the missing person',
+      'photos.optional': ' (optional)',
+      'photos.help':  "Drop recent photos here, or click to choose them. Multiple photos and different angles help. They're added straight to the case file — no lag, no waiting on us.",
+      'photos.dz.primary':   'Drag photos here, or <span class="dropzone-link">choose files</span>',
+      'photos.dz.secondary': 'JPEG, PNG, or HEIC · up to 10 photos · 10 MB each',
+      'photos.caption':      'Caption',
       'you.legend':   'Your information',
       'you.help':     'All fields below are used only for missing-person-related communication and are not shared outside CBI.',
       'you.first.label':'Your first name',
@@ -1028,6 +1409,12 @@ footer.page-footer a {
       'mp.first.help': 'Primer nombre de la persona desaparecida.',
       'mp.last.label': 'Apellido de la persona desaparecida',
       'mp.last.help':  'Apellido de la persona desaparecida.',
+      'photos.legend':'Fotos de la persona desaparecida',
+      'photos.optional': ' (opcional)',
+      'photos.help':  'Arrastre fotos recientes aquí, o haga clic para elegirlas. Varias fotos y distintos ángulos ayudan. Se añaden directamente al expediente del caso — sin demora, sin esperar.',
+      'photos.dz.primary':   'Arrastre fotos aquí, o <span class="dropzone-link">elija archivos</span>',
+      'photos.dz.secondary': 'JPEG, PNG o HEIC · hasta 10 fotos · 10 MB cada una',
+      'photos.caption':      'Leyenda',
       'you.legend':   'Su información',
       'you.help':     'Todos los campos a continuación se usan únicamente para comunicación relacionada con personas desaparecidas y no se comparten fuera del CBI.',
       'you.first.label':'Su primer nombre',
