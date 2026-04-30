@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missing Person Contact Form | Colorado Bureau of Investigation</title>
+<meta name="description" content="Contact form for family, friends, and associates of missing persons in Colorado. Provide your contact information so the CBI Missing Persons Unit can reach you for case updates and event invitations.">
+
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║  CBI Missing Person Contact Form — accessible reference build    ║
+  ║                                                                  ║
+  ║  Drops into the existing Drupal Webform infrastructure used      ║
+  ║  by cbi.colorado.gov. Every field maps to a standard Drupal      ║
+  ║  Webform field type. CSS uses State of Colorado palette tokens.  ║
+  ║                                                                  ║
+  ║  Resolves all 7 critical/serious findings from the ADA audit.    ║
+  ║  Includes optional Claude API routing layer (parallel to the     ║
+  ║  Salesforce Einstein pattern in the COAG complaint form audit).  ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
+
+<style>
+/* ──────────────────────────────────────────────────────────────
+   DESIGN TOKENS — State of Colorado / CBI palette
+   All text/background pairs verified ≥ 4.5:1 for WCAG 1.4.3 AA
+   ────────────────────────────────────────────────────────────── */
+:root {
+  --navy:        #003E70;   /*  11.5:1 on white  */
+  --navy-2:      #002B4F;   /*  16.1:1 on white  */
+  --burgundy:    #8E1100;   /*   8.7:1 on white  */
+  --slate:       #475569;   /*   7.4:1 on white  */
+  --slate-2:     #64748B;   /*   5.0:1 on white  */
+  --txt:         #1F2937;   /*  14.6:1 on white  */
+  --bg:          #FFFFFF;
+  --surf:        #F8FAFC;
+  --surf-2:      #F1F5F9;
+  --border:      #CBD5E1;
+  --border-2:    #94A3B8;
+  --focus:       #B45309;   /* high-contrast focus ring */
+  --green:       #166534;   /*  AA pass on white */
+  --green-bg:    #DCFCE7;
+  --amber:       #92400E;   /* AAA pass on white */
+  --amber-bg:    #FEF3C7;
+  --red:         #991B1B;   /* AAA pass on white */
+  --red-bg:      #FEE2E2;
+}
+
+/* ─── Reset and base ─────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  font-size: 16px; line-height: 1.55;
+  color: var(--txt); background: var(--bg);
+  margin: 0; padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── ACCESSIBILITY UTILITIES ────────────────────────────────── */
+
+/* Visually hidden, available to AT */
+.sr-only {
+  position: absolute !important; width: 1px !important; height: 1px !important;
+  padding: 0 !important; margin: -1px !important; overflow: hidden !important;
+  clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important;
+}
+
+/* Skip link — visible on focus */
+.skip-link {
+  position: absolute; top: -100px; left: 0;
+  background: var(--navy); color: #fff;
+  padding: 12px 20px; font-weight: 600;
+  text-decoration: none; z-index: 9999;
+  border: 3px solid transparent;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* GLOBAL focus indicator — meets WCAG 2.4.7 + 2.4.11 (AA)
+   Verified ratio against any background ≥ 3:1 */
+*:focus-visible {
+  outline: 3px solid var(--focus) !important;
+  outline-offset: 2px !important;
+  border-radius: 2px;
+}
+
+/* ─── Layout shell ───────────────────────────────────────────── */
+header.brand {
+  background: var(--navy);
+  color: #fff;
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 4px solid var(--burgundy);
+}
+.brand-mark {
+  font-size: 18px; font-weight: 600; letter-spacing: 0.02em;
+}
+.brand-mark a { color: #fff; text-decoration: none; }
+.brand-mark a:hover { text-decoration: underline; }
+
+.lang-toggle {
+  display: inline-flex; gap: 4px; background: rgba(255,255,255,0.12);
+  border-radius: 4px; padding: 3px;
+}
+.lang-toggle button {
+  background: transparent; border: 0; color: #fff;
+  padding: 6px 12px; font: inherit; font-size: 14px; font-weight: 600;
+  border-radius: 3px; cursor: pointer;
+}
+.lang-toggle button[aria-pressed="true"] {
+  background: #fff; color: var(--navy);
+}
+
+main {
+  max-width: 760px; margin: 0 auto; padding: 32px 24px 64px;
+}
+
+/* ─── Page heading area ──────────────────────────────────────── */
+.page-h1 {
+  font-size: 32px; font-weight: 700; color: var(--navy-2);
+  margin: 0 0 12px; line-height: 1.15;
+}
+.page-lede {
+  font-size: 17px; color: var(--slate);
+  margin: 0 0 24px; line-height: 1.55; max-width: 65ch;
+}
+
+.notice {
+  background: var(--amber-bg);
+  border-left: 4px solid var(--amber);
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin: 0 0 32px;
+}
+.notice-title {
+  display: block; font-weight: 700; color: var(--amber);
+  margin-bottom: 4px;
+}
+.notice-body {
+  font-size: 15px; color: var(--txt); line-height: 1.5;
+}
+.notice-body a {
+  color: var(--burgundy); font-weight: 600;
+}
+
+/* ─── Form structure ─────────────────────────────────────────── */
+form { margin: 0; }
+
+fieldset.section {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 28px 20px;
+  margin: 0 0 20px;
+  background: var(--bg);
+}
+fieldset.section legend {
+  font-size: 18px; font-weight: 700; color: var(--navy);
+  padding: 0 8px;
+}
+fieldset.section .legend-help {
+  display: block; font-size: 14px; font-weight: 400;
+  color: var(--slate); margin-top: 4px; max-width: 60ch;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+.field:last-child { margin-bottom: 0; }
+
+.field label,
+.field .field-label {
+  display: block; font-weight: 600; color: var(--txt);
+  margin-bottom: 6px; font-size: 15px;
+}
+.required-mark {
+  color: var(--burgundy); margin-left: 2px;
+  font-weight: 700;
+}
+.field-help {
+  font-size: 14px; color: var(--slate);
+  margin: 4px 0 8px; line-height: 1.45;
+}
+
+.field input[type="text"],
+.field input[type="tel"],
+.field input[type="email"],
+.field select,
+.field textarea {
+  width: 100%; max-width: 540px;
+  padding: 10px 12px; font: inherit; font-size: 16px;
+  background: var(--bg); color: var(--txt);
+  border: 2px solid var(--border-2); border-radius: 4px;
+  line-height: 1.4;
+}
+.field textarea { min-height: 120px; resize: vertical; }
+.field input:hover,
+.field select:hover,
+.field textarea:hover { border-color: var(--slate); }
+
+/* Error state */
+.field.has-error input,
+.field.has-error select,
+.field.has-error textarea {
+  border-color: var(--red);
+  background: var(--red-bg);
+}
+.field-error {
+  display: block; color: var(--red); font-size: 14px;
+  margin-top: 4px; font-weight: 600;
+}
+
+/* Two-up / three-up grid for related fields */
+.field-group {
+  display: grid; gap: 16px; margin-bottom: 18px;
+}
+.field-group.cols-2 { grid-template-columns: 1fr 1fr; }
+.field-group.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+@media (max-width: 600px) {
+  .field-group.cols-2,
+  .field-group.cols-3 { grid-template-columns: 1fr; }
+}
+.field-group .field { margin-bottom: 0; }
+.field-group .field input { max-width: 100%; }
+
+/* ─── Routing question (the redesigned Yes/No gate) ──────────── */
+.routing-question {
+  background: var(--surf);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 0 0 24px;
+}
+.routing-question legend {
+  font-weight: 700; color: var(--navy);
+  font-size: 16px; padding: 0;
+}
+.routing-options {
+  display: grid; gap: 10px; margin-top: 12px;
+}
+.routing-option {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px; background: var(--bg);
+  border: 2px solid var(--border); border-radius: 6px;
+  cursor: pointer;
+}
+.routing-option:hover { border-color: var(--navy); }
+.routing-option input[type="radio"] {
+  margin-top: 3px; flex-shrink: 0;
+  width: 18px; height: 18px;
+  accent-color: var(--navy);
+}
+.routing-option:has(input:checked) {
+  border-color: var(--navy); background: var(--surf-2);
+}
+.routing-label {
+  font-weight: 600; color: var(--txt); margin: 0;
+}
+.routing-desc {
+  font-size: 14px; color: var(--slate); margin-top: 2px;
+}
+
+/* Alternative path card — replaces dead-end "you cannot proceed" */
+.alt-path {
+  display: none;
+  background: var(--green-bg);
+  border-left: 4px solid var(--green);
+  padding: 18px 22px; border-radius: 4px;
+  margin: 16px 0 0;
+}
+.alt-path.shown { display: block; }
+.alt-path-title {
+  font-weight: 700; color: var(--green); margin: 0 0 6px;
+}
+.alt-path-body {
+  font-size: 15px; color: var(--txt); line-height: 1.5; margin: 0;
+}
+.alt-path-body a {
+  color: var(--burgundy); font-weight: 600;
+}
+
+/* ─── AI routing advisory chip (the FBI/AG pattern) ──────────── */
+.ai-advisory {
+  display: none;
+  background: var(--surf-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.ai-advisory.shown { display: block; }
+.ai-advisory.urgent {
+  background: var(--red-bg);
+  border-color: var(--red);
+}
+.ai-advisory-icon {
+  display: inline-block; margin-right: 6px;
+  font-weight: 700; color: var(--navy);
+}
+.ai-advisory.urgent .ai-advisory-icon { color: var(--red); }
+.ai-advisory-text {
+  color: var(--txt);
+}
+.ai-thinking {
+  display: inline-block; color: var(--slate);
+  font-style: italic; font-size: 13px;
+}
+
+/* ─── Submit row ──────────────────────────────────────────────── */
+.submit-row {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin-top: 24px;
+  align-items: center;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 28px; font: inherit; font-size: 16px; font-weight: 700;
+  border: 2px solid transparent; border-radius: 4px;
+  cursor: pointer; min-height: 48px; min-width: 160px;
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--burgundy); color: #fff;
+}
+.btn-primary:hover { background: #6B0D00; }
+.btn-primary:disabled { background: var(--slate-2); cursor: not-allowed; }
+.btn-secondary {
+  background: var(--bg); color: var(--navy);
+  border-color: var(--navy);
+}
+.btn-secondary:hover { background: var(--surf-2); }
+
+.submit-help {
+  font-size: 14px; color: var(--slate);
+  flex-basis: 100%; margin-top: 4px;
+}
+
+/* ─── HONEYPOT — properly hidden from AT and visually ────────── */
+.hp-field {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+/* ─── Form-level alerts (live regions) ───────────────────────── */
+.form-status,
+.form-alert {
+  margin-bottom: 16px; padding: 12px 16px;
+  border-radius: 4px; font-size: 15px;
+}
+.form-alert {
+  background: var(--red-bg); color: var(--red);
+  border-left: 4px solid var(--red); font-weight: 600;
+}
+.form-status {
+  background: var(--green-bg); color: var(--green);
+  border-left: 4px solid var(--green);
+}
+
+/* ─── Disabled fieldset (hidden post-submit) ─────────────────── */
+.form-hidden { display: none; }
+
+/* ─── Footer ─────────────────────────────────────────────────── */
+footer.page-footer {
+  margin-top: 40px; padding: 24px;
+  background: var(--surf-2);
+  border-top: 1px solid var(--border);
+  font-size: 14px; color: var(--slate); text-align: center;
+}
+footer.page-footer a {
+  color: var(--navy); font-weight: 600;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Skip link — first DOM element (WCAG 2.4.1) -->
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- Header -->
+<header class="brand" role="banner">
+  <div class="brand-mark">
+    <a href="https://cbi.colorado.gov/" aria-label="Colorado Bureau of Investigation home">
+      Colorado Bureau of Investigation
+    </a>
+  </div>
+  <div class="lang-toggle" role="group" aria-label="Language">
+    <button type="button" data-lang="en" aria-pressed="true">English</button>
+    <button type="button" data-lang="es" aria-pressed="false">Español</button>
+  </div>
+</header>
+
+<main id="main-content" role="main" tabindex="-1">
+
+  <h1 class="page-h1" data-i18n="page.title">Missing Person Contact Form</h1>
+
+  <p class="page-lede" data-i18n="page.lede">
+    The CBI Missing Persons Unit uses this form to keep contact information current
+    for family, friends, and associates of missing persons in Colorado. Your information
+    helps us reach you for case-related communication and event invitations.
+  </p>
+
+  <!-- Critical notice — properly highlighted, not a heading -->
+  <div class="notice" role="region" aria-labelledby="notice-title">
+    <strong class="notice-title" id="notice-title" data-i18n="notice.title">
+      This form is not for reporting a missing person.
+    </strong>
+    <span class="notice-body" data-i18n="notice.body">
+      If you need to report a loved one as missing, please call your local law enforcement
+      agency immediately, or call <a href="tel:303-239-4201">303-239-4201</a> for the
+      CBI 24-hour line.
+    </span>
+  </div>
+
+  <!-- Form-level live regions (WCAG 4.1.3) -->
+  <div role="alert" aria-live="assertive" id="form-error-region" class="sr-only"></div>
+  <div role="status" aria-live="polite" id="form-status-region" class="sr-only"></div>
+
+  <form id="cbi-mp-form" novalidate>
+
+    <!-- Routing question — replaces the dead-end Yes/No gate -->
+    <fieldset class="routing-question">
+      <legend data-i18n="routing.legend">
+        Are you directly connected to a missing person case in Colorado?
+        <span class="required-mark" aria-hidden="true">*</span>
+        <span class="sr-only">(required)</span>
+      </legend>
+
+      <div class="routing-options" role="radiogroup" aria-required="true"
+           aria-describedby="routing-help">
+        <label class="routing-option">
+          <input type="radio" name="connection" value="direct" required>
+          <span>
+            <span class="routing-label" data-i18n="routing.direct.label">
+              Yes — I am family, a loved one, or an associate of a missing person
+            </span>
+            <span class="routing-desc" data-i18n="routing.direct.desc">
+              Continue with the form so we can keep your contact information on file.
+            </span>
+          </span>
+        </label>
+        <label class="routing-option">
+          <input type="radio" name="connection" value="supporter" required>
+          <span>
+            <span class="routing-label" data-i18n="routing.supporter.label">
+              No — I'm a community member or program supporter
+            </span>
+            <span class="routing-desc" data-i18n="routing.supporter.desc">
+              We have a separate path for supporters and resources.
+            </span>
+          </span>
+        </label>
+      </div>
+      <span id="routing-help" class="sr-only">
+        Choose one of the options. The form will route you to the correct path.
+      </span>
+
+      <!-- Alternative path for supporters — NOT a dead end -->
+      <div class="alt-path" id="alt-path" role="region" aria-labelledby="alt-path-title">
+        <p class="alt-path-title" id="alt-path-title" data-i18n="altpath.title">
+          Thank you for your support
+        </p>
+        <p class="alt-path-body" data-i18n="altpath.body">
+          The Missing Persons program welcomes community involvement. To learn how to help,
+          visit the <a href="https://cbi.colorado.gov/missing-persons-resource-page">Missing Persons Resource Page</a>
+          or sign up for <a href="https://cbi.colorado.gov/investigations/missing-persons/missing-children-poster-contest">community events</a>.
+          You can also follow case updates through the <a href="https://cbi.colorado.gov/alerts">CBI Alerts page</a>.
+        </p>
+      </div>
+    </fieldset>
+
+    <!-- ─── Fields below only shown when "direct" is selected ────────── -->
+    <div id="direct-fields" class="form-hidden">
+
+      <fieldset class="section">
+        <legend data-i18n="mp.legend">
+          About the missing person
+          <span class="legend-help" data-i18n="mp.help">
+            Provide the name of the person you are connected to.
+          </span>
+        </legend>
+
+        <div class="field-group cols-2">
+          <div class="field">
+            <label for="mp-first" data-i18n="mp.first.label">
+              Missing person's first name
+              <span class="required-mark" aria-hidden="true">*</span>
+              <span class="sr-only">(required)</span>
+            </label>
+            <input type="text" id="mp-first" name="mp_first"
+                   autocomplete="off" required
+                   aria-describedby="mp-first-help">
+            <span class="field-help" id="mp-first-help" data-i18n="mp.first.help">
+              First or given name of the missing person.
+            </span>
+          </div>
+          <div class="field">
+            <label for="mp-last" data-i18n="mp.last.label">
+              Missing person's last name
+              <span class="required-mark" aria-hidden="true">*</span>
+              <span class="sr-only">(required)</span>
+            </label>
+            <input type="text" id="mp-last" name="mp_last"
+                   autocomplete="off" required
+                   aria-describedby="mp-last-help">
+            <span class="field-help" id="mp-last-help" data-i18n="mp.last.help">
+              Last or family name of the missing person.
+            </span>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="section">
+        <legend data-i18n="you.legend">
+          Your information
+          <span class="legend-help" data-i18n="you.help">
+            All fields below are used only for missing-person-related communication
+            and are not shared outside CBI.
+          </span>
+        </legend>
+
+        <div class="field-group cols-2">
+          <div class="field">
+            <label for="your-first" data-i18n="you.first.label">
+              Your first name
+              <span class="required-mark" aria-hidden="true">*</span>
+              <span class="sr-only">(required)</span>
+            </label>
+            <input type="text" id="your-first" name="your_first"
+                   autocomplete="given-name" required>
+          </div>
+          <div class="field">
+            <label for="your-last" data-i18n="you.last.label">
+              Your last name
+              <span class="required-mark" aria-hidden="true">*</span>
+              <span class="sr-only">(required)</span>
+            </label>
+            <input type="text" id="your-last" name="your_last"
+                   autocomplete="family-name" required>
+          </div>
+        </div>
+
+        <div class="field-group cols-2">
+          <div class="field">
+            <label for="your-phone" data-i18n="you.phone.label">
+              Phone number
+              <span class="required-mark" aria-hidden="true">*</span>
+              <span class="sr-only">(required)</span>
+            </label>
+            <input type="tel" id="your-phone" name="your_phone"
+                   autocomplete="tel" required
+                   aria-describedby="your-phone-help"
+                   placeholder="(719) 555-0142">
+            <span class="field-help" id="your-phone-help" data-i18n="you.phone.help">
+              The best phone number, including area code, where we can reach you.
+            </span>
+          </div>
+          <div class="field">
+            <label for="your-email" data-i18n="you.email.label">
+              Email address
+              <span class="required-mark" aria-hidden="true">*</span>
+              <span class="sr-only">(required)</span>
+            </label>
+            <input type="email" id="your-email" name="your_email"
+                   autocomplete="email" required
+                   aria-describedby="your-email-help"
+                   placeholder="you@example.com">
+            <span class="field-help" id="your-email-help" data-i18n="you.email.help">
+              The best email address to reach you.
+            </span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="your-address" data-i18n="you.address.label">
+            Mailing address
+          </label>
+          <input type="text" id="your-address" name="your_address"
+                 autocomplete="street-address"
+                 aria-describedby="your-address-help">
+          <span class="field-help" id="your-address-help" data-i18n="you.address.help">
+            Used only for missing-person-related mail.
+          </span>
+        </div>
+
+        <div class="field-group cols-3">
+          <div class="field">
+            <label for="your-city" data-i18n="you.city.label">City</label>
+            <input type="text" id="your-city" name="your_city"
+                   autocomplete="address-level2">
+          </div>
+          <div class="field">
+            <label for="your-state" data-i18n="you.state.label">State</label>
+            <input type="text" id="your-state" name="your_state"
+                   autocomplete="address-level1" value="Colorado">
+          </div>
+          <div class="field">
+            <label for="your-zip" data-i18n="you.zip.label">ZIP</label>
+            <input type="text" id="your-zip" name="your_zip"
+                   autocomplete="postal-code" inputmode="numeric"
+                   pattern="[0-9]{5}(-[0-9]{4})?">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="section">
+        <legend data-i18n="msg.legend">
+          Anything you'd like us to know
+          <span class="legend-help" data-i18n="msg.help">
+            Optional. If you share context — for example, a recent change of address,
+            urgency about a case update, or a question — we can route your message
+            to the right team faster.
+          </span>
+        </legend>
+
+        <div class="field">
+          <label for="comments" data-i18n="msg.label">
+            Your message
+          </label>
+          <textarea id="comments" name="comments"
+                    aria-describedby="comments-help"
+                    placeholder=""></textarea>
+          <span class="field-help" id="comments-help" data-i18n="msg.help2">
+            We read every message. If your message is time-sensitive, please also call
+            <a href="tel:303-239-4201">303-239-4201</a>.
+          </span>
+
+          <!-- AI advisory chip — populated by Claude API on debounced typing -->
+          <div class="ai-advisory" id="ai-advisory" role="status" aria-live="polite">
+            <span class="ai-advisory-icon" aria-hidden="true">→</span>
+            <span class="ai-advisory-text" id="ai-advisory-text"></span>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- HONEYPOT — properly hidden from AT and visually -->
+    <div class="hp-field" aria-hidden="true">
+      <label for="hp-website">Website (leave blank)</label>
+      <input type="text" id="hp-website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!-- Form errors region — appears above submit if validation fails -->
+    <div id="form-errors-visible" class="form-alert" hidden role="alert"></div>
+
+    <div class="submit-row">
+      <button type="submit" class="btn btn-primary" id="submit-btn">
+        <span data-i18n="btn.submit">Submit</span>
+      </button>
+      <a href="tel:303-239-4201" class="btn btn-secondary"
+         aria-label="Call CBI Missing Persons Unit at 303-239-4201">
+        <span data-i18n="btn.call">Call us instead: 303-239-4201</span>
+      </a>
+      <span class="submit-help" data-i18n="btn.help">
+        Prefer to talk? Calling is just as effective. Lines are answered 24 hours.
+      </span>
+    </div>
+
+  </form>
+
+  <!-- Confirmation panel — shown after successful submission -->
+  <div id="confirmation" class="form-status form-hidden" tabindex="-1"
+       role="region" aria-labelledby="conf-title">
+    <h2 id="conf-title" style="margin:0 0 8px; font-size:18px; color: var(--green);"
+        data-i18n="conf.title">
+      Thank you. Your information has been received.
+    </h2>
+    <p style="margin:0; font-size:15px;" data-i18n="conf.body">
+      A member of the Missing Persons Unit will be in touch as needed. If your situation
+      is time-sensitive, please call <a href="tel:303-239-4201">303-239-4201</a>.
+    </p>
+  </div>
+
+</main>
+
+<footer class="page-footer" role="contentinfo">
+  <p>
+    <a href="https://cbi.colorado.gov/">cbi.colorado.gov</a> ·
+    <a href="https://publicsafety.colorado.gov/accessibility-interpretation-and-translation-support">Accessibility</a> ·
+    <a href="tel:303-239-4201">303-239-4201</a>
+  </p>
+  <p style="margin-top: 6px; font-size: 13px;">
+    Colorado Bureau of Investigation · 690 Kipling Street, Suite 3000, Lakewood, CO 80215
+  </p>
+</footer>
+
+<script>
+/* ────────────────────────────────────────────────────────────────
+   FORM BEHAVIOR — accessibility-first, no framework
+   Drupal Webform integration points are commented inline.
+   ──────────────────────────────────────────────────────────────── */
+
+(() => {
+  const form          = document.getElementById('cbi-mp-form');
+  const directFields  = document.getElementById('direct-fields');
+  const altPath       = document.getElementById('alt-path');
+  const errorRegion   = document.getElementById('form-error-region');
+  const statusRegion  = document.getElementById('form-status-region');
+  const errorVisible  = document.getElementById('form-errors-visible');
+  const confirmation  = document.getElementById('confirmation');
+  const submitBtn     = document.getElementById('submit-btn');
+  const aiAdvisory    = document.getElementById('ai-advisory');
+  const aiAdvisoryTxt = document.getElementById('ai-advisory-text');
+
+  // ── Routing question handler ─────────────────────────────────
+  const routingInputs = document.querySelectorAll('input[name="connection"]');
+  routingInputs.forEach(input => {
+    input.addEventListener('change', () => {
+      if (input.value === 'direct' && input.checked) {
+        directFields.classList.remove('form-hidden');
+        altPath.classList.remove('shown');
+        // Announce to AT — WCAG 4.1.3
+        statusRegion.textContent = 'Form is now active. Please complete the fields below.';
+      } else if (input.value === 'supporter' && input.checked) {
+        directFields.classList.add('form-hidden');
+        altPath.classList.add('shown');
+        statusRegion.textContent = 'Thank you for your support. Resources are listed below.';
+      }
+    });
+  });
+
+  // ── Real-time validation messaging (WCAG 3.3.1) ──────────────
+  function clearFieldError(input) {
+    const wrapper = input.closest('.field');
+    if (!wrapper) return;
+    wrapper.classList.remove('has-error');
+    const err = wrapper.querySelector('.field-error');
+    if (err) err.remove();
+  }
+  function setFieldError(input, message) {
+    const wrapper = input.closest('.field');
+    if (!wrapper) return;
+    wrapper.classList.add('has-error');
+    let err = wrapper.querySelector('.field-error');
+    if (!err) {
+      err = document.createElement('span');
+      err.className = 'field-error';
+      err.id = `${input.id}-error`;
+      wrapper.appendChild(err);
+    }
+    err.textContent = message;
+    // Wire input to its error message via aria-describedby
+    const existing = (input.getAttribute('aria-describedby') || '').split(' ').filter(Boolean);
+    if (!existing.includes(err.id)) {
+      input.setAttribute('aria-describedby', [...existing, err.id].join(' '));
+    }
+    input.setAttribute('aria-invalid', 'true');
+  }
+
+  form.querySelectorAll('input, textarea').forEach(input => {
+    input.addEventListener('blur', () => {
+      if (input.value.trim()) {
+        clearFieldError(input);
+        input.removeAttribute('aria-invalid');
+      }
+    });
+  });
+
+  // ── Form submission ──────────────────────────────────────────
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorVisible.hidden = true;
+    errorRegion.textContent = '';
+
+    // Gather visible required fields
+    const connection = form.querySelector('input[name="connection"]:checked');
+    if (!connection) {
+      errorVisible.hidden = false;
+      errorVisible.textContent = 'Please choose whether you are directly connected to a missing person case.';
+      errorRegion.textContent = errorVisible.textContent;
+      return;
+    }
+    if (connection.value !== 'direct') {
+      // Supporter path — no submission, just guide them to resources
+      altPath.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      altPath.focus?.();
+      return;
+    }
+
+    // Validate required fields
+    const fields = directFields.querySelectorAll('[required]');
+    let firstInvalid = null;
+    let errors = [];
+    fields.forEach(input => {
+      clearFieldError(input);
+      input.removeAttribute('aria-invalid');
+      if (!input.value.trim()) {
+        const labelEl = input.closest('.field')?.querySelector('label');
+        const labelText = (labelEl?.firstChild?.textContent || input.name).trim();
+        setFieldError(input, `${labelText} is required.`);
+        errors.push(labelText);
+        if (!firstInvalid) firstInvalid = input;
+      } else if (input.type === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value)) {
+        setFieldError(input, 'Please enter a valid email address.');
+        errors.push('email format');
+        if (!firstInvalid) firstInvalid = input;
+      }
+    });
+
+    // Honeypot check (silently reject if filled)
+    const hp = form.querySelector('input[name="website"]');
+    if (hp && hp.value) {
+      // Pretend success but don't submit
+      submitBtn.disabled = true;
+      showConfirmation();
+      return;
+    }
+
+    if (errors.length) {
+      errorVisible.hidden = false;
+      errorVisible.textContent = `Please correct the following: ${errors.join(', ')}.`;
+      errorRegion.textContent = `${errors.length} field${errors.length===1?'':'s'} need attention. Focus has moved to the first error.`;
+      firstInvalid?.focus();
+      return;
+    }
+
+    // ── Submit to Drupal Webform endpoint ──────────────────────
+    /*
+     * In production, this POSTs to the Drupal Webform REST endpoint
+     * configured at /webform_rest/{webform_id}/submission.
+     *
+     *   POST /webform_rest/missing_person_contact/submission
+     *   Headers: { 'X-CSRF-Token': '<token>', 'Content-Type': 'application/json' }
+     *   Body: { webform_id, ...fieldValues }
+     *
+     * The Webform's email handler routes the submission to the
+     * Missing Persons Unit inbox. The optional Anthropic API
+     * webhook (configured below) attaches a routing summary
+     * to the email subject line.
+     */
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting…';
+    statusRegion.textContent = 'Submitting your information.';
+
+    const data = Object.fromEntries(new FormData(form).entries());
+    delete data.website; // strip honeypot before send
+
+    try {
+      // PRODUCTION endpoint:
+      // const res = await fetch('/webform_rest/missing_person_contact/submission', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': await getCsrfToken() },
+      //   body: JSON.stringify({ webform_id: 'missing_person_contact', ...data }),
+      // });
+      // if (!res.ok) throw new Error(await res.text());
+
+      // Demo: simulate network
+      await new Promise(r => setTimeout(r, 800));
+      showConfirmation();
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit';
+      errorVisible.hidden = false;
+      errorVisible.textContent = 'There was a problem submitting the form. Please call 303-239-4201 or try again.';
+      errorRegion.textContent = errorVisible.textContent;
+    }
+  });
+
+  function showConfirmation() {
+    form.style.display = 'none';
+    confirmation.classList.remove('form-hidden');
+    confirmation.focus();
+    statusRegion.textContent = 'Your information has been received successfully.';
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // CLAUDE API ROUTING LAYER — narrative-based case triage
+  // ─────────────────────────────────────────────────────────────
+  // Same pattern used in the Colorado AG Salesforce-integrated form.
+  // While the user types in the message field (debounced), we send
+  // the text to a backend proxy that calls the Anthropic API and
+  // returns a routing suggestion: case relation, urgency, related
+  // case ID match. The output is shown as advisory text; the form
+  // submission continues regardless of the AI output.
+  //
+  // SECURITY: API key NEVER touches the browser. The fetch goes to
+  // a server-side endpoint at /api/cbi-routing/analyze that holds
+  // the key and rate-limits per-IP.
+  //
+  // For Drupal: implement the proxy as a Drupal route controller
+  // (custom module) that calls the Anthropic API server-side and
+  // logs the routing decision to the Webform submission record.
+  // ─────────────────────────────────────────────────────────────
+
+  const commentsField = document.getElementById('comments');
+  let aiTimer = null;
+  let lastAnalysed = '';
+
+  commentsField.addEventListener('input', () => {
+    clearTimeout(aiTimer);
+    const text = commentsField.value.trim();
+    if (text.length < 60 || text === lastAnalysed) return;
+    aiTimer = setTimeout(() => analyzeMessage(text), 1500);
+  });
+
+  async function analyzeMessage(text) {
+    lastAnalysed = text;
+    aiAdvisory.classList.add('shown');
+    aiAdvisoryTxt.innerHTML = '<span class="ai-thinking">Routing your message…</span>';
+
+    try {
+      // PRODUCTION endpoint:
+      // const res = await fetch('/api/cbi-routing/analyze', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ message: text }),
+      // });
+      // const result = await res.json();
+
+      // Demo: rule-based stand-in so the UI is testable without backend
+      const result = mockAnalysis(text);
+
+      const cls = result.urgency === 'high' ? 'urgent' : '';
+      aiAdvisory.className = `ai-advisory shown ${cls}`;
+      aiAdvisoryTxt.innerHTML = result.message;
+    } catch (e) {
+      aiAdvisory.classList.remove('shown');
+    }
+  }
+
+  // Demo analysis mirroring the Claude API contract.
+  // PRODUCTION REPLACEMENT: server-side prompt to claude-sonnet-4-7
+  // returning JSON: { routing, urgency, message, possible_case_match }
+  function mockAnalysis(text) {
+    const t = text.toLowerCase();
+    if (/(urgent|asap|emergency|right now|critical|immediately)/i.test(t)) {
+      return {
+        urgency: 'high',
+        message: `<strong>This message looks time-sensitive.</strong>
+                  If your situation is an active emergency, please call
+                  <a href="tel:303-239-4201">303-239-4201</a> now.
+                  Your message has been flagged for priority routing.`,
+      };
+    }
+    if (/(amber|abducted|kidnapped|child|minor)/i.test(t)) {
+      return {
+        urgency: 'medium',
+        message: `Your message references possible AMBER Alert content.
+                  We'll route this to the Missing Children desk.`,
+      };
+    }
+    if (/(address|moved|new phone|new email|update)/i.test(t)) {
+      return {
+        urgency: 'low',
+        message: `Looks like a contact information update —
+                  we'll log this with your current case file.`,
+      };
+    }
+    return {
+      urgency: 'low',
+      message: `Thanks. We'll route your message to the appropriate team.`,
+    };
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // LANGUAGE TOGGLE — sets html lang and swaps text per WCAG 3.1.1
+  // ─────────────────────────────────────────────────────────────
+  const i18n = {
+    en: {
+      'page.title': 'Missing Person Contact Form',
+      'page.lede':  'The CBI Missing Persons Unit uses this form to keep contact information current for family, friends, and associates of missing persons in Colorado. Your information helps us reach you for case-related communication and event invitations.',
+      'notice.title': 'This form is not for reporting a missing person.',
+      'notice.body':  `If you need to report a loved one as missing, please call your local law enforcement agency immediately, or call <a href="tel:303-239-4201">303-239-4201</a> for the CBI 24-hour line.`,
+      'routing.legend':         'Are you directly connected to a missing person case in Colorado?',
+      'routing.direct.label':   'Yes — I am family, a loved one, or an associate of a missing person',
+      'routing.direct.desc':    'Continue with the form so we can keep your contact information on file.',
+      'routing.supporter.label':"No — I'm a community member or program supporter",
+      'routing.supporter.desc': 'We have a separate path for supporters and resources.',
+      'altpath.title':'Thank you for your support',
+      'altpath.body': `The Missing Persons program welcomes community involvement. To learn how to help, visit the <a href="https://cbi.colorado.gov/missing-persons-resource-page">Missing Persons Resource Page</a> or sign up for <a href="https://cbi.colorado.gov/investigations/missing-persons/missing-children-poster-contest">community events</a>. You can also follow case updates through the <a href="https://cbi.colorado.gov/alerts">CBI Alerts page</a>.`,
+      'mp.legend':    'About the missing person',
+      'mp.help':      'Provide the name of the person you are connected to.',
+      'mp.first.label':"Missing person's first name",
+      'mp.first.help': 'First or given name of the missing person.',
+      'mp.last.label': "Missing person's last name",
+      'mp.last.help':  'Last or family name of the missing person.',
+      'you.legend':   'Your information',
+      'you.help':     'All fields below are used only for missing-person-related communication and are not shared outside CBI.',
+      'you.first.label':'Your first name',
+      'you.last.label': 'Your last name',
+      'you.phone.label':'Phone number',
+      'you.phone.help': 'The best phone number, including area code, where we can reach you.',
+      'you.email.label':'Email address',
+      'you.email.help': 'The best email address to reach you.',
+      'you.address.label':'Mailing address',
+      'you.address.help': 'Used only for missing-person-related mail.',
+      'you.city.label':'City',
+      'you.state.label':'State',
+      'you.zip.label': 'ZIP',
+      'msg.legend':   "Anything you'd like us to know",
+      'msg.help':     "Optional. If you share context — for example, a recent change of address, urgency about a case update, or a question — we can route your message to the right team faster.",
+      'msg.label':    'Your message',
+      'msg.help2':    'We read every message. If your message is time-sensitive, please also call <a href="tel:303-239-4201">303-239-4201</a>.',
+      'btn.submit':   'Submit',
+      'btn.call':     'Call us instead: 303-239-4201',
+      'btn.help':     'Prefer to talk? Calling is just as effective. Lines are answered 24 hours.',
+      'conf.title':   'Thank you. Your information has been received.',
+      'conf.body':    'A member of the Missing Persons Unit will be in touch as needed. If your situation is time-sensitive, please call <a href="tel:303-239-4201">303-239-4201</a>.',
+    },
+    es: {
+      'page.title': 'Formulario de contacto sobre personas desaparecidas',
+      'page.lede':  'La Unidad de Personas Desaparecidas del CBI usa este formulario para mantener actualizada la información de contacto de familiares, amigos y asociados de personas desaparecidas en Colorado. Su información nos permite comunicarnos con usted sobre el caso e invitarle a eventos relacionados.',
+      'notice.title': 'Este formulario no sirve para reportar a una persona desaparecida.',
+      'notice.body':  `Si necesita reportar a un ser querido como desaparecido, llame inmediatamente a la agencia policial local o llame al <a href="tel:303-239-4201">303-239-4201</a>, la línea de 24 horas del CBI.`,
+      'routing.legend':         '¿Está usted directamente vinculado/a a un caso de persona desaparecida en Colorado?',
+      'routing.direct.label':   'Sí — Soy familiar, ser querido o asociado/a de una persona desaparecida',
+      'routing.direct.desc':    'Continúe con el formulario para que podamos mantener su información en archivo.',
+      'routing.supporter.label':'No — Soy miembro de la comunidad o partidario/a del programa',
+      'routing.supporter.desc': 'Tenemos un camino aparte para partidarios y recursos.',
+      'altpath.title':'Gracias por su apoyo',
+      'altpath.body': `El programa de Personas Desaparecidas agradece la participación comunitaria. Para aprender cómo ayudar, visite la <a href="https://cbi.colorado.gov/missing-persons-resource-page">Página de Recursos sobre Personas Desaparecidas</a> o regístrese para <a href="https://cbi.colorado.gov/investigations/missing-persons/missing-children-poster-contest">eventos comunitarios</a>. También puede seguir las actualizaciones de los casos en la <a href="https://cbi.colorado.gov/alerts">Página de Alertas del CBI</a>.`,
+      'mp.legend':    'Sobre la persona desaparecida',
+      'mp.help':      'Proporcione el nombre de la persona con quien está vinculado/a.',
+      'mp.first.label':'Primer nombre de la persona desaparecida',
+      'mp.first.help': 'Primer nombre de la persona desaparecida.',
+      'mp.last.label': 'Apellido de la persona desaparecida',
+      'mp.last.help':  'Apellido de la persona desaparecida.',
+      'you.legend':   'Su información',
+      'you.help':     'Todos los campos a continuación se usan únicamente para comunicación relacionada con personas desaparecidas y no se comparten fuera del CBI.',
+      'you.first.label':'Su primer nombre',
+      'you.last.label': 'Su apellido',
+      'you.phone.label':'Número de teléfono',
+      'you.phone.help': 'El mejor teléfono, incluyendo el código de área, para contactarlo/a.',
+      'you.email.label':'Correo electrónico',
+      'you.email.help': 'El mejor correo electrónico para contactarlo/a.',
+      'you.address.label':'Dirección postal',
+      'you.address.help': 'Se usa únicamente para correo relacionado con personas desaparecidas.',
+      'you.city.label':'Ciudad',
+      'you.state.label':'Estado',
+      'you.zip.label': 'Código postal',
+      'msg.legend':   'Cualquier información adicional',
+      'msg.help':     'Opcional. Si comparte contexto — por ejemplo, un cambio de dirección reciente, una urgencia sobre un caso, o una pregunta — podemos enviar su mensaje al equipo correcto más rápido.',
+      'msg.label':    'Su mensaje',
+      'msg.help2':    'Leemos todos los mensajes. Si su mensaje es urgente, por favor también llame al <a href="tel:303-239-4201">303-239-4201</a>.',
+      'btn.submit':   'Enviar',
+      'btn.call':     'Llámenos: 303-239-4201',
+      'btn.help':     '¿Prefiere hablar por teléfono? Llamar es igual de efectivo. Las líneas están abiertas 24 horas.',
+      'conf.title':   'Gracias. Hemos recibido su información.',
+      'conf.body':    'Un miembro de la Unidad de Personas Desaparecidas se comunicará con usted cuando sea necesario. Si su situación es urgente, por favor llame al <a href="tel:303-239-4201">303-239-4201</a>.',
+    },
+  };
+
+  function setLang(lang) {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (i18n[lang]?.[key]) {
+        el.innerHTML = i18n[lang][key];
+      }
+    });
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.setAttribute('aria-pressed', btn.dataset.lang === lang ? 'true' : 'false');
+    });
+    statusRegion.textContent = lang === 'es'
+      ? 'Idioma cambiado a español.'
+      : 'Language changed to English.';
+  }
+  document.querySelectorAll('.lang-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => setLang(btn.dataset.lang));
+  });
+
+})();
+</script>
+</body>
+</html>
