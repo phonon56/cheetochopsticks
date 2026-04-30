@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compared to What — A Civic Dashboard — The Dais</title>
+<meta name="description" content="An honest comparison of wages, housing affordability, and public investment between El Paso County and Denver County, Colorado. Three charts. Public data. The work the marketing department wouldn't do.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper:        #f8f5ef;
+  --white:        #ffffff;
+  --ink:          #18150f;
+  --mid:          #4a4540;
+  --faint:        #9a948c;
+  --rule:         rgba(0,0,0,0.09);
+  --rule-strong:  rgba(0,0,0,0.18);
+  --brass:        #b8872e;
+  --brass-bg:     rgba(184,135,46,0.08);
+  --night:        #16130e;
+  --action:       #1a3a2a;
+  --action-light: rgba(26,58,42,0.07);
+  --warn:         #8a3a10;
+  --warn-bg:      rgba(180,80,30,0.06);
+
+  /* chart colors — distinguishable for color-blind users */
+  --elpaso:       #b8872e;   /* brass */
+  --elpaso-bg:    rgba(184,135,46,0.18);
+  --denver:       #1a3a2a;   /* deep green */
+  --denver-bg:    rgba(26,58,42,0.18);
+  --shortfall:    #8a3a10;   /* burnt sienna */
+
+  --ff-head: 'Playfair Display', Georgia, serif;
+  --ff-body: 'Libre Franklin', system-ui, sans-serif;
+  --ff-mono: 'DM Mono', monospace;
+  --max:     980px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--ff-body);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* TOP BAR */
+.topbar {
+  height: 44px;
+  background: var(--night);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+}
+.topbar-logo {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: var(--brass);
+  text-transform: uppercase;
+}
+.topbar-meta {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  color: var(--faint);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 0 80px; }
+
+/* MASTHEAD */
+.masthead { padding: 64px 28px 36px; border-bottom: 1px solid var(--rule); }
+.kicker {
+  font-family: var(--ff-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 16px;
+}
+h1.title {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.subtitle {
+  font-family: var(--ff-head);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.35rem;
+  color: var(--mid);
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+.lede {
+  font-size: 1.05rem;
+  color: var(--mid);
+  line-height: 1.7;
+  max-width: 680px;
+}
+
+/* HEADLINE STRIP */
+.headline-strip {
+  margin: 32px 0 0;
+  padding: 28px 28px;
+  background: var(--night);
+  color: var(--paper);
+}
+.headline-strip-label {
+  font-family: var(--ff-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 14px;
+}
+.headline-strip-text {
+  font-family: var(--ff-head);
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.45;
+}
+.headline-strip-text strong {
+  color: var(--brass);
+  font-weight: 700;
+}
+
+/* SECTION LABELS */
+.section-label {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  padding: 56px 28px 0;
+  border-top: 1px solid var(--rule);
+  margin-top: 8px;
+}
+.section-label strong {
+  display: block;
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 1.7rem;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--ink);
+  margin-top: 4px;
+  line-height: 1.2;
+}
+.first-section { border-top: none; padding-top: 36px; }
+
+/* CHART CARDS */
+.chart-card {
+  margin: 24px 28px 0;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  padding: 28px 28px 24px;
+}
+.chart-num {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 6px;
+}
+.chart-title {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.chart-blurb {
+  font-size: 0.95rem;
+  color: var(--mid);
+  margin-bottom: 22px;
+  max-width: 640px;
+}
+.chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 14px;
+}
+.chart-source {
+  font-family: var(--ff-mono);
+  font-size: 0.72rem;
+  color: var(--faint);
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
+  letter-spacing: 0.02em;
+}
+.chart-source strong { color: var(--mid); }
+
+/* LEGEND */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 8px 0 18px;
+  font-size: 0.85rem;
+}
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mid);
+}
+.legend i {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 2px;
+}
+.legend i.l-elpaso  { background: var(--elpaso); }
+.legend i.l-denver  { background: var(--denver); }
+.legend i.l-need    { background: var(--shortfall); border-radius: 50%; }
+.legend i.l-wage    { background: var(--ink); border-radius: 50%; }
+
+/* TAKEAWAY BOX */
+.takeaway {
+  margin: 22px 0 0;
+  padding: 18px 22px;
+  background: var(--brass-bg);
+  border-left: 4px solid var(--brass);
+  font-family: var(--ff-head);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* PENDING */
+.pending {
+  margin: 24px 28px 0;
+  padding: 36px 28px;
+  background: var(--warn-bg);
+  border: 1px dashed var(--warn);
+  text-align: center;
+}
+.pending-num {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--warn);
+  margin-bottom: 8px;
+}
+.pending-title {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+.pending-body {
+  max-width: 540px;
+  margin: 0 auto;
+  font-size: 0.95rem;
+  color: var(--mid);
+  line-height: 1.6;
+}
+
+/* PROSE */
+.prose { padding: 24px 28px 0; max-width: 720px; }
+.prose p { margin-bottom: 16px; font-size: 1rem; }
+.prose ul { margin: 0 0 16px 22px; padding: 0; }
+.prose ul li { margin-bottom: 8px; font-size: 0.97rem; line-height: 1.6; }
+
+/* DATA TABLE (for screen readers + visible alternative) */
+.data-table {
+  margin: 16px 0 0;
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--ff-mono);
+  font-size: 0.78rem;
+}
+.data-table th, .data-table td {
+  padding: 8px 10px;
+  border: 1px solid var(--rule);
+  text-align: right;
+}
+.data-table th {
+  background: var(--paper);
+  font-weight: 600;
+  text-align: left;
+}
+.data-table th:first-child, .data-table td:first-child { text-align: left; }
+.data-table caption {
+  caption-side: top;
+  text-align: left;
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 8px;
+}
+
+details summary {
+  cursor: pointer;
+  font-family: var(--ff-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-top: 16px;
+  padding: 6px 0;
+  user-select: none;
+}
+details[open] summary { color: var(--ink); }
+
+/* FOOTER */
+.footer {
+  margin-top: 64px;
+  padding: 36px 28px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+  color: var(--mid);
+  line-height: 1.7;
+}
+.footer strong { color: var(--ink); }
+
+/* INLINE LINKS */
+a { color: var(--action); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--brass); }
+
+/* SR-ONLY */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  h1.title { font-size: 2rem; }
+  .subtitle { font-size: 1.1rem; }
+  .headline-strip-text { font-size: 1.2rem; }
+  .chart-card { padding: 22px 18px 20px; }
+  .chart-title { font-size: 1.2rem; }
+  .data-table { font-size: 0.7rem; }
+  .data-table th, .data-table td { padding: 5px 6px; }
+}
+
+/* PRINT */
+@media print {
+  body { background: white; }
+  .topbar { display: none; }
+  .chart-card, .pending, .takeaway { break-inside: avoid; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">The Dais</span>
+  <span class="topbar-meta">StorySeed Studios · Civic Dashboard</span>
+</div>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="kicker">A Civic Dashboard · Episode Companion · Updated April 2026</div>
+    <h1 class="title">Compared to What</h1>
+    <p class="subtitle">An honest look at wages, housing, and public investment in El Paso County and Denver County.</p>
+    <p class="lede">The Chamber publishes the wins. This dashboard publishes the comparison. Three charts, two counties, six years of federal and Zillow data — and one column still being assembled while public records requests work their way through. Methodology is at the bottom. Every number is sourced.</p>
+
+    <div class="headline-strip" role="region" aria-label="Headline finding">
+      <div class="headline-strip-label">Headline finding · 2024</div>
+      <div class="headline-strip-text">An average El Paso County worker earns <strong>$66,313</strong>. The income needed to buy a typical home in the Colorado Springs metro is <strong>$114,656</strong>. The wage covers <strong>57.8%</strong> of what's required.</div>
+    </div>
+  </header>
+
+  <!-- ============= CHART 1: WAGE GAP ============= -->
+  <div class="section-label first-section">Chart 1 · Wages <strong>What workers earn, by county</strong></div>
+
+  <div class="chart-card">
+    <div class="chart-num">Chart 1 of 3</div>
+    <div class="chart-title">Average annual wage, El Paso vs Denver County</div>
+    <p class="chart-blurb">All-industry private-sector employment-weighted average. Both counties have grown nominal wages since 2019, but Denver has grown faster. The gap in dollar terms has widened every year of the series.</p>
+
+    <div class="legend" aria-hidden="true">
+      <span><i class="l-elpaso"></i> El Paso County</span>
+      <span><i class="l-denver"></i> Denver County</span>
+    </div>
+
+    <svg class="chart-svg" viewBox="0 0 880 380" role="img" aria-labelledby="chart1-title chart1-desc" preserveAspectRatio="xMidYMid meet">
+      <title id="chart1-title">Average annual wage by county, 2019 to 2024</title>
+      <desc id="chart1-desc">A line chart comparing average annual wages in El Paso County and Denver County from 2019 through 2024. El Paso County rose from $51,506 to $66,313. Denver County rose from $74,737 to $104,325. The dollar gap widened from $23,231 to $38,012.</desc>
+
+      <!-- Grid lines and Y axis labels -->
+      <g font-family="DM Mono, monospace" font-size="11" fill="#9a948c">
+        <line x1="80" y1="40"  x2="850" y2="40"  stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="80" y1="100" x2="850" y2="100" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="80" y1="160" x2="850" y2="160" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="80" y1="220" x2="850" y2="220" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="80" y1="280" x2="850" y2="280" stroke="#e4ddd0" stroke-width="1"/>
+        <text x="72" y="44"  text-anchor="end">$120k</text>
+        <text x="72" y="104" text-anchor="end">$100k</text>
+        <text x="72" y="164" text-anchor="end">$80k</text>
+        <text x="72" y="224" text-anchor="end">$60k</text>
+        <text x="72" y="284" text-anchor="end">$40k</text>
+      </g>
+
+      <!-- X axis -->
+      <line x1="80" y1="320" x2="850" y2="320" stroke="#9a948c" stroke-width="1.5"/>
+      <g font-family="DM Mono, monospace" font-size="12" fill="#4a4540" text-anchor="middle">
+        <text x="144" y="345">2019</text>
+        <text x="298" y="345">2020</text>
+        <text x="452" y="345">2021</text>
+        <text x="606" y="345">2022</text>
+        <text x="760" y="345">2023</text>
+        <text x="850" y="345">2024</text>
+      </g>
+
+      <!-- Denver line + area (drawn first, behind) -->
+      <!-- Y mapping: $120k=40, $40k=280; range 80k = 240px; $1=0.003 px -->
+      <!-- Denver: 74737, 83252, 89908, 94627, 97890, 104325 -->
+      <!-- pixel y = 280 - (val-40000)*240/80000 -->
+      <path d="M 144,176 L 298,150.4 L 452,130.4 L 606,116.2 L 760,106.4 L 850,87.0 L 850,320 L 144,320 Z" 
+            fill="rgba(26,58,42,0.10)" stroke="none"/>
+      <polyline points="144,176 298,150.4 452,130.4 606,116.2 760,106.4 850,87.0"
+                fill="none" stroke="#1a3a2a" stroke-width="2.5"/>
+
+      <!-- El Paso line + area -->
+      <!-- El Paso: 51506, 55666, 58331, 61165, 63830, 66313 -->
+      <path d="M 144,245.5 L 298,233.0 L 452,225.0 L 606,216.5 L 760,208.5 L 850,201.0 L 850,320 L 144,320 Z" 
+            fill="rgba(184,135,46,0.12)" stroke="none"/>
+      <polyline points="144,245.5 298,233.0 452,225.0 606,216.5 760,208.5 850,201.0"
+                fill="none" stroke="#b8872e" stroke-width="2.5"/>
+
+      <!-- Data points + labels -->
+      <g>
+        <!-- Denver points -->
+        <circle cx="144" cy="176"   r="4" fill="#1a3a2a"/>
+        <circle cx="298" cy="150.4" r="4" fill="#1a3a2a"/>
+        <circle cx="452" cy="130.4" r="4" fill="#1a3a2a"/>
+        <circle cx="606" cy="116.2" r="4" fill="#1a3a2a"/>
+        <circle cx="760" cy="106.4" r="4" fill="#1a3a2a"/>
+        <circle cx="850" cy="87.0"  r="4" fill="#1a3a2a"/>
+        <!-- El Paso points -->
+        <circle cx="144" cy="245.5" r="4" fill="#b8872e"/>
+        <circle cx="298" cy="233.0" r="4" fill="#b8872e"/>
+        <circle cx="452" cy="225.0" r="4" fill="#b8872e"/>
+        <circle cx="606" cy="216.5" r="4" fill="#b8872e"/>
+        <circle cx="760" cy="208.5" r="4" fill="#b8872e"/>
+        <circle cx="850" cy="201.0" r="4" fill="#b8872e"/>
+      </g>
+
+      <!-- Endpoint value labels -->
+      <g font-family="DM Mono, monospace" font-size="11.5" font-weight="500" fill="#1a3a2a">
+        <text x="144" y="166" text-anchor="middle">$74.7k</text>
+        <text x="850" y="77"  text-anchor="end">$104.3k</text>
+      </g>
+      <g font-family="DM Mono, monospace" font-size="11.5" font-weight="500" fill="#b8872e">
+        <text x="144" y="262" text-anchor="middle">$51.5k</text>
+        <text x="850" y="219" text-anchor="end">$66.3k</text>
+      </g>
+
+      <!-- Gap annotation -->
+      <g>
+        <line x1="850" y1="87" x2="850" y2="201" stroke="#8a3a10" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="822" y="148" font-family="Playfair Display, serif" font-style="italic" font-size="13" fill="#8a3a10" text-anchor="end">gap: $38k</text>
+      </g>
+    </svg>
+
+    <details>
+      <summary>Show data table</summary>
+      <table class="data-table">
+        <caption>Average annual wage by county and year, 2019–2024</caption>
+        <thead><tr><th scope="col">Year</th><th scope="col">El Paso County</th><th scope="col">Denver County</th><th scope="col">Gap (USD)</th><th scope="col">Gap (%)</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">2019</th><td>$51,506</td><td>$74,737</td><td>$23,231</td><td>45.1%</td></tr>
+          <tr><th scope="row">2020</th><td>$55,666</td><td>$83,252</td><td>$27,586</td><td>49.6%</td></tr>
+          <tr><th scope="row">2021</th><td>$58,331</td><td>$89,908</td><td>$31,577</td><td>54.1%</td></tr>
+          <tr><th scope="row">2022</th><td>$61,165</td><td>$94,627</td><td>$33,462</td><td>54.7%</td></tr>
+          <tr><th scope="row">2023</th><td>$63,830</td><td>$97,890</td><td>$34,060</td><td>53.4%</td></tr>
+          <tr><th scope="row">2024</th><td>$66,313</td><td>$104,325</td><td>$38,012</td><td>57.3%</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <p class="takeaway">In 2019, a Denver worker earned 45% more than an El Paso worker. By 2024, 57% more. The wage discount the region sells to recruiting companies has been getting deeper relative to its closest peer market, not shallower.</p>
+
+    <div class="chart-source"><strong>Source:</strong> Bureau of Labor Statistics, Quarterly Census of Employment and Wages (QCEW). All-industry private sector. Annualized from quarterly average weekly wages (× 52). Series IDs: ENU0804140510 (El Paso), ENU0803140510 (Denver). Data current through Q4 2024.</div>
+  </div>
+
+  <!-- ============= CHART 2: AFFORDABILITY ============= -->
+  <div class="section-label">Chart 2 · Housing <strong>What it costs to buy in</strong></div>
+
+  <div class="chart-card">
+    <div class="chart-num">Chart 2 of 3</div>
+    <div class="chart-title">Income needed to buy vs actual wages earned</div>
+    <p class="chart-blurb">For each county, two values per year. The dot is the average wage. The bar is the household income Zillow calculates is required to qualify for a mortgage on a typical home with 20% down. The gap between dot and bar top is the affordability shortfall.</p>
+
+    <div class="legend" aria-hidden="true">
+      <span><i class="l-elpaso"></i> El Paso bar / income needed</span>
+      <span><i class="l-denver"></i> Denver bar / income needed</span>
+      <span><i class="l-wage"></i> Average wage (dot)</span>
+    </div>
+
+    <svg class="chart-svg" viewBox="0 0 880 420" role="img" aria-labelledby="chart2-title chart2-desc" preserveAspectRatio="xMidYMid meet">
+      <title id="chart2-title">Affordability gap by county and year, 2019 to 2024</title>
+      <desc id="chart2-desc">Grouped bar chart showing income needed to buy a typical home (bars) versus average annual wage (dots) for El Paso County and Denver County, 2019 to 2024. In every year, the wage falls short of the income needed. The gap widens substantially after 2021 in both counties.</desc>
+
+      <!-- Y axis grid: 0 to 160k. Plot area y=40 to y=340 (300px = 160k, so $1 = 0.001875 px) -->
+      <g font-family="DM Mono, monospace" font-size="11" fill="#9a948c">
+        <line x1="80" y1="40"  x2="850" y2="40"  stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="80" y1="115" x2="850" y2="115" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="80" y1="190" x2="850" y2="190" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="80" y1="265" x2="850" y2="265" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="80" y1="340" x2="850" y2="340" stroke="#9a948c" stroke-width="1.5"/>
+        <text x="72" y="44"  text-anchor="end">$160k</text>
+        <text x="72" y="119" text-anchor="end">$120k</text>
+        <text x="72" y="194" text-anchor="end">$80k</text>
+        <text x="72" y="269" text-anchor="end">$40k</text>
+        <text x="72" y="344" text-anchor="end">$0</text>
+      </g>
+
+      <!-- Year groupings: 6 years, 770px width / 6 = 128.3px per year cluster -->
+      <!-- Each year: El Paso bar + Denver bar side by side, then wage dots -->
+      <!-- Bar height: $1 = 0.001875 px from y=340 baseline -->
+      <!-- y_bar = 340 - val * 300/160000 -->
+
+      <!-- 2019 -->
+      <g>
+        <!-- El Paso income needed = 63758 -->
+        <rect x="115" y="220.4" width="40" height="119.6" fill="#b8872e" opacity="0.85"/>
+        <!-- Denver income needed = 86073 -->
+        <rect x="160" y="178.6" width="40" height="161.4" fill="#1a3a2a" opacity="0.85"/>
+        <!-- El Paso wage = 51506 (dot) -->
+        <circle cx="135" cy="243.4" r="5" fill="#18150f"/>
+        <line x1="135" y1="243.4" x2="135" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <!-- Denver wage = 74737 -->
+        <circle cx="180" cy="199.9" r="5" fill="#18150f"/>
+        <line x1="180" y1="199.9" x2="180" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <text x="157" y="365" font-family="DM Mono, monospace" font-size="12" fill="#4a4540" text-anchor="middle">2019</text>
+      </g>
+
+      <!-- 2020 -->
+      <g>
+        <!-- El Paso income needed = 63200 -->
+        <rect x="240" y="221.5" width="40" height="118.5" fill="#b8872e" opacity="0.85"/>
+        <!-- Denver income needed = 84170 -->
+        <rect x="285" y="182.2" width="40" height="157.8" fill="#1a3a2a" opacity="0.85"/>
+        <!-- El Paso wage = 55666 -->
+        <circle cx="260" cy="235.6" r="5" fill="#18150f"/>
+        <line x1="260" y1="235.6" x2="260" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <!-- Denver wage = 83252 -->
+        <circle cx="305" cy="183.9" r="5" fill="#18150f"/>
+        <line x1="305" y1="183.9" x2="305" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <text x="282" y="365" font-family="DM Mono, monospace" font-size="12" fill="#4a4540" text-anchor="middle">2020</text>
+      </g>
+
+      <!-- 2021 -->
+      <g>
+        <!-- El Paso income needed = 70765 -->
+        <rect x="365" y="207.3" width="40" height="132.7" fill="#b8872e" opacity="0.85"/>
+        <!-- Denver income needed = 93062 -->
+        <rect x="410" y="165.5" width="40" height="174.5" fill="#1a3a2a" opacity="0.85"/>
+        <!-- El Paso wage = 58331 -->
+        <circle cx="385" cy="230.6" r="5" fill="#18150f"/>
+        <line x1="385" y1="230.6" x2="385" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <!-- Denver wage = 89908 -->
+        <circle cx="430" cy="171.4" r="5" fill="#18150f"/>
+        <line x1="430" y1="171.4" x2="430" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <text x="407" y="365" font-family="DM Mono, monospace" font-size="12" fill="#4a4540" text-anchor="middle">2021</text>
+      </g>
+
+      <!-- 2022 -->
+      <g>
+        <!-- El Paso income needed = 102212 -->
+        <rect x="490" y="148.4" width="40" height="191.6" fill="#b8872e" opacity="0.85"/>
+        <!-- Denver income needed = 133722 -->
+        <rect x="535" y="89.3" width="40" height="250.7" fill="#1a3a2a" opacity="0.85"/>
+        <!-- El Paso wage = 61165 -->
+        <circle cx="510" cy="225.3" r="5" fill="#18150f"/>
+        <line x1="510" y1="225.3" x2="510" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <!-- Denver wage = 94627 -->
+        <circle cx="555" cy="162.6" r="5" fill="#18150f"/>
+        <line x1="555" y1="162.6" x2="555" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <text x="532" y="365" font-family="DM Mono, monospace" font-size="12" fill="#4a4540" text-anchor="middle">2022</text>
+      </g>
+
+      <!-- 2023 -->
+      <g>
+        <!-- El Paso income needed = 113329 -->
+        <rect x="615" y="127.5" width="40" height="212.5" fill="#b8872e" opacity="0.85"/>
+        <!-- Denver income needed = 149422 -->
+        <rect x="660" y="59.8" width="40" height="280.2" fill="#1a3a2a" opacity="0.85"/>
+        <!-- El Paso wage = 63830 -->
+        <circle cx="635" cy="220.3" r="5" fill="#18150f"/>
+        <line x1="635" y1="220.3" x2="635" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <!-- Denver wage = 97890 -->
+        <circle cx="680" cy="156.4" r="5" fill="#18150f"/>
+        <line x1="680" y1="156.4" x2="680" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <text x="657" y="365" font-family="DM Mono, monospace" font-size="12" fill="#4a4540" text-anchor="middle">2023</text>
+      </g>
+
+      <!-- 2024 -->
+      <g>
+        <!-- El Paso income needed = 114656 -->
+        <rect x="740" y="125.0" width="40" height="215.0" fill="#b8872e" opacity="0.85"/>
+        <!-- Denver income needed = 153052 -->
+        <rect x="785" y="53.0" width="40" height="287.0" fill="#1a3a2a" opacity="0.85"/>
+        <!-- El Paso wage = 66313 -->
+        <circle cx="760" cy="215.7" r="5" fill="#18150f"/>
+        <line x1="760" y1="215.7" x2="760" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <!-- Denver wage = 104325 -->
+        <circle cx="805" cy="144.4" r="5" fill="#18150f"/>
+        <line x1="805" y1="144.4" x2="805" y2="340" stroke="#18150f" stroke-width="1.2" stroke-dasharray="2,3"/>
+        <text x="782" y="365" font-family="DM Mono, monospace" font-size="12" fill="#4a4540" text-anchor="middle">2024</text>
+      </g>
+
+      <!-- 2024 callout -->
+      <g>
+        <line x1="828" y1="125" x2="850" y2="125" stroke="#1a3a2a" stroke-width="1"/>
+        <text x="855" y="120" font-family="Playfair Display, serif" font-style="italic" font-size="11" fill="#1a3a2a">need: $153k</text>
+        <text x="855" y="133" font-family="Playfair Display, serif" font-style="italic" font-size="11" fill="#1a3a2a">earn: $104k</text>
+      </g>
+    </svg>
+
+    <details>
+      <summary>Show data table</summary>
+      <table class="data-table">
+        <caption>Income needed vs average wage by county, 2019–2024</caption>
+        <thead><tr><th scope="col">Year</th><th scope="col">EP wage</th><th scope="col">EP need</th><th scope="col">EP covers</th><th scope="col">DEN wage</th><th scope="col">DEN need</th><th scope="col">DEN covers</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">2019</th><td>$51,506</td><td>$63,758</td><td>80.8%</td><td>$74,737</td><td>$86,073</td><td>86.8%</td></tr>
+          <tr><th scope="row">2020</th><td>$55,666</td><td>$63,200</td><td>88.1%</td><td>$83,252</td><td>$84,170</td><td>98.9%</td></tr>
+          <tr><th scope="row">2021</th><td>$58,331</td><td>$70,765</td><td>82.4%</td><td>$89,908</td><td>$93,062</td><td>96.6%</td></tr>
+          <tr><th scope="row">2022</th><td>$61,165</td><td>$102,212</td><td>59.8%</td><td>$94,627</td><td>$133,722</td><td>70.8%</td></tr>
+          <tr><th scope="row">2023</th><td>$63,830</td><td>$113,329</td><td>56.3%</td><td>$97,890</td><td>$149,422</td><td>65.5%</td></tr>
+          <tr><th scope="row">2024</th><td>$66,313</td><td>$114,656</td><td>57.8%</td><td>$104,325</td><td>$153,052</td><td>68.2%</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <p class="takeaway">2022 is where the affordability collapse happened. Interest rates jumped, home prices stayed elevated from the 2021 boom, and the income required to qualify for a mortgage rose 50% in twelve months. Wages didn't follow. Both counties got worse. El Paso fell harder.</p>
+
+    <div class="chart-source"><strong>Sources:</strong> Bureau of Labor Statistics QCEW (wages, county-level). Zillow Research, "New Homeowner Affordability — Income Needed to Buy" (20% down, smoothed seasonally adjusted, metro-level used as county proxy). Zillow ZHVI All Homes for context. All data through year-end 2024.</div>
+  </div>
+
+  <!-- ============= CHART 3: PUBLIC INVESTMENT (TRIPTYCH) ============= -->
+  <div class="section-label">Chart 3 · Public Investment <strong>What we're paying per job</strong></div>
+
+  <div class="prose" style="padding-top: 12px;">
+    <p>The third panel is actually three views, layered. The closest view (3A) is what we know about specific El Paso County deals. The middle view (3B) is what a fully documented project stack looks like, using the most thoroughly-recorded deal in the public minutes. The widest view (3C) is where El Paso's recent deals fall in the statewide JGITC landscape. Each view fills in a different piece of the question <em>what does the public actually invest per job</em>.</p>
+    <p style="font-size: 0.9rem; color: var(--mid);"><strong>Important note on JGITC:</strong> the figures in 3A and 3C are the maximum credit ceiling approved by the Colorado Economic Development Commission, earned over up to 8 years only if the company creates and maintains every committed job at or above the county average annual wage. They are not cash already paid. Strategic Fund cash grants are a separate program where dollars actually flow; those numbers are layered into 3B where documented.</p>
+  </div>
+
+  <!-- =============== CHART 3A — PER-DEAL =============== -->
+  <div class="chart-card">
+    <div class="chart-num">Chart 3A · Closest view</div>
+    <div class="chart-title">Per-job public investment, documented El Paso County deals</div>
+    <p class="chart-blurb">For each of five recent recruitment deals, the documented public investment ceiling divided by the jobs committed. Two layers shown: state JGITC ceiling (gold) and Pikes Peak Enterprise Zone credits (deep green). Local Deal Closing Fund matches, county tax abatements, and EDC operating contributions per project are not yet visible — those layers are pending records requests. The dashed extension on each bar marks the gap.</p>
+
+    <div class="legend" aria-hidden="true">
+      <span><i class="l-elpaso"></i> JGITC ceiling (state tax credit)</span>
+      <span><i class="l-denver"></i> Enterprise Zone credits</span>
+      <span><i style="background: repeating-linear-gradient(90deg, #9a948c 0 4px, transparent 4px 8px); border: 1px solid #9a948c;"></i> Pending CORA layers</span>
+    </div>
+
+    <svg class="chart-svg" viewBox="0 0 880 380" role="img" aria-labelledby="chart3a-title chart3a-desc" preserveAspectRatio="xMidYMid meet">
+      <title id="chart3a-title">Per-job public investment by deal, documented portion</title>
+      <desc id="chart3a-desc">Horizontal stacked bar chart for five El Paso County recruitment deals: ITS at $11,349 per job documented, SelectTech at $13,191 per job documented, Terra Ferma at $10,249 per job documented, Mobius at $2,308 per job documented, and BoodleBox at $13,645 per job documented. Each bar shows the JGITC ceiling and Enterprise Zone credits separately. A dashed extension on each bar signals layers still pending records requests.</desc>
+
+      <!-- X axis: 0 to 20000 per job. Plot area x=200 to x=820 (620px = $20k, so $1 = 0.031 px) -->
+      <g font-family="DM Mono, monospace" font-size="11" fill="#9a948c">
+        <line x1="200" y1="50"  x2="200" y2="320" stroke="#9a948c" stroke-width="1.5"/>
+        <line x1="355" y1="50"  x2="355" y2="320" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="510" y1="50"  x2="510" y2="320" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="665" y1="50"  x2="665" y2="320" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="820" y1="50"  x2="820" y2="320" stroke="#e4ddd0" stroke-width="1"/>
+        <text x="200" y="340" text-anchor="middle">$0</text>
+        <text x="355" y="340" text-anchor="middle">$5k</text>
+        <text x="510" y="340" text-anchor="middle">$10k</text>
+        <text x="665" y="340" text-anchor="middle">$15k</text>
+        <text x="820" y="340" text-anchor="middle">$20k</text>
+        <text x="510" y="360" text-anchor="middle" font-size="11" font-style="italic" fill="#4a4540">documented public investment per job (USD)</text>
+      </g>
+
+      <!-- Bars. Each row 50px tall. Order by total per job descending: BoodleBox 13645, SelectTech 13191, ITS 11349, Terra Ferma 10249, Mobius 2308 -->
+      <!-- Bar y centerlines: 75, 125, 175, 225, 275 -->
+
+      <!-- BoodleBox: 30 jobs, JGITC 323056 ($10,768/job), EZ 86285 ($2,876/job), total $13,645 -->
+      <g>
+        <rect x="200" y="62" width="333.8" height="26" fill="#b8872e" opacity="0.9"/>
+        <rect x="533.8" y="62" width="89.2" height="26" fill="#1a3a2a" opacity="0.9"/>
+        <!-- Pending dashed extension -->
+        <rect x="623" y="62" width="60" height="26" fill="none" stroke="#9a948c" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="190" y="82" text-anchor="end" font-family="DM Mono, monospace" font-size="11.5" font-weight="500">BoodleBox</text>
+        <text x="180" y="68" text-anchor="end" font-family="DM Mono, monospace" font-size="9.5" fill="#9a948c">30 jobs</text>
+        <text x="690" y="80" font-family="Playfair Display, serif" font-style="italic" font-size="11.5" fill="#1a3a2a">$13,645/job</text>
+      </g>
+
+      <!-- SelectTech: 150 jobs, JGITC 1978673 ($13,191/job), EZ unknown, total documented $13,191 -->
+      <g>
+        <rect x="200" y="112" width="408.9" height="26" fill="#b8872e" opacity="0.9"/>
+        <!-- Pending dashed extension (no EZ documented + other CORA layers) -->
+        <rect x="608.9" y="112" width="80" height="26" fill="none" stroke="#9a948c" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="190" y="132" text-anchor="end" font-family="DM Mono, monospace" font-size="11.5" font-weight="500">SelectTech</text>
+        <text x="180" y="118" text-anchor="end" font-family="DM Mono, monospace" font-size="9.5" fill="#9a948c">150 jobs*</text>
+        <text x="700" y="130" font-family="Playfair Display, serif" font-style="italic" font-size="11.5" fill="#1a3a2a">$13,191/job*</text>
+      </g>
+
+      <!-- ITS: 500 jobs, JGITC 4901635 ($9,803/job), EZ 772651 ($1,545/job), total $11,349 -->
+      <g>
+        <rect x="200" y="162" width="303.9" height="26" fill="#b8872e" opacity="0.9"/>
+        <rect x="503.9" y="162" width="47.9" height="26" fill="#1a3a2a" opacity="0.9"/>
+        <rect x="551.8" y="162" width="60" height="26" fill="none" stroke="#9a948c" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="190" y="182" text-anchor="end" font-family="DM Mono, monospace" font-size="11.5" font-weight="500">ITS</text>
+        <text x="180" y="168" text-anchor="end" font-family="DM Mono, monospace" font-size="9.5" fill="#9a948c">500 jobs</text>
+        <text x="620" y="180" font-family="Playfair Display, serif" font-style="italic" font-size="11.5" fill="#1a3a2a">$11,349/job</text>
+      </g>
+
+      <!-- Terra Ferma: 120 jobs, JGITC 1010584 ($8,422/job), EZ 219272 ($1,827/job), total $10,249 -->
+      <g>
+        <rect x="200" y="212" width="261.1" height="26" fill="#b8872e" opacity="0.9"/>
+        <rect x="461.1" y="212" width="56.6" height="26" fill="#1a3a2a" opacity="0.9"/>
+        <rect x="517.7" y="212" width="60" height="26" fill="none" stroke="#9a948c" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="190" y="232" text-anchor="end" font-family="DM Mono, monospace" font-size="11.5" font-weight="500">Terra Ferma</text>
+        <text x="180" y="218" text-anchor="end" font-family="DM Mono, monospace" font-size="9.5" fill="#9a948c">120 jobs</text>
+        <text x="585" y="230" font-family="Playfair Display, serif" font-style="italic" font-size="11.5" fill="#1a3a2a">$10,249/job</text>
+      </g>
+
+      <!-- Mobius: 75 jobs, JGITC unknown (not in documented set), EZ 173100 ($2,308/job), total documented $2,308 -->
+      <g>
+        <rect x="200" y="262" width="71.5" height="26" fill="#1a3a2a" opacity="0.9"/>
+        <rect x="271.5" y="262" width="80" height="26" fill="none" stroke="#9a948c" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="190" y="282" text-anchor="end" font-family="DM Mono, monospace" font-size="11.5" font-weight="500">Mobius</text>
+        <text x="180" y="268" text-anchor="end" font-family="DM Mono, monospace" font-size="9.5" fill="#9a948c">75 jobs</text>
+        <text x="360" y="280" font-family="Playfair Display, serif" font-style="italic" font-size="11.5" fill="#1a3a2a">$2,308/job</text>
+        <text x="370" y="294" font-family="Playfair Display, serif" font-style="italic" font-size="9.5" fill="#9a948c">EZ-only documented</text>
+      </g>
+    </svg>
+
+    <details>
+      <summary>Show data table</summary>
+      <table class="data-table">
+        <caption>Documented per-job public investment, El Paso County deals</caption>
+        <thead><tr><th scope="col">Deal</th><th scope="col">Jobs</th><th scope="col">JGITC ceiling</th><th scope="col">EZ credits</th><th scope="col">Total documented</th><th scope="col">Per job</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">BoodleBox</th><td>30</td><td>$323,056</td><td>$86,285</td><td>$409,341</td><td>$13,645</td></tr>
+          <tr><th scope="row">SelectTech*</th><td>150*</td><td>$1,978,673</td><td>—</td><td>$1,978,673</td><td>$13,191*</td></tr>
+          <tr><th scope="row">ITS</th><td>500</td><td>$4,901,635</td><td>$772,651</td><td>$5,674,286</td><td>$11,349</td></tr>
+          <tr><th scope="row">Terra Ferma</th><td>120</td><td>$1,010,584</td><td>$219,272</td><td>$1,229,856</td><td>$10,249</td></tr>
+          <tr><th scope="row">Mobius</th><td>75</td><td>—</td><td>$173,100</td><td>$173,100</td><td>$2,308</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <p class="takeaway">For these five deals, the documented per-job public investment ranges from about $2,300 to $13,600 — and that's only what's already public. Local match dollars, county property-tax structures, and EDC contributions don't appear here yet. The real per-job number, once those layers are added, will be larger.</p>
+
+    <div class="chart-source"><strong>Sources:</strong> OEDIT Economic Development Commission meeting minutes (JGITC approvals), Colorado Springs Chamber & EDC project announcements (Pikes Peak Enterprise Zone credit amounts). Mobius JGITC not located in the documented set; if approved, that would shift its per-job total upward. Reach OEDIT EDC archives at oedit.colorado.gov/about/economic-development-commission/edc-archives.</div>
+
+    <div class="chart-source" style="margin-top: 14px; border-top: 1px solid var(--rule); padding-top: 14px;"><strong>* Footnote on SelectTech and announced-vs-delivered jobs:</strong> Public reporting indicates SelectTech Services Corporation currently employs roughly 50 to 150 people total with annual revenue in the $17M–$28M range. The announced 150-job El Paso expansion would effectively double the company's existing workforce — meaning the announcement is a forecast tied to future federal contract wins, not the relocation of an existing operation. JGITC is performance-based: OEDIT issues credits only as jobs are created and maintained at or above the county average wage for a full year. If announced jobs don't fully materialize, the JGITC simply doesn't get paid. Other incentive layers (local cash, abatements, fee waivers) may flow earlier and don't all carry the same performance gates. <em>Announced jobs are not delivered jobs</em> — and per-job calculations from announcement-stage data should be read accordingly. The OEDIT Annual Reports include a "JGITC Tax Credit Certificates Issued" table that tracks delivered against approved; that comparison is the cleaner long-term measure and will be added in a future dashboard update.</div>
+
+    <div class="chart-source" style="margin-top: 14px; border-top: 1px solid var(--rule); padding-top: 14px;"><strong>Context on the cleared-workforce labor pool:</strong> The pool of Americans holding active security clearances declined from roughly 5.1 million in 2013 to about 4.2 million in recent reporting from the Office of the Director of National Intelligence (ODNI Annual Report on Security Clearance Determinations). Clearance processing times regressed in 2024, with top-secret investigations averaging 70 days longer than the prior year. Federal contractor industry surveys consistently identify cleared talent acquisition as a top operational concern. SelectTech's 150-job announcement plus ITS's 500-job announcement in the same week represent meaningful demand on a finite regional pool of cleared workers — which has implications for whether announced jobs can be filled at announced wages, or whether competition will push compensation upward.</div>
+  </div>
+
+  <!-- =============== CHART 3B — PROJECT BORON =============== -->
+  <div class="chart-card">
+    <div class="chart-num">Chart 3B · Methodological reference</div>
+    <div class="chart-title">What a fully documented stack looks like — Project Boron</div>
+    <p class="chart-blurb">Most recruitment packages stack incentives across multiple programs. Project Boron is the cleanest documented example in the El Paso County minutes: four layers, $25.83M total. This view shows the full stack as a single composition. The bars in Chart 3A look like single layers because most of the stack hasn't been reported yet — Boron shows what those bars would look like if all the layers were visible.</p>
+
+    <div class="legend" aria-hidden="true">
+      <span><i style="background: #b8872e;"></i> JGITC (state tax credit)</span>
+      <span><i style="background: #1a3a2a;"></i> Enterprise Zone</span>
+      <span><i style="background: #8a3a10;"></i> CHIPS Refund Cert</span>
+      <span><i style="background: #4a3a6a;"></i> Local cash (Colorado Springs)</span>
+    </div>
+
+    <svg class="chart-svg" viewBox="0 0 880 280" role="img" aria-labelledby="chart3b-title chart3b-desc" preserveAspectRatio="xMidYMid meet">
+      <title id="chart3b-title">Project Boron stacked incentive package</title>
+      <desc id="chart3b-desc">Horizontal stacked bar showing the complete public investment package for Project Boron. The total of $25.83 million is composed of $11.3M Colorado Springs local cash (43.7%), $7.1M Enterprise Zone credits (27.5%), $4.6M CHIPS refund certificate (17.8%), and $2.83M JGITC ceiling (11.0%). The local match is the largest single layer.</desc>
+
+      <!-- Single full-width stacked bar, centered -->
+      <!-- Total $25.83M, plot from x=120 to x=820 (700px), so $1M = 27.10 px -->
+      <!-- JGITC 2.83M, EZ 7.1M, CHIPS 4.6M, Local 11.3M -->
+      <!-- Order: JGITC, CHIPS, EZ, Local (smallest to largest for cleanest look) -->
+      <g>
+        <!-- JGITC: 2.83M, width 76.7 -->
+        <rect x="120" y="100" width="76.7" height="60" fill="#b8872e"/>
+        <!-- CHIPS: 4.6M, width 124.7 -->
+        <rect x="196.7" y="100" width="124.7" height="60" fill="#8a3a10"/>
+        <!-- EZ: 7.1M, width 192.4 -->
+        <rect x="321.4" y="100" width="192.4" height="60" fill="#1a3a2a"/>
+        <!-- Local: 11.3M, width 306.2 -->
+        <rect x="513.8" y="100" width="306.2" height="60" fill="#4a3a6a"/>
+
+        <!-- Labels inside each segment if it fits, otherwise outside -->
+        <text x="158" y="135" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="#ffffff" font-weight="500">JGITC</text>
+        <text x="158" y="148" text-anchor="middle" font-family="DM Mono, monospace" font-size="9.5" fill="#ffffff" opacity="0.85">$2.83M</text>
+
+        <text x="259" y="135" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="#ffffff" font-weight="500">CHIPS</text>
+        <text x="259" y="148" text-anchor="middle" font-family="DM Mono, monospace" font-size="9.5" fill="#ffffff" opacity="0.85">$4.6M</text>
+
+        <text x="417" y="135" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="#ffffff" font-weight="500">Enterprise Zone</text>
+        <text x="417" y="148" text-anchor="middle" font-family="DM Mono, monospace" font-size="9.5" fill="#ffffff" opacity="0.85">$7.1M</text>
+
+        <text x="666" y="135" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="#ffffff" font-weight="500">Local cash (Colorado Springs)</text>
+        <text x="666" y="148" text-anchor="middle" font-family="DM Mono, monospace" font-size="9.5" fill="#ffffff" opacity="0.85">$11.3M</text>
+      </g>
+
+      <!-- Total marker -->
+      <g font-family="Playfair Display, serif">
+        <text x="120" y="85" font-size="13" fill="#4a4540" font-style="italic">Project Boron — total documented public investment</text>
+        <text x="820" y="85" font-size="20" fill="#18150f" text-anchor="end" font-weight="700">$25.83M</text>
+      </g>
+
+      <!-- Footnote line -->
+      <g font-family="DM Mono, monospace" font-size="10" fill="#9a948c">
+        <line x1="120" y1="180" x2="820" y2="180" stroke="#e4ddd0" stroke-width="1"/>
+        <text x="120" y="200" font-style="italic">Local cash is the largest single layer — 43.7% of the package.</text>
+        <text x="120" y="218" font-style="italic">JGITC, the layer most often cited in press releases, is 11.0%.</text>
+      </g>
+
+      <!-- Composition note -->
+      <g font-family="DM Mono, monospace" font-size="10" fill="#4a4540">
+        <text x="120" y="248">Stack composition: JGITC 11.0% · CHIPS 17.8% · EZ 27.5% · Local 43.7%</text>
+      </g>
+    </svg>
+
+    <details>
+      <summary>Show data table</summary>
+      <table class="data-table">
+        <caption>Project Boron stacked incentive package</caption>
+        <thead><tr><th scope="col">Layer</th><th scope="col">Amount</th><th scope="col">Share</th><th scope="col">Type</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Local cash (Colorado Springs)</th><td>$11,300,000</td><td>43.7%</td><td>Cash, local government</td></tr>
+          <tr><th scope="row">Enterprise Zone credits</th><td>$7,100,000</td><td>27.5%</td><td>State tax credit</td></tr>
+          <tr><th scope="row">CHIPS Refund Certificate</th><td>$4,600,000</td><td>17.8%</td><td>State refund</td></tr>
+          <tr><th scope="row">JGITC ceiling</th><td>$2,830,000</td><td>11.0%</td><td>State tax credit</td></tr>
+          <tr><th scope="row" style="border-top: 2px solid #18150f;"><strong>Total</strong></th><td style="border-top: 2px solid #18150f;"><strong>$25,830,000</strong></td><td style="border-top: 2px solid #18150f;">100%</td><td style="border-top: 2px solid #18150f;">—</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <p class="takeaway">When public investment per job gets reported, the JGITC line tends to be the headline number. For Project Boron, JGITC is 11% of the total package. The local cash, which is rarely surfaced in press releases, is nearly four times larger. This is what's missing from the bars in Chart 3A — and why per-job calculations from JGITC alone substantially understate what residents actually contribute.</p>
+
+    <div class="chart-source"><strong>Source:</strong> OEDIT EDC meeting minutes (project code Boron). Project code names are anonymized in OEDIT minutes during active site selection; the underlying company name typically becomes public when the deal closes. Cited here as documented in the meeting record.</div>
+  </div>
+
+  <!-- =============== CHART 3C — STATEWIDE LANDSCAPE =============== -->
+  <div class="chart-card">
+    <div class="chart-num">Chart 3C · Widest view</div>
+    <div class="chart-title">Where El Paso's deals fall in the statewide JGITC landscape</div>
+    <p class="chart-blurb">JGITC approvals across Colorado, 2024–2025. Each tick on the scale is a deal, plotted by ceiling amount. The four marked El Paso County deals are highlighted. The largest single approval in the archive — Project Ladybug at $35.26M for 1,850 jobs — is more than seven times bigger than El Paso's largest. The statewide median sits in the $500K–$2M range, which is where SelectTech and Terra Ferma land.</p>
+
+    <svg class="chart-svg" viewBox="0 0 880 320" role="img" aria-labelledby="chart3c-title chart3c-desc" preserveAspectRatio="xMidYMid meet">
+      <title id="chart3c-title">JGITC approval distribution across Colorado, El Paso County deals highlighted</title>
+      <desc id="chart3c-desc">A scatter strip chart showing the magnitude of state JGITC approvals in 2024 and 2025. Statewide deals span from under $500,000 to over $35 million. El Paso County deals plotted: BoodleBox at $323K is in the under-$500K bucket, Terra Ferma at $1.01M and SelectTech at $1.98M are in the $500K to $2M bucket, and ITS at $4.9M is in the $2M to $5M bucket. None of El Paso's documented recent deals are in the largest categories.</desc>
+
+      <!-- Log-style x-axis since the range is huge: 100K to 50M -->
+      <!-- Use bucket-based plotting — five vertical strips -->
+      <!-- Buckets: <500K, 500K-2M, 2M-5M, 5M-10M, 10M+ -->
+
+      <g font-family="DM Mono, monospace" font-size="11" fill="#9a948c">
+        <line x1="40" y1="240" x2="840" y2="240" stroke="#9a948c" stroke-width="1.5"/>
+        <!-- Bucket boundaries -->
+        <line x1="200" y1="60" x2="200" y2="240" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="360" y1="60" x2="360" y2="240" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="520" y1="60" x2="520" y2="240" stroke="#e4ddd0" stroke-width="1"/>
+        <line x1="680" y1="60" x2="680" y2="240" stroke="#e4ddd0" stroke-width="1"/>
+        <!-- Bucket labels -->
+        <text x="120" y="260" text-anchor="middle" font-weight="500" fill="#4a4540">Under $500K</text>
+        <text x="280" y="260" text-anchor="middle" font-weight="500" fill="#4a4540">$500K – $2M</text>
+        <text x="440" y="260" text-anchor="middle" font-weight="500" fill="#4a4540">$2M – $5M</text>
+        <text x="600" y="260" text-anchor="middle" font-weight="500" fill="#4a4540">$5M – $10M</text>
+        <text x="760" y="260" text-anchor="middle" font-weight="500" fill="#4a4540">$10M+</text>
+        <!-- Sample counts -->
+        <text x="120" y="277" text-anchor="middle" font-size="9.5" fill="#9a948c">4 sample deals</text>
+        <text x="280" y="277" text-anchor="middle" font-size="9.5" fill="#9a948c">5 sample deals</text>
+        <text x="440" y="277" text-anchor="middle" font-size="9.5" fill="#9a948c">5 sample deals</text>
+        <text x="600" y="277" text-anchor="middle" font-size="9.5" fill="#9a948c">2 sample deals</text>
+        <text x="760" y="277" text-anchor="middle" font-size="9.5" fill="#9a948c">3 sample deals</text>
+      </g>
+
+      <!-- Statewide deals as small grey dots (jittered Y) -->
+      <g fill="#9a948c" opacity="0.75">
+        <!-- Under $500K: 4 deals -->
+        <circle cx="80"  cy="200" r="5"/><circle cx="105" cy="170" r="5"/>
+        <circle cx="135" cy="195" r="5"/><circle cx="165" cy="180" r="5"/>
+        <!-- $500K-$2M: 5 deals -->
+        <circle cx="225" cy="190" r="5"/><circle cx="245" cy="170" r="5"/>
+        <circle cx="295" cy="200" r="5"/><circle cx="320" cy="180" r="5"/>
+        <circle cx="345" cy="195" r="5"/>
+        <!-- $2M-$5M: 5 deals -->
+        <circle cx="385" cy="190" r="5"/><circle cx="410" cy="170" r="5"/>
+        <circle cx="455" cy="195" r="5"/><circle cx="485" cy="175" r="5"/>
+        <circle cx="505" cy="200" r="5"/>
+        <!-- $5M-$10M: 2 deals -->
+        <circle cx="560" cy="190" r="5"/><circle cx="630" cy="180" r="5"/>
+        <!-- $10M+: 3 deals -->
+        <circle cx="710" cy="195" r="5"/><circle cx="745" cy="175" r="5"/>
+        <circle cx="800" cy="190" r="5"/>
+      </g>
+
+      <!-- El Paso highlighted dots -->
+      <g>
+        <!-- BoodleBox $323K — Under $500K bucket -->
+        <circle cx="105" cy="120" r="9" fill="#b8872e" stroke="#18150f" stroke-width="2"/>
+        <line x1="105" y1="129" x2="105" y2="170" stroke="#b8872e" stroke-width="1.5" stroke-dasharray="2,3"/>
+        <text x="105" y="105" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="11" fill="#18150f">BoodleBox</text>
+        <text x="105" y="92" text-anchor="middle" font-family="DM Mono, monospace" font-size="9.5" fill="#9a948c">$323K · 30j</text>
+
+        <!-- Terra Ferma $1.01M — $500K-$2M -->
+        <circle cx="245" cy="120" r="9" fill="#b8872e" stroke="#18150f" stroke-width="2"/>
+        <line x1="245" y1="129" x2="245" y2="170" stroke="#b8872e" stroke-width="1.5" stroke-dasharray="2,3"/>
+        <text x="245" y="105" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="11" fill="#18150f">Terra Ferma</text>
+        <text x="245" y="92" text-anchor="middle" font-family="DM Mono, monospace" font-size="9.5" fill="#9a948c">$1.01M · 120j</text>
+
+        <!-- SelectTech $1.98M — $500K-$2M -->
+        <circle cx="345" cy="135" r="9" fill="#b8872e" stroke="#18150f" stroke-width="2"/>
+        <line x1="345" y1="144" x2="345" y2="195" stroke="#b8872e" stroke-width="1.5" stroke-dasharray="2,3"/>
+        <text x="345" y="120" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="11" fill="#18150f">SelectTech</text>
+        <text x="345" y="107" text-anchor="middle" font-family="DM Mono, monospace" font-size="9.5" fill="#9a948c">$1.98M · 150j</text>
+
+        <!-- ITS $4.9M — $2M-$5M -->
+        <circle cx="505" cy="120" r="9" fill="#b8872e" stroke="#18150f" stroke-width="2"/>
+        <line x1="505" y1="129" x2="505" y2="195" stroke="#b8872e" stroke-width="1.5" stroke-dasharray="2,3"/>
+        <text x="505" y="105" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="11" fill="#18150f">ITS</text>
+        <text x="505" y="92" text-anchor="middle" font-family="DM Mono, monospace" font-size="9.5" fill="#9a948c">$4.9M · 500j</text>
+
+        <!-- Largest annotation -->
+        <text x="800" y="155" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="10" fill="#8a3a10">Ladybug</text>
+        <text x="800" y="167" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#9a948c">$35.26M · 1,850j</text>
+        <line x1="800" y1="170" x2="800" y2="183" stroke="#8a3a10" stroke-width="1" stroke-dasharray="2,3"/>
+      </g>
+
+      <!-- Legend -->
+      <g font-family="DM Mono, monospace" font-size="10">
+        <circle cx="55" cy="305" r="5" fill="#9a948c" opacity="0.75"/>
+        <text x="65" y="308" fill="#4a4540">other Colorado deals</text>
+        <circle cx="240" cy="305" r="7" fill="#b8872e" stroke="#18150f" stroke-width="2"/>
+        <text x="252" y="308" fill="#4a4540">El Paso County deals</text>
+      </g>
+    </svg>
+
+    <details>
+      <summary>Show data table</summary>
+      <table class="data-table">
+        <caption>JGITC approvals: El Paso County deals plotted against statewide distribution</caption>
+        <thead><tr><th scope="col">Bucket</th><th scope="col">Statewide samples</th><th scope="col">El Paso County deals in this bucket</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Under $500K</th><td>Tabletop, Cypress, Short Circuit, New Vernon</td><td>BoodleBox ($323K, 30 jobs)</td></tr>
+          <tr><th scope="row">$500K – $2M</th><td>Da Vinci, Pancake, Diamond, Lightspeed, Captain</td><td>Terra Ferma ($1.01M, 120j); SelectTech ($1.98M, 150j)</td></tr>
+          <tr><th scope="row">$2M – $5M</th><td>Skyhawk, Saffron, Omega, Atlantis, Phoenix</td><td>ITS ($4.9M, 500 jobs)</td></tr>
+          <tr><th scope="row">$5M – $10M</th><td>Airborne ($5.46M), SkyForge ($5.85M)</td><td>—</td></tr>
+          <tr><th scope="row">$10M+</th><td>WesCo ($10.89M); Split ($24.39M); Ladybug ($35.26M)</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <p class="takeaway">El Paso County's documented recent JGITC deals cluster in the smaller buckets — none of the largest statewide approvals from 2024–2025 went to El Paso County companies. The recruitment activity is consistent and broad-based, but the magnitudes are mid-pack rather than headline. Whether that's a strategic choice, a function of which industries the county recruits, or a bias in what gets celebrated publicly is a question the data raises but doesn't answer alone.</p>
+
+    <div class="chart-source"><strong>Source:</strong> OEDIT Economic Development Commission meeting minutes, 2024–2025. Approximately 50 individual JGITC approvals were captured in the archive review; this chart shows a representative sample stratified by ceiling magnitude. Full archive at oedit.colorado.gov/about/economic-development-commission/edc-archives.</div>
+  </div>
+
+  <!-- ============= WHAT THIS MEANS ============= -->
+  <div class="section-label">Reading <strong>What the data is telling us</strong></div>
+
+  <div class="prose">
+    <p>The Chamber & EDC's pitch to recruiting companies, in their own words, is that "Colorado Springs' lower wages gives it an edge over cities of similar size." That works as a recruiting line for companies. It only works as a recruiting line for workers if the cost of living is also lower. The data above says it isn't — at least not enough to compensate.</p>
+
+    <p>El Paso County workers earn 36% less than Denver County workers on average. Typical homes in El Paso cost only about 19% less than typical homes in Denver. The wage discount is steeper than the housing discount, by a lot. So the average El Paso worker covers 57.8% of the income needed to buy a typical home in their own metro. The average Denver worker covers 68.2%. Both are bad. El Paso's is worse, and the gap is widening.</p>
+
+    <p>This is the structural truth underneath the headlines about jobs landed and ribbons cut. Recruitment activity has been strong. Worker outcomes — measured by whether the recruited workforce can afford to live where they're being recruited to — have been deteriorating. Both things are true. The first is what gets celebrated. The second is what shows up at kitchen tables.</p>
+
+    <p>None of this is an indictment of the EDC, the Chamber, or the recruited companies. They're doing what they're structured to do. The question is whether the public agencies funding the recruitment apparatus — the city, the county, the utilities, the state — are measuring the right outcomes. Right now they measure jobs landed and capital invested. They don't measure whether the workers being recruited can afford to stay.</p>
+
+    <p>That's a fixable problem. It starts with the data being legible. Hence this dashboard.</p>
+  </div>
+
+  <!-- ============= METHODOLOGY ============= -->
+  <div class="section-label">Methodology <strong>Show your work</strong></div>
+
+  <div class="prose">
+    <p>This dashboard exists because the comparison numbers it shows aren't published anywhere in one place. Every figure on this page comes from public, free, government or nonprofit datasets. Every series ID is documented. Every limitation is named.</p>
+  </div>
+
+  <div class="prose">
+    <h3 style="font-family: var(--ff-head); font-size: 1.2rem; margin: 24px 0 12px;">Source 1 — BLS Quarterly Census of Employment and Wages</h3>
+    <p>The federal QCEW dataset covers approximately 95% of U.S. employment. Free, public, updated quarterly. Series IDs used:</p>
+    <ul>
+      <li><code>ENU0804140510</code> — El Paso County, all-industry private, average weekly wage</li>
+      <li><code>ENU0803140510</code> — Denver County, all-industry private, average weekly wage</li>
+      <li><code>ENU0804110510</code> — El Paso County, all-industry private, employment level</li>
+      <li><code>ENU0803110510</code> — Denver County, all-industry private, employment level</li>
+    </ul>
+    <p><strong>Limitations:</strong> QCEW reports average weekly wage, not median. Annualized by × 52. Doesn't capture benefits, equity, or non-wage compensation. Aerospace-specific (NAICS 3364) data isn't reliably exposed at the county level in the public API; the all-industry comparison is what's reported here.</p>
+  </div>
+
+  <div class="prose">
+    <h3 style="font-family: var(--ff-head); font-size: 1.2rem; margin: 24px 0 12px;">Source 2 — Zillow Research</h3>
+    <p>Zillow Research publishes county- and metro-level housing indices as free downloadable CSVs at zillow.com/research/data. Datasets used:</p>
+    <ul>
+      <li><strong>ZHVI All Homes</strong> (county level, smoothed, seasonally adjusted) — typical home value, 35th–65th percentile</li>
+      <li><strong>New Homeowner Affordability Income Needed</strong> (metro level, 20% down) — Zillow's calculation of household income required to qualify at the standard 30% debt-to-income ratio at current mortgage rates</li>
+    </ul>
+    <p><strong>Limitations:</strong> ZHVI is "typical home value," not median sale price. Income Needed is published at the metro level — Colorado Springs MSA and Denver-Aurora-Lakewood MSA — used here as the closest proxy for the underlying counties. Zillow's mortgage-rate assumptions update with each release; the affordability spike in 2022 reflects both rising home values and rising rates.</p>
+  </div>
+
+  <div class="prose">
+    <h3 style="font-family: var(--ff-head); font-size: 1.2rem; margin: 24px 0 12px;">Source 3 — Public Investment per Job</h3>
+    <p>Chart 3 is built across three views. Each view captures a different layer of what's documented in OEDIT meeting minutes and Chamber & EDC announcements. The data below explains what's visible and what isn't.</p>
+    <p><strong>What's documented and shown:</strong></p>
+    <ul>
+      <li><strong>JGITC ceilings</strong> — the maximum credit a company can earn over 8 years, public via OEDIT EDC meeting minutes. <em>This is a tax credit ceiling, not cash paid.</em> Companies must create and maintain every committed job at or above county average annual wage to vest each year's portion.</li>
+      <li><strong>Pikes Peak Enterprise Zone credits</strong> — partial; per-company amounts are sometimes published in Chamber announcements but aren't always visible.</li>
+      <li><strong>Project Boron stack</strong> — the four-layer documented total ($25.83M) is visible in EDC minutes because the deal is large and the stack was disclosed during commission discussion. Most deals don't have this level of public disclosure.</li>
+    </ul>
+    <p><strong>What's still pending records requests:</strong></p>
+    <ul>
+      <li>Strategic Fund cash grants (the per-job cash incentive layered with JGITC, typically $2,500–$5,000 per qualifying job paid only after job verification)</li>
+      <li>Local Deal Closing Fund matches from the Chamber & EDC ($1,000–$5,000 per net new job)</li>
+      <li>County and city tax abatements (CORA pending to County Clerk and City Clerk)</li>
+      <li>Business Personal Property Tax forgone revenue — El Paso County is the only Colorado county that doesn't collect this; the implied subsidy per company is calculable from equipment investment but requires records request</li>
+      <li>EDC operating contributions per project (aggregate published; per-project breakdowns CORA pending)</li>
+    </ul>
+    <p><strong>Important caveat on JGITC:</strong> approvals are conditional on the company actually selecting Colorado. Companies don't always claim the full credit, and some are deferred or declined at the EDC level. The OEDIT Annual Reports include a "JGITC Tax Credit Certificates Issued" table showing what's actually delivered vs. approved. That distinction matters and will be added to a future version of this dashboard.</p>
+    <p><strong>Why Project Boron matters as a reference:</strong> Boron is the cleanest documented example of a fully-stacked package in the recent El Paso County minutes. Most reporting and most public discussion focuses on JGITC alone because it's the most visible layer. For Boron, JGITC is 11% of the package; local cash is 43.7%. Future per-job calculations should account for the full stack, not just the headline number.</p>
+  </div>
+
+  <div class="prose">
+    <h3 style="font-family: var(--ff-head); font-size: 1.2rem; margin: 24px 0 12px;">Update cadence</h3>
+    <p>Quarterly. QCEW publishes on a quarterly lag, so re-running the data pull every three months captures the most recent fully-published period. Zillow updates monthly. Incentive data updates whenever new OEDIT minutes are published or when CORA responses arrive.</p>
+
+    <h3 style="font-family: var(--ff-head); font-size: 1.2rem; margin: 24px 0 12px;">Reproducibility</h3>
+    <p>The Python scripts that pull the data are published alongside this dashboard. <code>bls_pull.py</code> hits the BLS Open Data API. <code>join_data_v2.py</code> joins the BLS output with the Zillow CSVs and computes the affordability metrics. Anyone can re-run them. Anyone can fork them for another county. The methodology is meant to travel.</p>
+  </div>
+
+  <!-- ============= ACCESSIBILITY ============= -->
+  <div class="section-label">Accessibility Statement <strong>The thing the marketing department doesn't include</strong></div>
+
+  <div class="prose">
+    <p>This dashboard targets WCAG 2.1 AA conformance. Specifically:</p>
+    <ul>
+      <li>All charts have descriptive <code>title</code> and <code>desc</code> elements for screen reader users.</li>
+      <li>Every chart includes a hidden, expandable data table (the "Show data table" toggle) so the underlying numbers are accessible without relying on the SVG.</li>
+      <li>Color choices for chart series are tested for distinguishability in deuteranopia and protanopia — the El Paso brass and Denver deep-green pair survive most color-vision differences. Where color alone might be ambiguous, line endpoints are labeled directly.</li>
+      <li>Page heading hierarchy is clean and tested. Skip-to-content navigation, semantic landmarks, and keyboard focus order are honored.</li>
+      <li>Text contrast on body copy is well above the 4.5:1 minimum.</li>
+      <li>No JavaScript is required to read this page. Charts render as static SVG. Data tables render as semantic HTML.</li>
+    </ul>
+    <p>Known limitations: this dashboard has not yet been audited with axe DevTools or by a screen reader user directly. If you find an accessibility issue, the contact for this project is in the footer below — please report it. Fixing it makes the dashboard better for everyone.</p>
+    <p>If you can't or don't want to use this dashboard, the underlying CSV data is available — same source files used to build it. Contact below.</p>
+  </div>
+
+  <footer class="footer">
+    <p><strong>Compared to What</strong> — a civic dashboard project from <em>The Dais</em>, StorySeed Studios. Built with public BLS QCEW data, Zillow Research housing data, and OEDIT economic development records. Not affiliated with the El Paso County government, the Colorado Springs Chamber & EDC, or the Colorado Tourism Office.</p>
+    <p>This dashboard is research, not legal or financial advice. For questions about the data, contact the issuing agencies directly. For questions about the dashboard itself or to report an accessibility issue, see <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener">storyseedstudios.com</a>.</p>
+    <p>I have a communications degree. It took seven years. I took Government twice. The second time I earned a D. The commissioners took it once and earn considerably more. We are all learning.</p>
+  </footer>
+
+</div><!-- .wrap -->
+
+</body>
+</html>
