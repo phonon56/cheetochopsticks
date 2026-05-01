@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>El Paso County Public Safety Dashboard</title>
+---
+layout: site.njk
+permalink: "/microsites/county/sheriff/public_safety_dashboard.html"
+title: "El Paso County Public Safety Dashboard"
+description: "El Paso County Sheriff public safety dashboard \u2014 calls for service, response times, and crime trends."
+activeNav: "dashboards"
+---
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -284,12 +286,8 @@ a{color:var(--blue)}
   .banner{grid-template-columns:1fr}
 }
 </style>
-</head>
-<body>
-<a href="#main" class="skip-link">Skip to main content</a>
-
 <!-- HEADER -->
-<header class="hdr" role="banner">
+<header class="hdr" role="region" aria-label="Page header">
   <div class="hdr-inner">
     <div>
       <h1 class="site-title">El Paso County Public Safety</h1>
@@ -1795,5 +1793,3 @@ function disc(btnId, bodyId) {
   btn.setAttribute('aria-expanded', String(!open));
 }
 </script>
-</body>
-</html>

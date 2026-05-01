@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Property conveyance records for zip code 80915 in El Paso County, Colorado. January 2022 through March 2026. 2,909 records from the El Paso County Assessor. Free public data, searchable and sortable.">
-<title>80915 Property Conveyances — El Paso County Assessor</title>
+---
+layout: site.njk
+permalink: "/microsites/county/land/Assessor_Property Conveyances.html"
+title: "80915 Property Conveyances \u2014 El Paso County Assessor"
+description: "Property transfer records from the El Paso County Assessor \u2014 who owns what, and when did that change."
+activeNav: "dashboards"
+---
+
 <style>
 /* ============================================================
    CSS CUSTOM PROPERTIES — AA defaults, AAA overrides via class
@@ -662,16 +663,11 @@ footer {
   outline-offset: var(--focus-offset);
 }
 </style>
-</head>
-<body>
-
 <!-- WCAG 2.4.1 Skip Navigation -->
-<a href="#main-content" class="skip-link">Skip to main content</a>
-
 <!-- WCAG 4.1.3 Live region for dynamic announcements -->
 <div id="announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
-<header class="site-header" role="banner">
+<header class="site-header" role="region" aria-label="Page header">
   <div class="header-inner">
     <div>
       <h1 class="site-title">El Paso County · Property Conveyances</h1>
@@ -1174,6 +1170,3 @@ document.getElementById('filter-year').addEventListener('change', applyFilters);
 applySort(null);
 announce('Property conveyance portal loaded. 2,909 records for zip code 80915. Press forward slash to focus search.');
 </script>
-
-</body>
-</html>

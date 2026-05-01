@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>File a Complaint | Colorado Attorney General</title>
-<meta name="description" content="File a complaint with the Colorado Attorney General's Office. Describe what happened — we handle the routing to the right team.">
+---
+layout: site.njk
+permalink: "/microsites/state/colorado-attorney-general/coag-complaint-form.html"
+title: "File a Complaint | Colorado Attorney General"
+description: "Colorado Attorney General consumer complaint form \u2014 current state of the live form."
+activeNav: "you"
+---
 
 <!-- ─────────────────────────────────────────────────────────
      SALESFORCE CONFIGURATION — Set before deploying
@@ -1028,16 +1028,11 @@ select:focus {
   .submit-btn { width: 100%; justify-content: center; }
 }
 </style>
-</head>
-<body>
-
 <!-- ══════════════════════════════════════════════════════════
      SKIP LINK — MUST BE ABSOLUTE FIRST ELEMENT IN DOM
      FIX: Addresses audit findings #20 (first focusable) and
           #4 (outline:none on skip link — now has visible ring)
      ══════════════════════════════════════════════════════════ -->
-<a href="#main" class="skip-link">Skip to main content</a>
-
 <!-- Screen reader live regions — FIX #86 (assertive for errors) -->
 <div role="alert" id="live-alert" aria-atomic="true"></div>
 <div role="status" id="live-status" aria-atomic="true"></div>
@@ -2002,6 +1997,3 @@ initSFStatus();
 // Init lang
 setLang('en');
 </script>
-
-</body>
-</html>

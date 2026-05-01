@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact — El Paso County Land Development Code Update</title>
-<meta name="description" content="Contact the El Paso County LDC update team. Submit questions, request accommodations, report accessibility issues, or reach your county commissioner.">
+---
+layout: site.njk
+permalink: "/microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html"
+title: "Contact \u2014 El Paso County Land Development Code Update"
+description: "Land Development Code contact and navigation \u2014 who to reach at El Paso County for development questions."
+activeNav: "people"
+---
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -257,11 +258,6 @@ a:hover { color: var(--rust-dark); text-decoration-thickness: 2px; }
 @media (max-width: 640px) { .site-nav { display: none; } .nav-toggle { display: flex; } .footer-grid { grid-template-columns: 1fr; } .utility-links { display: none; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; } html { scroll-behavior: auto; } }
 </style>
-</head>
-<body>
-
-<a href="#main" class="skip-link">Skip to main content</a>
-
 <div class="utility-bar" role="complementary" aria-label="Utility links">
   <div class="utility-bar-inner">
     <div class="utility-links" role="list">
@@ -273,7 +269,7 @@ a:hover { color: var(--rust-dark); text-decoration-thickness: 2px; }
   </div>
 </div>
 
-<header class="site-header" role="banner">
+<header class="site-header" role="region" aria-label="Page header">
   <div class="header-inner">
     <a href="/" class="site-logo" aria-label="El Paso County Land Development Code — homepage">
       <span class="logo-county" aria-hidden="true">El Paso County, Colorado</span>
@@ -591,5 +587,3 @@ document.querySelector('.nav-toggle')?.addEventListener('click', function() {
   nav.classList.toggle('open', !expanded);
 });
 </script>
-</body>
-</html>

@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>File a Complaint | Colorado Attorney General — Phil Weiser</title>
-<meta name="description" content="Tell us what happened — Colorado AG handles the routing. Submit a complaint about consumer fraud, housing, worker protection, environmental crimes, civil rights violations, and more.">
+---
+layout: site.njk
+permalink: "/microsites/state/colorado-attorney-general/coag-file-complaint-redesign.html"
+title: "File a Complaint | Colorado Attorney General \u2014 Phil Weiser"
+description: "Colorado Attorney General complaint form \u2014 accessible redesign."
+activeNav: "you"
+---
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
 <style>
@@ -235,11 +236,7 @@ select:focus{outline:3px solid var(--focus);outline-offset:0;border-color:var(--
 .footer-nav a:hover{color:var(--gold)}
 .footer-nav a:focus-visible{outline:2px solid var(--focus-dark);outline-offset:2px;border-radius:1px}
 </style>
-</head>
-<body>
-
 <!-- Skip link must be first -->
-<a href="#main" class="skip">Skip to main content</a>
 <div role="alert" id="live-alert" aria-atomic="true"></div>
 <div role="status" id="live-status" aria-atomic="true"></div>
 
@@ -263,7 +260,7 @@ select:focus{outline:3px solid var(--focus);outline-offset:0;border-color:var(--
 </div>
 
 <!-- Header -->
-<header class="site-header" role="banner">
+<header class="site-header" role="region" aria-label="Page header">
   <div class="header-inner">
     <a href="https://coag.gov" class="logo-link" aria-label="Colorado Attorney General home">
       <div class="seal" aria-hidden="true">CO<br>AG</div>
@@ -972,5 +969,3 @@ resBody.addEventListener('keydown',e=>{
 /* ── INIT ───────────────────────────────────────────── */
 setLang('en');
 </script>
-</body>
-</html>

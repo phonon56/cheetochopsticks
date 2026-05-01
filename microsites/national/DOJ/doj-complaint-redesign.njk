@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>File a Civil Rights Complaint | U.S. Department of Justice — Civil Rights Division</title>
-<meta name="description" content="Describe a civil rights violation in your own words. We'll help you organize it into the DOJ complaint fields. ADA, housing, education, voting, and more. Works on mobile.">
+---
+layout: site.njk
+permalink: "/microsites/national/DOJ/doj-complaint-redesign.html"
+title: "File a Civil Rights Complaint | U.S. Department of Justice \u2014 Civil Rights Division"
+description: "Department of Justice complaint form \u2014 accessible redesign."
+activeNav: "you"
+---
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -966,13 +967,9 @@ textarea.prompt-box::placeholder {
   .confidence-chip { border: 1px solid CanvasText; }
 }
 </style>
-</head>
-<body>
-
 <!-- ═══════════════════════════════════════════
      ACCESSIBILITY HELPERS
      ═══════════════════════════════════════════ -->
-<a href="#main" class="skip">Skip to main content</a>
 <div id="live-region" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- ═══════════════════════════════════════════
@@ -989,7 +986,7 @@ textarea.prompt-box::placeholder {
 <!-- ═══════════════════════════════════════════
      HEADER
      ═══════════════════════════════════════════ -->
-<header class="site-header" role="banner">
+<header class="site-header" role="region" aria-label="Page header">
   <div class="header-inner">
     <a href="https://civilrights.justice.gov" class="logo-block" aria-label="U.S. Department of Justice, Civil Rights Division — home">
       <div class="logo-seal" aria-hidden="true">DOJ</div>
@@ -1902,6 +1899,3 @@ anonCheck.addEventListener('change', () => {
     : 'Filing with contact information.';
 });
 </script>
-
-</body>
-</html>

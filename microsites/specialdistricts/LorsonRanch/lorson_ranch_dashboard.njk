@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lorson Ranch Metropolitan Districts — Financial Dashboard</title>
+---
+layout: site.njk
+permalink: "/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html"
+title: "Lorson Ranch Metropolitan Districts \u2014 Financial Dashboard"
+description: "Lorson Ranch Metropolitan Districts Nos. 1\u20137 financial dashboard \u2014 mill levies, bond debt, IGA money flows, audited net position, and a per-home tax calculator."
+activeNav: "dashboards"
+---
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -845,12 +847,7 @@ footer .colophon {
   color: var(--teal);
 }
 </style>
-</head>
-<body>
-
-<a href="#main-content" class="skip-link">Skip to main content</a>
-
-<header class="masthead" role="banner">
+<header class="masthead" role="region" aria-label="Page header">
   <div class="container">
     <p class="eyebrow">Civic financial transparency · El Paso County, Colorado</p>
     <h1>Lorson Ranch Metropolitan Districts Nos. 1–7</h1>
@@ -1431,6 +1428,3 @@ boardData.forEach(([dist, name, email, ballot]) => {
   boardBody.appendChild(tr);
 });
 </script>
-
-</body>
-</html>

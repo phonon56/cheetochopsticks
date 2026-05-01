@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADAM Dashboard - Active Missing Children Cases</title>
-    <meta name="description" content="The ADAM Program Interactive Missing Children Dashboard: A powerful tool designed to help the public search geo-targeted areas for missing child alerts.">
-    
-    <style>
+---
+layout: site.njk
+permalink: "/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html"
+title: "ADAM Dashboard - Active Missing Children Cases"
+description: "LexisNexis ADAM Program missing-children dashboard \u2014 accessible reference rebuild."
+activeNav: "dashboards"
+---
+
+<style>
         /* CSS Variables for theming and accessibility */
         :root {
             --primary-blue: #1e3a8a;
@@ -1065,13 +1065,9 @@
             }
         }
     </style>
-</head>
-<body>
-    <!-- Skip to main content link for accessibility -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
+<!-- Skip to main content link for accessibility -->
     <!-- Header with logo and navigation -->
-    <header class="header" role="banner">
+    <header class="header" role="region" aria-label="Page header">
         <div class="header-content">
             <div class="logo-section">
                 <a href="https://risk.lexisnexis.com/" class="lexisnexis-logo" aria-label="LexisNexis Risk Solutions Home">
@@ -2452,5 +2448,3 @@
         `;
         document.head.appendChild(style);
     </script>
-</body>
-</html>

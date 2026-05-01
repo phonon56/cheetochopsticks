@@ -1,9 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CDOLA Open Records Request — Accessibility Audit & Redesign · StorySeed / The Dais</title>
+---
+layout: site.njk
+permalink: "/microsites/state/cdola/cdola-cora-audit-and-redesign.html"
+title: "CDOLA Open Records Request \u2014 Accessibility Audit & Redesign \u00b7 StorySeed / The Dais"
+description: "Colorado Department of Local Affairs CORA audit and redesigned records-request flow."
+activeNav: "dashboards"
+---
+
+{% raw %}
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Inter:wght@300;400;500;600&display=swap');
 
@@ -411,14 +414,10 @@ pre code .r { color: #fca5a5; }  /* bad highlight */
   position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;
 }
 </style>
-</head>
-<body>
-
-<a href="#main" class="skip-link">Skip to main content</a>
 <div id="live-status" role="status" aria-atomic="true"></div>
 
 <!-- ── MASTHEAD ── -->
-<header class="audit-band" role="banner">
+<header class="audit-band" role="region" aria-label="Page header">
   <div class="audit-band-inner">
     <p class="audit-eyebrow">StorySeed Studios · The Dais · Live Browser Audit · April 2026</p>
     <h1>CDOLA Open Records Request<br>Accessibility Audit &amp; Redesign</h1>
@@ -1217,7 +1216,4 @@ tabBtns.forEach((btn, i) => {
     if (e.key === 'ArrowLeft')  { e.preventDefault(); btns[(idx-1+btns.length) % btns.length].click(); btns[(idx-1+btns.length) % btns.length].focus(); }
   });
 });
-</script>
-
-</body>
-</html>
+</script>{% endraw %}

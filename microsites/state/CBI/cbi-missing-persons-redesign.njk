@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Missing Person Contact Form | Colorado Bureau of Investigation</title>
-<meta name="description" content="Contact form for family, friends, and associates of missing persons in Colorado. Provide your contact information so the CBI Missing Persons Unit can reach you for case updates and event invitations.">
+---
+layout: site.njk
+permalink: "/microsites/state/CBI/cbi-missing-persons-redesign.html"
+title: "Missing Person Contact Form | Colorado Bureau of Investigation"
+description: "CBI Missing Persons contact form \u2014 accessible reference rebuild that resolves all seven critical/serious findings from the ADA audit."
+activeNav: "you"
+---
 
 <!--
   ╔══════════════════════════════════════════════════════════════════╗
@@ -521,15 +521,9 @@ footer.page-footer a {
   * { animation: none !important; transition: none !important; }
 }
 </style>
-</head>
-
-<body>
-
 <!-- Skip link — first DOM element (WCAG 2.4.1) -->
-<a class="skip-link" href="#main-content">Skip to main content</a>
-
 <!-- Header -->
-<header class="brand" role="banner">
+<header class="brand" role="region" aria-label="Page header">
   <div class="brand-mark">
     <a href="https://cbi.colorado.gov/" aria-label="Colorado Bureau of Investigation home">
       Colorado Bureau of Investigation
@@ -1461,5 +1455,3 @@ footer.page-footer a {
 
 })();
 </script>
-</body>
-</html>
