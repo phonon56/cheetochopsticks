@@ -31,25 +31,25 @@ body{font-family:var(--sans);font-size:15px;line-height:1.65;color:var(--slate);
 .skip{position:absolute;top:-999px;left:0;background:var(--navy);color:#fff;padding:.5rem 1.25rem;font-weight:600;z-index:9999;text-decoration:none}
 .skip:focus{top:0}
 
-/* HEADER */
-header{background:var(--navy);color:#fff}
-.hband{background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.1);padding:.4rem 1.5rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#7ba3c8}
-.hband-inner{max-width:1160px;margin:0 auto;display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;align-items:center}
-.hsep{opacity:.3}
-.header-inner{max-width:1160px;margin:0 auto;padding:1.75rem 1.5rem 1.5rem;display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:end}
-@media(max-width:700px){.header-inner{grid-template-columns:1fr}}
-header h1{font-family:var(--serif);font-size:1.75rem;font-weight:600;line-height:1.2;margin-bottom:.3rem}
-.hsub{font-size:.88rem;color:#9dbbd8;max-width:560px;line-height:1.5}
-.ep-hero{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:1rem 1.5rem;text-align:right}
-.ep-num{font-family:var(--serif);font-size:3rem;font-weight:600;color:#fff;line-height:1;display:block}
-.ep-lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#7ba3c8;margin-top:.3rem;display:block}
-.ep-sub{font-size:.78rem;color:#9dbbd8;margin-top:.2rem}
+/* HEADER — scoped to the dashboard's own banner so the layout's site nav is untouched */
+header[aria-label="Dashboard summary"]{background:var(--navy);color:#fff}
+header[aria-label="Dashboard summary"] .hband{background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.1);padding:.4rem 1.5rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#7ba3c8}
+header[aria-label="Dashboard summary"] .hband-inner{max-width:1160px;margin:0 auto;display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;align-items:center}
+header[aria-label="Dashboard summary"] .hsep{opacity:.3}
+header[aria-label="Dashboard summary"] .header-inner{max-width:1160px;margin:0 auto;padding:1.75rem 1.5rem 1.5rem;display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:end}
+@media(max-width:700px){header[aria-label="Dashboard summary"] .header-inner{grid-template-columns:1fr}}
+header[aria-label="Dashboard summary"] h1{font-family:var(--serif);font-size:1.75rem;font-weight:600;line-height:1.2;margin-bottom:.3rem}
+header[aria-label="Dashboard summary"] .hsub{font-size:.88rem;color:#9dbbd8;max-width:560px;line-height:1.5}
+header[aria-label="Dashboard summary"] .ep-hero{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:1rem 1.5rem;text-align:right}
+header[aria-label="Dashboard summary"] .ep-num{font-family:var(--serif);font-size:3rem;font-weight:600;color:#fff;line-height:1;display:block}
+header[aria-label="Dashboard summary"] .ep-lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#7ba3c8;margin-top:.3rem;display:block}
+header[aria-label="Dashboard summary"] .ep-sub{font-size:.78rem;color:#9dbbd8;margin-top:.2rem}
 
-/* NAV */
-nav{background:var(--navy2);border-bottom:1px solid rgba(255,255,255,.08)}
-nav ul{max-width:1160px;margin:0 auto;padding:0 1.5rem;display:flex;flex-wrap:wrap;list-style:none}
-nav a{display:block;padding:.55rem .85rem;font-size:.78rem;font-weight:500;color:#9dbbd8;text-decoration:none;border-bottom:2px solid transparent;transition:all .15s}
-nav a:hover,nav a:focus{color:#fff;border-bottom-color:#60a5fa}
+/* NAV — scoped to the dashboard's section nav so the layout's site nav is untouched */
+nav[aria-label="Dashboard sections"]{background:var(--navy2);border-bottom:1px solid rgba(255,255,255,.08)}
+nav[aria-label="Dashboard sections"] ul{max-width:1160px;margin:0 auto;padding:0 1.5rem;display:flex;flex-wrap:wrap;list-style:none}
+nav[aria-label="Dashboard sections"] a{display:block;padding:.55rem .85rem;font-size:.78rem;font-weight:500;color:#9dbbd8;text-decoration:none;border-bottom:2px solid transparent;transition:all .15s}
+nav[aria-label="Dashboard sections"] a:hover,nav[aria-label="Dashboard sections"] a:focus{color:#fff;border-bottom-color:#60a5fa}
 
 /* LAYOUT */
 main{max-width:1160px;margin:0 auto;padding:1.75rem 1.5rem 4rem}
