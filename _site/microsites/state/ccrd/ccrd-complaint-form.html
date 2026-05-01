@@ -1947,8 +1947,8 @@ abbr[title]:focus {
   </div>
 </main>
 
-<!-- FIX C-3: <footer> with role inferred from semantic element -->
-<footer class="site-footer">
+<!-- Demoted to section so the layout cc-footer stays the only contentinfo landmark. -->
+<section class="site-footer" role="region" aria-label="About this page">
   <div class="footer-inner">
     <div class="footer-section">
       <h4>Colorado Civil Rights Division</h4>
@@ -1978,7 +1978,7 @@ abbr[title]:focus {
     <span>© 2026 State of Colorado · DORA · Civil Rights Division</span>
     <span>Accessibility: <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.1 Level AAA · <abbr title="Americans with Disabilities Act">ADA</abbr> Title II compliant</span>
   </div>
-</footer>
+</section>
 
 <div class="demo-banner" aria-hidden="true">DEMO MODE — No data is submitted</div>
 
