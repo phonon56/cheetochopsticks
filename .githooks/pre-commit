@@ -1,0 +1,48 @@
+#!/bin/sh
+# Pre-commit hook: rebuild _site/ if any source files are staged, then re-stage
+# the regenerated _site/ so what's committed always matches what Eleventy emits.
+#
+# Active because of `npm run prepare` (which runs `git config core.hooksPath
+# .githooks`). Skip with `git commit --no-verify` in a pinch.
+
+set -e
+
+# Watch the inputs that affect the build output.
+need_rebuild=false
+while IFS= read -r f; do
+  case "$f" in
+    *.njk \
+    | _includes/* \
+    | _data/* \
+    | .eleventy.js \
+    | package.json \
+    | shared/* \
+    | microsites/*)
+      need_rebuild=true
+      break
+      ;;
+  esac
+done <<EOF
+$(git diff --cached --name-only --diff-filter=ACMR)
+EOF
+
+if [ "$need_rebuild" = false ]; then
+  exit 0
+fi
+
+# node_modules might be missing on a fresh clone — bail loud rather than silent.
+if [ ! -d node_modules/@11ty/eleventy ]; then
+  echo "pre-commit: node_modules missing. Run \`npm install\` first." >&2
+  exit 1
+fi
+
+echo "pre-commit: source change detected — running \`npm run build\`..."
+if ! npm run build --silent; then
+  echo "pre-commit: build failed. Fix the error or commit with --no-verify." >&2
+  exit 1
+fi
+
+# Stage any new/changed files in _site/ so the commit captures the rebuild.
+git add _site
+
+exit 0

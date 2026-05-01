@@ -1,0 +1,193 @@
+series,year,period,period_name,value
+elpaso_total_avg_weekly_wage,2024,Q04,4th Quarter,1339.0
+elpaso_total_avg_weekly_wage,2024,Q03,3rd Quarter,1234.0
+elpaso_total_avg_weekly_wage,2024,Q02,2nd Quarter,1221.0
+elpaso_total_avg_weekly_wage,2024,Q01,1st Quarter,1307.0
+elpaso_total_avg_weekly_wage,2023,Q04,4th Quarter,1272.0
+elpaso_total_avg_weekly_wage,2023,Q03,3rd Quarter,1198.0
+elpaso_total_avg_weekly_wage,2023,Q02,2nd Quarter,1184.0
+elpaso_total_avg_weekly_wage,2023,Q01,1st Quarter,1256.0
+elpaso_total_avg_weekly_wage,2022,Q04,4th Quarter,1228.0
+elpaso_total_avg_weekly_wage,2022,Q03,3rd Quarter,1202.0
+elpaso_total_avg_weekly_wage,2022,Q02,2nd Quarter,1132.0
+elpaso_total_avg_weekly_wage,2022,Q01,1st Quarter,1143.0
+elpaso_total_avg_weekly_wage,2021,Q04,4th Quarter,1234.0
+elpaso_total_avg_weekly_wage,2021,Q03,3rd Quarter,1106.0
+elpaso_total_avg_weekly_wage,2021,Q02,2nd Quarter,1071.0
+elpaso_total_avg_weekly_wage,2021,Q01,1st Quarter,1076.0
+elpaso_total_avg_weekly_wage,2020,Q04,4th Quarter,1175.0
+elpaso_total_avg_weekly_wage,2020,Q03,3rd Quarter,1036.0
+elpaso_total_avg_weekly_wage,2020,Q02,2nd Quarter,1050.0
+elpaso_total_avg_weekly_wage,2020,Q01,1st Quarter,1021.0
+elpaso_total_avg_weekly_wage,2019,Q04,4th Quarter,1030.0
+elpaso_total_avg_weekly_wage,2019,Q03,3rd Quarter,965.0
+elpaso_total_avg_weekly_wage,2019,Q02,2nd Quarter,956.0
+elpaso_total_avg_weekly_wage,2019,Q01,1st Quarter,1011.0
+elpaso_total_employment,2024,M12,December,253616.0
+elpaso_total_employment,2024,M11,November,254015.0
+elpaso_total_employment,2024,M10,October,254905.0
+elpaso_total_employment,2024,M09,September,253836.0
+elpaso_total_employment,2024,M08,August,255739.0
+elpaso_total_employment,2024,M07,July,256760.0
+elpaso_total_employment,2024,M06,June,255305.0
+elpaso_total_employment,2024,M05,May,253955.0
+elpaso_total_employment,2024,M04,April,251896.0
+elpaso_total_employment,2024,M03,March,248213.0
+elpaso_total_employment,2024,M02,February,248558.0
+elpaso_total_employment,2024,M01,January,249425.0
+elpaso_total_employment,2023,M12,December,255989.0
+elpaso_total_employment,2023,M11,November,256668.0
+elpaso_total_employment,2023,M10,October,256466.0
+elpaso_total_employment,2023,M09,September,253200.0
+elpaso_total_employment,2023,M08,August,255160.0
+elpaso_total_employment,2023,M07,July,254936.0
+elpaso_total_employment,2023,M06,June,255444.0
+elpaso_total_employment,2023,M05,May,251718.0
+elpaso_total_employment,2023,M04,April,249621.0
+elpaso_total_employment,2023,M03,March,246467.0
+elpaso_total_employment,2023,M02,February,245831.0
+elpaso_total_employment,2023,M01,January,245464.0
+elpaso_total_employment,2022,M12,December,246076.0
+elpaso_total_employment,2022,M11,November,245987.0
+elpaso_total_employment,2022,M10,October,245553.0
+elpaso_total_employment,2022,M09,September,243409.0
+elpaso_total_employment,2022,M08,August,245944.0
+elpaso_total_employment,2022,M07,July,245599.0
+elpaso_total_employment,2022,M06,June,245429.0
+elpaso_total_employment,2022,M05,May,244592.0
+elpaso_total_employment,2022,M04,April,243641.0
+elpaso_total_employment,2022,M03,March,239753.0
+elpaso_total_employment,2022,M02,February,239692.0
+elpaso_total_employment,2022,M01,January,237528.0
+elpaso_total_employment,2021,M12,December,241433.0
+elpaso_total_employment,2021,M11,November,241974.0
+elpaso_total_employment,2021,M10,October,241110.0
+elpaso_total_employment,2021,M09,September,236270.0
+elpaso_total_employment,2021,M08,August,238893.0
+elpaso_total_employment,2021,M07,July,238517.0
+elpaso_total_employment,2021,M06,June,237138.0
+elpaso_total_employment,2021,M05,May,232467.0
+elpaso_total_employment,2021,M04,April,229868.0
+elpaso_total_employment,2021,M03,March,227739.0
+elpaso_total_employment,2021,M02,February,226215.0
+elpaso_total_employment,2021,M01,January,223991.0
+elpaso_total_employment,2020,M12,December,225859.0
+elpaso_total_employment,2020,M11,November,230128.0
+elpaso_total_employment,2020,M10,October,230237.0
+elpaso_total_employment,2020,M09,September,227142.0
+elpaso_total_employment,2020,M08,August,227441.0
+elpaso_total_employment,2020,M07,July,225591.0
+elpaso_total_employment,2020,M06,June,220298.0
+elpaso_total_employment,2020,M05,May,210837.0
+elpaso_total_employment,2020,M04,April,200600.0
+elpaso_total_employment,2020,M03,March,231137.0
+elpaso_total_employment,2020,M02,February,232144.0
+elpaso_total_employment,2020,M01,January,231959.0
+elpaso_total_employment,2019,M12,December,234145.0
+elpaso_total_employment,2019,M11,November,235089.0
+elpaso_total_employment,2019,M10,October,234595.0
+elpaso_total_employment,2019,M09,September,233257.0
+elpaso_total_employment,2019,M08,August,235823.0
+elpaso_total_employment,2019,M07,July,235025.0
+elpaso_total_employment,2019,M06,June,233771.0
+elpaso_total_employment,2019,M05,May,231553.0
+elpaso_total_employment,2019,M04,April,228853.0
+elpaso_total_employment,2019,M03,March,225489.0
+elpaso_total_employment,2019,M02,February,225501.0
+elpaso_total_employment,2019,M01,January,224711.0
+denver_total_avg_weekly_wage,2024,Q04,4th Quarter,2030.0
+denver_total_avg_weekly_wage,2024,Q03,3rd Quarter,1873.0
+denver_total_avg_weekly_wage,2024,Q02,2nd Quarter,1923.0
+denver_total_avg_weekly_wage,2024,Q01,1st Quarter,2199.0
+denver_total_avg_weekly_wage,2023,Q04,4th Quarter,1904.0
+denver_total_avg_weekly_wage,2023,Q03,3rd Quarter,1761.0
+denver_total_avg_weekly_wage,2023,Q02,2nd Quarter,1782.0
+denver_total_avg_weekly_wage,2023,Q01,1st Quarter,2083.0
+denver_total_avg_weekly_wage,2022,Q04,4th Quarter,1831.0
+denver_total_avg_weekly_wage,2022,Q03,3rd Quarter,1759.0
+denver_total_avg_weekly_wage,2022,Q02,2nd Quarter,1737.0
+denver_total_avg_weekly_wage,2022,Q01,1st Quarter,1952.0
+denver_total_avg_weekly_wage,2021,Q04,4th Quarter,1851.0
+denver_total_avg_weekly_wage,2021,Q03,3rd Quarter,1616.0
+denver_total_avg_weekly_wage,2021,Q02,2nd Quarter,1626.0
+denver_total_avg_weekly_wage,2021,Q01,1st Quarter,1823.0
+denver_total_avg_weekly_wage,2020,Q04,4th Quarter,1712.0
+denver_total_avg_weekly_wage,2020,Q03,3rd Quarter,1518.0
+denver_total_avg_weekly_wage,2020,Q02,2nd Quarter,1508.0
+denver_total_avg_weekly_wage,2020,Q01,1st Quarter,1666.0
+denver_total_avg_weekly_wage,2019,Q04,4th Quarter,1463.0
+denver_total_avg_weekly_wage,2019,Q03,3rd Quarter,1364.0
+denver_total_avg_weekly_wage,2019,Q02,2nd Quarter,1348.0
+denver_total_avg_weekly_wage,2019,Q01,1st Quarter,1574.0
+denver_total_employment,2024,M12,December,488699.0
+denver_total_employment,2024,M11,November,489881.0
+denver_total_employment,2024,M10,October,491686.0
+denver_total_employment,2024,M09,September,491500.0
+denver_total_employment,2024,M08,August,494029.0
+denver_total_employment,2024,M07,July,494079.0
+denver_total_employment,2024,M06,June,492989.0
+denver_total_employment,2024,M05,May,493820.0
+denver_total_employment,2024,M04,April,493149.0
+denver_total_employment,2024,M03,March,486490.0
+denver_total_employment,2024,M02,February,487291.0
+denver_total_employment,2024,M01,January,486772.0
+denver_total_employment,2023,M12,December,497299.0
+denver_total_employment,2023,M11,November,499162.0
+denver_total_employment,2023,M10,October,499615.0
+denver_total_employment,2023,M09,September,494517.0
+denver_total_employment,2023,M08,August,498202.0
+denver_total_employment,2023,M07,July,498165.0
+denver_total_employment,2023,M06,June,501513.0
+denver_total_employment,2023,M05,May,497853.0
+denver_total_employment,2023,M04,April,495680.0
+denver_total_employment,2023,M03,March,490747.0
+denver_total_employment,2023,M02,February,489533.0
+denver_total_employment,2023,M01,January,487463.0
+denver_total_employment,2022,M12,December,493530.0
+denver_total_employment,2022,M11,November,495854.0
+denver_total_employment,2022,M10,October,495288.0
+denver_total_employment,2022,M09,September,491057.0
+denver_total_employment,2022,M08,August,494143.0
+denver_total_employment,2022,M07,July,492282.0
+denver_total_employment,2022,M06,June,487562.0
+denver_total_employment,2022,M05,May,486932.0
+denver_total_employment,2022,M04,April,483949.0
+denver_total_employment,2022,M03,March,474914.0
+denver_total_employment,2022,M02,February,472282.0
+denver_total_employment,2022,M01,January,469154.0
+denver_total_employment,2021,M12,December,470303.0
+denver_total_employment,2021,M11,November,469541.0
+denver_total_employment,2021,M10,October,466154.0
+denver_total_employment,2021,M09,September,458199.0
+denver_total_employment,2021,M08,August,458846.0
+denver_total_employment,2021,M07,July,456424.0
+denver_total_employment,2021,M06,June,449325.0
+denver_total_employment,2021,M05,May,442939.0
+denver_total_employment,2021,M04,April,437946.0
+denver_total_employment,2021,M03,March,429220.0
+denver_total_employment,2021,M02,February,425764.0
+denver_total_employment,2021,M01,January,419626.0
+denver_total_employment,2020,M12,December,417675.0
+denver_total_employment,2020,M11,November,422522.0
+denver_total_employment,2020,M10,October,422496.0
+denver_total_employment,2020,M09,September,415146.0
+denver_total_employment,2020,M08,August,414146.0
+denver_total_employment,2020,M07,July,409644.0
+denver_total_employment,2020,M06,June,404406.0
+denver_total_employment,2020,M05,May,394174.0
+denver_total_employment,2020,M04,April,387993.0
+denver_total_employment,2020,M03,March,460298.0
+denver_total_employment,2020,M02,February,463420.0
+denver_total_employment,2020,M01,January,462061.0
+denver_total_employment,2019,M12,December,465825.0
+denver_total_employment,2019,M11,November,466302.0
+denver_total_employment,2019,M10,October,466145.0
+denver_total_employment,2019,M09,September,463716.0
+denver_total_employment,2019,M08,August,465792.0
+denver_total_employment,2019,M07,July,464300.0
+denver_total_employment,2019,M06,June,462718.0
+denver_total_employment,2019,M05,May,457352.0
+denver_total_employment,2019,M04,April,455239.0
+denver_total_employment,2019,M03,March,449487.0
+denver_total_employment,2019,M02,February,448224.0
+denver_total_employment,2019,M01,January,446423.0
