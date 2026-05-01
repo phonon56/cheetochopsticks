@@ -139,11 +139,22 @@
     .nav-logo {
       text-decoration: none;
       display: flex;
-      align-items: baseline;
+      align-items: center;
       gap: 1px;
       margin-right: 32px;
       flex-shrink: 0;
     }
+    .nav-logo-img {
+      height: 22px;
+      width: auto;
+      display: block;
+    }
+    .nav-logo:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    /* Legacy text-logo styles kept for any other surfaces that reference them */
     .nav-logo-word {
       font-family: var(--sans);
       font-weight: 600;
@@ -1027,7 +1038,7 @@
   <div class="container">
     <div class="nav-inner">
       <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
-        <span class="nav-logo-word">cheetochopsticks</span><span class="nav-logo-dot">.com</span>
+        <img src="shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="209" height="22">
       </a>
       <nav class="nav-links" id="nav-links" aria-label="Site sections">
         <a class="nav-link you-link" href="#you">You</a>
