@@ -1,10 +1,11 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Consolidated Audit Memo — CSPD Crash Data chart portfolio</title>
-<meta name="description" content="Audit of every Tyler Data & Insights view derived from the Colorado Springs Police Department crash dataset: seven chart views and a story page.">
+---
+layout: site.njk
+permalink: /microsites/city/police/neighborhood/audit-memo-12C-consolidated.html
+title: "Consolidated Audit Memo \u2014 CSPD Crash Data chart portfolio"
+description: "Audit of every Tyler Data & Insights view derived from the Colorado Springs Police Department crash dataset: seven chart views and a story page."
+activeNav: "dashboards"
+---
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -144,9 +145,6 @@
   }
   @media print { body { background: #fff; font-size: 10.5pt; } .view { break-inside: avoid; } }
 </style>
-</head>
-<body>
-<a class="skip" href="#main">Skip to main content</a>
 <div class="page">
 
 <header class="m">
@@ -662,5 +660,3 @@ const BUNDLE = {"monthly_loc": [{"YearMonth": "2016-01", "total": 835, "no_loc":
   svg.appendChild(el('line', {x1: ML, x2: ML, y1: MT, y2: MT+pH, stroke: '#6b5d4a'}));
 })();
 </script>
-</body>
-</html>

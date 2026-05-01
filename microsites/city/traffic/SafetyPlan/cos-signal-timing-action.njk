@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Intersection, Your Voice · Colorado Springs Signal Timing Action Dashboard · StorySeed / The Dais</title>
+---
+layout: site.njk
+permalink: /microsites/city/traffic/SafetyPlan/cos-signal-timing-action.html
+title: "Your Intersection, Your Voice \u00b7 Colorado Springs Signal Timing Action Dashboard \u00b7 StorySeed / The Dais"
+description: "Colorado Springs signal-timing action dashboard \u2014 your intersection, your voice."
+activeNav: "dashboards"
+---
 
 <!-- Atkinson Hyperlegible: designed by the Braille Institute for maximum character differentiation and low-vision readability. Fraunces: variable serif for display warmth. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -699,16 +700,12 @@ footer p {
   .letter-text { max-height: none; overflow: visible; border: none; background: #fff; }
 }
 </style>
-</head>
-<body>
-
-<a href="#main" class="skip-link">Skip to main content</a>
 <div id="live-region" role="status" aria-live="polite" class="sr-only"></div>
 
 <!-- ═══════════════════════════════════════════════════════
      MASTHEAD
 ═══════════════════════════════════════════════════════ -->
-<header class="masthead" role="banner">
+<header class="masthead" role="region" aria-label="Page header">
   <!-- Decorative ripple SVG echoing the project theme -->
   <svg class="masthead-ripple" aria-hidden="true" viewBox="0 0 400 400" fill="none">
     <circle cx="200" cy="200" r="60"  stroke="#c8a84b" stroke-width="1.5"/>
@@ -1198,6 +1195,3 @@ document.querySelectorAll('.toc-link').forEach(link => {
 
 document.getElementById('live-region').textContent = 'Action dashboard loaded. 20 intersections, 3 letter templates, and 4 contact cards are available.';
 </script>
-
-</body>
-</html>

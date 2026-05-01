@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Colorado Springs · Traffic Safety Intelligence · StorySeed / The Dais</title>
+---
+layout: site.njk
+permalink: /microsites/city/traffic/SafetyPlan/cos-traffic-hub.html
+title: "Colorado Springs \u00b7 Traffic Safety Intelligence \u00b7 StorySeed / The Dais"
+description: "Colorado Springs traffic safety intelligence \u2014 64,434 crash records, 12 charts, FHWA funding analysis."
+activeNav: "dashboards"
+---
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 /* ===== DESIGN TOKENS =====
@@ -414,15 +416,11 @@ td.num{text-align:right;font-family:var(--mono);}
   .brand-pill .bp-name{font-size:13px;}
 }
 </style>
-</head>
-<body>
-
-<a href="#main" class="skip">Skip to main content</a>
 <div id="live-region" role="status" aria-live="polite" class="sr-only"></div>
 <div id="live-announce" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
 <!-- ===== HEADER ===== -->
-<header class="dashboard-header" role="banner">
+<header class="dashboard-header" role="region" aria-label="Page header">
   <div class="header-inner">
     <p class="eyebrow">StorySeed Studios · The Dais · Civic Intelligence Platform</p>
     <h1>Colorado Springs — Traffic Safety &amp; Funding</h1>
@@ -1682,5 +1680,3 @@ document.querySelectorAll('thead th button').forEach(btn=>{
 
 loadAll();
 </script>
-</body>
-</html>

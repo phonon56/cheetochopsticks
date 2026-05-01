@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Request a City Record — Colorado Springs CORA</title>
+---
+layout: site.njk
+permalink: /microsites/city/coraform/cos-cora-form.html
+title: "Request a City Record \u2014 Colorado Springs CORA"
+description: "Submit a Colorado Open Records Act (CORA) request to the City of Colorado Springs."
+activeNav: "you"
+---
 
 <!--
   ╔══════════════════════════════════════════════════════════════════╗
@@ -189,12 +190,7 @@ select{cursor:pointer;}
 }
 @media print{.skip-link,.btn-submit,.mode-banner{display:none;}.form-card{border:none;}}
 </style>
-</head>
-<body>
-
-<a href="#main" class="skip-link">Skip to main content</a>
-
-<header class="site-header" role="banner">
+<header class="site-header" role="region" aria-label="Page header">
   <div class="header-inner">
     <h1>Request a City Record</h1>
     <p>Colorado Springs Open Records Act (CORA) <span aria-hidden="true">·</span>
@@ -854,5 +850,3 @@ function fallbackToMailto(data, message) {
     if (el) el.addEventListener('blur', validate);
   });
 </script>
-</body>
-</html>
