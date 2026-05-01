@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Submit a Tip | FBI</title>
-<meta name="description" content="Submit a tip to the FBI. Describe what you witnessed — we handle the routing. Tips can be anonymous.">
+---
+layout: site.njk
+permalink: "/microsites/FBI/tips-fbi-redesign.html"
+title: "Submit a Tip | FBI"
+description: "FBI tips.fbi.gov form \u2014 accessible reference rebuild and DOJ ADA letter."
+activeNav: "you"
+---
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
@@ -817,10 +818,6 @@ input[aria-invalid="true"] {
   border: 0;
 }
 </style>
-</head>
-<body>
-
-<a href="#main" class="skip">Skip to main content</a>
 <div role="status" id="live-status" aria-atomic="true"></div>
 
 <!-- ── EMERGENCY BAR ── -->
@@ -1233,6 +1230,3 @@ tipText.addEventListener('input', () => {
   document.getElementById('tip-error').textContent = '';
 });
 </script>
-
-</body>
-</html>
