@@ -372,11 +372,14 @@
     .notif-action:hover { border-color: var(--cc-gold); }
 
     /* ── FOOTER ─────────────────────────────────────────────────── */
-    .cc-footer {
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
       border-top: 1px solid var(--cc-border);
       padding: 32px 0 36px;
       margin-top: 56px;
-      background: rgba(10, 15, 26, .6);
+      background: var(--cc-bg);
+      color: var(--cc-text);
       position: relative;
       z-index: 1;
     }
@@ -458,7 +461,7 @@
      NOTIFICATIONS PANEL
 ════════════════════════════════════════════════════════════════════ -->
 <div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
-<aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
   <div class="notif-panel-head">
     <span class="notif-panel-title">Alerts &amp; notifications</span>
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
@@ -604,9 +607,10 @@
     </div>
 
   </div>
-</aside>
+</div>
 
-  
+  <main id="main-content" tabindex="-1">
+    
 <!-- ─────────────────────────────────────────────────────────
      SALESFORCE CONFIGURATION
      The CCRD CaseConnect platform runs on Salesforce.
@@ -1011,7 +1015,7 @@ body {
 .progress-step.done { color: var(--ink-mid); }
 
 /* ── MAIN FORM ─────────────────────────────────────────────── */
-/* FIX C-3: <main> landmark exists */
+/* FIX C-3: <div role="region" aria-label="Page content"> landmark exists */
 .form-wrapper {
   max-width: 1180px;
   margin: 0 auto;
@@ -1628,7 +1632,7 @@ abbr[title]:focus {
   </div>
 </aside>
 
-<!-- FIX C-3: <header> with role="banner" via semantic element -->
+<!-- FIX C-3: <section role="region" aria-label="Page header"> with role="banner" via semantic element -->
 <header class="site-header" role="region" aria-label="Page header">
   <div class="header-inner">
     <!-- FIX C-6 + N-1: logo link has accessible name -->
@@ -1649,10 +1653,10 @@ abbr[title]:focus {
          aria-label="Call 1-800-262-4845">1-800-262-4845</a>
     </div>
   </div>
-</header>
+</section>
 
-<!-- FIX C-3: <main> landmark with id for skip link target -->
-<main id="main">
+<!-- FIX C-3: <div role="region" aria-label="Page content"> landmark with id for skip link target -->
+<div role="region" aria-label="Page content">
 
   <!-- Hero -->
   <section class="hero" aria-labelledby="page-heading">
@@ -1945,7 +1949,7 @@ abbr[title]:focus {
     </aside>
 
   </div>
-</main>
+</div>
 
 <!-- Demoted to section so the layout cc-footer stays the only contentinfo landmark. -->
 <section class="site-footer" role="region" aria-label="About this page">
@@ -2334,6 +2338,7 @@ document.getElementById('save-btn').addEventListener('click', () => {
   alert('In production: this would email you a unique link to resume later. (Demo)');
 });
 </script>
+  </main>
   <!-- ═══════════════════════════════════════════════════════════════════
      FOOTER — single source of truth, included by site.njk on every page.
 ════════════════════════════════════════════════════════════════════ -->

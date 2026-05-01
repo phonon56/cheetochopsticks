@@ -358,11 +358,14 @@
     .notif-action:hover { border-color: var(--cc-gold); }
 
     /* ── FOOTER ─────────────────────────────────────────────────── */
-    .cc-footer {
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
       border-top: 1px solid var(--cc-border);
       padding: 32px 0 36px;
       margin-top: 56px;
-      background: rgba(10, 15, 26, .6);
+      background: var(--cc-bg);
+      color: var(--cc-text);
       position: relative;
       z-index: 1;
     }

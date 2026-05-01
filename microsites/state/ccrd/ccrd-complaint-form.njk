@@ -410,7 +410,7 @@ body {
 .progress-step.done { color: var(--ink-mid); }
 
 /* ── MAIN FORM ─────────────────────────────────────────────── */
-/* FIX C-3: <main> landmark exists */
+/* FIX C-3: <div role="region" aria-label="Page content"> landmark exists */
 .form-wrapper {
   max-width: 1180px;
   margin: 0 auto;
@@ -1027,7 +1027,7 @@ abbr[title]:focus {
   </div>
 </aside>
 
-<!-- FIX C-3: <header> with role="banner" via semantic element -->
+<!-- FIX C-3: <section role="region" aria-label="Page header"> with role="banner" via semantic element -->
 <header class="site-header" role="region" aria-label="Page header">
   <div class="header-inner">
     <!-- FIX C-6 + N-1: logo link has accessible name -->
@@ -1048,10 +1048,10 @@ abbr[title]:focus {
          aria-label="Call 1-800-262-4845">1-800-262-4845</a>
     </div>
   </div>
-</header>
+</section>
 
-<!-- FIX C-3: <main> landmark with id for skip link target -->
-<main id="main">
+<!-- FIX C-3: <div role="region" aria-label="Page content"> landmark with id for skip link target -->
+<div role="region" aria-label="Page content">
 
   <!-- Hero -->
   <section class="hero" aria-labelledby="page-heading">
@@ -1344,7 +1344,7 @@ abbr[title]:focus {
     </aside>
 
   </div>
-</main>
+</div>
 
 <!-- Demoted to section so the layout cc-footer stays the only contentinfo landmark. -->
 <section class="site-footer" role="region" aria-label="About this page">

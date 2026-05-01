@@ -372,11 +372,14 @@
     .notif-action:hover { border-color: var(--cc-gold); }
 
     /* ── FOOTER ─────────────────────────────────────────────────── */
-    .cc-footer {
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
       border-top: 1px solid var(--cc-border);
       padding: 32px 0 36px;
       margin-top: 56px;
-      background: rgba(10, 15, 26, .6);
+      background: var(--cc-bg);
+      color: var(--cc-text);
       position: relative;
       z-index: 1;
     }
@@ -458,7 +461,7 @@
      NOTIFICATIONS PANEL
 ════════════════════════════════════════════════════════════════════ -->
 <div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
-<aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
   <div class="notif-panel-head">
     <span class="notif-panel-title">Alerts &amp; notifications</span>
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
@@ -604,9 +607,10 @@
     </div>
 
   </div>
-</aside>
+</div>
 
-  
+  <main id="main-content" tabindex="-1">
+    
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1376,7 +1380,7 @@ details.agency .agency-list a::after {
 }
 .agg-link:hover { text-decoration: underline }
 </style>
-<header class="masthead">
+<section role="region" aria-label="Page header" class="masthead">
   <div class="masthead-inner">
     <div class="mast-brand"><span class="dot"></span> What residents actually ask</div>
     <nav class="mast-nav" aria-label="Section navigation">
@@ -1391,9 +1395,9 @@ details.agency .agency-list a::after {
       <a href="#appendix">Appendix</a>
     </nav>
   </div>
-</header>
+</section>
 
-<main id="main">
+<div role="region" aria-label="Page content">
 
 <!-- ═════════ HERO ═════════ -->
 <section class="hero">
@@ -2322,7 +2326,7 @@ details.agency .agency-list a::after {
   </div>
 </section>
 
-</main>
+</div>
 
 <section class="colo" role="region" aria-label="About this page">
   <div class="colo-inner">
@@ -2740,6 +2744,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 </script>
+  </main>
   <!-- ═══════════════════════════════════════════════════════════════════
      FOOTER — single source of truth, included by site.njk on every page.
 ════════════════════════════════════════════════════════════════════ -->

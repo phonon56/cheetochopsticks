@@ -369,14 +369,14 @@ activeNav: "dashboards"
       * { transition: none !important; }
     }
   </style>
-<header class="page-head">
+<section role="region" aria-label="Page header" class="page-head">
     <p class="page-eyebrow">County · CitizenConnect</p>
     <h1 class="page-title" id="page-title">ADA / WCAG 2.1 AA accessibility audit — Citizen Connect</h1>
     <p class="page-meta"><strong>citizenconnect.elpasoco.com</strong> &nbsp;·&nbsp; Audited April 14, 2026 &nbsp;·&nbsp; WCAG 2.1 AA + axe-core 4.9.1</p>
     <p class="page-note">Automated scan (axe-core) + manual DOM inspection. Does not substitute a full manual screen-reader test.</p>
-  </header>
+  </section>
 
-  <main id="main" class="wrap" aria-labelledby="page-title">
+  <div role="region" aria-label="Page content" class="wrap" aria-labelledby="page-title">
 
     <aside class="top-callout" role="region" aria-labelledby="functional-h">
       <p class="callout-label">Functional issues beyond WCAG</p>
@@ -576,4 +576,4 @@ activeNav: "dashboards"
       <p><strong>Recommended next step:</strong> Run a manual screen-reader walkthrough with NVDA + Firefox and VoiceOver + Safari, focusing on the mobile menu toggle, the service-request search form, and the social media embeds. Automated tools catch ~30–40% of real-world accessibility failures; the issues flagged above are the highest-confidence items from combined automated + DOM analysis.</p>
     </div>
 
-  </main>
+  </div>

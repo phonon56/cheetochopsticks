@@ -372,11 +372,14 @@
     .notif-action:hover { border-color: var(--cc-gold); }
 
     /* ── FOOTER ─────────────────────────────────────────────────── */
-    .cc-footer {
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
       border-top: 1px solid var(--cc-border);
       padding: 32px 0 36px;
       margin-top: 56px;
-      background: rgba(10, 15, 26, .6);
+      background: var(--cc-bg);
+      color: var(--cc-text);
       position: relative;
       z-index: 1;
     }
@@ -458,7 +461,7 @@
      NOTIFICATIONS PANEL
 ════════════════════════════════════════════════════════════════════ -->
 <div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
-<aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
   <div class="notif-panel-head">
     <span class="notif-panel-title">Alerts &amp; notifications</span>
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
@@ -604,9 +607,10 @@
     </div>
 
   </div>
-</aside>
+</div>
 
-  
+  <main id="main-content" tabindex="-1">
+    
 <!-- ─────────────────────────────────────────────────────────
      SALESFORCE CONFIGURATION — Set before deploying
      ─────────────────────────────────────────────────────── -->
@@ -1659,7 +1663,7 @@ select:focus {
 </div>
 
 <!-- Site header -->
-<header class="site-header">
+<section role="region" aria-label="Page header" class="site-header">
   <div class="header-inner">
     <a href="https://coag.gov" class="logo-link" aria-label="Colorado Attorney General — home">
       <div class="logo-seal" aria-hidden="true">CO<br>AG</div>
@@ -1673,7 +1677,7 @@ select:focus {
       <span>secure .gov</span>
     </div>
   </div>
-</header>
+</section>
 
 <!-- Hero -->
 <div class="hero" role="region" aria-labelledby="hero-heading">
@@ -1717,7 +1721,7 @@ select:focus {
 <!-- ═══════════════════════════════════════════════════════ -->
 <!-- MAIN CONTENT — #main is the skip link target           -->
 <!-- ═══════════════════════════════════════════════════════ -->
-<main id="main" class="form-section">
+<div role="region" aria-label="Page content" class="form-section">
 
   <!-- Salesforce connection status -->
   <div class="sf-status-strip demo" id="sf-status" role="status" aria-live="polite">
@@ -2162,7 +2166,7 @@ select:focus {
     </div>
   </section>
 
-</main><!-- /#main -->
+</div><!-- /#main -->
 
 <!-- Footer -->
 
@@ -2583,6 +2587,7 @@ initSFStatus();
 // Init lang
 setLang('en');
 </script>
+  </main>
   <!-- ═══════════════════════════════════════════════════════════════════
      FOOTER — single source of truth, included by site.njk on every page.
 ════════════════════════════════════════════════════════════════════ -->

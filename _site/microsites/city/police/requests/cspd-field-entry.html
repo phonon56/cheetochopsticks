@@ -372,11 +372,14 @@
     .notif-action:hover { border-color: var(--cc-gold); }
 
     /* ── FOOTER ─────────────────────────────────────────────────── */
-    .cc-footer {
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
       border-top: 1px solid var(--cc-border);
       padding: 32px 0 36px;
       margin-top: 56px;
-      background: rgba(10, 15, 26, .6);
+      background: var(--cc-bg);
+      color: var(--cc-text);
       position: relative;
       z-index: 1;
     }
@@ -458,7 +461,7 @@
      NOTIFICATIONS PANEL
 ════════════════════════════════════════════════════════════════════ -->
 <div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
-<aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
   <div class="notif-panel-head">
     <span class="notif-panel-title">Alerts &amp; notifications</span>
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
@@ -604,9 +607,10 @@
     </div>
 
   </div>
-</aside>
+</div>
 
-  
+  <main id="main-content" tabindex="-1">
+    
 <meta name="theme-color" content="#2d4a3e" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -2187,7 +2191,7 @@
     }
   </style>
 <div class="shell">
-    <header class="page">
+    <section role="region" aria-label="Page header" class="page">
       <div class="topline">
         <span>field entry v8 · cspd crash report</span>
         <span class="savedot" id="savedot">autosaved · just now</span>
@@ -2207,7 +2211,7 @@
         <div class="specpill">Picklist, not text</div>
         <div class="specpill">Select-all per field</div>
       </div>
-    </header>
+    </section>
 
     <div class="nav-sticky">
       <div class="view-tabs">
@@ -2267,7 +2271,7 @@
       </button>
     </div>
 
-    <main id="main" class="accordion">
+    <div role="region" aria-label="Page content" class="accordion">
 
       <!-- 01 CASE & TIME -->
       <section class="section" data-section="meta">
@@ -2722,7 +2726,7 @@
         </div></div>
       </section>
 
-    </main>
+    </div>
 
     <div class="footnote">
       <h3>Prototype provenance</h3>
@@ -4327,6 +4331,7 @@
     renderPersons();
     renderCaseList();
   </script>
+  </main>
   <!-- ═══════════════════════════════════════════════════════════════════
      FOOTER — single source of truth, included by site.njk on every page.
 ════════════════════════════════════════════════════════════════════ -->

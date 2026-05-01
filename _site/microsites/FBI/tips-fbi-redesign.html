@@ -372,11 +372,14 @@
     .notif-action:hover { border-color: var(--cc-gold); }
 
     /* ── FOOTER ─────────────────────────────────────────────────── */
-    .cc-footer {
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
       border-top: 1px solid var(--cc-border);
       padding: 32px 0 36px;
       margin-top: 56px;
-      background: rgba(10, 15, 26, .6);
+      background: var(--cc-bg);
+      color: var(--cc-text);
       position: relative;
       z-index: 1;
     }
@@ -458,7 +461,7 @@
      NOTIFICATIONS PANEL
 ════════════════════════════════════════════════════════════════════ -->
 <div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
-<aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
   <div class="notif-panel-head">
     <span class="notif-panel-title">Alerts &amp; notifications</span>
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
@@ -604,9 +607,10 @@
     </div>
 
   </div>
-</aside>
+</div>
 
-  
+  <main id="main-content" tabindex="-1">
+    
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
@@ -1435,7 +1439,7 @@ input[aria-invalid="true"] {
 </div>
 
 <!-- ── HEADER ── -->
-<header class="site-header">
+<section role="region" aria-label="Page header" class="site-header">
   <div class="header-inner">
     <a href="https://www.fbi.gov" class="logo-block" aria-label="FBI homepage">
       <div class="logo-seal" aria-hidden="true">FBI</div>
@@ -1449,7 +1453,7 @@ input[aria-invalid="true"] {
       <span>secure .gov</span>
     </div>
   </div>
-</header>
+</section>
 
 <!-- ── HERO ── -->
 <div class="hero" role="region" aria-labelledby="hero-heading">
@@ -1469,7 +1473,7 @@ input[aria-invalid="true"] {
 </div>
 
 <!-- ── FORM ── -->
-<main id="main" class="form-section" role="main">
+<div role="region" aria-label="Page content" class="form-section">
 
   <div class="form-card" role="region" aria-labelledby="form-heading">
 
@@ -1728,7 +1732,7 @@ input[aria-invalid="true"] {
     </div>
   </section>
 
-</main>
+</div>
 
 <!-- ── FOOTER ── -->
 
@@ -1819,6 +1823,7 @@ tipText.addEventListener('input', () => {
   document.getElementById('tip-error').textContent = '';
 });
 </script>
+  </main>
   <!-- ═══════════════════════════════════════════════════════════════════
      FOOTER — single source of truth, included by site.njk on every page.
 ════════════════════════════════════════════════════════════════════ -->

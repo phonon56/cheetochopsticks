@@ -176,7 +176,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 17px; line-height: 1
     <a href="#">Contact</a>
   </nav>
 
-  <header class="site-header">
+  <section role="region" aria-label="Page header" class="site-header">
     <a class="logo-link" href="#" aria-label="Downtown Colorado Springs — return to home">
       <div class="logo-box" aria-hidden="true">
         <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -193,7 +193,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 17px; line-height: 1
       </div>
     </a>
     <span class="header-badge" aria-label="Funding Transparency Portal — sample data">Funding Transparency Portal</span>
-  </header>
+  </section>
 
   <section aria-labelledby="search-heading" class="hero">
     <h1 id="search-heading">Downtown Funding &amp; Records Search</h1>
@@ -344,7 +344,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 17px; line-height: 1
 
     </nav>
 
-    <main id="main-content" class="results-area" tabindex="-1">
+    <div role="region" aria-label="Page content" class="results-area">
       <div class="results-bar">
         <p id="results-count" aria-live="polite" aria-atomic="true"></p>
         <div class="sort-wrap">
@@ -358,7 +358,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 17px; line-height: 1
         </div>
       </div>
       <div id="results-list" aria-label="Funding records" role="list"></div>
-    </main>
+    </div>
   </div>
 
   <section class="explainer" aria-labelledby="explainer-h">

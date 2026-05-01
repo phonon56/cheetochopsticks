@@ -372,11 +372,14 @@
     .notif-action:hover { border-color: var(--cc-gold); }
 
     /* ── FOOTER ─────────────────────────────────────────────────── */
-    .cc-footer {
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
       border-top: 1px solid var(--cc-border);
       padding: 32px 0 36px;
       margin-top: 56px;
-      background: rgba(10, 15, 26, .6);
+      background: var(--cc-bg);
+      color: var(--cc-text);
       position: relative;
       z-index: 1;
     }
@@ -458,7 +461,7 @@
      NOTIFICATIONS PANEL
 ════════════════════════════════════════════════════════════════════ -->
 <div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
-<aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
   <div class="notif-panel-head">
     <span class="notif-panel-title">Alerts &amp; notifications</span>
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
@@ -604,9 +607,10 @@
     </div>
 
   </div>
-</aside>
+</div>
 
-  
+  <main id="main-content" tabindex="-1">
+    
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Muli:ital,wght@0,400;0,600;0,700;0,800&display=swap');
 
@@ -777,7 +781,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 17px; line-height: 1
     <a href="#">Contact</a>
   </nav>
 
-  <header class="site-header">
+  <section role="region" aria-label="Page header" class="site-header">
     <a class="logo-link" href="#" aria-label="Downtown Colorado Springs — return to home">
       <div class="logo-box" aria-hidden="true">
         <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -794,7 +798,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 17px; line-height: 1
       </div>
     </a>
     <span class="header-badge" aria-label="Funding Transparency Portal — sample data">Funding Transparency Portal</span>
-  </header>
+  </section>
 
   <section aria-labelledby="search-heading" class="hero">
     <h1 id="search-heading">Downtown Funding &amp; Records Search</h1>
@@ -945,7 +949,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 17px; line-height: 1
 
     </nav>
 
-    <main id="main-content" class="results-area" tabindex="-1">
+    <div role="region" aria-label="Page content" class="results-area">
       <div class="results-bar">
         <p id="results-count" aria-live="polite" aria-atomic="true"></p>
         <div class="sort-wrap">
@@ -959,7 +963,7 @@ body, .portal { font-family: 'Muli', sans-serif; font-size: 17px; line-height: 1
         </div>
       </div>
       <div id="results-list" aria-label="Funding records" role="list"></div>
-    </main>
+    </div>
   </div>
 
   <section class="explainer" aria-labelledby="explainer-h">
@@ -1096,6 +1100,7 @@ function toggleMissing(){
 
 applyFilters();
 </script>
+  </main>
   <!-- ═══════════════════════════════════════════════════════════════════
      FOOTER — single source of truth, included by site.njk on every page.
 ════════════════════════════════════════════════════════════════════ -->

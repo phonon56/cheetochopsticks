@@ -20,7 +20,9 @@
   <a class="skip-link" href="#main-content">Skip to main content</a>
   {% include "partials/nav.njk" %}
   {% include "partials/notifications.njk" %}
-  {{ content | safe }}
+  <main id="main-content" tabindex="-1">
+    {{ content | safe }}
+  </main>
   {% include "partials/footer.njk" %}
   {% include "partials/nav-scripts.njk" %}
 </body>

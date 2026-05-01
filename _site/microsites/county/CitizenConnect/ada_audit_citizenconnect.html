@@ -372,11 +372,14 @@
     .notif-action:hover { border-color: var(--cc-gold); }
 
     /* ── FOOTER ─────────────────────────────────────────────────── */
-    .cc-footer {
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
       border-top: 1px solid var(--cc-border);
       padding: 32px 0 36px;
       margin-top: 56px;
-      background: rgba(10, 15, 26, .6);
+      background: var(--cc-bg);
+      color: var(--cc-text);
       position: relative;
       z-index: 1;
     }
@@ -458,7 +461,7 @@
      NOTIFICATIONS PANEL
 ════════════════════════════════════════════════════════════════════ -->
 <div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
-<aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
   <div class="notif-panel-head">
     <span class="notif-panel-title">Alerts &amp; notifications</span>
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
@@ -604,9 +607,10 @@
     </div>
 
   </div>
-</aside>
+</div>
 
-  
+  <main id="main-content" tabindex="-1">
+    
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -970,14 +974,14 @@
       * { transition: none !important; }
     }
   </style>
-<header class="page-head">
+<section role="region" aria-label="Page header" class="page-head">
     <p class="page-eyebrow">County · CitizenConnect</p>
     <h1 class="page-title" id="page-title">ADA / WCAG 2.1 AA accessibility audit — Citizen Connect</h1>
     <p class="page-meta"><strong>citizenconnect.elpasoco.com</strong> &nbsp;·&nbsp; Audited April 14, 2026 &nbsp;·&nbsp; WCAG 2.1 AA + axe-core 4.9.1</p>
     <p class="page-note">Automated scan (axe-core) + manual DOM inspection. Does not substitute a full manual screen-reader test.</p>
-  </header>
+  </section>
 
-  <main id="main" class="wrap" aria-labelledby="page-title">
+  <div role="region" aria-label="Page content" class="wrap" aria-labelledby="page-title">
 
     <aside class="top-callout" role="region" aria-labelledby="functional-h">
       <p class="callout-label">Functional issues beyond WCAG</p>
@@ -1177,6 +1181,7 @@
       <p><strong>Recommended next step:</strong> Run a manual screen-reader walkthrough with NVDA + Firefox and VoiceOver + Safari, focusing on the mobile menu toggle, the service-request search form, and the social media embeds. Automated tools catch ~30–40% of real-world accessibility failures; the issues flagged above are the highest-confidence items from combined automated + DOM analysis.</p>
     </div>
 
+  </div>
   </main>
   <!-- ═══════════════════════════════════════════════════════════════════
      FOOTER — single source of truth, included by site.njk on every page.
