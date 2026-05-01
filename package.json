@@ -1,17 +1,14 @@
 {
-  "name": "cheetochopsticks-worker",
+  "name": "cheetochopsticks",
   "private": true,
-  "version": "0.0.0",
-  "description": "Cloudflare Worker + static assets for cheetochopsticks.com",
+  "type": "module",
   "scripts": {
-    "catalog": "node --experimental-strip-types worker/generate-catalog.mjs",
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "build": "eleventy && npm run prune-build",
+    "prune-build": "rm -rf _site/microsites/city/goGov/cos-portal-prototype/node_modules _site/microsites/city/goGov/cos-portal-prototype/src _site/microsites/city/goGov/cos-portal-prototype/scripts _site/microsites/city/goGov/cos-portal-prototype/public _site/**/node_modules _site/**/*.tsbuildinfo",
+    "watch": "eleventy --watch",
+    "serve": "eleventy --serve"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250628.0",
-    "typescript": "^5.6.3",
-    "wrangler": "^4.0.0"
+    "@11ty/eleventy": "^3.1.5"
   }
 }

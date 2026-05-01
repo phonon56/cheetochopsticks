@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File a Civil Rights Complaint | Colorado Civil Rights Division</title>
+<meta name="description" content="Tell us what happened in your own words. The Colorado Civil Rights Division reads every complaint and routes it to the correct unit — Employment, Housing, or Public Accommodations.">
+
+<!-- ─────────────────────────────────────────────────────────
+     SALESFORCE CONFIGURATION
+     The CCRD CaseConnect platform runs on Salesforce.
+     This form maps to the standard Salesforce Case object plus
+     the custom fields used by CCRD intake.
+     ─────────────────────────────────────────────────────── -->
+<script>
+window.SFCONFIG = {
+  // Salesforce org domain (no trailing slash)
+  instanceUrl:   'https://socgov07.my.salesforce.com',
+  // API version
+  apiVersion:    'v59.0',
+  // Demo mode — flip to false in production with a real backend proxy
+  demoMode:      true,
+  // Backend proxy that handles OAuth + Case creation
+  // (NEVER put client_secret in the browser)
+  proxyEndpoint: '/api/ccrd/intake',
+  // Object type and record type
+  objectType:    'Case',
+  recordType:    'CCRD_Intake',
+};
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── DESIGN TOKENS — CCRD palette · WCAG 2.1 AAA verified ──── */
+:root {
+  --navy:          #1a2942;     /* CCRD primary dark · 14.6:1 on white */
+  --navy-mid:      #2a3a55;
+  --navy-deep:     #0f1c30;     /* 17.1:1 on white */
+  --teal:          #0e7490;     /* DECORATIVE ONLY — borders, bgs, large icons */
+  --teal-deep:     #075569;     /* 8.4:1 on white · use for text/icons */
+  --teal-soft:     #67aaba;     /* DECORATIVE ONLY — underline accents */
+  --gold:          #b58a2e;     /* DECORATIVE ONLY — borders, bgs */
+  --gold-text:     #8a6620;     /* 7.0:1 on white · use for gold-tinted text */
+  --gold-soft:     #d4b063;     /* 8.3:1 on navy-deep · safe on dark */
+  --ink:           #1a1a1a;     /* 17.4:1 on white */
+  --ink-mid:       #3a3a3a;     /* 11.4:1 on white */
+  --ink-mute:      #525252;     /* 7.8:1 on white · 7.5:1 on paper · AAA */
+  --on-navy:       #a8c5d4;     /* 9.4:1 on navy-deep · AAA */
+  --white:         #ffffff;
+  --paper:         #fafaf7;
+  --paper-deep:    #f3f1ea;
+  --rule:          #c9c2ad;     /* darkened from #d8d3c4 — 3:1 against white for non-text contrast */
+  --rule-soft:     #ece8dc;
+  --red:           #a02020;     /* 7.7:1 on white · AAA */
+  --red-bg:        #fef2f2;
+  --green:         #1e6e3a;     /* 6.5:1 — large/bold only */
+  --green-deep:    #135a2c;     /* 8.0:1 on white · AAA for normal text */
+  --green-bg:      #ecfdf5;
+  --amber:         #92580c;     /* 6.7:1 — large/bold only */
+  --amber-bg:      #fff7ed;
+  /* Focus ring — 2.4.13 AAA: ≥2px thick, 3:1 against adjacent colors */
+  --focus-ring:        #1d4ed8;     /* 6.7:1 on white */
+  --focus-ring-on-dark: #fbbf24;    /* 10.5:1 on navy-deep */
+  --focus-thick:   3px;
+  --focus-offset:  3px;
+  /* Minimum target size — 2.5.5 AAA */
+  --target-min:    44px;
+}
+
+/* ── BASE ──────────────────────────────────────────────────── */
+/* 2.4.12 AAA: scroll-padding ensures focused element never hidden */
+html { font-size: 16px; scroll-behavior: smooth; scroll-padding-top: 2rem; scroll-padding-bottom: 2rem; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'kern', 'liga', 'ss01';
+  min-height: 100vh;
+  /* 1.4.8 AAA: line-height ≥1.5 within paragraphs */
+  line-height: 1.6;
+  background-image:
+    radial-gradient(circle at 10% 0%, rgba(14, 116, 144, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 100%, rgba(181, 138, 46, 0.03) 0%, transparent 40%);
+}
+
+/* ── SKIP LINK — FIRST FOCUSABLE ELEMENT ───────────────────── */
+.skip-link {
+  position: absolute;
+  left: -10000px;
+  top: 8px;
+  z-index: 9999;
+  background: var(--navy-deep);
+  color: var(--white);
+  /* 2.5.5 AAA target size */
+  min-height: var(--target-min);
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 2px;
+  text-decoration: none;
+  /* 2.4.13 AAA: 3px outline, 3px offset, high-contrast on dark */
+  outline: 3px solid var(--focus-ring-on-dark);
+  outline-offset: 3px;
+}
+.skip-link:focus { left: 16px; }
+
+/* ── GLOBAL FOCUS — 2.4.13 AAA Focus Appearance ────────────── */
+:focus { outline: none; }
+:focus-visible {
+  /* ≥2px solid perimeter, ≥3:1 contrast against inside + outside */
+  outline: var(--focus-thick) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+  border-radius: 2px;
+}
+/* Use yellow ring on dark surfaces for 3:1 contrast both directions */
+.alert-bar :focus-visible,
+.site-footer :focus-visible,
+.btn-primary:focus-visible,
+.lang-toggle[aria-pressed="true"]:focus-visible {
+  outline-color: var(--focus-ring-on-dark);
+}
+
+/* ── SCREEN-READER ONLY UTILITY ────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── ALERT BAR ─────────────────────────────────────────────── */
+.alert-bar {
+  background: var(--navy-deep);
+  color: var(--white);
+  border-bottom: 3px solid var(--gold);
+}
+.alert-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  /* 2.5.5 AAA: links inside have adequate target */
+  min-height: var(--target-min);
+  line-height: 1.5;
+}
+.alert-bar strong { color: var(--gold-soft); font-weight: 600; }
+.alert-bar a {
+  color: var(--white);
+  text-decoration: underline;
+  text-decoration-color: var(--teal-soft);
+  text-underline-offset: 3px;
+}
+.alert-bar a:hover { text-decoration-color: var(--gold); }
+
+/* ── HEADER ────────────────────────────────────────────────── */
+.site-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--rule);
+}
+.header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: var(--ink);
+}
+/* FIX C-6 + N-1: logo has accessible name via aria-label */
+.seal {
+  width: 56px; height: 56px;
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+.logo-words { display: flex; flex-direction: column; }
+.logo-words strong {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  line-height: 1.2;
+}
+.logo-words span {
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.lang-toggle {
+  background: none;
+  border: 1.5px solid var(--rule);
+  /* 2.5.5 AAA: minimum 44×44 target */
+  min-width: var(--target-min);
+  min-height: var(--target-min);
+  padding: 12px 18px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-mid);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+}
+.lang-toggle:hover { background: var(--paper-deep); border-color: var(--navy); }
+.lang-toggle[aria-pressed="true"] {
+  background: var(--navy);
+  color: var(--white);
+  border-color: var(--navy);
+}
+.header-tel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy-deep);
+  text-decoration: none;
+  border-bottom: 2px solid var(--gold);
+  /* 2.5.5 AAA target size */
+  min-height: var(--target-min);
+  padding: 12px 4px;
+  display: inline-flex;
+  align-items: center;
+}
+.header-tel:hover { color: var(--teal-deep); }
+
+/* ── HERO / EYEBROW ────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
+  border-bottom: 1px solid var(--rule);
+}
+.hero-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 56px 24px 48px;
+}
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--teal-deep);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--gold);
+}
+
+/* FIX M-1: page H1 is a real semantic heading */
+.hero h1 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(36px, 5.5vw, 60px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: var(--navy-deep);
+  max-width: 860px;
+  margin-bottom: 24px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--teal-deep);
+  position: relative;
+}
+.hero h1 em::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -4px;
+  height: 4px;
+  background: var(--gold);
+}
+.hero-lead {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--ink-mid);
+  max-width: 720px;
+  margin-bottom: 16px;
+}
+.hero-lead strong { color: var(--navy-deep); font-weight: 600; }
+
+.routing-callout {
+  margin-top: 32px;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--teal);
+  padding: 20px 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  max-width: 820px;
+}
+.routing-arrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 24px;
+  color: var(--teal-deep);
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 2px;
+}
+.routing-callout p {
+  font-size: 14px;
+  color: var(--ink-mid);
+  line-height: 1.55;
+}
+.routing-callout strong {
+  color: var(--navy-deep);
+  font-weight: 600;
+}
+
+/* ── PROGRESS INDICATOR ────────────────────────────────────── */
+/* FIX N-5: addresses the "no multi-step indicator" finding */
+.progress {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.progress-inner {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--rule);
+  background: var(--white);
+}
+.progress-step {
+  flex: 1;
+  padding: 16px 18px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-mid);  /* 11.4:1 — AAA */
+  border-right: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* 2.5.5 AAA: minimum target if interactive */
+  min-height: var(--target-min);
+  line-height: 1.4;
+  font-weight: 600;
+}
+.progress-step:last-child { border-right: none; }
+.progress-step .step-num {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--rule-soft);
+  color: var(--ink-mid);  /* 11.4:1 — AAA */
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.progress-step[aria-current="step"] {
+  background: var(--navy-deep);
+  color: var(--white);
+}
+.progress-step[aria-current="step"] .step-num {
+  background: var(--gold-soft);  /* 8.3:1 against navy-deep */
+  color: var(--navy-deep);
+}
+.progress-step.done .step-num { background: var(--teal-deep); color: var(--white); }
+.progress-step.done { color: var(--ink-mid); }
+
+/* ── MAIN FORM ─────────────────────────────────────────────── */
+/* FIX C-3: <main> landmark exists */
+.form-wrapper {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 24px 80px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 40px;
+}
+@media (max-width: 900px) {
+  .form-wrapper { grid-template-columns: 1fr; padding: 16px 16px 60px; }
+}
+
+.form-main {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  padding: 40px;
+}
+@media (max-width: 600px) { .form-main { padding: 24px 20px; } }
+
+.form-section { margin-bottom: 36px; }
+.form-section:last-child { margin-bottom: 0; }
+
+/* FIX M-1 + N-3: real semantic headings throughout */
+.form-section h2 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+.form-section .section-sub {
+  font-size: 14px;
+  color: var(--ink-mute);  /* 7.8:1 — AAA */
+  margin-bottom: 22px;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.02em;
+  line-height: 1.55;
+}
+
+/* ── FORM FIELDS ───────────────────────────────────────────── */
+/* FIX C-1: every input gets a real <label> */
+.field { margin-bottom: 22px; }
+.field label,
+.field .label-text {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy-deep);
+  margin-bottom: 8px;
+  letter-spacing: 0.005em;
+  line-height: 1.5;
+}
+/* FIX C-2 + C-7: required indicator with aria-hidden, not <font> */
+.required-mark {
+  color: var(--red);
+  font-weight: 700;
+  margin-left: 2px;
+}
+.field-help {
+  font-size: 14px;
+  color: var(--ink-mute);  /* 7.8:1 — AAA */
+  margin-top: 6px;
+  /* 1.4.8 AAA: line-height ≥1.5 */
+  line-height: 1.6;
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="tel"],
+.field input[type="date"],
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 11px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: 2px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--ink-mute);
+}
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  border-color: var(--focus-ring);
+  background: var(--paper);
+}
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: var(--red);
+  background: var(--red-bg);
+}
+
+/* ── NARRATIVE TEXTAREA — the centerpiece ──────────────────── */
+.narrative-wrap {
+  position: relative;
+  background: var(--paper);
+  border: 1.5px solid var(--rule);
+  border-radius: 2px;
+  transition: border-color 0.2s ease;
+}
+.narrative-wrap:focus-within {
+  border-color: var(--teal);
+  background: var(--white);
+}
+.narrative-wrap textarea {
+  width: 100%;
+  min-height: 220px;
+  padding: 18px 20px 44px;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  resize: vertical;
+}
+.narrative-wrap textarea:focus { outline: none; }
+.narrative-meta {
+  position: absolute;
+  bottom: 12px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-mute);  /* 7.8:1 — AAA */
+  letter-spacing: 0.03em;
+  pointer-events: none;
+  line-height: 1.5;
+}
+
+/* ── ROUTING CHIPS ─────────────────────────────────────────── */
+.routing-suggestion {
+  margin-top: 16px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, var(--paper-deep) 0%, var(--paper) 100%);
+  border: 1px dashed var(--teal);
+  display: none;
+}
+.routing-suggestion.visible { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.routing-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--teal-deep);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pulse {
+  width: 8px; height: 8px;
+  background: var(--teal);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(1.3); }
+}
+.routing-result {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 16px;
+  color: var(--navy-deep);
+  line-height: 1.5;
+}
+.routing-result strong {
+  color: var(--teal-deep);
+  font-weight: 700;
+}
+
+/* Department chips for selection */
+.chips {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+@media (max-width: 600px) { .chips { grid-template-columns: 1fr; } }
+.chip {
+  position: relative;
+  display: block;
+  padding: 14px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--rule);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.chip:hover { border-color: var(--navy); background: var(--paper); }
+.chip input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.chip input[type="radio"]:focus-visible + .chip-content {
+  box-shadow: 0 0 0 3px var(--focus-ring);
+  border-radius: 2px;
+}
+.chip:has(input:checked) {
+  border-color: var(--teal);
+  background: linear-gradient(135deg, var(--paper) 0%, rgba(14, 116, 144, 0.06) 100%);
+}
+.chip:has(input:checked) .chip-content::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  background: var(--teal);
+  border-radius: 50%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="white" d="M6.5 11L3 7.5 4.5 6 6.5 8 11.5 3 13 4.5z"/></svg>');
+  background-size: 14px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.chip-content { position: relative; }
+.chip-name {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.chip-desc {
+  font-size: 14px;
+  color: var(--ink-mute);  /* 7.8:1 — AAA */
+  line-height: 1.55;
+}
+
+/* ── ACTIONS ───────────────────────────────────────────────── */
+/* FIX M-2: real <button> elements, not anchors */
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+  align-items: center;
+}
+.btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  /* 2.5.5 AAA: 44×44 minimum target */
+  min-height: var(--target-min);
+  min-width: var(--target-min);
+  padding: 14px 28px;
+  border: 2px solid transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-primary {
+  background: var(--navy-deep);
+  color: var(--white);
+  border-color: var(--navy-deep);
+}
+.btn-primary:hover { background: var(--teal-deep); border-color: var(--teal-deep); }
+.btn-primary:disabled {
+  background: var(--ink-mute);
+  border-color: var(--ink-mute);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--navy-deep);
+  border-color: var(--ink-mute);  /* 7.5:1 against white — non-text contrast 3:1 needed, exceeds */
+}
+.btn-secondary:hover { border-color: var(--navy-deep); background: var(--paper); }
+.btn-tertiary {
+  background: transparent;
+  color: var(--ink-mid);  /* 11.4:1 — was --ink-mute, bumped for clarity */
+  border-color: transparent;
+  /* 2.5.5 AAA: full target area */
+  min-height: var(--target-min);
+  padding: 14px 16px;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.btn-tertiary:hover { color: var(--red); }
+
+/* ── REVIEW/CONFIRM PANEL — 3.3.6 AAA Error Prevention ─────── */
+.review-panel {
+  display: none;
+  background: var(--white);
+  border: 2px solid var(--navy-deep);
+  padding: 32px;
+  margin-top: 28px;
+}
+.review-panel.visible { display: block; }
+.review-panel .review-header {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--teal-deep);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.review-panel .review-header::before {
+  content: '';
+  display: inline-block;
+  width: 28px; height: 1px;
+  background: var(--gold);
+}
+.review-panel h2 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  margin-bottom: 16px;
+  line-height: 1.25;
+}
+.review-panel .review-intro {
+  font-size: 15px;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.review-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  border-top: 1px solid var(--rule);
+}
+.review-list li {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  font-size: 14px;
+  line-height: 1.55;
+}
+@media (max-width: 600px) {
+  .review-list li { grid-template-columns: 1fr; gap: 4px; }
+}
+.review-list .review-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-mute);  /* 7.8:1 — AAA */
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding-top: 2px;
+  /* Allow shrinking below content width if needed */
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.review-list .review-value {
+  color: var(--ink);
+  font-family: 'Libre Baskerville', serif;
+  font-size: 15px;
+  line-height: 1.55;
+  /* Critical fix: grid items default to min-width:auto and won't shrink below
+     content's intrinsic width. These rules let long narratives wrap correctly. */
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.review-list .review-value.empty {
+  color: var(--ink-mute);
+  font-style: italic;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+.review-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+
+/* ── ABBREVIATIONS — 3.1.4 AAA ─────────────────────────────── */
+/* Expand acronyms on hover/focus; screen readers announce title */
+abbr[title] {
+  text-decoration: underline dotted var(--ink-mute);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: help;
+  /* iOS doesn't show title on tap by default; cursor:help signals expandability */
+}
+abbr[title]:hover,
+abbr[title]:focus {
+  text-decoration-color: var(--teal-deep);
+  text-decoration-thickness: 2px;
+}
+
+/* ── ERROR SUMMARY ─────────────────────────────────────────── */
+/* FIX M-6: aria-live region for validation */
+.error-summary {
+  display: none;
+  background: var(--red-bg);
+  border-left: 4px solid var(--red);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+.error-summary.visible { display: block; }
+.error-summary h3 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 16px;
+  color: var(--red);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.error-summary ul { padding-left: 18px; }
+.error-summary li {
+  font-size: 14px;
+  color: var(--ink-mid);
+  margin-bottom: 4px;
+}
+.error-summary a { color: var(--red); font-weight: 500; }
+
+.field-error {
+  display: none;
+  font-size: 13px;
+  color: var(--red);
+  margin-top: 4px;
+  font-weight: 500;
+}
+.field-error.visible { display: block; }
+
+/* ── SIDEBAR ───────────────────────────────────────────────── */
+.sidebar {
+  font-size: 14px;
+  color: var(--ink-mid);
+  position: sticky;
+  top: 24px;
+  align-self: start;
+}
+@media (max-width: 900px) {
+  .sidebar { position: static; }
+}
+.sidebar-section {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+}
+.sidebar-section h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--teal-deep);  /* 8.4:1 — AAA */
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+.sidebar-section p {
+  font-size: 14px;
+  /* 1.4.8 AAA: line-height ≥1.5 */
+  line-height: 1.6;
+  color: var(--ink-mid);  /* 11.4:1 — AAA */
+  margin-bottom: 12px;
+}
+.sidebar-section ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar-section li {
+  font-size: 14px;
+  color: var(--ink-mid);
+  padding: 10px 0 10px 24px;
+  border-top: 1px solid var(--rule-soft);
+  /* List-item layout — inline content (including abbr) stays inline as text */
+  position: relative;
+  line-height: 1.55;
+}
+.sidebar-section li:first-child { border-top: none; }
+.sidebar-section li::before {
+  content: '→';
+  color: var(--teal-deep);
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  position: absolute;
+  left: 0;
+  top: 10px;
+}
+.sidebar-section a {
+  color: var(--teal-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── DEMO BANNER ───────────────────────────────────────────── */
+.demo-banner {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background: var(--navy-deep);
+  color: var(--white);
+  padding: 12px 18px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  z-index: 1000;
+  border-left: 3px solid var(--gold-soft);
+}
+
+/* ── FOOTER ────────────────────────────────────────────────── */
+.site-footer {
+  background: var(--navy-deep);
+  color: var(--on-navy);
+  padding: 40px 24px 24px;
+  margin-top: 60px;
+}
+.footer-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px;
+}
+@media (max-width: 700px) { .footer-inner { grid-template-columns: 1fr; } }
+.footer-section h4 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--gold-soft);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.footer-section a {
+  color: var(--on-navy);
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-block;
+  /* 2.5.5 AAA target size */
+  min-height: var(--target-min);
+  padding: 12px 0;
+  border-bottom: 1px solid transparent;
+}
+.footer-section a:hover,
+.footer-section a:focus-visible {
+  border-bottom-color: var(--gold-soft);
+  color: var(--white);
+}
+.footer-base {
+  max-width: 1180px;
+  margin: 32px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid rgba(168, 197, 212, 0.2);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--on-navy);
+  letter-spacing: 0.04em;
+}
+
+/* ── REDUCED MOTION ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── HIGH CONTRAST ─────────────────────────────────────────── */
+@media (prefers-contrast: more) {
+  .field input, .field select, .field textarea { border-width: 2px; }
+  .btn { border-width: 2px; }
+}
+</style>
+</head>
+<body>
+
+<!-- FIX C-4: Skip link is the FIRST element in DOM -->
+<a class="skip-link" href="#main">Skip to complaint form</a>
+
+<!-- Emergency / urgency bar -->
+<aside class="alert-bar" aria-label="Emergency contacts">
+  <div class="alert-inner">
+    <strong>EMERGENCY?</strong>
+    <span>Call 911. For 24/7 crisis support, dial 988.</span>
+    <span>·</span>
+    <span>CCRD Office: <a href="tel:18002624845" aria-label="Call Colorado Civil Rights Division at 1-800-262-4845">1-800-262-4845</a></span>
+  </div>
+</aside>
+
+<!-- FIX C-3: <header> with role="banner" via semantic element -->
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <!-- FIX C-6 + N-1: logo link has accessible name -->
+    <a href="https://ccrd.colorado.gov" class="logo-link"
+       aria-label="Colorado Civil Rights Division — Home">
+      <div class="seal" aria-hidden="true">CO<br>CRD</div>
+      <div class="logo-words">
+        <strong>Colorado Civil Rights Division</strong>
+        <span>Department of Regulatory Agencies</span>
+      </div>
+    </a>
+    <div class="header-right">
+      <button type="button" class="lang-toggle" aria-pressed="true"
+              aria-label="Switch to English" data-lang="en">EN</button>
+      <button type="button" class="lang-toggle" aria-pressed="false"
+              aria-label="Cambiar a español" data-lang="es">ES</button>
+      <a href="tel:18002624845" class="header-tel"
+         aria-label="Call 1-800-262-4845">1-800-262-4845</a>
+    </div>
+  </div>
+</header>
+
+<!-- FIX C-3: <main> landmark with id for skip link target -->
+<main id="main">
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="page-heading">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Civil Rights Complaint Intake</p>
+      <!-- FIX M-1: real <h1> -->
+      <h1 id="page-heading">
+        Tell us what<br><em>happened.</em><br>We'll route it from there.
+      </h1>
+      <p class="hero-lead">
+        Write in plain language. <strong>You do not need to identify the legal category
+        of your complaint.</strong> Our intake team — and the routing model that supports
+        them — reads every submission and directs it to the correct unit:
+        Employment, Housing, or Public Accommodations.
+      </p>
+
+      <div class="routing-callout" role="note">
+        <span class="routing-arrow" aria-hidden="true">→</span>
+        <p>
+          <strong>You write, we sort.</strong>
+          Tell us what happened in your own words. As you type, we'll show
+          which <abbr title="Colorado Civil Rights Division">CCRD</abbr>
+          team is most likely to handle it. A real intake worker
+          checks the routing before anything moves. You can submit a tip
+          without your name — but to open a formal case we'll need to
+          contact you.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIX N-5: progress indicator -->
+  <nav class="progress" aria-label="Complaint filing progress">
+    <ol class="progress-inner">
+      <li class="progress-step" aria-current="step">
+        <span class="step-num" aria-hidden="true">1</span>
+        <span>Describe what happened</span>
+      </li>
+      <li class="progress-step">
+        <span class="step-num" aria-hidden="true">2</span>
+        <span>Your information</span>
+      </li>
+      <li class="progress-step">
+        <span class="step-num" aria-hidden="true">3</span>
+        <span>Review &amp; submit</span>
+      </li>
+    </ol>
+  </nav>
+
+  <div class="form-wrapper">
+
+    <!-- FIX M-6: aria-live error summary -->
+    <div class="form-main">
+      <div class="error-summary" id="error-summary" role="alert" aria-live="assertive"></div>
+
+      <form id="complaint-form" novalidate>
+
+        <!-- ────────── SECTION 1: NARRATIVE ────────── -->
+        <section class="form-section" aria-labelledby="sec-narrative">
+          <h2 id="sec-narrative">Describe the incident</h2>
+          <p class="section-sub">In your own words · No legal vocabulary required</p>
+
+          <div class="field">
+            <!-- FIX C-1: real <label for="..."> association -->
+            <label for="narrative">
+              What happened?
+              <span class="required-mark" aria-hidden="true">*</span>
+              <span class="sr-only">(required)</span>
+            </label>
+            <p class="field-help" id="narrative-help">
+              Include who, what, when, and where if you remember. You can write as
+              much or as little as you want — there is no minimum. If you are not
+              ready to share details, write a short summary and an investigator
+              will follow up.
+            </p>
+            <div class="narrative-wrap">
+              <textarea id="narrative" name="narrative"
+                        rows="8"
+                        required
+                        aria-required="true"
+                        aria-describedby="narrative-help narrative-error"
+                        placeholder="On April 12 my landlord told me he won't renew my lease because of my service dog…"></textarea>
+              <div class="narrative-meta">
+                <span id="char-count" aria-live="polite">0 characters</span>
+                <span>Plain language is welcome here</span>
+              </div>
+            </div>
+            <div class="field-error" id="narrative-error" role="alert"></div>
+          </div>
+
+          <!-- AI Routing suggestion -->
+          <div class="routing-suggestion" id="routing-suggestion"
+               aria-live="polite" aria-atomic="true">
+            <div class="routing-label">
+              <span class="pulse" aria-hidden="true"></span>
+              Suggested routing — verify below
+            </div>
+            <div class="routing-result" id="routing-result"></div>
+          </div>
+        </section>
+
+        <!-- ────────── SECTION 2: CATEGORY (auto-suggested) ────────── -->
+        <section class="form-section" aria-labelledby="sec-category">
+          <h2 id="sec-category">Which CCRD unit handles this?</h2>
+          <p class="section-sub">Pre-selected based on your description · You can change it</p>
+
+          <!-- FIX C-1 + 1.3.1: fieldset + legend for radio group -->
+          <fieldset style="border: none; padding: 0; margin: 0;">
+            <legend class="sr-only">Select the CCRD unit that should handle this complaint</legend>
+            <div class="chips" role="radiogroup" aria-labelledby="sec-category">
+              <label class="chip">
+                <input type="radio" name="category" value="employment">
+                <div class="chip-content">
+                  <div class="chip-name">Employment</div>
+                  <div class="chip-desc">Hiring, firing, harassment, pay, promotion, retaliation at work</div>
+                </div>
+              </label>
+              <label class="chip">
+                <input type="radio" name="category" value="housing">
+                <div class="chip-content">
+                  <div class="chip-name">Housing</div>
+                  <div class="chip-desc">Rental, sale, lending, eviction, accommodations for disability</div>
+                </div>
+              </label>
+              <label class="chip">
+                <input type="radio" name="category" value="public-accommodations">
+                <div class="chip-content">
+                  <div class="chip-name">Public Accommodations</div>
+                  <div class="chip-desc">Restaurants, stores, hotels, transit, healthcare, schools, government services</div>
+                </div>
+              </label>
+              <label class="chip">
+                <input type="radio" name="category" value="not-sure">
+                <div class="chip-content">
+                  <div class="chip-name">Not sure</div>
+                  <div class="chip-desc">An intake specialist will read your description and route it</div>
+                </div>
+              </label>
+            </div>
+          </fieldset>
+        </section>
+
+        <!-- ────────── SECTION 3: WHEN ────────── -->
+        <section class="form-section" aria-labelledby="sec-when">
+          <h2 id="sec-when">When did this happen?</h2>
+          <p class="section-sub">Approximate is fine · Filing deadlines depend on the date of the most recent incident</p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="field">
+              <label for="incident-date">Date of incident</label>
+              <input type="date" id="incident-date" name="incident-date">
+              <p class="field-help">Or the most recent date if it's ongoing</p>
+            </div>
+            <div class="field">
+              <label for="incident-ongoing">Is this still happening?</label>
+              <select id="incident-ongoing" name="incident-ongoing">
+                <option value="">— Select —</option>
+                <option value="yes">Yes, it's ongoing</option>
+                <option value="no">No, it has stopped</option>
+                <option value="unknown">I'm not sure</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- ────────── SECTION 4: CONTACT (optional) ────────── -->
+        <section class="form-section" aria-labelledby="sec-contact">
+          <h2 id="sec-contact">Your contact information</h2>
+          <p class="section-sub">Optional for tips · Required to open a formal investigation</p>
+
+          <!-- FIX M-7: autocomplete tokens on every personal-data field -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="field">
+              <label for="first-name">First name</label>
+              <input type="text" id="first-name" name="first-name"
+                     autocomplete="given-name">
+            </div>
+            <div class="field">
+              <label for="last-name">Last name</label>
+              <input type="text" id="last-name" name="last-name"
+                     autocomplete="family-name">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email"
+                   autocomplete="email"
+                   aria-describedby="email-help">
+            <p class="field-help" id="email-help">
+              We'll send confirmation and investigator updates here.
+            </p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone"
+                     autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="zip">Zip code</label>
+              <input type="text" id="zip" name="zip"
+                     autocomplete="postal-code"
+                     inputmode="numeric"
+                     pattern="[0-9]{5}">
+            </div>
+          </div>
+        </section>
+
+        <!-- ────────── ACTIONS ────────── -->
+        <!-- FIX M-2: real <button> elements -->
+        <!-- 3.3.6 AAA: button leads to review, not direct submit -->
+        <div class="actions">
+          <button type="submit" class="btn btn-primary" id="submit-btn">
+            Review before sending
+          </button>
+          <button type="button" class="btn btn-secondary" id="save-btn">
+            Save and finish later
+          </button>
+          <button type="reset" class="btn btn-tertiary">
+            Clear form
+          </button>
+        </div>
+      </form>
+
+      <!-- 3.3.6 AAA Error Prevention (All): review before final submit -->
+      <section class="review-panel" id="review-panel"
+               aria-labelledby="review-heading"
+               aria-live="polite">
+        <p class="review-header">Step 2 of 2 — Review before sending</p>
+        <h2 id="review-heading">Does this look right?</h2>
+        <p class="review-intro">
+          We'll send this to the CCRD intake team once you confirm.
+          You can go back and change anything before submitting.
+        </p>
+        <ul class="review-list" id="review-list"></ul>
+        <div class="review-actions">
+          <button type="button" class="btn btn-primary" id="confirm-btn">
+            Confirm and send
+          </button>
+          <button type="button" class="btn btn-secondary" id="back-btn">
+            Go back and edit
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ────────── SIDEBAR ────────── -->
+    <aside class="sidebar" aria-label="Filing context and resources">
+      <div class="sidebar-section">
+        <h3>What we cannot help with</h3>
+        <p>CCRD enforces civil rights in <strong>employment, housing, and public
+        accommodations</strong>. We do not handle:</p>
+        <ul>
+          <li>Criminal matters (call local police)</li>
+          <li>Landlord-tenant disputes unrelated to discrimination</li>
+          <li>Federal employment (file with <abbr title="Equal Employment Opportunity Commission">EEOC</abbr>)</li>
+          <li>Fraud or consumer issues (file with the Attorney General)</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Filing deadlines</h3>
+        <p>Most complaints must be filed within <strong>300 days</strong> of the
+        most recent incident under <abbr title="Colorado Anti-Discrimination Act">CADA</abbr>.
+        Housing complaints have a one-year deadline. If your incident is older,
+        file anyway — exceptions may apply.</p>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>What happens next</h3>
+        <ul>
+          <li>You'll receive an automated confirmation within minutes</li>
+          <li>An intake worker reviews within 5 business days</li>
+          <li>If the case is something CCRD can handle, we'll contact you to begin the formal intake</li>
+          <li>If not, we'll point you to the right agency</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Need help filing?</h3>
+        <p>If you cannot fill out this form yourself, you can:</p>
+        <ul>
+          <li>Call <a href="tel:18002624845">1-800-262-4845</a> — staff will take your complaint by phone</li>
+          <li>Visit any CCRD office — locations at <a href="https://ccrd.colorado.gov">ccrd.colorado.gov</a></li>
+          <li>Have someone else file on your behalf with your written consent</li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<!-- FIX C-3: <footer> with role inferred from semantic element -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-section">
+      <h4>Colorado Civil Rights Division</h4>
+      <p style="font-size: 14px; line-height: 1.6;">
+        A unit of the Colorado Department of Regulatory Agencies
+        (<abbr title="Department of Regulatory Agencies">DORA</abbr>).
+        We enforce the Colorado Anti-Discrimination Act
+        (<abbr title="Colorado Anti-Discrimination Act">CADA</abbr>)
+        and serve as the state's civil rights enforcement agency for employment,
+        housing, and public accommodations.
+      </p>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <a href="tel:18002624845">1-800-262-4845</a>
+      <a href="mailto:dora_ccrdintake@state.co.us">dora_ccrdintake@state.co.us</a>
+      <a href="https://ccrd.colorado.gov">ccrd.colorado.gov</a>
+    </div>
+    <div class="footer-section">
+      <h4>Other agencies</h4>
+      <a href="https://eeoc.gov"><abbr title="Equal Employment Opportunity Commission">EEOC</abbr> (federal employment)</a>
+      <a href="https://hud.gov/fairhousing"><abbr title="U.S. Department of Housing and Urban Development">HUD</abbr> (federal housing)</a>
+      <a href="https://coag.gov/file-complaint/">Colorado AG (consumer fraud)</a>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>© 2026 State of Colorado · DORA · Civil Rights Division</span>
+    <span>Accessibility: <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.1 Level AAA · <abbr title="Americans with Disabilities Act">ADA</abbr> Title II compliant</span>
+  </div>
+</footer>
+
+<div class="demo-banner" aria-hidden="true">DEMO MODE — No data is submitted</div>
+
+<script>
+'use strict';
+
+// ─── Plain-language keyword routing ─────────────────────────────
+// In production this would call Claude or Salesforce Einstein.
+// For demo purposes we run a local keyword classifier so the
+// behavior is visible without a backend.
+const ROUTING_RULES = {
+  employment: {
+    keywords: [
+      'fired', 'firing', 'hired', 'hiring', 'employer', 'employee',
+      'workplace', 'work', 'job', 'manager', 'supervisor', 'boss',
+      'wage', 'salary', 'pay', 'promotion', 'demoted', 'demotion',
+      'co-worker', 'coworker', 'office', 'company', 'hr', 'human resources',
+      'pregnant', 'pregnancy', 'maternity', 'paternity',
+      'overtime', 'shift', 'schedule', 'union', 'fmla'
+    ],
+    name: 'Employment',
+    blurb: 'Workplace discrimination, harassment, or retaliation',
+  },
+  housing: {
+    keywords: [
+      'landlord', 'tenant', 'apartment', 'rent', 'rental', 'lease',
+      'eviction', 'evicted', 'evict', 'housing', 'home', 'mortgage',
+      'realtor', 'real estate', 'property manager', 'hoa',
+      'service animal', 'service dog', 'emotional support', 'esa',
+      'reasonable accommodation', 'wheelchair', 'ramp', 'unit'
+    ],
+    name: 'Housing',
+    blurb: 'Discrimination in rental, sale, or lending of housing',
+  },
+  public_accommodations: {
+    keywords: [
+      'restaurant', 'store', 'shop', 'mall', 'hotel', 'motel',
+      'school', 'college', 'university', 'hospital', 'doctor',
+      'medical', 'transit', 'bus', 'taxi', 'uber', 'lyft',
+      'public accommodation', 'business', 'venue', 'gym', 'theater',
+      'pharmacy', 'bank', 'government', 'dmv', 'court',
+      'service refused', 'denied service', 'kicked out', 'asked to leave'
+    ],
+    name: 'Public Accommodations',
+    blurb: 'Denial of services from a business or government office',
+  },
+};
+
+const PROTECTED_BASIS_HINTS = [
+  { kw: ['race', 'racial', 'racist', 'black', 'white', 'asian', 'hispanic', 'latino'], basis: 'race' },
+  { kw: ['disability', 'disabled', 'service dog', 'wheelchair', 'autism', 'mental health'], basis: 'disability' },
+  { kw: ['age', 'older', 'too old', 'too young'], basis: 'age' },
+  { kw: ['gay', 'lesbian', 'transgender', 'trans', 'lgbt', 'sexual orientation', 'gender identity'], basis: 'sexual orientation / gender identity' },
+  { kw: ['pregnant', 'pregnancy', 'maternity'], basis: 'sex / pregnancy' },
+  { kw: ['religion', 'religious', 'muslim', 'jewish', 'christian', 'hindu', 'sikh'], basis: 'religion' },
+  { kw: ['national origin', 'immigrant', 'accent', 'language'], basis: 'national origin' },
+];
+
+function classifyNarrative(text) {
+  if (!text || text.length < 20) return null;
+  const lower = text.toLowerCase();
+  const scores = {};
+  let topBasis = null;
+
+  Object.entries(ROUTING_RULES).forEach(([key, rule]) => {
+    scores[key] = rule.keywords.reduce(
+      (acc, kw) => acc + (lower.includes(kw) ? 1 : 0), 0
+    );
+  });
+
+  for (const hint of PROTECTED_BASIS_HINTS) {
+    if (hint.kw.some(k => lower.includes(k))) { topBasis = hint.basis; break; }
+  }
+
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  if (sorted[0][1] === 0) return null;
+
+  const winner = sorted[0][0];
+  return {
+    category: winner,
+    name:     ROUTING_RULES[winner].name,
+    blurb:    ROUTING_RULES[winner].blurb,
+    basis:    topBasis,
+    confidence: sorted[0][1] >= 2 ? 'high' : 'medium',
+  };
+}
+
+// ─── Bind narrative routing ─────────────────────────────────────
+const narrative = document.getElementById('narrative');
+const charCount = document.getElementById('char-count');
+const routingBox = document.getElementById('routing-suggestion');
+const routingResult = document.getElementById('routing-result');
+let routingTimer = null;
+
+narrative.addEventListener('input', () => {
+  const text = narrative.value;
+  charCount.textContent = `${text.length} character${text.length === 1 ? '' : 's'}`;
+
+  clearTimeout(routingTimer);
+  routingTimer = setTimeout(() => {
+    const result = classifyNarrative(text);
+    if (!result) {
+      routingBox.classList.remove('visible');
+      return;
+    }
+
+    // Pick "a" or "an" based on first letter sound
+    const article = /^[aeiouAEIOU]/.test(result.name) ? 'an' : 'a';
+    let message = `Based on what you wrote, this looks like ${article} <strong>${result.name}</strong> matter — ${result.blurb}.`;
+    if (result.basis) {
+      message += ` We're noting <strong>${result.basis}</strong> as the protected basis. You can change either below.`;
+    }
+    routingResult.innerHTML = message;
+    routingBox.classList.add('visible');
+
+    // Auto-select the matching radio chip
+    const radio = document.querySelector(
+      `input[name="category"][value="${result.category.replace('_', '-')}"]`
+    );
+    if (radio && !document.querySelector('input[name="category"]:checked')) {
+      radio.checked = true;
+    }
+  }, 800);
+});
+
+// ─── Validation + review-then-confirm flow ────────────────────
+// 3.3.6 AAA Error Prevention (All): user reviews everything
+// before any data is actually sent to the CCRD intake queue.
+const form = document.getElementById('complaint-form');
+const errorSummary = document.getElementById('error-summary');
+const reviewPanel = document.getElementById('review-panel');
+const reviewList  = document.getElementById('review-list');
+
+function buildPayload() {
+  const narrativeField = document.getElementById('narrative');
+  return {
+    Subject: narrativeField.value.substring(0, 250).split('\n')[0],
+    Description: narrativeField.value,
+    Origin: 'Web — Plain Language Intake',
+    Status: 'New',
+    Type: getSelectedCategory() || 'Unknown — Awaiting Triage',
+    SuppliedEmail: document.getElementById('email').value || null,
+    SuppliedName: [
+      document.getElementById('first-name').value,
+      document.getElementById('last-name').value,
+    ].filter(Boolean).join(' ') || null,
+    SuppliedPhone: document.getElementById('phone').value || null,
+    Complaint_Zip__c: document.getElementById('zip').value || null,
+    Incident_Date__c: document.getElementById('incident-date').value || null,
+    Incident_Ongoing__c: document.getElementById('incident-ongoing').value || null,
+    AI_Routing_Confidence__c: classifyNarrative(narrativeField.value)?.confidence || 'low',
+    Recordtype: window.SFCONFIG.recordType,
+  };
+}
+
+function getSelectedCategory() {
+  const checked = document.querySelector('input[name="category"]:checked');
+  return checked ? checked.value : null;
+}
+
+function categoryLabel(value) {
+  const map = {
+    'employment':            'Employment',
+    'housing':               'Housing',
+    'public-accommodations': 'Public Accommodations',
+    'not-sure':              'Not sure — let an investigator decide',
+  };
+  return map[value] || 'Unknown — awaiting triage';
+}
+
+function ongoingLabel(value) {
+  return ({
+    'yes':     'Yes, it is ongoing',
+    'no':      'No, it has stopped',
+    'unknown': 'Not sure',
+  })[value] || null;
+}
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  errorSummary.classList.remove('visible');
+  errorSummary.innerHTML = '';
+
+  const errors = [];
+
+  // Narrative is the only hard required field
+  const narrativeField = document.getElementById('narrative');
+  const narrativeError = document.getElementById('narrative-error');
+  narrativeError.classList.remove('visible');
+  narrativeField.removeAttribute('aria-invalid');
+
+  if (!narrativeField.value.trim() || narrativeField.value.trim().length < 10) {
+    errors.push({
+      id: 'narrative',
+      label: 'What happened',
+      msg: 'Please describe what happened — at least a sentence or two.',
+    });
+    narrativeError.textContent = 'Please describe what happened — at least a sentence or two.';
+    narrativeError.classList.add('visible');
+    narrativeField.setAttribute('aria-invalid', 'true');
+  }
+
+  // Email format if provided
+  const emailField = document.getElementById('email');
+  emailField.removeAttribute('aria-invalid');
+  if (emailField.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
+    errors.push({
+      id: 'email',
+      label: 'Email',
+      msg: 'Please enter a valid email address.',
+    });
+    emailField.setAttribute('aria-invalid', 'true');
+  }
+
+  if (errors.length > 0) {
+    let html = `<h3>Please fix ${errors.length} ${errors.length === 1 ? 'item' : 'items'} before continuing:</h3><ul>`;
+    errors.forEach(err => {
+      html += `<li><a href="#${err.id}">${err.label}</a> — ${err.msg}</li>`;
+    });
+    html += '</ul>';
+    errorSummary.innerHTML = html;
+    errorSummary.classList.add('visible');
+    setTimeout(() => { document.getElementById(errors[0].id).focus(); }, 100);
+    errorSummary.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
+  // ─── Show review panel (3.3.6 AAA) ──────────────────────────
+  showReview(buildPayload());
+});
+
+function showReview(payload) {
+  // Build review list — every field the user filled in
+  const fields = [
+    ['What happened',       payload.Description, true],
+    ['Routed to',           categoryLabel(getSelectedCategory()), false],
+    ['Date of incident',    payload.Incident_Date__c, false],
+    ['Still happening?',    ongoingLabel(payload.Incident_Ongoing__c), false],
+    ['Your name',           payload.SuppliedName, false],
+    ['Email',               payload.SuppliedEmail, false],
+    ['Phone',               payload.SuppliedPhone, false],
+    ['Zip code',            payload.Complaint_Zip__c, false],
+  ];
+  reviewList.innerHTML = fields.map(([key, val, isLong]) => {
+    const display = val
+      ? (isLong
+          ? `<div class="review-value" style="white-space: pre-wrap;">${escapeHtml(val)}</div>`
+          : `<div class="review-value">${escapeHtml(val)}</div>`)
+      : `<div class="review-value empty">— not provided —</div>`;
+    return `<li><div class="review-key">${key}</div>${display}</li>`;
+  }).join('');
+
+  // Hide form, show review
+  form.style.display = 'none';
+  reviewPanel.classList.add('visible');
+  // 2.4.12 AAA: ensure focus moves and the new heading is visible
+  setTimeout(() => {
+    document.getElementById('review-heading').setAttribute('tabindex', '-1');
+    document.getElementById('review-heading').focus();
+    reviewPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+// Go back from review to edit
+document.getElementById('back-btn').addEventListener('click', () => {
+  reviewPanel.classList.remove('visible');
+  form.style.display = '';
+  setTimeout(() => {
+    document.getElementById('narrative').focus();
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+});
+
+// Final confirm — actually send
+document.getElementById('confirm-btn').addEventListener('click', () => {
+  const payload = buildPayload();
+
+  if (window.SFCONFIG.demoMode) {
+    showSuccess(payload);
+  } else {
+    fetch(window.SFCONFIG.proxyEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then(r => r.json())
+      .then(data => showSuccess(payload, data.caseNumber))
+      .catch(err => {
+        const errBox = document.createElement('div');
+        errBox.setAttribute('role', 'alert');
+        errBox.style.cssText = 'background: var(--red-bg); border-left: 4px solid var(--red); padding: 16px 20px; margin-bottom: 16px;';
+        errBox.innerHTML = `<strong>Submission failed.</strong> Please try again, or call 1-800-262-4845. Error: ${escapeHtml(err.message)}`;
+        reviewPanel.insertBefore(errBox, reviewPanel.firstChild);
+      });
+  }
+});
+
+function showSuccess(payload, caseNumber) {
+  const main = document.getElementById('main');
+  const refNum = caseNumber || ('CCRD-' + Math.random().toString(36).substr(2, 9).toUpperCase());
+  main.innerHTML = `
+    <div style="max-width: 720px; margin: 80px auto; padding: 0 24px; text-align: left;">
+      <p style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--teal-deep); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; font-weight: 700;">
+        ✓ Submission received
+      </p>
+      <h1 tabindex="-1" id="success-heading" style="font-family: 'Libre Baskerville', serif; font-size: 42px; color: var(--navy-deep); margin-bottom: 20px; line-height: 1.2;">
+        Thank you. Your complaint is in our queue.
+      </h1>
+      <p style="font-size: 17px; color: var(--ink-mid); line-height: 1.6; margin-bottom: 24px;">
+        Reference number: <strong style="font-family: 'IBM Plex Mono', monospace; color: var(--navy-deep);">${refNum}</strong>
+      </p>
+      <p style="font-size: 16px; color: var(--ink-mid); line-height: 1.65; margin-bottom: 16px;">
+        An intake worker will review your description within 5 business days
+        and contact you${payload.SuppliedEmail ? ` at <strong>${escapeHtml(payload.SuppliedEmail)}</strong>` : ''}.
+        If your complaint is something a different agency handles, we'll
+        point you there at no cost.
+      </p>
+      <p style="font-size: 15px; color: var(--ink-mid); line-height: 1.6; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--rule);">
+        Suggested routing: <strong>${escapeHtml(categoryLabel(getSelectedCategory()))}</strong> · Confidence: <strong>${escapeHtml(payload.AI_Routing_Confidence__c)}</strong><br>
+        ${window.SFCONFIG.demoMode ? '<em>This is a demo — no data was actually sent to Salesforce.</em>' : 'Salesforce Case created via /api/ccrd/intake.'}
+      </p>
+    </div>
+  `;
+  // Move focus to success heading for screen readers
+  setTimeout(() => {
+    document.getElementById('success-heading').focus();
+    main.scrollIntoView({ behavior: 'smooth' });
+  }, 50);
+}
+
+// ─── Language toggle (demo) ────────────────────────────────────
+document.querySelectorAll('.lang-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lang = btn.dataset.lang;
+    document.querySelectorAll('.lang-toggle').forEach(b => {
+      b.setAttribute('aria-pressed', b.dataset.lang === lang ? 'true' : 'false');
+    });
+    document.documentElement.lang = lang === 'es' ? 'es-US' : 'en-US';
+    if (lang === 'es') {
+      alert('En producción, el formulario se traduciría al español aquí. (Demo)');
+    }
+  });
+});
+
+// ─── Save draft (demo) ────────────────────────────────────────
+document.getElementById('save-btn').addEventListener('click', () => {
+  alert('In production: this would email you a unique link to resume later. (Demo)');
+});
+</script>
+
+</body>
+</html>

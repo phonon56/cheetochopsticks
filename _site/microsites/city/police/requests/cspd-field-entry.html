@@ -1,0 +1,3731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#2d4a3e" />
+  <title>CSPD Field Entry v8 — Drag-Drop &amp; Lightbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Instrument+Sans:ital,wght@0,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f3efe5;
+      --card: #fdfcf8;
+      --ink: #1a1d1a;
+      --ink-soft: #5b635a;
+      --ink-faint: #5f645e;
+      --rule: #e0d9c7;
+      --rule-soft: #ebe5d6;
+      --accent: #2d4a3e;
+      --accent-soft: #4a7c59;
+      --action: #934015;
+      --saved: #4a7c59;
+      --warn: #8a4a1a;
+      --alert: #a02a1f;
+      --record: #c43d2f;
+      --default-badge: #f0ead8;
+      --selected: #e8efe5;
+      --selected-warn: #f7e4d3;
+      --shadow: 0 1px 0 rgba(26,29,26,.04), 0 2px 4px rgba(26,29,26,.03);
+      --shadow-lift: 0 2px 0 rgba(26,29,26,.05), 0 8px 16px rgba(26,29,26,.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    .skip-link { position:absolute; top:-100px; left:16px; background:var(--accent); color:#fff; font-family:"JetBrains Mono",monospace; font-size:13px; font-weight:600; padding:10px 18px; border-radius:4px; text-decoration:none; z-index:9999; transition:top .2s; }
+    .skip-link:focus { top:16px; }
+    *:focus-visible { outline:3px solid var(--accent); outline-offset:3px; border-radius:2px; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: "Instrument Sans", -apple-system, system-ui, sans-serif;
+      background: var(--bg); color: var(--ink);
+      line-height: 1.45; font-size: 15px;
+      padding-bottom: 120px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .shell { max-width: 640px; margin: 0 auto; padding: 0 20px; }
+
+    .nav-sticky {
+      position: sticky; top: 0;
+      z-index: 10;
+      padding: 8px 0 10px;
+      background: var(--bg);
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px -4px rgba(26,29,26,.08);
+    }
+    .nav-sticky .view-tabs { margin-bottom: 6px; }
+    .nav-sticky .datenav { margin-bottom: 6px; }
+    .nav-sticky .caselist { margin-bottom: 0; }
+
+    header.page {
+      padding: 28px 0 14px;
+    }
+    .topline {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--ink-faint); margin-bottom: 10px;
+    }
+    .savedot { display: inline-flex; align-items: center; gap: 6px; color: var(--saved); }
+    .savedot::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--saved); animation: pulse 2.5s ease-in-out infinite;
+    }
+    .savedot.offline { color: var(--warn); }
+    .savedot.offline::before { background: var(--warn); animation: none; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+    h1.title {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 400; font-size: 30px; line-height: 1.1;
+      letter-spacing: -0.015em; margin-bottom: 2px;
+      font-variation-settings: "SOFT" 50;
+    }
+    .subtitle {
+      font-family: "Fraunces", Georgia, serif;
+      font-style: italic; font-weight: 300; font-size: 15px;
+      color: var(--ink-soft); margin-bottom: 14px;
+    }
+
+    .thesis {
+      background: var(--default-badge);
+      border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+      padding: 12px 14px; margin-bottom: 14px; border-radius: 0 2px 2px 0;
+      font-family: "Fraunces", serif; font-size: 14px;
+      line-height: 1.5; color: var(--ink);
+    }
+    .thesis strong { font-weight: 500; }
+    .thesis .tag {
+      display: block;
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--accent); margin-bottom: 5px;
+    }
+
+    .specstrip {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 480px) { .specstrip { grid-template-columns: repeat(4, 1fr); } }
+    .specpill {
+      background: var(--card); border: 1px solid var(--rule); border-radius: 2px;
+      padding: 6px 8px; font-family: "JetBrains Mono", monospace;
+      font-size: 13px; text-transform: uppercase; letter-spacing: .06em;
+      color: var(--accent); text-align: center; box-shadow: var(--shadow);
+    }
+    .specpill::before { content: "✓ "; color: var(--accent-soft); }
+
+    .view-tabs {
+      display: flex; gap: 0;
+      background: var(--card); border: 1px solid var(--rule); border-radius: 2px;
+      padding: 3px; margin-bottom: 10px; box-shadow: var(--shadow);
+    }
+    .view-tabs button {
+      flex: 1; background: none; border: none;
+      padding: 7px 0; font-family: inherit; font-size: 13px;
+      color: var(--ink-soft); cursor: pointer; border-radius: 2px;
+      transition: all .15s;
+    }
+    .view-tabs button.active { background: var(--accent); color: var(--card); }
+
+    .datenav {
+      background: var(--card); border: 1px solid var(--rule); border-radius: 2px;
+      padding: 12px 14px; margin-bottom: 10px; box-shadow: var(--shadow);
+    }
+    .daterow { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .datestepper { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+    .datestepper button {
+      width: 30px; height: 30px;
+      border: 1px solid var(--rule);
+      background: var(--card);
+      border-radius: 2px;
+      cursor: pointer;
+      color: var(--ink);
+      font-size: 15px;
+      font-family: inherit;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all .15s;
+    }
+    .datestepper button:hover {
+      background: var(--default-badge);
+      border-color: var(--accent-soft);
+    }
+    .currentdate {
+      font-family: "Fraunces", serif; font-size: 17px;
+      font-weight: 400; letter-spacing: -0.01em;
+    }
+    .currentdate .muted {
+      color: var(--ink-faint); font-size: 13px; margin-left: 6px;
+      font-family: "JetBrains Mono", monospace;
+    }
+    .search {
+      display: flex; align-items: center;
+      background: var(--bg); border: 1px solid var(--rule); border-radius: 2px;
+      padding: 5px 10px; flex: 1; min-width: 160px;
+    }
+    .search input {
+      flex: 1; border: none; background: none;
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      color: var(--ink); outline: none;
+    }
+    .search input::placeholder { color: var(--ink-faint); }
+    .search svg { width: 14px; height: 14px; color: var(--ink-faint); margin-right: 8px; flex-shrink: 0; }
+
+    .caselist {
+      background: var(--card); border: 1px solid var(--rule); border-radius: 2px;
+      margin-bottom: 14px; box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .caselist-head {
+      width: 100%;
+      padding: 12px 14px;
+      border: none; background: none;
+      display: grid;
+      grid-template-columns: 1fr 16px;
+      gap: 12px;
+      align-items: center;
+      cursor: pointer;
+      font-family: inherit; color: inherit; text-align: left;
+      transition: background .15s;
+    }
+    .caselist-head:hover { background: rgba(26,29,26,.02); }
+    .caselist:not(.collapsed) .caselist-head {
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .caselist-head-main {
+      display: flex; flex-direction: column;
+      min-width: 0;
+    }
+    .caselist-head .title {
+      font-family: "Fraunces", serif; font-size: 15px; font-weight: 400;
+      line-height: 1.2;
+    }
+    .caselist-head .sub {
+      font-size: 13px; color: var(--ink-soft);
+      margin-top: 2px;
+      font-family: "Instrument Sans", sans-serif;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .caselist-head .sub .mono {
+      font-family: "JetBrains Mono", monospace; color: var(--ink-faint);
+      margin-right: 6px;
+    }
+    .caselist-head .sub .sep { color: var(--ink-faint); margin: 0 5px; }
+    .caselist-head .count {
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      color: var(--ink-faint);
+    }
+    .caselist-head .chevron-list {
+      color: var(--ink-faint);
+      transition: transform .25s ease;
+      width: 16px; height: 16px;
+    }
+    .caselist:not(.collapsed) .caselist-head .chevron-list {
+      transform: rotate(180deg);
+    }
+    .caselist-body {
+      max-height: 340px;
+      overflow-y: auto;
+      transition: max-height .3s ease;
+    }
+    .caselist.collapsed .caselist-body {
+      max-height: 0;
+      overflow: hidden;
+    }
+    .caselist.collapsed .newcase-btn {
+      border-top: none;
+    }
+    .case-item {
+      display: grid; grid-template-columns: 90px 1fr auto; gap: 10px;
+      padding: 9px 14px; border-bottom: 1px solid var(--rule-soft);
+      cursor: pointer; align-items: center;
+      background: var(--card);
+    }
+    .case-item:last-of-type { border-bottom: none; }
+    .case-item:hover { background: var(--bg); }
+    .case-item.active { background: var(--selected); border-left: 3px solid var(--accent); padding-left: 11px; }
+    .case-num {
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      color: var(--ink-faint);
+    }
+    .case-detail { font-size: 13px; line-height: 1.4; min-width: 0; }
+    .case-detail .loc { color: var(--ink); }
+    .case-detail .meta {
+      color: var(--ink-faint); font-size: 13px;
+      font-family: "JetBrains Mono", monospace; margin-top: 2px;
+    }
+    .case-badge {
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      text-transform: uppercase; letter-spacing: .1em;
+      padding: 3px 6px; border-radius: 2px; white-space: nowrap;
+    }
+    .case-badge.fatal { background: #f7dcd8; color: var(--alert); }
+    .case-badge.injury { background: var(--selected-warn); color: var(--action); }
+    .case-badge.pdo { background: var(--default-badge); color: var(--accent); }
+    .case-empty {
+      padding: 20px 14px; text-align: center;
+      font-size: 13px; color: var(--ink-faint);
+      font-style: italic;
+    }
+
+    .newcase-btn {
+      width: 100%; padding: 11px;
+      background: var(--accent); color: var(--card); border: none;
+      border-top: 1px solid var(--rule-soft);
+      font-family: inherit; font-size: 13px; cursor: pointer;
+      letter-spacing: .02em;
+    }
+    .newcase-btn:hover { background: #1e3329; }
+
+    .template-banner {
+      background: var(--default-badge);
+      border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+      padding: 12px 14px; margin-bottom: 14px; border-radius: 0 2px 2px 0;
+    }
+    .template-banner .label {
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--accent); margin-bottom: 3px;
+    }
+    .template-banner .body {
+      font-family: "Fraunces", serif; font-size: 14px; line-height: 1.45;
+    }
+    .template-banner strong { font-weight: 500; }
+
+    .validation-alert {
+      background: #f7dcd8; border: 1px solid #d9a5a0;
+      border-left: 3px solid var(--alert);
+      padding: 10px 12px; margin-top: 8px; font-size: 13px;
+      color: var(--alert); border-radius: 0 2px 2px 0;
+      display: none; line-height: 1.5;
+    }
+    .validation-alert.visible { display: block; }
+    .validation-alert strong { font-weight: 600; }
+
+    .accordion { display: flex; flex-direction: column; gap: 5px; }
+
+    /* ── MULTI-PERSON AT-FAULT ────────────────────────── */
+    .persons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .person-card {
+      border: 1px solid var(--rule-soft);
+      border-radius: 2px;
+      background: var(--card);
+      overflow: hidden;
+    }
+    .person-card.primary {
+      border-left: 3px solid var(--accent-soft);
+    }
+    .person-card.added {
+      border-left: 3px solid var(--action);
+    }
+    .person-head {
+      padding: 10px 12px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--rule-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .person-title {
+      font-family: "Fraunces", serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .person-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+    .person-tag.primary-tag {
+      background: var(--default-badge);
+      color: var(--accent);
+    }
+    .person-tag.added-tag {
+      background: var(--selected-warn);
+      color: var(--action);
+    }
+    .person-remove {
+      padding: 5px 10px;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .person-remove:hover {
+      background: #f7dcd8;
+      border-color: var(--alert);
+      color: var(--alert);
+    }
+    .person-body {
+      padding: 12px;
+    }
+    .person-body .field:first-child { margin-top: 0; }
+    .person-notes-wrap {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--rule-soft);
+    }
+    .person-notes-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--ink);
+      padding: 4px 0;
+      font-family: "JetBrains Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-size: 13px;
+    }
+    .person-notes-toggle input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 14px;
+      height: 14px;
+      margin: 0;
+    }
+    .person-notes-body {
+      margin-top: 8px;
+    }
+    .person-notes-textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--rule-soft);
+      border-radius: 2px;
+      background: var(--card);
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--ink);
+      outline: none;
+      resize: vertical;
+      min-height: 60px;
+      line-height: 1.5;
+    }
+    .person-notes-textarea:focus { border-color: var(--accent); }
+    .person-notes-mic-row {
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+      margin-top: 6px;
+    }
+    .person-notes-mic-row .person-notes-textarea { flex: 1; }
+    .person-notes-mic {
+      width: 32px; height: 32px;
+      border: 1px solid var(--rule);
+      background: var(--bg);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+      transition: all .15s;
+    }
+    .person-notes-mic:hover { background: var(--rule-soft); }
+    .person-notes-mic.recording {
+      background: var(--record);
+      color: var(--card);
+      border-color: var(--record);
+      animation: micpulse 1s ease-in-out infinite;
+    }
+
+    .add-person-btn {
+      margin-top: 12px;
+      padding: 10px 14px;
+      width: 100%;
+      background: var(--card);
+      border: 1px dashed var(--accent-soft);
+      border-radius: 2px;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--accent);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .add-person-btn:hover {
+      background: var(--default-badge);
+      border-style: solid;
+    }
+    .schema-note {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: var(--default-badge);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 2px 2px 0;
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      font-family: "JetBrains Mono", monospace;
+    }
+    .schema-note strong { color: var(--ink); }
+    .schema-note code {
+      background: var(--card);
+      padding: 1px 4px;
+      border-radius: 2px;
+      border: 1px solid var(--rule-soft);
+      color: var(--accent);
+    }
+
+    /* ── FORM CONTROLS STRIP ──────────────────────────── */
+    .form-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 0 8px;
+      padding: 4px 2px;
+    }
+    .form-controls-label {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ink-faint);
+    }
+    .form-control-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 10px;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .form-control-btn:hover { background: var(--default-badge); border-color: var(--accent-soft); }
+    .form-control-btn .icon {
+      width: 12px; height: 12px;
+    }
+
+    /* ── ATTACHMENTS ──────────────────────────────────── */
+    .attach-upload-row {
+      display: flex; gap: 10px; align-items: center;
+      flex-wrap: wrap;
+    }
+    .attach-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 16px;
+      background: var(--accent); color: var(--card);
+      border: none; border-radius: 2px;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .attach-btn:hover { background: #1e3329; }
+    .attach-btn .cam-icon {
+      width: 16px; height: 16px;
+    }
+    .attach-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      color: var(--ink-faint);
+    }
+    .attach-count strong { color: var(--ink); }
+
+    .attach-note {
+      margin-top: 10px; padding: 10px 12px;
+      background: var(--default-badge);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 2px 2px 0;
+      font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+      font-family: "JetBrains Mono", monospace;
+    }
+    .attach-note strong { color: var(--ink); }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    @media (min-width: 500px) {
+      .photo-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .photo-card {
+      border: 1px solid var(--rule-soft);
+      border-radius: 2px;
+      overflow: hidden;
+      background: var(--card);
+      display: flex; flex-direction: column;
+    }
+
+    .photo-thumb {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      background: var(--rule-soft);
+      display: block;
+    }
+
+    .photo-meta {
+      padding: 10px;
+      border-top: 1px solid var(--rule-soft);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .photo-tag-row {
+      display: flex; gap: 8px; align-items: center;
+    }
+
+    .photo-tag {
+      flex: 1;
+      padding: 6px 8px;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      background: var(--card);
+      font-family: inherit; font-size: 13px;
+      color: var(--ink);
+      outline: none;
+      cursor: pointer;
+    }
+    .photo-tag:focus { border-color: var(--accent); }
+
+    .photo-delete {
+      width: 28px; height: 28px;
+      border: 1px solid var(--rule);
+      background: var(--bg);
+      border-radius: 2px; cursor: pointer;
+      font-family: inherit; font-size: 13px;
+      color: var(--ink-soft);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .photo-delete:hover { background: #f7dcd8; color: var(--alert); border-color: var(--alert); }
+
+    .photo-caption-row {
+      display: flex; gap: 6px; align-items: flex-start;
+    }
+
+    .photo-caption {
+      flex: 1;
+      padding: 7px 9px;
+      border: 1px solid var(--rule-soft);
+      border-radius: 2px;
+      background: var(--card);
+      font-family: inherit; font-size: 13px;
+      color: var(--ink);
+      outline: none;
+      resize: vertical;
+      min-height: 48px;
+      line-height: 1.4;
+    }
+    .photo-caption:focus { border-color: var(--accent); }
+
+    .photo-mic {
+      width: 32px; height: 32px;
+      border: 1px solid var(--rule);
+      background: var(--bg);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+      transition: all .15s;
+    }
+    .photo-mic:hover { background: var(--rule-soft); }
+    .photo-mic.recording {
+      background: var(--record);
+      color: var(--card);
+      border-color: var(--record);
+      animation: micpulse 1s ease-in-out infinite;
+    }
+    @keyframes micpulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(196,61,47,.5); }
+      50% { box-shadow: 0 0 0 6px rgba(196,61,47,0); }
+    }
+
+    .photo-empty {
+      padding: 20px 12px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--ink-faint);
+      font-style: italic;
+      border: 1px dashed var(--rule);
+      border-radius: 2px;
+      margin-top: 10px;
+    }
+
+    /* ── MEDIA BINS (standard vs sensitive) ──────────── */
+    .media-bin {
+      margin-top: 14px;
+      border: 1px solid var(--rule-soft);
+      border-radius: 2px;
+      overflow: hidden;
+      background: var(--card);
+    }
+    .media-bin-head {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--rule-soft);
+      display: grid;
+      grid-template-columns: 18px 1fr auto 16px;
+      gap: 10px;
+      align-items: center;
+      cursor: pointer;
+      border: none;
+      font-family: inherit; color: inherit; text-align: left;
+    }
+    .media-bin-head:hover { background: var(--rule-soft); }
+    .media-bin.collapsed .media-bin-body { display: none; }
+    .media-bin-body { padding: 12px; }
+
+    .media-bin-icon {
+      width: 14px; height: 14px;
+      color: var(--ink-soft);
+    }
+
+    .media-bin-title {
+      font-family: "Fraunces", serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+    .media-bin-title .count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      color: var(--ink-faint);
+      margin-left: 8px;
+    }
+
+    .media-bin.sensitive {
+      background: #faf4ed;
+      border-color: #e8d4b8;
+    }
+    .media-bin.sensitive .media-bin-head {
+      background: #f3e3c9;
+      border-bottom-color: #e8d4b8;
+    }
+    .media-bin.sensitive .media-bin-head:hover { background: #ecd7b2; }
+    .media-bin.sensitive .media-bin-icon { color: var(--warn); }
+    .media-bin.sensitive .media-bin-title { color: var(--warn); }
+
+    .bin-chevron {
+      width: 14px; height: 14px;
+      color: var(--ink-faint);
+      transition: transform .2s;
+    }
+    .media-bin:not(.collapsed) .bin-chevron { transform: rotate(180deg); }
+
+    .media-empty-bin {
+      padding: 16px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--ink-faint);
+      font-style: italic;
+    }
+
+    /* ── MULTI-SELECT + DRAG-DROP ────────────────────── */
+    .bulk-actions {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 10px 12px;
+      margin-top: 10px;
+      background: var(--accent);
+      color: var(--card);
+      border-radius: 2px;
+      box-shadow: var(--shadow-lift);
+    }
+    .bulk-actions.visible { display: flex; }
+    .bulk-actions .count-label {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-right: 4px;
+    }
+    .bulk-actions .count-label strong {
+      font-size: 14px;
+      font-family: inherit;
+      letter-spacing: 0;
+    }
+    .bulk-btn {
+      padding: 6px 10px;
+      background: rgba(255,255,255,.14);
+      color: var(--card);
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 2px;
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .bulk-btn:hover { background: rgba(255,255,255,.24); }
+    .bulk-btn.warn { background: #8a4a1a; border-color: rgba(255,255,255,.3); }
+    .bulk-btn.warn:hover { background: #7a3e14; }
+    .bulk-btn.danger { background: var(--alert); border-color: rgba(255,255,255,.3); }
+    .bulk-btn.danger:hover { background: #8a1e14; }
+    .bulk-btn.ghost {
+      background: transparent;
+      border-color: rgba(255,255,255,.4);
+      margin-left: auto;
+    }
+
+    .media-card.selected {
+      outline: 3px solid var(--accent);
+      outline-offset: -1px;
+    }
+    .media-card.dragging {
+      opacity: .45;
+      transform: scale(.97);
+    }
+    .media-thumb-wrap { cursor: pointer; }
+    .media-card[draggable="true"] .media-thumb-wrap { cursor: grab; }
+    .media-card[draggable="true"] .media-thumb-wrap:active { cursor: grabbing; }
+
+    .media-select-overlay {
+      position: absolute;
+      top: 6px; left: 6px;
+      z-index: 3;
+    }
+    .media-checkbox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      background: rgba(255,255,255,.92);
+      border: 1.5px solid var(--ink);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .media-checkbox:hover {
+      background: var(--card);
+      border-color: var(--accent);
+    }
+    .media-checkbox input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      margin: 0;
+    }
+    .media-card.selected .media-checkbox {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .media-bin.drag-over {
+      outline: 3px dashed var(--accent);
+      outline-offset: -1px;
+      background: var(--default-badge);
+    }
+    .media-bin.sensitive.drag-over {
+      outline-color: var(--warn);
+      background: #f3e3c9;
+    }
+
+    /* Drag hint inside empty bins to show they accept drops */
+    .media-bin.drag-over .media-empty-bin {
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .media-bin.sensitive.drag-over .media-empty-bin {
+      color: var(--warn);
+    }
+
+    /* ── LIGHTBOX / SLIDESHOW ─────────────────────────── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(26,29,26,.92);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      overflow-y: auto;
+      padding: 20px;
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+    }
+    .lightbox.open { display: flex; }
+
+    .lightbox-inner {
+      background: var(--card);
+      border-radius: 4px;
+      max-width: 960px;
+      width: 100%;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      position: relative;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      background: rgba(26,29,26,.85);
+      color: var(--card);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      transition: background .15s;
+    }
+    .lightbox-close:hover { background: var(--alert); }
+
+    .lightbox-preview {
+      background: #0e0f0e;
+      border-radius: 4px 4px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      max-height: 62vh;
+      overflow: hidden;
+      position: relative;
+    }
+    .lightbox-preview img,
+    .lightbox-preview video {
+      max-width: 100%;
+      max-height: 62vh;
+      object-fit: contain;
+      display: block;
+    }
+    .lightbox-sensitive-overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--warn);
+      color: var(--card);
+      padding: 4px 10px 3px;
+      border-radius: 2px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .lightbox-sensitive-overlay svg { width: 10px; height: 10px; }
+
+    .lightbox-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .lightbox-nav-btn {
+      width: 34px;
+      height: 34px;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+      font-family: inherit;
+    }
+    .lightbox-nav-btn:hover:not(:disabled) {
+      background: var(--default-badge);
+      border-color: var(--accent-soft);
+    }
+    .lightbox-nav-btn:disabled {
+      opacity: .3;
+      cursor: not-allowed;
+    }
+    .lightbox-position {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .lightbox-position strong {
+      color: var(--ink);
+      font-family: inherit;
+    }
+
+    .lightbox-meta {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .lightbox-tag-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .lightbox-tag-row .media-tag { flex: 1; }
+    .lightbox-caption-label {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ink-soft);
+    }
+    .lightbox-caption-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .lightbox-caption {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid var(--rule-soft);
+      border-radius: 2px;
+      background: var(--card);
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.5;
+    }
+    .lightbox-caption:focus { border-color: var(--accent); }
+    .lightbox-mic {
+      width: 40px; height: 40px;
+      border: 1px solid var(--rule);
+      background: var(--bg);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+      transition: all .15s;
+    }
+    .lightbox-mic:hover { background: var(--rule-soft); }
+    .lightbox-mic.recording {
+      background: var(--record);
+      color: var(--card);
+      border-color: var(--record);
+      animation: micpulse 1s ease-in-out infinite;
+    }
+
+    @media (max-width: 600px) {
+      .lightbox { padding: 0; align-items: stretch; }
+      .lightbox-inner { border-radius: 0; min-height: 100vh; }
+      .lightbox-preview { max-height: 50vh; min-height: 220px; }
+      .lightbox-preview img, .lightbox-preview video { max-height: 50vh; }
+    }
+
+    /* Media card (used in both bins) */
+    .media-card {
+      border: 1px solid var(--rule-soft);
+      border-radius: 2px;
+      overflow: hidden;
+      background: var(--card);
+      display: flex; flex-direction: column;
+      position: relative;
+    }
+
+    .media-bin.sensitive .media-card {
+      border-color: #d9c28e;
+    }
+
+    .media-thumb-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--rule-soft);
+      overflow: hidden;
+    }
+
+    .media-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .media-type-badge {
+      position: absolute;
+      top: 6px; left: 6px;
+      background: rgba(26,29,26,.75);
+      color: var(--card);
+      padding: 3px 7px 2px;
+      border-radius: 2px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      pointer-events: none;
+    }
+
+    .media-type-badge.video { background: rgba(196,61,47,.88); }
+
+    .video-play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .video-play-overlay svg {
+      width: 48px; height: 48px;
+      color: rgba(255,255,255,.92);
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,.4));
+    }
+    video.media-thumb[data-playing="true"] + .video-play-overlay {
+      display: none;
+    }
+
+    .sensitive-badge {
+      position: absolute;
+      top: 6px; right: 6px;
+      background: var(--warn);
+      color: var(--card);
+      padding: 3px 7px 2px;
+      border-radius: 2px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      display: flex; align-items: center; gap: 4px;
+      pointer-events: none;
+    }
+    .sensitive-badge svg { width: 9px; height: 9px; }
+
+    .media-meta {
+      padding: 10px;
+      border-top: 1px solid var(--rule-soft);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .media-tag-row {
+      display: flex; gap: 6px; align-items: center;
+    }
+
+    .media-tag {
+      flex: 1;
+      padding: 6px 8px;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      background: var(--card);
+      font-family: inherit; font-size: 13px;
+      color: var(--ink);
+      outline: none; cursor: pointer;
+    }
+    .media-tag:focus { border-color: var(--accent); }
+
+    .media-action-btn {
+      width: 28px; height: 28px;
+      border: 1px solid var(--rule);
+      background: var(--bg);
+      border-radius: 2px; cursor: pointer;
+      font-family: inherit; font-size: 13px;
+      color: var(--ink-soft);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all .12s;
+    }
+    .media-action-btn:hover { background: var(--rule-soft); color: var(--ink); }
+
+    .media-action-btn.sensitive-toggle.active {
+      background: #f3e3c9;
+      color: var(--warn);
+      border-color: #d9c28e;
+    }
+    .media-action-btn.sensitive-toggle:hover {
+      background: #f3e3c9;
+      color: var(--warn);
+      border-color: #d9c28e;
+    }
+
+    .media-action-btn.delete-btn:hover {
+      background: #f7dcd8;
+      color: var(--alert);
+      border-color: var(--alert);
+    }
+
+    .media-action-btn svg {
+      width: 14px; height: 14px;
+    }
+
+    .media-caption-row {
+      display: flex; gap: 6px; align-items: flex-start;
+    }
+
+    .media-caption {
+      flex: 1;
+      padding: 7px 9px;
+      border: 1px solid var(--rule-soft);
+      border-radius: 2px;
+      background: var(--card);
+      font-family: inherit; font-size: 13px;
+      color: var(--ink);
+      outline: none;
+      resize: vertical;
+      min-height: 48px;
+      line-height: 1.4;
+    }
+    .media-caption:focus { border-color: var(--accent); }
+
+    .media-mic {
+      width: 32px; height: 32px;
+      border: 1px solid var(--rule);
+      background: var(--bg);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+      transition: all .15s;
+    }
+    .media-mic:hover { background: var(--rule-soft); }
+    .media-mic.recording {
+      background: var(--record);
+      color: var(--card);
+      border-color: var(--record);
+      animation: micpulse 1s ease-in-out infinite;
+    }
+
+    .section {
+      background: var(--card); border: 1px solid var(--rule); border-radius: 2px;
+      overflow: hidden;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .section.changed { border-left: 3px solid var(--action); }
+    .section.open { box-shadow: var(--shadow-lift); }
+    .section.stub { opacity: .75; }
+
+    .header-row {
+      display: grid; grid-template-columns: 24px 1fr auto 16px;
+      gap: 12px; align-items: center;
+      padding: 14px 14px 14px 16px;
+      cursor: pointer; background: none; border: none;
+      width: 100%; text-align: left; font-family: inherit; color: inherit;
+    }
+    .header-row:hover { background: rgba(26,29,26,.02); }
+    .section-num {
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      color: var(--ink-faint); letter-spacing: .05em;
+    }
+    .section-main { display: flex; flex-direction: column; min-width: 0; }
+    .section-title {
+      font-family: "Fraunces", serif; font-size: 16px; font-weight: 400;
+      letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 2px;
+    }
+    .section-summary {
+      font-size: 13px; color: var(--ink-soft); line-height: 1.4;
+    }
+    .section-summary .sep { color: var(--ink-faint); margin: 0 6px; }
+    .section-summary .stub { color: var(--ink-faint); font-style: italic; }
+    .section-summary .warn { color: var(--warn); }
+
+    .status-pill {
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      text-transform: uppercase; letter-spacing: .1em;
+      padding: 3px 7px 2px; border-radius: 2px; white-space: nowrap;
+    }
+    .status-pill.default { background: var(--default-badge); color: var(--accent); }
+    .status-pill.changed { background: var(--selected-warn); color: var(--action); }
+    .status-pill.stub { background: #eaeaea; color: var(--ink-faint); }
+    .status-pill.review { background: #f7dcd8; color: var(--alert); }
+
+    .chevron {
+      color: var(--ink-faint); transition: transform .25s ease;
+      width: 16px; height: 16px;
+    }
+    .section.open .chevron { transform: rotate(180deg); }
+
+    .body-row { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+    .section.open .body-row { max-height: 3500px; }
+    .body-inner {
+      padding: 4px 16px 16px;
+      border-top: 1px solid var(--rule-soft); margin-top: 4px;
+    }
+
+    .field { margin-top: 14px; }
+    .field:first-child { margin-top: 4px; }
+    .field-label {
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--ink-soft); margin-bottom: 8px;
+      display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+    }
+    .field-label .raw {
+      color: var(--ink-faint); font-weight: 400;
+      text-transform: none; letter-spacing: .02em; font-size: 13px;
+    }
+
+    .options {
+      display: flex; flex-direction: column;
+      border: 1px solid var(--rule-soft); border-radius: 2px; overflow: hidden;
+    }
+    .options label {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; cursor: pointer;
+      font-size: 13px; color: var(--ink);
+      border-bottom: 1px solid var(--rule-soft);
+      background: var(--card); transition: background .1s;
+    }
+    .options label:last-child { border-bottom: none; }
+    .options label:hover { background: var(--bg); }
+    .options label.selected { background: var(--selected); }
+    .options label.warn.selected { background: var(--selected-warn); }
+    .options input[type="radio"],
+    .options input[type="checkbox"] {
+      accent-color: var(--accent); margin: 0; flex-shrink: 0;
+    }
+    .opt-label { flex: 1; }
+    .opt-badge {
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--ink-faint); white-space: nowrap;
+    }
+    .opt-badge.default { color: var(--accent-soft); }
+
+    .number-input {
+      display: flex; align-items: center; gap: 12px;
+      border: 1px solid var(--rule-soft); border-radius: 2px;
+      padding: 6px 10px; background: var(--card);
+    }
+    .number-input button {
+      width: 30px; height: 30px;
+      border: 1px solid var(--rule);
+      background: var(--card);
+      border-radius: 2px;
+      cursor: pointer;
+      font-family: inherit; font-size: 16px;
+      color: var(--ink);
+      transition: all .15s;
+    }
+    .number-input button:hover {
+      background: var(--default-badge);
+      border-color: var(--accent-soft);
+    }
+    .number-input input {
+      flex: 1; border: none; background: none; text-align: center;
+      font-family: "JetBrains Mono", monospace; font-size: 16px;
+      color: var(--ink); outline: none;
+    }
+    .number-input.invalid { border-color: var(--alert); }
+
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid var(--rule-soft);
+    }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-label { font-size: 13px; color: var(--ink); }
+    .toggle-label .sub {
+      display: block; font-size: 13px; color: var(--ink-faint);
+      margin-top: 2px; font-family: "JetBrains Mono", monospace;
+    }
+    .toggle {
+      position: relative; width: 40px; height: 22px;
+      background: var(--rule); border-radius: 11px; cursor: pointer;
+      transition: background .2s; flex-shrink: 0;
+    }
+    .toggle.on { background: var(--accent); }
+    .toggle::after {
+      content: ""; position: absolute; top: 2px; left: 2px;
+      width: 18px; height: 18px; background: var(--card);
+      border-radius: 50%; transition: left .2s;
+    }
+    .toggle.on::after { left: 20px; }
+
+    .select-all {
+      margin-top: 12px; padding: 9px 12px;
+      background: var(--default-badge); border-radius: 2px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--ink-soft);
+    }
+    .select-all label {
+      flex: 1; cursor: pointer; display: flex; align-items: center; gap: 8px;
+    }
+    .select-all input { accent-color: var(--accent); }
+    .select-all strong { color: var(--ink); font-weight: 500; }
+
+    .text-input, .notes-input {
+      width: 100%; border: 1px solid var(--rule-soft); border-radius: 2px;
+      padding: 9px 12px; font-family: inherit; font-size: 14px;
+      color: var(--ink); background: var(--card); outline: none;
+      accent-color: var(--accent);
+    }
+    .text-input:focus, .notes-input:focus { border-color: var(--accent); }
+    .notes-input { font-size: 13px; resize: vertical; min-height: 100px; line-height: 1.5; }
+
+    /* Native date picker: tint the popup controls (checkmark, selected day,
+       today indicator) so they match the forest-green theme instead of blue.
+       color-scheme:light forces light-mode popup; accent-color applies to
+       the selected-date highlight and the today dot in Chromium/Edge. */
+    input[type="datetime-local"],
+    input[type="date"],
+    input[type="time"] {
+      accent-color: var(--accent);
+      color-scheme: light;
+    }
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator {
+      filter: invert(23%) sepia(15%) saturate(1100%) hue-rotate(100deg) brightness(95%) contrast(85%);
+      cursor: pointer;
+      opacity: .75;
+    }
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover,
+    input[type="date"]::-webkit-calendar-picker-indicator:hover,
+    input[type="time"]::-webkit-calendar-picker-indicator:hover {
+      opacity: 1;
+    }
+
+    /* ── AUDIO RECORDING UI ──────────────────────────────── */
+    .audio-panel {
+      margin-top: 10px;
+      border: 1px solid var(--rule-soft);
+      border-radius: 2px;
+      background: var(--card);
+      overflow: hidden;
+    }
+    .audio-controls {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px;
+      background: var(--default-badge);
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .audio-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      border: none; border-radius: 2px;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all .15s;
+    }
+    .audio-btn.primary {
+      background: var(--record); color: var(--card);
+    }
+    .audio-btn.primary:hover { background: #a5352a; }
+    .audio-btn.stop {
+      background: var(--ink); color: var(--card);
+    }
+    .audio-btn.secondary {
+      background: var(--card); color: var(--ink);
+      border: 1px solid var(--rule);
+    }
+    .audio-btn.secondary:hover { background: var(--bg); }
+    .audio-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .audio-btn .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: currentColor;
+    }
+    .audio-btn.primary .dot { background: var(--card); }
+    .recording .audio-btn.primary .dot { animation: blink 1s ease-in-out infinite; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+    .audio-status {
+      flex: 1;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      color: var(--ink-soft);
+      letter-spacing: .05em;
+    }
+    .audio-status.recording { color: var(--record); }
+    .audio-status .timer { font-size: 14px; color: var(--ink); }
+
+    .waveform {
+      display: flex; align-items: center; gap: 2px;
+      height: 20px; padding: 0 6px;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .recording .waveform { opacity: 1; }
+    .waveform .bar {
+      width: 2px; background: var(--record);
+      border-radius: 1px;
+      animation: wave 1s ease-in-out infinite;
+    }
+    .waveform .bar:nth-child(1) { height: 30%; animation-delay: 0s; }
+    .waveform .bar:nth-child(2) { height: 60%; animation-delay: .1s; }
+    .waveform .bar:nth-child(3) { height: 80%; animation-delay: .2s; }
+    .waveform .bar:nth-child(4) { height: 50%; animation-delay: .3s; }
+    .waveform .bar:nth-child(5) { height: 70%; animation-delay: .4s; }
+    @keyframes wave {
+      0%,100% { transform: scaleY(0.4); }
+      50% { transform: scaleY(1); }
+    }
+
+    .audio-player-wrap {
+      padding: 12px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .audio-player-wrap.visible { display: flex; }
+    .audio-player-wrap audio {
+      flex: 1; height: 36px;
+    }
+    .audio-player-wrap audio::-webkit-media-controls-panel {
+      background: var(--bg);
+    }
+
+    .interim-transcript {
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--ink-faint);
+      font-style: italic;
+      background: #fafaf5;
+      border-bottom: 1px solid var(--rule-soft);
+      min-height: 40px;
+      display: none;
+    }
+    .interim-transcript.visible { display: block; }
+    .interim-transcript .final {
+      color: var(--ink);
+      font-style: normal;
+    }
+
+    .audio-note {
+      padding: 10px 12px;
+      background: #fafaf5;
+      font-size: 13px;
+      color: var(--ink-faint);
+      font-family: "JetBrains Mono", monospace;
+      line-height: 1.5;
+    }
+    .audio-note strong { color: var(--ink-soft); }
+    .audio-unsupported {
+      padding: 12px;
+      background: #f7e4d3;
+      color: var(--warn);
+      font-size: 13px;
+      display: none;
+    }
+    .audio-unsupported.visible { display: block; }
+
+    .stub-notice {
+      padding: 10px 12px; background: var(--default-badge);
+      border: 1px dashed var(--rule); border-radius: 2px;
+      font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .stub-notice strong { color: var(--ink); }
+    .stub-notice code {
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      background: var(--card); padding: 1px 4px; border-radius: 2px;
+      border: 1px solid var(--rule-soft);
+    }
+
+    .stub-grid {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 6px 16px; font-size: 13px;
+      font-family: "JetBrains Mono", monospace;
+    }
+    .stub-grid .k { color: var(--ink); }
+    .stub-grid .v { color: var(--ink-faint); text-align: right; }
+
+    .bottom-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--card); border-top: 1px solid var(--rule);
+      padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+      z-index: 20;
+    }
+    .bottom-bar-inner {
+      max-width: 640px; margin: 0 auto;
+      display: flex; gap: 10px; align-items: center;
+    }
+    .summary-stat { flex: 1; font-size: 13px; color: var(--ink-soft); line-height: 1.3; }
+    .summary-stat strong { color: var(--ink); font-weight: 500; }
+    .btn-submit {
+      background: var(--accent); color: var(--card); border: none;
+      padding: 10px 18px; font-family: inherit; font-size: 13px;
+      font-weight: 500; cursor: pointer; border-radius: 2px;
+    }
+    .btn-submit:hover { background: #1e3329; }
+
+    .footnote {
+      margin-top: 28px; padding-top: 18px;
+      border-top: 1px solid var(--rule-soft);
+      font-family: "JetBrains Mono", monospace; font-size: 13px;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--ink-faint); line-height: 1.6;
+    }
+    .footnote h3 {
+      font-size: 13px; color: var(--ink-soft); margin-bottom: 6px;
+    }
+    .footnote .kv { display: flex; justify-content: space-between; padding: 2px 0; gap: 10px; }
+    .footnote .kv .v {
+      color: var(--ink-soft); text-transform: none;
+      letter-spacing: 0; font-size: 13px; text-align: right;
+    }
+
+    @media (max-width: 440px) {
+      h1.title { font-size: 26px; }
+      .case-item { grid-template-columns: 80px 1fr auto; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="shell">
+    <header class="page">
+      <div class="topline">
+        <span>field entry v8 · cspd crash report</span>
+        <span class="savedot" id="savedot">autosaved · just now</span>
+      </div>
+      <h1 class="title">Case entry</h1>
+      <div class="subtitle">Defaults computed from 457 fatal-crash rows. Tap only what differs.</div>
+
+      <div class="thesis">
+        <span class="tag">The premise</span>
+        <strong>Let's help them do the job they were hired to do.</strong>
+        Form fatigue is real and prevalent in the most capable professionals. Officers are hired to respond, investigate, and write fair reports — forms should not be their primary concern all the time. The <code style="font-family:'JetBrains Mono',monospace;font-size:13px">driveraction</code> null rate and the impossible dates aren't about discipline. They're what happens when a desk-designed form meets a roadside reality. Defaults, picklists, and validation at the point of entry carry the weight the officer shouldn't have to.
+      </div>
+
+      <div class="specstrip">
+        <div class="specpill">One-page schema</div>
+        <div class="specpill">Accordion inline</div>
+        <div class="specpill">Picklist, not text</div>
+        <div class="specpill">Select-all per field</div>
+      </div>
+    </header>
+
+    <div class="nav-sticky">
+      <div class="view-tabs">
+        <button class="active" data-view="day">Day</button>
+        <button data-view="week">Week</button>
+        <button data-view="month">Month</button>
+      </div>
+
+      <div class="datenav">
+        <div class="daterow">
+          <div class="datestepper">
+            <button id="prev-btn" aria-label="Previous">‹</button>
+            <div class="currentdate" id="currentdate">
+              Fri, Apr 18
+              <span class="muted">2026</span>
+            </div>
+            <button id="next-btn" aria-label="Next">›</button>
+          </div>
+          <div class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="search-input" placeholder="case #, intersection, zip" />
+          </div>
+        </div>
+      </div>
+
+      <div class="caselist collapsed" id="caselist">
+        <button class="caselist-head" onclick="toggleCaseList()" type="button">
+          <div class="caselist-head-main">
+            <span class="title" id="caselist-title">Case browser</span>
+            <span class="sub" id="caselist-sub">
+              <span class="mono" id="sub-casenum">2026-00094412</span>
+              <span id="sub-loc">N Academy &amp; Austin Bluffs</span>
+              <span class="sep">·</span>
+              <span id="sub-time">fri 14:22</span>
+            </span>
+          </div>
+          <svg class="chevron-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="caselist-body" id="caselist-body"></div>
+        <button class="newcase-btn" id="new-case-btn">+ New case for today</button>
+      </div>
+    </div>
+
+    <div class="template-banner">
+      <div class="label">Profile: typical fatal crash · evening · weekend · male 21–29</div>
+      <div class="body">
+        <strong>13 of 16 fields</strong> pre-filled from the Fatality Register's actual distributions.
+        Tap any section to change what differs. Everything autosaves.
+      </div>
+    </div>
+
+    <div class="form-controls">
+      <span class="form-controls-label">Case form · 11 sections</span>
+      <button class="form-control-btn" id="expand-all-btn" onclick="toggleAllSections()">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <span id="expand-all-label">Expand all</span>
+      </button>
+    </div>
+
+    <main id="main" class="accordion">
+
+      <!-- 01 CASE & TIME -->
+      <section class="section" data-section="meta">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">01</span>
+          <span class="section-main">
+            <span class="section-title">Case &amp; time</span>
+            <span class="section-summary" id="summary-meta">
+              <span id="sum-casenum">2026-00094412</span><span class="sep">·</span>
+              <span id="sum-datetime">Fri Apr 18, 14:22</span>
+            </span>
+          </span>
+          <span class="status-pill default">auto</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="field">
+            <div class="field-label"><span>Accident number</span><span class="raw">raw: accidentnumber · auto</span></div>
+            <input class="text-input" id="field-casenum" value="2026-00094412" readonly style="font-family:'JetBrains Mono',monospace;color:var(--ink-faint);" />
+          </div>
+          <div class="field">
+            <div class="field-label"><span>Accident date/time</span><span class="raw">raw: accidentdatetime</span></div>
+            <input class="text-input" id="field-datetime" type="datetime-local" value="2026-04-18T14:22" style="font-family:'JetBrains Mono',monospace;" />
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 02 LOCATION -->
+      <section class="section" data-section="location">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">02</span>
+          <span class="section-main">
+            <span class="section-title">Location</span>
+            <span class="section-summary" id="summary-location">
+              <span id="sum-loc">N Academy &amp; Austin Bluffs</span><span class="sep">·</span>
+              <span id="sum-div">Sand Creek</span><span class="sep">·</span>
+              <span id="sum-zip">80909</span>
+            </span>
+          </span>
+          <span class="status-pill default">defaults</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="field">
+            <div class="field-label"><span>Crash location</span><span class="raw">raw: crashlocation</span></div>
+            <input class="text-input" id="field-loc" value="N Academy Blvd & Austin Bluffs Pkwy" />
+          </div>
+          <div class="field">
+            <div class="field-label"><span>Patrol division</span><span class="raw">raw: patroldivision · enum</span></div>
+            <div class="options" data-field="division">
+              <label class="selected"><input type="radio" name="div" value="Sand Creek" checked /><span class="opt-label">Sand Creek</span><span class="opt-badge default">27.8%</span></label>
+              <label><input type="radio" name="div" value="Gold Hill" /><span class="opt-label">Gold Hill</span><span class="opt-badge">24.5%</span></label>
+              <label><input type="radio" name="div" value="Stetson Hills" /><span class="opt-label">Stetson Hills</span><span class="opt-badge">20.8%</span></label>
+              <label><input type="radio" name="div" value="Falcon" /><span class="opt-label">Falcon</span><span class="opt-badge">16.6%</span></label>
+              <label><input type="radio" name="div" value="Unknown" /><span class="opt-label">Unknown — flag for follow-up</span><span class="opt-badge">explicit null</span></label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label"><span>Zip code</span><span class="raw">raw: zipcode · validate 5-digit</span></div>
+            <div class="options" data-field="zip">
+              <label class="selected"><input type="radio" name="zip" value="80909" checked /><span class="opt-label">80909</span><span class="opt-badge default">12.9%</span></label>
+              <label><input type="radio" name="zip" value="80910" /><span class="opt-label">80910</span><span class="opt-badge">9.6%</span></label>
+              <label><input type="radio" name="zip" value="80918" /><span class="opt-label">80918</span><span class="opt-badge">9.0%</span></label>
+              <label><input type="radio" name="zip" value="80905" /><span class="opt-label">80905</span><span class="opt-badge">8.3%</span></label>
+              <label><input type="radio" name="zip" value="80903" /><span class="opt-label">80903</span><span class="opt-badge">8.3%</span></label>
+              <label><input type="radio" name="zip" value="80916" /><span class="opt-label">80916</span><span class="opt-badge">7.0%</span></label>
+              <label><input type="radio" name="zip" value="80907" /><span class="opt-label">80907</span><span class="opt-badge">7.0%</span></label>
+              <label><input type="radio" name="zip" value="80917" /><span class="opt-label">80917</span></label>
+              <label><input type="radio" name="zip" value="80920" /><span class="opt-label">80920</span></label>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 03 SEVERITY -->
+      <section class="section" data-section="severity">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">03</span>
+          <span class="section-main">
+            <span class="section-title">Severity</span>
+            <span class="section-summary" id="summary-severity">
+              <span id="sum-killed">1 killed</span><span class="sep">·</span>
+              <span id="sum-injured">0 injured</span>
+            </span>
+          </span>
+          <span class="status-pill default">defaults</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="field">
+            <div class="field-label"><span>Number killed</span><span class="raw">raw: numberkilled · max 10</span></div>
+            <div class="number-input" id="killed-input">
+              <button onclick="stepN(this,-1,validateKilled)">−</button>
+              <input id="field-killed" type="number" value="1" min="0" max="10" oninput="validateKilled(this)" />
+              <button onclick="stepN(this,1,validateKilled)">+</button>
+            </div>
+            <div class="validation-alert" id="killed-alert">
+              <strong>Validation blocked.</strong> Number killed cannot exceed 10. The live dataset currently contains one row with 99 — a sentinel that inflated the 2025 fatality headline by 196%. This field is bounded at entry to prevent recurrence.
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label"><span>Number injured</span><span class="raw">raw: numberinjured · max 20</span></div>
+            <div class="number-input">
+              <button onclick="stepN(this,-1)">−</button>
+              <input id="field-injured" type="number" value="0" min="0" max="20" />
+              <button onclick="stepN(this,1)">+</button>
+            </div>
+            <div style="font-size:13px;color:var(--ink-faint);margin-top:4px;font-family:'JetBrains Mono',monospace;">
+              70.7% of fatal crashes have 0 additional injured
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 04 VRU -->
+      <section class="section" data-section="vru">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">04</span>
+          <span class="section-main">
+            <span class="section-title">Vulnerable road users</span>
+            <span class="section-summary">
+              <span>No pedestrian</span><span class="sep">·</span>
+              <span>No bicycle</span><span class="sep">·</span>
+              <span>No motorcycle</span>
+            </span>
+          </span>
+          <span class="status-pill default">defaults</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="field">
+            <div class="field-label"><span>Involvement flags</span><span class="raw">raw: pedestrianinvolved · bicycleinvolved · motorcycleinvolved</span></div>
+            <div class="toggle-row">
+              <span class="toggle-label">Pedestrian involved<span class="sub">default: no · 87.1% of fatal crashes</span></span>
+              <div class="toggle" onclick="toggleOn(this)"></div>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">Bicycle involved<span class="sub">default: no · 97.2% of fatal crashes</span></span>
+              <div class="toggle" onclick="toggleOn(this)"></div>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">Motorcycle involved<span class="sub">default: no · but 28% of fatal crashes — verify every time</span></span>
+              <div class="toggle" onclick="toggleOn(this)"></div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 05 AT-FAULT PERSON(S) -->
+      <section class="section" data-section="person">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">05</span>
+          <span class="section-main">
+            <span class="section-title">At-fault person(s)</span>
+            <span class="section-summary" id="summary-person"><span>1 person</span><span class="sep">·</span><span>Male, 21–29</span></span>
+          </span>
+          <span class="status-pill default">defaults</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="persons-list" id="persons-list"></div>
+          <button class="add-person-btn" onclick="addPerson()" type="button">
+            + Add another at-fault person
+          </button>
+          <div class="schema-note">
+            <strong>Schema note:</strong> <code>at_fault_persons</code> is an array. Primary sits at index 0 with the distribution-based defaults (Male, 21–29). Additional contributors start unselected — the officer picks age and gender explicitly so the added record isn't silently filled with the typical-case defaults. The public Fatality Register currently flattens multi-fault crashes to a single record, which is a real schema shortcoming when an impaired driver triggers a chain-reaction.
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 06 VEHICLE (with SELECT-ALL) -->
+      <section class="section" data-section="vehicle">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">06</span>
+          <span class="section-main">
+            <span class="section-title">Vehicle</span>
+            <span class="section-summary">
+              <span>Automobile</span><span class="sep">·</span>
+              <span>1 unit</span>
+            </span>
+          </span>
+          <span class="status-pill default">defaults</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="field">
+            <div class="field-label"><span>Vehicle type (at-fault)</span><span class="raw">raw: vehicletype · enum</span></div>
+            <div class="options">
+              <label class="selected"><input type="radio" name="veh" checked /><span class="opt-label">Automobile</span><span class="opt-badge default">58.4%</span></label>
+              <label><input type="radio" name="veh" /><span class="opt-label">Motorcycle / trike</span><span class="opt-badge">20.4%</span></label>
+              <label><input type="radio" name="veh" /><span class="opt-label">Bicycle</span><span class="opt-badge">1.8%</span></label>
+              <label><input type="radio" name="veh" /><span class="opt-label">Truck (commercial)</span><span class="opt-badge">1.3%</span></label>
+              <label><input type="radio" name="veh" /><span class="opt-label">Other</span></label>
+              <label><input type="radio" name="veh" /><span class="opt-label">Unknown — flag for follow-up</span><span class="opt-badge">explicit null</span></label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label"><span>Number of units involved</span><span class="raw">raw: unit_count</span></div>
+            <div class="number-input">
+              <button onclick="stepN(this,-1)">−</button>
+              <input type="number" value="1" min="1" max="10" />
+              <button onclick="stepN(this,1)">+</button>
+            </div>
+            <div class="select-all">
+              <label>
+                <input type="checkbox" />
+                Apply <strong>Automobile</strong> to <strong>all units</strong>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);margin-left:auto;">select-all</span>
+              </label>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 07 CONTRIBUTING FACTOR -->
+      <section class="section" data-section="factor">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">07</span>
+          <span class="section-main">
+            <span class="section-title">Contributing factor</span>
+            <span class="section-summary">
+              <span>Not yet determined</span>
+              <span class="sep">·</span>
+              <span class="warn">80% currently have no cause coded — requires explicit pick</span>
+            </span>
+          </span>
+          <span class="status-pill review">review</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="stub-notice">
+            <strong>Design decision:</strong> the Fatality Register codes 60.2% as <code>NO APPARENT FACTOR</code> + 19.5% null = 79.7% carrying no usable causal information. This section <strong>does not pre-select</strong> — the officer must choose. Explicit <em>Unknown — follow-up required</em> replaces silent null.
+          </div>
+          <div class="field">
+            <div class="field-label"><span>Driver contributing factor</span><span class="raw">raw: drivercontributingfactor · enum</span></div>
+            <div class="options">
+              <label><input type="radio" name="factor" /><span class="opt-label">Distracted by cell phone</span><span class="opt-badge">1.1%</span></label>
+              <label><input type="radio" name="factor" /><span class="opt-label">Distracted by other</span><span class="opt-badge">2.6%</span></label>
+              <label><input type="radio" name="factor" /><span class="opt-label">DUI / DWAI / DUID</span><span class="opt-badge">2.0%</span></label>
+              <label><input type="radio" name="factor" /><span class="opt-label">Aggressive driving</span><span class="opt-badge">1.3%</span></label>
+              <label><input type="radio" name="factor" /><span class="opt-label">Driver inexperience</span><span class="opt-badge">1.8%</span></label>
+              <label><input type="radio" name="factor" /><span class="opt-label">Medical event</span></label>
+              <label><input type="radio" name="factor" /><span class="opt-label">Weather / road surface</span></label>
+              <label><input type="radio" name="factor" /><span class="opt-label">Mechanical failure</span></label>
+              <label><input type="radio" name="factor" /><span class="opt-label">Other factor (specify in notes)</span><span class="opt-badge">8.8%</span></label>
+              <label class="warn"><input type="radio" name="factor" /><span class="opt-label">No apparent factor</span><span class="opt-badge">60.2% — overused</span></label>
+              <label><input type="radio" name="factor" /><span class="opt-label">Unknown — flag for follow-up</span><span class="opt-badge">explicit null</span></label>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 08 ENFORCEMENT -->
+      <section class="section" data-section="enforcement">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">08</span>
+          <span class="section-main">
+            <span class="section-title">Enforcement</span>
+            <span class="section-summary"><span>No citation</span></span>
+          </span>
+          <span class="status-pill default">default</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="field">
+            <div class="field-label"><span>Citation issued at scene</span><span class="raw">raw: citationissued</span></div>
+            <div class="toggle-row">
+              <span class="toggle-label">Citation issued<span class="sub">default: no · 92.6% receive no scene citation</span></span>
+              <div class="toggle" onclick="toggleOn(this)"></div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 09 ATTACHMENTS & MEDIA -->
+      <section class="section" data-section="attachments">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">09</span>
+          <span class="section-main">
+            <span class="section-title">Attachments &amp; media</span>
+            <span class="section-summary" id="summary-attachments"><span class="stub">No media yet — tap add below</span></span>
+          </span>
+          <span class="status-pill default" id="attach-pill">0 items</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="field">
+            <div class="field-label">
+              <span>Scene, vehicle, and evidence media</span>
+              <span class="raw">raw: attachments[] · photos + video · not exported to public dataset</span>
+            </div>
+            <div class="attach-upload-row">
+              <input type="file" accept="image/*,video/*" capture="environment" multiple hidden id="photo-input" />
+              <button class="attach-btn" onclick="document.getElementById('photo-input').click()">
+                <svg class="cam-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+                Add media
+              </button>
+              <span class="attach-count" id="attach-count"><strong>0</strong> attached · 0 sensitive</span>
+            </div>
+            <div class="attach-note">
+              <strong>Two-bin privacy model:</strong> newly added media goes into <em>Standard</em> by default. Tap the shield icon on any card to move it to <em>Sensitive</em> — a collapsed, separately-gated bin for media that shouldn't display alongside routine review work (graphic injury, identifying faces, protected docs). Neither bin flows to the public crash dataset. Move between bins freely; delete is per-item only.
+            </div>
+
+            <!-- BULK ACTIONS BAR (appears when items are selected) -->
+            <div class="bulk-actions" id="bulk-actions">
+              <span class="count-label"><strong id="bulk-count">0</strong> selected</span>
+              <button class="bulk-btn" onclick="bulkMoveToStandard()">→ Standard</button>
+              <button class="bulk-btn warn" onclick="bulkMoveToSensitive()">→ Sensitive</button>
+              <button class="bulk-btn danger" onclick="bulkDelete()">Delete</button>
+              <button class="bulk-btn ghost" onclick="clearSelection()">Cancel</button>
+            </div>
+
+            <!-- STANDARD BIN -->
+            <div class="media-bin" id="bin-standard">
+              <button class="media-bin-head" onclick="toggleBin('bin-standard')" type="button">
+                <svg class="media-bin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="9" cy="9" r="2"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span class="media-bin-title">Standard<span class="count" id="count-standard">0 items</span></span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;">visible by default</span>
+                <svg class="bin-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="media-bin-body"
+                ondragover="onBinDragOver(event, 'standard')"
+                ondragleave="onBinDragLeave(event, 'standard')"
+                ondrop="onBinDrop(event, 'standard')">
+                <div class="photo-grid" id="grid-standard">
+                  <div class="media-empty-bin" id="empty-standard">
+                    Tap <em>Add media</em> above. Camera opens directly on mobile; file picker on desktop. Accepts photos and video.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SENSITIVE BIN -->
+            <div class="media-bin sensitive collapsed" id="bin-sensitive">
+              <button class="media-bin-head" onclick="toggleBin('bin-sensitive')" type="button">
+                <svg class="media-bin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="4" y="11" width="16" height="10" rx="2"/>
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                </svg>
+                <span class="media-bin-title">Sensitive<span class="count" id="count-sensitive">0 items</span></span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--warn);text-transform:uppercase;letter-spacing:.08em;">tap to reveal</span>
+                <svg class="bin-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="media-bin-body"
+                ondragover="onBinDragOver(event, 'sensitive')"
+                ondragleave="onBinDragLeave(event, 'sensitive')"
+                ondrop="onBinDrop(event, 'sensitive')">
+                <div class="photo-grid" id="grid-sensitive">
+                  <div class="media-empty-bin" id="empty-sensitive">
+                    No sensitive items. Tap the shield icon on any Standard item to move it here.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 10 NARRATIVE + AUDIO -->
+      <section class="section open" data-section="notes">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">10</span>
+          <span class="section-main">
+            <span class="section-title">Narrative &amp; audio note</span>
+            <span class="section-summary" id="summary-notes"><span class="stub">Empty — tap record or type</span></span>
+          </span>
+          <span class="status-pill default">optional</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="field">
+            <div class="field-label">
+              <span>Narrative (speak or type)</span>
+              <span class="raw">raw: narrative_text · narrative_audio_url</span>
+            </div>
+            <textarea class="notes-input" id="narrative" placeholder="Tap the record button to dictate — your words transcribe in real time. Edit the text freely after; the audio stays attached to the case as evidence."></textarea>
+
+            <div class="audio-panel" id="audio-panel">
+              <div class="audio-unsupported" id="audio-unsupported">
+                <strong>Voice recording not supported in this browser.</strong> Use Chrome, Edge, or Safari. You can still type in the narrative field above.
+              </div>
+              <div class="audio-controls" id="audio-controls">
+                <button class="audio-btn primary" id="record-btn" onclick="startRecording()">
+                  <span class="dot"></span>
+                  <span id="record-label">Record</span>
+                </button>
+                <button class="audio-btn stop" id="stop-btn" onclick="stopRecording()" disabled style="display:none;">
+                  ⏹ Stop
+                </button>
+                <div class="waveform">
+                  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+                <div class="audio-status" id="audio-status">
+                  <span id="audio-status-text">Ready</span>
+                  <span class="timer" id="audio-timer" style="display:none;">0:00</span>
+                </div>
+              </div>
+              <div class="interim-transcript" id="interim-transcript">
+                <span class="final" id="interim-final"></span><span id="interim-pending"></span>
+              </div>
+              <div class="audio-player-wrap" id="audio-player-wrap">
+                <audio id="audio-player" controls></audio>
+                <button class="audio-btn secondary" onclick="downloadAudio()" title="Download recording">⬇</button>
+                <button class="audio-btn secondary" onclick="deleteAudio()" title="Delete recording">🗑</button>
+              </div>
+              <div class="audio-note">
+                <strong>Audio &amp; transcript both saved.</strong> Audio attaches to the case as a playable artifact (raw: <code>narrative_audio_url</code>). Transcript is editable and stored as text (raw: <code>narrative_text</code>). Audio runs locally via the browser's Speech Recognition API — no data leaves the device until submit.
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- 11 STUB -->
+      <section class="section stub" data-section="stub">
+        <button class="header-row" onclick="toggleSection(this)">
+          <span class="section-num">11</span>
+          <span class="section-main">
+            <span class="section-title">Additional fields <em style="font-family:'Fraunces';font-weight:300;color:var(--ink-faint);font-style:italic;">— from full bjpt-tkzq dataset</em></span>
+            <span class="section-summary"><span class="stub">14 fields not present in subset</span></span>
+          </span>
+          <span class="status-pill stub">stubbed</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="body-row"><div class="body-inner">
+          <div class="stub-notice">
+            <strong>These fields exist in the full public dataset (bjpt-tkzq, 95,200 rows)</strong> but are not present in the Fatality Register subset (457 rows). Each needs distribution analysis before shipping a default.
+          </div>
+          <div class="stub-grid">
+            <span class="k">driveraction</span><span class="v">18 enum · 49.4% null</span>
+            <span class="k">firstharmfulevent</span><span class="v">enum · 43.5% null</span>
+            <span class="k">unittype</span><span class="v">enum · 43.4% null</span>
+            <span class="k">race</span><span class="v">enum · 11.0% null</span>
+            <span class="k">ethnicity</span><span class="v">enum · 10.4% null</span>
+            <span class="k">weather_condition</span><span class="v">enum · needs analysis</span>
+            <span class="k">road_surface_condition</span><span class="v">enum · needs analysis</span>
+            <span class="k">lighting_condition</span><span class="v">enum · needs analysis</span>
+            <span class="k">traffic_control_device</span><span class="v">enum · needs analysis</span>
+            <span class="k">roadway_type</span><span class="v">enum · needs analysis</span>
+            <span class="k">dui_determination</span><span class="v">enum · backfilled post-tox</span>
+            <span class="k">injury_severity_per_person</span><span class="v">per-occupant array</span>
+            <span class="k">driver_license_status</span><span class="v">enum</span>
+            <span class="k">vehicle_make_model_year</span><span class="v">text + VIN lookup</span>
+          </div>
+        </div></div>
+      </section>
+
+    </main>
+
+    <div class="footnote">
+      <h3>Prototype provenance</h3>
+      <div class="kv"><span>source data</span><span class="v">CSPD_Fatality_Register_bjpt-tkzq.xlsx · 457 rows</span></div>
+      <div class="kv"><span>mock cases</span><span class="v">32 cases spanning 6 weeks for date-nav demo</span></div>
+      <div class="kv"><span>validation</span><span class="v">numberkilled ≤ 10 · numberinjured ≤ 20</span></div>
+      <div class="kv"><span>autosave</span><span class="v">every keystroke · 700ms debounce · localStorage</span></div>
+      <div class="kv"><span>audio</span><span class="v">MediaRecorder API + SpeechRecognition (Chrome/Safari/Edge)</span></div>
+      <div class="kv"><span>target load</span><span class="v">&lt; 3s on cellular · no external bundles</span></div>
+
+      <h3 style="margin-top:16px;">v8 additions</h3>
+      <div class="kv"><span>drag and drop</span><span class="v">drag cards between Standard and Sensitive bins · works on desktop</span></div>
+      <div class="kv"><span>bulk select</span><span class="v">checkbox per card · bulk bar appears with selection</span></div>
+      <div class="kv"><span>bulk actions</span><span class="v">→ Standard · → Sensitive · Delete · Cancel</span></div>
+      <div class="kv"><span>lightbox</span><span class="v">tap thumbnail to open full-size viewer</span></div>
+      <div class="kv"><span>lightbox edit</span><span class="v">tag · sensitivity · caption · delete · dictate</span></div>
+      <div class="kv"><span>lightbox nav</span><span class="v">‹ › buttons · arrow keys · Esc closes · click backdrop closes</span></div>
+      <div class="kv"><span>datepicker</span><span class="v">accent-color tints the native popup · no more blue</span></div>
+
+      <h3 style="margin-top:16px;">v7 additions</h3>
+      <div class="kv"><span>at-fault persons</span><span class="v">primary + unlimited additions · each with own age, gender, notes</span></div>
+      <div class="kv"><span>per-person notes</span><span class="v">checkbox reveals textarea · voice dictation per person</span></div>
+      <div class="kv"><span>schema shape</span><span class="v">at_fault_persons[] · primary at index 0</span></div>
+      <div class="kv"><span>button styling</span><span class="v">unified across date nav, number inputs, form controls</span></div>
+      <div class="kv"><span>date picker</span><span class="v">native calendar icon tinted to accent color</span></div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="bottom-bar-inner">
+      <div class="summary-stat">
+        <strong id="fieldcount">0</strong> fields changed
+        <span id="audio-indicator" style="display:none;color:var(--record);"> · 🎤 audio attached</span>
+      </div>
+      <button class="btn-submit" onclick="submitCase()">Submit</button>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX / SLIDESHOW -->
+  <div class="lightbox" id="lightbox" onclick="lightboxBackdropClick(event)" role="dialog" aria-modal="true" aria-labelledby="lightbox-position">
+    <div class="lightbox-inner" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+      <div class="lightbox-preview" id="lightbox-preview"></div>
+      <div class="lightbox-nav">
+        <button class="lightbox-nav-btn" id="lightbox-prev" onclick="lightboxNav(-1)" aria-label="Previous">‹</button>
+        <span class="lightbox-position" id="lightbox-position">—</span>
+        <button class="lightbox-nav-btn" id="lightbox-next" onclick="lightboxNav(1)" aria-label="Next">›</button>
+      </div>
+      <div class="lightbox-meta">
+        <div class="lightbox-tag-row">
+          <select class="media-tag" id="lightbox-tag" onchange="lightboxUpdateTag(this.value)">
+            <option value="scene">Scene overview</option>
+            <option value="vehicle">Vehicle damage</option>
+            <option value="document">Document (license / reg / insurance)</option>
+            <option value="diagram">Diagram or sketch</option>
+            <option value="other">Other</option>
+          </select>
+          <button class="media-action-btn sensitive-toggle" id="lightbox-sensitive-btn"
+            onclick="lightboxToggleSensitivity()" title="Toggle sensitivity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="11" width="16" height="10" rx="2"/>
+              <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+            </svg>
+          </button>
+          <button class="media-action-btn delete-btn" onclick="lightboxDelete()" title="Delete this item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+            </svg>
+          </button>
+        </div>
+        <div>
+          <div class="lightbox-caption-label">Caption</div>
+          <div class="lightbox-caption-row">
+            <textarea class="lightbox-caption" id="lightbox-caption"
+              placeholder="Edit caption — type freely, or tap 🎤 to dictate"
+              oninput="lightboxCaptionInput(this.value)"></textarea>
+            <button class="lightbox-mic" id="lightbox-mic" onclick="toggleLightboxMic()" title="Dictate caption">🎤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════════════════
+    // MOCK CASE DATA
+    // ══════════════════════════════════════════════════════
+    const MOCK_CASES = [
+      // Week of Apr 13-19, 2026 (current week)
+      { num:'2026-00094412', date:'2026-04-18T14:22', loc:'N Academy Blvd & Austin Bluffs Pkwy', div:'Stetson Hills', zip:'80917', type:'injury' },
+      { num:'2026-00094377', date:'2026-04-18T09:04', loc:'S Circle Dr & Hancock Expy', div:'Sand Creek', zip:'80910', type:'pdo' },
+      { num:'2026-00094355', date:'2026-04-18T07:41', loc:'Fountain Blvd & Powers Blvd', div:'Sand Creek', zip:'80916', type:'fatal' },
+      { num:'2026-00094298', date:'2026-04-17T22:15', loc:'Platte Ave & Union Blvd', div:'Sand Creek', zip:'80909', type:'injury' },
+      { num:'2026-00094266', date:'2026-04-17T18:42', loc:'Woodmen Rd & Black Forest Rd', div:'Falcon', zip:'80920', type:'pdo' },
+      { num:'2026-00094201', date:'2026-04-16T15:33', loc:'I-25 SB & Garden of Gods', div:'Gold Hill', zip:'80907', type:'pdo' },
+      { num:'2026-00094178', date:'2026-04-16T11:08', loc:'Constitution Ave & Murray Blvd', div:'Sand Creek', zip:'80915', type:'injury' },
+      { num:'2026-00094144', date:'2026-04-15T19:55', loc:'Nevada Ave & Cache La Poudre St', div:'Gold Hill', zip:'80903', type:'pdo' },
+      { num:'2026-00094099', date:'2026-04-15T08:12', loc:'Powers Blvd & Barnes Rd', div:'Stetson Hills', zip:'80917', type:'injury' },
+      { num:'2026-00094033', date:'2026-04-14T21:44', loc:'Tejon St & Colorado Ave', div:'Gold Hill', zip:'80903', type:'pdo' },
+      { num:'2026-00094011', date:'2026-04-14T12:30', loc:'Academy Blvd & Platte Ave', div:'Sand Creek', zip:'80909', type:'injury' },
+      { num:'2026-00093988', date:'2026-04-13T17:22', loc:'Briargate Pkwy & Lexington Dr', div:'Falcon', zip:'80920', type:'pdo' },
+      // Week of Apr 6-12
+      { num:'2026-00093901', date:'2026-04-12T23:15', loc:'Academy Blvd & Galley Rd', div:'Sand Creek', zip:'80910', type:'fatal' },
+      { num:'2026-00093877', date:'2026-04-11T16:08', loc:'Chelton Rd & Fountain Blvd', div:'Sand Creek', zip:'80910', type:'injury' },
+      { num:'2026-00093822', date:'2026-04-10T13:55', loc:'Centennial Blvd & Filmore St', div:'Gold Hill', zip:'80907', type:'pdo' },
+      { num:'2026-00093766', date:'2026-04-09T10:41', loc:'Austin Bluffs Pkwy & Union Blvd', div:'Stetson Hills', zip:'80918', type:'injury' },
+      { num:'2026-00093701', date:'2026-04-08T19:30', loc:'8th St & Cimarron St', div:'Gold Hill', zip:'80905', type:'pdo' },
+      { num:'2026-00093655', date:'2026-04-07T14:12', loc:'Dublin Blvd & Union Blvd', div:'Falcon', zip:'80918', type:'injury' },
+      { num:'2026-00093599', date:'2026-04-06T08:25', loc:'Hancock Expy & Fountain Blvd', div:'Sand Creek', zip:'80910', type:'pdo' },
+      // Week of Mar 30-Apr 5
+      { num:'2026-00093488', date:'2026-04-04T20:18', loc:'Vickers Dr & Academy Blvd', div:'Falcon', zip:'80918', type:'injury' },
+      { num:'2026-00093422', date:'2026-04-03T15:44', loc:'Uintah St & I-25', div:'Gold Hill', zip:'80904', type:'pdo' },
+      { num:'2026-00093355', date:'2026-04-02T12:11', loc:'Stetson Hills Blvd & Tutt Blvd', div:'Stetson Hills', zip:'80923', type:'injury' },
+      { num:'2026-00093288', date:'2026-04-01T17:29', loc:'Platte Ave & Powers Blvd', div:'Sand Creek', zip:'80915', type:'fatal' },
+      { num:'2026-00093221', date:'2026-03-31T09:55', loc:'Fillmore St & Centennial Blvd', div:'Gold Hill', zip:'80907', type:'pdo' },
+      { num:'2026-00093166', date:'2026-03-30T18:07', loc:'Airport Rd & Hancock Expy', div:'Sand Creek', zip:'80916', type:'injury' },
+      // Earlier March
+      { num:'2026-00093055', date:'2026-03-25T14:30', loc:'Woodmen Rd & Academy Blvd', div:'Stetson Hills', zip:'80918', type:'pdo' },
+      { num:'2026-00092988', date:'2026-03-22T11:15', loc:'Bijou St & Cascade Ave', div:'Gold Hill', zip:'80903', type:'injury' },
+      { num:'2026-00092901', date:'2026-03-18T22:44', loc:'Murray Blvd & Platte Ave', div:'Sand Creek', zip:'80915', type:'fatal' },
+      { num:'2026-00092833', date:'2026-03-15T16:02', loc:'Powers Blvd & Stetson Hills Blvd', div:'Stetson Hills', zip:'80923', type:'pdo' },
+      { num:'2026-00092766', date:'2026-03-12T08:47', loc:'Nevada Ave & Platte Ave', div:'Gold Hill', zip:'80903', type:'injury' },
+      { num:'2026-00092699', date:'2026-03-08T19:22', loc:'Circle Dr & Airport Rd', div:'Sand Creek', zip:'80910', type:'pdo' },
+      { num:'2026-00092622', date:'2026-03-05T13:11', loc:'Union Blvd & Briargate Pkwy', div:'Falcon', zip:'80920', type:'injury' },
+    ];
+
+    // ══════════════════════════════════════════════════════
+    // DATE NAVIGATION (day/week/month + stepper)
+    // ══════════════════════════════════════════════════════
+    let currentView = 'day';
+    let currentDate = new Date('2026-04-18T14:22');
+    let activeCase = '2026-00094412';
+
+    function formatDateHeader() {
+      const opts = { weekday: 'short', month: 'short', day: 'numeric' };
+      const yr = currentDate.getFullYear();
+      if (currentView === 'day') {
+        const s = currentDate.toLocaleDateString('en-US', opts);
+        return `${s}<span class="muted">${yr}</span>`;
+      }
+      if (currentView === 'week') {
+        const start = new Date(currentDate);
+        const day = start.getDay();
+        start.setDate(start.getDate() - day);
+        const end = new Date(start);
+        end.setDate(end.getDate() + 6);
+        const sFmt = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const eFmt = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        return `${sFmt} – ${eFmt}<span class="muted">${yr}</span>`;
+      }
+      const monthFmt = currentDate.toLocaleDateString('en-US', { month: 'long' });
+      return `${monthFmt}<span class="muted">${yr}</span>`;
+    }
+
+    function caseListTitle() {
+      // kept for back-compat; updateCaselistHeader now handles display
+      if (currentView === 'day') {
+        return `Cases for ${currentDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`;
+      }
+      if (currentView === 'week') return `Cases this week`;
+      return `Cases this month`;
+    }
+
+    function dateInRange(caseDate) {
+      const cd = new Date(caseDate);
+      if (currentView === 'day') {
+        return cd.toDateString() === currentDate.toDateString();
+      }
+      if (currentView === 'week') {
+        const start = new Date(currentDate);
+        start.setHours(0,0,0,0);
+        start.setDate(start.getDate() - start.getDay());
+        const end = new Date(start);
+        end.setDate(end.getDate() + 7);
+        return cd >= start && cd < end;
+      }
+      // month
+      return cd.getMonth() === currentDate.getMonth() && cd.getFullYear() === currentDate.getFullYear();
+    }
+
+    function renderCaseList() {
+      const searchVal = (document.getElementById('search-input').value || '').toLowerCase();
+      const filtered = MOCK_CASES.filter(c => {
+        if (!dateInRange(c.date)) return false;
+        if (!searchVal) return true;
+        return c.num.toLowerCase().includes(searchVal)
+          || c.loc.toLowerCase().includes(searchVal)
+          || c.zip.includes(searchVal)
+          || c.div.toLowerCase().includes(searchVal);
+      });
+      filtered.sort((a,b) => b.date.localeCompare(a.date));
+
+      const body = document.getElementById('caselist-body');
+      const caselist = document.getElementById('caselist');
+
+      // Update the collapsible header: always show active case info
+      updateCaselistHeader(filtered.length);
+
+      if (filtered.length === 0) {
+        body.innerHTML = '<div class="case-empty">No cases in this range. Try Week or Month view, or + New case below.</div>';
+        return;
+      }
+
+      body.innerHTML = filtered.map(c => {
+        const d = new Date(c.date);
+        const weekday = d.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+        const time = d.toTimeString().slice(0,5);
+        const dateStr = currentView === 'day'
+          ? `${weekday} ${time}`
+          : `${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toLowerCase()} · ${time}`;
+        return `
+          <div class="case-item ${c.num === activeCase ? 'active' : ''}" onclick="loadCase('${c.num}')">
+            <span class="case-num">${c.num}</span>
+            <span class="case-detail">
+              <span class="loc">${c.loc}</span>
+              <span class="meta">${dateStr} · ${c.div.toLowerCase()} · ${c.zip}</span>
+            </span>
+            <span class="case-badge ${c.type}">${c.type}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateCaselistHeader(count) {
+      const active = MOCK_CASES.find(c => c.num === activeCase);
+      const isCollapsed = document.getElementById('caselist').classList.contains('collapsed');
+
+      if (isCollapsed && active) {
+        // Collapsed state: show active case summary
+        const d = new Date(active.date);
+        const weekday = d.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+        const time = d.toTimeString().slice(0,5);
+        document.getElementById('caselist-title').textContent = 'Active case';
+        document.getElementById('sub-casenum').textContent = active.num;
+        document.getElementById('sub-loc').textContent = active.loc;
+        document.getElementById('sub-time').textContent = `${weekday} ${time}`;
+      } else {
+        // Expanded state: show range + count
+        let title;
+        if (currentView === 'day') {
+          title = `Cases for ${currentDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`;
+        } else if (currentView === 'week') {
+          title = 'Cases this week';
+        } else {
+          title = 'Cases this month';
+        }
+        document.getElementById('caselist-title').textContent = title;
+        document.getElementById('sub-casenum').textContent = '';
+        document.getElementById('sub-loc').textContent = `${count} case${count === 1 ? '' : 's'} in range`;
+        document.getElementById('sub-time').textContent = '';
+      }
+    }
+
+    function toggleCaseList() {
+      const caselist = document.getElementById('caselist');
+      caselist.classList.toggle('collapsed');
+      renderCaseList();
+    }
+
+    function setView(view) {
+      currentView = view;
+      document.querySelectorAll('.view-tabs button').forEach(b => {
+        b.classList.toggle('active', b.dataset.view === view);
+      });
+      document.getElementById('currentdate').innerHTML = formatDateHeader();
+      renderCaseList();
+    }
+
+    function stepDate(delta) {
+      const d = new Date(currentDate);
+      if (currentView === 'day') d.setDate(d.getDate() + delta);
+      else if (currentView === 'week') d.setDate(d.getDate() + (delta * 7));
+      else d.setMonth(d.getMonth() + delta);
+      currentDate = d;
+      document.getElementById('currentdate').innerHTML = formatDateHeader();
+      renderCaseList();
+    }
+
+    document.querySelectorAll('.view-tabs button').forEach(btn => {
+      btn.addEventListener('click', () => setView(btn.dataset.view));
+    });
+    document.getElementById('prev-btn').addEventListener('click', () => stepDate(-1));
+    document.getElementById('next-btn').addEventListener('click', () => stepDate(1));
+    document.getElementById('search-input').addEventListener('input', renderCaseList);
+
+    // ══════════════════════════════════════════════════════
+    // CASE LOADING
+    // ══════════════════════════════════════════════════════
+    function loadCase(caseNum) {
+      const c = MOCK_CASES.find(x => x.num === caseNum);
+      if (!c) return;
+      activeCase = caseNum;
+
+      document.getElementById('field-casenum').value = c.num;
+      document.getElementById('sum-casenum').textContent = c.num;
+
+      const dt = c.date.slice(0, 16);
+      document.getElementById('field-datetime').value = dt;
+      const d = new Date(c.date);
+      const dtStr = d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' })
+        + ', ' + d.toTimeString().slice(0,5);
+      document.getElementById('sum-datetime').textContent = dtStr;
+
+      document.getElementById('field-loc').value = c.loc;
+      document.getElementById('sum-loc').textContent = c.loc;
+
+      // Select the matching division radio
+      document.querySelectorAll('input[name="div"]').forEach(r => {
+        const label = r.closest('label');
+        const match = r.value === c.div;
+        r.checked = match;
+        label.classList.toggle('selected', match);
+      });
+      document.getElementById('sum-div').textContent = c.div;
+
+      // Select the matching zip radio
+      document.querySelectorAll('input[name="zip"]').forEach(r => {
+        const label = r.closest('label');
+        const match = r.value === c.zip;
+        r.checked = match;
+        label.classList.toggle('selected', match);
+      });
+      document.getElementById('sum-zip').textContent = c.zip;
+
+      // Set severity by case type
+      const killed = c.type === 'fatal' ? 1 : 0;
+      const injured = c.type === 'injury' ? 1 : 0;
+      document.getElementById('field-killed').value = killed;
+      document.getElementById('field-injured').value = injured;
+      document.getElementById('sum-killed').textContent = `${killed} killed`;
+      document.getElementById('sum-injured').textContent = `${injured} injured`;
+
+      // Auto-collapse the case list so the form is immediately visible
+      document.getElementById('caselist').classList.add('collapsed');
+      renderCaseList();
+      triggerSave();
+    }
+
+    // ══════════════════════════════════════════════════════
+    // NEW CASE
+    // ══════════════════════════════════════════════════════
+    document.getElementById('new-case-btn').addEventListener('click', () => {
+      const now = new Date();
+      const newNum = '2026-00094' + String(500 + Math.floor(Math.random() * 500)).padStart(3, '0');
+      activeCase = newNum;
+
+      document.getElementById('field-casenum').value = newNum;
+      document.getElementById('sum-casenum').textContent = newNum;
+
+      const iso = now.toISOString().slice(0, 16);
+      document.getElementById('field-datetime').value = iso;
+      const dtStr = now.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' })
+        + ', ' + now.toTimeString().slice(0,5);
+      document.getElementById('sum-datetime').textContent = dtStr;
+
+      // Reset to defaults
+      document.getElementById('field-loc').value = 'N Academy Blvd & Austin Bluffs Pkwy';
+      document.getElementById('sum-loc').textContent = 'N Academy & Austin Bluffs';
+      document.querySelectorAll('input[name="div"]').forEach(r => {
+        r.checked = r.value === 'Sand Creek';
+        r.closest('label').classList.toggle('selected', r.checked);
+      });
+      document.getElementById('sum-div').textContent = 'Sand Creek';
+      document.querySelectorAll('input[name="zip"]').forEach(r => {
+        r.checked = r.value === '80909';
+        r.closest('label').classList.toggle('selected', r.checked);
+      });
+      document.getElementById('sum-zip').textContent = '80909';
+
+      document.getElementById('field-killed').value = 1;
+      document.getElementById('field-injured').value = 0;
+      document.getElementById('sum-killed').textContent = '1 killed';
+      document.getElementById('sum-injured').textContent = '0 injured';
+
+      // Clear narrative and audio
+      document.getElementById('narrative').value = '';
+      deleteAudio();
+
+      // Clear media + selection + close lightbox
+      media = [];
+      selectedMedia.clear();
+      if (document.getElementById('lightbox').classList.contains('open')) {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+        lightboxMediaId = null;
+      }
+      renderMedia();
+      updateAttachmentSummary();
+      updateBulkActionBar();
+
+      // Reset persons to primary with defaults
+      persons = [{ age: '21-29', gender: 'male', notesEnabled: false, notes: '' }];
+      renderPersons();
+
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('changed'));
+      updateFieldCount();
+      triggerSave();
+
+      // Auto-collapse the case list so the fresh form is visible
+      document.getElementById('caselist').classList.add('collapsed');
+      renderCaseList();
+    });
+
+    // ══════════════════════════════════════════════════════
+    // ACCORDION + FORM INTERACTIONS
+    // ══════════════════════════════════════════════════════
+    function toggleSection(btn) {
+      btn.closest('.section').classList.toggle('open');
+    }
+
+    function stepN(btn, delta, validator) {
+      const input = btn.parentElement.querySelector('input');
+      const v = parseInt(input.value) || 0;
+      const min = parseInt(input.min) || 0;
+      const max = parseInt(input.max) || 999;
+      input.value = Math.max(min, Math.min(max, v + delta));
+      if (validator) validator(input);
+      markChanged(btn);
+      triggerSave();
+      updateSeveritySummary();
+    }
+
+    function validateKilled(input) {
+      const v = parseInt(input.value);
+      const wrap = document.getElementById('killed-input');
+      const alert = document.getElementById('killed-alert');
+      if (v > 10 || v === 99) {
+        wrap.classList.add('invalid');
+        alert.classList.add('visible');
+        input.value = Math.min(10, v);
+      } else {
+        wrap.classList.remove('invalid');
+        alert.classList.remove('visible');
+      }
+      updateSeveritySummary();
+    }
+
+    function updateSeveritySummary() {
+      const k = document.getElementById('field-killed').value;
+      const i = document.getElementById('field-injured').value;
+      document.getElementById('sum-killed').textContent = `${k} killed`;
+      document.getElementById('sum-injured').textContent = `${i} injured`;
+    }
+
+    function toggleOn(el) {
+      el.classList.toggle('on');
+      markChanged(el);
+      triggerSave();
+    }
+
+    function markChanged(el) {
+      const section = el.closest('.section');
+      if (section && !['meta', 'stub'].includes(section.dataset.section)) {
+        section.classList.add('changed');
+        const pill = section.querySelector('.status-pill');
+        if (pill && !pill.classList.contains('review')) {
+          pill.classList.remove('default');
+          pill.classList.add('changed');
+          pill.textContent = 'edited';
+        }
+      }
+      updateFieldCount();
+    }
+
+    // Radio/checkbox handlers
+    document.querySelectorAll('.options input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => {
+          r.closest('label').classList.toggle('selected', r.checked);
+        });
+        // Update summaries for division/zip
+        if (this.name === 'div') document.getElementById('sum-div').textContent = this.value;
+        if (this.name === 'zip') document.getElementById('sum-zip').textContent = this.value;
+        markChanged(this);
+        triggerSave();
+      });
+    });
+    document.querySelectorAll('.options input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', function() {
+        this.closest('label').classList.toggle('selected', this.checked);
+        markChanged(this);
+        triggerSave();
+      });
+    });
+
+    // Field changes
+    ['field-loc', 'field-datetime', 'field-killed', 'field-injured'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => markChanged(el));
+    });
+    document.getElementById('field-loc').addEventListener('input', function() {
+      document.getElementById('sum-loc').textContent = this.value;
+    });
+    document.getElementById('narrative').addEventListener('input', function() {
+      const v = this.value.trim();
+      document.getElementById('summary-notes').innerHTML = v
+        ? `<span>${v.slice(0, 60)}${v.length > 60 ? '…' : ''}</span>`
+        : '<span class="stub">Empty — tap record or type</span>';
+      triggerSave();
+    });
+
+    // ══════════════════════════════════════════════════════
+    // AUTOSAVE
+    // ══════════════════════════════════════════════════════
+    let saveTimer;
+    const savedot = document.getElementById('savedot');
+
+    function triggerSave() {
+      savedot.textContent = navigator.onLine ? 'saving…' : 'saving locally…';
+      savedot.classList.toggle('offline', !navigator.onLine);
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        try { localStorage.setItem('cspd_draft', JSON.stringify(collectState())); } catch(e) {}
+        if (navigator.onLine) {
+          savedot.textContent = 'autosaved · just now';
+          savedot.classList.remove('offline');
+        } else {
+          savedot.textContent = 'saved locally · will sync when online';
+          savedot.classList.add('offline');
+        }
+      }, 700);
+    }
+
+    function collectState() {
+      const state = { case: activeCase, narrative: document.getElementById('narrative').value };
+      document.querySelectorAll('.section').forEach(s => {
+        state[s.dataset.section] = { changed: s.classList.contains('changed') };
+      });
+      return state;
+    }
+
+    window.addEventListener('online', () => { savedot.textContent = 'back online · syncing'; setTimeout(triggerSave, 500); });
+    window.addEventListener('offline', () => { savedot.textContent = 'offline · saving locally'; savedot.classList.add('offline'); });
+
+    function updateFieldCount() {
+      const changed = document.querySelectorAll('.section.changed').length;
+      document.getElementById('fieldcount').textContent = changed;
+    }
+
+    // ══════════════════════════════════════════════════════
+    // AUDIO RECORDING + LIVE TRANSCRIPTION
+    // ══════════════════════════════════════════════════════
+    let mediaRecorder, audioChunks = [], audioBlob = null, audioUrl = null;
+    let recognition = null;
+    let recordStart = null, timerInterval = null;
+    let finalTranscript = '';
+
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const MR_OK = typeof MediaRecorder !== 'undefined' && navigator.mediaDevices;
+    const SR_OK = !!SR;
+
+    if (!MR_OK) {
+      document.getElementById('audio-unsupported').classList.add('visible');
+      document.getElementById('audio-controls').style.display = 'none';
+    }
+
+    async function startRecording() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+        mediaRecorder.onstop = () => {
+          audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          audioUrl = URL.createObjectURL(audioBlob);
+          document.getElementById('audio-player').src = audioUrl;
+          document.getElementById('audio-player-wrap').classList.add('visible');
+          document.getElementById('audio-indicator').style.display = 'inline';
+          stream.getTracks().forEach(t => t.stop());
+          markChanged(document.getElementById('narrative'));
+        };
+
+        mediaRecorder.start();
+        document.getElementById('audio-panel').classList.add('recording');
+        document.getElementById('record-btn').style.display = 'none';
+        document.getElementById('stop-btn').style.display = 'inline-flex';
+        document.getElementById('stop-btn').disabled = false;
+        document.getElementById('audio-status').classList.add('recording');
+        document.getElementById('audio-status-text').textContent = 'Recording';
+        document.getElementById('audio-timer').style.display = 'inline';
+
+        recordStart = Date.now();
+        timerInterval = setInterval(() => {
+          const elapsed = Math.floor((Date.now() - recordStart) / 1000);
+          const m = Math.floor(elapsed / 60);
+          const s = (elapsed % 60).toString().padStart(2, '0');
+          document.getElementById('audio-timer').textContent = `${m}:${s}`;
+        }, 250);
+
+        // Start speech recognition in parallel
+        if (SR_OK) {
+          finalTranscript = document.getElementById('narrative').value;
+          if (finalTranscript && !finalTranscript.endsWith(' ')) finalTranscript += ' ';
+
+          recognition = new SR();
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.lang = 'en-US';
+
+          recognition.onresult = (event) => {
+            let interim = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              const transcript = event.results[i][0].transcript;
+              if (event.results[i].isFinal) {
+                finalTranscript += transcript;
+              } else {
+                interim += transcript;
+              }
+            }
+            document.getElementById('narrative').value = finalTranscript + interim;
+            document.getElementById('interim-transcript').classList.add('visible');
+            document.getElementById('interim-final').textContent = finalTranscript;
+            document.getElementById('interim-pending').textContent = interim;
+          };
+
+          recognition.onerror = (e) => {
+            console.warn('Speech recognition error:', e.error);
+          };
+
+          recognition.start();
+        }
+      } catch (err) {
+        alert('Microphone access denied or unavailable. You can still type the narrative.');
+        console.error(err);
+      }
+    }
+
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+      if (recognition) {
+        try { recognition.stop(); } catch(e) {}
+        recognition = null;
+      }
+      clearInterval(timerInterval);
+      document.getElementById('audio-panel').classList.remove('recording');
+      document.getElementById('record-btn').style.display = 'inline-flex';
+      document.getElementById('record-label').textContent = 'Re-record';
+      document.getElementById('stop-btn').style.display = 'none';
+      document.getElementById('audio-status').classList.remove('recording');
+      document.getElementById('audio-status-text').textContent = 'Saved locally';
+      setTimeout(() => {
+        document.getElementById('interim-transcript').classList.remove('visible');
+      }, 2000);
+
+      // Update narrative summary
+      document.getElementById('narrative').dispatchEvent(new Event('input'));
+      triggerSave();
+    }
+
+    function downloadAudio() {
+      if (!audioUrl) return;
+      const a = document.createElement('a');
+      a.href = audioUrl;
+      a.download = `${activeCase}-audio-${Date.now()}.webm`;
+      a.click();
+    }
+
+    function deleteAudio() {
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+      audioBlob = null;
+      audioUrl = null;
+      audioChunks = [];
+      document.getElementById('audio-player').src = '';
+      document.getElementById('audio-player-wrap').classList.remove('visible');
+      document.getElementById('audio-indicator').style.display = 'none';
+      document.getElementById('record-label').textContent = 'Record';
+      document.getElementById('audio-status-text').textContent = 'Ready';
+    }
+
+    // ══════════════════════════════════════════════════════
+    // SUBMIT
+    // ══════════════════════════════════════════════════════
+    function submitCase() {
+      const state = collectState();
+      state.narrative_text = document.getElementById('narrative').value;
+      state.narrative_audio_attached = !!audioBlob;
+      state.narrative_audio_size_bytes = audioBlob ? audioBlob.size : 0;
+      state.at_fault_persons = persons.map((p, idx) => ({
+        primary: idx === 0,
+        age: p.age,
+        gender: p.gender,
+        has_notes: !!(p.notesEnabled && p.notes && p.notes.trim()),
+        notes: p.notesEnabled ? p.notes : ''
+      }));
+      state.at_fault_person_count = persons.length;
+      state.attachments = media.map(m => ({
+        id: m.id,
+        type: m.type,
+        tag: m.tag,
+        caption: m.caption,
+        sensitive: m.sensitive,
+        size_bytes: m.size,
+        has_voice_caption: !!(m.caption && m.caption.trim())
+      }));
+      state.attachment_counts = {
+        total: media.length,
+        photos: media.filter(m => m.type === 'image').length,
+        videos: media.filter(m => m.type === 'video').length,
+        sensitive: media.filter(m => m.sensitive).length
+      };
+      alert('Would POST to Tyler RMS:\n\n' + JSON.stringify(state, null, 2) + '\n\nThe at_fault_persons array is the schema-faithful representation. Primary at index 0, additional contributors at [1], [2], etc. Each carries optional per-person notes. Media (photos + video) upload to object storage. Sensitive items carry a flag that gates display in downstream review tools.');
+    }
+
+    // ══════════════════════════════════════════════════════
+    // EXPAND ALL / COLLAPSE ALL
+    // ══════════════════════════════════════════════════════
+    function toggleAllSections() {
+      const sections = document.querySelectorAll('main.accordion .section');
+      const label = document.getElementById('expand-all-label');
+      const allOpen = Array.from(sections).every(s => s.classList.contains('open'));
+      if (allOpen) {
+        sections.forEach(s => s.classList.remove('open'));
+        label.textContent = 'Expand all';
+      } else {
+        sections.forEach(s => s.classList.add('open'));
+        label.textContent = 'Collapse all';
+      }
+    }
+
+    // Keep the expand-all label in sync when individual sections are toggled
+    document.querySelectorAll('main.accordion .section .header-row').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setTimeout(syncExpandAllLabel, 50);
+      });
+    });
+    function syncExpandAllLabel() {
+      const sections = document.querySelectorAll('main.accordion .section');
+      const label = document.getElementById('expand-all-label');
+      const allOpen = Array.from(sections).every(s => s.classList.contains('open'));
+      label.textContent = allOpen ? 'Collapse all' : 'Expand all';
+    }
+
+    // ══════════════════════════════════════════════════════
+    // MEDIA ATTACHMENTS (photos + video, two-bin)
+    // ══════════════════════════════════════════════════════
+    let media = []; // { id, type: 'image'|'video', url, blob, tag, caption, sensitive, size }
+    let activeCaptionMediaId = null;
+    let captionRecognition = null;
+
+    document.getElementById('photo-input').addEventListener('change', handleMediaUpload);
+
+    function handleMediaUpload(event) {
+      const files = Array.from(event.target.files || []);
+      files.forEach(file => {
+        const isImage = file.type.startsWith('image/');
+        const isVideo = file.type.startsWith('video/');
+        if (!isImage && !isVideo) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const item = {
+            id: 'm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+            type: isImage ? 'image' : 'video',
+            url: e.target.result,
+            blob: file,
+            size: file.size,
+            tag: isVideo ? 'scene' : 'scene',
+            caption: '',
+            sensitive: false
+          };
+          media.push(item);
+          renderMedia();
+          updateAttachmentSummary();
+          markChanged(document.getElementById('bin-standard'));
+          triggerSave();
+        };
+        reader.readAsDataURL(file);
+      });
+      event.target.value = '';
+    }
+
+    function renderMedia() {
+      renderBin('standard', media.filter(m => !m.sensitive));
+      renderBin('sensitive', media.filter(m => m.sensitive));
+      updateBinCounts();
+    }
+
+    function renderBin(binKey, items) {
+      const grid = document.getElementById('grid-' + binKey);
+      if (items.length === 0) {
+        if (binKey === 'standard') {
+          grid.innerHTML = '<div class="media-empty-bin">Tap <em>Add media</em> above. Camera opens directly on mobile; file picker on desktop. Accepts photos and video.</div>';
+        } else {
+          grid.innerHTML = '<div class="media-empty-bin">No sensitive items. Tap the shield icon on any Standard item to move it here.</div>';
+        }
+        return;
+      }
+      grid.innerHTML = items.map(m => mediaCardHtml(m)).join('');
+    }
+
+    function mediaCardHtml(m) {
+      const thumb = m.type === 'video'
+        ? `<video class="media-thumb" src="${m.url}" preload="metadata" muted playsinline></video>
+           <div class="video-play-overlay">
+             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+           </div>`
+        : `<img class="media-thumb" src="${m.url}" alt="Attached ${m.type}" />`;
+
+      const typeBadge = m.type === 'video'
+        ? `<div class="media-type-badge video">▶ video</div>`
+        : `<div class="media-type-badge">photo</div>`;
+
+      const sensitiveBadge = m.sensitive
+        ? `<div class="sensitive-badge">
+             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+             sensitive
+           </div>`
+        : '';
+
+      const sensitiveTitle = m.sensitive ? 'Move back to Standard' : 'Mark as Sensitive';
+      const sensitiveActive = m.sensitive ? 'active' : '';
+      const isSelected = selectedMedia.has(m.id);
+      const selectedClass = isSelected ? 'selected' : '';
+
+      return `
+        <div class="media-card ${selectedClass}" data-id="${m.id}"
+             draggable="true"
+             ondragstart="onCardDragStart(event, '${m.id}')"
+             ondragend="onCardDragEnd(event)">
+          <div class="media-select-overlay" onclick="event.stopPropagation()">
+            <label class="media-checkbox" title="Select for bulk actions">
+              <input type="checkbox" ${isSelected ? 'checked' : ''}
+                onchange="toggleMediaSelection('${m.id}')" />
+            </label>
+          </div>
+          <div class="media-thumb-wrap" onclick="openLightbox('${m.id}')">
+            ${thumb}
+            ${typeBadge}
+            ${sensitiveBadge}
+          </div>
+          <div class="media-meta">
+            <div class="media-tag-row">
+              <select class="media-tag" onchange="updateMediaTag('${m.id}', this.value)">
+                <option value="scene" ${m.tag==='scene'?'selected':''}>Scene overview</option>
+                <option value="vehicle" ${m.tag==='vehicle'?'selected':''}>Vehicle damage</option>
+                <option value="document" ${m.tag==='document'?'selected':''}>Document (license / reg / insurance)</option>
+                <option value="diagram" ${m.tag==='diagram'?'selected':''}>Diagram or sketch</option>
+                <option value="other" ${m.tag==='other'?'selected':''}>Other</option>
+              </select>
+              <button class="media-action-btn sensitive-toggle ${sensitiveActive}"
+                onclick="toggleSensitivity('${m.id}')"
+                title="${sensitiveTitle}" aria-label="${sensitiveTitle}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="4" y="11" width="16" height="10" rx="2"/>
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                </svg>
+              </button>
+              <button class="media-action-btn delete-btn"
+                onclick="deleteMedia('${m.id}')"
+                title="Delete this item" aria-label="Delete">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                </svg>
+              </button>
+            </div>
+            <div class="media-caption-row">
+              <textarea class="media-caption" id="caption-${m.id}"
+                placeholder="Caption — type or tap 🎤 to dictate"
+                oninput="updateMediaCaption('${m.id}', this.value)">${escapeHtml(m.caption || '')}</textarea>
+              <button class="media-mic" id="mic-${m.id}" onclick="toggleMediaMic('${m.id}')" title="Dictate caption" aria-label="Dictate caption">🎤</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function toggleVideoPlay(id) {
+      const card = document.querySelector(`.media-card[data-id="${id}"]`);
+      if (!card) return;
+      const video = card.querySelector('video');
+      const overlay = card.querySelector('.video-play-overlay');
+      if (!video) return;
+      if (video.paused) {
+        video.play();
+        video.setAttribute('controls', 'true');
+        video.dataset.playing = 'true';
+        if (overlay) overlay.style.display = 'none';
+      } else {
+        video.pause();
+        video.removeAttribute('data-playing');
+        if (overlay) overlay.style.display = 'flex';
+      }
+    }
+
+    function updateMediaTag(id, tag) {
+      const m = media.find(x => x.id === id);
+      if (m) m.tag = tag;
+      updateAttachmentSummary();
+      triggerSave();
+    }
+
+    function updateMediaCaption(id, caption) {
+      const m = media.find(x => x.id === id);
+      if (m) m.caption = caption;
+      updateAttachmentSummary();
+      triggerSave();
+    }
+
+    function toggleSensitivity(id) {
+      const m = media.find(x => x.id === id);
+      if (!m) return;
+      m.sensitive = !m.sensitive;
+      // If moving to sensitive, auto-expand the sensitive bin so the officer sees where it went
+      if (m.sensitive) {
+        document.getElementById('bin-sensitive').classList.remove('collapsed');
+      }
+      renderMedia();
+      updateAttachmentSummary();
+      triggerSave();
+    }
+
+    function deleteMedia(id) {
+      // If recording caption for this one, stop
+      if (activeCaptionMediaId === id && captionRecognition) {
+        try { captionRecognition.stop(); } catch(e) {}
+      }
+      media = media.filter(m => m.id !== id);
+      renderMedia();
+      updateAttachmentSummary();
+      triggerSave();
+    }
+
+    function toggleBin(binId) {
+      document.getElementById(binId).classList.toggle('collapsed');
+    }
+
+    function updateBinCounts() {
+      const std = media.filter(m => !m.sensitive).length;
+      const sen = media.filter(m => m.sensitive).length;
+      document.getElementById('count-standard').textContent = `${std} item${std===1?'':'s'}`;
+      document.getElementById('count-sensitive').textContent = `${sen} item${sen===1?'':'s'}`;
+    }
+
+    function updateAttachmentSummary() {
+      const count = media.length;
+      const sensitiveCount = media.filter(m => m.sensitive).length;
+      const videoCount = media.filter(m => m.type === 'video').length;
+      const pill = document.getElementById('attach-pill');
+      const summary = document.getElementById('summary-attachments');
+      const countEl = document.getElementById('attach-count');
+
+      countEl.innerHTML = `<strong>${count}</strong> attached · ${sensitiveCount} sensitive`;
+      updateBinCounts();
+
+      if (count === 0) {
+        pill.textContent = '0 items';
+        pill.classList.remove('changed');
+        pill.classList.add('default');
+        summary.innerHTML = '<span class="stub">No media yet — tap add below</span>';
+        document.querySelector('[data-section="attachments"]').classList.remove('changed');
+      } else {
+        pill.textContent = `${count} item${count===1?'':'s'}`;
+        pill.classList.remove('default');
+        pill.classList.add('changed');
+
+        const parts = [];
+        if (videoCount > 0) parts.push(`${videoCount} video${videoCount===1?'':'s'}`);
+        const photoCount = count - videoCount;
+        if (photoCount > 0) parts.push(`${photoCount} photo${photoCount===1?'':'s'}`);
+        if (sensitiveCount > 0) parts.push(`<span class="warn">${sensitiveCount} sensitive</span>`);
+        const captioned = media.filter(m => m.caption && m.caption.trim()).length;
+        if (captioned > 0) parts.push(`${captioned} captioned`);
+
+        summary.innerHTML = parts.map((p, i) =>
+          i === 0 ? `<span>${p}</span>` : `<span class="sep">·</span><span>${p}</span>`
+        ).join('');
+      }
+    }
+
+    // ── PER-MEDIA VOICE CAPTION ──────────────────────────
+    function toggleMediaMic(id) {
+      const mic = document.getElementById('mic-' + id);
+      const caption = document.getElementById('caption-' + id);
+      if (!mic || !caption) return;
+
+      if (activeCaptionMediaId === id && captionRecognition) {
+        try { captionRecognition.stop(); } catch(e) {}
+        return;
+      }
+      if (activeCaptionMediaId && captionRecognition) {
+        try { captionRecognition.stop(); } catch(e) {}
+      }
+
+      if (!SR_OK) {
+        alert('Voice transcription not supported in this browser. Use Chrome, Edge, or Safari — or type the caption manually.');
+        return;
+      }
+
+      activeCaptionMediaId = id;
+      mic.classList.add('recording');
+
+      let startingText = caption.value;
+      if (startingText && !startingText.endsWith(' ')) startingText += ' ';
+
+      captionRecognition = new SR();
+      captionRecognition.continuous = true;
+      captionRecognition.interimResults = true;
+      captionRecognition.lang = 'en-US';
+
+      captionRecognition.onresult = (event) => {
+        let interim = '';
+        let finalText = startingText;
+        for (let i = 0; i < event.results.length; i++) {
+          const t = event.results[i][0].transcript;
+          if (event.results[i].isFinal) finalText += t;
+          else interim += t;
+        }
+        caption.value = finalText + interim;
+        updateMediaCaption(id, caption.value);
+      };
+
+      captionRecognition.onend = () => {
+        mic.classList.remove('recording');
+        activeCaptionMediaId = null;
+        captionRecognition = null;
+        triggerSave();
+      };
+
+      captionRecognition.onerror = (e) => {
+        console.warn('Speech recognition error:', e.error);
+        mic.classList.remove('recording');
+        activeCaptionMediaId = null;
+        captionRecognition = null;
+        if (e.error === 'not-allowed') {
+          alert('Microphone access denied. Type the caption manually or enable mic permission.');
+        }
+      };
+
+      captionRecognition.start();
+    }
+
+    // ══════════════════════════════════════════════════════
+    // MULTI-PERSON AT-FAULT
+    // ══════════════════════════════════════════════════════
+    const AGE_OPTIONS = [
+      { val: '16-20', label: '16 – 20', pct: '11.4%', isDefault: false },
+      { val: '21-29', label: '21 – 29', pct: '23.7%', isDefault: true  },
+      { val: '30-39', label: '30 – 39', pct: '18.5%', isDefault: false },
+      { val: '40-54', label: '40 – 54', pct: '20.7%', isDefault: false },
+      { val: '55-69', label: '55 – 69', pct: '16.6%', isDefault: false },
+      { val: '70+',   label: '70+',     pct: '9.1%',  isDefault: false },
+      { val: 'unknown', label: 'Unknown — flag for follow-up', pct: 'explicit null', isDefault: false }
+    ];
+    const GENDER_OPTIONS = [
+      { val: 'male',    label: 'Male',    pct: '77.2%', isDefault: true  },
+      { val: 'female',  label: 'Female',  pct: '21.7%', isDefault: false },
+      { val: 'unknown', label: 'Unknown', pct: '1.1%',  isDefault: false }
+    ];
+
+    // Primary always at index 0 with defaults; additions start blank
+    let persons = [
+      { age: '21-29', gender: 'male', notesEnabled: false, notes: '' }
+    ];
+    let activePersonNotesIdx = null;
+    let personNotesRecognition = null;
+
+    function renderPersons() {
+      const list = document.getElementById('persons-list');
+      list.innerHTML = persons.map((p, idx) => renderPersonCard(p, idx)).join('');
+      updatePersonsSummary();
+    }
+
+    function renderPersonCard(p, idx) {
+      const isPrimary = idx === 0;
+      const classes = `person-card ${isPrimary ? 'primary' : 'added'}`;
+      const tag = isPrimary
+        ? '<span class="person-tag primary-tag">primary</span>'
+        : '<span class="person-tag added-tag">additional</span>';
+      const removeBtn = isPrimary
+        ? ''
+        : `<button class="person-remove" onclick="removePerson(${idx})" type="button">✕ Remove</button>`;
+
+      const ageOpts = AGE_OPTIONS.map(o => {
+        const selected = p.age === o.val ? 'selected' : '';
+        const checked = p.age === o.val ? 'checked' : '';
+        const badgeClass = o.isDefault ? 'default' : '';
+        return `<label class="${selected}"><input type="radio" name="age-${idx}" value="${o.val}" ${checked} onchange="updatePerson(${idx}, 'age', '${o.val}')" /><span class="opt-label">${o.label}</span><span class="opt-badge ${badgeClass}">${o.pct}</span></label>`;
+      }).join('');
+
+      const genOpts = GENDER_OPTIONS.map(o => {
+        const selected = p.gender === o.val ? 'selected' : '';
+        const checked = p.gender === o.val ? 'checked' : '';
+        const badgeClass = o.isDefault ? 'default' : '';
+        return `<label class="${selected}"><input type="radio" name="gen-${idx}" value="${o.val}" ${checked} onchange="updatePerson(${idx}, 'gender', '${o.val}')" /><span class="opt-label">${o.label}</span><span class="opt-badge ${badgeClass}">${o.pct}</span></label>`;
+      }).join('');
+
+      const notesBody = p.notesEnabled ? `
+        <div class="person-notes-body">
+          <div class="person-notes-mic-row">
+            <textarea class="person-notes-textarea" id="person-notes-${idx}"
+              placeholder="Specific to this person — e.g., impaired, left scene, contradictory witness statement, medical history relevant to the crash."
+              oninput="updatePersonNotes(${idx}, this.value)">${escapeHtml(p.notes || '')}</textarea>
+            <button class="person-notes-mic" id="person-notes-mic-${idx}" onclick="togglePersonNotesMic(${idx})" type="button" title="Dictate notes">🎤</button>
+          </div>
+        </div>
+      ` : '';
+
+      const rawLabel = isPrimary
+        ? 'raw: at_fault_persons[0] · primary'
+        : `raw: at_fault_persons[${idx}]`;
+
+      return `
+        <div class="${classes}" data-person-idx="${idx}">
+          <div class="person-head">
+            <span class="person-title">Person ${idx + 1} ${tag}</span>
+            ${removeBtn}
+          </div>
+          <div class="person-body">
+            <div class="field">
+              <div class="field-label"><span>Age</span><span class="raw">${rawLabel}.age</span></div>
+              <div class="options">${ageOpts}</div>
+            </div>
+            <div class="field">
+              <div class="field-label"><span>Gender</span><span class="raw">${rawLabel}.gender</span></div>
+              <div class="options">${genOpts}</div>
+            </div>
+            <div class="person-notes-wrap">
+              <label class="person-notes-toggle">
+                <input type="checkbox" ${p.notesEnabled ? 'checked' : ''}
+                  onchange="togglePersonNotes(${idx}, this.checked)" />
+                <span>Notes specific to this person${p.notes && p.notes.trim() ? ' · has content' : ''}</span>
+              </label>
+              ${notesBody}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updatePerson(idx, field, value) {
+      if (!persons[idx]) return;
+      persons[idx][field] = value;
+      // Update selected class on radios in this person's group
+      document.querySelectorAll(`input[name="${field === 'age' ? 'age' : 'gen'}-${idx}"]`).forEach(r => {
+        r.closest('label').classList.toggle('selected', r.checked);
+      });
+      updatePersonsSummary();
+      markChanged(document.querySelector('[data-section="person"]'));
+      triggerSave();
+    }
+
+    function addPerson() {
+      persons.push({ age: null, gender: null, notesEnabled: false, notes: '' });
+      renderPersons();
+      markChanged(document.querySelector('[data-section="person"]'));
+      triggerSave();
+      // Scroll the newly added person into view
+      setTimeout(() => {
+        const cards = document.querySelectorAll('.person-card');
+        const last = cards[cards.length - 1];
+        if (last) last.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+
+    function removePerson(idx) {
+      if (idx === 0) return; // primary cannot be removed
+      if (activePersonNotesIdx === idx && personNotesRecognition) {
+        try { personNotesRecognition.stop(); } catch(e) {}
+      }
+      persons.splice(idx, 1);
+      renderPersons();
+      markChanged(document.querySelector('[data-section="person"]'));
+      triggerSave();
+    }
+
+    function togglePersonNotes(idx, enabled) {
+      if (!persons[idx]) return;
+      persons[idx].notesEnabled = enabled;
+      if (!enabled) persons[idx].notes = '';
+      renderPersons();
+      triggerSave();
+    }
+
+    function updatePersonNotes(idx, text) {
+      if (!persons[idx]) return;
+      persons[idx].notes = text;
+      updatePersonsSummary();
+      triggerSave();
+    }
+
+    function updatePersonsSummary() {
+      const summary = document.getElementById('summary-person');
+      if (!summary) return;
+      const count = persons.length;
+      const primary = persons[0];
+      const withNotes = persons.filter(p => p.notesEnabled && p.notes && p.notes.trim()).length;
+
+      const parts = [];
+      parts.push(`${count} person${count === 1 ? '' : 's'}`);
+
+      if (primary && primary.age && primary.gender) {
+        const genderLabel = GENDER_OPTIONS.find(o => o.val === primary.gender)?.label || primary.gender;
+        const ageLabel = AGE_OPTIONS.find(o => o.val === primary.age)?.label.replace(/\s/g, '') || primary.age;
+        parts.push(`${genderLabel}, ${ageLabel}`);
+      }
+
+      if (withNotes > 0) {
+        parts.push(`<span class="warn">${withNotes} with notes</span>`);
+      }
+
+      summary.innerHTML = parts.map((p, i) =>
+        i === 0 ? `<span>${p}</span>` : `<span class="sep">·</span><span>${p}</span>`
+      ).join('');
+    }
+
+    // Per-person notes voice dictation
+    function togglePersonNotesMic(idx) {
+      const mic = document.getElementById('person-notes-mic-' + idx);
+      const textarea = document.getElementById('person-notes-' + idx);
+      if (!mic || !textarea) return;
+
+      if (activePersonNotesIdx === idx && personNotesRecognition) {
+        try { personNotesRecognition.stop(); } catch(e) {}
+        return;
+      }
+      if (activePersonNotesIdx !== null && personNotesRecognition) {
+        try { personNotesRecognition.stop(); } catch(e) {}
+      }
+
+      if (!SR_OK) {
+        alert('Voice transcription not supported in this browser.');
+        return;
+      }
+
+      activePersonNotesIdx = idx;
+      mic.classList.add('recording');
+
+      let startingText = textarea.value;
+      if (startingText && !startingText.endsWith(' ')) startingText += ' ';
+
+      personNotesRecognition = new SR();
+      personNotesRecognition.continuous = true;
+      personNotesRecognition.interimResults = true;
+      personNotesRecognition.lang = 'en-US';
+
+      personNotesRecognition.onresult = (event) => {
+        let interim = '';
+        let finalText = startingText;
+        for (let i = 0; i < event.results.length; i++) {
+          const t = event.results[i][0].transcript;
+          if (event.results[i].isFinal) finalText += t;
+          else interim += t;
+        }
+        textarea.value = finalText + interim;
+        updatePersonNotes(idx, textarea.value);
+      };
+
+      personNotesRecognition.onend = () => {
+        mic.classList.remove('recording');
+        activePersonNotesIdx = null;
+        personNotesRecognition = null;
+        triggerSave();
+      };
+
+      personNotesRecognition.onerror = (e) => {
+        console.warn('Person-notes speech error:', e.error);
+        mic.classList.remove('recording');
+        activePersonNotesIdx = null;
+        personNotesRecognition = null;
+        if (e.error === 'not-allowed') {
+          alert('Microphone access denied. Type notes manually or enable mic permission.');
+        }
+      };
+
+      personNotesRecognition.start();
+    }
+
+    // ══════════════════════════════════════════════════════
+    // SELECTION + DRAG-DROP + BULK ACTIONS
+    // ══════════════════════════════════════════════════════
+    let selectedMedia = new Set();
+    let draggedId = null;
+
+    function toggleMediaSelection(id) {
+      if (selectedMedia.has(id)) selectedMedia.delete(id);
+      else selectedMedia.add(id);
+      renderMedia();
+      updateBulkActionBar();
+    }
+
+    function clearSelection() {
+      selectedMedia.clear();
+      renderMedia();
+      updateBulkActionBar();
+    }
+
+    function updateBulkActionBar() {
+      const bar = document.getElementById('bulk-actions');
+      const count = selectedMedia.size;
+      document.getElementById('bulk-count').textContent = count;
+      bar.classList.toggle('visible', count > 0);
+    }
+
+    function bulkMoveToSensitive() {
+      let moved = 0;
+      selectedMedia.forEach(id => {
+        const m = media.find(x => x.id === id);
+        if (m && !m.sensitive) { m.sensitive = true; moved++; }
+      });
+      if (moved > 0) {
+        document.getElementById('bin-sensitive').classList.remove('collapsed');
+      }
+      selectedMedia.clear();
+      renderMedia();
+      updateAttachmentSummary();
+      updateBulkActionBar();
+      triggerSave();
+    }
+
+    function bulkMoveToStandard() {
+      selectedMedia.forEach(id => {
+        const m = media.find(x => x.id === id);
+        if (m) m.sensitive = false;
+      });
+      selectedMedia.clear();
+      renderMedia();
+      updateAttachmentSummary();
+      updateBulkActionBar();
+      triggerSave();
+    }
+
+    function bulkDelete() {
+      const count = selectedMedia.size;
+      if (count === 0) return;
+      if (!confirm(`Delete ${count} item${count === 1 ? '' : 's'}? This cannot be undone.`)) return;
+      media = media.filter(m => !selectedMedia.has(m.id));
+      selectedMedia.clear();
+      renderMedia();
+      updateAttachmentSummary();
+      updateBulkActionBar();
+      triggerSave();
+    }
+
+    // --- DRAG-DROP ---
+    function onCardDragStart(event, id) {
+      draggedId = id;
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', id); // Firefox requires this
+      event.currentTarget.classList.add('dragging');
+    }
+
+    function onCardDragEnd(event) {
+      event.currentTarget.classList.remove('dragging');
+      draggedId = null;
+      document.querySelectorAll('.media-bin').forEach(b => b.classList.remove('drag-over'));
+    }
+
+    function onBinDragOver(event, binKey) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+      document.getElementById('bin-' + binKey).classList.add('drag-over');
+    }
+
+    function onBinDragLeave(event, binKey) {
+      const bin = document.getElementById('bin-' + binKey);
+      // Only clear if we're actually leaving the bin (not entering a child element)
+      if (!bin.contains(event.relatedTarget)) {
+        bin.classList.remove('drag-over');
+      }
+    }
+
+    function onBinDrop(event, binKey) {
+      event.preventDefault();
+      document.getElementById('bin-' + binKey).classList.remove('drag-over');
+      if (!draggedId) return;
+      const targetSensitive = (binKey === 'sensitive');
+      // If the dragged card is in the current selection, move everything selected.
+      // Otherwise just move the one card being dragged.
+      const idsToMove = selectedMedia.has(draggedId)
+        ? Array.from(selectedMedia)
+        : [draggedId];
+      let moved = 0;
+      idsToMove.forEach(id => {
+        const m = media.find(x => x.id === id);
+        if (m && m.sensitive !== targetSensitive) {
+          m.sensitive = targetSensitive;
+          moved++;
+        }
+      });
+      if (moved > 0) {
+        if (targetSensitive) {
+          document.getElementById('bin-sensitive').classList.remove('collapsed');
+        }
+        selectedMedia.clear();
+        renderMedia();
+        updateAttachmentSummary();
+        updateBulkActionBar();
+        triggerSave();
+      }
+    }
+
+    // ══════════════════════════════════════════════════════
+    // LIGHTBOX / SLIDESHOW
+    // ══════════════════════════════════════════════════════
+    let lightboxMediaId = null;
+    let lightboxMicRecognition = null;
+
+    function currentBinItems() {
+      // Return the bin items that lightboxMediaId belongs to, preserving order
+      const current = media.find(m => m.id === lightboxMediaId);
+      if (!current) return [];
+      return media.filter(m => m.sensitive === current.sensitive);
+    }
+
+    function openLightbox(id) {
+      const item = media.find(m => m.id === id);
+      if (!item) return;
+      lightboxMediaId = id;
+      renderLightbox();
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      if (lightboxMicRecognition) {
+        try { lightboxMicRecognition.stop(); } catch(e) {}
+      }
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+      lightboxMediaId = null;
+      // Re-render main grids so any caption/tag/sensitivity edits reflect
+      renderMedia();
+      updateAttachmentSummary();
+      triggerSave();
+    }
+
+    function lightboxBackdropClick(event) {
+      // Only close if the click was on the backdrop itself, not inside inner
+      if (event.target.id === 'lightbox') closeLightbox();
+    }
+
+    function lightboxNav(delta) {
+      const binItems = currentBinItems();
+      if (binItems.length === 0) { closeLightbox(); return; }
+      const idx = binItems.findIndex(m => m.id === lightboxMediaId);
+      const newIdx = (idx + delta + binItems.length) % binItems.length;
+      lightboxMediaId = binItems[newIdx].id;
+      // Stop any active mic when switching
+      if (lightboxMicRecognition) {
+        try { lightboxMicRecognition.stop(); } catch(e) {}
+      }
+      renderLightbox();
+    }
+
+    function renderLightbox() {
+      const item = media.find(m => m.id === lightboxMediaId);
+      if (!item) { closeLightbox(); return; }
+      const binItems = currentBinItems();
+      const idx = binItems.findIndex(m => m.id === lightboxMediaId);
+
+      // Preview
+      const preview = document.getElementById('lightbox-preview');
+      if (item.type === 'video') {
+        preview.innerHTML = `<video src="${item.url}" controls autoplay playsinline></video>`;
+      } else {
+        preview.innerHTML = `<img src="${item.url}" alt="Attached photo" />`;
+      }
+      if (item.sensitive) {
+        preview.insertAdjacentHTML('beforeend', `
+          <div class="lightbox-sensitive-overlay">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <rect x="4" y="11" width="16" height="10" rx="2"/>
+              <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+            </svg>
+            sensitive
+          </div>
+        `);
+      }
+
+      // Position indicator
+      document.getElementById('lightbox-position').innerHTML =
+        `<strong>${idx + 1}</strong> of ${binItems.length} · ${item.sensitive ? 'sensitive' : 'standard'} bin`;
+
+      // Nav button states (allow wraparound, so never disable but hint if only 1)
+      document.getElementById('lightbox-prev').disabled = binItems.length <= 1;
+      document.getElementById('lightbox-next').disabled = binItems.length <= 1;
+
+      // Tag select
+      document.getElementById('lightbox-tag').value = item.tag;
+
+      // Sensitive toggle button state
+      const sensBtn = document.getElementById('lightbox-sensitive-btn');
+      sensBtn.classList.toggle('active', item.sensitive);
+      sensBtn.title = item.sensitive ? 'Move back to Standard' : 'Mark as Sensitive';
+
+      // Caption
+      document.getElementById('lightbox-caption').value = item.caption || '';
+
+      // Reset mic visual state
+      document.getElementById('lightbox-mic').classList.remove('recording');
+    }
+
+    function lightboxCaptionInput(text) {
+      const item = media.find(m => m.id === lightboxMediaId);
+      if (item) item.caption = text;
+    }
+
+    function lightboxUpdateTag(tag) {
+      const item = media.find(m => m.id === lightboxMediaId);
+      if (item) item.tag = tag;
+    }
+
+    function lightboxToggleSensitivity() {
+      const item = media.find(m => m.id === lightboxMediaId);
+      if (!item) return;
+      item.sensitive = !item.sensitive;
+      // After toggling, the current bin changes. Re-render lightbox for the new bin.
+      renderLightbox();
+    }
+
+    function lightboxDelete() {
+      const item = media.find(m => m.id === lightboxMediaId);
+      if (!item) return;
+      if (!confirm('Delete this item? This cannot be undone.')) return;
+      // Stop any mic first
+      if (lightboxMicRecognition) {
+        try { lightboxMicRecognition.stop(); } catch(e) {}
+      }
+      const binItems = currentBinItems();
+      const idx = binItems.findIndex(m => m.id === lightboxMediaId);
+      media = media.filter(m => m.id !== lightboxMediaId);
+      // After deletion, navigate to next in bin or close
+      const remaining = media.filter(m => m.sensitive === item.sensitive);
+      if (remaining.length === 0) {
+        closeLightbox();
+        return;
+      }
+      const nextIdx = Math.min(idx, remaining.length - 1);
+      lightboxMediaId = remaining[nextIdx].id;
+      renderLightbox();
+    }
+
+    function toggleLightboxMic() {
+      const mic = document.getElementById('lightbox-mic');
+      const textarea = document.getElementById('lightbox-caption');
+      if (!mic || !textarea) return;
+
+      if (lightboxMicRecognition) {
+        try { lightboxMicRecognition.stop(); } catch(e) {}
+        return;
+      }
+      if (!SR_OK) {
+        alert('Voice transcription not supported in this browser.');
+        return;
+      }
+
+      mic.classList.add('recording');
+      let startingText = textarea.value;
+      if (startingText && !startingText.endsWith(' ')) startingText += ' ';
+
+      lightboxMicRecognition = new SR();
+      lightboxMicRecognition.continuous = true;
+      lightboxMicRecognition.interimResults = true;
+      lightboxMicRecognition.lang = 'en-US';
+
+      lightboxMicRecognition.onresult = (event) => {
+        let interim = '';
+        let finalText = startingText;
+        for (let i = 0; i < event.results.length; i++) {
+          const t = event.results[i][0].transcript;
+          if (event.results[i].isFinal) finalText += t;
+          else interim += t;
+        }
+        textarea.value = finalText + interim;
+        lightboxCaptionInput(textarea.value);
+      };
+
+      lightboxMicRecognition.onend = () => {
+        mic.classList.remove('recording');
+        lightboxMicRecognition = null;
+      };
+
+      lightboxMicRecognition.onerror = (e) => {
+        console.warn('Lightbox mic error:', e.error);
+        mic.classList.remove('recording');
+        lightboxMicRecognition = null;
+        if (e.error === 'not-allowed') {
+          alert('Microphone access denied. Type the caption manually.');
+        }
+      };
+
+      lightboxMicRecognition.start();
+    }
+
+    // Keyboard shortcuts for the lightbox
+    document.addEventListener('keydown', (e) => {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') lightboxNav(-1);
+      else if (e.key === 'ArrowRight') lightboxNav(1);
+    });
+
+    // ══════════════════════════════════════════════════════
+    // INIT
+    // ══════════════════════════════════════════════════════
+    renderPersons();
+    renderCaseList();
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!-- ═══════════════════════════════════════════════════════════════════
+     NAV — sourced from a single partial; pages mark their active section
+     by setting `activeNav` in front-matter (one of: you, dashboards,
+     people, events).
+════════════════════════════════════════════════════════════════════ -->
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
+        <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Site sections">
+        <a class="nav-link you-link{% if activeNav == 'you' %} active{% endif %}" href="/#you">You</a>
+        <a class="nav-link{% if activeNav == 'dashboards' %} active{% endif %}" href="/#dashboards">Dashboards</a>
+        <a class="nav-link{% if activeNav == 'people' %} active{% endif %}" href="/#people">People</a>
+        <a class="nav-link{% if activeNav == 'events' %} active{% endif %}" href="/#events">Events</a>
+      </nav>
+      <div class="nav-right">
+        <button class="nav-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">Menu</button>
+        <button class="notif-btn" onclick="openNotif()" aria-label="Open alerts and notifications, 10 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+          <span>Alerts</span>
+          <span class="notif-count" aria-live="polite">10</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

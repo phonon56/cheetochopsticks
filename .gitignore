@@ -21,6 +21,7 @@ ehthumbs.db
 .env*
 !.env.example
 
-# root Worker deps
-/node_modules
-
+# Eleventy build artifacts and node deps
+node_modules/
+.cache/
+# (We DO commit _site/ — Cloudflare serves it directly without a build step.)

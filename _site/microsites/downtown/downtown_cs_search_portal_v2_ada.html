@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Downtown Funding &amp; Records Search Portal — Colorado Springs</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Muli:ital,wght@0,400;0,600;0,700;0,800&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Color palette — verified WCAG 2.1 AA / AAA
+     All text pairs meet AAA (7:1+):
+       cs-text #111 on #fff       → 18.9  AAA
+       cs-muted #3A4A5A on #fff   →  9.1  AAA
+       cs-muted #3A4A5A on #F3F5F7 → 8.3  AAA
+       cs-navy #213B5D on #fff    → 11.4  AAA
+       cs-green #4A6100 on #fff   →  7.0  AAA
+       cs-teal #0F4F64 on #fff    →  9.0  AAA
+       cs-error #8B0000 on #fff   → 10.0  AAA
+       #fff on cs-navy #213B5D    → 11.4  AAA
+       hero-desc #C8D8E8 on #213B5D → 7.8  AAA  */
+  --cs-navy:   #213B5D;
+  --cs-green:  #4A6100;
+  --cs-teal:   #0F4F64;
+  --cs-white:  #FFFFFF;
+  --cs-light:  #F3F5F7;
+  --cs-border: #B0BAC4;
+  --cs-text:   #111111;
+  --cs-muted:  #3A4A5A;
+  --cs-error:  #8B0000;
+  --cs-errorbg:#FFF0F0;
+  --focus-ring: 0 0 0 3px #FFD700;
+}
+
+/* ── Universal focus-visible ring (ADA) ── */
+*:focus { outline: none; }
+*:focus-visible { outline: 3px solid #FFD700; outline-offset: 3px; border-radius: 2px; }
+
+/* ── Reduced motion (ADA) ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+body, .portal { font-family: 'Muli', sans-serif; font-size: 17px; line-height: 1.65; color: var(--cs-text); background: var(--cs-white); }
+
+/* ── Skip link ── */
+.skip { position: absolute; top: -999px; left: 6px; background: var(--cs-navy); color: #fff; padding: 10px 18px; font-size: 16px; font-weight: 700; border-radius: 0 0 6px 6px; text-decoration: none; z-index: 9999; }
+.skip:focus { top: 0; box-shadow: var(--focus-ring); outline: none; }
+
+/* ── Top utility bar ── */
+.topbar { background: var(--cs-navy); padding: 8px 20px; display: flex; justify-content: flex-end; gap: 24px; }
+.topbar a { color: #FFFFFF; font-size: 16px; font-weight: 600; text-decoration: underline; text-decoration-color: transparent; }
+.topbar a:hover { text-decoration-color: #fff; }
+.topbar a:focus { outline: none; box-shadow: var(--focus-ring); border-radius: 3px; }
+
+/* ── Site header ── */
+.site-header { background: var(--cs-white); border-bottom: 4px solid var(--cs-green); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+.logo-link { display: flex; align-items: center; gap: 12px; text-decoration: none; border-radius: 4px; }
+.logo-link:focus { outline: none; box-shadow: var(--focus-ring); }
+.logo-box { width: 48px; height: 48px; background: var(--cs-navy); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-box svg { width: 30px; height: 30px; }
+.logo-words strong { display: block; font-size: 18px; font-weight: 800; color: var(--cs-navy); }
+.logo-words span { display: block; font-size: 13px; font-weight: 700; color: var(--cs-teal); letter-spacing: 1.2px; text-transform: uppercase; }
+.header-badge { margin-left: auto; font-size: 14px; font-weight: 700; color: var(--cs-teal); border: 2px solid var(--cs-teal); padding: 5px 12px; border-radius: 4px; }
+
+/* ── Hero / search ── */
+.hero { background: var(--cs-navy); padding: 36px 20px 44px; }
+.hero h1 { color: #FFFFFF; font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+.hero-desc { color: #C8D8E8; font-size: 17px; margin-bottom: 24px; max-width: 580px; }
+.search-wrap { display: flex; max-width: 640px; border-radius: 6px; overflow: hidden; }
+.search-wrap label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.search-inner { flex: 1; position: relative; }
+.search-inner svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #555; }
+#main-search { width: 100%; padding: 15px 15px 15px 46px; font-size: 17px; font-family: 'Muli', sans-serif; border: none; color: var(--cs-text); }
+#main-search:focus { outline: none; box-shadow: inset 0 0 0 3px #FFD700; }
+.search-btn { background: var(--cs-green); color: #FFFFFF; border: none; padding: 15px 28px; font-size: 17px; font-weight: 700; cursor: pointer; font-family: 'Muli', sans-serif; white-space: nowrap; }
+.search-btn:hover { background: #3A4D00; }
+.search-btn:focus { outline: none; box-shadow: var(--focus-ring); }
+.quick-row { margin-top: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.quick-lbl { color: #C8D8E8; font-size: 15px; font-weight: 600; }
+.quick-chip { background: rgba(255,255,255,0.14); color: #FFFFFF; border: 2px solid rgba(255,255,255,0.4); padding: 5px 14px; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Muli', sans-serif; }
+.quick-chip:hover { background: rgba(255,255,255,0.25); }
+.quick-chip:focus { outline: none; box-shadow: var(--focus-ring); border-radius: 4px; }
+
+/* ── Missing data banner ── */
+.missing-banner { background: var(--cs-errorbg); border-left: 6px solid var(--cs-error); padding: 20px 24px; }
+.missing-banner-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.missing-banner-head svg { flex-shrink: 0; }
+.missing-banner h2 { font-size: 20px; font-weight: 800; color: var(--cs-error); }
+.missing-banner p { font-size: 16px; color: #5A0000; margin-bottom: 16px; }
+.missing-banner button.toggle-btn { background: none; border: 2px solid var(--cs-error); color: var(--cs-error); font-size: 15px; font-weight: 700; padding: 7px 16px; border-radius: 4px; cursor: pointer; font-family: 'Muli', sans-serif; }
+.missing-banner button.toggle-btn:hover { background: #FDE0E0; }
+.missing-banner button.toggle-btn:focus { outline: none; box-shadow: 0 0 0 3px #CC000088; border-radius: 4px; }
+.missing-list-wrap { margin-top: 16px; }
+.missing-cat { margin-bottom: 18px; }
+.missing-cat h3 { font-size: 16px; font-weight: 800; color: var(--cs-error); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #FABABA; }
+.missing-cat ul { list-style: none; padding: 0; }
+.missing-cat ul li { font-size: 15px; color: #4A0000; padding: 5px 0 5px 24px; position: relative; border-bottom: 1px solid #FDE0E0; }
+.missing-cat ul li::before { content: "✗"; position: absolute; left: 0; color: var(--cs-error); font-weight: 800; font-size: 14px; }
+
+/* ── Layout ── */
+.layout { display: flex; }
+.sidebar { width: 248px; min-width: 248px; background: var(--cs-light); border-right: 2px solid var(--cs-border); padding: 22px 18px; }
+.sidebar-section { margin-bottom: 26px; }
+.sidebar-section h2 { font-size: 14px; font-weight: 800; color: var(--cs-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.filter-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 16px; color: var(--cs-text); cursor: pointer; }
+.filter-item input[type=checkbox] { width: 20px; height: 20px; cursor: pointer; accent-color: var(--cs-navy); flex-shrink: 0; }
+.filter-item input:focus { outline: 3px solid var(--cs-navy); outline-offset: 2px; }
+.fcount { margin-left: auto; font-size: 14px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.fcount-bid { background: #D0DCF5; color: #0D2260; }
+.fcount-dda { background: #C8EBD0; color: #0D3A18; }
+.fcount-dp  { background: #FAE8CC; color: #5C2E00; }
+
+/* ── Results ── */
+.results-area { flex: 1; padding: 22px 24px; min-width: 0; }
+.results-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 2px solid var(--cs-border); }
+#results-count { font-size: 16px; color: var(--cs-muted); }
+#results-count strong { color: var(--cs-text); font-size: 17px; }
+.sort-wrap label { font-size: 15px; color: var(--cs-muted); margin-right: 6px; font-weight: 600; }
+.sort-wrap select { padding: 7px 12px; border: 2px solid var(--cs-border); border-radius: 4px; font-size: 15px; color: var(--cs-text); background: #fff; font-family: 'Muli', sans-serif; cursor: pointer; }
+.sort-wrap select:focus { outline: none; box-shadow: var(--focus-ring); }
+
+/* ── Record cards ── */
+.record { border: 2px solid var(--cs-border); border-radius: 6px; padding: 18px 22px; margin-bottom: 14px; background: #fff; }
+.record:hover { border-color: var(--cs-teal); }
+.record-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+.rec-badge { font-size: 14px; font-weight: 800; padding: 4px 10px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+.rec-badge-BID { background: #D0DCF5; color: #0D2260; }
+.rec-badge-DDA { background: #C8EBD0; color: #0D3A18; }
+.rec-badge-Partnership { background: #FAE8CC; color: #5C2E00; }
+.rec-title { font-size: 17px; font-weight: 700; color: var(--cs-navy); text-decoration: none; flex: 1; }
+.rec-title:hover { text-decoration: underline; color: var(--cs-teal); }
+.rec-title:focus { outline: none; box-shadow: var(--focus-ring); border-radius: 3px; }
+.rec-amount { font-size: 19px; font-weight: 800; color: var(--cs-navy); white-space: nowrap; margin-left: 12px; }
+.rec-meta { display: flex; flex-wrap: wrap; gap: 14px; font-size: 15px; color: var(--cs-muted); margin-bottom: 10px; }
+.rec-meta span { display: flex; align-items: center; gap: 5px; }
+.status-pill { font-size: 14px; font-weight: 700; padding: 3px 10px; border-radius: 10px; }
+.pill-Approved { background: #C8EBD0; color: #0D3A18; }
+.pill-Pending { background: #FEF3C7; color: #5C3D00; }
+.pill-Minutes { background: #D0DCF5; color: #0D2260; }
+.rec-desc { font-size: 16px; color: var(--cs-muted); line-height: 1.6; }
+.no-results { text-align: center; padding: 48px 24px; }
+.no-results strong { display: block; font-size: 20px; color: var(--cs-text); margin-bottom: 8px; }
+.no-results p { font-size: 16px; color: var(--cs-muted); }
+
+/* ── Explainer ── */
+.explainer { background: var(--cs-light); border-top: 4px solid var(--cs-green); padding: 32px 24px; }
+.explainer h2 { font-size: 22px; font-weight: 800; color: var(--cs-navy); margin-bottom: 22px; }
+.entity-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.entity-card { background: #fff; border: 2px solid var(--cs-border); border-radius: 6px; padding: 22px; }
+.entity-card.e-bid { border-top: 5px solid #0D2260; }
+.entity-card.e-dda { border-top: 5px solid #0D3A18; }
+.entity-card.e-dp  { border-top: 5px solid #5C2E00; }
+.entity-card .abbr { font-size: 14px; font-weight: 800; color: var(--cs-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.entity-card h3 { font-size: 17px; font-weight: 800; color: var(--cs-navy); margin-bottom: 10px; }
+.entity-card p { font-size: 15px; color: var(--cs-muted); line-height: 1.6; margin-bottom: 12px; }
+.entity-card dl { font-size: 15px; }
+.entity-card dt { font-weight: 700; color: var(--cs-text); margin-top: 8px; }
+.entity-card dd { color: var(--cs-muted); margin-left: 0; }
+
+@media (max-width: 720px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; min-width: unset; }
+  .entity-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="portal">
+  <a href="#main-content" class="skip">Skip to main content</a>
+
+  <nav class="topbar" aria-label="Utility links">
+    <a href="#">downtowncs.com</a>
+    <a href="#">About the BID</a>
+    <a href="#">About the DDA</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <header class="site-header">
+    <a class="logo-link" href="#" aria-label="Downtown Colorado Springs — return to home">
+      <div class="logo-box" aria-hidden="true">
+        <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2"  y="16" width="5"  height="12" fill="#fff" opacity=".9"/>
+          <rect x="9"  y="11" width="5"  height="17" fill="#fff"/>
+          <rect x="16" y="7"  width="5"  height="21" fill="#fff"/>
+          <rect x="23" y="13" width="4"  height="15" fill="#fff" opacity=".8"/>
+          <path d="M0 16 Q15 3 30 16" stroke="#FFD700" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <div class="logo-words">
+        <strong>Downtown</strong>
+        <span>Colorado Springs</span>
+      </div>
+    </a>
+    <span class="header-badge" aria-label="Funding Transparency Portal — sample data">Funding Transparency Portal</span>
+  </header>
+
+  <section aria-labelledby="search-heading" class="hero">
+    <h1 id="search-heading">Downtown Funding &amp; Records Search</h1>
+    <p class="hero-desc">Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</p>
+    <form onsubmit="doSearch(event)" role="search" aria-label="Search funding records">
+      <div class="search-wrap">
+        <div class="search-inner">
+          <label for="main-search">Search all funding records</label>
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="main-search" placeholder="Business name, address, grant type…" autocomplete="off" aria-describedby="search-tip"/>
+        </div>
+        <button type="submit" class="search-btn">Search</button>
+      </div>
+    </form>
+    <p id="search-tip" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Enter a business name, address, or record type to filter all downtown funding records.</p>
+    <div class="quick-row" role="group" aria-label="Quick search examples">
+      <span class="quick-lbl" aria-hidden="true">Try:</span>
+      <button class="quick-chip" type="button" onclick="quickSearch('building enhancement')">Building Enhancement</button>
+      <button class="quick-chip" type="button" onclick="quickSearch('TIF reimbursement')">TIF Reimbursement</button>
+      <button class="quick-chip" type="button" onclick="quickSearch('Tejon')">Tejon Street</button>
+      <button class="quick-chip" type="button" onclick="quickSearch('mill levy')">Mill Levy</button>
+      <button class="quick-chip" type="button" onclick="quickSearch('board meeting')">Board Meetings</button>
+    </div>
+  </section>
+
+  <!-- MISSING DATA BANNER -->
+  <div class="missing-banner" role="alert" aria-labelledby="missing-heading">
+    <div class="missing-banner-head">
+      <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8B0000" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <h2 id="missing-heading">All financial data is currently missing from this portal</h2>
+    </div>
+    <p>The records shown below are <strong>sample data only</strong>. The Downtown Partnership, BID, and DDA do not currently publish the financial documents listed below in any publicly accessible, searchable form. All items marked below are either not posted online, buried in unsearchable PDFs, or not disclosed at all — despite being legally required or expected of quasi-governmental entities spending public funds.</p>
+    <button class="toggle-btn" type="button" id="toggle-missing" onclick="toggleMissing()" aria-expanded="true" aria-controls="missing-list">Hide full list of missing records ▲</button>
+    <div id="missing-list" class="missing-list-wrap">
+
+      <div class="missing-cat">
+        <h3>BID — Business Improvement District</h3>
+        <ul>
+          <li>Annual adopted budget for each fiscal year — not posted online</li>
+          <li>Audited financial statements — required by Colorado statute, not posted</li>
+          <li>Mill levy rate and total assessed value by parcel — not disclosed</li>
+          <li>Individual property assessment amounts per parcel — not posted</li>
+          <li>Itemized expense breakdown (clean crew, marketing, transit, admin) — not posted</li>
+          <li>Vendor contracts and service agreements — not posted</li>
+          <li>Board member names, terms, and conflict-of-interest disclosures — not posted</li>
+          <li>Advance meeting agendas — only minutes are posted, no pre-meeting agendas</li>
+          <li>BID boundary map linked to parcel data — not publicly searchable</li>
+          <li>Reserve fund balances — not disclosed</li>
+        </ul>
+      </div>
+
+      <div class="missing-cat">
+        <h3>DDA — Downtown Development Authority</h3>
+        <ul>
+          <li>Annual adopted budget — not posted (required by C.R.S. 29-1-101 et seq.)</li>
+          <li>Audited financial statements — required by State Auditor annually, not posted online</li>
+          <li>Monthly financial statements reviewed at board meetings — exist but not posted separately</li>
+          <li>TIF reimbursement agreements — recipients, amounts, parcel addresses, terms — not posted</li>
+          <li>Building Enhancement Grant recipients, award amounts, and parcel addresses — not posted</li>
+          <li>Retail Incentive Grant recipients and award amounts — not posted</li>
+          <li>Tree Canopy Grant recipients and award amounts — not posted</li>
+          <li>Energy Efficiency Grant recipients and award amounts — not posted</li>
+          <li>Special Project Grant recipients and award amounts — not posted</li>
+          <li>Job Incentive payments — recipients, amounts, employment outcomes — not posted</li>
+          <li>Total TIF revenue captured year by year — not posted</li>
+          <li>TIF baseline assessment values and increment calculations — not posted</li>
+          <li>5-mill levy collections per year — not posted</li>
+          <li>Total TIF committed vs. remaining capacity (TIF expires 2037) — not posted</li>
+          <li>List of parcels receiving TIF reimbursements linked to parcel IDs — not posted</li>
+          <li>Grant application outcomes — how many applied, how many denied — not posted</li>
+          <li>DDA boundary map linked to searchable parcel data — not posted</li>
+          <li>Board member conflict-of-interest disclosures — not posted</li>
+          <li>Advance meeting agendas — inconsistently posted</li>
+        </ul>
+      </div>
+
+      <div class="missing-cat">
+        <h3>Downtown Partnership (501c4 Nonprofit)</h3>
+        <ul>
+          <li>IRS Form 990 (public record) — not linked on website</li>
+          <li>Audited financial statements — not posted</li>
+          <li>Executive compensation disclosure — available only via 990, not posted</li>
+          <li>Membership revenue total and breakdown by tier — not posted</li>
+          <li>Sponsorship revenue and sponsor list — not posted</li>
+          <li>Contract amounts paid to the Partnership by BID and DDA — not posted</li>
+          <li>Downtown Ventures financial statements — not posted</li>
+          <li>Community Ventures financial statements — not posted</li>
+          <li>Board member list for all four boards — inconsistently maintained</li>
+        </ul>
+      </div>
+
+      <div class="missing-cat">
+        <h3>Cross-entity transparency gaps</h3>
+        <ul>
+          <li>No parcel-linked record index — impossible to look up a single address across all entities</li>
+          <li>No unified grant history — no way to see all money a building or business has ever received</li>
+          <li>No searchable document archive — PDFs exist but are not indexed or searchable</li>
+          <li>No plain-language summaries of board decisions tied to specific properties</li>
+          <li>No notification system for property owners or business owners in the affected districts</li>
+          <li>No machine-readable data exports (CSV, JSON, or API) for any financial records</li>
+          <li>No record of denied applications or unfunded requests</li>
+          <li>No status tracking for pending grants or reimbursements</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Filter records by entity, type, and status">
+
+      <div class="sidebar-section">
+        <h2 id="lbl-entity">Entity</h2>
+        <div role="group" aria-labelledby="lbl-entity">
+          <label class="filter-item">
+            <input type="checkbox" id="f-bid" checked onchange="applyFilters()" aria-label="BID — Business Improvement District, 7 records"/>
+            BID <span class="fcount fcount-bid" aria-hidden="true">7</span>
+          </label>
+          <label class="filter-item">
+            <input type="checkbox" id="f-dda" checked onchange="applyFilters()" aria-label="DDA — Downtown Development Authority, 9 records"/>
+            DDA <span class="fcount fcount-dda" aria-hidden="true">9</span>
+          </label>
+          <label class="filter-item">
+            <input type="checkbox" id="f-dp" checked onchange="applyFilters()" aria-label="Downtown Partnership, 4 records"/>
+            Partnership <span class="fcount fcount-dp" aria-hidden="true">4</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h2 id="lbl-type">Record type</h2>
+        <div role="group" aria-labelledby="lbl-type">
+          <label class="filter-item"><input type="checkbox" id="f-grant"      checked onchange="applyFilters()"/> Grant <span class="fcount" aria-hidden="true">6</span></label>
+          <label class="filter-item"><input type="checkbox" id="f-tif"        checked onchange="applyFilters()"/> TIF Reimbursement <span class="fcount" aria-hidden="true">4</span></label>
+          <label class="filter-item"><input type="checkbox" id="f-assessment" checked onchange="applyFilters()"/> Assessment <span class="fcount" aria-hidden="true">4</span></label>
+          <label class="filter-item"><input type="checkbox" id="f-meeting"    checked onchange="applyFilters()"/> Board Meeting <span class="fcount" aria-hidden="true">6</span></label>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h2 id="lbl-status">Status</h2>
+        <div role="group" aria-labelledby="lbl-status">
+          <label class="filter-item"><input type="checkbox" id="f-approved" checked onchange="applyFilters()"/> Approved</label>
+          <label class="filter-item"><input type="checkbox" id="f-pending"  checked onchange="applyFilters()"/> Pending</label>
+          <label class="filter-item"><input type="checkbox" id="f-minutes"  checked onchange="applyFilters()"/> Minutes Posted</label>
+        </div>
+      </div>
+
+    </nav>
+
+    <main id="main-content" class="results-area" tabindex="-1">
+      <div class="results-bar">
+        <p id="results-count" aria-live="polite" aria-atomic="true"></p>
+        <div class="sort-wrap">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select" onchange="applyFilters()">
+            <option value="date-desc">Newest first</option>
+            <option value="date-asc">Oldest first</option>
+            <option value="amount-desc">Largest amount</option>
+            <option value="alpha">A to Z</option>
+          </select>
+        </div>
+      </div>
+      <div id="results-list" aria-label="Funding records" role="list"></div>
+    </main>
+  </div>
+
+  <section class="explainer" aria-labelledby="explainer-h">
+    <h2 id="explainer-h">How the three entities work</h2>
+    <div class="entity-grid">
+      <article class="entity-card e-bid" aria-labelledby="bid-h">
+        <p class="abbr">BID</p>
+        <h3 id="bid-h">Business Improvement District</h3>
+        <p>Funded by a mandatory assessment on all property owners in the district. Covers clean and safe services, streetscaping, and events.</p>
+        <dl>
+          <dt>Funding source</dt><dd>Property owner mill levy (~$589K/yr)</dd>
+          <dt>Board</dt><dd>11 members appointed by City Council</dd>
+          <dt>Meetings</dt><dd>Every other month, 3rd Tuesday</dd>
+          <dt>Can fund</dt><dd>District services only — not private grants</dd>
+        </dl>
+      </article>
+      <article class="entity-card e-dda" aria-labelledby="dda-h">
+        <p class="abbr">DDA</p>
+        <h3 id="dda-h">Downtown Development Authority</h3>
+        <p>Funded by a 5-mill levy plus Tax Increment Financing — the growth in property tax above a baseline, reinvested in the district.</p>
+        <dl>
+          <dt>Funding source</dt><dd>5-mill levy + TIF (expires 2037)</dd>
+          <dt>Board</dt><dd>11 members appointed by City Council</dd>
+          <dt>Meetings</dt><dd>Monthly, 2nd Tuesday, 9:15 a.m.</dd>
+          <dt>Can fund</dt><dd>Building grants, TIF reimbursements, housing</dd>
+        </dl>
+      </article>
+      <article class="entity-card e-dp" aria-labelledby="dp-h">
+        <p class="abbr">Partnership</p>
+        <h3 id="dp-h">Downtown Partnership</h3>
+        <p>A 501(c)(4) nonprofit that staffs the BID and DDA under contract. Funded by membership dues, sponsorships, and service contracts.</p>
+        <dl>
+          <dt>Funding source</dt><dd>Memberships, sponsorships, contracts</dd>
+          <dt>Legal type</dt><dd>501(c)(4) — files IRS Form 990</dd>
+          <dt>Role</dt><dd>Marketing, advocacy, events, technical assistance</dd>
+          <dt>Note</dt><dd>Not subject to CORA directly; 990 is public but not linked</dd>
+        </dl>
+      </article>
+    </div>
+  </section>
+</div>
+
+<script>
+const DATA=[
+  {id:1,entity:'DDA',type:'Grant',sub:'Building Enhancement',title:'Rabbit Hole Restaurant — Facade Renovation',addr:'101 N. Tejon St.',amt:48500,date:'2024-09-10',status:'Approved',desc:'Exterior facade improvement including new signage, lighting, and historic brick restoration on the Kiowa Street entrance.'},
+  {id:2,entity:'DDA',type:'TIF Reimbursement',sub:'Commercial TIF',title:'The Well Food Hall — Commercial TIF Agreement',addr:'333 N. Tejon St.',amt:215000,date:'2024-07-22',status:'Approved',desc:'Tax increment reimbursement for interior build-out costs enabling a mixed food-hall and live-music venue concept.'},
+  {id:3,entity:'BID',type:'Assessment',sub:'Annual Assessment',title:'Annual BID Property Assessment — FY2024',addr:'District-wide',amt:589310,date:'2024-01-01',status:'Approved',desc:'Total mill levy assessment collected from all property owners within the BID boundary for FY2024 operations.'},
+  {id:4,entity:'DDA',type:'Grant',sub:'Retail Incentive',title:'Ladyfingers Letterpress — Retail Incentive Grant',addr:'113 E. Bijou St.',amt:22000,date:'2024-05-14',status:'Approved',desc:'New business incentive grant for a queer- and trans-owned stationery and letterpress studio.'},
+  {id:5,entity:'BID',type:'Meeting',sub:'Board Meeting',title:'BID Board Meeting — May 2025',addr:'Downtown Partnership Office',amt:null,date:'2025-05-13',status:'Minutes Posted',desc:'Agenda included FY2025 budget review, streetscape maintenance contract renewal, and safety ambassador program update.'},
+  {id:6,entity:'DDA',type:'Meeting',sub:'Board Meeting',title:'DDA Board Meeting — March 2025',addr:'Downtown Partnership Office',amt:null,date:'2025-03-18',status:'Minutes Posted',desc:'Board accepted financial statements ending February 28, 2025. Reviewed Building Enhancement Grant pipeline.'},
+  {id:7,entity:'DDA',type:'TIF Reimbursement',sub:'Residential TIF',title:'Artspace Affordable Artist Housing — TIF Agreement',addr:'Pikes Peak Ave. & Nevada Ave.',amt:380000,date:'2024-03-01',status:'Approved',desc:'Residential TIF reimbursement supporting affordable units reserved for working artists.'},
+  {id:8,entity:'BID',type:'Assessment',sub:'Annual Assessment',title:'Annual BID Property Assessment — FY2023',addr:'District-wide',amt:572000,date:'2023-01-01',status:'Approved',desc:'Total mill levy assessment for FY2023. Funds allocated to public space management, marketing, and transit access.'},
+  {id:9,entity:'DDA',type:'Grant',sub:'Energy Efficiency',title:'Mash Mechanix Brewing — Energy Efficiency Grant',addr:'25 N. Wahsatch Ave.',amt:18750,date:'2023-11-08',status:'Approved',desc:'Reimbursement grant for LED lighting upgrade and smart electrical panel installation.'},
+  {id:10,entity:'Partnership',type:'Meeting',sub:'Annual Breakfast',title:'Annual Breakfast — Ed Robson Arena',addr:'Colorado College Campus',amt:null,date:'2024-02-14',status:'Minutes Posted',desc:'Record 750 attendees. Awards presented to downtown stakeholders.'},
+  {id:11,entity:'DDA',type:'Grant',sub:'Tree Canopy',title:'Cascade Ave. Streetscape — Tree Canopy Grant',addr:'Cascade Ave. (Kiowa to Boulder)',amt:14200,date:'2024-08-30',status:'Approved',desc:'Reimbursement grant for new tree pit installations adding 12 canopy trees to the urban corridor.'},
+  {id:12,entity:'BID',type:'Meeting',sub:'Board Meeting',title:'BID Board Meeting — March 2025',addr:'Downtown Partnership Office',amt:null,date:'2025-03-11',status:'Minutes Posted',desc:'Reviewed clean crew performance metrics, approved flower pot maintenance contract for Tejon Street.'},
+  {id:13,entity:'DDA',type:'TIF Reimbursement',sub:'Commercial TIF',title:'US Olympic & Paralympic Museum — TIF Payment',addr:'200 S. Sierra Madre St.',amt:450000,date:'2023-04-15',status:'Approved',desc:'Annual TIF obligation payment supporting ongoing operations at the catalytic anchor institution.'},
+  {id:14,entity:'Partnership',type:'Grant',sub:'Special Project',title:'State of Downtown 2024 Economic Report',addr:'District-wide',amt:null,date:'2024-01-15',status:'Approved',desc:'Annual economic snapshot benchmarking visitation, occupancy, residential units, and investment activity.'},
+  {id:15,entity:'BID',type:'Assessment',sub:'Annual Assessment',title:'Annual BID Property Assessment — FY2025',addr:'District-wide',amt:612000,date:'2025-01-01',status:'Pending',desc:'Projected FY2025 assessment pending final mill levy certification by El Paso County Assessor.'},
+  {id:16,entity:'DDA',type:'Meeting',sub:'Board Meeting',title:'DDA Board Meeting — January 2025',addr:'Downtown Partnership Office',amt:null,date:'2025-01-14',status:'Minutes Posted',desc:'Approved two building enhancement grants. Reviewed TIF pipeline for Q1 2025.'},
+  {id:17,entity:'DDA',type:'Grant',sub:'Special Project',title:'Bluestaq — Job Incentive Payment',addr:'8 E. Bijou St.',amt:35000,date:'2023-05-01',status:'Approved',desc:'Job incentive payment supporting tech-sector employment retention in the downtown core.'},
+  {id:18,entity:'Partnership',type:'Meeting',sub:'Board Meeting',title:'Downtown Partnership Board Meeting — Q2 2025',addr:'Downtown Partnership Office',amt:null,date:'2025-04-08',status:'Minutes Posted',desc:'Bi-annual joint meeting of all four downtown boards. Discussed Elevate Downtown Plan progress.'},
+  {id:19,entity:'BID',type:'Meeting',sub:'Board Meeting',title:'BID Board Meeting — January 2025',addr:'Downtown Partnership Office',amt:null,date:'2025-01-14',status:'Minutes Posted',desc:'Approved minutes from November 2024. Discussed summer programming and BID boundary assessment methodology.'},
+  {id:20,entity:'Partnership',type:'Assessment',sub:'Membership',title:'Downtown Partnership Annual Membership Revenue — FY2024',addr:'District-wide',amt:195000,date:'2024-06-30',status:'Approved',desc:'Total membership dues from 200+ member businesses. Funds marketing, advocacy, and technical assistance.'},
+];
+
+let query='';
+
+function doSearch(e){ e.preventDefault(); query=document.getElementById('main-search').value.trim().toLowerCase(); applyFilters(); }
+function quickSearch(q){ document.getElementById('main-search').value=q; query=q.toLowerCase(); applyFilters(); }
+
+function applyFilters(){
+  const fBid=document.getElementById('f-bid').checked;
+  const fDda=document.getElementById('f-dda').checked;
+  const fDp=document.getElementById('f-dp').checked;
+  const fGrant=document.getElementById('f-grant').checked;
+  const fTif=document.getElementById('f-tif').checked;
+  const fA=document.getElementById('f-assessment').checked;
+  const fM=document.getElementById('f-meeting').checked;
+  const fApp=document.getElementById('f-approved').checked;
+  const fPen=document.getElementById('f-pending').checked;
+  const fMin=document.getElementById('f-minutes').checked;
+  const sort=document.getElementById('sort-select').value;
+
+  let rows=DATA.filter(r=>{
+    const eOk=(r.entity==='BID'&&fBid)||(r.entity==='DDA'&&fDda)||(r.entity==='Partnership'&&fDp);
+    const tOk=(r.type==='Grant'&&fGrant)||(r.type==='TIF Reimbursement'&&fTif)||(r.type==='Assessment'&&fA)||(r.type==='Meeting'&&fM);
+    const sOk=(r.status==='Approved'&&fApp)||(r.status==='Pending'&&fPen)||(r.status==='Minutes Posted'&&fMin);
+    const qOk=!query||[r.title,r.addr,r.desc,r.entity,r.type,r.sub,r.status].join(' ').toLowerCase().includes(query);
+    return eOk&&tOk&&sOk&&qOk;
+  });
+
+  if(sort==='date-desc') rows.sort((a,b)=>b.date.localeCompare(a.date));
+  else if(sort==='date-asc') rows.sort((a,b)=>a.date.localeCompare(b.date));
+  else if(sort==='amount-desc') rows.sort((a,b)=>(b.amt||0)-(a.amt||0));
+  else rows.sort((a,b)=>a.title.localeCompare(b.title));
+
+  const n=rows.length;
+  document.getElementById('results-count').innerHTML=
+    '<strong>'+n+' sample record'+(n!==1?'s':'')+' found</strong>'+(query?' for "'+query+'"':'');
+
+  const list=document.getElementById('results-list');
+  if(!n){ list.innerHTML='<div class="no-results" role="status"><strong>No records match your search.</strong><p>Try adjusting your filters or clearing the search box.</p></div>'; return; }
+
+  const fmtAmt=v=>'$'+v.toLocaleString();
+  const fmtDate=s=>new Date(s).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+  const pillClass={Approved:'pill-Approved',Pending:'pill-Pending','Minutes Posted':'pill-Minutes'};
+
+  list.innerHTML=rows.map(r=>`
+    <article class="record" role="listitem" aria-label="${r.title}">
+      <div class="record-top">
+        <span class="rec-badge rec-badge-${r.entity}" aria-label="Entity: ${r.entity}">${r.entity}</span>
+        <a href="#" class="rec-title" aria-label="${r.title}, ${r.type}, ${r.addr}">${r.title}</a>
+        ${r.amt!=null?`<span class="rec-amount" aria-label="Amount: ${fmtAmt(r.amt)}">${fmtAmt(r.amt)}</span>`:''}
+      </div>
+      <div class="rec-meta">
+        <span><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <time datetime="${r.date}">${fmtDate(r.date)}</time></span>
+        <span><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> ${r.addr}</span>
+        <span>${r.sub}</span>
+        <span class="status-pill ${pillClass[r.status]}" aria-label="Status: ${r.status}">${r.status}</span>
+      </div>
+      <p class="rec-desc">${r.desc}</p>
+    </article>`).join('');
+}
+
+function toggleMissing(){
+  const btn=document.getElementById('toggle-missing');
+  const list=document.getElementById('missing-list');
+  const isOpen=btn.getAttribute('aria-expanded')==='true';
+  btn.setAttribute('aria-expanded',String(!isOpen));
+  list.style.display=isOpen?'none':'block';
+  btn.textContent=isOpen?'Show full list of missing records ▼':'Hide full list of missing records ▲';
+}
+
+applyFilters();
+</script>
+</body>
+</html>

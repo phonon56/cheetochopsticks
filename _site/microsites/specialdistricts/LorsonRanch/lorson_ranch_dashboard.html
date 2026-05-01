@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorson Ranch Metropolitan Districts — Financial Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1A1B1E;
+  --paper: #F4ECD8;
+  --paper-deep: #EAE0C5;
+  --paper-soft: #FAF5E8;
+  --teal: #0F4C5C;
+  --teal-deep: #073B49;
+  --crimson: #9A2A2A;
+  --crimson-soft: #C25450;
+  --amber: #C77D2C;
+  --slate: #5C6E81;
+  --slate-soft: #6B7C90;
+  --rule: rgba(15, 76, 92, 0.18);
+  --amber-deep: #8A5418;
+  --shadow: 0 1px 2px rgba(7, 59, 73, 0.05), 0 4px 12px rgba(7, 59, 73, 0.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+/* Accessibility: visible focus + skip link */
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  text-decoration: none;
+  z-index: 100;
+}
+.skip-link:focus {
+  left: 8px;
+  top: 8px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Lora', Georgia, serif;
+  line-height: 1.6;
+  font-feature-settings: "kern", "liga", "onum";
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 10% 0%, rgba(15, 76, 92, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 100%, rgba(199, 125, 44, 0.05) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ============= HEADER ============= */
+.masthead {
+  border-bottom: 3px double var(--teal);
+  padding: 56px 0 28px;
+  margin-bottom: 0;
+}
+
+.masthead .eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 14px;
+}
+
+.masthead h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 12px;
+  font-variation-settings: 'opsz' 144, 'SOFT' 30;
+}
+
+.masthead .subtitle {
+  font-family: 'Lora', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--slate);
+  max-width: 720px;
+}
+
+.masthead .meta {
+  display: flex;
+  gap: 32px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--slate);
+}
+
+.masthead .meta strong {
+  color: var(--teal-deep);
+  font-weight: 500;
+}
+
+/* ============= HERO STATS ============= */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-soft);
+  margin: 0 -32px;
+  padding: 0 32px;
+}
+
+.hero-stat {
+  padding: 36px 28px;
+  border-right: 1px solid var(--rule);
+}
+.hero-stat:last-child { border-right: none; }
+
+.hero-stat .label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--slate);
+  margin-bottom: 12px;
+}
+
+.hero-stat .value {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--teal-deep);
+  font-variant-numeric: tabular-nums oldstyle-nums;
+}
+
+.hero-stat .value.alert { color: var(--crimson); }
+.hero-stat .value.amber { color: var(--amber); }
+
+.hero-stat .footnote {
+  font-size: 0.82rem;
+  color: var(--slate);
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+/* ============= SECTION HEADINGS ============= */
+section { padding: 64px 0; }
+section + section { border-top: 1px solid var(--rule); }
+
+.section-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px;
+  align-items: baseline;
+  margin-bottom: 36px;
+}
+
+.section-head .num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--amber-deep);
+  font-weight: 600;
+  border: 1px solid var(--amber-deep);
+  padding: 4px 10px;
+  border-radius: 2px;
+  align-self: center;
+}
+
+.section-head h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 2rem;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  font-variation-settings: 'opsz' 100;
+}
+
+.section-head .deck {
+  grid-column: 2;
+  font-style: italic;
+  color: var(--slate);
+  margin-top: 6px;
+  font-size: 1rem;
+  max-width: 760px;
+}
+
+/* ============= DISTRICT CARDS ============= */
+.district-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+
+.district-card {
+  background: var(--paper-soft);
+  padding: 24px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.district-card:hover { background: #FFF; }
+
+.district-card .id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--teal);
+  text-transform: uppercase;
+}
+
+.district-card h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: var(--ink);
+  margin: 4px 0 18px;
+  letter-spacing: -0.01em;
+}
+
+.district-card .role {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  background: rgba(15, 76, 92, 0.08);
+  color: var(--teal-deep);
+  margin-bottom: 14px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.district-card .role.financing { background: rgba(199, 125, 44, 0.18); color: var(--amber-deep); }
+
+.district-card dl {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  font-size: 0.88rem;
+}
+
+.district-card dt {
+  color: var(--slate);
+}
+
+.district-card dd {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--ink);
+  text-align: right;
+}
+
+.district-card dd.high { color: var(--crimson); }
+.district-card dd.low { color: var(--slate-soft); }
+
+/* ============= MILL LEVY CHART ============= */
+.chart {
+  background: var(--paper-soft);
+  border: 1px solid var(--rule);
+  padding: 36px 32px;
+}
+
+.chart-bars { display: flex; flex-direction: column; gap: 16px; }
+.bar-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 110px;
+  gap: 16px;
+  align-items: center;
+}
+
+.bar-row .name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--teal-deep);
+}
+
+.bar-track {
+  height: 24px;
+  background: rgba(15, 76, 92, 0.06);
+  border-radius: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  display: flex;
+  position: relative;
+  border-radius: 1px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bar-op { background: var(--teal); }
+.bar-debt { background: var(--crimson-soft); }
+
+.bar-row .value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 24px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: middle;
+  border-radius: 1px;
+}
+
+.legend-swatch.op { background: var(--teal); }
+.legend-swatch.debt { background: var(--crimson-soft); }
+
+/* ============= NET POSITION CHART ============= */
+.net-pos-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.np-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 130px;
+  gap: 16px;
+  align-items: center;
+}
+
+.np-row .name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--teal-deep);
+}
+
+.np-track {
+  position: relative;
+  height: 30px;
+  background: rgba(15, 76, 92, 0.04);
+}
+
+.np-track::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--ink);
+  opacity: 0.4;
+  z-index: 2;
+}
+
+.np-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.np-bar.positive {
+  left: 50%;
+  background: var(--teal);
+}
+
+.np-bar.negative {
+  right: 50%;
+  background: var(--crimson-soft);
+}
+
+.np-bar.exempt {
+  left: 49%;
+  width: 2%;
+  background: var(--slate-soft);
+  opacity: 0.5;
+}
+
+.np-row .np-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.88rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.np-row .np-value.pos { color: var(--teal-deep); }
+.np-row .np-value.neg { color: var(--crimson); }
+.np-row .np-value.exempt { color: var(--slate-soft); font-style: italic; }
+
+.np-axis {
+  display: grid;
+  grid-template-columns: 70px 1fr 130px;
+  gap: 16px;
+  margin-top: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--slate);
+}
+
+.np-axis-labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ============= BOND TABLE ============= */
+.bond-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Lora', serif;
+  font-size: 0.92rem;
+}
+
+.bond-table thead th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--slate);
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 2px solid var(--ink);
+  font-weight: 500;
+}
+
+.bond-table thead th.num { text-align: right; }
+
+.bond-table tbody td {
+  padding: 16px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+
+.bond-table tbody td.num {
+  font-family: 'IBM Plex Mono', monospace;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bond-table tbody tr:hover { background: var(--paper-soft); }
+
+.bond-table .district {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  color: var(--teal);
+  white-space: nowrap;
+}
+
+.bond-table .series {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.bond-table .pending {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  background: var(--amber-deep);
+  color: white;
+  margin-left: 8px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.bond-table .note {
+  font-size: 0.82rem;
+  color: var(--slate);
+  font-style: italic;
+  margin-top: 6px;
+}
+
+/* ============= IGA FLOWS ============= */
+.iga-diagram {
+  background: var(--paper-soft);
+  border: 1px solid var(--rule);
+  padding: 40px;
+}
+
+.iga-flow {
+  display: grid;
+  grid-template-columns: 100px auto 1fr 100px auto;
+  gap: 14px 20px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
+.iga-flow:last-child { border-bottom: none; }
+
+.iga-source, .iga-target {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  color: var(--teal);
+  font-size: 0.95rem;
+}
+
+.iga-arrow {
+  color: var(--slate-soft);
+  font-size: 1.4rem;
+}
+
+.iga-purpose {
+  font-style: italic;
+  color: var(--slate);
+  font-size: 0.92rem;
+}
+
+.iga-amount {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.iga-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: rgba(15, 76, 92, 0.08);
+  color: var(--teal-deep);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.iga-tag.debt { background: rgba(154, 42, 42, 0.1); color: var(--crimson); }
+.iga-tag.capital { background: rgba(199, 125, 44, 0.18); color: var(--amber-deep); }
+
+/* ============= TAX CALCULATOR ============= */
+.calc-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.calc-input {
+  background: var(--teal-deep);
+  color: var(--paper-soft);
+  padding: 36px 32px;
+  border-radius: 2px;
+  position: sticky;
+  top: 24px;
+}
+
+.calc-input h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: var(--paper);
+  margin-bottom: 8px;
+}
+
+.calc-input p {
+  font-size: 0.88rem;
+  font-style: italic;
+  opacity: 0.8;
+  margin-bottom: 28px;
+}
+
+.calc-input label {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  opacity: 0.85;
+}
+
+.calc-input input {
+  width: 100%;
+  background: rgba(244, 236, 216, 0.08);
+  border: 1px solid rgba(244, 236, 216, 0.25);
+  color: var(--paper-soft);
+  font-family: 'Fraunces', serif;
+  font-size: 1.6rem;
+  padding: 14px 16px;
+  border-radius: 2px;
+  font-variant-numeric: tabular-nums;
+  -webkit-appearance: none;
+}
+
+.calc-input input:focus {
+  border-color: var(--amber);
+}
+.calc-input input:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.assessed-readout {
+  margin-top: 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.assessed-readout strong {
+  font-weight: 500;
+  color: var(--paper);
+}
+
+.calc-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+
+.calc-result-row {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 22px 24px;
+  background: var(--paper-soft);
+  transition: background 0.2s;
+}
+
+.calc-result-row:hover { background: #FFF; }
+
+.calc-result-row .dist-name {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+
+.calc-result-row .dist-mill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--slate);
+}
+
+.calc-result-row .dist-tax {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--teal-deep);
+  font-variant-numeric: tabular-nums oldstyle-nums;
+  text-align: right;
+  min-width: 140px;
+}
+
+.calc-result-row .dist-tax.high { color: var(--crimson); }
+
+.calc-disclaimer {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--paper-deep);
+  border-left: 3px solid var(--amber);
+  font-size: 0.88rem;
+  color: var(--slate);
+  font-style: italic;
+}
+
+.calc-disclaimer strong {
+  color: var(--ink);
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ============= BOARD TABLE ============= */
+.board-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.board-table thead th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--slate);
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--ink);
+  font-weight: 500;
+}
+
+.board-table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.board-table tbody tr:hover { background: var(--paper-soft); }
+
+.board-table .vacant { color: var(--crimson); font-style: italic; }
+
+.board-table .ballot-yes {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  background: rgba(199, 125, 44, 0.18);
+  color: var(--amber-deep);
+  padding: 2px 8px;
+  border-radius: 1px;
+  font-weight: 600;
+}
+
+.board-table .ballot-no {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--slate-soft);
+}
+
+/* ============= FOOTER ============= */
+footer {
+  background: var(--teal-deep);
+  color: var(--paper-soft);
+  padding: 56px 0 40px;
+  margin-top: 0;
+}
+
+footer .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+footer h4 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
+footer p, footer li {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  opacity: 0.85;
+}
+
+footer ul { list-style: none; }
+
+footer a {
+  color: var(--paper);
+  text-decoration: underline;
+  text-decoration-color: rgba(244, 236, 216, 0.3);
+  text-underline-offset: 3px;
+}
+
+footer a:hover { text-decoration-color: var(--amber); }
+
+footer .colophon {
+  grid-column: 1 / -1;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(244, 236, 216, 0.15);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  opacity: 0.65;
+  letter-spacing: 0.05em;
+}
+
+/* ============= RESPONSIVE ============= */
+@media (max-width: 900px) {
+  .hero-stats { grid-template-columns: 1fr 1fr; }
+  .hero-stat { border-right: none; border-bottom: 1px solid var(--rule); }
+  .hero-stat:nth-child(2n) { border-right: none; }
+  .calc-grid { grid-template-columns: 1fr; }
+  .calc-input { position: static; }
+  .calc-result-row { grid-template-columns: 1fr auto; }
+  .calc-result-row .dist-mill { grid-column: 1 / -1; }
+  footer .container { grid-template-columns: 1fr; }
+  .iga-flow { grid-template-columns: 1fr; gap: 6px; }
+  .iga-arrow { display: none; }
+}
+
+@media (max-width: 600px) {
+  .container { padding: 0 20px; }
+  .hero-stats { grid-template-columns: 1fr; margin: 0 -20px; padding: 0 20px; }
+  .hero-stat { border-right: none; }
+  .section-head { grid-template-columns: 1fr; gap: 8px; }
+  .section-head .deck { grid-column: 1; }
+  .bond-table { font-size: 0.85rem; }
+  .bond-table thead th, .bond-table tbody td { padding: 10px 8px; }
+}
+
+/* ============= UTILITY ============= */
+.dropcap::first-letter {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 3.6rem;
+  float: left;
+  line-height: 0.85;
+  margin: 8px 12px 0 0;
+  color: var(--teal);
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="masthead" role="banner">
+  <div class="container">
+    <p class="eyebrow">Civic financial transparency · El Paso County, Colorado</p>
+    <h1>Lorson Ranch Metropolitan Districts Nos. 1–7</h1>
+    <p class="subtitle">A plain-language financial snapshot of seven cross-pledged metropolitan districts financing the Lorson Ranch community. 2026 budget year.</p>
+    <div class="meta">
+      <div><strong>Total assessed value</strong> · $117.2M</div>
+      <div><strong>2026 mill levy revenue</strong> · $8.72M</div>
+      <div><strong>Districts</strong> · 7</div>
+      <div><strong>Last updated</strong> · April 2026</div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<div class="container">
+  <section class="hero-stats" style="padding: 0;" aria-label="Key district financial figures">
+    <div class="hero-stat">
+      <div class="label">Total residential market value</div>
+      <div class="value">$1.62B</div>
+      <div class="footnote">$1,615,898,861 — assessed at the 6.25% residential rate.</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Annual mill levy collected</div>
+      <div class="value">$8.72M</div>
+      <div class="footnote">$1.46M operating · $7.25M debt service. 2026 budget.</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Aggregate authorized debt</div>
+      <div class="value amber">$300M</div>
+      <div class="footnote">Service Plan cap. Voter authorization is $2.4B.</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Combined net position (12/31/24)</div>
+      <div class="value alert">−$94.2M</div>
+      <div class="footnote">Aggregate audited deficit across 7 districts. MD4 alone: −$62.5M.</div>
+    </div>
+  </section>
+</div>
+
+<div class="container">
+
+  <section>
+    <div class="section-head">
+      <span class="num">01</span>
+      <h2>Seven districts at a glance</h2>
+      <p class="deck">District No. 1 is the Service District — it operates and maintains the community. Districts 2 through 7 are Financing Districts that send tax revenue up to MD1 and pay their own bondholders.</p>
+    </div>
+
+    <div class="district-grid">
+      <div class="district-card">
+        <div class="id">MD No. 1</div>
+        <h3>Service District</h3>
+        <span class="role">operates &amp; maintains</span>
+        <dl>
+          <dt>Assessed value</dt><dd>$25,550</dd>
+          <dt>Total mill levy</dt><dd>8.750</dd>
+          <dt>2026 tax revenue</dt><dd>$224</dd>
+          <dt>Outstanding debt</dt><dd class="high">$9.84M</dd>
+          <dt>Status</dt><dd class="low">Built out</dd>
+        </dl>
+      </div>
+      <div class="district-card">
+        <div class="id">MD No. 2</div>
+        <h3>Financing District</h3>
+        <span class="role financing">finances · pays bonds</span>
+        <dl>
+          <dt>Assessed value</dt><dd>$23.13M</dd>
+          <dt>Total mill levy</dt><dd>76.297</dd>
+          <dt>2026 tax revenue</dt><dd>$1.76M</dd>
+          <dt>Outstanding debt</dt><dd class="high">Series 2016</dd>
+          <dt>Status</dt><dd class="low">Built out</dd>
+        </dl>
+      </div>
+      <div class="district-card">
+        <div class="id">MD No. 3</div>
+        <h3>Financing District</h3>
+        <span class="role financing">finances · pays bonds</span>
+        <dl>
+          <dt>Assessed value</dt><dd>$37.32M</dd>
+          <dt>Total mill levy</dt><dd>76.327</dd>
+          <dt>2026 tax revenue</dt><dd>$2.85M</dd>
+          <dt>Outstanding debt</dt><dd class="high">Series 2022</dd>
+          <dt>Status</dt><dd class="low">Built out</dd>
+        </dl>
+      </div>
+      <div class="district-card">
+        <div class="id">MD No. 4</div>
+        <h3>Financing District</h3>
+        <span class="role financing">finances · pays bonds</span>
+        <dl>
+          <dt>Assessed value</dt><dd>$33.19M</dd>
+          <dt>Total mill levy</dt><dd>75.885</dd>
+          <dt>2026 tax revenue</dt><dd>$2.52M</dd>
+          <dt>Outstanding debt</dt><dd class="high">2022A + 2022B</dd>
+          <dt>Status</dt><dd class="low">Built out</dd>
+        </dl>
+      </div>
+      <div class="district-card">
+        <div class="id">MD No. 5</div>
+        <h3>Financing District</h3>
+        <span class="role financing">developing</span>
+        <dl>
+          <dt>Assessed value</dt><dd>$298,240</dd>
+          <dt>Total mill levy</dt><dd>2.749</dd>
+          <dt>2026 tax revenue</dt><dd>$820</dd>
+          <dt>Outstanding debt</dt><dd class="low">None</dd>
+          <dt>Status</dt><dd class="low">Under construction</dd>
+        </dl>
+      </div>
+      <div class="district-card">
+        <div class="id">MD No. 6</div>
+        <h3>Financing District</h3>
+        <span class="role financing">finances · pays bonds</span>
+        <dl>
+          <dt>Assessed value</dt><dd>$22.68M</dd>
+          <dt>Total mill levy</dt><dd>69.668</dd>
+          <dt>2026 tax revenue</dt><dd>$1.58M</dd>
+          <dt>Outstanding debt</dt><dd class="high">Series 2026 (pending)</dd>
+          <dt>Status</dt><dd class="low">Under construction</dd>
+        </dl>
+      </div>
+      <div class="district-card">
+        <div class="id">MD No. 7</div>
+        <h3>Financing District</h3>
+        <span class="role financing">developing</span>
+        <dl>
+          <dt>Assessed value</dt><dd>$552,390</dd>
+          <dt>Total mill levy</dt><dd>10.740</dd>
+          <dt>2026 tax revenue</dt><dd>$5,933</dd>
+          <dt>Outstanding debt</dt><dd class="low">None</dd>
+          <dt>Status</dt><dd class="low">Under construction</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="num">02</span>
+      <h2>Mill levy by district</h2>
+      <p class="deck">Most homeowners pay a combined operating + debt service mill levy. The Service Plan caps debt service at 50 mills; several financing districts exceed that under the "subject to adjustment" provision.</p>
+    </div>
+
+    <div class="chart" role="img" aria-label="Mill levy by district, split into operating and debt service portions. Numeric totals follow each bar.">
+      <div class="chart-bars" id="mill-bars"></div>
+      <div class="chart-legend">
+        <span><span class="legend-swatch op" aria-hidden="true"></span>Operating mill levy</span>
+        <span><span class="legend-swatch debt" aria-hidden="true"></span>Debt service mill levy</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="num">03</span>
+      <h2>Outstanding bond debt</h2>
+      <p class="deck">Six bond issues across five districts. Note the unique structure of MD1's Series 2012 bonds: 10% interest with no principal schedule until maturity in 2041. Interest accrues if pledged revenue is insufficient.</p>
+    </div>
+
+    <table class="bond-table">
+      <caption class="sr-only">Outstanding bond debt by district</caption>
+      <thead>
+        <tr>
+          <th scope="col">District</th>
+          <th scope="col">Series</th>
+          <th scope="col">Coupon</th>
+          <th scope="col">Maturity</th>
+          <th scope="col" class="num">Mill Levy</th>
+          <th scope="col" class="num">2026 Revenue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="district">MD 1</td>
+          <td>
+            <span class="series">Series 2012</span><br>
+            <span class="note">Limited Tax GO. $9.84M outstanding (orig. $13.93M). Cash flow bond — accrued unpaid interest $3.35M and growing.</span>
+          </td>
+          <td class="num">10.00%</td>
+          <td class="num">2041</td>
+          <td class="num">—</td>
+          <td class="num">$0</td>
+        </tr>
+        <tr>
+          <td class="district">MD 2</td>
+          <td>
+            <span class="series">Series 2016</span><br>
+            <span class="note">Limited Tax GO Refunding &amp; Improvement. Pays own debt service plus $1.79M IGA cross-pledged to MD1.</span>
+          </td>
+          <td class="num">2–5%</td>
+          <td class="num">2050</td>
+          <td class="num">63.581</td>
+          <td class="num">$1,470,723</td>
+        </tr>
+        <tr>
+          <td class="district">MD 3</td>
+          <td>
+            <span class="series">Series 2022</span><br>
+            <span class="note">Limited Tax GO Refunding &amp; Improvement. Sends $2.03M IGA cross-pledged to MD4.</span>
+          </td>
+          <td class="num">6.00%</td>
+          <td class="num">2052</td>
+          <td class="num">63.606</td>
+          <td class="num">$2,373,614</td>
+        </tr>
+        <tr>
+          <td class="district">MD 4</td>
+          <td>
+            <span class="series">Series 2022A — Senior</span><br>
+            <span class="note">Limited Tax GO Drawdown. 2026 interest expense $2.27M.</span>
+          </td>
+          <td class="num">5.50%</td>
+          <td class="num">2057</td>
+          <td class="num">63.238</td>
+          <td class="num">$2,099,066</td>
+        </tr>
+        <tr>
+          <td class="district">MD 4</td>
+          <td>
+            <span class="series">Series 2022B — Subordinate</span><br>
+            <span class="note">No dedicated mill levy. Paid from MD3 IGA + residuals. 2026: $1.16M interest + $930K principal.</span>
+          </td>
+          <td class="num">8.00%</td>
+          <td class="num">2057</td>
+          <td class="num">—</td>
+          <td class="num">$0</td>
+        </tr>
+        <tr>
+          <td class="district">MD 6</td>
+          <td>
+            <span class="series">Series 2026 <span class="pending">Pending</span></span><br>
+            <span class="note">Coupon and maturity TBD. Mill levy of 57.808 already certified. 2025: $50M issued + $50M developer advance repaid + $49.8M IGA to MD1 capital.</span>
+          </td>
+          <td class="num">TBD</td>
+          <td class="num">TBD</td>
+          <td class="num">57.808</td>
+          <td class="num">$1,311,351</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="num">04</span>
+      <h2>Audited financial position</h2>
+      <p class="deck">Net position from each district's 2024 audited financials. Negative figures are structurally normal for metro-district financing entities — they hold large bond liabilities while the underlying public infrastructure assets sit on the Service District (MD1) balance sheet, not theirs. The chart shows what each district owes versus what it owns, in net.</p>
+    </div>
+
+    <div class="chart" role="img" aria-label="Audited net position by district, with positive and negative bars relative to a zero center line. Numeric values follow each bar; the data table below contains the same figures.">
+      <div class="net-pos-chart" id="net-pos-chart"></div>
+      <div class="chart-legend">
+        <span><span class="legend-swatch op" style="background: var(--teal);" aria-hidden="true"></span>Positive net position</span>
+        <span><span class="legend-swatch debt" style="background: var(--crimson-soft);" aria-hidden="true"></span>Negative net position (liabilities exceed assets)</span>
+      </div>
+    </div>
+
+    <div class="net-pos-detail">
+      <table class="bond-table" style="margin-top: 32px;">
+        <caption class="sr-only">Audited net position by district, 2024</caption>
+        <thead>
+          <tr>
+            <th scope="col">District</th>
+            <th scope="col">Auditor</th>
+            <th scope="col" class="num">Total Assets</th>
+            <th scope="col" class="num">Total Liabilities</th>
+            <th scope="col" class="num">Net Position</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="district">MD 1</td><td>Wipfli LLP</td><td class="num">$17,465,599</td><td class="num">$14,610,453</td><td class="num" style="color: var(--teal-deep); font-weight: 600;">+$2,862,317</td></tr>
+          <tr><td class="district">MD 2</td><td>Wipfli LLP</td><td class="num">$6,290,242</td><td class="num">$16,068,430</td><td class="num" style="color: var(--crimson); font-weight: 600;">−$11,689,021</td></tr>
+          <tr><td class="district">MD 3</td><td>Wipfli LLP</td><td class="num">$5,387,965</td><td class="num">$26,449,758</td><td class="num" style="color: var(--crimson); font-weight: 600;">−$24,168,903</td></tr>
+          <tr><td class="district">MD 4</td><td>Wipfli LLP</td><td class="num">$2,830,464</td><td class="num">$62,569,213</td><td class="num" style="color: var(--crimson); font-weight: 600;">−$62,503,273</td></tr>
+          <tr><td class="district">MD 5</td><td>CLA (audit exempt)</td><td class="num"><em style="color: var(--slate-soft);">Total revenue $847</em></td><td class="num"><em style="color: var(--slate-soft);">No debt</em></td><td class="num"><em style="color: var(--slate-soft);">Audit exempt</em></td></tr>
+          <tr><td class="district">MD 6</td><td>Wipfli LLP</td><td class="num">$2,546,752</td><td class="num">$1,677</td><td class="num" style="color: var(--teal-deep); font-weight: 600;">+$1,315,435</td></tr>
+          <tr><td class="district">MD 7</td><td>CLA (audit exempt)</td><td class="num"><em style="color: var(--slate-soft);">Total revenue $7,690</em></td><td class="num"><em style="color: var(--slate-soft);">No debt</em></td><td class="num"><em style="color: var(--slate-soft);">Audit exempt</em></td></tr>
+          <tr style="background: var(--paper-deep); font-weight: 600;">
+            <td class="district">Combined</td>
+            <td>—</td>
+            <td class="num">$34,521,022</td>
+            <td class="num">$119,699,531</td>
+            <td class="num" style="color: var(--crimson); font-weight: 700; font-size: 1.05rem;">−$94,183,445</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="calc-disclaimer" style="margin-top: 24px;">
+        <strong>What this means:</strong> The aggregate $94.2M deficit reflects the standard accounting treatment for cross-pledged metro districts — the financing districts (MDs 2, 3, 4) hold the bond liability while the Service District (MD1) holds the depreciated capital assets the bonds funded. It does not by itself indicate distress; what matters is whether each district's pledged tax revenue stream can cover its debt service. MD1's Series 2012 bond carries the most concerning structure: $3.35M in already-accrued unpaid interest at 10%, with no scheduled principal payments until 2041 maturity. MD6 is in transition — positive at 12/31/24 with no debt, then $50M issued during 2025.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="num">05</span>
+      <h2>Where the money flows</h2>
+      <p class="deck">Tax revenue moves between districts via intergovernmental agreements (IGAs). Operating revenue routes to the Service District. Debt service revenue cross-pledges between specific bond issues.</p>
+    </div>
+
+    <div class="iga-diagram" id="iga-diagram" aria-label="Intergovernmental agreement money flows between districts" role="list"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="num">06</span>
+      <h2>What does my home pay?</h2>
+      <p class="deck">Calculate the Lorson Ranch district tax for a given home value. This shows district mill levy only — your full property tax bill includes county, school district, fire district, and other taxing authorities.</p>
+    </div>
+
+    <div class="calc-grid">
+      <div class="calc-input">
+        <h3>Your home</h3>
+        <p>Edit the value to see what you'd pay each year in district mill levy.</p>
+        <label for="home-value">Home market value</label>
+        <input type="number" id="home-value" value="450000" min="0" step="10000">
+        <div class="assessed-readout">
+          Assessed at 6.25%: <strong id="assessed-readout">$28,125</strong>
+        </div>
+      </div>
+      <div>
+        <div class="calc-results" id="calc-results" aria-live="polite" aria-label="Estimated annual district tax by district"></div>
+        <div class="calc-disclaimer">
+          <strong>Note:</strong> A homeowner pays only the mill levy of their specific district — not all seven combined. The figures above show what the same home would pay if it were located in each district. The full property tax bill also includes El Paso County, Widefield School District #3, Security Fire Protection District, and several smaller overlapping authorities.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="num">07</span>
+      <h2>Who sits on the boards</h2>
+      <p class="deck">Each district has a five-seat board. Per the 2024 audit, board members are employees, owners, or affiliates of the developer (Eagle Development), the Landhuis Company, Tralon Homes, or holders of the districts' outstanding bonds — and acknowledge potential conflicts of interest.</p>
+    </div>
+
+    <table class="board-table" id="board-table">
+      <caption class="sr-only">Board members by district</caption>
+      <thead>
+        <tr>
+          <th scope="col">District</th>
+          <th scope="col">Director</th>
+          <th scope="col">Contact</th>
+          <th scope="col">On 2027 ballot</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</div>
+</main>
+
+<footer role="contentinfo">
+  <div class="container">
+    <div>
+      <h4>About this dashboard</h4>
+      <p>Built from publicly available documents at <a href="https://www.lorsonranchmds.com">lorsonranchmds.com</a>: 2026 final budgets, 2024 audited financial statements, 2026 transparency notices, and the 2024 annual report. Aggregated, normalized, and presented in plain language.</p>
+      <p style="margin-top: 16px;">All figures cross-verifiable against the source PDFs. The accompanying spreadsheet preserves the full calculation chain.</p>
+    </div>
+    <div>
+      <h4>Source documents</h4>
+      <ul>
+        <li><a href="https://www.lorsonranchmds.com/budgets">2026 final budgets — all 7 districts</a></li>
+        <li><a href="https://www.lorsonranchmds.com/audits-financial-statements">2024 audited financial statements</a></li>
+        <li><a href="https://www.lorsonranchmds.com/transparency-notices">2026 transparency notices</a></li>
+        <li><a href="https://www.lorsonranchmds.com/annual-reports">2024 annual report</a></li>
+        <li><a href="https://www.lorsonranchmds.com/public-infrastructure-debt-mill-levy-information">Public infrastructure debt &amp; mill levy</a></li>
+        <li><a href="https://dola.colorado.gov/dlg_lgis_ui_pu/publicLGSearch.jsf">Colorado DOLA Local Government Information System</a></li>
+      </ul>
+    </div>
+    <div class="colophon">
+      Lorson Ranch MDs Nos. 1–7 · El Paso County, Colorado · Data as of 2026 budget cycle
+    </div>
+  </div>
+</footer>
+
+<script>
+const districts = [
+  { id: 'MD 1', op: 8.750, debt: 0.000, av: 25550, role: 'Service' },
+  { id: 'MD 2', op: 12.716, debt: 63.581, av: 23131490, role: 'Financing' },
+  { id: 'MD 3', op: 12.721, debt: 63.606, av: 37317450, role: 'Financing' },
+  { id: 'MD 4', op: 12.647, debt: 63.238, av: 33193110, role: 'Financing' },
+  { id: 'MD 5', op: 2.749, debt: 0.000, av: 298240, role: 'Financing' },
+  { id: 'MD 6', op: 11.860, debt: 57.808, av: 22684600, role: 'Financing' },
+  { id: 'MD 7', op: 10.740, debt: 0.000, av: 552390, role: 'Financing' },
+];
+
+// Net position chart
+const netPositions = [
+  { id: 'MD 1', value: 2862317, status: 'audited' },
+  { id: 'MD 2', value: -11689021, status: 'audited' },
+  { id: 'MD 3', value: -24168903, status: 'audited' },
+  { id: 'MD 4', value: -62503273, status: 'audited' },
+  { id: 'MD 5', value: null, status: 'exempt' },
+  { id: 'MD 6', value: 1315435, status: 'audited' },
+  { id: 'MD 7', value: null, status: 'exempt' },
+];
+
+const npEl = document.getElementById('net-pos-chart');
+const npMax = 65000000; // chart range: ±$65M (covers MD4's -$62.5M with margin)
+
+netPositions.forEach(d => {
+  const row = document.createElement('div');
+  row.className = 'np-row';
+
+  let bar = '';
+  let valTxt = '';
+  let valClass = '';
+  if (d.status === 'exempt') {
+    bar = `<div class="np-bar exempt"></div>`;
+    valTxt = 'Audit exempt';
+    valClass = 'exempt';
+  } else if (d.value >= 0) {
+    const pct = (d.value / npMax) * 50;
+    bar = `<div class="np-bar positive" style="width: ${pct}%;"></div>`;
+    valTxt = '+$' + d.value.toLocaleString('en-US');
+    valClass = 'pos';
+  } else {
+    const pct = (Math.abs(d.value) / npMax) * 50;
+    bar = `<div class="np-bar negative" style="width: ${pct}%;"></div>`;
+    valTxt = '−$' + Math.abs(d.value).toLocaleString('en-US');
+    valClass = 'neg';
+  }
+
+  row.innerHTML = `
+    <div class="name">${d.id}</div>
+    <div class="np-track">${bar}</div>
+    <div class="np-value ${valClass}">${valTxt}</div>
+  `;
+  npEl.appendChild(row);
+});
+
+// Axis labels under chart
+const axis = document.createElement('div');
+axis.className = 'np-axis';
+axis.innerHTML = `
+  <div></div>
+  <div class="np-axis-labels"><span>−$65M</span><span>0</span><span>+$65M</span></div>
+  <div></div>
+`;
+npEl.parentElement.insertBefore(axis, npEl.nextSibling);
+
+// Mill levy bars
+const maxMill = 80;
+const barsEl = document.getElementById('mill-bars');
+districts.forEach(d => {
+  const total = d.op + d.debt;
+  const opPct = (d.op / maxMill) * 100;
+  const debtPct = (d.debt / maxMill) * 100;
+  const row = document.createElement('div');
+  row.className = 'bar-row';
+  row.innerHTML = `
+    <div class="name">${d.id}</div>
+    <div class="bar-track">
+      <div class="bar-fill" style="width: ${opPct + debtPct}%;">
+        <div class="bar-op" style="width: ${(d.op / total) * 100}%;"></div>
+        <div class="bar-debt" style="width: ${(d.debt / total) * 100}%;"></div>
+      </div>
+    </div>
+    <div class="value">${total.toFixed(3)} mills</div>
+  `;
+  barsEl.appendChild(row);
+});
+
+// IGA flows
+const igaFlows = [
+  { from: 'MD 2', to: 'MD 1', purpose: 'Operating mill revenue → Service District for landscaping, streetlights', amount: 316201, type: 'op' },
+  { from: 'MD 3', to: 'MD 1', purpose: 'Operating mill revenue → Service District', amount: 510318, type: 'op' },
+  { from: 'MD 4', to: 'MD 1', purpose: 'Operating mill revenue → Service District', amount: 451277, type: 'op' },
+  { from: 'MD 5', to: 'MD 1', purpose: 'Operating mill revenue → Service District', amount: 882, type: 'op' },
+  { from: 'MD 6', to: 'MD 1', purpose: 'Operating mill revenue → Service District', amount: 289218, type: 'op' },
+  { from: 'MD 7', to: 'MD 1', purpose: 'Operating mill revenue → Service District', amount: 6378, type: 'op' },
+  { from: 'MD 2', to: 'MD 1', purpose: 'Cross-pledged debt service → MD1 Series 2012 bond interest', amount: 1787000, type: 'debt' },
+  { from: 'MD 3', to: 'MD 4', purpose: 'Cross-pledged debt service → MD4 subordinate bond', amount: 2030250, type: 'debt' },
+  { from: 'MD 4', to: 'MD 1', purpose: 'Capital — developer infrastructure reimbursement', amount: 15000000, type: 'capital' },
+  { from: 'MD 6', to: 'MD 1', purpose: 'Capital — developer infrastructure reimbursement', amount: 15000000, type: 'capital' },
+];
+
+const igaEl = document.getElementById('iga-diagram');
+const fmtUSD = (n) => '$' + n.toLocaleString('en-US');
+igaFlows.forEach(f => {
+  const row = document.createElement('div');
+  row.className = 'iga-flow';
+  row.setAttribute('role', 'listitem');
+  const tagText = f.type === 'op' ? 'Operating' : (f.type === 'debt' ? 'Debt Service' : 'Capital');
+  row.innerHTML = `
+    <span class="iga-source">${f.from}</span>
+    <span class="iga-arrow" aria-hidden="true">→</span>
+    <span class="iga-purpose">${f.purpose}</span>
+    <span class="iga-target"><span class="sr-only">to </span>${f.to}</span>
+    <span class="iga-tag ${f.type}">${tagText}</span>
+    <span class="iga-amount" style="grid-column: 1 / -1; padding-top: 4px;">${fmtUSD(f.amount)}</span>
+  `;
+  igaEl.appendChild(row);
+});
+
+// Tax calculator
+const calcRows = document.getElementById('calc-results');
+const homeInput = document.getElementById('home-value');
+const assessedReadout = document.getElementById('assessed-readout');
+
+function renderCalc() {
+  const homeVal = Number(homeInput.value) || 0;
+  const assessed = homeVal * 0.0625;
+  assessedReadout.textContent = '$' + Math.round(assessed).toLocaleString('en-US');
+
+  calcRows.innerHTML = '';
+  districts.forEach(d => {
+    const totalMill = d.op + d.debt;
+    const tax = (assessed * totalMill) / 1000;
+    const isHigh = totalMill > 60;
+    const row = document.createElement('div');
+    row.className = 'calc-result-row';
+    row.innerHTML = `
+      <div>
+        <div class="dist-name">${d.id}</div>
+        <div class="dist-mill">${totalMill.toFixed(3)} mills (${d.op.toFixed(3)} op + ${d.debt.toFixed(3)} debt)</div>
+      </div>
+      <div></div>
+      <div class="dist-tax ${isHigh ? 'high' : ''}">$${Math.round(tax).toLocaleString('en-US')}</div>
+    `;
+    calcRows.appendChild(row);
+  });
+}
+homeInput.addEventListener('input', renderCalc);
+renderCalc();
+
+// Board members
+const boardData = [
+  ['MD 1', 'Jeff Mark (Chair)',  'JMark@landhuisco.com',     'No'],
+  ['MD 1', 'Glenn Pawlak',       'gpawlak@landhuisco.com',   'Yes'],
+  ['MD 1', 'Chasity McMorrow',   'cmcmorrow@landhuisco.com', 'Yes'],
+  ['MD 1', '— Vacant —',         '',                          'Yes'],
+  ['MD 1', '— Vacant —',         '',                          'Yes'],
+  ['MD 2', 'Jeff Mark (Chair)',  'doleary@spencerfane.com',  'Yes'],
+  ['MD 2', 'Aaron Wegener',      'doleary@spencerfane.com',  'No'],
+  ['MD 2', 'Israel Galvan',      'doleary@spencerfane.com',  'No'],
+  ['MD 2', 'Joyce Napoleon',     'doleary@spencerfane.com',  'Yes'],
+  ['MD 2', 'Andrew Wimberly',    'doleary@spencerfane.com',  'Yes'],
+  ['MD 3', 'Thomas Fredericks',  'doleary@spencerfane.com',  'No'],
+  ['MD 3', 'Drew Bailey',        'doleary@spencerfane.com',  'No'],
+  ['MD 3', 'Samuel Mitchell',    'doleary@spencerfane.com',  'Yes'],
+  ['MD 3', 'Asia Zanders',       'doleary@spencerfane.com',  'Yes'],
+  ['MD 3', 'Kimberly Allen',     'doleary@spencerfane.com',  'Yes'],
+  ['MD 4', 'Adam Pastor',        'doleary@spencerfane.com',  'No'],
+  ['MD 4', 'David Deegan',       'doleary@spencerfane.com',  'Yes'],
+  ['MD 4', 'Jonathan Horwath',   'doleary@spencerfane.com',  'Yes'],
+  ['MD 4', 'James Farmer',       'doleary@spencerfane.com',  'Yes'],
+  ['MD 4', 'Frank Stephens',     'doleary@spencerfane.com',  'Yes'],
+  ['MD 5', 'Jeff Mark',          'JMark@landhuisco.com',     'No'],
+  ['MD 5', '— Vacant —',         '',                          'No'],
+  ['MD 5', 'Chasity McMorrow',   'cmcmorrow@landhuisco.com', 'No'],
+  ['MD 5', 'Glenn Pawlak',       'gpawlak@landhuisco.com',   'No'],
+  ['MD 5', '— Vacant —',         '',                          'No'],
+  ['MD 6', 'Jeff Mark',          'doleary@spencerfane.com',  'No'],
+  ['MD 6', 'Chasity McMorrow',   'doleary@spencerfane.com',  'Yes'],
+  ['MD 6', 'Glenn Pawlak',       'doleary@spencerfane.com',  'Yes'],
+  ['MD 6', '— Vacant —',         '',                          'Yes'],
+  ['MD 6', '— Vacant —',         '',                          'Yes'],
+  ['MD 7', 'Jeff Mark',          'JMark@landhuisco.com',     'No'],
+  ['MD 7', '— Vacant —',         '',                          'No'],
+  ['MD 7', 'Chasity McMorrow',   'cmcmorrow@landhuisco.com', 'No'],
+  ['MD 7', 'Glenn Pawlak',       'gpawlak@landhuisco.com',   'No'],
+  ['MD 7', '— Vacant —',         '',                          'No'],
+];
+
+const boardBody = document.querySelector('#board-table tbody');
+boardData.forEach(([dist, name, email, ballot]) => {
+  const tr = document.createElement('tr');
+  const isVacant = name.includes('Vacant');
+  const ballotClass = ballot === 'Yes' ? 'ballot-yes' : 'ballot-no';
+  tr.innerHTML = `
+    <td><strong style="font-family: 'IBM Plex Mono', monospace; color: var(--teal);">${dist}</strong></td>
+    <td class="${isVacant ? 'vacant' : ''}">${name}</td>
+    <td style="font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; color: var(--slate);">${email || '—'}</td>
+    <td><span class="${ballotClass}">${ballot}</span></td>
+  `;
+  boardBody.appendChild(tr);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Mirror of .assetsignore — keeps build noise and source files out of _site/.
+**/node_modules/**
+microsites/city/goGov/cos-portal-prototype/src/**
+microsites/city/goGov/cos-portal-prototype/scripts/**
+microsites/city/goGov/cos-portal-prototype/public/**
+microsites/city/goGov/cos-portal-prototype/*.json
+microsites/city/goGov/cos-portal-prototype/*.ts
+microsites/city/goGov/cos-portal-prototype/*.js
+microsites/city/goGov/cos-portal-prototype/*.md
+microsites/city/goGov/cos-portal-prototype/.gitignore
+microsites/city/goGov/cos-portal-prototype/index.html
+microsites/city/goGov/cos-portal-prototype/eslint.config.*
+
+# The Eleventy source files themselves shouldn't be served
+package.json
+package-lock.json
+.eleventy.js
+node_modules/**

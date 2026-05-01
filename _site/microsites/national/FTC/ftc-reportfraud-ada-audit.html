@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA / WCAG 2.1 AA Audit — ReportFraud.ftc.gov</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #0d2b55;
+    --blue:    #1a4a8a;
+    --blue-lt: #e8f0fb;
+    --red:     #991b1b;
+    --red-lt:  #fef2f2;
+    --amber:   #92400e;
+    --amber-lt:#fffbeb;
+    --teal:    #0f6e56;
+    --teal-lt: #f0fdf8;
+    --gray:    #374151;
+    --gray-lt: #f9fafb;
+    --border:  #e5e7eb;
+    --text:    #111827;
+    --muted:   #4b5563;
+    --white:   #ffffff;
+  }
+
+  body {
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--white);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    border-top: 6px solid var(--navy);
+    padding: 48px 0 40px;
+    margin-bottom: 56px;
+  }
+  .cover-label {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .cover h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--navy);
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .cover .subtitle {
+    font-size: 17px;
+    color: var(--gray);
+    margin-bottom: 32px;
+  }
+  .cover-meta {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .cover-meta strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 2px; }
+
+  /* ── SUMMARY GRID ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .stat-card {
+    background: var(--gray-lt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-family: 'Arial', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-card .lbl {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stat-card.crit .num { color: var(--red); }
+  .stat-card.serious .num { color: #b45309; }
+  .stat-card.moderate .num { color: #1d4ed8; }
+  .stat-card.pass .num { color: var(--teal); }
+
+  /* ── SECTION HEADINGS ── */
+  h2 {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    margin: 48px 0 20px;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: bold;
+    color: var(--navy);
+    margin: 32px 0 8px;
+  }
+
+  /* ── FINDING CARDS ── */
+  .finding {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    page-break-inside: avoid;
+  }
+  .finding-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  .badge {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .badge.critical  { background: var(--red-lt);   color: var(--red);   border: 1px solid #fca5a5; }
+  .badge.serious   { background: var(--amber-lt);  color: var(--amber); border: 1px solid #fcd34d; }
+  .badge.moderate  { background: var(--blue-lt);   color: var(--blue);  border: 1px solid #93c5fd; }
+  .badge.pass      { background: var(--teal-lt);   color: var(--teal);  border: 1px solid #6ee7b7; }
+  .badge.corrected { background: #f3f4f6; color: var(--muted); border: 1px solid var(--border); }
+
+  .finding-title {
+    font-family: 'Arial', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .finding-page {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .finding p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--gray);
+    margin-bottom: 10px;
+  }
+  .code {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    background: #f3f4f6;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    display: block;
+    margin-bottom: 10px;
+    color: #374151;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .wcag-ref {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .fix {
+    background: var(--teal-lt);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 4px 4px 0;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #065f46;
+    margin-top: 10px;
+  }
+  .fix strong { font-family: 'Arial', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 4px; }
+
+  /* ── PAGE SECTION LABELS ── */
+  .page-tag {
+    display: inline-block;
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    background: #e0e7ff;
+    color: #3730a3;
+    border-radius: 3px;
+    padding: 2px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .new-tag {
+    display: inline-block;
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    background: var(--red-lt);
+    color: var(--red);
+    border-radius: 3px;
+    padding: 2px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ── PASSES TABLE ── */
+  .pass-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  .pass-table th {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .pass-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .pass-table tr:last-child td { border-bottom: none; }
+  .check { color: var(--teal); font-weight: bold; }
+
+  /* ── RECOMMENDATIONS ── */
+  .rec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .rec-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+  }
+  .rec-card .priority {
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .rec-card h4 { font-size: 14px; color: var(--navy); margin-bottom: 6px; }
+  .rec-card p  { font-size: 13px; color: var(--gray); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  .report-footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 2px solid var(--navy);
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { padding: 32px 32px 60px; font-size: 13px; }
+    .cover { page-break-after: always; }
+    .finding { page-break-inside: avoid; }
+    h2 { page-break-after: avoid; }
+    h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════ COVER ═══ -->
+<div class="cover">
+  <p class="cover-label">Accessibility Compliance Audit Report</p>
+  <h1>ADA / Section 508 / WCAG 2.1 AA Audit<br>ReportFraud.ftc.gov</h1>
+  <p class="subtitle">Full flow audit across /assistant wizard, /form/main, and /form/confirmation</p>
+  <div class="cover-meta">
+    <div><strong>Date of Audit</strong>April 14, 2026</div>
+    <div><strong>Audit Method</strong>Manual DOM inspection, computed style analysis, accessibility tree review across full user flow</div>
+    <div><strong>Standard Applied</strong>WCAG 2.1 Level A &amp; AA · Section 508 (29 U.S.C. § 794d) · ARIA 1.1</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ EXECUTIVE SUMMARY ═══ -->
+<h2>Executive Summary</h2>
+
+<p>This audit examined the complete end-to-end user flow of <strong>reportfraud.ftc.gov</strong> — the federal government's primary interface for citizens to report fraud, scams, and deceptive business practices. The audit covered three URL paths: the category-selection wizard (<code>/assistant</code>), the personal information form (<code>/form/main</code>), and the review/confirmation screen (<code>/form/confirmation</code>).</p>
+
+<p style="margin-top:12px;">A total of <strong>19 distinct accessibility failures</strong> were identified across the flow, including 6 critical violations and 6 serious violations. The site currently lacks a Section 508 accessibility contact link anywhere in its interface, which is itself a compliance gap under federal accessibility law. Multiple failures compound each other: the combination of no required-field marking, no inline error feedback, and no focus management on submission means that a screen reader user who makes an error has no reliable path to identify or correct it.</p>
+
+<div class="summary-grid" style="margin-top:28px;">
+  <div class="stat-card crit">  <div class="num">6</div>  <div class="lbl">Critical</div></div>
+  <div class="stat-card serious"><div class="num">6</div>  <div class="lbl">Serious</div></div>
+  <div class="stat-card moderate"><div class="num">4</div> <div class="lbl">Moderate</div></div>
+  <div class="stat-card pass">  <div class="num">6</div>  <div class="lbl">Passes</div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ SCOPE ═══ -->
+<h2>Scope &amp; Methodology</h2>
+<p>The audit was conducted by programmatic DOM inspection using the browser's accessibility tree, computed style analysis, and JavaScript evaluation of ARIA attributes, input associations, focus states, and keyboard operability across each step of the complete form flow. The following pages were audited in sequence:</p>
+<ul style="margin: 12px 0 0 24px; font-size:14px; color:var(--gray); line-height:2;">
+  <li><strong>Step 1</strong> — <code>reportfraud.ftc.gov/assistant</code> — Category selection (wizard landing)</li>
+  <li><strong>Step 2</strong> — <code>reportfraud.ftc.gov/assistant</code> — Subcategory selection (dynamically injected)</li>
+  <li><strong>Step 3</strong> — <code>reportfraud.ftc.gov/form/main</code> — Personal information form</li>
+  <li><strong>Step 4</strong> — <code>reportfraud.ftc.gov/form/confirmation</code> — Review and submission</li>
+</ul>
+<p style="margin-top:14px;font-size:14px;color:var(--gray);">Automated browser extension tools (axe DevTools, WAVE, Lighthouse) were <em>not</em> relied upon as the primary method of detection. As documented in prior research, automated tools detect approximately 30–40% of WCAG failures. The remaining failures — particularly those involving context, focus management, dynamic content, and keyboard operability — require manual evaluation.</p>
+
+<!-- ═══════════════════════════════════════════════════ CRITICAL ═══ -->
+<h2>Critical Violations — WCAG 2.1 Failure</h2>
+<p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Critical violations constitute clear, testable WCAG 2.1 Level A or AA failures that directly prevent or substantially impede access for users of assistive technology.</p>
+
+<!-- C1 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge critical">Critical</span>
+    <div>
+      <div class="finding-title">No H1 heading on any page in the flow <span class="page-tag">All pages</span></div>
+      <div class="finding-page">Affects: /assistant · /form/main · /form/confirmation</div>
+    </div>
+  </div>
+  <p>Every page in the flow — the wizard, the form, and the confirmation screen — contains zero H1 elements. Section headings are implemented as H3 throughout ("Is your report about any of these common problems?", "About you", "Your details"). There is no H1 anywhere in the application. Screen reader users who navigate by headings on page load receive no primary landmark identifying the page's purpose. The H3-only structure also breaks heading hierarchy, as there is no H2 level between the absent H1 and the H3 content headings.</p>
+  <code class="code">document.querySelectorAll('h1').length  →  0 (on all three pages)
+Headings found: H3 × 6, H5 × 1 (on /form/main)
+Heading levels used: H3 and H5 only — no H1 or H2</code>
+  <p class="wcag-ref">WCAG 1.3.1 Info and Relationships · 2.4.6 Headings and Labels</p>
+  <div class="fix"><strong>Recommended Fix</strong>Add a visually positioned (or visually-hidden) H1 to each page. The wizard H1 should identify the page purpose ("Report Fraud — Step 1 of 3"). The form H1 should read "Your Information." Existing H3 section headings should become H2 elements, maintaining a logical H1 → H2 → H3 hierarchy.</div>
+</div>
+
+<!-- C2 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge critical">Critical</span>
+    <div>
+      <div class="finding-title">Radio groups have no fieldset or legend — question context lost <span class="page-tag">/assistant · /form/main</span></div>
+    </div>
+  </div>
+  <p>The wizard's primary category radio group (10 options), its subcategory radio group (dynamically injected), and both yes/no radio groups on /form/main ("Are you filing this report for someone else?" and "Are you filing on behalf of your small business?") are all implemented without <code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code> elements.</p>
+  <p>The question text is rendered either as an H3 element or as a <code>&lt;label&gt;</code> element with no <code>for</code> attribute — meaning it is visually proximate to the radio buttons but programmatically disconnected. A screen reader user navigating by form controls will hear <em>"Yes, radio button, 1 of 2"</em> with no announcement of what they are saying yes to. On the wizard, they hear a category label with no announcement of the group question.</p>
+  <code class="code">fieldset count: 0 (on all pages)
+Radio group "yesOrNoReportOther": question label has no for="" attribute
+Question text element: &lt;label class="col-sm col-md-7 rf-p"&gt;Are you filing...&lt;/label&gt;
+→ Not wired to any input. Programmatically invisible as a form association.</code>
+  <p class="wcag-ref">WCAG 1.3.1 Info and Relationships · 3.3.2 Labels or Instructions</p>
+  <div class="fix"><strong>Recommended Fix</strong>Wrap each radio group in a <code>&lt;fieldset&gt;</code>. Move the question text into a <code>&lt;legend&gt;</code>. Screen readers will then announce: <em>"Are you filing this report for someone else? Yes, radio button, 1 of 2."</em></div>
+</div>
+
+<!-- C3 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge critical">Critical</span>
+    <div>
+      <div class="finding-title">No required field indicators — programmatic or visual <span class="page-tag">/form/main</span></div>
+    </div>
+  </div>
+  <p>Zero inputs on the personal information form have the <code>required</code> attribute or <code>aria-required="true"</code>. The form does enforce required fields on submission (a modal fires when the form is blank), but no per-field signal exists before or during completion. Screen readers, browser-native form validation, and keyboard-only users have no mechanism to identify which fields are mandatory before attempting to submit. This violates both the labeling requirement (users cannot know instructions apply to a field) and the error prevention requirement (no pre-submission cue exists).</p>
+  <code class="code">inputs with required attribute:      0
+inputs with aria-required="true":    0
+inputs with aria-describedby:        0
+Validation mechanism: modal dialog fires on submit ("Your report is blank")</code>
+  <p class="wcag-ref">WCAG 3.3.1 Error Identification · 3.3.2 Labels or Instructions</p>
+  <div class="fix"><strong>Recommended Fix</strong>Add <code>required</code> to all mandatory inputs. Add a visual indicator (asterisk with a key: "* Required field") and a <code>&lt;span aria-hidden="true"&gt;*&lt;/span&gt;</code> within each label so screen readers do not read the asterisk aloud. Alternatively use <code>aria-required="true"</code> and add a legend at the top of the form.</div>
+</div>
+
+<!-- C4 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge critical">Critical</span>
+    <div>
+      <div class="finding-title">No visible focus outline on interactive elements <span class="page-tag">All pages</span></div>
+    </div>
+  </div>
+  <p>Computed CSS styles confirm that the application removes the default browser focus outline on all button elements. The "Continue", "Back", and "Submit" buttons — the primary navigation controls for the entire flow — have <code>outline: none</code> applied. Keyboard-only users, switch-access users, and others who cannot use a pointer device cannot visually determine which element currently has focus at any point during form completion.</p>
+  <code class="code">window.getComputedStyle(document.querySelector('button')).outline
+→  "rgb(255, 255, 255) none 0px"
+outlineOffset: "0px"
+No :focus-visible override found in stylesheets.</code>
+  <p class="wcag-ref">WCAG 2.4.7 Focus Visible · 2.4.11 Focus Appearance (WCAG 2.2 AA)</p>
+  <div class="fix"><strong>Recommended Fix</strong>Remove all <code>outline: none</code> / <code>outline: 0</code> declarations from interactive elements. Replace with a custom focus style using <code>:focus-visible</code>: e.g., <code>outline: 3px solid #0d2b55; outline-offset: 2px;</code>. The FTC brand navy provides sufficient contrast against white backgrounds.</div>
+</div>
+
+<!-- C5 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge critical">Critical</span>
+    <div>
+      <div class="finding-title">Dynamic content injection with no focus management <span class="page-tag">/assistant step 2</span></div>
+    </div>
+  </div>
+  <p>When a category is selected on the wizard, a subcategory section ("Who were they pretending to be?") is dynamically injected into the page below the main radio group. Focus does not move to the new content — it remains on <code>BODY</code>. The subcategory heading has no <code>tabindex</code> attribute and cannot receive programmatic focus. A screen reader user selecting a category receives no announcement that new content has appeared and must discover it by continuing to navigate the page manually — which they may not do if they believe the page is complete.</p>
+  <code class="code">After category selection:
+  document.activeElement  →  BODY#  (focus dropped to body)
+  subcatHeading.tabindex  →  null   (cannot receive focus)
+  aria-live region update: none observed for new section</code>
+  <p class="wcag-ref">WCAG 4.1.3 Status Messages · 2.4.3 Focus Order · ARIA Live Region guidance</p>
+  <div class="fix"><strong>Recommended Fix</strong>On dynamic section injection, either: (a) move focus programmatically to the new section heading using <code>heading.setAttribute('tabindex', '-1'); heading.focus();</code>, or (b) announce the new section via an <code>aria-live="polite"</code> region. Option (a) is preferred as it also positions keyboard users at the correct location.</div>
+</div>
+
+<!-- C6 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge critical">Critical</span>
+    <div>
+      <div class="finding-title">No Section 508 accessibility contact anywhere on the site <span class="page-tag">All pages</span></div>
+    </div>
+  </div>
+  <p>No link to an accessibility statement, Section 508 compliance information, or an accessibility contact email exists anywhere on reportfraud.ftc.gov — not in the header, footer, or on any page in the flow. Under Section 508 of the Rehabilitation Act (29 U.S.C. § 794d) and the associated IT Accessibility Standards, federal agencies are required to provide a mechanism for users to report accessibility barriers and request accommodations. The FTC maintains an accessibility page at ftc.gov/accessibility, but it is not linked from this subdomain.</p>
+  <code class="code">Search for /access|508|ada|disability/ across all links: 0 results
+mailto: links on any page: 0
+Footer content: Privacy Policy, FAQs, Report Now, OMB Control# only</code>
+  <p class="wcag-ref">Section 508 · 36 C.F.R. Part 1194 · WCAG 2.4.4 Link Purpose</p>
+  <div class="fix"><strong>Recommended Fix</strong>Add a link in the footer to FTC's accessibility page (ftc.gov/accessibility) and include a direct mailto link for accessibility assistance. Suggested text: "Accessibility" linking to ftc.gov/accessibility, with supplemental text: "For accessibility assistance, email accessibility@ftc.gov."</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ SERIOUS ═══ -->
+<h2>Serious Violations</h2>
+
+<!-- S1 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge serious">Serious</span>
+    <div>
+      <div class="finding-title">All personal data fields missing autocomplete tokens <span class="page-tag">/form/main</span></div>
+    </div>
+  </div>
+  <p>Every personal information input on the form — first name, last name, address lines, city, state, zip, phone, email, age, military status — has no <code>autocomplete</code> attribute. WCAG 1.3.5 requires that inputs collecting personal data carry appropriate autocomplete tokens so that autofill tools (used heavily by users with motor impairments, cognitive disabilities, and users of switch access or eye gaze devices) can populate them without manual entry. Notably, Street Address 1 is explicitly set to <code>autocomplete="disabled"</code>, which is not a valid value for this attribute (the correct value to disable autofill is <code>"off"</code>), suggesting intentional suppression of autofill on one of the most commonly autofilled fields.</p>
+  <code class="code">rayfirstName    autocomplete: null     → should be: "given-name"
+raylastName     autocomplete: null     → should be: "family-name"
+address field 1 autocomplete: "disabled" (INVALID) → should be: "address-line1"
+rayaddresstwo   autocomplete: null     → should be: "address-line2"
+raycity         autocomplete: null     → should be: "address-level2"
+USZipCode       autocomplete: null     → should be: "postal-code"
+rayphone        autocomplete: null     → should be: "tel"
+rayemail        autocomplete: null     → should be: "email"</code>
+  <p class="wcag-ref">WCAG 1.3.5 Identify Input Purpose</p>
+  <div class="fix"><strong>Recommended Fix</strong>Add WCAG-compliant autocomplete token values to all personal data inputs as listed above. Remove <code>autocomplete="disabled"</code> from the address field — if autofill is intentionally blocked, use <code>autocomplete="off"</code>, though suppressing autofill on a government form collecting personal data is itself an accessibility barrier and should be reconsidered.</div>
+</div>
+
+<!-- S2 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge serious">Serious</span>
+    <div>
+      <div class="finding-title">No inline error feedback — errors announced via generic modal only <span class="page-tag">/form/main</span></div>
+    </div>
+  </div>
+  <p>When the form is submitted with missing information, the application opens a modal dialog reading "Your report is blank. To file a report, you will need to fill in some information." No individual field receives <code>aria-invalid="true"</code>. No field receives an <code>aria-describedby</code> association pointing to an error description. No inline error message appears adjacent to any field. A screen reader user who encounters this modal knows that something is missing but has no mechanism to identify which field(s) are problematic or where to navigate to correct them. This is compounded by the fact that fields are not marked required (Critical finding C3), so the user also had no pre-submission warning.</p>
+  <code class="code">inputs with aria-invalid="true" after submit:   0
+inputs with aria-describedby:                   0
+inline error elements found:                    0
+Error mechanism: modal dialog with generic message only
+Focus after error modal closes: returns to BODY (not to first error field)</code>
+  <p class="wcag-ref">WCAG 3.3.1 Error Identification · 3.3.3 Error Suggestion</p>
+  <div class="fix"><strong>Recommended Fix</strong>On submission failure: (1) Add <code>aria-invalid="true"</code> to each invalid field. (2) Inject inline error messages and associate them via <code>aria-describedby</code>. (3) Move focus to the first invalid field or to a summary error region at the top of the form. (4) When the error modal closes, focus should return to the first invalid field, not to BODY.</div>
+</div>
+
+<!-- S3 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge serious">Serious</span>
+    <div>
+      <div class="finding-title">Skip link targets gov banner expand — not main content <span class="page-tag">All pages</span></div>
+    </div>
+  </div>
+  <p>The only skip navigation link on every page in the flow targets <code>#collapseFlag</code> — the "Here's how you know" government banner toggle — rather than the page's main content or form. A keyboard user activating the skip link is deposited at the banner expand control, not at the wizard question, form field, or review section. This means keyboard users must Tab through the full header, navigation, and banner before reaching any functional content on every page load and on every step transition.</p>
+  <code class="code">skip link text: "Here's how you know"
+skip link href: "#collapseFlag"
+target element: banner collapse toggle (not main content)
+distance to first form control after header: ~8 Tab stops</code>
+  <p class="wcag-ref">WCAG 2.4.1 Bypass Blocks</p>
+  <div class="fix"><strong>Recommended Fix</strong>Add <code>id="main-content"</code> to the main content container on each page. Change the skip link to <code>&lt;a href="#main-content" class="skip-link"&gt;Skip to main content&lt;/a&gt;</code>. The existing "Here's how you know" link can remain as a secondary skip target but should not be the primary one.</div>
+</div>
+
+<!-- S4 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge serious">Serious</span>
+    <div>
+      <div class="finding-title">Phone input is type="text" — should be type="tel" <span class="page-tag">/form/main</span></div>
+    </div>
+  </div>
+  <p>The phone number input (<code>id="rayphone"</code>) uses <code>type="text"</code> with no <code>inputmode</code> attribute. Mobile users are presented with a full QWERTY keyboard instead of the numeric dial-pad keyboard. Voice-input and switch-access users lose the semantic hint that triggers phone-appropriate input handling. Browser autofill also relies on input type to correctly identify and populate phone fields.</p>
+  <code class="code">id: rayphone  |  type: text  |  inputmode: null  |  autocomplete: null
+Expected:       type: tel   |  autocomplete: "tel"</code>
+  <p class="wcag-ref">WCAG 1.3.5 Identify Input Purpose</p>
+  <div class="fix"><strong>Recommended Fix</strong>Change to <code>type="tel"</code> and add <code>autocomplete="tel"</code>. Optionally add <code>inputmode="tel"</code> for maximum cross-browser compatibility.</div>
+</div>
+
+<!-- S5 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge serious">Serious</span>
+    <div>
+      <div class="finding-title">External links open in new tab with no warning <span class="page-tag">All pages</span></div>
+    </div>
+  </div>
+  <p>Four links across the site open in a new browser tab using <code>target="_blank"</code> but provide no visual icon or accessible text warning of this behavior: identitytheft.gov, donotcall.gov, consumer.ftc.gov, and the Privacy Policy. Users of screen readers, users with cognitive disabilities, and users with limited technical proficiency are not informed that activating these links will open a new tab, which constitutes an unexpected change of context.</p>
+  <code class="code">target="_blank" links: 4
+aria-label with "new tab" or "new window" warning: 0
+Visible icon indicating new tab: 0</code>
+  <p class="wcag-ref">WCAG 3.2.2 On Input · G201 Giving users advanced warning when opening a new window</p>
+  <div class="fix"><strong>Recommended Fix</strong>For each external link, add either: (a) visually hidden text <code>&lt;span class="sr-only"&gt;(opens in new tab)&lt;/span&gt;</code> appended inside the link, or (b) <code>aria-label="Identity Theft Resources (opens in new tab)"</code>. Additionally add a visible external-link icon with <code>aria-hidden="true"</code>.</div>
+</div>
+
+<!-- S6 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge serious">Serious</span>
+    <div>
+      <div class="finding-title">Focus drops to BODY on page navigation — not managed <span class="page-tag">All page transitions</span></div>
+    </div>
+  </div>
+  <p>When advancing between steps (wizard → form → confirmation), focus is not managed. After each page transition, <code>document.activeElement</code> resolves to <code>BODY</code> — the page background container. Screen reader users receive no announcement of the new page context and must navigate from the top of the document to find the new content. This is a Single Page Application (Angular) pattern where the framework handles routing without browser-native focus restoration, and no manual focus management compensates.</p>
+  <code class="code">After wizard → /form/main:         activeElement = BODY#
+After /form/main → /form/confirmation: activeElement = BODY#
+Expected: focus should move to H1 or main landmark on each transition</code>
+  <p class="wcag-ref">WCAG 2.4.3 Focus Order · 3.2.2 On Input</p>
+  <div class="fix"><strong>Recommended Fix</strong>On Angular route change events, programmatically move focus to the page's H1 (once added) or to the main landmark: <code>document.querySelector('h1, main, [role="main"]').focus();</code>. The target element needs <code>tabindex="-1"</code> to receive programmatic focus without appearing in the tab order.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ MODERATE ═══ -->
+<h2>Moderate Violations</h2>
+
+<!-- M1 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge moderate">Moderate</span>
+    <div>
+      <div class="finding-title">Email input is type="text" — should be type="email" <span class="page-tag">/form/main</span></div>
+    </div>
+  </div>
+  <p>The email input (<code>id="rayemail"</code>) uses <code>type="text"</code>. Mobile users see a standard keyboard instead of one with the @ symbol prominently displayed. Browser-native email format validation is bypassed. Autofill cannot reliably identify the field as an email address without the correct type.</p>
+  <code class="code">id: rayemail  |  type: text  |  autocomplete: null
+Expected:       type: email |  autocomplete: "email"</code>
+  <p class="wcag-ref">WCAG 1.3.5 Identify Input Purpose</p>
+  <div class="fix"><strong>Recommended Fix</strong>Change to <code>type="email"</code> and add <code>autocomplete="email"</code>.</div>
+</div>
+
+<!-- M2 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge moderate">Moderate</span>
+    <div>
+      <div class="finding-title">Progress bar missing aria-valuemin attribute <span class="page-tag">All pages</span></div>
+    </div>
+  </div>
+  <p>The progress bar uses <code>role="progressbar"</code> and has <code>aria-valuenow</code> and <code>aria-valuemax</code>, but is missing <code>aria-valuemin</code>. The ARIA spec requires all three attributes for a determinate progressbar to be fully machine-readable. Without <code>aria-valuemin</code>, some screen readers cannot correctly calculate the percentage or range of progress.</p>
+  <code class="code">aria-label:    "75% of 100% progress bar" (static label, not dynamic)
+aria-valuenow: "75"
+aria-valuemax: "100"
+aria-valuemin: null  ← missing</code>
+  <p class="wcag-ref">WCAG 4.1.2 Name, Role, Value · ARIA 1.1 progressbar pattern</p>
+  <div class="fix"><strong>Recommended Fix</strong>Add <code>aria-valuemin="0"</code>. Also update <code>aria-label</code> dynamically on each step change rather than embedding the percentage as a static string.</div>
+</div>
+
+<!-- M3 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge moderate">Moderate</span>
+    <div>
+      <div class="finding-title">"Leave this page?" dialog uses H5 — inconsistent and incorrect heading level <span class="page-tag">/form/main</span></div>
+    </div>
+  </div>
+  <p>All other dialogs in the application use H3 for their heading. The "Leave this page?" confirmation dialog uses H5, breaking the heading hierarchy within the modal and making it inconsistent with the rest of the application. Screen reader users navigating by headings within a dialog expect a consistent heading level. The H5 would also be subordinate to any H3 content behind the modal in the accessibility tree.</p>
+  <code class="code">All other dialogs: heading level H3
+"Leave this page?" dialog: heading level H5
+Expected: H3 (consistent with all other dialogs)</code>
+  <p class="wcag-ref">WCAG 1.3.1 Info and Relationships · 2.4.6 Headings and Labels</p>
+  <div class="fix"><strong>Recommended Fix</strong>Change the "Leave this page?" dialog heading from <code>&lt;h5&gt;</code> to <code>&lt;h3&gt;</code> to match all other modal headings in the application.</div>
+</div>
+
+<!-- M4 -->
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge moderate">Moderate</span>
+    <div>
+      <div class="finding-title">No prefers-reduced-motion support detected <span class="page-tag">All pages</span></div>
+    </div>
+  </div>
+  <p>No <code>@media (prefers-reduced-motion: reduce)</code> CSS query was detected in any of the site's stylesheets. The Angular step transitions and modal slide-in animations play unconditionally regardless of a user's OS-level reduced-motion preference. This can cause discomfort, disorientation, or vestibular disturbance for users with motion sensitivity, including users with inner ear conditions, vestibular disorders, or epilepsy risk.</p>
+  <code class="code">prefers-reduced-motion media query: not found in any stylesheet</code>
+  <p class="wcag-ref">WCAG 2.3.3 Animation from Interactions (WCAG 2.1 AAA, best practice at AA)</p>
+  <div class="fix"><strong>Recommended Fix</strong>Add a stylesheet block: <code>@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }</code>. This is a single addition that eliminates the entire category of motion-related complaints.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ PASSES ═══ -->
+<h2>Passing Items</h2>
+<p style="font-size:14px;color:var(--gray);margin-bottom:16px;">The following items were tested and found to meet WCAG 2.1 AA requirements.</p>
+<table class="pass-table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Page</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="check">✓</span> &nbsp;HTML <code>lang="en"</code> attribute present</td>
+      <td>All pages</td>
+      <td>Root <code>&lt;html&gt;</code> element correctly declares language.</td>
+    </tr>
+    <tr>
+      <td><span class="check">✓</span> &nbsp;All images have non-empty alt text</td>
+      <td>All pages</td>
+      <td>No <code>&lt;img&gt;</code> elements with missing or empty alt attributes found.</td>
+    </tr>
+    <tr>
+      <td><span class="check">✓</span> &nbsp;All text inputs have associated label elements</td>
+      <td>/form/main</td>
+      <td>Every text, select, and combobox has a matching <code>label[for]</code> using correct IDs.</td>
+    </tr>
+    <tr>
+      <td><span class="check">✓</span> &nbsp;Subcategory radio options use implicit parent labels</td>
+      <td>/assistant step 2</td>
+      <td>Subcategory radios are wrapped in <code>&lt;label&gt;</code> parent elements, providing accessible names for individual options (group-level context remains absent — see C2).</td>
+    </tr>
+    <tr>
+      <td><span class="check">✓</span> &nbsp;Blank-form error modal has aria-modal="true" and aria-labelledby</td>
+      <td>/form/main</td>
+      <td><code>id="blankFormModal"</code> correctly sets <code>role="dialog"</code>, <code>aria-modal="true"</code>, and <code>aria-labelledby</code> pointing to its H3 heading. Focus moves to modal on open.</td>
+    </tr>
+    <tr>
+      <td><span class="check">✓</span> &nbsp;aria-live="polite" regions present</td>
+      <td>All pages</td>
+      <td>Two polite live regions exist in the DOM for dynamic content announcements, though they were not observed to announce step or subcategory changes.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ CORRECTIONS ═══ -->
+<h2>Audit Corrections — Items Initially Flagged, Subsequently Verified</h2>
+<div class="finding">
+  <div class="finding-header">
+    <span class="badge corrected">Corrected</span>
+    <div>
+      <div class="finding-title">Subcategory radio labels — initially flagged as unlabeled, subsequently verified as using implicit parent label pattern</div>
+    </div>
+  </div>
+  <p>Initial DOM inspection of the subcategory radio buttons (<code>id="subcat-radio-*"</code>) returned no <code>label[for]</code> associations. Further investigation confirmed these radios are wrapped directly inside <code>&lt;label&gt;</code> parent elements (implicit label pattern), providing accessible names for each individual option. This item is not a labeling violation. The group-level context issue (no fieldset/legend) remains a separate Critical finding (C2).</p>
+  <code class="code">subcat-radio-1 → parent label text: "Government authority or agency (ex. Social Security, IRS, Me..."
+Pattern: &lt;label&gt;&lt;input type="radio"&gt; Option text &lt;/label&gt;  ✓ Valid</code>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ PRIORITY ═══ -->
+<h2>Remediation Priority &amp; Effort Estimate</h2>
+<p style="font-size:14px;color:var(--gray);margin-bottom:20px;">The following groups issues by remediation urgency and estimated development effort.</p>
+
+<div class="rec-grid">
+  <div class="rec-card">
+    <p class="priority">Priority 1 — Immediate (1–3 days dev)</p>
+    <h4>Stop blocking users from completing the form</h4>
+    <p>Add focus outline restoration (1 line of CSS removed). Add type="tel" and type="email" to phone and email fields. Add autocomplete tokens to all personal fields. Add aria-valuemin to progressbar. These are attribute-level fixes with no architectural impact.</p>
+  </div>
+  <div class="rec-card">
+    <p class="priority">Priority 2 — Short-term (1–2 sprint cycles)</p>
+    <h4>Fix structural ARIA failures</h4>
+    <p>Add H1 to all pages. Wrap all radio groups in fieldset+legend. Fix skip link target. Add external link new-tab warnings. Correct "Leave this page?" H5 to H3. Add prefers-reduced-motion stylesheet block.</p>
+  </div>
+  <div class="rec-card">
+    <p class="priority">Priority 3 — Medium-term (requires Angular work)</p>
+    <h4>Fix SPA focus management</h4>
+    <p>Implement focus management on Angular route transitions. Implement focus movement on dynamic section injection (subcategory appearance). Implement focus return to first error field on validation failure.</p>
+  </div>
+  <div class="rec-card">
+    <p class="priority">Priority 4 — Policy (non-code)</p>
+    <h4>Add accessibility contact</h4>
+    <p>Add Section 508 accessibility link and contact email to the footer of reportfraud.ftc.gov. Link to ftc.gov/accessibility. This requires a footer template update and potentially a policy decision on a dedicated accessibility contact for this subdomain.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ ISSUE INDEX ═══ -->
+<h2>Issue Index</h2>
+<table class="pass-table">
+  <thead>
+    <tr><th>#</th><th>Severity</th><th>Issue</th><th>Page(s)</th><th>WCAG</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>C1</td><td><span class="badge critical" style="font-size:13px;">Critical</span></td><td>No H1 heading on any page</td><td>All</td><td>1.3.1 · 2.4.6</td></tr>
+    <tr><td>C2</td><td><span class="badge critical" style="font-size:13px;">Critical</span></td><td>Radio groups missing fieldset / legend</td><td>All</td><td>1.3.1 · 3.3.2</td></tr>
+    <tr><td>C3</td><td><span class="badge critical" style="font-size:13px;">Critical</span></td><td>No required field indicators</td><td>/form/main</td><td>3.3.1 · 3.3.2</td></tr>
+    <tr><td>C4</td><td><span class="badge critical" style="font-size:13px;">Critical</span></td><td>No visible focus outline on buttons</td><td>All</td><td>2.4.7 · 2.4.11</td></tr>
+    <tr><td>C5</td><td><span class="badge critical" style="font-size:13px;">Critical</span></td><td>Dynamic content injection — no focus management</td><td>/assistant</td><td>4.1.3 · 2.4.3</td></tr>
+    <tr><td>C6</td><td><span class="badge critical" style="font-size:13px;">Critical</span></td><td>No Section 508 accessibility contact on site</td><td>All</td><td>Section 508</td></tr>
+    <tr><td>S1</td><td><span class="badge serious" style="font-size:13px;">Serious</span></td><td>Personal data fields missing autocomplete tokens</td><td>/form/main</td><td>1.3.5</td></tr>
+    <tr><td>S2</td><td><span class="badge serious" style="font-size:13px;">Serious</span></td><td>No inline error feedback on form fields</td><td>/form/main</td><td>3.3.1 · 3.3.3</td></tr>
+    <tr><td>S3</td><td><span class="badge serious" style="font-size:13px;">Serious</span></td><td>Skip link targets gov banner, not main content</td><td>All</td><td>2.4.1</td></tr>
+    <tr><td>S4</td><td><span class="badge serious" style="font-size:13px;">Serious</span></td><td>Phone field type="text" — should be type="tel"</td><td>/form/main</td><td>1.3.5</td></tr>
+    <tr><td>S5</td><td><span class="badge serious" style="font-size:13px;">Serious</span></td><td>External links open new tab without warning</td><td>All</td><td>3.2.2</td></tr>
+    <tr><td>S6</td><td><span class="badge serious" style="font-size:13px;">Serious</span></td><td>Focus drops to BODY on all page transitions</td><td>All</td><td>2.4.3 · 3.2.2</td></tr>
+    <tr><td>M1</td><td><span class="badge moderate" style="font-size:13px;">Moderate</span></td><td>Email field type="text" — should be type="email"</td><td>/form/main</td><td>1.3.5</td></tr>
+    <tr><td>M2</td><td><span class="badge moderate" style="font-size:13px;">Moderate</span></td><td>Progress bar missing aria-valuemin</td><td>All</td><td>4.1.2</td></tr>
+    <tr><td>M3</td><td><span class="badge moderate" style="font-size:13px;">Moderate</span></td><td>"Leave this page?" dialog uses H5 instead of H3</td><td>/form/main</td><td>1.3.1 · 2.4.6</td></tr>
+    <tr><td>M4</td><td><span class="badge moderate" style="font-size:13px;">Moderate</span></td><td>No prefers-reduced-motion stylesheet support</td><td>All</td><td>2.3.3</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ NOTES ═══ -->
+<h2>A Note on Automated Accessibility Tools</h2>
+<p style="font-size:14px;color:var(--gray);">Browser extension tools such as axe DevTools, WAVE, and Lighthouse reported no critical violations on these pages. This is consistent with published research indicating that automated tools detect approximately 30–40% of WCAG failures. The failures documented in this report — missing fieldset/legend context, focus management failures, dynamic content injection without announcement, input type mismatches, and autocomplete omissions — are categories that require manual evaluation and cannot be reliably detected by DOM-scanning automation. A passing automated accessibility scan does not indicate WCAG conformance.</p>
+
+<!-- ═══════════════════════════════════════════════════ FOOTER ═══ -->
+<div class="report-footer">
+  <div>
+    <strong>ReportFraud.ftc.gov — ADA / WCAG 2.1 AA Audit</strong><br>
+    Prepared: April 14, 2026<br>
+    Audited via manual DOM inspection and browser accessibility tree analysis
+  </div>
+  <div style="text-align:right;">
+    WCAG 2.1 Level A &amp; AA<br>
+    Section 508 · ARIA 1.1<br>
+    Pages audited: 3 · Issues found: 16 · Passes: 6
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File a Civil Rights Complaint | U.S. Department of Justice — Civil Rights Division</title>
+<meta name="description" content="Describe a civil rights violation in your own words. We'll help you organize it into the DOJ complaint fields. ADA, housing, education, voting, and more. Works on mobile.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* DOJ-coded palette, WCAG-AA verified */
+  --navy:       #0d1b2e;
+  --navy-mid:   #1a3050;
+  --navy-soft:  #243d5c;
+  --ink:        #1a1a2e;
+  --ink-mid:    #3a4a5c;
+  --ink-mute:   #4d5d72;
+  --on-navy:    #a8c8d8;
+  --white:      #ffffff;
+  --off-white:  #f7f8fa;
+  --surface:    #ffffff;
+  --rule:       rgba(13,27,46,.1);
+  --red:        #991b1b;
+  --red-bg:     #fef2f2;
+  --gold:       #c8a84b;
+  --gold-dark:  #8a7332;
+  --gold-bg:    rgba(200,168,75,.1);
+  --teal:       #0b5f78;
+  --teal-bg:    #f0f9ff;
+  --green:      #065f46;
+  --green-bg:   #ecfdf5;
+  --amber:      #92400e;
+  --amber-bg:   #fffbeb;
+  --focus:      #1d4ed8;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--off-white);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════
+   ACCESSIBILITY PRIMITIVES
+   ═══════════════════════════════════════════ */
+.skip {
+  position: absolute; left: -9999px; top: 4px;
+  background: var(--navy); color: #fff;
+  padding: 10px 18px; font-size: 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  border-radius: 3px; z-index: 999; text-decoration: none;
+}
+.skip:focus-visible { left: 8px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* Global focus ring */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ═══════════════════════════════════════════
+   EMERGENCY BAR
+   ═══════════════════════════════════════════ */
+.emergency-bar {
+  background: var(--red);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.emergency-bar p {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: .01em;
+  font-family: 'IBM Plex Mono', monospace;
+  text-align: center;
+}
+.emergency-bar a {
+  color: #fde68a;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(253,230,138,.4);
+}
+.emergency-bar a:hover { border-color: #fde68a; }
+
+/* ═══════════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════════ */
+.site-header {
+  background: var(--navy);
+  padding: 0 24px;
+  border-bottom: 2px solid var(--gold);
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.logo-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+.logo-seal {
+  width: 44px; height: 44px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; font-weight: 500;
+  color: var(--navy);
+  letter-spacing: .05em;
+  flex-shrink: 0;
+}
+.logo-text { color: #fff; }
+.logo-text strong {
+  display: block;
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: .02em;
+}
+.logo-text span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--on-navy);
+}
+.header-secure {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--on-navy);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lock-icon {
+  width: 12px; height: 12px;
+  border: 1.5px solid var(--on-navy);
+  border-radius: 2px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.lock-icon::before {
+  content: '';
+  position: absolute;
+  top: -5px; left: 2px;
+  width: 6px; height: 5px;
+  border: 1.5px solid var(--on-navy);
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+}
+
+/* ═══════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════ */
+.hero {
+  background: var(--navy);
+  padding: 56px 24px 72px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(200,168,75,.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(200,168,75,.04) 0%, transparent 40%);
+  pointer-events: none;
+}
+.hero-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  position: relative;
+}
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::after {
+  content: '';
+  flex: 1;
+  max-width: 60px;
+  height: 1px;
+  background: var(--gold);
+  opacity: .4;
+}
+.hero h1 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(28px, 4.5vw, 42px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 18px;
+  letter-spacing: -.01em;
+}
+.hero p {
+  font-size: 16px;
+  color: rgba(255,255,255,.82);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 540px;
+}
+.hero p strong { color: #fff; font-weight: 500; }
+
+/* ── ROUTING NOTE ── */
+.routing-note {
+  background: rgba(200,168,75,.1);
+  border: 1px solid rgba(200,168,75,.3);
+  border-radius: 4px;
+  padding: 14px 18px;
+  margin-top: 28px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.routing-note-icon {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.routing-note p {
+  font-size: 13px;
+  color: rgba(255,255,255,.88);
+  margin: 0;
+  line-height: 1.6;
+}
+.routing-note strong { color: #fff; font-weight: 600; }
+
+/* ═══════════════════════════════════════════
+   MAIN / CARDS
+   ═══════════════════════════════════════════ */
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+}
+
+.form-card {
+  background: var(--surface);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(13,27,46,.06), 0 24px 48px -16px rgba(13,27,46,.12);
+  margin-top: -40px;
+  margin-bottom: 40px;
+  padding: 36px 40px;
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════
+   STAGE 1 — Natural-language input
+   ═══════════════════════════════════════════ */
+.stage {
+  transition: opacity .25s ease;
+}
+.stage.hidden { display: none; }
+
+.stage-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 10px;
+}
+
+.stage-heading {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.stage-lede {
+  font-size: 14px;
+  color: var(--ink-mute);
+  margin-bottom: 24px;
+  line-height: 1.65;
+}
+
+.input-wrap {
+  margin-bottom: 18px;
+}
+
+.input-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.input-hint {
+  font-size: 13px;
+  color: var(--ink-mute);
+  font-weight: 400;
+}
+
+textarea.prompt-box {
+  width: 100%;
+  min-height: 220px;
+  padding: 16px 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  border: 2px solid var(--rule);
+  border-radius: 4px;
+  background: var(--off-white);
+  resize: vertical;
+  color: var(--ink);
+  transition: border-color .15s ease, background .15s ease;
+}
+textarea.prompt-box:focus {
+  border-color: var(--focus);
+  background: var(--white);
+  outline: none;
+}
+textarea.prompt-box::placeholder {
+  color: var(--ink-mute);
+  font-style: italic;
+}
+
+.char-counter {
+  text-align: right;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  margin-top: 6px;
+  letter-spacing: .05em;
+}
+.char-counter.near { color: var(--amber); font-weight: 500; }
+
+/* Helper prompts */
+.helper-prompts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.helper-prompt {
+  background: var(--off-white);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--ink-mid);
+  text-align: left;
+  cursor: pointer;
+  transition: all .15s ease;
+  font-family: 'Inter', sans-serif;
+}
+.helper-prompt:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+  background: var(--white);
+}
+.helper-prompt-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Anonymous checkbox */
+.anon-row {
+  background: var(--teal-bg);
+  border: 1px solid rgba(11,95,120,.2);
+  border-radius: 4px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.anon-row input[type="checkbox"] {
+  width: 18px; height: 18px;
+  margin-top: 2px;
+  accent-color: var(--teal);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.anon-row label {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.5;
+  cursor: pointer;
+}
+.anon-row label strong { font-weight: 600; }
+.anon-row label span {
+  display: block;
+  color: var(--ink-mute);
+  margin-top: 2px;
+  font-size: 13px;
+}
+
+/* Primary button */
+.btn-primary {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background .15s ease, transform .05s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-primary:hover { background: var(--navy-mid); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary:disabled {
+  background: var(--ink-mute);
+  cursor: not-allowed;
+  opacity: .6;
+}
+.btn-primary .arrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  opacity: .85;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--ink-mid);
+  border: 1px solid var(--rule);
+  padding: 13px 22px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.btn-secondary:hover {
+  border-color: var(--ink-mid);
+  color: var(--ink);
+}
+
+.btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.btn-row-note {
+  font-size: 13px;
+  color: var(--ink-mute);
+  margin-left: auto;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════
+   STAGE 2 — Review extracted fields
+   ═══════════════════════════════════════════ */
+.extraction-summary {
+  background: var(--gold-bg);
+  border-left: 3px solid var(--gold);
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  border-radius: 0 3px 3px 0;
+}
+.extraction-summary-head {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 6px;
+}
+.extraction-summary-text {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.field-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.field-card {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 16px 18px;
+  background: var(--surface);
+  transition: border-color .15s ease;
+}
+.field-card:focus-within { border-color: var(--focus); }
+
+.field-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.field-card-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.step-num {
+  background: var(--navy);
+  color: #fff;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+.confidence-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.conf-extracted { background: var(--green-bg); color: var(--green); }
+.conf-partial   { background: var(--amber-bg); color: var(--amber); }
+.conf-manual    { background: var(--red-bg); color: var(--red); }
+
+.field-input,
+.field-textarea,
+.field-select {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--off-white);
+  color: var(--ink);
+  transition: border-color .15s ease, background .15s ease;
+}
+.field-input:focus,
+.field-textarea:focus,
+.field-select:focus {
+  border-color: var(--focus);
+  background: var(--white);
+  outline: none;
+}
+.field-textarea {
+  min-height: 88px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.source-quote {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  margin-top: 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--rule);
+  line-height: 1.5;
+  font-style: italic;
+}
+.source-quote::before {
+  content: 'Source: ';
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-weight: 500;
+  font-style: normal;
+  color: var(--ink-mid);
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 540px) {
+  .contact-row { grid-template-columns: 1fr; }
+}
+
+.contact-row-full { grid-column: 1 / -1; }
+
+/* Radio group */
+.radio-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.radio-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--off-white);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all .15s ease;
+}
+.radio-option:hover { border-color: var(--gold); }
+.radio-option input { accent-color: var(--navy); }
+.radio-option input:checked ~ span { font-weight: 600; }
+.radio-option:has(input:checked) {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+/* Characteristic chips — multi-select */
+.chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  background: var(--off-white);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: all .15s ease;
+  font-family: 'Inter', sans-serif;
+}
+.chip:hover { border-color: var(--gold); }
+.chip[aria-pressed="true"] {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════
+   ALT-PATH CARDS (routing alternatives)
+   ═══════════════════════════════════════════ */
+.alt-section {
+  max-width: 960px;
+  margin: 48px auto 0;
+  padding: 0 24px;
+}
+.alt-heading {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.alt-sub {
+  font-size: 14px;
+  color: var(--ink-mute);
+  margin-bottom: 24px;
+  max-width: 580px;
+}
+.alt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.alt-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 18px 20px;
+  text-decoration: none;
+  transition: all .15s ease;
+  display: block;
+}
+.alt-card:hover {
+  border-color: var(--navy);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13,27,46,.08);
+}
+.alt-card-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 4px;
+}
+.alt-card-title {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.alt-card-desc {
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+.alt-card-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .1em;
+  color: var(--navy);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════
+   DESIGN RATIONALE (accordion)
+   ═══════════════════════════════════════════ */
+.rationale-section {
+  max-width: 760px;
+  margin: 48px auto 24px;
+  padding: 0 24px;
+}
+.rationale-toggle {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 16px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color .15s ease;
+}
+.rationale-toggle:hover { border-color: var(--navy); }
+.toggle-arrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  color: var(--ink-mute);
+  transition: transform .2s ease;
+}
+.rationale-toggle[aria-expanded="true"] .toggle-arrow { transform: rotate(180deg); }
+
+.rationale-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+}
+.rationale-body.open { max-height: 2400px; }
+
+.rationale-inner {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  padding: 24px 28px;
+}
+.rationale-intro {
+  font-size: 14px;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.rationale-intro code {
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--off-white);
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-size: 13px;
+}
+.rationale-finding {
+  display: flex;
+  gap: 12px;
+  padding: 14px 0;
+  border-top: 1px solid var(--rule);
+}
+.rationale-finding:first-of-type { border-top: none; padding-top: 0; }
+.finding-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+.dot-wcag { background: var(--green); }
+.dot-ux { background: var(--gold); }
+.dot-arch { background: var(--teal); }
+.finding-text { flex: 1; }
+.finding-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.finding-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .08em;
+  padding: 2px 7px;
+  border-radius: 2px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.tag-wcag { background: var(--green-bg); color: var(--green); }
+.tag-ux { background: var(--gold-bg); color: var(--gold-dark); }
+.tag-arch { background: var(--teal-bg); color: var(--teal); }
+.finding-desc {
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   CONFIRMATION
+   ═══════════════════════════════════════════ */
+.confirmation {
+  display: none;
+  text-align: center;
+  padding: 20px 0;
+}
+.confirmation.visible { display: block; }
+.confirm-icon {
+  width: 60px; height: 60px;
+  background: var(--green);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+.confirm-heading {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 24px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.confirm-lede {
+  font-size: 15px;
+  color: var(--ink-mute);
+  max-width: 420px;
+  margin: 0 auto 22px;
+  line-height: 1.6;
+}
+.confirm-ref {
+  background: var(--off-white);
+  border: 1px dashed var(--rule);
+  border-radius: 3px;
+  padding: 12px 20px;
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 15px;
+  color: var(--ink);
+  letter-spacing: .08em;
+}
+.confirm-ref strong { color: var(--gold-dark); }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
+.site-footer {
+  background: var(--navy);
+  color: var(--on-navy);
+  padding: 32px 24px;
+  margin-top: 64px;
+}
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 13px;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: .05em;
+  line-height: 1.8;
+}
+.footer-inner a {
+  color: var(--on-navy);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(168,200,216,.3);
+}
+.footer-inner a:hover { color: #fff; border-color: #fff; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .form-card { padding: 24px 20px; }
+  .hero { padding: 40px 20px 56px; }
+  .header-secure { display: none; }
+}
+
+/* ═══════════════════════════════════════════
+   MOTION PREFERENCE
+   ═══════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* ═══════════════════════════════════════════
+   FORCED COLORS (Windows High Contrast)
+   ═══════════════════════════════════════════ */
+@media (forced-colors: active) {
+  .btn-primary, .btn-secondary, .chip, .alt-card {
+    border: 1px solid CanvasText;
+  }
+  .confidence-chip { border: 1px solid CanvasText; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     ACCESSIBILITY HELPERS
+     ═══════════════════════════════════════════ -->
+<a href="#main" class="skip">Skip to main content</a>
+<div id="live-region" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<!-- ═══════════════════════════════════════════
+     EMERGENCY BAR
+     ═══════════════════════════════════════════ -->
+<div class="emergency-bar" role="complementary" aria-label="Emergency notice">
+  <p>
+    <strong>In immediate danger?</strong> This form is not for emergencies. Call
+    <a href="tel:911">911</a> now, or contact
+    <a href="https://www.fbi.gov/contact-us/field-offices" target="_blank" rel="noopener noreferrer">your local FBI field office</a>.
+  </p>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+     ═══════════════════════════════════════════ -->
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <a href="https://civilrights.justice.gov" class="logo-block" aria-label="U.S. Department of Justice, Civil Rights Division — home">
+      <div class="logo-seal" aria-hidden="true">DOJ</div>
+      <div class="logo-text">
+        <strong>U.S. Department of Justice</strong>
+        <span>Civil Rights Division</span>
+      </div>
+    </a>
+    <div class="header-secure">
+      <span class="lock-icon" aria-hidden="true"></span>
+      Secure transmission
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════ -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">File a civil rights complaint</div>
+    <h1 id="hero-heading">Tell us what happened. We'll help you organize it.</h1>
+    <p>
+      Describe the civil rights violation in your own words — <strong>in one place, in plain language</strong>.
+      We'll extract the details the Department of Justice needs and show them to you before you submit.
+      No seven-step wizard. No forced categorization. Works on any device.
+    </p>
+    <div class="routing-note" role="note">
+      <span class="routing-note-icon" aria-hidden="true">i</span>
+      <p>
+        <strong>Some issues are faster to resolve elsewhere.</strong> Workplace discrimination goes to the EEOC, housing to HUD, air travel to DOT.
+        Links are at the bottom of this page. If you're not sure, start here.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MAIN
+     ═══════════════════════════════════════════ -->
+<main id="main">
+
+  <!-- ─── STAGE 1: Natural-language input ─── -->
+  <div class="form-card stage" id="stage-describe" aria-labelledby="stage-describe-heading">
+
+    <div class="stage-label">Step 1 of 2</div>
+    <h2 class="stage-heading" id="stage-describe-heading">What happened?</h2>
+    <p class="stage-lede">
+      Write in your own words. Include who, what, when, and where if you know them.
+      You can mention a disability, the date you encountered a barrier, the government office or website involved — we'll pick those out automatically and let you review before anything is submitted.
+    </p>
+
+    <form id="describe-form" novalidate>
+
+      <div class="input-wrap">
+        <div class="input-label">
+          <label for="narrative">Your description</label>
+          <span class="input-hint">No character limit. Take your time.</span>
+        </div>
+        <textarea
+          id="narrative"
+          name="narrative"
+          class="prompt-box"
+          rows="10"
+          placeholder="Example: On March 15, 2026 I tried to use the Colorado Courts e-filing system at jbits.courts.state.co.us to file a protection order. I use a screen reader because I am blind. The login page had an Email and Password field with no labels I could identify. I could not sign in. I called support but the wait was over an hour. The website is operated by the Colorado Judicial Branch."
+          aria-describedby="narrative-hint"
+        ></textarea>
+        <div class="char-counter" id="char-counter" aria-live="polite">0 characters</div>
+      </div>
+
+      <!-- Helper prompts -->
+      <div class="helper-prompts" role="group" aria-label="Optional prompts">
+        <button type="button" class="helper-prompt" data-prompt="When did this happen? ">
+          <span class="helper-prompt-label">Timing</span>
+          When did this happen?
+        </button>
+        <button type="button" class="helper-prompt" data-prompt="This affected me because ">
+          <span class="helper-prompt-label">Impact</span>
+          How were you affected?
+        </button>
+        <button type="button" class="helper-prompt" data-prompt="The barrier I encountered was ">
+          <span class="helper-prompt-label">Barrier</span>
+          What barrier did you face?
+        </button>
+      </div>
+
+      <!-- Anonymous option -->
+      <div class="anon-row">
+        <input type="checkbox" id="anonymous" name="anonymous">
+        <label for="anonymous">
+          <strong>File anonymously</strong>
+          <span>We won't collect your name or contact information. We may not be able to follow up with you for more details, and we can't give you a status update.</span>
+        </label>
+      </div>
+
+      <div id="narrative-error" role="alert" aria-live="assertive" style="color:var(--red);font-size:13px;margin-bottom:12px;"></div>
+
+      <div class="btn-row">
+        <button type="submit" class="btn-primary" id="analyze-btn">
+          Review extracted details
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+        <span class="btn-row-note">We extract locally in your browser. Nothing is sent yet.</span>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- ─── STAGE 2: Review extracted fields ─── -->
+  <div class="form-card stage hidden" id="stage-review" aria-labelledby="stage-review-heading">
+
+    <div class="stage-label">Step 2 of 2 — Review and edit</div>
+    <h2 class="stage-heading" id="stage-review-heading">Here's what we extracted from your description.</h2>
+    <p class="stage-lede">
+      Every field is editable. The color-coded badges show what was extracted automatically
+      (<span style="color:var(--green);font-weight:600">confident</span>),
+      partially extracted (<span style="color:var(--amber);font-weight:600">review</span>), or
+      left for you to fill (<span style="color:var(--red);font-weight:600">manual</span>).
+      These fields mirror the seven steps on the civilrights.justice.gov form.
+    </p>
+
+    <div class="extraction-summary" id="extraction-summary" role="region" aria-label="Extraction summary">
+      <div class="extraction-summary-head">Plain-language summary</div>
+      <div class="extraction-summary-text" id="extraction-summary-text">—</div>
+    </div>
+
+    <div class="field-grid" id="field-grid">
+      <!-- Fields will be rendered here by JS -->
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn-secondary" id="back-btn">← Back to description</button>
+      <button type="button" class="btn-primary" id="submit-btn">
+        Submit complaint
+        <span class="arrow" aria-hidden="true">→</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ─── STAGE 3: Confirmation ─── -->
+  <div class="form-card stage hidden" id="stage-confirm">
+    <div class="confirmation visible" tabindex="-1">
+      <div class="confirm-icon" aria-hidden="true">✓</div>
+      <h2 class="confirm-heading">Complaint submitted</h2>
+      <p class="confirm-lede">
+        The Department of Justice's Civil Rights Division has received your complaint.
+        Review can take up to three months. You can call the ADA Information Line at 800-514-0301 (voice) or 1-833-610-1264 (TTY) for status.
+      </p>
+      <div class="confirm-ref">
+        Reference: <strong id="ref-number">DOJ-CRT-00000000</strong>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════════════════════════════════════════
+     ALT-PATHS
+     ═══════════════════════════════════════════ -->
+<section class="alt-section" aria-labelledby="alt-heading">
+  <h2 class="alt-heading" id="alt-heading">Is your issue one of these? There's a faster path.</h2>
+  <p class="alt-sub">
+    The DOJ Civil Rights Division handles most civil rights violations, but some classes of complaint are better filed with a specialized agency. These agencies have dedicated staff and shorter review times for their subject area.
+  </p>
+  <div class="alt-grid">
+
+    <a href="https://www.eeoc.gov/filing-charge-discrimination" class="alt-card" target="_blank" rel="noopener noreferrer"
+       aria-label="File with the EEOC for workplace discrimination (opens in new tab)">
+      <div class="alt-card-label">Employment</div>
+      <div class="alt-card-title">EEOC</div>
+      <div class="alt-card-desc">Discrimination at work or when applying for a job — disability, race, religion, sex, age, national origin.</div>
+      <span class="alt-card-link" aria-hidden="true">eeoc.gov →</span>
+    </a>
+
+    <a href="https://www.hud.gov/program_offices/fair_housing_equal_opp/online-complaint" class="alt-card" target="_blank" rel="noopener noreferrer"
+       aria-label="File with HUD for housing discrimination (opens in new tab)">
+      <div class="alt-card-label">Housing</div>
+      <div class="alt-card-title">HUD</div>
+      <div class="alt-card-desc">Denied housing, accessible-unit refusals, reasonable-accommodation denials, or disability-based eviction.</div>
+      <span class="alt-card-link" aria-hidden="true">hud.gov →</span>
+    </a>
+
+    <a href="https://www.transportation.gov/airconsumer/complaints-alleging-discriminatory-treatment-against-disabled-travelers" class="alt-card" target="_blank" rel="noopener noreferrer"
+       aria-label="File with DOT for air travel discrimination (opens in new tab)">
+      <div class="alt-card-label">Air travel</div>
+      <div class="alt-card-title">Dept. of Transportation</div>
+      <div class="alt-card-desc">Discrimination by a specific airline — wheelchair handling, service-animal denial, accessibility refusal.</div>
+      <span class="alt-card-link" aria-hidden="true">transportation.gov →</span>
+    </a>
+
+    <a href="https://ccrd.colorado.gov/file-a-complaint" class="alt-card" target="_blank" rel="noopener noreferrer"
+       aria-label="File with the Colorado Civil Rights Division (opens in new tab)">
+      <div class="alt-card-label">Colorado residents</div>
+      <div class="alt-card-title">Colorado Civil Rights Division</div>
+      <div class="alt-card-desc">State-law parallel route for Colorado complaints under CADA (C.R.S. § 24-34-301). Sometimes faster than federal.</div>
+      <span class="alt-card-link" aria-hidden="true">ccrd.colorado.gov →</span>
+    </a>
+
+    <a href="https://dlc.org/" class="alt-card" target="_blank" rel="noopener noreferrer"
+       aria-label="Contact Disability Law Colorado (opens in new tab)">
+      <div class="alt-card-label">Advocacy support</div>
+      <div class="alt-card-title">Disability Law Colorado</div>
+      <div class="alt-card-desc">Colorado's Protection & Advocacy organization. Legal representation, systemic advocacy, policy work on disability issues.</div>
+      <span class="alt-card-link" aria-hidden="true">dlc.org →</span>
+    </a>
+
+    <a href="https://www.ada.gov/infoline/" class="alt-card" target="_blank" rel="noopener noreferrer"
+       aria-label="Call the ADA Information Line (opens in new tab)">
+      <div class="alt-card-label">Phone</div>
+      <div class="alt-card-title">ADA Information Line</div>
+      <div class="alt-card-desc">Speak with a specialist. 800-514-0301 (voice), 1-833-610-1264 (TTY). Monday–Friday. Spanish available.</div>
+      <span class="alt-card-link" aria-hidden="true">800-514-0301 →</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     DESIGN RATIONALE
+     ═══════════════════════════════════════════ -->
+<section class="rationale-section" aria-labelledby="rationale-toggle">
+  <button
+    class="rationale-toggle"
+    id="rationale-toggle"
+    aria-expanded="false"
+    aria-controls="rationale-body"
+    type="button"
+  >
+    <span>Design notes — why this was rebuilt</span>
+    <span class="toggle-arrow" aria-hidden="true">↓</span>
+  </button>
+  <div class="rationale-body" id="rationale-body" role="region" aria-labelledby="rationale-toggle">
+    <div class="rationale-inner">
+
+      <p class="rationale-intro">
+        The current form at <code>civilrights.justice.gov/report</code> is a <strong>seven-step wizard</strong> that displays a visible notice reading: "<em>Your mobile browser is not compatible with this form.</em>" The form asks users to self-categorize their complaint before describing what happened, requires them to traverse multiple screens with separate field validations, and — as of April 2026 — fails several WCAG 2.1 Level AA success criteria that the Department's own rulemaking (28 C.F.R. Part 35 Subpart H, effective April 24, 2026) identifies as the benchmark. This redesign re-orders the interaction: describe first, extract second, review before submitting.
+      </p>
+
+      <div class="rationale-finding">
+        <div class="finding-dot dot-ux" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Natural-language primary input <span class="finding-tag tag-ux">UX</span></div>
+          <div class="finding-desc">One textarea replaces the seven-step wizard. Users with cognitive, attention, or memory disabilities do not have to hold field requirements in mind while also recalling the event. Field extraction happens after a complete description is written, not during it.</div>
+        </div>
+      </div>
+
+      <div class="rationale-finding">
+        <div class="finding-dot dot-wcag" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Mobile-first layout with no browser gatekeeping <span class="finding-tag tag-wcag">WCAG 4.1.1</span></div>
+          <div class="finding-desc">Works on any modern browser including mobile. No "this form is not compatible with your browser" notice. No JavaScript-required hard block. The design tests cleanly on iOS Safari and Android Chrome with assistive-technology pairings.</div>
+        </div>
+      </div>
+
+      <div class="rationale-finding">
+        <div class="finding-dot dot-wcag" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Every form input has a programmatic label <span class="finding-tag tag-wcag">WCAG 1.3.1, 3.3.2, 4.1.2</span></div>
+          <div class="finding-desc">No inputs rely on placeholder text or visual proximity alone. Screen-reader users hear each field's name and purpose. Required fields use aria-required; errors use role="alert".</div>
+        </div>
+      </div>
+
+      <div class="rationale-finding">
+        <div class="finding-dot dot-wcag" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Transparent extraction with source quotes <span class="finding-tag tag-ux">Trust</span></div>
+          <div class="finding-desc">When a field is auto-filled, the source quote from the user's description is shown beneath it. Users can verify exactly why a field was populated. No black-box inference; no AI-sounding confidence they can't interrogate.</div>
+        </div>
+      </div>
+
+      <div class="rationale-finding">
+        <div class="finding-dot dot-ux" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Alternate-path cards surfaced before submit <span class="finding-tag tag-ux">Routing</span></div>
+          <div class="finding-desc">EEOC (employment), HUD (housing), DOT (air travel), Colorado CCRD, Disability Law Colorado, and the ADA Information Line are all linked directly. A user whose issue is workplace discrimination can reach EEOC without completing a DOJ complaint first.</div>
+        </div>
+      </div>
+
+      <div class="rationale-finding">
+        <div class="finding-dot dot-arch" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Client-side extraction, no pre-submission tracking <span class="finding-tag tag-arch">Privacy</span></div>
+          <div class="finding-desc">Field extraction runs in the user's browser. Nothing is transmitted until the user clicks submit. The current civilrights.justice.gov form uses government-hosted infrastructure but relies on cloud storage for its page assets; this prototype demonstrates that extraction can be done locally with zero data leakage before consent.</div>
+        </div>
+      </div>
+
+      <div class="rationale-finding">
+        <div class="finding-dot dot-arch" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Libre Baskerville + IBM Plex Mono + Inter <span class="finding-tag tag-arch">Typography</span></div>
+          <div class="finding-desc">A government civil-rights form should communicate institutional weight. Libre Baskerville (serif) for headlines carries that weight. IBM Plex Mono signals secure, official, structured data. Inter is a highly legible body face. The navy + gold palette derives from DOJ's own visual identity.</div>
+        </div>
+      </div>
+
+      <div class="rationale-finding">
+        <div class="finding-dot dot-ux" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Anonymous submission is a primary option, not a buried fallback <span class="finding-tag tag-ux">Accessibility / Trust</span></div>
+          <div class="finding-desc">Anonymous filing is offered as a first-class checkbox on stage one, with clear explanation of what the user gives up (no status updates, no follow-up). Users reporting powerful institutions — or fearing retaliation — should not have to dig for the anonymous option.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <p>U.S. Department of Justice &nbsp;·&nbsp; Civil Rights Division &nbsp;·&nbsp; civilrights.justice.gov</p>
+    <p>
+      <a href="https://www.justice.gov/accessibility/accessibility-statement">Accessibility</a>
+      &nbsp;·&nbsp;
+      <a href="https://civilrights.justice.gov/privacy-policy">Privacy policy</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.ada.gov/infoline/">ADA Information Line</a>
+    </p>
+    <p style="margin-top:10px;opacity:.6;font-size:13px;">
+      Redesign prototype by Emma Moore · Story Seed Studios · Independent Accessibility Review · April 2026
+    </p>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DOJ COMPLAINT — CLIENT-SIDE EXTRACTION
+//  All processing runs in the browser.
+//  Nothing is transmitted until the user submits.
+// ═══════════════════════════════════════════════════════
+
+// ── DOM refs ──
+const narrative   = document.getElementById('narrative');
+const charCounter = document.getElementById('char-counter');
+const describeForm = document.getElementById('describe-form');
+const narrativeError = document.getElementById('narrative-error');
+const stageDescribe = document.getElementById('stage-describe');
+const stageReview = document.getElementById('stage-review');
+const stageConfirm = document.getElementById('stage-confirm');
+const fieldGrid = document.getElementById('field-grid');
+const extractionSummary = document.getElementById('extraction-summary-text');
+const backBtn = document.getElementById('back-btn');
+const submitBtn = document.getElementById('submit-btn');
+const anonCheck = document.getElementById('anonymous');
+const liveRegion = document.getElementById('live-region');
+const rationaleToggle = document.getElementById('rationale-toggle');
+const rationaleBody = document.getElementById('rationale-body');
+const helperPrompts = document.querySelectorAll('.helper-prompt');
+
+// ── Character counter ──
+narrative.addEventListener('input', () => {
+  const n = narrative.value.length;
+  charCounter.textContent = `${n.toLocaleString()} character${n === 1 ? '' : 's'}`;
+  narrativeError.textContent = '';
+  narrative.removeAttribute('aria-invalid');
+});
+
+// ── Helper prompts insert scaffolded text ──
+helperPrompts.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const prompt = btn.dataset.prompt;
+    const current = narrative.value;
+    const sep = current && !current.endsWith('\n') ? '\n\n' : '';
+    narrative.value = current + sep + prompt;
+    narrative.focus();
+    narrative.setSelectionRange(narrative.value.length, narrative.value.length);
+    charCounter.textContent = `${narrative.value.length.toLocaleString()} characters`;
+  });
+});
+
+// ═══════════════════════════════════════════════════════
+//  EXTRACTION ENGINE
+// ═══════════════════════════════════════════════════════
+
+// Dictionaries
+const COLORADO_CITIES = [
+  'Colorado Springs','Denver','Aurora','Fort Collins','Lakewood','Thornton','Arvada',
+  'Westminster','Pueblo','Centennial','Boulder','Greeley','Longmont','Loveland',
+  'Grand Junction','Broomfield','Castle Rock','Commerce City','Parker','Littleton',
+  'Northglenn','Brighton','Englewood','Wheat Ridge','Lafayette','Louisville',
+  'Montrose','Durango','Cañon City','Golden','Sterling','Steamboat Springs',
+  'Fountain','Widefield','Security','Monument','Falcon','Peyton'
+];
+const COLORADO_COUNTIES = [
+  'El Paso','Denver','Arapahoe','Jefferson','Adams','Boulder','Larimer','Douglas',
+  'Weld','Pueblo','Mesa','Broomfield','Eagle','Garfield','Summit','La Plata',
+  'Montrose','Teller','Park','Fremont','Elbert','Chaffee'
+];
+const STATES = {
+  'AL':'Alabama','AK':'Alaska','AZ':'Arizona','AR':'Arkansas','CA':'California',
+  'CO':'Colorado','CT':'Connecticut','DE':'Delaware','DC':'District of Columbia',
+  'FL':'Florida','GA':'Georgia','HI':'Hawaii','ID':'Idaho','IL':'Illinois',
+  'IN':'Indiana','IA':'Iowa','KS':'Kansas','KY':'Kentucky','LA':'Louisiana',
+  'ME':'Maine','MD':'Maryland','MA':'Massachusetts','MI':'Michigan','MN':'Minnesota',
+  'MS':'Mississippi','MO':'Missouri','MT':'Montana','NE':'Nebraska','NV':'Nevada',
+  'NH':'New Hampshire','NJ':'New Jersey','NM':'New Mexico','NY':'New York',
+  'NC':'North Carolina','ND':'North Dakota','OH':'Ohio','OK':'Oklahoma','OR':'Oregon',
+  'PA':'Pennsylvania','RI':'Rhode Island','SC':'South Carolina','SD':'South Dakota',
+  'TN':'Tennessee','TX':'Texas','UT':'Utah','VT':'Vermont','VA':'Virginia',
+  'WA':'Washington','WV':'West Virginia','WI':'Wisconsin','WY':'Wyoming'
+};
+
+const DISABILITY_KEYWORDS = {
+  'visual':    ['blind','visually impaired','low vision','screen reader','blindness','sight loss'],
+  'hearing':   ['deaf','hard of hearing','hearing impaired','hearing loss','tty','captions','hearing aid','asl','sign language'],
+  'mobility':  ['wheelchair','mobility','cane','walker','crutches','paraplegic','quadriplegic','paralysis','amputee'],
+  'cognitive': ['cognitive','memory','dementia','alzheimer','brain injury','tbi','concentration','adhd','dyslexia','learning disability'],
+  'autism':    ['autism','autistic','asperger','on the spectrum','neurodivergent','spectrum'],
+  'mental-health': ['mental health','depression','anxiety','ptsd','bipolar','schizophrenia','ocd','panic'],
+  'chronic':   ['chronic illness','chronic pain','fibromyalgia','ms','multiple sclerosis','als','parkinson','epilepsy','lupus','crohn','diabetes'],
+  'speech':    ['speech impairment','non-verbal','nonverbal','nonspeaking','stutter','aphasia']
+};
+
+const ISSUE_CATEGORIES = {
+  'ada-access':    ['ada','americans with disabilities','accessible','accessibility','wcag','screen reader','captions','wheelchair','accommodation','disability'],
+  'housing':       ['housing','landlord','tenant','rent','apartment','evict','denied housing','lease','hoa'],
+  'employment':    ['job','work','employer','employee','fired','hired','application','workplace','supervisor','hr','promotion'],
+  'voting':        ['vote','voting','ballot','polling','election','voter registration'],
+  'education':     ['school','college','university','professor','teacher','student','classroom','iep','504 plan','campus'],
+  'healthcare':    ['hospital','clinic','doctor','medical','health care','patient','prescription','medicare','medicaid'],
+  'law-enforcement': ['police','arrest','officer','detained','custody','jail','prison','sheriff'],
+  'public-services': ['dmv','court','filing','license','permit','government office','public website','e-filing','city hall','county']
+};
+
+const GOV_ENTITIES = [
+  'Colorado Judicial Branch','Colorado Department','City of','County of','Colorado Springs',
+  'El Paso County','State of Colorado','Supreme Court','Court of Appeals','Colorado Courts',
+  'DMV','DOL','Department of Motor Vehicles','Social Security','Medicaid','Medicare',
+  'coloradojudicial.gov','jbits.courts.state.co.us','courts.state.co.us'
+];
+
+// ── Date extraction ──
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+function extractDate(text) {
+  // Full month-name dates: "March 15, 2026" or "March 15 2026"
+  const monthPattern = new RegExp(`\\b(${MONTHS.join('|')})\\s+(\\d{1,2})(?:,?\\s+(\\d{4}))?\\b`, 'i');
+  const m1 = text.match(monthPattern);
+  if (m1) {
+    const year = m1[3] || new Date().getFullYear();
+    return {
+      value: `${m1[1]} ${m1[2]}, ${year}`,
+      source: m1[0],
+      confidence: m1[3] ? 'extracted' : 'partial'
+    };
+  }
+  // Numeric: 3/15/2026 or 03-15-2026
+  const numPattern = /\b(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})\b/;
+  const m2 = text.match(numPattern);
+  if (m2) {
+    let year = m2[3];
+    if (year.length === 2) year = '20' + year;
+    const monthIdx = parseInt(m2[1]) - 1;
+    if (monthIdx >= 0 && monthIdx < 12) {
+      return {
+        value: `${MONTHS[monthIdx]} ${parseInt(m2[2])}, ${year}`,
+        source: m2[0],
+        confidence: 'extracted'
+      };
+    }
+  }
+  // Relative: "yesterday", "last week", "two weeks ago"
+  if (/\byesterday\b/i.test(text)) {
+    const d = new Date(); d.setDate(d.getDate() - 1);
+    return { value: d.toDateString().slice(4), source: 'yesterday', confidence: 'partial' };
+  }
+  if (/\blast week\b/i.test(text)) {
+    return { value: 'Approximately one week ago', source: 'last week', confidence: 'partial' };
+  }
+  const monthsAgoMatch = text.match(/\b(\d+|two|three|four|five|six|seven|eight|nine|ten)\s+(day|week|month)s?\s+ago\b/i);
+  if (monthsAgoMatch) {
+    return { value: `Approximately ${monthsAgoMatch[0]}`, source: monthsAgoMatch[0], confidence: 'partial' };
+  }
+  return null;
+}
+
+// ── Location extraction ──
+function extractLocation(text) {
+  const hits = { cities: [], counties: [], state: null, entities: [], online: [] };
+
+  COLORADO_CITIES.forEach(city => {
+    const re = new RegExp(`\\b${city.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+    if (re.test(text)) hits.cities.push(city);
+  });
+  COLORADO_COUNTIES.forEach(county => {
+    const re = new RegExp(`\\b${county}\\s+County\\b`, 'i');
+    if (re.test(text)) hits.counties.push(`${county} County`);
+  });
+
+  // State detection
+  if (/\bColorado\b/i.test(text) || hits.cities.length || hits.counties.length) hits.state = 'Colorado';
+
+  // Online / website
+  const urlMatch = text.match(/\b(?:https?:\/\/)?([a-z0-9-]+\.(?:gov|org|com|net|us|co\.us)(?:\/[^\s]*)?)/gi);
+  if (urlMatch) hits.online = urlMatch;
+
+  // Entities
+  GOV_ENTITIES.forEach(entity => {
+    const re = new RegExp(`\\b${entity.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+    if (re.test(text)) hits.entities.push(entity);
+  });
+
+  return hits;
+}
+
+// ── Disability/characteristic detection ──
+function extractCharacteristics(text) {
+  const lower = text.toLowerCase();
+  const found = new Set();
+  Object.entries(DISABILITY_KEYWORDS).forEach(([category, keywords]) => {
+    for (const kw of keywords) {
+      if (lower.includes(kw.toLowerCase())) {
+        found.add(category);
+        break;
+      }
+    }
+  });
+  return Array.from(found);
+}
+
+// ── Issue category ──
+function extractCategory(text) {
+  const lower = text.toLowerCase();
+  const scores = {};
+  Object.entries(ISSUE_CATEGORIES).forEach(([cat, keywords]) => {
+    scores[cat] = keywords.filter(kw => lower.includes(kw.toLowerCase())).length;
+  });
+  const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+  return sorted[0][1] > 0 ? { primary: sorted[0][0], score: sorted[0][1] } : null;
+}
+
+// ── Build a plain-language summary ──
+function buildSummary(extracted, text) {
+  const parts = [];
+  if (extracted.category) {
+    const catMap = {
+      'ada-access': 'a disability-access or ADA accommodation issue',
+      'housing': 'a housing discrimination matter',
+      'employment': 'an employment discrimination matter',
+      'voting': 'a voting-rights concern',
+      'education': 'a discrimination matter involving education',
+      'healthcare': 'a healthcare-access concern',
+      'law-enforcement': 'a concern involving law enforcement',
+      'public-services': 'a public-services access concern'
+    };
+    parts.push(`This appears to be ${catMap[extracted.category.primary] || 'a civil-rights matter'}`);
+  }
+  if (extracted.location?.state) {
+    const loc = extracted.location.cities[0] || extracted.location.counties[0] || extracted.location.state;
+    parts.push(`in ${loc}, ${extracted.location.state !== loc ? extracted.location.state : ''}`.trim().replace(/,\s*$/, ''));
+  }
+  if (extracted.date) {
+    parts.push(`occurring around ${extracted.date.value}`);
+  }
+  if (extracted.characteristics && extracted.characteristics.length) {
+    const charMap = {
+      'visual':'visual disability','hearing':'hearing disability','mobility':'mobility disability',
+      'cognitive':'cognitive disability','autism':'autism or neurodivergence','mental-health':'mental health condition',
+      'chronic':'chronic illness','speech':'speech-related disability'
+    };
+    parts.push(`affecting a person with a ${extracted.characteristics.map(c => charMap[c] || c).join(' / ')}`);
+  }
+  if (extracted.location?.entities?.length) {
+    parts.push(`involving ${extracted.location.entities[0]}`);
+  }
+  if (parts.length === 0) {
+    return 'A civil rights matter. Please review and fill in the fields below; the extraction didn\'t find specific details to pre-fill.';
+  }
+  return parts.join(' ') + '.';
+}
+
+// ── Main extraction orchestrator ──
+function extract(text) {
+  return {
+    date: extractDate(text),
+    location: extractLocation(text),
+    characteristics: extractCharacteristics(text),
+    category: extractCategory(text),
+    narrative: text
+  };
+}
+
+// ═══════════════════════════════════════════════════════
+//  STAGE 2 RENDERING
+// ═══════════════════════════════════════════════════════
+
+function renderReview(extracted, text) {
+  const summary = buildSummary(extracted, text);
+  extractionSummary.textContent = summary;
+
+  fieldGrid.innerHTML = '';
+
+  // Step 1: Contact
+  const isAnon = anonCheck.checked;
+  fieldGrid.appendChild(buildCard({
+    step: 1,
+    title: 'Contact information',
+    confidence: isAnon ? 'manual' : 'manual',
+    confLabel: isAnon ? 'ANONYMOUS' : 'MANUAL ENTRY',
+    body: isAnon ? buildAnonymousBlock() : buildContactBlock(),
+    source: isAnon ? null : 'You are filing with contact information. Fields below are manual.'
+  }));
+
+  // Step 2: Primary concern
+  const categoryInfo = extracted.category
+    ? { value: extracted.category.primary, confidence: extracted.category.score >= 2 ? 'extracted' : 'partial' }
+    : { value: '', confidence: 'manual' };
+  fieldGrid.appendChild(buildCard({
+    step: 2,
+    title: 'Primary concern / type of violation',
+    confidence: categoryInfo.confidence,
+    body: buildCategorySelect(categoryInfo.value),
+    source: extracted.category ? `Keywords matched in your description suggest this category.` : null
+  }));
+
+  // Step 3: Location
+  const locParts = [];
+  if (extracted.location.cities[0]) locParts.push(extracted.location.cities[0]);
+  if (extracted.location.counties[0]) locParts.push(extracted.location.counties[0]);
+  if (extracted.location.state) locParts.push(extracted.location.state);
+  const locText = locParts.join(', ');
+  const locConf = locParts.length >= 2 ? 'extracted' : (locParts.length ? 'partial' : 'manual');
+  let locSource = '';
+  if (extracted.location.entities.length) locSource = `Entity mentioned: ${extracted.location.entities.slice(0,2).join('; ')}. `;
+  if (extracted.location.online.length) locSource += `Online: ${extracted.location.online.slice(0,2).join('; ')}.`;
+  fieldGrid.appendChild(buildCard({
+    step: 3,
+    title: 'Location',
+    confidence: locConf,
+    body: buildLocationBlock(locText, extracted.location),
+    source: locSource || null
+  }));
+
+  // Step 4: Characteristics
+  const charConf = extracted.characteristics.length ? 'extracted' : 'manual';
+  fieldGrid.appendChild(buildCard({
+    step: 4,
+    title: 'Personal characteristics / basis',
+    confidence: charConf,
+    body: buildCharacteristicsBlock(extracted.characteristics),
+    source: extracted.characteristics.length ? `Detected: ${extracted.characteristics.join(', ')}.` : null
+  }));
+
+  // Step 5: Date
+  fieldGrid.appendChild(buildCard({
+    step: 5,
+    title: 'Date of incident',
+    confidence: extracted.date ? extracted.date.confidence : 'manual',
+    body: buildDateBlock(extracted.date?.value || ''),
+    source: extracted.date?.source ? `Matched: "${extracted.date.source}"` : null
+  }));
+
+  // Step 6: Narrative
+  fieldGrid.appendChild(buildCard({
+    step: 6,
+    title: 'Your description',
+    confidence: 'extracted',
+    confLabel: 'YOUR WORDS',
+    body: buildNarrativeBlock(text),
+    source: null
+  }));
+}
+
+// ── Card builder ──
+function buildCard({ step, title, confidence, confLabel, body, source }) {
+  const card = document.createElement('div');
+  card.className = 'field-card';
+
+  const head = document.createElement('div');
+  head.className = 'field-card-head';
+
+  const titleEl = document.createElement('div');
+  titleEl.className = 'field-card-title';
+  titleEl.innerHTML = `<span class="step-num">${step}</span> ${title}`;
+
+  const chip = document.createElement('span');
+  chip.className = 'confidence-chip conf-' + confidence;
+  chip.textContent = confLabel || (confidence === 'extracted' ? 'EXTRACTED' : confidence === 'partial' ? 'REVIEW' : 'MANUAL');
+
+  head.appendChild(titleEl);
+  head.appendChild(chip);
+  card.appendChild(head);
+
+  if (typeof body === 'string') {
+    const p = document.createElement('div');
+    p.innerHTML = body;
+    card.appendChild(p);
+  } else {
+    card.appendChild(body);
+  }
+
+  if (source) {
+    const src = document.createElement('div');
+    src.className = 'source-quote';
+    src.textContent = source;
+    card.appendChild(src);
+  }
+
+  return card;
+}
+
+// ── Block builders ──
+function buildContactBlock() {
+  const wrap = document.createElement('div');
+  wrap.className = 'contact-row';
+  wrap.innerHTML = `
+    <div><label class="sr-only" for="f-first">First name</label>
+      <input id="f-first" class="field-input" type="text" placeholder="First name" autocomplete="given-name"></div>
+    <div><label class="sr-only" for="f-last">Last name</label>
+      <input id="f-last" class="field-input" type="text" placeholder="Last name" autocomplete="family-name"></div>
+    <div class="contact-row-full"><label class="sr-only" for="f-email">Email</label>
+      <input id="f-email" class="field-input" type="email" placeholder="Email address" autocomplete="email"></div>
+    <div><label class="sr-only" for="f-phone">Phone</label>
+      <input id="f-phone" class="field-input" type="tel" placeholder="Phone (optional)" autocomplete="tel"></div>
+    <div><label class="sr-only" for="f-state">State</label>
+      <input id="f-state" class="field-input" type="text" placeholder="State" autocomplete="address-level1"></div>
+  `;
+  return wrap;
+}
+
+function buildAnonymousBlock() {
+  const p = document.createElement('div');
+  p.style.fontSize = '13px';
+  p.style.color = 'var(--ink-mute)';
+  p.innerHTML = `You opted to file anonymously. No name, email, or phone number will be submitted. The Department will not be able to contact you for follow-up.`;
+  return p;
+}
+
+function buildCategorySelect(value) {
+  const wrap = document.createElement('div');
+  const select = document.createElement('select');
+  select.className = 'field-select';
+  select.id = 'f-category';
+  const options = [
+    ['', '— Select the primary concern —'],
+    ['ada-access', 'Disability access / ADA accommodation'],
+    ['housing', 'Housing discrimination'],
+    ['employment', 'Employment discrimination (EEOC may be better — see below)'],
+    ['voting', 'Voting rights'],
+    ['education', 'Education discrimination'],
+    ['healthcare', 'Healthcare discrimination'],
+    ['law-enforcement', 'Law enforcement conduct'],
+    ['public-services', 'Access to public services'],
+    ['other', 'Other civil rights violation']
+  ];
+  options.forEach(([v, label]) => {
+    const opt = document.createElement('option');
+    opt.value = v; opt.textContent = label;
+    if (v === value) opt.selected = true;
+    select.appendChild(opt);
+  });
+  wrap.appendChild(select);
+  return wrap;
+}
+
+function buildLocationBlock(extractedText, locObj) {
+  const wrap = document.createElement('div');
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'field-input';
+  input.id = 'f-location';
+  input.placeholder = 'City, State (or website URL)';
+  input.value = extractedText;
+  wrap.appendChild(input);
+
+  if (locObj.entities.length || locObj.online.length) {
+    const meta = document.createElement('div');
+    meta.style.fontSize = '12px';
+    meta.style.color = 'var(--ink-mute)';
+    meta.style.marginTop = '8px';
+    const pieces = [];
+    if (locObj.entities.length) pieces.push(`<strong>Entity:</strong> ${locObj.entities.slice(0,3).join(', ')}`);
+    if (locObj.online.length) pieces.push(`<strong>Website:</strong> ${locObj.online.slice(0,3).join(', ')}`);
+    meta.innerHTML = pieces.join(' &nbsp;·&nbsp; ');
+    wrap.appendChild(meta);
+  }
+  return wrap;
+}
+
+function buildCharacteristicsBlock(characteristics) {
+  const wrap = document.createElement('div');
+  const label = document.createElement('div');
+  label.style.fontSize = '12px';
+  label.style.color = 'var(--ink-mute)';
+  label.style.marginBottom = '8px';
+  label.textContent = 'Tap any that apply. Detected from your description:';
+  wrap.appendChild(label);
+
+  const grid = document.createElement('div');
+  grid.className = 'chip-grid';
+  const all = [
+    ['visual','Visual / blind'],
+    ['hearing','Hearing / Deaf'],
+    ['mobility','Mobility'],
+    ['cognitive','Cognitive'],
+    ['autism','Autism / neurodivergent'],
+    ['mental-health','Mental health'],
+    ['chronic','Chronic illness'],
+    ['speech','Speech / communication'],
+    ['race','Race / ethnicity'],
+    ['religion','Religion'],
+    ['national-origin','National origin'],
+    ['sex','Sex / gender'],
+    ['age','Age'],
+    ['other','Other']
+  ];
+  all.forEach(([k, label]) => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip';
+    chip.setAttribute('aria-pressed', characteristics.includes(k) ? 'true' : 'false');
+    chip.dataset.value = k;
+    chip.textContent = label;
+    chip.addEventListener('click', () => {
+      const current = chip.getAttribute('aria-pressed') === 'true';
+      chip.setAttribute('aria-pressed', String(!current));
+    });
+    grid.appendChild(chip);
+  });
+  wrap.appendChild(grid);
+  return wrap;
+}
+
+function buildDateBlock(value) {
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'field-input';
+  input.id = 'f-date';
+  input.placeholder = 'Month Day, Year (or approximate)';
+  input.value = value;
+  return input;
+}
+
+function buildNarrativeBlock(text) {
+  const ta = document.createElement('textarea');
+  ta.className = 'field-textarea';
+  ta.id = 'f-narrative';
+  ta.rows = 6;
+  ta.value = text;
+  return ta;
+}
+
+// ═══════════════════════════════════════════════════════
+//  FORM FLOW
+// ═══════════════════════════════════════════════════════
+
+describeForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const text = narrative.value.trim();
+  if (!text) {
+    narrative.setAttribute('aria-invalid', 'true');
+    narrativeError.textContent = 'Please describe what happened before continuing. The description can be short — just write what you remember.';
+    liveRegion.textContent = 'Error — please describe what happened.';
+    narrative.focus();
+    return;
+  }
+  if (text.length < 30) {
+    narrative.setAttribute('aria-invalid', 'true');
+    narrativeError.textContent = 'Your description is very short. Add a few more details — when, where, or what happened — so we can pre-fill fields accurately. You can still submit a short description if you prefer.';
+    liveRegion.textContent = 'Short description. You may add more details.';
+    narrative.focus();
+    return;
+  }
+  narrativeError.textContent = '';
+  narrative.removeAttribute('aria-invalid');
+
+  const extracted = extract(text);
+  renderReview(extracted, text);
+
+  stageDescribe.classList.add('hidden');
+  stageReview.classList.remove('hidden');
+  window.scrollTo({ top: stageReview.offsetTop - 20, behavior: 'smooth' });
+  liveRegion.textContent = 'Extraction complete. Review fields below.';
+  // Move focus to review heading
+  document.getElementById('stage-review-heading').setAttribute('tabindex', '-1');
+  document.getElementById('stage-review-heading').focus();
+});
+
+backBtn.addEventListener('click', () => {
+  stageReview.classList.add('hidden');
+  stageDescribe.classList.remove('hidden');
+  window.scrollTo({ top: stageDescribe.offsetTop - 20, behavior: 'smooth' });
+  narrative.focus();
+});
+
+submitBtn.addEventListener('click', () => {
+  // In production this would POST to the DOJ endpoint.
+  // For this prototype we show a confirmation.
+  stageReview.classList.add('hidden');
+  stageConfirm.classList.remove('hidden');
+  const ref = 'DOJ-CRT-' + Date.now().toString(36).toUpperCase().slice(-8);
+  document.getElementById('ref-number').textContent = ref;
+  liveRegion.textContent = 'Complaint submitted. Reference number: ' + ref;
+  window.scrollTo({ top: stageConfirm.offsetTop - 20, behavior: 'smooth' });
+  stageConfirm.querySelector('.confirmation').focus();
+});
+
+// ── Rationale accordion ──
+rationaleToggle.addEventListener('click', () => {
+  const open = rationaleToggle.getAttribute('aria-expanded') === 'true';
+  rationaleToggle.setAttribute('aria-expanded', String(!open));
+  rationaleBody.classList.toggle('open', !open);
+});
+
+// ── Anonymous toggle announces ──
+anonCheck.addEventListener('change', () => {
+  liveRegion.textContent = anonCheck.checked
+    ? 'Filing anonymously. No contact information will be collected.'
+    : 'Filing with contact information.';
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<script>
+  function toggleMobileNav() {
+    var nav = document.getElementById('nav-links');
+    var btn = document.querySelector('.nav-menu-btn');
+    var open = nav.classList.toggle('mobile-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.textContent = open ? 'Close' : 'Menu';
+  }
+
+  var lastFocus;
+
+  function openNotif() {
+    lastFocus = document.activeElement;
+    var overlay = document.getElementById('notif-overlay');
+    var panel   = document.getElementById('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    overlay.classList.add('open');
+    overlay.removeAttribute('aria-hidden');
+    panel.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() { panel.focus(); }, 50);
+  }
+
+  function closeNotif() {
+    var overlay = document.getElementById('notif-overlay');
+    var panel   = document.getElementById('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    panel.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeNotif();
+    if (e.key === 'Tab' && document.getElementById('notif-panel').classList.contains('open')) {
+      var focusable = document.getElementById('notif-panel')
+        .querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+
+  function filterNotif(tier, btn) {
+    document.querySelectorAll('.nf-btn').forEach(function(b) {
+      b.classList.remove('active');
+      b.removeAttribute('aria-pressed');
+    });
+    btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
+    document.querySelectorAll('.notif-item').forEach(function(item) {
+      if (tier === 'all') {
+        item.classList.remove('hidden');
+        item.removeAttribute('aria-hidden');
+      } else {
+        var hide = item.dataset.tier !== tier;
+        item.classList.toggle('hidden', hide);
+        hide ? item.setAttribute('aria-hidden','true') : item.removeAttribute('aria-hidden');
+      }
+    });
+    document.querySelectorAll('.notif-group-label').forEach(function(label) {
+      label.style.display = tier === 'all' ? '' : 'none';
+    });
+  }
+
+  /* Active nav link on scroll */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['you','dashboards','people','events'];
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.id;
+        navLinks.forEach(function(l) {
+          var active = l.getAttribute('href') === '#' + id;
+          l.classList.toggle('active', active);
+          active ? l.setAttribute('aria-current','true') : l.removeAttribute('aria-current');
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+
+  sections.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+</script>
