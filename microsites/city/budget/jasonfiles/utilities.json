@@ -1,0 +1,92 @@
+{
+  "generated_from": "2024 Colorado Springs ACFR, MD&A + Proprietary Fund Schedule of Revenues and Expenses + Statistical Section Table 5",
+  "as_of": "2024-12-31",
+  "description": "Colorado Springs Utilities \u2014 a municipal enterprise providing electric, natural gas, water, and wastewater services. Reported as major proprietary fund.",
+  "operating_2024": {
+    "operating_revenue_budget": 1174770000,
+    "operating_revenue_actual": 1012680000,
+    "operating_revenue_variance": -162090000,
+    "operating_expenses": {
+      "salaries_and_benefits": 265028000,
+      "other_operating": 388396000,
+      "depreciation_and_amortization": 202416000,
+      "total": 855840000
+    },
+    "operating_income": 156840000,
+    "nonoperating": {
+      "investment_earnings": 29833000,
+      "interest_expense": -98534000,
+      "derivative_gain": 7978000,
+      "other_net": 12166000,
+      "total": -48557000
+    },
+    "capital_contributions": 58232000,
+    "transfers_out": -35886000,
+    "change_in_net_position": 130629000
+  },
+  "charges_for_services_history": [
+    {
+      "year": 2015,
+      "amount": 830821000
+    },
+    {
+      "year": 2016,
+      "amount": 793293000
+    },
+    {
+      "year": 2017,
+      "amount": 839822000
+    },
+    {
+      "year": 2018,
+      "amount": 890477000
+    },
+    {
+      "year": 2019,
+      "amount": 893026000
+    },
+    {
+      "year": 2020,
+      "amount": 884352000
+    },
+    {
+      "year": 2021,
+      "amount": 1065754000
+    },
+    {
+      "year": 2022,
+      "amount": 1234496000,
+      "note": "natural_gas_price_shock_pass_through"
+    },
+    {
+      "year": 2023,
+      "amount": 1005708000
+    },
+    {
+      "year": 2024,
+      "amount": 1012680000
+    }
+  ],
+  "services_provided": [
+    "electric_generation_and_distribution",
+    "natural_gas_distribution",
+    "water_treatment_and_distribution",
+    "wastewater_collection_and_treatment",
+    "street_lighting"
+  ],
+  "revenue_bond_pledged_collateral": 3953079000,
+  "rate_actions": [
+    {
+      "approved_date": "2024-11-12",
+      "effective": "2025-01-01 through 2029-12-31",
+      "scope": [
+        "electric",
+        "natural_gas",
+        "water",
+        "wastewater"
+      ],
+      "note": "Multi-year rate schedule approved. Time-of-day electric rates effective October 1, 2025."
+    }
+  ],
+  "note_on_service_breakdown": "Electric/gas/water/wastewater revenue splits are NOT reported in the ACFR. The ACFR consolidates Utilities charges into a single $1,012,680,000 line. For service-level detail, see the separately published Colorado Springs Utilities standalone financial statements (Accounting Dept, PO Box 1103, Mail Code 929, Colorado Springs CO 80947-0929)."
+}

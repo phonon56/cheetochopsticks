@@ -1,0 +1,178 @@
+{
+  "generated_from": "2024 Colorado Springs ACFR, Statistical Section Tables 19 & 20",
+  "as_of": "2024-12-31",
+  "notes": "Fiscal year is the year of collection. Certification done in prior year. Rates include levies for operations and debt service. Representative sample of overlapping districts \u2014 other overlapping district mill levies vary.",
+  "representative_within_city_history": [
+    {
+      "year": 2015,
+      "city": 4.279,
+      "county": 7.791,
+      "school_district_11": 43.165,
+      "library": 4.0,
+      "water_conservancy": 0.94,
+      "total": 60.175
+    },
+    {
+      "year": 2016,
+      "city": 4.279,
+      "county": 7.869,
+      "school_district_11": 40.803,
+      "library": 3.857,
+      "water_conservancy": 0.941,
+      "total": 57.749
+    },
+    {
+      "year": 2017,
+      "city": 4.279,
+      "county": 7.919,
+      "school_district_11": 40.878,
+      "library": 3.957,
+      "water_conservancy": 0.94,
+      "total": 57.973
+    },
+    {
+      "year": 2018,
+      "city": 4.279,
+      "county": 7.965,
+      "school_district_11": 52.499,
+      "library": 3.812,
+      "water_conservancy": 0.939,
+      "total": 69.494
+    },
+    {
+      "year": 2019,
+      "city": 4.279,
+      "county": 8.068,
+      "school_district_11": 56.084,
+      "library": 4.0,
+      "water_conservancy": 0.944,
+      "total": 73.375
+    },
+    {
+      "year": 2020,
+      "city": 4.279,
+      "county": 7.035,
+      "school_district_11": 51.558,
+      "library": 3.731,
+      "water_conservancy": 0.902,
+      "total": 67.505
+    },
+    {
+      "year": 2021,
+      "city": 4.279,
+      "county": 7.692,
+      "school_district_11": 51.104,
+      "library": 3.855,
+      "water_conservancy": 0.942,
+      "total": 67.872
+    },
+    {
+      "year": 2022,
+      "city": 3.929,
+      "county": 6.696,
+      "school_district_11": 44.054,
+      "library": 3.49,
+      "water_conservancy": 0.839,
+      "total": 59.008,
+      "note": "City includes 0.35 mill temporary credit"
+    },
+    {
+      "year": 2023,
+      "city": 3.929,
+      "county": 4.809,
+      "school_district_11": 42.821,
+      "library": 3.512,
+      "water_conservancy": 0.887,
+      "total": 55.958,
+      "note": "City includes 0.35 mill temporary credit"
+    },
+    {
+      "year": 2024,
+      "city": 3.579,
+      "county": 7.192,
+      "school_district_11": 40.069,
+      "library": 3.061,
+      "water_conservancy": 0.888,
+      "total": 54.789,
+      "note": "City includes 0.70 mill temporary credit"
+    }
+  ],
+  "assessed_valuation_history": [
+    {
+      "year": 2015,
+      "assessed_valuation_thousands": 4678625,
+      "tax_levy": 20019838,
+      "current_collections": 19469574,
+      "collections_pct": 97.3
+    },
+    {
+      "year": 2016,
+      "assessed_valuation_thousands": 4985582,
+      "tax_levy": 21333306,
+      "current_collections": 20014822,
+      "collections_pct": 93.8
+    },
+    {
+      "year": 2017,
+      "assessed_valuation_thousands": 5048413,
+      "tax_levy": 19368851,
+      "current_collections": 18751296,
+      "collections_pct": 96.8
+    },
+    {
+      "year": 2018,
+      "assessed_valuation_thousands": 5414777,
+      "tax_levy": 20663441,
+      "current_collections": 19939068,
+      "collections_pct": 96.5
+    },
+    {
+      "year": 2019,
+      "assessed_valuation_thousands": 5508082,
+      "tax_levy": 21019928,
+      "current_collections": 20324600,
+      "collections_pct": 96.7
+    },
+    {
+      "year": 2020,
+      "assessed_valuation_thousands": 6280902,
+      "tax_levy": 24311078,
+      "current_collections": 23479175,
+      "collections_pct": 96.6
+    },
+    {
+      "year": 2021,
+      "assessed_valuation_thousands": 6220352,
+      "tax_levy": 25361893,
+      "current_collections": 23869463,
+      "collections_pct": 94.1
+    },
+    {
+      "year": 2022,
+      "assessed_valuation_thousands": 7400356,
+      "tax_levy": 26486009,
+      "current_collections": 26054499,
+      "collections_pct": 98.4
+    },
+    {
+      "year": 2023,
+      "assessed_valuation_thousands": 7504519,
+      "tax_levy": 26397601,
+      "current_collections": 26059445,
+      "collections_pct": 98.7
+    },
+    {
+      "year": 2024,
+      "assessed_valuation_thousands": 9026171,
+      "tax_levy": 31695133,
+      "current_collections": 30858491,
+      "collections_pct": 97.4
+    }
+  ],
+  "city_mill_levy_components_2024": {
+    "gross_mill_levy_before_credit": 4.279,
+    "temporary_credit": 0.7,
+    "net_mill_levy": 3.579,
+    "credit_source": "City Council certification ordinance annual"
+  }
+}

@@ -1,0 +1,309 @@
+{
+  "generated_from": "2024 Colorado Springs ACFR, Notes to Financial Statements IV.G",
+  "as_of": "2024-12-31",
+  "currency_unit": "USD_thousands",
+  "issues": [
+    {
+      "series": "Refunding COP Series 2017",
+      "fund": "governmental",
+      "type": "certificate_of_participation",
+      "original": 29930,
+      "outstanding": 25415,
+      "future_interest": 8151,
+      "rate_min": 3.0,
+      "rate_max": 5.25,
+      "maturity_start": 2018,
+      "maturity_end": 2039
+    },
+    {
+      "series": "COP Series 2019",
+      "fund": "governmental",
+      "type": "certificate_of_participation",
+      "original": 9000,
+      "outstanding": 7490,
+      "future_interest": 2693,
+      "rate_min": 4.0,
+      "rate_max": 5.0,
+      "maturity_start": 2020,
+      "maturity_end": 2039
+    },
+    {
+      "series": "Marketplace at Austin Bluffs GID Series 2008",
+      "fund": "governmental",
+      "type": "general_obligation_direct_placement",
+      "original": 2790,
+      "outstanding": 1125,
+      "future_interest": 312,
+      "rate_min": 6.5,
+      "rate_max": 6.5,
+      "maturity_start": 2010,
+      "maturity_end": 2031
+    },
+    {
+      "series": "Financed Purchase Series 2016",
+      "fund": "governmental",
+      "type": "financed_purchase_direct_placement",
+      "original": 13690,
+      "outstanding": 2925,
+      "future_interest": 71,
+      "rate_min": 1.62,
+      "rate_max": 1.62,
+      "maturity_start": 2017,
+      "maturity_end": 2026
+    },
+    {
+      "series": "Other financed purchases (pool)",
+      "fund": "governmental",
+      "type": "financed_purchase",
+      "original": 41054,
+      "outstanding": 17680,
+      "future_interest": 943,
+      "rate_min": 0.0,
+      "rate_max": 4.822,
+      "maturity_start": 2019,
+      "maturity_end": 2028
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2005A",
+      "fund": "utilities",
+      "type": "revenue_bond_variable",
+      "original": 100000,
+      "outstanding": 48500,
+      "rate_type": "weekly_reset",
+      "maturity_start": 2010,
+      "maturity_end": 2035
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2006B",
+      "fund": "utilities",
+      "type": "revenue_bond_variable",
+      "original": 75000,
+      "outstanding": 59270,
+      "future_interest": 14091,
+      "rate_type": "weekly_reset",
+      "maturity_start": 2011,
+      "maturity_end": 2036
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2007A",
+      "fund": "utilities",
+      "type": "revenue_bond_variable",
+      "original": 75000,
+      "outstanding": 45210,
+      "future_interest": 10717,
+      "rate_type": "weekly_reset",
+      "maturity_start": 2008,
+      "maturity_end": 2037
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2008A",
+      "fund": "utilities",
+      "type": "revenue_bond_variable",
+      "original": 50000,
+      "outstanding": 31555,
+      "future_interest": 10998,
+      "rate_type": "weekly_reset",
+      "maturity_start": 2009,
+      "maturity_end": 2038
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2009B-2",
+      "fund": "utilities",
+      "type": "revenue_bond_fixed",
+      "original": 64450,
+      "outstanding": 52200,
+      "future_interest": 24980,
+      "rate_min": 4.949,
+      "rate_max": 5.545,
+      "maturity_start": 2010,
+      "maturity_end": 2039
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2009C",
+      "fund": "utilities",
+      "type": "revenue_bond_variable",
+      "original": 66455,
+      "outstanding": 53025,
+      "future_interest": 10877,
+      "rate_type": "weekly_reset",
+      "maturity_start": 2010,
+      "maturity_end": 2028
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2009D-2",
+      "fund": "utilities",
+      "type": "revenue_bond_fixed",
+      "original": 56750,
+      "outstanding": 47870,
+      "future_interest": 44695,
+      "rate_min": 4.164,
+      "rate_max": 6.313,
+      "maturity_start": 2016,
+      "maturity_end": 2049
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2010C",
+      "fund": "utilities",
+      "type": "revenue_bond_variable",
+      "original": 50000,
+      "outstanding": 33785,
+      "future_interest": 12158,
+      "rate_type": "weekly_reset",
+      "maturity_start": 2011,
+      "maturity_end": 2040
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2010D-4",
+      "fund": "utilities",
+      "type": "revenue_bond_fixed",
+      "original": 107260,
+      "outstanding": 107260,
+      "future_interest": 91660,
+      "rate_min": 6.615,
+      "rate_max": 6.615,
+      "maturity_start": 2011,
+      "maturity_end": 2040
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2012A",
+      "fund": "utilities",
+      "type": "revenue_bond_variable",
+      "original": 50000,
+      "outstanding": 35310,
+      "future_interest": 14052,
+      "rate_type": "weekly_reset",
+      "maturity_start": 2012,
+      "maturity_end": 2041
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2015A",
+      "fund": "utilities",
+      "type": "revenue_bond_fixed",
+      "original": 82795,
+      "outstanding": 53985,
+      "future_interest": 24471,
+      "rate_min": 3.0,
+      "rate_max": 5.0,
+      "maturity_start": 2018,
+      "maturity_end": 2048
+    },
+    {
+      "series": "Utilities Revenue Bonds Series 2017A-1",
+      "fund": "utilities",
+      "type": "revenue_bond",
+      "original": 89750,
+      "outstanding": 73175,
+      "maturity_note": "various"
+    },
+    {
+      "series": "Utilities System Improvement Revenue Bonds Series 2024A",
+      "fund": "utilities",
+      "type": "revenue_bond",
+      "original": 289020,
+      "issued_year": 2024,
+      "note": "new issuance 2024"
+    },
+    {
+      "series": "Utilities System Refunding Revenue Bonds Series 2024B",
+      "fund": "utilities",
+      "type": "revenue_bond_refunding",
+      "original": 89190,
+      "issued_year": 2024,
+      "note": "refunded 2014A-1"
+    }
+  ],
+  "aggregate_debt_service_by_year": [
+    {
+      "year": 2025,
+      "principal": 126100,
+      "interest": 160858,
+      "total": 286958
+    },
+    {
+      "year": 2026,
+      "principal": 127135,
+      "interest": 154217,
+      "total": 281352
+    },
+    {
+      "year": 2027,
+      "principal": 132560,
+      "interest": 147660,
+      "total": 280220
+    },
+    {
+      "year": 2028,
+      "principal": 150460,
+      "interest": 140620,
+      "total": 291080
+    },
+    {
+      "year": 2029,
+      "principal": 160250,
+      "interest": 132976,
+      "total": 293226
+    },
+    {
+      "year_range": "2030-2034",
+      "principal": 716760,
+      "interest": 548234,
+      "total": 1264994
+    },
+    {
+      "year_range": "2035-2039",
+      "principal": 679670,
+      "interest": 353619,
+      "total": 1033289
+    },
+    {
+      "year_range": "2040-2044",
+      "principal": 400830,
+      "interest": 204219,
+      "total": 605049
+    },
+    {
+      "year_range": "2045-2049",
+      "principal": 351685,
+      "interest": 112152,
+      "total": 463837
+    },
+    {
+      "year_range": "2050-2053",
+      "principal": 231810,
+      "interest": 31639,
+      "total": 263449
+    }
+  ],
+  "totals": {
+    "governmental_outstanding": 54635,
+    "business_type_outstanding": 3263427,
+    "primary_government_total": 3318062,
+    "future_debt_service_total": 5063454
+  },
+  "pledged_revenue_collateral": [
+    {
+      "fund": "Utilities revenue bonds",
+      "amount": 3953079,
+      "term_start": 2005,
+      "term_end": 2054
+    },
+    {
+      "fund": "PACE revenue bonds",
+      "amount": 782800,
+      "term_start": 2009,
+      "term_end": 2038
+    },
+    {
+      "fund": "Parking revenue bonds",
+      "amount": 2387,
+      "term_start": 2015,
+      "term_end": 2027
+    },
+    {
+      "fund": "PPAM revenue bonds",
+      "amount": 46746,
+      "term_start": 2019,
+      "term_end": 2048
+    }
+  ]
+}

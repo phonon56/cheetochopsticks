@@ -1,0 +1,176 @@
+{
+  "generated_from": "Primary-source cross-verification across 2005, 2013, 2016, 2019, 2024 CAFRs/ACFRs",
+  "methodology_note": "Pre-2002 data not available by industry (per 2005 CAFR Table 7 footnote). City sales tax dollar values available from 2004+. Tax rate history available from 1996 (2005 CAFR Table 6).",
+  "pre_2002_data_availability": "2005 CAFR Table 7: 'Sales and use tax data not available by industry prior to 2002.' This reflects the first year of detailed industry-level tax payer reporting.",
+  "rate_history_since_1996": [
+    {
+      "year_range": "1996",
+      "city_direct_rate_pct": 2.1,
+      "total_direct_and_overlapping_pct": 3.1
+    },
+    {
+      "year_range": "1997",
+      "event": "Base city rate reduced from 2.10% to 2.00%; TOPS 0.10% added effective July 1",
+      "city_direct_rate_pct": 2.1,
+      "total_direct_and_overlapping_pct": 3.0
+    },
+    {
+      "year_range": "1998-2001",
+      "city_direct_rate_pct": 2.1,
+      "total_direct_and_overlapping_pct": 3.1
+    },
+    {
+      "year_range": "2002",
+      "event": "Public Safety Sales Tax 0.40% added effective Jan 1",
+      "city_direct_rate_pct": 2.1,
+      "total_direct_and_overlapping_pct": 3.1,
+      "note": "Effective rates per 2005 CAFR Table 6"
+    },
+    {
+      "year_range": "2003",
+      "city_direct_rate_pct": 2.5,
+      "total_direct_and_overlapping_pct": 3.5
+    },
+    {
+      "year_range": "2004",
+      "city_direct_rate_pct": 2.5,
+      "total_direct_and_overlapping_pct": 3.5
+    },
+    {
+      "year_range": "2005-2015",
+      "event": "PPRTA 1.00% added effective Jan 1, 2005",
+      "city_direct_rate_pct": 2.5,
+      "total_direct_and_overlapping_pct": 4.5
+    },
+    {
+      "year_range": "2016-present",
+      "event": "2C Road Tax 0.62% added effective Jan 1, 2016 (extended 2021-2025, then 2026-2035 via Nov 2024 vote)",
+      "city_direct_rate_pct": 3.12,
+      "total_direct_and_overlapping_pct": 5.35
+    }
+  ],
+  "city_sales_tax_only_series": [
+    {
+      "year": 2004,
+      "amount": 116471513,
+      "source": "2013 CAFR",
+      "methodology": "includes_audit_revenue"
+    },
+    {
+      "year": 2005,
+      "amount": 118648568,
+      "source": "2013 CAFR",
+      "methodology": "includes_audit_revenue"
+    },
+    {
+      "year": 2006,
+      "amount": 122626114,
+      "source": "2013 CAFR",
+      "methodology": "includes_audit_revenue"
+    },
+    {
+      "year": 2007,
+      "amount": 125661571,
+      "source": "2013 CAFR",
+      "methodology": "includes_audit_revenue"
+    },
+    {
+      "year": 2008,
+      "amount": 115961702,
+      "source": "2013 CAFR",
+      "methodology": "includes_audit_revenue",
+      "yoy_pct": -7.7,
+      "note": "Great Recession onset"
+    },
+    {
+      "year": 2009,
+      "amount": 111023593,
+      "source": "2013 CAFR",
+      "methodology": "includes_audit_revenue",
+      "yoy_pct": -4.3,
+      "note": "Great Recession trough"
+    },
+    {
+      "year": 2010,
+      "amount": 117428817,
+      "source": "2013/2019 CAFRs (consistent)",
+      "yoy_pct": 5.8
+    },
+    {
+      "year": 2011,
+      "amount": 118569370,
+      "source": "2019 CAFR",
+      "methodology": "excludes_audit_revenue"
+    },
+    {
+      "year": 2012,
+      "amount": 126925671,
+      "source": "2019 CAFR"
+    },
+    {
+      "year": 2013,
+      "amount": 134068394,
+      "source": "2019 CAFR"
+    },
+    {
+      "year": 2014,
+      "amount": 142102152,
+      "source": "2019 CAFR"
+    },
+    {
+      "year": 2015,
+      "amount": 148658292,
+      "source": "2019/2024 CAFRs"
+    },
+    {
+      "year": 2016,
+      "amount": 162067524,
+      "source": "2019/2024 CAFRs",
+      "note": "2C Road Tax begins; total city direct rate rises 2.50%\u21923.12%"
+    },
+    {
+      "year": 2017,
+      "amount": 170186924
+    },
+    {
+      "year": 2018,
+      "amount": 181242818
+    },
+    {
+      "year": 2019,
+      "amount": 185508324
+    },
+    {
+      "year": 2020,
+      "amount": 186289844,
+      "yoy_pct": 0.4,
+      "note": "COVID year \u2014 essentially flat"
+    },
+    {
+      "year": 2021,
+      "amount": 231164344,
+      "yoy_pct": 24.1,
+      "note": "Post-pandemic spike"
+    },
+    {
+      "year": 2022,
+      "amount": 247792362
+    },
+    {
+      "year": 2023,
+      "amount": 247665340,
+      "yoy_pct": -0.1
+    },
+    {
+      "year": 2024,
+      "amount": 250418864,
+      "yoy_pct": 1.1,
+      "note": "Missed budget by $5.5M"
+    }
+  ],
+  "cagrs": {
+    "21yr_2004_to_2024_mixed_methodology": 3.71,
+    "post_recession_10yr_2010_to_2019": 4.7,
+    "post_pandemic_3yr_2021_to_2024": 2.72
+  }
+}

@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+---
+layout: site.njk
+permalink: /microsites/shared/metro_district_citizen_toolkit.html
+title: "Metro District Citizen Toolkit \u2014 cheetochopsticks"
+description: "Sample CORA letters, BOCC templates, DOJ complaint drafts, and every contact you need to push for change in El Paso County."
+activeNav: "dashboards"
+---
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <meta name="description" content="Sample CORA letters, BOCC templates, DOJ complaint drafts, and every contact you need to push for change in El Paso County.">
-  <title>Metro District Citizen Toolkit — cheetochopsticks</title>
   <style>
     /* Palette verified WCAG 2.1 AA/AAA on --bg #0c1220
        text   #ede8dc → 15.3 AAA · muted #96adc4 → 8.08 AAA
@@ -88,26 +89,6 @@
     .footer-inner a:hover{color:var(--gold);}
     @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
   </style>
-</head>
-<body>
-<a class="skip-link" href="#main-content">Skip to main content</a>
-<header class="site-nav z1" role="banner">
-  <div class="container">
-    <div class="nav-inner">
-      <a href="/" class="nav-logo" aria-label="cheetochopsticks home"><img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42"></a>
-      <nav class="nav-links" aria-label="Site sections">
-        <a class="nav-link you-link" href="/#you">You</a>
-        <a class="nav-link active" href="/#shared" aria-current="true">Shared</a>
-        <a class="nav-link" href="/#land">Land</a>
-        <a class="nav-link" href="/#building">Building</a>
-        <a class="nav-link" href="/#people">People</a>
-        <a class="nav-link" href="/#events">Events</a>
-      </nav>
-      <span class="nav-crumb" aria-hidden="true">Shared &middot; Citizen Toolkit</span>
-    </div>
-  </div>
-</header>
-
 <section class="page-hd z1" role="region" aria-labelledby="page-h1">
   <div class="container">
     <p class="page-eyebrow" aria-hidden="true">Shared &middot; Citizen action &middot; El Paso County</p>
@@ -463,5 +444,3 @@ Respectfully submitted,
     }).catch(function(){ var ta=document.createElement('textarea'); ta.value=box.innerText||box.textContent; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); });
   }
 </script>
-</body>
-</html>

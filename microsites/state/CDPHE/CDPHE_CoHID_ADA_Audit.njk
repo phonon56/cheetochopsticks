@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ADA Accessibility Audit – CDPHE CoHID Mortality Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+---
+layout: site.njk
+permalink: /microsites/state/CDPHE/CDPHE_CoHID_ADA_Audit.html
+title: "ADA Accessibility Audit \u2013 CDPHE CoHID Mortality Dashboard"
+description: "ADA accessibility audit of the CDPHE CoHID Mortality Dashboard \u2014 seven WCAG 2.1 AA gaps identified in the Tableau-based visualization, with remediation recommendations."
+activeNav: "dashboards"
+---
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../../shared/css/main.css" />
@@ -481,38 +483,8 @@
       border-radius: 2px;
     }
   </style>
-</head>
-<body>
-
-  <!-- SKIP LINK: Required WCAG 2.4.1 -->
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-
-<!-- ═══ SITE NAV ═══ -->
-<header class="nav" role="banner">
-  <div class="container">
-    <div class="nav-inner">
-      <a href="../../../index.html" class="nav-logo" aria-label="cheetochopsticks home">
-        <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
-      </a>
-      <nav class="nav-links" id="nav-links" aria-label="Site sections">
-        <a class="nav-link you-link" href="../../../index.html#you">You</a>
-        <a class="nav-link" href="../../../index.html#shared">Shared</a>
-        <a class="nav-link" href="../../../index.html#land">Land</a>
-        <a class="nav-link" href="../../../index.html#building">Building</a>
-        <a class="nav-link" href="../../../index.html#people">People</a>
-        <a class="nav-link" href="../../../index.html#events">Events</a>
-      </nav>
-      <div class="nav-right">
-        <button class="nav-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">Menu</button>
-        <button class="notif-btn" onclick="openNotif()" aria-label="Open alerts and notifications, 9 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
-          <span>Alerts</span>
-          <span class="notif-count" aria-live="polite">9</span>
-        </button>
-      </div>
-    </div>
-  </div>
-</header>
-
+<!-- SKIP LINK: Required WCAG 2.4.1 -->
+  <!-- ═══ SITE NAV ═══ -->
 <!-- ═══ NOTIFICATIONS PANEL ═══ -->
 <div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
 <aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
@@ -1109,5 +1081,3 @@
   </footer>
 
 <script src="../../../shared/js/main.js"></script>
-</body>
-</html>

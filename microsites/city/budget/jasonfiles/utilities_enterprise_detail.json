@@ -1,0 +1,124 @@
+{
+  "status": "PLACEHOLDER \u2014 awaiting Colorado Springs Utilities standalone financial statements",
+  "schema_version": "1.0",
+  "note_to_populator": "This file is a typed scaffold. When the CSU standalone financials arrive, populate each null with the corresponding value. ACFR-consolidated values are shown for comparison/validation. Populate 'last_updated' when filled.",
+  "last_updated": null,
+  "source_when_populated": {
+    "expected_source": "Colorado Springs Utilities standalone financial statements",
+    "obtain_from": "Colorado Springs Utilities, Accounting Department, P.O. Box 1103, Mail Code 929, Colorado Springs, CO 80947-0929",
+    "web_location": "Typically published at coloradosprings.gov/utilities or cspringsutilities.com",
+    "referenced_in_acfr_note": "2024 Colorado Springs ACFR, Note III.A.2 'Blended Component Units'"
+  },
+  "consolidated_validation_check_2024": {
+    "acfr_reported_utilities_operating_revenue_actual": 1012680000,
+    "source": "2024 ACFR Exhibit F-1",
+    "formula_to_verify": "electric.operating_revenue + natural_gas.operating_revenue + water.operating_revenue + wastewater.operating_revenue + streetlight.operating_revenue SHOULD EQUAL 1012680000 (within immaterial rounding)"
+  },
+  "service_lines": {
+    "electric": {
+      "operating_revenue_2024": null,
+      "operating_expenses_2024": null,
+      "customer_count_2024": null,
+      "peak_demand_mw_2024": null,
+      "total_generation_mwh_2024": null,
+      "generation_mix_pct": {
+        "coal": null,
+        "natural_gas": null,
+        "wind_ppa": null,
+        "solar_ppa": null,
+        "hydro": null,
+        "purchased_power_other": null
+      },
+      "rate_base_2024": null,
+      "capital_plan_5yr": null,
+      "note_on_decommissioning": "Martin Drake plant retired 2023; Ray Nixon slated for 2030 decommissioning per Sustainable Energy Plan. 2020 ACFR recorded ~$67.3M impairment associated with early retirement decision."
+    },
+    "natural_gas": {
+      "operating_revenue_2024": null,
+      "operating_expenses_2024": null,
+      "customer_count_2024": null,
+      "distribution_miles_2024": null,
+      "rate_base_2024": null,
+      "capital_plan_5yr": null,
+      "note_on_pace": "PACE (Public Authority for Colorado Energy) is a separate blended component unit providing ~20% of Utilities' natural gas supply under a 30-year prepaid gas contract (2008 issuance). Its revenues pass through to Utilities."
+    },
+    "water": {
+      "operating_revenue_2024": null,
+      "operating_expenses_2024": null,
+      "customer_count_2024": null,
+      "treatment_capacity_mgd_2024": null,
+      "source_mix_pct": {
+        "local_surface": null,
+        "transmountain_diversion": null,
+        "groundwater": null
+      },
+      "rate_base_2024": null,
+      "capital_plan_5yr": null
+    },
+    "wastewater": {
+      "operating_revenue_2024": null,
+      "operating_expenses_2024": null,
+      "customer_count_2024": null,
+      "treatment_capacity_mgd_2024": null,
+      "rate_base_2024": null,
+      "capital_plan_5yr": null
+    },
+    "streetlight": {
+      "operating_revenue_2024": null,
+      "note": "Typically combined with electric service; may not appear as a separate segment"
+    }
+  },
+  "rate_action_2024": {
+    "approved_date": "2024-11-12",
+    "effective": "2025-01-01 through 2029-12-31",
+    "services_affected": [
+      "electric",
+      "natural_gas",
+      "water",
+      "wastewater"
+    ],
+    "specific_changes": [
+      "Multi-year rate schedule approved",
+      "Time-of-day electric rates effective 2025-10-01"
+    ],
+    "source": "2024 ACFR Note IV.J Subsequent Events"
+  },
+  "debt_summary_from_acfr": {
+    "total_utilities_revenue_bonds_outstanding_2024_000s": 2947840,
+    "pledged_revenue_amount_2024_000s": 3953079,
+    "pledged_revenue_term": "2005 through 2054",
+    "major_2024_issuances": [
+      {
+        "series": "2024A",
+        "amount_000s": 289020,
+        "type": "System Improvement Revenue Bonds"
+      },
+      {
+        "series": "2024B",
+        "amount_000s": 89190,
+        "type": "Refunding Revenue Bonds",
+        "refunded": "Series 2014A-1"
+      }
+    ],
+    "note": "Full issue-by-issue list in bonds.json under fund='utilities'"
+  },
+  "opeb_plan_summary_from_acfr": {
+    "status": "closed_group_pay_as_you_go",
+    "net_opeb_liability_2024": 13151000,
+    "covered_payroll_2024": 476000,
+    "note": "Shrinking liability as closed group retires. Full trajectory in pension_opeb.json."
+  },
+  "related_component_units": {
+    "PACE_Public_Authority_for_Colorado_Energy": {
+      "relationship": "blended_component_unit",
+      "purpose": "30-year prepaid natural gas supply",
+      "revenue_bonds_outstanding_2024_000s": null,
+      "placeholder_note": "Populate from CSU standalone or from 2024 ACFR Notes"
+    },
+    "Young_Gas_Storage_Company_Ltd": {
+      "relationship": "5.0% equity interest (joint venture)",
+      "purpose": "Natural gas storage near Fort Morgan, CO",
+      "financial_statements_obtain_from": "Colorado Springs Utilities Accounting Department"
+    }
+  }
+}

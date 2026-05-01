@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "eleventy && npm run prune-build",
-    "prune-build": "rm -rf _site/microsites/city/goGov/cos-portal-prototype/node_modules _site/microsites/city/goGov/cos-portal-prototype/src _site/microsites/city/goGov/cos-portal-prototype/scripts _site/microsites/city/goGov/cos-portal-prototype/public _site/**/node_modules _site/**/*.tsbuildinfo",
+    "prune-build": "rm -rf _site/microsites/city/goGov/cos-portal-prototype/node_modules _site/microsites/city/goGov/cos-portal-prototype/src _site/microsites/city/goGov/cos-portal-prototype/scripts _site/microsites/city/goGov/cos-portal-prototype/public _site/**/node_modules _site/**/*.tsbuildinfo && find _site -name '*.njk' -delete",
     "watch": "eleventy --watch",
     "serve": "eleventy --serve"
   },
