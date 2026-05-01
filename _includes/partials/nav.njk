@@ -16,8 +16,7 @@
         <a class="nav-link{% if activeNav == 'events' %} active{% endif %}" href="/#events">Events</a>
       </nav>
       <div class="nav-right">
-        <button class="nav-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">Menu</button>
-        <button class="notif-btn" onclick="openNotif()" aria-label="Open alerts and notifications, 10 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 10 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
           <span>Alerts</span>
           <span class="notif-count" aria-live="polite">10</span>
         </button>

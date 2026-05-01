@@ -396,8 +396,7 @@
         <a class="nav-link" href="/#events">Events</a>
       </nav>
       <div class="nav-right">
-        <button class="nav-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">Menu</button>
-        <button class="notif-btn" onclick="openNotif()" aria-label="Open alerts and notifications, 10 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 10 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
           <span>Alerts</span>
           <span class="notif-count" aria-live="polite">10</span>
         </button>
@@ -2649,46 +2648,77 @@
 
 
   <script>
-  function toggleMobileNav() {
-    var nav = document.getElementById('nav-links');
-    var btn = document.querySelector('.nav-menu-btn');
-    var open = nav.classList.toggle('mobile-open');
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    btn.textContent = open ? 'Close' : 'Menu';
-  }
+/* ── Site nav + notifications panel scripts ──────────────────────────
+   Wrapped in an IIFE so locals never leak. The functions onclick handlers
+   call (openNotif, closeNotif, filterNotif) are explicitly attached to
+   `window` so a page's own scripts can't shadow them, and each function
+   is defensive about the DOM possibly being absent on a page that opted
+   out of the layout. */
+(function () {
+  function $(id) { return document.getElementById(id); }
 
   var lastFocus;
 
   function openNotif() {
-    lastFocus = document.activeElement;
-    var overlay = document.getElementById('notif-overlay');
-    var panel   = document.getElementById('notif-panel');
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
     var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    lastFocus = document.activeElement;
     overlay.classList.add('open');
     overlay.removeAttribute('aria-hidden');
     panel.classList.add('open');
     btn.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
-    setTimeout(function() { panel.focus(); }, 50);
+    setTimeout(function () { panel.focus(); }, 50);
   }
 
   function closeNotif() {
-    var overlay = document.getElementById('notif-overlay');
-    var panel   = document.getElementById('notif-panel');
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
     var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     panel.classList.remove('open');
     btn.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
-    if (lastFocus) lastFocus.focus();
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
   }
 
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeNotif();
-    if (e.key === 'Tab' && document.getElementById('notif-panel').classList.contains('open')) {
-      var focusable = document.getElementById('notif-panel')
-        .querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+  function filterNotif(tier, btn) {
+    document.querySelectorAll('.nf-btn').forEach(function (b) {
+      b.classList.remove('active');
+      b.removeAttribute('aria-pressed');
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    document.querySelectorAll('.notif-item').forEach(function (item) {
+      if (tier === 'all') {
+        item.classList.remove('hidden');
+        item.removeAttribute('aria-hidden');
+      } else {
+        var hide = item.dataset.tier !== tier;
+        item.classList.toggle('hidden', hide);
+        if (hide) item.setAttribute('aria-hidden', 'true');
+        else item.removeAttribute('aria-hidden');
+      }
+    });
+    document.querySelectorAll('.notif-group-label').forEach(function (label) {
+      label.style.display = tier === 'all' ? '' : 'none';
+    });
+  }
+
+  /* Escape closes the panel; Tab stays inside it while it's open. */
+  document.addEventListener('keydown', function (e) {
+    var panel = $('notif-panel');
+    if (!panel) return;
+    if (e.key === 'Escape') { closeNotif(); return; }
+    if (e.key === 'Tab' && panel.classList.contains('open')) {
+      var focusable = panel.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
       var first = focusable[0], last = focusable[focusable.length - 1];
       if (e.shiftKey) {
         if (document.activeElement === first) { e.preventDefault(); last.focus(); }
@@ -2698,48 +2728,36 @@
     }
   });
 
-  function filterNotif(tier, btn) {
-    document.querySelectorAll('.nf-btn').forEach(function(b) {
-      b.classList.remove('active');
-      b.removeAttribute('aria-pressed');
-    });
-    btn.classList.add('active');
-    btn.setAttribute('aria-pressed', 'true');
-    document.querySelectorAll('.notif-item').forEach(function(item) {
-      if (tier === 'all') {
-        item.classList.remove('hidden');
-        item.removeAttribute('aria-hidden');
-      } else {
-        var hide = item.dataset.tier !== tier;
-        item.classList.toggle('hidden', hide);
-        hide ? item.setAttribute('aria-hidden','true') : item.removeAttribute('aria-hidden');
-      }
-    });
-    document.querySelectorAll('.notif-group-label').forEach(function(label) {
-      label.style.display = tier === 'all' ? '' : 'none';
+  /* Active nav link on scroll — only runs when the index has the matching anchors. */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['you', 'dashboards', 'people', 'events'];
+  if (typeof IntersectionObserver === 'function' && navLinks.length) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function (l) {
+            var href = l.getAttribute('href') || '';
+            var active = href === '#' + id || href === '/#' + id;
+            l.classList.toggle('active', active);
+            if (active) l.setAttribute('aria-current', 'true');
+            else l.removeAttribute('aria-current');
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach(function (id) {
+      var el = $(id);
+      if (el) observer.observe(el);
     });
   }
 
-  /* Active nav link on scroll */
-  var navLinks = document.querySelectorAll('.nav-link');
-  var sections = ['you','dashboards','people','events'];
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        var id = entry.target.id;
-        navLinks.forEach(function(l) {
-          var active = l.getAttribute('href') === '#' + id;
-          l.classList.toggle('active', active);
-          active ? l.setAttribute('aria-current','true') : l.removeAttribute('aria-current');
-        });
-      }
-    });
-  }, { rootMargin: '-40% 0px -50% 0px' });
-
-  sections.forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) observer.observe(el);
-  });
+  /* Expose the click-target functions globally so inline onclick handlers
+     (and any page that needs them) can always reach them by name. */
+  window.openNotif   = openNotif;
+  window.closeNotif  = closeNotif;
+  window.filterNotif = filterNotif;
+})();
 </script>
 
 </body>
