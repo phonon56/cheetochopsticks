@@ -1954,7 +1954,14 @@ Object.entries(ALL_COUNTIES).sort((a,b)=>b[1][1]-a[1][1]).forEach(([fips,[name,c
       .attr('tabindex','0').attr('role','img')
       .attr('aria-label',d=>{const f=String(d.id).padStart(5,'0');const r=ALL_COUNTIES[f];return r?`${r[0]} County: ${r[1].toLocaleString()} deaths${f===EP?' — El Paso (military population note applies)':''}`:f+': no data';})
       .on('mousemove',(ev,d)=>{const f=String(d.id).padStart(5,'0');const r=ALL_COUNTIES[f];tt.style.display='block';tt.style.left=(ev.offsetX+12)+'px';tt.style.top=(ev.offsetY-8)+'px';tt.textContent=r?`${r[0]} Co.: ${r[1].toLocaleString()}${f===EP?' ★ military note':''}`:f+': no data';})
-      .on('mousele
+      .on('mouseleave',()=>{tt.style.display='none';});
+  } catch(err) {
+    const note=document.getElementById('map-loading');
+    if(note) note.textContent='Map data could not be loaded.';
+    console.warn('Map load failed:', err);
+  }
+})();
+</script>
   <script>
 /* ── Site nav + notifications panel scripts ──────────────────────────
    Wrapped in an IIFE so locals never leak. The functions onclick handlers
