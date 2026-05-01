@@ -25,3 +25,4 @@ ehthumbs.db
 node_modules/
 .cache/
 # (We DO commit _site/ — Cloudflare serves it directly without a build step.)
+.claude/

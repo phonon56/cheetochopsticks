@@ -27,30 +27,30 @@
            green   #4ade80 → 10.7  AAA
            blue    #60a5fa →  7.4  AAA
            amber   #fbbf24 → 11.2  AAA                                  */
-      --bg:         #0c1220;
-      --surface:    #141e2e;
-      --surface2:   #1c2a3e;
-      --surface3:   #233045;
-      --border:     rgba(255,255,255,.14);
-      --border-hi:  rgba(255,255,255,.28);
-      --gold:       #c8a84b;
-      --gold-dim:   rgba(200,168,75,.22);
-      --gold-faint: rgba(200,168,75,.09);
-      --gold-lt:    #fde68a;
-      --text:       #ede8dc;
-      --muted:      #96adc4;
-      --quiet:      #8ca3b8;
-      --mono:       'IBM Plex Mono', monospace;
-      --sans:       'IBM Plex Sans', sans-serif;
-      --serif:      'Playfair Display', Georgia, serif;
-      --red:        #fca5a5;
-      --red-dim:    rgba(252,165,165,.16);
-      --green:      #4ade80;
-      --green-dim:  rgba(74,222,128,.14);
-      --blue:       #60a5fa;
-      --blue-dim:   rgba(96,165,250,.14);
-      --amber:      #fbbf24;
-      --amber-dim:  rgba(251,191,36,.16);
+      --cc-bg:         #0c1220;
+      --cc-surface:    #141e2e;
+      --cc-surface2:   #1c2a3e;
+      --cc-surface3:   #233045;
+      --cc-border:     rgba(255,255,255,.14);
+      --cc-border-hi:  rgba(255,255,255,.28);
+      --cc-gold:       #c8a84b;
+      --cc-gold-dim:   rgba(200,168,75,.22);
+      --cc-gold-faint: rgba(200,168,75,.09);
+      --cc-gold-lt:    #fde68a;
+      --cc-text:       #ede8dc;
+      --cc-muted:      #96adc4;
+      --cc-quiet:      #8ca3b8;
+      --cc-mono:       'IBM Plex Mono', monospace;
+      --cc-sans:       'IBM Plex Sans', sans-serif;
+      --cc-serif:      'Playfair Display', Georgia, serif;
+      --cc-red:        #fca5a5;
+      --cc-red-dim:    rgba(252,165,165,.16);
+      --cc-green:      #4ade80;
+      --cc-green-dim:  rgba(74,222,128,.14);
+      --cc-blue:       #60a5fa;
+      --cc-blue-dim:   rgba(96,165,250,.14);
+      --cc-amber:      #fbbf24;
+      --cc-amber-dim:  rgba(251,191,36,.16);
     }
 
     html { scroll-behavior: smooth; }
@@ -60,9 +60,9 @@
       position: absolute;
       top: -100px;
       left: 16px;
-      background: var(--gold);
+      background: var(--cc-gold);
       color: #0c1220;
-      font-family: var(--mono);
+      font-family: var(--cc-mono);
       font-size: .78rem;
       font-weight: 700;
       letter-spacing: .08em;
@@ -77,18 +77,18 @@
     /* ── Focus visible — universal gold ring ─────────────────────── */
     *:focus { outline: none; }
     *:focus-visible {
-      outline: 3px solid var(--gold);
+      outline: 3px solid var(--cc-gold);
       outline-offset: 3px;
       border-radius: 2px;
     }
 
     /* ── Serif subheadline ───────────────────────────────────────── */
     .section-sub {
-      font-family: var(--sans);
+      font-family: var(--cc-sans);
       font-style: normal;
       font-weight: 400;
       font-size: 1.05rem;
-      color: var(--muted);
+      color: var(--cc-muted);
       line-height: 1.6;
       margin-top: 4px;
       margin-bottom: 28px;
@@ -101,9 +101,9 @@
     }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
       font-size: 18px;
       line-height: 1.7;
       min-height: 100vh;
@@ -124,7 +124,7 @@
 
     /* ── NAV ─────────────────────────────────────────────────────── */
     .nav {
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--cc-border);
       padding: 14px 0;
       position: sticky;
       top: 0;
@@ -152,19 +152,19 @@
       display: block;
     }
     .nav-logo:focus-visible {
-      outline: 2px solid var(--gold);
+      outline: 2px solid var(--cc-gold);
       outline-offset: 4px;
       border-radius: 2px;
     }
     /* Legacy text-logo styles kept for any other surfaces that reference them */
     .nav-logo-word {
-      font-family: var(--sans);
+      font-family: var(--cc-sans);
       font-weight: 600;
       font-size: .95rem;
       letter-spacing: -.01em;
-      color: var(--text);
+      color: var(--cc-text);
     }
-    .nav-logo-dot { color: var(--gold); font-size: .95rem; }
+    .nav-logo-dot { color: var(--cc-gold); font-size: .95rem; }
 
     .nav-links {
       display: flex;
@@ -173,11 +173,11 @@
       flex: 1;
     }
     .nav-link {
-      font-family: var(--mono);
+      font-family: var(--cc-mono);
       font-size: .78rem;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--cc-muted);
       text-decoration: none;
       padding: 6px 12px;
       border-radius: 3px;
@@ -185,19 +185,19 @@
       transition: all .18s;
       white-space: nowrap;
     }
-    .nav-link:hover { color: var(--text); background: rgba(255,255,255,.04); }
+    .nav-link:hover { color: var(--cc-text); background: rgba(255,255,255,.04); }
     .nav-link.you-link {
-      color: var(--gold);
-      border-color: var(--gold-dim);
-      background: var(--gold-faint);
+      color: var(--cc-gold);
+      border-color: var(--cc-gold-dim);
+      background: var(--cc-gold-faint);
     }
-    .nav-link.you-link:hover { background: var(--gold-dim); }
+    .nav-link.you-link:hover { background: var(--cc-gold-dim); }
     .nav-link.active {
-      color: var(--text);
-      border-color: var(--border-hi);
+      color: var(--cc-text);
+      border-color: var(--cc-border-hi);
       background: rgba(255,255,255,.06);
       text-decoration: underline;
-      text-decoration-color: var(--gold);
+      text-decoration-color: var(--cc-gold);
       text-underline-offset: 3px;
     }
 
@@ -211,28 +211,28 @@
     .notif-btn {
       position: relative;
       background: none;
-      border: 1px solid var(--border);
+      border: 1px solid var(--cc-border);
       border-radius: 4px;
       padding: 6px 10px;
       cursor: pointer;
-      color: var(--muted);
+      color: var(--cc-muted);
       font-size: .78rem;
       display: flex;
       align-items: center;
       gap: 6px;
-      font-family: var(--mono);
+      font-family: var(--cc-mono);
       letter-spacing: .06em;
       transition: all .18s;
     }
-    .notif-btn:hover { color: var(--text); border-color: var(--border-hi); }
+    .notif-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
     .notif-count {
-      background: var(--red);
+      background: var(--cc-red);
       color: #0a0f1a;
       font-size: .78rem;
       font-weight: 700;
       border-radius: 10px;
       padding: 1px 5px;
-      font-family: var(--mono);
+      font-family: var(--cc-mono);
       line-height: 1.4;
     }
 
@@ -251,8 +251,8 @@
       position: fixed;
       top: 0; right: 0; bottom: 0;
       width: 360px;
-      background: var(--surface);
-      border-left: 1px solid var(--border-hi);
+      background: var(--cc-surface);
+      border-left: 1px solid var(--cc-border-hi);
       z-index: 301;
       transform: translateX(100%);
       transition: transform .28s cubic-bezier(.32,.72,0,1);
@@ -263,61 +263,61 @@
     .notif-panel.open { transform: translateX(0); }
     .notif-panel-head {
       padding: 20px 20px 14px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--cc-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
     }
     .notif-panel-title {
-      font-family: var(--mono);
+      font-family: var(--cc-mono);
       font-size: .78rem;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--text);
+      color: var(--cc-text);
     }
     .notif-close {
       background: none;
-      border: 1px solid var(--border);
+      border: 1px solid var(--cc-border);
       border-radius: 3px;
-      color: var(--muted);
+      color: var(--cc-muted);
       font-size: .78rem;
       padding: 4px 10px;
       cursor: pointer;
-      font-family: var(--mono);
+      font-family: var(--cc-mono);
       transition: all .15s;
     }
-    .notif-close:hover { color: var(--text); border-color: var(--border-hi); }
+    .notif-close:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
     .notif-filters {
       display: flex;
       gap: 6px;
       padding: 12px 20px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--cc-border);
       flex-shrink: 0;
       flex-wrap: wrap;
     }
     .nf-btn {
-      font-family: var(--mono);
+      font-family: var(--cc-mono);
       font-size: .78rem;
       letter-spacing: .1em;
       text-transform: uppercase;
       padding: 4px 10px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--cc-border);
       border-radius: 2px;
       background: none;
-      color: var(--muted);
+      color: var(--cc-muted);
       cursor: pointer;
       transition: all .15s;
     }
-    .nf-btn:hover { color: var(--text); border-color: var(--border-hi); }
-    .nf-btn.active { background: var(--gold-dim); color: var(--gold); border-color: rgba(200,168,75,.3); }
+    .nf-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold); border-color: rgba(200,168,75,.3); }
     .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
     .notif-group-label {
-      font-family: var(--mono);
+      font-family: var(--cc-mono);
       font-size: .78rem;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--quiet);
+      color: var(--cc-quiet);
       padding: 10px 20px 4px;
     }
     .notif-item {
@@ -325,7 +325,7 @@
       display: flex;
       gap: 12px;
       align-items: flex-start;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--cc-border);
       transition: background .15s;
       cursor: default;
     }
@@ -337,39 +337,39 @@
       flex-shrink: 0;
       margin-top: 5px;
     }
-    .nd-red    { background: var(--red); }
-    .nd-amber  { background: var(--amber); }
-    .nd-blue   { background: var(--blue); }
-    .nd-green  { background: var(--green); }
-    .nd-gold   { background: var(--gold); }
-    .nd-quiet  { background: var(--quiet); }
+    .nd-red    { background: var(--cc-red); }
+    .nd-amber  { background: var(--cc-amber); }
+    .nd-blue   { background: var(--cc-blue); }
+    .nd-green  { background: var(--cc-green); }
+    .nd-gold   { background: var(--cc-gold); }
+    .nd-quiet  { background: var(--cc-quiet); }
     .notif-body { flex: 1; }
     .notif-text {
       font-size: .85rem;
-      color: var(--text);
+      color: var(--cc-text);
       line-height: 1.55;
       margin-bottom: 3px;
     }
-    .notif-text strong { color: var(--gold-lt); font-weight: 500; }
+    .notif-text strong { color: var(--cc-gold-lt); font-weight: 500; }
     .notif-meta {
-      font-family: var(--mono);
+      font-family: var(--cc-mono);
       font-size: .78rem;
       letter-spacing: .08em;
-      color: var(--quiet);
+      color: var(--cc-quiet);
       margin-bottom: 4px;
     }
     .notif-action {
-      font-family: var(--mono);
+      font-family: var(--cc-mono);
       font-size: .78rem;
       letter-spacing: .08em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--cc-gold);
       text-decoration: none;
-      border-bottom: 1px solid var(--gold-dim);
+      border-bottom: 1px solid var(--cc-gold-dim);
       padding-bottom: 1px;
       transition: border-color .15s;
     }
-    .notif-action:hover { border-color: var(--gold); }
+    .notif-action:hover { border-color: var(--cc-gold); }
 
 </style>
 
