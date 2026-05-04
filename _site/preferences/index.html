@@ -1396,7 +1396,7 @@
         </div>
         <aside class="prefs-banner" aria-label="Note about digest delivery">
           <span class="sr-only">Note: </span>
-          <strong>Heads up:</strong> digest delivery is launching soon. We'll record your choice now and start grouping messages on the schedule above as soon as it goes live. Until then, "immediate" is the only mode that actually sends.
+          <strong>Digests arrive at 8 AM in your timezone.</strong> Daily every morning, weekly on Thursdays, monthly on the 1st. If nothing was posted in your topics during the period, we skip the email — no "nothing happened" notes.
         </aside>
       </div>
 
@@ -1563,7 +1563,10 @@
                        .map(function (cb) { return cb.value; });
     var frequency = (formView.querySelector('input[name="frequency"]:checked') || {}).value || 'immediate';
     var interests = (formView.querySelector('input[name="interests_text"]') || { value: '' }).value;
-    return { topics: topics, frequency: frequency, interests_text: interests };
+    // Capture the browser's IANA timezone so digests fire at the user's local 8am.
+    var timezone = '';
+    try { timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    return { topics: topics, frequency: frequency, interests_text: interests, timezone: timezone };
   }
 
   // ── Search-led topic picker ──────────────────────────
@@ -1886,10 +1889,12 @@
       e.preventDefault();
       out.textContent = 'Submitting…';
       var email = form.email.value.trim();
+      var timezone = '';
+      try { timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) {}
       fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, topic: topic, source: source }),
+        body: JSON.stringify({ email: email, topic: topic, source: source, timezone: timezone }),
       })
         .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
         .then(function (res) {

@@ -63,6 +63,9 @@ export default {
         return env.ASSETS.fetch(request);
     }
   },
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runDigestDelivery(event, env));
+  },
 };
 
 // ─── /api/subscribe ────────────────────────────────────────────────────────
@@ -83,6 +86,7 @@ async function handleSubscribe(request, env) {
   const frequency     = ['immediate','daily','weekly','monthly'].includes(body.frequency)
     ? body.frequency : 'immediate';
   const interestsText = String(body.interests_text || '').slice(0, 1000);
+  const timezone      = validTimezone(body.timezone);
 
   if (!emailValid(email))    return json({ error: 'invalid email' }, 400, cors);
   if (!topics.length)         return json({ error: 'no topics selected' }, 400, cors);
@@ -96,12 +100,13 @@ async function handleSubscribe(request, env) {
   // Upsert subscriber.
   const id = crypto.randomUUID();
   await env.DB.prepare(`
-    INSERT INTO subscribers (id, email, status, frequency, interests_text)
-    VALUES (?1, ?2, 'pending', ?3, ?4)
+    INSERT INTO subscribers (id, email, status, frequency, interests_text, timezone)
+    VALUES (?1, ?2, 'pending', ?3, ?4, ?5)
     ON CONFLICT(email) DO UPDATE SET
       frequency = excluded.frequency,
-      interests_text = COALESCE(NULLIF(excluded.interests_text, ''), subscribers.interests_text)
-  `).bind(id, email, frequency, interestsText).run();
+      interests_text = COALESCE(NULLIF(excluded.interests_text, ''), subscribers.interests_text),
+      timezone = excluded.timezone
+  `).bind(id, email, frequency, interestsText, timezone).run();
 
   const row = await env.DB.prepare(`SELECT id, status FROM subscribers WHERE email = ?1`).bind(email).first();
   const subscriberId = row.id;
@@ -325,9 +330,10 @@ async function handlePrefs(request, env, url) {
   const added   = [...after].filter((t) => !before.has(t));
   const removed = [...before].filter((t) => !after.has(t));
 
+  const tz = validTimezone(body.timezone);
   const stmts = [
-    env.DB.prepare(`UPDATE subscribers SET frequency=?2, interests_text=?3 WHERE id=?1`)
-      .bind(subscriberId, frequency, interests),
+    env.DB.prepare(`UPDATE subscribers SET frequency=?2, interests_text=?3, timezone=?4 WHERE id=?1`)
+      .bind(subscriberId, frequency, interests, tz),
   ];
   for (const t of removed) {
     stmts.push(env.DB.prepare(`DELETE FROM subscriber_topics WHERE subscriber_id=?1 AND topic=?2`)
@@ -373,24 +379,50 @@ async function handleAdminSend(request, env) {
   if (!topicValid(topic)) return json({ error: 'invalid topic' }, 400);
   if (!subject || (!html && !text)) return json({ error: 'subject and html/text required' }, 400);
 
-  // Find confirmed subscribers for this topic.
+  // Find ALL confirmed subscribers for this topic (we'll split by frequency).
   const subs = await env.DB.prepare(`
-    SELECT s.id, s.email
+    SELECT s.id, s.email, s.frequency
     FROM subscribers s
     JOIN subscriber_topics st ON st.subscriber_id = s.id
     WHERE st.topic = ?1
       AND s.status = 'confirmed'
-      AND s.frequency = 'immediate'
   `).bind(topic).all();
 
   if (!subs.results.length) {
-    return json({ ok: true, sent: 0, message: 'No confirmed immediate subscribers for this topic.' });
+    return json({ ok: true, sent: 0, queued: 0, message: 'No confirmed subscribers for this topic.' });
   }
 
-  // Render per-recipient and batch.
+  const immediate = subs.results.filter((s) => s.frequency === 'immediate');
+  const queued    = subs.results.filter((s) => s.frequency !== 'immediate');
+
+  // Queue digest deliveries for non-immediate subscribers.
+  let queuedCount = 0;
+  if (queued.length) {
+    const payload = JSON.stringify({ subject, html, text });
+    const now = new Date().toISOString();
+    const stmts = queued.map((s) => env.DB.prepare(`
+      INSERT INTO pending_notifications (subscriber_id, topic, workflow, payload, scheduled_for)
+      VALUES (?1, ?2, 'admin-send', ?3, ?4)
+    `).bind(s.id, topic, payload, now));
+    // D1 batch limit is 100 statements per call.
+    for (let i = 0; i < stmts.length; i += 100) {
+      await env.DB.batch(stmts.slice(i, i + 100));
+      queuedCount += Math.min(100, stmts.length - i);
+    }
+  }
+
+  if (!immediate.length) {
+    return json({
+      ok: true, topic, eligible: subs.results.length,
+      sent: 0, queued: queuedCount, failed: 0,
+      message: `Queued ${queuedCount} digest deliveries; no immediate subscribers.`
+    });
+  }
+
+  // Render per-recipient and batch (immediate only).
   let sent = 0, failed = 0;
-  for (let i = 0; i < subs.results.length; i += ADMIN_BATCH_SIZE) {
-    const batch = subs.results.slice(i, i + ADMIN_BATCH_SIZE);
+  for (let i = 0; i < immediate.length; i += ADMIN_BATCH_SIZE) {
+    const batch = immediate.slice(i, i + ADMIN_BATCH_SIZE);
     const renderedBatch = await Promise.all(batch.map(async (s) => {
       const unsubToken = await signToken(
         { sub: s.id, purpose: 'unsub', topic, exp: nowSec() + UNSUB_TOKEN_TTL },
@@ -432,7 +464,192 @@ async function handleAdminSend(request, env) {
     else      failed += renderedBatch.length;
   }
 
-  return json({ ok: true, topic, eligible: subs.results.length, sent, failed });
+  return json({ ok: true, topic, eligible: subs.results.length, sent, queued: queuedCount, failed });
+}
+
+// ─── Scheduled digest delivery ──────────────────────────────────────────────
+// Runs hourly. For each non-immediate subscriber whose local time is 8 AM
+// today, who's "due" for their cadence, and who has un-delivered queued
+// notices, render a per-topic digest and send it. Skip if queue is empty.
+
+async function runDigestDelivery(event, env) {
+  const now = new Date(event?.scheduledTime || Date.now());
+
+  const subs = await env.DB.prepare(`
+    SELECT id, email, frequency, timezone,
+           last_daily_digest_at, last_weekly_digest_at, last_monthly_digest_at
+    FROM subscribers
+    WHERE status = 'confirmed' AND frequency != 'immediate'
+  `).all();
+
+  let processed = 0, skipped = 0, sent = 0, failed = 0;
+  for (const sub of subs.results) {
+    processed++;
+    const tz = sub.timezone || 'America/Denver';
+    const local = localParts(now, tz);
+    if (!local || local.hour !== 8) { skipped++; continue; }
+
+    if (sub.frequency === 'weekly'  && local.weekday !== 4) { skipped++; continue; } // Thursday
+    if (sub.frequency === 'monthly' && local.day !== 1)     { skipped++; continue; } // 1st of month
+
+    if (alreadySentForCadence(sub, local)) { skipped++; continue; }
+
+    const pending = await env.DB.prepare(`
+      SELECT id, topic, payload, created_at
+      FROM pending_notifications
+      WHERE subscriber_id = ?1 AND delivered_at IS NULL
+      ORDER BY topic, created_at
+    `).bind(sub.id).all();
+
+    if (!pending.results.length) { skipped++; continue; }  // skip-if-empty
+
+    const prefsToken = await signToken(
+      { sub: sub.id, exp: nowSec() + PREFS_TOKEN_TTL },
+      env.PREFS_TOKEN_SECRET
+    );
+    const unsubToken = await signToken(
+      { sub: sub.id, purpose: 'unsub', exp: nowSec() + UNSUB_TOKEN_TTL },
+      env.PREFS_TOKEN_SECRET
+    );
+    const prefsUrl = `${env.PUBLIC_ORIGIN}/preferences/?t=${prefsToken}`;
+    const unsubUrl = `${env.PUBLIC_ORIGIN}/api/unsubscribe?t=${unsubToken}`;
+
+    try {
+      await sendEmail(env, {
+        to: sub.email,
+        subject: digestSubject(sub.frequency, pending.results.length),
+        html: digestHtml(sub, pending.results, prefsUrl, unsubUrl),
+        text: digestText(sub, pending.results, prefsUrl, unsubUrl),
+      });
+      sent++;
+
+      // Mark delivered + bump last-sent timestamp.
+      const col = sub.frequency === 'daily'  ? 'last_daily_digest_at'
+                : sub.frequency === 'weekly' ? 'last_weekly_digest_at'
+                :                              'last_monthly_digest_at';
+      const ids = pending.results.map((p) => p.id);
+      const placeholders = ids.map((_, i) => '?' + (i + 2)).join(',');
+      const nowIso = new Date().toISOString();
+      await env.DB.batch([
+        env.DB.prepare(`UPDATE subscribers SET ${col} = ?1 WHERE id = ?2`)
+          .bind(nowIso, sub.id),
+        env.DB.prepare(
+          `UPDATE pending_notifications SET delivered_at = ?1
+           WHERE subscriber_id = ${placeholders.length ? '?' + (ids.length + 2) : 'NULL'}
+             AND id IN (${placeholders})`
+        ).bind(nowIso, ...ids, sub.id),
+      ]);
+    } catch (e) {
+      failed++;
+      console.log('digest send failed for', sub.email, e?.message);
+    }
+  }
+
+  console.log(`digest run: processed=${processed} sent=${sent} skipped=${skipped} failed=${failed}`);
+}
+
+// Convert a UTC Date into the subscriber's local clock parts.
+function localParts(date, timezone) {
+  try {
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      hour12: false,
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', weekday: 'short',
+    });
+    const parts = Object.fromEntries(fmt.formatToParts(date).map(p => [p.type, p.value]));
+    const wmap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    return {
+      year: Number(parts.year),
+      month: Number(parts.month),
+      day: Number(parts.day),
+      hour: Number(parts.hour) % 24,
+      weekday: wmap[parts.weekday],
+      yyyymmdd: `${parts.year}-${parts.month}-${parts.day}`,
+      yyyymm: `${parts.year}-${parts.month}`,
+    };
+  } catch { return null; }
+}
+
+function alreadySentForCadence(sub, local) {
+  if (sub.frequency === 'daily')   return sub.last_daily_digest_at   && sub.last_daily_digest_at.startsWith(local.yyyymmdd);
+  if (sub.frequency === 'weekly')  return sub.last_weekly_digest_at  && sub.last_weekly_digest_at.startsWith(local.yyyymmdd);
+  if (sub.frequency === 'monthly') return sub.last_monthly_digest_at && sub.last_monthly_digest_at.startsWith(local.yyyymm);
+  return false;
+}
+
+function digestSubject(frequency, count) {
+  const cadence = frequency === 'daily' ? 'daily' : frequency === 'weekly' ? 'weekly' : 'monthly';
+  return `Your ${cadence} digest from CheetoChopsticks (${count} update${count === 1 ? '' : 's'})`;
+}
+
+function digestHtml(sub, items, prefsUrl, unsubUrl) {
+  const byTopic = groupByTopic(items);
+  const intro = `We bundled ${items.length} update${items.length === 1 ? '' : 's'} from the topics you subscribe to. Click any to read more.`;
+
+  const sections = Object.keys(byTopic).sort().map((topic) => {
+    const rows = byTopic[topic].map((p) => `
+      <tr><td style="padding:14px 0;border-bottom:1px solid #eee">
+        <h3 style="font:600 17px/1.3 system-ui,sans-serif;color:#0c1220;margin:0 0 6px">${escapeHtml(p.subject || '(no subject)')}</h3>
+        <div style="font:15px/1.55 system-ui,sans-serif;color:#0c1220">${p.html || `<p>${escapeHtml(p.text || '')}</p>`}</div>
+      </td></tr>
+    `).join('');
+    return `
+      <h2 style="font:600 13px/1.3 system-ui,sans-serif;color:#5b6478;text-transform:uppercase;letter-spacing:.06em;margin:32px 0 8px;padding-bottom:6px;border-bottom:2px solid #c8a84b">${escapeHtml(prettyTopic(topic))}</h2>
+      <table role="presentation" style="width:100%;border-collapse:collapse">${rows}</table>
+    `;
+  }).join('');
+
+  return baseEmailHtml(`
+    <h1 style="font:600 22px/1.25 system-ui,sans-serif;color:#0c1220;margin:0 0 8px">Your ${escapeHtml(sub.frequency)} digest</h1>
+    <p style="font:16px/1.55 system-ui,sans-serif;color:#0c1220;margin:0 0 8px">${escapeHtml(intro)}</p>
+    ${sections}
+    <hr style="margin:32px 0;border:0;border-top:1px solid #eee">
+    <p style="font:13px/1.55 system-ui,sans-serif;color:#5b6478">
+      <a href="${prefsUrl}" style="color:#0049b1">Manage preferences</a> ·
+      <a href="${unsubUrl}" style="color:#0049b1">Unsubscribe from everything</a>
+    </p>
+  `);
+}
+
+function digestText(sub, items, prefsUrl, unsubUrl) {
+  const byTopic = groupByTopic(items);
+  const lines = [
+    `Your ${sub.frequency} digest from CheetoChopsticks`,
+    '',
+    `${items.length} update${items.length === 1 ? '' : 's'} from your topics.`,
+    '',
+  ];
+  for (const topic of Object.keys(byTopic).sort()) {
+    lines.push('━━━ ' + prettyTopic(topic).toUpperCase() + ' ━━━');
+    for (const p of byTopic[topic]) {
+      lines.push('', p.subject || '(no subject)', '', p.text || stripHtml(p.html || ''));
+    }
+    lines.push('');
+  }
+  lines.push('---', `Manage preferences: ${prefsUrl}`, `Unsubscribe: ${unsubUrl}`);
+  return lines.join('\n');
+}
+
+function groupByTopic(items) {
+  const out = {};
+  for (const it of items) {
+    let p; try { p = JSON.parse(it.payload); } catch { p = { subject: '', text: '' }; }
+    (out[it.topic] = out[it.topic] || []).push({ ...p, _at: it.created_at });
+  }
+  return out;
+}
+
+function stripHtml(s) {
+  return String(s || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+}
+
+function validTimezone(tz) {
+  if (!tz || typeof tz !== 'string') return 'America/Denver';
+  // Minimal validation: must look like an IANA TZ identifier.
+  if (!/^[A-Za-z_]+(?:\/[A-Za-z_+\-0-9]+){0,2}$/.test(tz)) return 'America/Denver';
+  // Trust it — Intl.DateTimeFormat will reject unknown TZs at use time.
+  return tz;
 }
 
 // ─── /api/resend-webhook — bounce / complaint ───────────────────────────────

@@ -1182,10 +1182,12 @@ new Chart(document.getElementById('chartBirths'),{
       e.preventDefault();
       out.textContent = 'Submitting…';
       var email = form.email.value.trim();
+      var timezone = '';
+      try { timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) {}
       fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, topic: topic, source: source }),
+        body: JSON.stringify({ email: email, topic: topic, source: source, timezone: timezone }),
       })
         .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
         .then(function (res) {

@@ -25,5 +25,11 @@
       "database_name": "notify",
       "database_id": "0a6318d4-3be7-4bf0-bdc0-a4fc8dca2813"
     }
-  ]
+  ],
+  "triggers": {
+    // Hourly: enough granularity for 8am-local digests across most US timezones.
+    // Each run: scan confirmed non-immediate subscribers, send digest if their
+    // local clock says 8am AND they're due AND they have queued notices.
+    "crons": ["0 * * * *"]
+  }
 }
