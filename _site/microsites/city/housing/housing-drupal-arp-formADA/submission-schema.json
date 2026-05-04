@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://coloradosprings.gov/schemas/home-arp-comment-submission/v1.json",
+  "title": "HOME-ARP Comment Submission",
+  "description": "JSON payload posted by the City of Colorado Springs Drupal Webform when a public comment is submitted on the HOME-ARP Allocation Plan amendment. This is the contract between the Webform and any downstream consumer (city record system, archival storage, analytics, etc.).",
+  "type": "object",
+  "required": ["webform_id", "submission_id", "submitted_at", "langcode", "comment"],
+
+  "properties": {
+
+    "webform_id": {
+      "type": "string",
+      "const": "home_arp_comment",
+      "description": "Stable machine name of the source Webform. Consumers use this to route by form."
+    },
+
+    "submission_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Drupal Webform serial number for this submission. Stable per-form, monotonically increasing."
+    },
+
+    "submission_uuid": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Globally unique identifier for the submission. Stable across systems."
+    },
+
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp when the submission was completed."
+    },
+
+    "langcode": {
+      "type": "string",
+      "enum": ["en", "es"],
+      "description": "Language the user submitted in. Drives downstream localization (e.g., follow-up email language)."
+    },
+
+    "name": {
+      "type": ["string", "null"],
+      "maxLength": 255,
+      "description": "Submitter's name. Optional. May be null or empty."
+    },
+
+    "email": {
+      "type": ["string", "null"],
+      "format": "email",
+      "description": "Submitter's email address. Optional."
+    },
+
+    "phone": {
+      "type": ["string", "null"],
+      "description": "Submitter's phone number. Optional. Free-form, not parsed."
+    },
+
+    "zip": {
+      "type": ["string", "null"],
+      "maxLength": 10,
+      "description": "Submitter's ZIP code. Optional. Used for geographic analysis only."
+    },
+
+    "submitter_role": {
+      "type": ["string", "null"],
+      "enum": [
+        "resident",
+        "qualifying_population",
+        "service_provider",
+        "advocate",
+        "elected_official",
+        "other",
+        null
+      ],
+      "description": "Self-described role of the submitter."
+    },
+
+    "submitter_role_other": {
+      "type": ["string", "null"],
+      "description": "Free-text description, populated only when submitter_role = 'other'."
+    },
+
+    "organization": {
+      "type": ["string", "null"],
+      "maxLength": 255,
+      "description": "Organization the submitter is representing, if applicable."
+    },
+
+    "topics": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "affordable_rental",
+          "tbra",
+          "supportive_services",
+          "non_congregate_shelter",
+          "allocation",
+          "eligible_activities",
+          "public_participation",
+          "other"
+        ]
+      },
+      "description": "Topics the comment addresses. May be empty."
+    },
+
+    "topic_other": {
+      "type": ["string", "null"],
+      "description": "Free-text description, populated only when 'other' is in topics."
+    },
+
+    "comment": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The comment text itself. The only required content field."
+    },
+
+    "attachment": {
+      "type": ["object", "null"],
+      "description": "Supporting document, if attached. Drupal stores the file; this is a reference.",
+      "properties": {
+        "fid": {
+          "type": "integer",
+          "description": "Drupal file ID."
+        },
+        "filename": {
+          "type": "string",
+          "description": "Original uploaded filename."
+        },
+        "filemime": {
+          "type": "string",
+          "description": "MIME type."
+        },
+        "filesize": {
+          "type": "integer",
+          "description": "Size in bytes."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Authenticated URL for staff retrieval. Not public."
+        }
+      },
+      "required": ["fid", "filename", "url"]
+    },
+
+    "contact_back": {
+      "type": "boolean",
+      "description": "Whether the submitter wants follow-up contact."
+    },
+
+    "newsletter": {
+      "type": "boolean",
+      "description": "Whether the submitter wants to be added to the Housing & Community Vitality newsletter."
+    },
+
+    "needs_alternate_format": {
+      "type": "boolean",
+      "description": "Whether the submitter requested an alternate format or accommodation. When true, format_needed should be populated and the Office of Accessibility is notified separately."
+    },
+
+    "format_needed": {
+      "type": ["string", "null"],
+      "description": "Free-text description of the requested accommodation."
+    },
+
+    "_metadata": {
+      "type": "object",
+      "description": "Server-side metadata not collected from the form.",
+      "properties": {
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL the form was submitted from (e.g., /home-arp-comment or /es/home-arp-comment)."
+        },
+        "user_agent_class": {
+          "type": "string",
+          "enum": ["desktop", "mobile", "tablet", "bot", "unknown"],
+          "description": "Coarse classification of the submitter's user agent. Raw user agent is not transmitted."
+        },
+        "ip_hash": {
+          "type": ["string", "null"],
+          "description": "SHA-256 hash of the submitter's IP address salted with a per-form secret. Not the raw IP. Used for deduplication and abuse detection only."
+        }
+      }
+    }
+  },
+
+  "additionalProperties": false,
+
+  "examples": [
+    {
+      "webform_id": "home_arp_comment",
+      "submission_id": 42,
+      "submission_uuid": "5b7b9d2c-3f4a-4b8c-9d1e-2a3f4b5c6d7e",
+      "submitted_at": "2026-05-04T15:23:11-06:00",
+      "langcode": "en",
+      "name": "Maria Lopez",
+      "email": "maria@example.org",
+      "phone": null,
+      "zip": "80910",
+      "submitter_role": "advocate",
+      "submitter_role_other": null,
+      "organization": "Pikes Peak Tenants Union",
+      "topics": ["tbra", "affordable_rental"],
+      "topic_other": null,
+      "comment": "We are concerned that the proposed allocation reduces TBRA in favor of capital projects. The waitlist for TBRA is already 14 months in this area...",
+      "attachment": null,
+      "contact_back": true,
+      "newsletter": false,
+      "needs_alternate_format": false,
+      "format_needed": null,
+      "_metadata": {
+        "source_url": "https://coloradosprings.gov/home-arp-comment",
+        "user_agent_class": "desktop",
+        "ip_hash": "a3f1c8e7..."
+      }
+    }
+  ]
+}

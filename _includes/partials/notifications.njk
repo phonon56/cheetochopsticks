@@ -8,14 +8,23 @@
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
   </div>
   <div class="notif-filters" role="group" aria-label="Filter notifications">
-    <button class="nf-btn active" onclick="filterNotif('all', this)">All (10)</button>
-    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (4)</button>
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (11)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (5)</button>
     <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
     <button class="nf-btn" onclick="filterNotif('info', this)">Info (3)</button>
   </div>
   <div class="notif-scroll">
 
     <div class="notif-group-label">Critical — act now</div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
+        <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
+        <a class="notif-action" href="microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
 
     <div class="notif-item" data-tier="critical">
       <div class="notif-dot nd-red"></div>

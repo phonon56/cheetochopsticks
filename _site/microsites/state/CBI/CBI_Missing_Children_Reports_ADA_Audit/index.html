@@ -1,0 +1,253 @@
+<h1>ADA / WCAG 2.1 AA Audit</h1>
+<h2>Colorado Bureau of Investigation — Missing Children Annual Reports</h2>
+<p><strong>Page audited:</strong> https://cbi.colorado.gov/investigations/missing-persons/missing-children-annual-reports
+<strong>Reports audited:</strong> 33 PDFs (1985–2023) + 1 Google Doc (2024)
+<strong>Standard applied:</strong> WCAG 2.1 Level AA, plus PDF/UA-1 for the PDF documents
+<strong>State of Colorado commitment:</strong> The footer of the page states the State is &quot;committed to providing equitable access… in line with the Web Content Accessibility Guidelines (WCAG) version 2.1, level AA criteria.&quot;</p>
+<hr>
+<h2>Executive summary</h2>
+<p>The page itself is mostly fine. The <strong>content the page exists to deliver — the reports — is not.</strong> Out of 34 reports linked from this page, <strong>only 12 (35%) provide content that a screen-reader user, a person with low vision using assistive tech, or a researcher using automated tools can actually consume.</strong> The other 65% are scanned images of paper, web pages saved as PDFs with statistical tables baked into images, missing entirely, or tucked into a different format with no notice.</p>
+<p>There is one bright spot: the most recent (2024) report — the one in the &quot;outlier&quot; Google Doc format — is actually the <strong>most accessible</strong> report in the entire corpus, with descriptive alt text on every figure and links to the underlying raw data. The agency clearly knows how to produce accessible content. The challenge is consistency.</p>
+<p>Because Colorado state policy commits the agency to WCAG 2.1 AA, this is not just a usability problem — it is a stated-commitment gap.</p>
+<hr>
+<h2>1. Scope and method</h2>
+<p>The audit covered:</p>
+<ul>
+<li>The HTML index page that lists the reports.</li>
+<li>A representative sample of the 33 linked PDFs, drawn from each of the three production eras visible in the corpus: scanned (1985–1999), web-archive HTML-as-PDF (2000–2009), and modern designed PDFs (2014–2023).</li>
+<li>The 2024 report, which is hosted as a published Google Doc.</li>
+</ul>
+<p>Method: machine text extraction (the same approach a screen reader, search index, or assistive tool would rely on); structural inspection of the index page HTML; comparison against WCAG 2.1 AA Success Criteria and PDF/UA-1.</p>
+<hr>
+<h2>2. Page-level findings (the index page)</h2>
+<p>The HTML page is reasonably structured. Most of the issues are minor and fixable in a single pass.</p>
+<h3>2.1 Findings</h3>
+<p><strong>(A) Empty or placeholder heading levels (WCAG 1.3.1, 2.4.6) — Moderate.</strong>
+The page includes several <code>###</code> headings that contain no text or only the literal placeholder &quot;placeholder&quot;. Screen readers announce these as empty headings, which is disorienting and breaks the heading outline.</p>
+<p><strong>(B) Redundant, ambiguous link text (WCAG 2.4.4, 2.4.9) — Moderate.</strong>
+Every PDF link in the table renders its accessible name as the year, followed by &quot;(opens in new window)(opens in new window)&quot; — the phrase is duplicated. A screen-reader user navigating by links hears each year twice. Beyond the duplication, the link text gives the user no signal about <em>which</em> report it is (the only differentiator is the year integer).</p>
+<p>Fix: link text should read like &quot;1985 Missing Children's Report (PDF)&quot; with a single &quot;(opens in new window)&quot; indicator delivered via <code>aria-label</code> or a sr-only span.</p>
+<p><strong>(C) Reports table has no programmatic structure (WCAG 1.3.1) — Minor.</strong>
+The reports are arranged in a 5-column-wide table, but it is purely a layout grid — no headers, no caption, no semantic relationship between cells. A screen-reader user navigating cell-by-cell hears years in row-major order with no context. A simple <code>&lt;ul&gt;</code> or a properly captioned table with a <code>&lt;caption&gt;</code> element would be more accessible.</p>
+<p><strong>(D) &quot;Opens in new window&quot; used without a visual cue (WCAG 3.2.5) — Minor.</strong>
+Sighted users get no indication that the link launches in a new tab/window — there's no icon, only the screen-reader text. Per WCAG, opening a new window without warning a sighted user is a change of context that should be predictable.</p>
+<p><strong>(E) Document type and size not indicated (WCAG 1.3.1, advisory 2.4.4) — Minor.</strong>
+Links don't tell users they're about to download a PDF, nor how big it is. For users on metered connections or older assistive tech, this matters. (One link is a Google Doc rather than a PDF — there is no warning that this differs from the rest.)</p>
+<p><strong>(F) The 2024 link points to a published Google Doc (WCAG 1.3.1, 4.1.2) — Moderate.</strong>
+Mixing a Google Doc with 33 PDFs in the same list, with no indication of the format change, breaks predictability. Google Docs in &quot;publish to web&quot; mode often have different keyboard-trap behavior than the rest of the page.</p>
+<p><strong>(G) Phone number for inquiries is not formatted as a <code>tel:</code> link in the body content — Minor.</strong>
+The number &quot;303-239-4211&quot; appears as plain text; only the footer phone number is a clickable <code>tel:</code> link. Mobile screen-reader users have to copy/paste.</p>
+<p><strong>(H) Color contrast: not directly verifiable from text-extracted content — Defer.</strong>
+Confirming AA-level contrast (4.5:1 for body text, 3:1 for large text and UI) requires rendering the page. This audit flags it as &quot;verify visually with an automated tool such as axe DevTools or WAVE.&quot;</p>
+<h3>2.2 What the page does well</h3>
+<ul>
+<li>Has a &quot;Skip to main content&quot; link (WCAG 2.4.1).</li>
+<li>Page has a <code>&lt;title&gt;</code> and breadcrumb trail.</li>
+<li>The State accessibility commitment and a contact path for accommodations are linked from the page footer.</li>
+<li>Site language is set on the document.</li>
+<li>Navigation is keyboard-traversable based on the source.</li>
+</ul>
+<hr>
+<h2>3. PDF-level findings — the substantive accessibility problem</h2>
+<p>The 34 reports fall into three production eras with sharply different accessibility characteristics. <strong>The page treats them as a single list, but they are not the same kind of artifact.</strong></p>
+<h3>3.1 Era 1: Scanned PDFs (1985, 1986, 1989, 1990–1999) — 13 reports</h3>
+<p><strong>Status: Inaccessible. Multiple WCAG fails.</strong></p>
+<p>These PDFs are images of paper documents. There is no underlying text. Direct text extraction returns &quot;[This PDF is empty or contains no machine-readable text].&quot;</p>
+<p>Failures:</p>
+<ul>
+<li><strong>WCAG 1.1.1 Non-text Content (Level A) — FAIL.</strong> Every page is a single image with no text alternative. A screen-reader user receives nothing.</li>
+<li><strong>WCAG 1.4.5 Images of Text (Level AA) — FAIL.</strong> The entire document is one large image of text.</li>
+<li><strong>WCAG 1.3.1 Info and Relationships (Level A) — FAIL.</strong> No tagged structure, no headings, no reading order.</li>
+<li><strong>WCAG 1.4.4 Resize Text (Level AA) — FAIL.</strong> Zooming a scanned image degrades quality; the user cannot reflow text.</li>
+<li><strong>WCAG 4.1.2 Name, Role, Value (Level A) — FAIL.</strong> No semantic structure for assistive tech.</li>
+<li><strong>PDF/UA-1 § 7.1 Tagged PDF — FAIL.</strong></li>
+<li><strong>PDF/UA-1 § 7.2 Document title in metadata — likely FAIL</strong> (cannot verify without binary, but consistent with format).</li>
+</ul>
+<p>Practical impact: a blind researcher, journalist, parent of a missing child, or auto-translation tool <strong>cannot read these reports at all</strong>. They are visible only to sighted users with full vision and no assistive-tech reliance.</p>
+<p>This is 13 of 34 reports — <strong>38% of the corpus is fully inaccessible.</strong></p>
+<p><strong>Remediation:</strong> OCR the PDFs (e.g., Adobe Acrobat Pro's &quot;Make Accessible,&quot; ABBYY FineReader, Tesseract), then add document tags, headings, and table structure. Approximate effort: 2–4 hours per report depending on complexity, or roughly 30–50 hours total for the whole 1985–1999 backlog. A vendor or batch-processing tool can do this for under $1k.</p>
+<h3>3.2 Era 2: Web-archive HTML-as-PDF (2000–2009) — 10 reports</h3>
+<p><strong>Status: Partially accessible. Text extracts unevenly; statistical tables are usually images.</strong></p>
+<p>These are web pages saved to PDF, sometimes from Wayback Machine captures (the 2000 PDF's URL strings include <code>web.archive.org</code> paths). Text extraction recovers narrative prose, definitions, and director's-message content — but the statistical content the reports exist for (counts by age, sex, day, month, recovery status) is frequently captured as a printed image of a page with bitmapped tables.</p>
+<p>Mixed results in the sample:</p>
+<ul>
+<li><strong>2008 report:</strong> All tables came through as text — <strong>best of this era.</strong></li>
+<li><strong>2009 report:</strong> Historical totals table came through; some other tables only partially.</li>
+<li><strong>2002, 2000 reports:</strong> Prose came through; &quot;Facts of Interest&quot; and statistical tables are present as images and don't extract.</li>
+</ul>
+<p>Failures:</p>
+<ul>
+<li><strong>WCAG 1.1.1 Non-text Content (Level A) — Partial FAIL</strong> (statistical tables embedded as images have no alt text).</li>
+<li><strong>WCAG 1.3.1 Info and Relationships (Level A) — FAIL</strong> (tables are not marked up programmatically; reading order is print-page order, not logical content order).</li>
+<li><strong>WCAG 1.4.5 Images of Text (Level AA) — FAIL</strong> for the table images.</li>
+<li><strong>PDF/UA-1 § 7.5 Tables — FAIL</strong> (no <code>&lt;TR&gt;</code>/<code>&lt;TH&gt;</code>/<code>&lt;TD&gt;</code> tags).</li>
+<li><strong>WCAG 2.4.6 Headings and Labels (Level AA) — FAIL</strong> (the &quot;headings&quot; are styled paragraphs, not tagged headings).</li>
+</ul>
+<p>Practical impact: a screen-reader user can hear what the report is about and read most of the prose, but cannot access the actual numeric data — which <em>is</em> the report.</p>
+<p><strong>Remediation:</strong> Re-export the source HTML to a tagged accessible PDF, or — better — publish the data as a structured page or open dataset. If keeping PDFs, regenerate from source with proper tagging (a one-time effort per report).</p>
+<h3>3.3 Era 3: Modern designed PDFs (2014–2023) — 10 reports</h3>
+<p><strong>Status: Mostly accessible at the text level; structural accessibility cannot be verified from content alone.</strong></p>
+<p>These reports extract cleanly to text. Headings, tables, and prose are all recoverable. They are demonstrably the best of the three eras.</p>
+<p>But text-extraction success <strong>does not guarantee WCAG/PDF UA compliance.</strong> A PDF can be text-only (no underlying image layer) yet still fail accessibility because:</p>
+<ul>
+<li>It lacks tags (a PDF without tags has no semantic structure for assistive tech, even if a search engine can read the text).</li>
+<li>Reading order in the tag tree may not match visual order.</li>
+<li>Decorative images may be exposed instead of marked artifact.</li>
+<li>Tables may not have header cells designated.</li>
+<li>Form fields, if any, may not have labels.</li>
+<li>Document metadata (title, language) may not be set.</li>
+</ul>
+<p>To fully audit these, the binary PDFs need to be inspected (e.g., with PAC 2024, PDF Accessibility Checker, or Acrobat Pro's accessibility checker). Likely findings based on what's typical for state-government communications-team-produced PDFs in this era:</p>
+<ul>
+<li><strong>Untagged or poorly-tagged structure (WCAG 1.3.1) — Likely partial fail.</strong></li>
+<li><strong>Missing document title in metadata (WCAG 2.4.2) — Likely partial fail.</strong></li>
+<li><strong>Decorative images (poster-contest cover, child illustrations) without alt text or marked as decorative (WCAG 1.1.1) — Likely partial fail.</strong></li>
+<li><strong>Color used to convey info — possible.</strong> The 2021 report shows a pie chart of recovery circumstances with color-only legend; if the only legend is color, that's a 1.4.1 fail.</li>
+<li><strong>Two-column layouts where reading order may be wrong — possible.</strong> Common in this kind of designed PDF.</li>
+</ul>
+<p><strong>Recommended remediation:</strong> Run each modern report through PAC 2024 and/or Acrobat Pro's checker; expect ~10–30 minutes per report to fix. New reports going forward should be checked at draft time, not after publication.</p>
+<h3>3.4 The 2024 Google Doc</h3>
+<p><strong>Status: Format outlier; actually the most accessible report in the corpus.</strong></p>
+<p>The 2024 report is hosted as a Google Doc published to web. This breaks the consistency of the report list, but inspection of the actual content reveals that <strong>it has stronger accessibility properties than any of the PDFs</strong>:</p>
+<ul>
+<li><strong>Every figure has descriptive alt text.</strong> The cover illustration's alt text reads: &quot;drawing of trees in the background, with a child kneeling on the ground with tears in their eyes looking at a lantern that is lit up yellow as if its glowing with the words 'Bringing our missing children home' written across the foreground.&quot; Figures 1–6 all have similarly substantive alt text describing what each chart shows.</li>
+<li><strong>Every chart links to its underlying raw data</strong> as a public Google Sheet. A user who cannot see Figure 3 (the race pie chart) can both hear the alt text (&quot;69% White, 18% Black, 11% Unknown, 1% Native American, 1% Asian&quot;) <em>and</em> open the linked spreadsheet.</li>
+<li><strong>Tables are real HTML tables</strong> with <code>&lt;th&gt;</code> headers, not images of tables.</li>
+<li><strong>Headings use proper heading levels</strong> (H1, H2, H3) — the document outline is navigable by screen reader.</li>
+<li><strong>The boilerplate stale &quot;39 children/day&quot; figure was finally updated</strong> to &quot;20 children/day&quot; in this report (the earliest correction in the eight-year stretch where it was wrong).</li>
+</ul>
+<p>This is, ironically, the report the page treats as the format outlier.</p>
+<p>What is still imperfect:</p>
+<ul>
+<li><strong>Format inconsistency (WCAG 3.2.3, 3.2.4):</strong> Mixing one Google Doc into a list of 33 PDFs without warning is a predictability issue. Users prepared to download a PDF land on something else.</li>
+<li><strong>No downloadable accessible version:</strong> A user wanting a single archival file (for their own records, for redistribution, for offline reading) has no PDF/A-tagged equivalent.</li>
+<li><strong>Dependency on Google's published-to-web rendering:</strong> if Google changes the format or removes the publish-to-web feature, the report becomes unreachable.</li>
+</ul>
+<p><strong>The takeaway:</strong> the 2024 report demonstrates the agency <em>knows how to produce accessible content</em> — they're doing it well in this format. The challenge is propagating those practices (alt text, raw-data links, real tables) backward into the PDF era and forward into a consistent format choice. The 2024 design is a good template; the missing step is making it consistently produced and consistently distributed.</p>
+<hr>
+<h2>4. WCAG 2.1 AA criteria — at-a-glance scorecard</h2>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Index page</th>
+<th>Era 1 PDFs (1985–99)</th>
+<th>Era 2 PDFs (2000–09)</th>
+<th>Era 3 PDFs (2014–23)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.1.1 Non-text content (A)</td>
+<td>Pass</td>
+<td>Fail</td>
+<td>Partial fail</td>
+<td>Likely partial</td>
+</tr>
+<tr>
+<td>1.3.1 Info &amp; relationships (A)</td>
+<td>Partial</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Likely partial</td>
+</tr>
+<tr>
+<td>1.4.1 Use of color (A)</td>
+<td>Defer</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>Verify (charts)</td>
+</tr>
+<tr>
+<td>1.4.3 Contrast (AA)</td>
+<td>Defer</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>Defer</td>
+</tr>
+<tr>
+<td>1.4.4 Resize text (AA)</td>
+<td>Pass</td>
+<td>Fail</td>
+<td>Partial</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>1.4.5 Images of text (AA)</td>
+<td>Pass</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>2.4.1 Bypass blocks (A)</td>
+<td>Pass</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>2.4.2 Page titled (A)</td>
+<td>Pass</td>
+<td>Likely fail</td>
+<td>Likely fail</td>
+<td>Verify</td>
+</tr>
+<tr>
+<td>2.4.4 Link purpose (A)</td>
+<td>Partial</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>2.4.6 Headings and labels (AA)</td>
+<td>Partial</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Likely partial</td>
+</tr>
+<tr>
+<td>3.1.1 Language of page (A)</td>
+<td>Pass</td>
+<td>Likely fail</td>
+<td>Likely fail</td>
+<td>Verify</td>
+</tr>
+<tr>
+<td>4.1.2 Name, role, value (A)</td>
+<td>Partial</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Likely partial</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>5. Risk and impact</h2>
+<p><strong>Audience harmed:</strong> screen-reader users (estimated 7–8 million U.S. adults with severe visual disabilities), users of refreshable Braille displays, users with cognitive disabilities relying on text-to-speech, motor-impaired users who cannot use a mouse to manually crop and copy table cells, users on low-bandwidth connections or older devices, automated translation tools, search engines, researchers and journalists.</p>
+<p><strong>Subject-matter sensitivity:</strong> missing-children data is exactly the kind of public-safety information whose accessibility matters most. The audience includes parents, caregivers, advocates, and legal professionals — populations with disproportionately high rates of stress, time pressure, and varying technical proficiency.</p>
+<p><strong>Legal/policy exposure:</strong> Title II of the ADA, Section 504, and Colorado's HB21-1110 (&quot;Colorado Laws For Persons With Disabilities&quot;) require state agencies to make digital content accessible. Colorado state policy explicitly references WCAG 2.1 AA. The page even links to the state's accessibility commitment — which makes the contrast between the stated commitment and the actual state of these PDFs noteworthy.</p>
+<hr>
+<h2>6. Recommendations, in order of impact</h2>
+<ol>
+<li><strong>Republish the 1990–2009 totals as a single accessible HTML table on the page.</strong> This is a 30-minute job that immediately makes 20 years of headline data accessible, even before any PDF remediation. The data is already extracted in the spreadsheet from this audit.</li>
+<li><strong>Run the modern (2014–2023) PDFs through an automated checker (PAC 2024, Acrobat Pro) and remediate.</strong> Expect this is a half-day of work per file maximum. Establish a checker-pass requirement before any future report is posted.</li>
+<li><strong>OCR the scanned 1985–1999 PDFs and re-publish as tagged accessible PDFs.</strong> Vendor-priced or batch-processed for ~$25–50/report.</li>
+<li><strong>Fix the index page's link text and remove the duplicated &quot;(opens in new window)(opens in new window)&quot; pattern.</strong> Likely a single template change in the CMS.</li>
+<li><strong>Add format/size indicators next to each link</strong> (&quot;PDF, 1.2 MB&quot; or &quot;Google Doc&quot;). Standard pattern, reduces confusion.</li>
+<li><strong>Publish a structured open dataset alongside the PDFs.</strong> A CSV or table on data.colorado.gov containing the per-year totals and key fields would solve the accessibility problem for the data layer permanently and make the reports actually useful for trend analysis (currently this requires the work that produced this audit's spreadsheet).</li>
+<li><strong>Standardize on a single format for future years.</strong> Either PDF or web-published HTML — not both. The 2024 Google Doc breaks the pattern.</li>
+<li><strong>Fill the 2010–2013 gap</strong>, or post a notice explaining why those years are absent. As-is, a user encountering the page reasonably assumes a missing report is a website bug.</li>
+</ol>
+<hr>
+<h2>7. Scope notes and limitations</h2>
+<ul>
+<li>This audit relied on text extraction and HTML-source inspection. Visual rendering, color contrast, focus indicator visibility, and PDF tag-tree structure could not be examined from the available tooling.</li>
+<li>Era-3 PDFs are scored &quot;likely partial&quot; rather than &quot;fail&quot; because text extraction succeeds; the structural-tag layer would need binary inspection (PAC 2024) to confirm.</li>
+<li>The 1987 and 1988 reports, and the 2010–2013 reports, are <strong>absent from the index page entirely</strong> and were therefore not audited.</li>
+</ul>
+<hr>
+<p><em>Prepared from automated extraction of all 34 reports linked at</em>
+<em>https://cbi.colorado.gov/investigations/missing-persons/missing-children-annual-reports</em>
+<em>on Thursday, April 30, 2026.</em></p>

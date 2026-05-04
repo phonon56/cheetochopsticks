@@ -423,6 +423,143 @@
       white-space: nowrap; border: 0;
     }
 
+    /* ── MARKDOWN CONTENT (rendered .md docs) ───────────────────── */
+    .markdown-content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .markdown-header {
+      border-bottom: 1px solid var(--cc-border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .markdown-content > .markdown-header h1,
+    .markdown-content h1 {
+      font-family: var(--cc-serif);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--cc-text);
+      margin: 0 0 8px;
+    }
+    .markdown-subtitle {
+      font-style: italic;
+      color: var(--cc-muted);
+      font-size: 1.05rem;
+      margin: 0;
+    }
+    .markdown-content h2 {
+      font-family: var(--cc-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cc-text);
+      margin: 48px 0 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--cc-border);
+    }
+    .markdown-content h3 {
+      font-family: var(--cc-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cc-gold-lt);
+      margin: 32px 0 8px;
+    }
+    .markdown-content h4 {
+      font-family: var(--cc-mono);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 24px 0 6px;
+    }
+    .markdown-content p { margin: 0 0 16px; color: var(--cc-text); }
+    .markdown-content strong { color: var(--cc-gold-lt); font-weight: 600; }
+    .markdown-content em { color: var(--cc-muted); }
+    .markdown-content a {
+      color: var(--cc-gold);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold-dim);
+      text-underline-offset: 3px;
+    }
+    .markdown-content a:hover,
+    .markdown-content a:focus-visible {
+      color: var(--cc-gold-lt);
+      text-decoration-color: var(--cc-gold-lt);
+    }
+    .markdown-content ul, .markdown-content ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+    }
+    .markdown-content li { margin-bottom: 6px; color: var(--cc-text); }
+    .markdown-content li::marker { color: var(--cc-gold); }
+    .markdown-content blockquote {
+      border-left: 3px solid var(--cc-gold);
+      padding: 8px 16px;
+      margin: 16px 0;
+      color: var(--cc-muted);
+      font-style: italic;
+      background: var(--cc-surface);
+    }
+    .markdown-content code {
+      font-family: var(--cc-mono);
+      font-size: .92em;
+      color: var(--cc-gold-lt);
+      background: var(--cc-surface);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+    .markdown-content pre {
+      background: var(--cc-surface);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-size: .85rem;
+      line-height: 1.55;
+    }
+    .markdown-content pre code {
+      background: none;
+      padding: 0;
+      color: var(--cc-text);
+      font-size: inherit;
+    }
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: .92rem;
+    }
+    .markdown-content th, .markdown-content td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--cc-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .markdown-content th {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      border-bottom: 2px solid var(--cc-border);
+    }
+    .markdown-content hr {
+      border: none;
+      border-top: 1px solid var(--cc-border);
+      margin: 32px 0;
+    }
+    .markdown-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
 </style>
 
 
@@ -448,9 +585,9 @@
         <a class="nav-link" href="/#events">Events</a>
       </nav>
       <div class="nav-right">
-        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 10 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
           <span>Alerts</span>
-          <span class="notif-count" aria-live="polite">10</span>
+          <span class="notif-count" aria-live="polite">11</span>
         </button>
       </div>
     </div>
@@ -467,14 +604,23 @@
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
   </div>
   <div class="notif-filters" role="group" aria-label="Filter notifications">
-    <button class="nf-btn active" onclick="filterNotif('all', this)">All (10)</button>
-    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (4)</button>
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (11)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (5)</button>
     <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
     <button class="nf-btn" onclick="filterNotif('info', this)">Info (3)</button>
   </div>
   <div class="notif-scroll">
 
     <div class="notif-group-label">Critical — act now</div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
+        <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
+        <a class="notif-action" href="microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
 
     <div class="notif-item" data-tier="critical">
       <div class="notif-dot nd-red"></div>

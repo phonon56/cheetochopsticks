@@ -1,0 +1,135 @@
+# =============================================================================
+# Spanish translation overlay for the HOME-ARP comment Webform
+# =============================================================================
+# Place this file at:
+#   sites/default/files/config_<hash>/sync/language/es/webform.webform.home_arp_comment.yml
+#
+# This is a Drupal Configuration Translation override file. It only contains
+# strings that differ from the source-language form. Everything else (machine
+# names, settings, handler logic) is inherited from the English source.
+#
+# Drupal applies this override automatically when the user is browsing the
+# site in Spanish (URL prefix /es/, or whichever Spanish detection method
+# is configured at /admin/config/regional/language/detection).
+#
+# Required modules: language, content_translation, config_translation, webform
+# After importing, verify the translation at:
+#   /admin/structure/webform/manage/home_arp_comment/translate/es/edit
+# =============================================================================
+
+title: 'Plan de Asignación HOME-ARP — Comentario público'
+description: 'Envíe un comentario público sobre la enmienda al Plan de Asignación HOME-ARP de la Ciudad de Colorado Springs. El período de comentarios públicos es del 24 de abril al 26 de mayo de 2026.'
+
+elements: |
+  intro:
+    '#markup': |
+      <h2>Acerca de este formulario</h2>
+      <p>La Ciudad de Colorado Springs está recibiendo comentarios públicos sobre una enmienda propuesta a su Plan de Asignación HOME-ARP. El período de comentarios públicos está abierto del <strong>24 de abril al 26 de mayo de 2026</strong>.</p>
+      <p>Puede enviar comentarios a través de este formulario o por cualquiera de los siguientes métodos. Todos los métodos se incorporan al registro público en igualdad de condiciones.</p>
+      <ul>
+        <li><strong>Correo electrónico:</strong> CityHousingAndCommunityVitality@coloradosprings.gov</li>
+        <li><strong>Teléfono:</strong> 719-385-5859 (los usuarios de TTY pueden marcar 711 para el servicio de retransmisión)</li>
+        <li><strong>Correo postal:</strong> Housing and Homelessness Response, 30 S. Nevada Ave., Colorado Springs, CO 80903</li>
+        <li><strong>En persona:</strong> en cualquier audiencia pública programada durante el período de comentarios</li>
+      </ul>
+      <p>Si necesita este formulario, el borrador de la enmienda o cualquier documento de la ciudad en otro formato (letra grande, Braille, ASL, audio, lenguaje sencillo u otro idioma), díganoslo en la sección "Solicitud de accesibilidad" al final de este formulario, o comuníquese con la Oficina de Accesibilidad al 719-385-5169.</p>
+      <p>Todos los campos excepto su comentario son opcionales. Recopilamos información de contacto solo para hacer un seguimiento si usted lo solicita.</p>
+
+  about_you:
+    '#title': 'Sobre usted'
+    '#description': 'Todos los campos de esta sección son opcionales.'
+    name:
+      '#title': 'Su nombre'
+      '#description': 'Proporcione un nombre solo si se siente cómodo asociándolo con su comentario en el registro público.'
+    email:
+      '#title': 'Dirección de correo electrónico'
+      '#description': 'Solo lo usaremos para hacer un seguimiento si usted lo solicita.'
+    phone:
+      '#title': 'Número de teléfono'
+      '#description': 'Opcional. Inclúyalo si desea un seguimiento por teléfono.'
+    zip:
+      '#title': 'Código postal'
+      '#description': 'Nos ayuda a comprender qué vecindarios están participando.'
+    submitter_role:
+      '#title': 'Estoy enviando este comentario como'
+      '#description': 'Elija la descripción que mejor corresponda.'
+      '#options':
+        resident: 'Residente de Colorado Springs'
+        qualifying_population: 'Persona que calificaría para los servicios de HOME-ARP (sin hogar, en riesgo de quedarse sin hogar, huyendo de la violencia u otra población vulnerable)'
+        service_provider: 'Proveedor de servicios o profesional de vivienda'
+        advocate: 'Defensor o representante de una organización comunitaria'
+        elected_official: 'Funcionario electo o designado'
+        other: 'Otro'
+    submitter_role_other:
+      '#title': 'Por favor describa'
+    organization:
+      '#title': 'Organización (si corresponde)'
+      '#description': 'Solo si está comentando en nombre de una organización.'
+
+  comment_topics:
+    '#title': '¿Sobre qué trata su comentario?'
+    '#description': 'Seleccione todas las opciones que correspondan. Esto nos ayuda a dirigir su comentario al equipo adecuado.'
+    topics:
+      '#title': 'Temas'
+      '#options':
+        affordable_rental: 'Producción de viviendas de alquiler asequibles'
+        tbra: 'Asistencia de alquiler basada en el inquilino (TBRA)'
+        supportive_services: 'Servicios de apoyo'
+        non_congregate_shelter: 'Refugio no congregado'
+        allocation: 'Cómo se asignan los fondos entre las actividades'
+        eligible_activities: 'Actividades elegibles y poblaciones que califican'
+        public_participation: 'El propio proceso de participación pública'
+        other: 'Otro'
+    topic_other:
+      '#title': 'Por favor describa el otro tema'
+
+  comment_section:
+    '#title': 'Su comentario'
+    comment:
+      '#title': 'Comentario'
+      '#description': 'Por favor comparta su comentario, pregunta o sugerencia. No hay límite de longitud, pero los comentarios más enfocados son más fáciles de atender.'
+      '#counter_maximum_message': '@count caracteres'
+    attachment:
+      '#title': 'Documento de apoyo (opcional)'
+      '#description': 'Adjunte una carta, datos o un documento de apoyo. Formatos aceptados: PDF, Word, texto plano, JPG, PNG. Máximo 10 MB.'
+
+  follow_up:
+    '#title': 'Seguimiento'
+    contact_back:
+      '#title': 'Sí, por favor contácteme sobre mi comentario'
+      '#description': 'Si está marcado, el equipo puede comunicarse usando la información de contacto que proporcionó.'
+    newsletter:
+      '#title': 'Agrégueme al boletín de Vivienda y Vitalidad Comunitaria'
+      '#description': 'Actualizaciones ocasionales del Departamento de Respuesta a la Vivienda y la Falta de Vivienda. Puede cancelar la suscripción en cualquier momento.'
+
+  accessibility_request:
+    '#title': 'Solicitud de accesibilidad'
+    '#description': 'Si necesita este formulario, el borrador del plan o documentos de la ciudad en otro formato, díganoslo aquí. La Oficina de Accesibilidad le hará un seguimiento.'
+    needs_alternate_format:
+      '#title': 'Necesito un formato alternativo o una adaptación'
+    format_needed:
+      '#title': '¿Qué formato o adaptación necesita?'
+      '#description': 'Por ejemplo: letra grande, Braille, interpretación en ASL, resumen en lenguaje sencillo, traducción al español, audio o cualquier otra adaptación.'
+
+  privacy:
+    '#markup': |
+      <p><small><strong>Aviso de privacidad.</strong> Los comentarios enviados a través de este formulario forman parte del registro público de la enmienda al Plan de Asignación HOME-ARP. La información personal que proporcione (nombre, datos de contacto) se utiliza únicamente para hacer un seguimiento si usted lo solicita. Su comentario se resumirá en la respuesta de la ciudad a los comentarios públicos, que se publica con el plan final. La presentación completa la conserva el Departamento de Respuesta a la Vivienda y la Falta de Vivienda de acuerdo con el calendario de retención de registros de la ciudad.</small></p>
+
+settings:
+  form_close_message: 'El período de comentarios HOME-ARP ha cerrado. Gracias a todos los que participaron. El plan final incorporará los comentarios del público y se publicará en la página de HOME-ARP.'
+  confirmation_title: 'Gracias'
+  confirmation_message: |
+    <p>Su comentario ha sido recibido y se incorporará al registro público de la enmienda al Plan de Asignación HOME-ARP.</p>
+    <p>Si proporcionó información de contacto y nos pidió que le hiciéramos un seguimiento, alguien del Departamento de Respuesta a la Vivienda y la Falta de Vivienda se comunicará con usted.</p>
+    <p>Si solicitó un formato alternativo o una adaptación, la Oficina de Accesibilidad le hará un seguimiento dentro de los cinco días hábiles.</p>
+
+handlers:
+  json_webhook:
+    settings:
+      error_message: 'Hubo un problema al enviar su comentario. Por favor inténtelo de nuevo o utilice uno de los métodos de envío alternativos enumerados al principio de este formulario.'
+  email_notification:
+    settings:
+      subject: 'Nuevo comentario HOME-ARP recibido [#[webform_submission:serial]]'
+  accessibility_routing:
+    settings:
+      subject: 'Solicitud de adaptación del formulario de comentarios HOME-ARP [#[webform_submission:serial]]'

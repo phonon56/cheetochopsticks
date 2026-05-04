@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Step-by-step Drupal admin installation guide for the HOME-ARP Comment Webform bundle.">
+  <title>HOME-ARP Comment Webform — Install Guide</title>
+
+  
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
+         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
+           text    #ede8dc → 15.3  AAA
+           muted   #96adc4 →  8.1  AAA
+           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
+           gold    #c8a84b →  8.2  AAA
+           gold-lt #fde68a → 15.0  AAA
+           red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
+           green   #4ade80 → 10.7  AAA
+           blue    #60a5fa →  7.4  AAA
+           amber   #fbbf24 → 11.2  AAA                                  */
+      --cc-bg:         #0c1220;
+      --cc-surface:    #141e2e;
+      --cc-surface2:   #1c2a3e;
+      --cc-surface3:   #233045;
+      --cc-border:     rgba(255,255,255,.14);
+      --cc-border-hi:  rgba(255,255,255,.28);
+      --cc-gold:       #c8a84b;
+      --cc-gold-dim:   rgba(200,168,75,.22);
+      --cc-gold-faint: rgba(200,168,75,.09);
+      --cc-gold-lt:    #fde68a;
+      --cc-text:       #ede8dc;
+      --cc-muted:      #96adc4;
+      --cc-quiet:      #8ca3b8;
+      --cc-mono:       'IBM Plex Mono', monospace;
+      --cc-sans:       'IBM Plex Sans', sans-serif;
+      --cc-serif:      'Playfair Display', Georgia, serif;
+      --cc-red:        #fca5a5;
+      --cc-red-dim:    rgba(252,165,165,.16);
+      --cc-green:      #4ade80;
+      --cc-green-dim:  rgba(74,222,128,.14);
+      --cc-blue:       #60a5fa;
+      --cc-blue-dim:   rgba(96,165,250,.14);
+      --cc-amber:      #fbbf24;
+      --cc-amber-dim:  rgba(251,191,36,.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* ── Skip link (ADA) ────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--cc-gold);
+      color: #0c1220;
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 10px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ── Focus visible — universal gold ring ─────────────────────── */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Serif subheadline ───────────────────────────────────────── */
+    .section-sub {
+      font-family: var(--cc-sans);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--cc-muted);
+      line-height: 1.6;
+      margin-top: 4px;
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+
+    body {
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    .nav {
+      border-bottom: 1px solid var(--cc-border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,26,.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 200;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nav-logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      margin-right: 32px;
+      flex-shrink: 0;
+    }
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+    .nav-logo:focus-visible {
+      outline: 2px solid var(--cc-gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    /* Legacy text-logo styles kept for any other surfaces that reference them */
+    .nav-logo-word {
+      font-family: var(--cc-sans);
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: -.01em;
+      color: var(--cc-text);
+    }
+    .nav-logo-dot { color: var(--cc-gold); font-size: .95rem; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+    .nav-link {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--cc-text); background: rgba(255,255,255,.04); }
+    .nav-link.you-link {
+      color: var(--cc-gold);
+      border-color: var(--cc-gold-dim);
+      background: var(--cc-gold-faint);
+    }
+    .nav-link.you-link:hover { background: var(--cc-gold-dim); }
+    .nav-link.active {
+      color: var(--cc-text);
+      border-color: var(--cc-border-hi);
+      background: rgba(255,255,255,.06);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold);
+      text-underline-offset: 3px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: all .18s;
+    }
+    .notif-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .notif-count {
+      background: var(--cc-red);
+      color: #0a0f1a;
+      font-size: .78rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 1px 5px;
+      font-family: var(--cc-mono);
+      line-height: 1.4;
+    }
+
+    /* ── NOTIFICATIONS PANEL ─────────────────────────────────────── */
+    .notif-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .notif-overlay.open { opacity: 1; pointer-events: all; }
+    .notif-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--cc-surface);
+      border-left: 1px solid var(--cc-border-hi);
+      z-index: 301;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.32,.72,0,1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .notif-panel.open { transform: translateX(0); }
+    .notif-panel-head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--cc-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .notif-panel-title {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-text);
+    }
+    .notif-close {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 3px;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: var(--cc-mono);
+      transition: all .15s;
+    }
+    .notif-close:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .notif-filters {
+      display: flex;
+      gap: 6px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--cc-border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .nf-btn {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--cc-border);
+      border-radius: 2px;
+      background: none;
+      color: var(--cc-muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .nf-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold); border-color: rgba(200,168,75,.3); }
+    .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .notif-group-label {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-quiet);
+      padding: 10px 20px 4px;
+    }
+    .notif-item {
+      padding: 12px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--cc-border);
+      transition: background .15s;
+      cursor: default;
+    }
+    .notif-item:hover { background: rgba(255,255,255,.02); }
+    .notif-item.hidden { display: none; }
+    .notif-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .nd-red    { background: var(--cc-red); }
+    .nd-amber  { background: var(--cc-amber); }
+    .nd-blue   { background: var(--cc-blue); }
+    .nd-green  { background: var(--cc-green); }
+    .nd-gold   { background: var(--cc-gold); }
+    .nd-quiet  { background: var(--cc-quiet); }
+    .notif-body { flex: 1; }
+    .notif-text {
+      font-size: .85rem;
+      color: var(--cc-text);
+      line-height: 1.55;
+      margin-bottom: 3px;
+    }
+    .notif-text strong { color: var(--cc-gold-lt); font-weight: 500; }
+    .notif-meta {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--cc-quiet);
+      margin-bottom: 4px;
+    }
+    .notif-action {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--cc-gold-dim);
+      padding-bottom: 1px;
+      transition: border-color .15s;
+    }
+    .notif-action:hover { border-color: var(--cc-gold); }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
+      border-top: 1px solid var(--cc-border);
+      padding: 32px 0 36px;
+      margin-top: 56px;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      position: relative;
+      z-index: 1;
+    }
+    .cc-footer .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .cc-footer-line {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .04em;
+      line-height: 1.9;
+      color: var(--cc-muted);
+      text-align: center;
+    }
+    .cc-footer-line a {
+      color: var(--cc-muted);
+      text-decoration: underline;
+      text-decoration-color: rgba(150, 173, 196, .35);
+      text-underline-offset: 3px;
+      transition: color .15s, text-decoration-color .15s;
+    }
+    .cc-footer-line a:hover,
+    .cc-footer-line a:focus-visible {
+      color: var(--cc-gold);
+      text-decoration-color: var(--cc-gold);
+    }
+    .cc-footer-ext {
+      display: inline-block;
+      font-size: .7em;
+      transform: translateY(-1px);
+      margin-left: 2px;
+      opacity: .7;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
+    }
+
+    /* ── MARKDOWN CONTENT (rendered .md docs) ───────────────────── */
+    .markdown-content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .markdown-header {
+      border-bottom: 1px solid var(--cc-border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .markdown-content > .markdown-header h1,
+    .markdown-content h1 {
+      font-family: var(--cc-serif);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--cc-text);
+      margin: 0 0 8px;
+    }
+    .markdown-subtitle {
+      font-style: italic;
+      color: var(--cc-muted);
+      font-size: 1.05rem;
+      margin: 0;
+    }
+    .markdown-content h2 {
+      font-family: var(--cc-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cc-text);
+      margin: 48px 0 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--cc-border);
+    }
+    .markdown-content h3 {
+      font-family: var(--cc-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cc-gold-lt);
+      margin: 32px 0 8px;
+    }
+    .markdown-content h4 {
+      font-family: var(--cc-mono);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 24px 0 6px;
+    }
+    .markdown-content p { margin: 0 0 16px; color: var(--cc-text); }
+    .markdown-content strong { color: var(--cc-gold-lt); font-weight: 600; }
+    .markdown-content em { color: var(--cc-muted); }
+    .markdown-content a {
+      color: var(--cc-gold);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold-dim);
+      text-underline-offset: 3px;
+    }
+    .markdown-content a:hover,
+    .markdown-content a:focus-visible {
+      color: var(--cc-gold-lt);
+      text-decoration-color: var(--cc-gold-lt);
+    }
+    .markdown-content ul, .markdown-content ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+    }
+    .markdown-content li { margin-bottom: 6px; color: var(--cc-text); }
+    .markdown-content li::marker { color: var(--cc-gold); }
+    .markdown-content blockquote {
+      border-left: 3px solid var(--cc-gold);
+      padding: 8px 16px;
+      margin: 16px 0;
+      color: var(--cc-muted);
+      font-style: italic;
+      background: var(--cc-surface);
+    }
+    .markdown-content code {
+      font-family: var(--cc-mono);
+      font-size: .92em;
+      color: var(--cc-gold-lt);
+      background: var(--cc-surface);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+    .markdown-content pre {
+      background: var(--cc-surface);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-size: .85rem;
+      line-height: 1.55;
+    }
+    .markdown-content pre code {
+      background: none;
+      padding: 0;
+      color: var(--cc-text);
+      font-size: inherit;
+    }
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: .92rem;
+    }
+    .markdown-content th, .markdown-content td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--cc-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .markdown-content th {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      border-bottom: 2px solid var(--cc-border);
+    }
+    .markdown-content hr {
+      border: none;
+      border-top: 1px solid var(--cc-border);
+      margin: 32px 0;
+    }
+    .markdown-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+</style>
+
+
+  
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NAV — sourced from a single partial; pages mark their active section
+     by setting `activeNav` in front-matter (one of: you, dashboards,
+     people, events).
+════════════════════════════════════════════════════════════════════ -->
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
+        <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Site sections">
+        <a class="nav-link you-link active" href="/#you">You</a>
+        <a class="nav-link" href="/#dashboards">Dashboards</a>
+        <a class="nav-link" href="/#people">People</a>
+        <a class="nav-link" href="/#events">Events</a>
+      </nav>
+      <div class="nav-right">
+        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+          <span>Alerts</span>
+          <span class="notif-count" aria-live="polite">11</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NOTIFICATIONS PANEL
+════════════════════════════════════════════════════════════════════ -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">Alerts &amp; notifications</span>
+    <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
+  </div>
+  <div class="notif-filters" role="group" aria-label="Filter notifications">
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (11)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (5)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (3)</button>
+  </div>
+  <div class="notif-scroll">
+
+    <div class="notif-group-label">Critical — act now</div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
+        <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
+        <a class="notif-action" href="microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Downtown Funding and Records Search</strong> Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</div>
+        <div class="notif-meta">Annual adopted budget — C.R.S. 29-1-101 et seq · April 10, 2026</div>
+        <a class="notif-action" href="microsites/downtown/downtown_cs_search_portal_v2_ada.html">Open the search portal <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+	  
+	      <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
+        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35 · April 8, 2026</div>
+        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">Open district audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access their own district's records.</div>
+        <div class="notif-meta">EPC Assessor audit · April 2026</div>
+        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">See district audit <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021. No governance docs. No financials. One compliance letter fixes all 30+ simultaneously.</div>
+        <div class="notif-meta">Platform audit · April 2026</div>
+        <a class="notif-action" href="microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">High priority</div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes, budgets, and audit docs are almost certainly untagged. This is the real HB21-1110 failure — not the homepage.</div>
+        <div class="notif-meta">ADA document audit · April 2026</div>
+        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">View ADA analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it. This is the foundational legal document. Not one district links it publicly.</div>
+        <div class="notif-meta">Governance gap · §32-1-202</div>
+        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106. Due to State Auditor by July 31. The clock is running.</div>
+        <div class="notif-meta">Governance gap · §32-1-106 · due July 31</div>
+        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">Informational</div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records both awaiting reply. Response window is still open.</div>
+        <div class="notif-meta">CORA tracker · April 2026</div>
+        <a class="notif-action" href="microsites/shared/requests_tracker_and_military_numbers.html">View tracker <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
+        <div class="notif-meta">Compliance analysis · April 2026</div>
+        <a class="notif-action" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
+        <div class="notif-meta">New · April 2026</div>
+        <a class="notif-action" href="microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CSPD Blotter — Weekly History is live.</strong> 271 incidents pulled directly from the live blotter feed, paired with a Poisson 95% confidence band to flag statistical anomalies week to week. Tabs are full APG-pattern keyboard accessible; every chart has an aria-label.</div>
+        <div class="notif-meta">New · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Lorson Ranch financial dashboard is live.</strong> Seven cross-pledged metro districts, $94.2M aggregate audited deficit, IGA money flows, and a per-home tax calculator — sourced from 2026 budgets and 2024 audits. Companion plain-language briefing available as a download.</div>
+        <div class="notif-meta">New · Special Districts · April 2026</div>
+        <a class="notif-action" href="microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CBI Missing Persons form — accessible rebuild is live.</strong> Resolves all seven critical/serious findings from the ADA audit: skip link, live regions, focus management, EN/ES localization, real-time validation messaging. Drops into the existing Drupal Webform infrastructure with optional Claude API routing.</div>
+        <div class="notif-meta">New · State · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LexisNexis ADAM Program dashboard — accessible rebuild is live.</strong> Audit and reference rebuild of the missing-children dashboard: APG-pattern tabs with roving tabindex and full keyboard nav, solid amber focus rings (3:1 against any surface), darker success-green for AA contrast, and "View Poster" placeholders converted from dead anchors to real buttons.</div>
+        <div class="notif-meta">New · Private Sector · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <main id="main-content" tabindex="-1">
+    <article class="markdown-content">
+  <header class="markdown-header"><h1>HOME-ARP Comment Webform — Install Guide</h1></header>
+  <p>This guide is for a Drupal site administrator with a working Drupal 10 (or 11) installation. Estimated time: 30–45 minutes for a clean install, plus translation review.</p>
+<h2>1. Required modules</h2>
+<p>Enable these modules. All are widely deployed; none require custom code.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Source</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Webform</td>
+<td>contrib (<code>drupal/webform</code>)</td>
+<td>The form itself</td>
+</tr>
+<tr>
+<td>Webform Translation</td>
+<td>bundled with Webform</td>
+<td>Per-form translation glue</td>
+</tr>
+<tr>
+<td>Language</td>
+<td>core</td>
+<td>Adds languages to the site</td>
+</tr>
+<tr>
+<td>Configuration Translation</td>
+<td>core</td>
+<td>Translates configuration entities</td>
+</tr>
+<tr>
+<td>Interface Translation</td>
+<td>core</td>
+<td>Translates UI strings</td>
+</tr>
+<tr>
+<td>File</td>
+<td>core</td>
+<td>Attachment uploads</td>
+</tr>
+<tr>
+<td>Token</td>
+<td>contrib (<code>drupal/token</code>)</td>
+<td>Email body templating (a Webform dep)</td>
+</tr>
+<tr>
+<td>Key (recommended)</td>
+<td>contrib (<code>drupal/key</code>)</td>
+<td>Stores the webhook shared secret outside config</td>
+</tr>
+</tbody>
+</table>
+<p>Install with Composer if not already present:</p>
+<pre><code class="language-bash">composer require drupal/webform drupal/token drupal/key
+drush en webform webform_translation language config_translation locale file token key
+</code></pre>
+<h2>2. Add Spanish as a site language</h2>
+<pre><code>Admin → Configuration → Regional and language → Languages → Add language → Spanish (es)
+</code></pre>
+<p>Then enable URL-prefix detection (recommended for accessibility, SEO, and shareability):</p>
+<pre><code>Admin → Configuration → Regional and language → Detection and selection
+  Enable: URL
+  Order: URL &gt; Browser &gt; Selected language
+</code></pre>
+<p>Confirm <code>/admin/config/regional/language/detection/url</code> shows <code>Path prefix: en, es</code>.</p>
+<h2>3. Import the form</h2>
+<p>There are three options. Pick whichever fits your workflow.</p>
+<p><strong>Option A: Configuration sync (recommended for environments with proper config management).</strong></p>
+<pre><code class="language-bash"># Place file
+cp drupal/webform.webform.home_arp_comment.yml \
+   &lt;site&gt;/sites/default/files/config_*/sync/webform.webform.home_arp_comment.yml
+cp drupal/language/es/webform.webform.home_arp_comment.yml \
+   &lt;site&gt;/sites/default/files/config_*/sync/language/es/webform.webform.home_arp_comment.yml
+
+drush config:import
+</code></pre>
+<p><strong>Option B: Drush single-config import.</strong></p>
+<pre><code class="language-bash">drush config:import:single --source=drupal/webform.webform.home_arp_comment.yml
+drush config:import:single \
+  --source=drupal/language/es/webform.webform.home_arp_comment.yml \
+  --partial
+</code></pre>
+<p><strong>Option C: Admin UI (no Drush).</strong></p>
+<pre><code>Admin → Structure → Webforms → + Add webform
+  Title: HOME-ARP Allocation Plan — Public Comment
+  Machine name: home_arp_comment
+  Save
+</code></pre>
+<p>Then on the new form:</p>
+<pre><code>Settings → Source (YAML) tab
+  Paste the contents of drupal/webform.webform.home_arp_comment.yml
+  Save
+</code></pre>
+<p>For the Spanish version via UI:</p>
+<pre><code>Translate tab → Spanish → Edit
+  Translate each label, description, and option using the strings in
+  drupal/language/es/webform.webform.home_arp_comment.yml as a reference.
+  Save
+</code></pre>
+<h2>4. Configure the webhook</h2>
+<p>After import, edit the <code>json_webhook</code> handler:</p>
+<pre><code>Admin → Structure → Webforms → HOME-ARP → Settings → Emails / Handlers
+  Edit &quot;JSON webhook to record system&quot;
+  Completed URL:    https://&lt;your-receiver-host&gt;/webhook/home-arp-comment
+  Custom options:
+    headers:
+      X-Webform-Source: 'cos-home-arp-comment'
+      X-Webform-Secret: '&lt;your-secret&gt;'      # or use a Key module reference
+</code></pre>
+<p>Recommended: store the secret with the Key module (<code>/admin/config/system/keys</code>) and reference it in the handler instead of hardcoding. This keeps the secret out of exported config and rotation becomes a one-step operation.</p>
+<h2>5. Configure the email recipients</h2>
+<p>Edit the <code>email_notification</code> handler:</p>
+<pre><code>To: CityHousingAndCommunityVitality@coloradosprings.gov   (already set)
+</code></pre>
+<p>Edit the <code>accessibility_routing</code> handler:</p>
+<pre><code>To: &lt;office-of-accessibility@coloradosprings.gov&gt;
+</code></pre>
+<p>Replace <code>CHANGE-ME-office-of-accessibility@coloradosprings.gov</code> with the real address. This handler only fires when the submitter checks the &quot;I need an alternate format or accommodation&quot; box — it is the inline replacement for the city's current phone-only accommodation intake.</p>
+<h2>6. Place the form on a page</h2>
+<p>Two patterns work; pick one.</p>
+<p><strong>Pattern A: Webform-owned page (simplest).</strong> The form's settings already specify <code>page_submit_path: /home-arp-comment</code> and <code>page_confirm_path: /home-arp-comment/confirmation</code>. Drupal serves the form at those paths automatically. You'll get bilingual URLs <code>/en/home-arp-comment</code> and <code>/es/home-arp-comment</code> once URL-prefix detection is enabled.</p>
+<p><strong>Pattern B: Block on an existing page.</strong> Place the Webform Submission Form block on whatever node hosts the public comment instructions:</p>
+<pre><code>Admin → Structure → Block layout → Place block → Webform Submission Form
+  Webform: HOME-ARP Allocation Plan — Public Comment
+  Region: Content
+  Visibility: Pages → /node/&lt;NID-of-HOME-ARP-page&gt;
+</code></pre>
+<h2>7. Place the language switcher</h2>
+<p>Two important accessibility choices for the switcher.</p>
+<p><strong>(a) Use <code>&lt;a&gt;</code> elements, not buttons.</strong> Drupal core's Language switcher block does this correctly out of the box. Don't replace it with a <code>&lt;select&gt;</code> styled to look like a dropdown — that creates focus and announcement issues for screen readers.</p>
+<p><strong>(b) Render each language name in its own language.</strong> &quot;English&quot; and &quot;Español,&quot; not &quot;Inglés&quot; and &quot;Spanish.&quot; Drupal core does this when languages are configured with their native names. Verify at <code>/admin/config/regional/language</code> that Spanish is listed with the native name <code>Español</code>.</p>
+<p>Place the block in the site header:</p>
+<pre><code>Admin → Structure → Block layout → &lt;Header region&gt; → Place block
+  Block: Language switcher
+  Visibility: All pages (or restrict if needed)
+</code></pre>
+<p>The reusable accessible pattern is documented in <code>docs/LANGUAGE_PATTERN.md</code>.</p>
+<h2>8. Run the receiver</h2>
+<p>The reference receiver in <code>receiver/</code> is the smallest deployable example.</p>
+<pre><code class="language-bash">cd receiver/
+pip install -r requirements.txt
+export HOMEARP_WEBHOOK_SECRET='&lt;same-value-as-Drupal-handler&gt;'
+export HOMEARP_STORAGE_DIR='/var/lib/home-arp-submissions'
+uvicorn app:app --host 127.0.0.1 --port 8080
+</code></pre>
+<p>Production deployment notes are at the top of <code>receiver/app.py</code>. At minimum:</p>
+<ul>
+<li>Front it with TLS (Caddy, nginx, or an internal load balancer).</li>
+<li>Run under a dedicated non-root user with write access only to the storage directory.</li>
+<li>Set HMAC-SHA256 signing if your Drupal stack supports it (see &quot;Verify secret&quot; comment in <code>app.py</code>).</li>
+<li>Add a request body size limit at the proxy layer in addition to the in-app limit.</li>
+<li>Monitor the audit log; alert on schema-validation failures (likely indicates upstream form change or hostile traffic).</li>
+</ul>
+<h2>9. Smoke test</h2>
+<p>Submit a test comment through the form, in English and again in Spanish. Verify:</p>
+<ul>
+<li>The form renders without console errors (browser DevTools → Console).</li>
+<li>Tab order is logical and focus is always visible.</li>
+<li>The receiver logs an accepted submission (HTTP 202) with <code>submission_id</code>.</li>
+<li>The storage directory has a JSON file matching the submission.</li>
+<li>The Housing email arrives.</li>
+<li>If you checked the accommodation box, the Office of Accessibility email also arrives.</li>
+<li>Switching to Spanish at <code>/es/home-arp-comment</code> shows the translated form.</li>
+<li>A submission from the Spanish form has <code>langcode: &quot;es&quot;</code> in the JSON payload.</li>
+</ul>
+<h2>10. Pre-launch accessibility review</h2>
+<p>Before going live, run:</p>
+<ul>
+<li>Automated: axe DevTools or WAVE on <code>/home-arp-comment</code> and <code>/es/home-arp-comment</code>.</li>
+<li>Keyboard: complete the form using only Tab, Shift+Tab, Space, Enter, and arrow keys. No mouse.</li>
+<li>Screen reader: complete the form with NVDA (Windows + Firefox) or VoiceOver (macOS + Safari). Note any field that is not announced or any control that is reached but not labeled.</li>
+<li>Zoom: complete the form at 200% zoom and at 400% zoom.</li>
+<li>Color contrast: Lighthouse audit, target 100 on Accessibility.</li>
+</ul>
+<p>Findings from this review should drive a final pass before launch.</p>
+<h2>Removing the form (post comment-window)</h2>
+<p>The form is configured to close automatically on <code>2026-05-26T23:59:59-06:00</code>. After that date, attempts to submit return the configured <code>form_close_message</code>. Submissions remain stored in Drupal and in the receiver's filesystem; nothing is deleted.</p>
+<p>To unpublish the form path entirely after the comment period:</p>
+<pre><code>Admin → Structure → Webforms → HOME-ARP → Settings → General
+  Status: Closed (already automatic)
+  Then: Page → Page enabled → Disabled
+</code></pre>
+<p>This stops <code>/home-arp-comment</code> from resolving but preserves the form and its submissions for the public record.</p>
+
+</article>
+
+  </main>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     FOOTER — single source of truth, included by site.njk on every page.
+════════════════════════════════════════════════════════════════════ -->
+<footer class="cc-footer" role="contentinfo">
+  <div class="container">
+    <p class="cc-footer-line">
+      &copy; 2026
+      CheetoChopsticks &amp;
+      <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener noreferrer">
+        StorySeed Studios<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      <a href="https://www.storyseedstudios.com/media-category/the-dais/" target="_blank" rel="noopener noreferrer">
+        The Dais<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      El Paso County, Colorado
+      &nbsp;·&nbsp;
+      For informational purposes only.
+      &nbsp;·&nbsp;
+      Open source.
+    </p>
+  </div>
+</footer>
+
+  <script>
+/* ── Site nav + notifications panel scripts ──────────────────────────
+   Wrapped in an IIFE so locals never leak. The functions onclick handlers
+   call (openNotif, closeNotif, filterNotif) are explicitly attached to
+   `window` so a page's own scripts can't shadow them, and each function
+   is defensive about the DOM possibly being absent on a page that opted
+   out of the layout. */
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  var lastFocus;
+
+  function openNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    lastFocus = document.activeElement;
+    overlay.classList.add('open');
+    overlay.removeAttribute('aria-hidden');
+    panel.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { panel.focus(); }, 50);
+  }
+
+  function closeNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    panel.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  function filterNotif(tier, btn) {
+    document.querySelectorAll('.nf-btn').forEach(function (b) {
+      b.classList.remove('active');
+      b.removeAttribute('aria-pressed');
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    document.querySelectorAll('.notif-item').forEach(function (item) {
+      if (tier === 'all') {
+        item.classList.remove('hidden');
+        item.removeAttribute('aria-hidden');
+      } else {
+        var hide = item.dataset.tier !== tier;
+        item.classList.toggle('hidden', hide);
+        if (hide) item.setAttribute('aria-hidden', 'true');
+        else item.removeAttribute('aria-hidden');
+      }
+    });
+    document.querySelectorAll('.notif-group-label').forEach(function (label) {
+      label.style.display = tier === 'all' ? '' : 'none';
+    });
+  }
+
+  /* Escape closes the panel; Tab stays inside it while it's open. */
+  document.addEventListener('keydown', function (e) {
+    var panel = $('notif-panel');
+    if (!panel) return;
+    if (e.key === 'Escape') { closeNotif(); return; }
+    if (e.key === 'Tab' && panel.classList.contains('open')) {
+      var focusable = panel.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+
+  /* Active nav link on scroll — only runs when the index has the matching anchors. */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['you', 'dashboards', 'people', 'events'];
+  if (typeof IntersectionObserver === 'function' && navLinks.length) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function (l) {
+            var href = l.getAttribute('href') || '';
+            var active = href === '#' + id || href === '/#' + id;
+            l.classList.toggle('active', active);
+            if (active) l.setAttribute('aria-current', 'true');
+            else l.removeAttribute('aria-current');
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach(function (id) {
+      var el = $(id);
+      if (el) observer.observe(el);
+    });
+  }
+
+  /* Expose the click-target functions globally so inline onclick handlers
+     (and any page that needs them) can always reach them by name. */
+  window.openNotif   = openNotif;
+  window.closeNotif  = closeNotif;
+  window.filterNotif = filterNotif;
+})();
+</script>
+
+</body>
+</html>

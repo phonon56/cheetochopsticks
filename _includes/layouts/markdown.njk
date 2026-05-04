@@ -1,0 +1,7 @@
+---
+layout: site.njk
+---
+<article class="markdown-content">
+  {% if title %}<header class="markdown-header"><h1>{{ title }}</h1>{% if subtitle %}<p class="markdown-subtitle">{{ subtitle }}</p>{% endif %}</header>{% endif %}
+  {{ content | safe }}
+</article>

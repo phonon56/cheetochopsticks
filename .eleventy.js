@@ -29,8 +29,9 @@ export default function (eleventyConfig) {
   eleventyConfig.ignores.add("microsites/city/goGov/cos-portal-prototype/public/**");
 
   return {
-    templateFormats: ["njk"],
+    templateFormats: ["njk", "md"],
     htmlTemplateEngine: "njk",
+    markdownTemplateEngine: "njk",
     dir: {
       input: ".",
       output: "_site",
