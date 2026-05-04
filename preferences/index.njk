@@ -1,0 +1,784 @@
+---
+layout: site.njk
+permalink: "/preferences/index.html"
+title: "Subscribe — CheetoChopsticks"
+description: "Choose which government topics you want updates about, how often, and what else you're interested in."
+subscribeTopic: ""
+---
+
+<style>
+  /* ── Preferences page ────────────────────────────────────
+     Uses the site's --cc-* design tokens (defined in shell-css.njk).
+     Site is dark-themed; this page matches.
+     Verified contrast (text on bg #0c1220):
+       cc-text   #ede8dc  → 15.3:1  AAA
+       cc-muted  #96adc4  →  8.1:1  AAA
+       cc-gold   #c8a84b  →  8.2:1  AAA  (also serves as CTA)
+       cc-red    #fca5a5  →  9.9:1  AAA
+       cc-green  #4ade80  → 10.7:1  AAA
+       cc-blue   #60a5fa  →  7.4:1  AAA
+     On surface (#141e2e) and surface2 (#1c2a3e) the ratios drop ~1
+     point but all remain ≥ AA.
+  */
+
+  .prefs-page {
+    padding: 56px 0 72px;
+    background: var(--cc-bg);
+    color: var(--cc-text);
+    min-height: 60vh;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .prefs-page .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .prefs-page h1 {
+    font-family: var(--cc-serif);
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+    margin: 0 0 8px;
+    color: var(--cc-text);
+    line-height: 1.15;
+  }
+  .prefs-page .deck {
+    color: var(--cc-muted);
+    margin: 0 0 24px;
+    font-size: 1.05rem;
+  }
+  .prefs-mode-switch {
+    margin-bottom: 24px;
+    font-size: 1rem;
+    color: var(--cc-muted);
+  }
+  .prefs-mode-switch a {
+    color: var(--cc-gold);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .prefs-mode-switch a:hover,
+  .prefs-mode-switch a:focus-visible { color: var(--cc-gold-lt); }
+
+  .prefs-card {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    border: 1px solid var(--cc-border-hi);
+    border-radius: 8px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .prefs-card h2 {
+    font-family: var(--cc-serif);
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+    color: var(--cc-text);
+    line-height: 1.25;
+  }
+  .prefs-card .help {
+    color: var(--cc-muted);
+    margin: 0 0 16px;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* ── Topics picker ─────────────────────────────────────── */
+  .prefs-jurisdiction { margin: 20px 0; border: 0; padding: 0; }
+  .prefs-jurisdiction:first-of-type { margin-top: 8px; }
+  .prefs-jurisdiction h3 {
+    font-family: var(--cc-sans);
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0 0 10px;
+    color: var(--cc-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--cc-gold-dim);
+    padding-bottom: 6px;
+  }
+  .prefs-agencies {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 16px;
+  }
+  @media (max-width: 600px) { .prefs-agencies { grid-template-columns: 1fr; } }
+
+  .prefs-agencies label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 6px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    color: var(--cc-text);
+    font-size: 1rem;
+  }
+  .prefs-agencies label:hover { background: var(--cc-surface2); }
+  .prefs-agencies input[type="checkbox"] {
+    width: 20px; height: 20px;
+    flex: 0 0 auto;
+    accent-color: var(--cc-gold);
+    cursor: pointer;
+  }
+
+  /* ── Frequency ─────────────────────────────────────────── */
+  .prefs-freq {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 4px 0 0;
+  }
+  .prefs-freq label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+    background: var(--cc-surface2);
+    cursor: pointer;
+    color: var(--cc-text);
+    font-size: 1rem;
+    transition: border-color 150ms ease, background 150ms ease;
+  }
+  .prefs-freq label:hover { border-color: var(--cc-gold); }
+  .prefs-freq input[type="radio"] { width: 18px; height: 18px; accent-color: var(--cc-gold); }
+  .prefs-freq input[type="radio"]:checked ~ span { font-weight: 600; }
+  .prefs-freq label:has(input:checked) {
+    border-color: var(--cc-gold);
+    background: var(--cc-gold-dim);
+    color: var(--cc-gold-lt);
+  }
+  .prefs-freq label:focus-within {
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 2px;
+  }
+
+  .prefs-banner {
+    background: var(--cc-blue-dim);
+    border-left: 4px solid var(--cc-blue);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 0.95rem;
+    color: var(--cc-text);
+    line-height: 1.6;
+  }
+  .prefs-banner strong { color: var(--cc-blue); }
+
+  /* ── Search-led topic picker ──────────────────────────── */
+  .topic-search {
+    position: relative;
+  }
+  .topic-search-hint {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--cc-quiet);
+  }
+  .selected-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 0;
+    min-height: 0;
+  }
+  .selected-chips:empty { margin-top: 0; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 6px 6px 12px;
+    background: var(--cc-gold-dim);
+    border: 1px solid var(--cc-gold);
+    color: var(--cc-gold-lt);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  .chip button {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    width: 24px; height: 24px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    line-height: 1;
+    padding: 0;
+  }
+  .chip button:hover,
+  .chip button:focus-visible {
+    background: var(--cc-gold);
+    color: #0c1220;
+  }
+  .topic-directory {
+    margin-top: 18px;
+    border: 1px solid var(--cc-border);
+    border-radius: 6px;
+    background: var(--cc-bg);
+  }
+  .topic-directory > summary {
+    cursor: pointer;
+    padding: 12px 16px;
+    list-style: none;
+    color: var(--cc-text);
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-radius: 6px;
+  }
+  .topic-directory > summary::-webkit-details-marker { display: none; }
+  .topic-directory > summary::after {
+    content: "▾";
+    color: var(--cc-muted);
+    transition: transform .2s ease;
+  }
+  .topic-directory[open] > summary::after { transform: rotate(180deg); }
+  .topic-directory > summary:hover,
+  .topic-directory > summary:focus-visible {
+    background: var(--cc-surface2);
+  }
+  .topic-directory-body { padding: 8px 16px 16px; }
+  .topic-result-count {
+    color: var(--cc-quiet);
+    font-size: 0.85rem;
+    margin-left: auto;
+  }
+  /* Hide agencies / jurisdictions that don't match the current search. */
+  .prefs-jurisdiction.filtered-out,
+  .prefs-agencies label.filtered-out {
+    display: none;
+  }
+  .topic-no-results {
+    padding: 16px 0 4px;
+    color: var(--cc-muted);
+    font-size: 0.95rem;
+  }
+  .topic-no-results em { color: var(--cc-gold-lt); font-style: normal; font-weight: 500; }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ── Interests + email ─────────────────────────────────── */
+  .prefs-input {
+    width: 100%;
+    padding: 12px;
+    font: inherit;
+    color: var(--cc-text);
+    background: var(--cc-surface2);
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+  }
+  .prefs-input:focus {
+    border-color: var(--cc-gold);
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 1px;
+  }
+  .prefs-input::placeholder {
+    color: var(--cc-quiet);   /* 7.2:1 on bg, 6.0:1 on surface2 — both AAA/AA */
+    opacity: 1;
+  }
+  .prefs-input[aria-invalid="true"] {
+    border-color: var(--cc-red);
+    box-shadow: 0 0 0 3px var(--cc-red-dim);
+  }
+  textarea.prefs-input { min-height: 96px; resize: vertical; }
+  .prefs-email-wrap label,
+  .prefs-email-label {
+    display: block;
+    font-weight: 600;
+    color: var(--cc-text);
+    margin-bottom: 6px;
+    font-size: 1rem;
+  }
+
+  /* ── Consent + actions ─────────────────────────────────── */
+  .prefs-consent {
+    color: var(--cc-muted);
+    font-size: 0.95rem;
+    margin: 12px 0 16px;
+    line-height: 1.65;
+  }
+  .prefs-consent em { color: var(--cc-quiet); font-style: italic; }
+  .prefs-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 8px;
+  }
+  .prefs-actions button {
+    min-height: 44px;
+    padding: 12px 24px;
+    font: 600 1rem var(--cc-sans);
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  }
+  .btn-save {
+    background: var(--cc-gold);
+    color: #0c1220;                 /* dark text on gold = 8.2:1 AAA */
+    border-color: var(--cc-gold);
+  }
+  .btn-save:hover, .btn-save:focus-visible {
+    background: var(--cc-gold-lt);
+    border-color: var(--cc-gold-lt);
+  }
+  .btn-unsub {
+    background: transparent;
+    color: var(--cc-red);            /* 9.9:1 on bg */
+    border-color: var(--cc-red);
+  }
+  .btn-unsub:hover, .btn-unsub:focus-visible {
+    background: var(--cc-red-dim);
+  }
+  .prefs-status {
+    display: block;
+    min-height: 1.4em;
+    color: var(--cc-text);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  .prefs-status[data-state="success"] { color: var(--cc-green); }
+  .prefs-status[data-state="error"]   { color: var(--cc-red); }
+
+  .prefs-hidden { display: none !important; }
+</style>
+
+<section class="prefs-page">
+  <div class="container">
+
+    {# ── Header (varies by mode) ───────────────────────── #}
+    <div id="prefs-header-new">
+      <h1>Subscribe to government updates</h1>
+      <p class="deck">Choose what you want updates on, how often, and tell us what else you wish we covered. We'll send a one-time confirmation email at the end.</p>
+      <p class="prefs-mode-switch">Already subscribed? <a href="/preferences/?manage=1">Manage your existing subscriptions →</a></p>
+    </div>
+    <div id="prefs-header-manage" class="prefs-hidden">
+      <h1>Manage your subscriptions</h1>
+      <p class="deck">Update topics, frequency, or unsubscribe.</p>
+    </div>
+
+    {# ── Magic-link request (mode = ?manage=1) ────────── #}
+    <div id="prefs-request" class="prefs-card prefs-hidden">
+      <h2>Get a sign-in link</h2>
+      <p class="help">Enter the email you subscribed with. We'll email you a one-time link to manage your preferences — no password needed.</p>
+      <form id="prefs-request-form" novalidate>
+        <label for="prefs-request-email" class="prefs-email-label">Email address</label>
+        <input id="prefs-request-email" type="email" name="email" class="prefs-input" required autocomplete="email" placeholder="you@example.com" aria-describedby="prefs-request-help">
+        <p id="prefs-request-help" class="prefs-consent">We'll only use this address to send the management link. If the email isn't subscribed, no message is sent.</p>
+        <div class="prefs-actions">
+          <button type="submit" class="btn-save">Send link</button>
+          <output role="status" aria-live="polite" class="prefs-status"></output>
+        </div>
+      </form>
+    </div>
+
+    {# ── Main form (used in both new + manage modes) ─── #}
+    <form id="prefs-form" class="prefs-hidden" novalidate>
+      <div class="prefs-card">
+        <h2>1. What do you want updates about?</h2>
+        <p class="help">Tell us in your own words. We'll suggest matching topics — pick any that fit, and we'll save what you typed for the topics we don't have yet.</p>
+
+        <div class="topic-search">
+          <label for="topic-search-input" class="prefs-email-label">Tell us in your own words</label>
+          <input id="topic-search-input" type="text" class="prefs-input" name="interests_text"
+                 maxlength="1000"
+                 placeholder="e.g. police body cams, school board meetings, traffic on Powers Boulevard, water quality…"
+                 aria-describedby="topic-search-hint">
+          <p id="topic-search-hint" class="topic-search-hint">As you type, matching topics appear below. Or open the directory to browse all {{ topics | length }} jurisdictions.</p>
+        </div>
+
+        <div id="selected-chips" class="selected-chips" role="list" aria-label="Topics you've selected"></div>
+
+        <details id="topic-directory" class="topic-directory">
+          <summary>
+            <span>Browse topics by jurisdiction</span>
+            <span class="topic-result-count" id="topic-result-count" aria-live="polite"></span>
+          </summary>
+          <div class="topic-directory-body">
+            {% for group in topics %}
+              <fieldset class="prefs-jurisdiction" data-jurisdiction="{{ group.label | lower }}">
+                <legend><h3>{{ group.label }}</h3></legend>
+                <div class="prefs-agencies">
+                  {% for ag in group.agencies %}
+                    <label data-agency="{{ ag.label | lower }}" data-topic="{{ ag.topic | lower }}">
+                      <input type="checkbox" name="topic" value="{{ ag.topic }}">
+                      <span>{{ ag.label }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              </fieldset>
+            {% endfor %}
+            <p id="topic-no-results" class="topic-no-results prefs-hidden">
+              No matching topics yet for <em id="topic-no-results-query"></em>.
+              That's still useful — we'll save what you typed and use it to decide what to add next.
+            </p>
+          </div>
+        </details>
+      </div>
+
+      <div class="prefs-card">
+        <h2>2. How often should we email?</h2>
+        <p class="help">Choose your delivery cadence.</p>
+        <div class="prefs-freq" role="radiogroup" aria-label="Delivery frequency">
+          <label><input type="radio" name="frequency" value="immediate" checked> <span>Immediate</span></label>
+          <label><input type="radio" name="frequency" value="daily">     <span>Daily digest</span></label>
+          <label><input type="radio" name="frequency" value="weekly">    <span>Weekly digest</span></label>
+          <label><input type="radio" name="frequency" value="monthly">   <span>Monthly digest</span></label>
+        </div>
+        <aside class="prefs-banner" aria-label="Note about digest delivery">
+          <span class="sr-only">Note: </span>
+          <strong>Heads up:</strong> digest delivery is launching soon. We'll record your choice now and start grouping messages on the schedule above as soon as it goes live. Until then, "immediate" is the only mode that actually sends.
+        </aside>
+      </div>
+
+      {# Email block — shown only in new-subscriber mode. In manage mode the
+         email is fixed (we already know it from the token). #}
+      <div id="prefs-email-block" class="prefs-card prefs-email-wrap">
+        <h2>3. Where should we send updates?</h2>
+        <label for="prefs-email">Email address</label>
+        <input id="prefs-email" type="email" name="email" class="prefs-input" required autocomplete="email" placeholder="you@example.com" aria-describedby="prefs-consent-text">
+        <p id="prefs-consent-text" class="prefs-consent">
+          By subscribing you agree to receive emails about the topics above. We'll send a confirmation link first to verify your address. You can update or unsubscribe at any time using the link in every email.
+          <em>(consent v2026-04-30-v1)</em>
+        </p>
+      </div>
+
+      <div id="prefs-email-readonly" class="prefs-card prefs-hidden">
+        <h2>Your email</h2>
+        <p><strong id="prefs-email-display"></strong></p>
+        <p class="help">To change your email, unsubscribe and resubscribe with the new address.</p>
+      </div>
+
+      <div class="prefs-actions">
+        <button type="submit" class="btn-save" id="prefs-submit-btn">Subscribe</button>
+        <button type="button" class="btn-unsub prefs-hidden" id="prefs-unsub-all">Unsubscribe from everything</button>
+        <output role="status" aria-live="polite" class="prefs-status" id="prefs-form-status"></output>
+      </div>
+    </form>
+
+    <div id="prefs-error" class="prefs-card prefs-hidden" role="alert">
+      <h2>Link expired or invalid</h2>
+      <p>Your sign-in link has expired or is invalid. <a href="/preferences/?manage=1">Request a new one →</a></p>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  var qs    = new URLSearchParams(location.search);
+  var token = qs.get('t');
+  var manageMode = qs.get('manage') === '1';
+
+  var headerNew   = document.getElementById('prefs-header-new');
+  var headerMng   = document.getElementById('prefs-header-manage');
+  var requestView = document.getElementById('prefs-request');
+  var formView    = document.getElementById('prefs-form');
+  var errorView   = document.getElementById('prefs-error');
+  var formStatus  = document.getElementById('prefs-form-status');
+  var emailBlock  = document.getElementById('prefs-email-block');
+  var emailReadonly = document.getElementById('prefs-email-readonly');
+  var emailDisplay  = document.getElementById('prefs-email-display');
+  var submitBtn   = document.getElementById('prefs-submit-btn');
+  var unsubBtn    = document.getElementById('prefs-unsub-all');
+
+  function setStatus(el, text, state) {
+    el.textContent = text;
+    if (state) el.dataset.state = state; else delete el.dataset.state;
+  }
+
+  // Clear aria-invalid as soon as the user starts correcting an errored field.
+  document.querySelectorAll('input[type="email"]').forEach(function (el) {
+    el.addEventListener('input', function () { el.removeAttribute('aria-invalid'); });
+  });
+
+  // ── Mode dispatch ─────────────────────────────────────
+  if (token) {
+    // Existing user, signed-in
+    headerNew.classList.add('prefs-hidden');
+    headerMng.classList.remove('prefs-hidden');
+    emailBlock.classList.add('prefs-hidden');
+    emailReadonly.classList.remove('prefs-hidden');
+    submitBtn.textContent = 'Save changes';
+    unsubBtn.classList.remove('prefs-hidden');
+    loadState();
+  } else if (manageMode) {
+    // Existing user, asking for a sign-in link
+    headerNew.classList.add('prefs-hidden');
+    headerMng.classList.remove('prefs-hidden');
+    requestView.classList.remove('prefs-hidden');
+  } else {
+    // New subscriber — full picker, email at the end
+    formView.classList.remove('prefs-hidden');
+    applyDeepLinkedTopics();
+  }
+
+  // Deep-linking from a microsite: /preferences/?topic=gov.city.forestry
+  // or /preferences/?topics=gov.city.forestry,gov.city.police
+  function applyDeepLinkedTopics() {
+    var wanted = [];
+    var single = qs.get('topic');
+    var multi  = qs.get('topics');
+    if (single) wanted.push(single.trim());
+    if (multi) multi.split(',').forEach(function (t) { t = t.trim(); if (t) wanted.push(t); });
+    if (!wanted.length) return;
+
+    var matched = 0;
+    wanted.forEach(function (t) {
+      var cb = formView.querySelector('input[name="topic"][value="' + CSS.escape(t) + '"]');
+      if (cb) { cb.checked = true; matched++; }
+    });
+    if (!matched) return;
+
+    renderChips();
+    // Quick visual confirmation: scroll the topic card into view
+    // and announce it to screen readers via the existing status output.
+    setTimeout(function () {
+      var card = formView.querySelector('.prefs-card');
+      if (card && card.scrollIntoView) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setStatus(formStatus, matched + ' topic' + (matched === 1 ? '' : 's') + ' pre-selected from your last page.', 'success');
+    }, 100);
+  }
+
+  // ── Magic-link request flow ──────────────────────────
+  var rf = document.getElementById('prefs-request-form');
+  rf.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var out = rf.querySelector('output');
+    var email = rf.email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      rf.email.setAttribute('aria-invalid', 'true');
+      setStatus(out, 'Please enter a valid email address.', 'error');
+      rf.email.focus();
+      return;
+    }
+    rf.email.removeAttribute('aria-invalid');
+    setStatus(out, 'Sending…');
+    fetch('/api/preferences/request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        setStatus(out, d.message || 'Check your email.', 'success');
+        if (d.dev_link) {
+          out.innerHTML += ' <a href="' + d.dev_link + '">[dev link]</a>';
+        }
+      })
+      .catch(function () { setStatus(out, 'Could not send. Try again.', 'error'); });
+  });
+
+  // ── Existing user: load state ────────────────────────
+  function loadState() {
+    fetch('/api/preferences?t=' + encodeURIComponent(token))
+      .then(function (r) { if (!r.ok) throw new Error('bad token'); return r.json(); })
+      .then(function (state) {
+        formView.querySelectorAll('input[name="topic"]').forEach(function (cb) {
+          cb.checked = state.topics.indexOf(cb.value) !== -1;
+        });
+        var freq = formView.querySelector('input[name="frequency"][value="' + state.frequency + '"]');
+        if (freq) freq.checked = true;
+        var interestsField = formView.querySelector('input[name="interests_text"]');
+        if (interestsField) interestsField.value = state.interests_text || '';
+        emailDisplay.textContent = state.email;
+        formView.classList.remove('prefs-hidden');
+        renderChips();
+        applyFilter();
+      })
+      .catch(function () { errorView.classList.remove('prefs-hidden'); });
+  }
+
+  // ── Save / Subscribe ─────────────────────────────────
+  function collectForm() {
+    var topics = [].slice.call(formView.querySelectorAll('input[name="topic"]:checked'))
+                       .map(function (cb) { return cb.value; });
+    var frequency = (formView.querySelector('input[name="frequency"]:checked') || {}).value || 'immediate';
+    var interests = (formView.querySelector('input[name="interests_text"]') || { value: '' }).value;
+    return { topics: topics, frequency: frequency, interests_text: interests };
+  }
+
+  // ── Search-led topic picker ──────────────────────────
+  var searchInput   = document.getElementById('topic-search-input');
+  var directory     = document.getElementById('topic-directory');
+  var resultCount   = document.getElementById('topic-result-count');
+  var noResults     = document.getElementById('topic-no-results');
+  var noResultsQ    = document.getElementById('topic-no-results-query');
+  var chipsHost     = document.getElementById('selected-chips');
+
+  // Tiny synonym map — extend as you spot patterns in interests_text data.
+  // Maps user phrasing → tokens that should match topic labels.
+  var SYNONYMS = {
+    'cops': 'police',
+    'cop': 'police',
+    'pd': 'police',
+    'cspd': 'police',
+    'dwi': 'police',
+    'tickets': 'traffic',
+    'speeding': 'traffic',
+    'records': 'cora',
+    'open records': 'cora',
+    'foia': 'cora',
+    'taxes': 'budget',
+    'mill levy': 'specialdistricts',
+    'metro district': 'specialdistricts',
+    'metro districts': 'specialdistricts'
+  };
+
+  function tokensFromQuery(q) {
+    var raw = q.toLowerCase().split(/[\s,;]+/).filter(Boolean);
+    var out = new Set(raw);
+    raw.forEach(function (t) { if (SYNONYMS[t]) out.add(SYNONYMS[t]); });
+    // Also match multi-word synonyms.
+    Object.keys(SYNONYMS).forEach(function (k) {
+      if (k.indexOf(' ') !== -1 && q.toLowerCase().indexOf(k) !== -1) out.add(SYNONYMS[k]);
+    });
+    return [...out];
+  }
+
+  function applyFilter() {
+    var q = searchInput.value.trim();
+    var tokens = tokensFromQuery(q);
+    var anyMatchTotal = 0;
+
+    formView.querySelectorAll('.prefs-jurisdiction').forEach(function (group) {
+      var jLabel = group.dataset.jurisdiction || '';
+      var groupHasMatch = false;
+      group.querySelectorAll('label[data-agency]').forEach(function (label) {
+        var hay = label.dataset.agency + ' ' + label.dataset.topic + ' ' + jLabel;
+        var match = !q ? true : tokens.some(function (t) { return hay.indexOf(t) !== -1; });
+        label.classList.toggle('filtered-out', !match);
+        if (match) { groupHasMatch = true; anyMatchTotal++; }
+      });
+      group.classList.toggle('filtered-out', !groupHasMatch && !!q);
+    });
+
+    if (q) {
+      directory.open = true;
+      resultCount.textContent = anyMatchTotal + ' match' + (anyMatchTotal === 1 ? '' : 'es');
+      noResults.classList.toggle('prefs-hidden', anyMatchTotal !== 0);
+      if (noResultsQ) noResultsQ.textContent = q;
+    } else {
+      resultCount.textContent = '';
+      noResults.classList.add('prefs-hidden');
+    }
+  }
+
+  function renderChips() {
+    chipsHost.innerHTML = '';
+    formView.querySelectorAll('input[name="topic"]:checked').forEach(function (cb) {
+      var label = cb.closest('label');
+      var name = label ? label.querySelector('span').textContent : cb.value;
+      var jurisdiction = label && label.closest('.prefs-jurisdiction');
+      var jLabel = jurisdiction ? jurisdiction.querySelector('h3').textContent : '';
+
+      var chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.setAttribute('role', 'listitem');
+      chip.innerHTML = '<span><strong>' + (jLabel ? jLabel + ' › ' : '') + '</strong>' + name + '</span>';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Remove ' + name);
+      btn.textContent = '✕';
+      btn.addEventListener('click', function () {
+        cb.checked = false;
+        cb.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      chip.appendChild(btn);
+      chipsHost.appendChild(chip);
+    });
+  }
+
+  if (searchInput) searchInput.addEventListener('input', applyFilter);
+  formView.querySelectorAll('input[name="topic"]').forEach(function (cb) {
+    cb.addEventListener('change', renderChips);
+  });
+
+  formView.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var data = collectForm();
+    if (!data.topics.length) {
+      setStatus(formStatus, 'Pick at least one topic.', 'error');
+      var firstCb = formView.querySelector('input[name="topic"]');
+      if (firstCb) firstCb.focus();
+      return;
+    }
+
+    if (token) {
+      // Manage mode: PATCH existing subscriber
+      setStatus(formStatus, 'Saving…');
+      fetch('/api/preferences?t=' + encodeURIComponent(token), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d.error || 'save failed');
+          setStatus(formStatus, 'Saved. (' + res.d.added + ' added, ' + res.d.removed + ' removed.)', 'success');
+        })
+        .catch(function (err) { setStatus(formStatus, 'Could not save: ' + err.message, 'error'); });
+      return;
+    }
+
+    // New-subscriber mode: validate email, then POST to /api/subscribe
+    var emailField = formView.querySelector('input[name="email"]');
+    var email = emailField.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailField.setAttribute('aria-invalid', 'true');
+      setStatus(formStatus, 'Please enter a valid email address.', 'error');
+      emailField.focus();
+      return;
+    }
+    emailField.removeAttribute('aria-invalid');
+    setStatus(formStatus, 'Submitting…');
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        topics: data.topics,
+        frequency: data.frequency,
+        interests_text: data.interests_text,
+        source: 'preferences-page',
+      }),
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
+        setStatus(formStatus, res.d.message || 'Check your email to confirm.', 'success');
+      })
+      .catch(function (err) { setStatus(formStatus, 'Could not subscribe: ' + err.message, 'error'); });
+  });
+
+  // ── Unsubscribe all (manage mode only) ──────────────
+  unsubBtn.addEventListener('click', function () {
+    if (!confirm('Unsubscribe from all topics? This stops every email from us.')) return;
+    setStatus(formStatus, 'Unsubscribing…');
+    fetch('/api/preferences?t=' + encodeURIComponent(token), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ unsubscribe_all: true }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        setStatus(formStatus, d.message || 'Done.', 'success');
+        formView.querySelectorAll('input[name="topic"]').forEach(function (cb) { cb.checked = false; });
+      })
+      .catch(function () { setStatus(formStatus, 'Could not unsubscribe. Try again.', 'error'); });
+  });
+})();
+</script>

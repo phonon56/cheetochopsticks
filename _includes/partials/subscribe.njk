@@ -1,0 +1,179 @@
+{#
+  subscribe.njk — citizen-subscribe block.
+
+  Now intended to be included once globally from the footer. The footer
+  resolves the topic from page front matter or URL and sets the vars below.
+
+  Required (set by caller):
+    sub_topic        Dotted topic key, e.g. "gov.city.police".
+                     Must match a list created by shared/notify/sync-lists.mjs.
+
+  Optional (set by caller, otherwise defaults apply):
+    sub_heading          H2 text.
+    sub_deck             Paragraph below the heading.
+    sub_consent          Sentence above the submit button.
+    sub_consent_version  Bump when sub_consent text changes. Default '2026-04-30-v1'.
+
+  Variable names are namespaced (sub_*) so they don't collide with page-level
+  vars on inclusion. If sub_topic is empty the partial renders nothing.
+#}
+{# Topic may be empty here — JS will infer from URL at runtime, or remove
+   the block if no topic can be resolved. #}
+{% set sub_heading = sub_heading or "Get email updates" %}
+{% set sub_deck = sub_deck or "We'll email you a plain-language summary with links to the source documents whenever this office posts new public-record material." %}
+{% set sub_consent_version = sub_consent_version or "2026-04-30-v1" %}
+{% set sub_consent = sub_consent or "By subscribing you agree to receive emails about this topic. We'll send a confirmation link first. Unsubscribe any time." %}
+
+<style>
+  .subscribe-block {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    padding: 48px 0;
+    border-top: 1px solid var(--cc-border);
+  }
+  .subscribe-block .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+  .subscribe-block h2 {
+    font-family: var(--cc-serif);
+    margin: 0 0 12px;
+    color: var(--cc-text);
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .subscribe-block .deck {
+    color: var(--cc-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .gov-subscribe { display: flex; flex-direction: column; gap: 12px; }
+  .gov-subscribe label {
+    display: block;
+    font-family: var(--cc-sans);
+    font-size: 1rem;
+    color: var(--cc-text);
+    font-weight: 500;
+  }
+  .gov-subscribe input[type="email"] {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 12px;
+    font: inherit;
+    background: var(--cc-surface2);
+    color: var(--cc-text);
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+    min-height: 44px;
+  }
+  .gov-subscribe input[type="email"]::placeholder { color: var(--cc-quiet); opacity: 1; }
+  .gov-subscribe input[type="email"]:focus {
+    border-color: var(--cc-gold);
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 1px;
+  }
+  .gov-subscribe__consent {
+    font-size: 0.9rem;
+    color: var(--cc-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .gov-subscribe button[type="submit"] {
+    align-self: flex-start;
+    background: var(--cc-gold);
+    color: #0c1220;
+    border: 0;
+    padding: 12px 24px;
+    min-height: 44px;
+    font: 700 .85rem var(--cc-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+  .gov-subscribe button[type="submit"]:hover,
+  .gov-subscribe button[type="submit"]:focus-visible { background: var(--cc-gold-lt); }
+  .gov-subscribe output {
+    display: block;
+    min-height: 1.4em;
+    font-size: 0.95rem;
+    color: var(--cc-muted);
+  }
+</style>
+<section class="subscribe-block" aria-label="Subscribe to updates" data-topic="{{ sub_topic or '' }}" hidden>
+  <div class="container">
+    <h2>{{ sub_heading }}</h2>
+    <p class="deck">{{ sub_deck }}</p>
+
+    <form class="gov-subscribe" novalidate>
+      <label>
+        Email address
+        <input type="email" name="email" required autocomplete="email"
+               placeholder="you@example.com">
+      </label>
+      <p class="gov-subscribe__consent">
+        {{ sub_consent }} <em>(consent v{{ sub_consent_version }})</em>
+      </p>
+      <button type="submit">Subscribe</button>
+      <output role="status" aria-live="polite"></output>
+    </form>
+  </div>
+</section>
+
+{# Init script. Guarded so it only attaches once per page. #}
+<script>
+(function () {
+  if (window.__govSubscribeInit) return;
+  window.__govSubscribeInit = true;
+
+  // Skip top-level pages and /microsites/shared/* — no agency-specific topic.
+  var SKIP_JURISDICTIONS = { shared: 1 };
+
+  function inferTopicFromUrl() {
+    var parts = location.pathname.split('/').filter(Boolean);
+    // ["microsites", "<jurisdiction>", "<agency>", ...]
+    if (parts[0] !== 'microsites') return '';
+    if (!parts[1] || !parts[2]) return '';
+    if (SKIP_JURISDICTIONS[parts[1]]) return '';
+    return 'gov.' + parts[1] + '.' + parts[2];
+  }
+
+  function attach(host) {
+    // Resolve topic: explicit data-topic wins, else infer from URL.
+    var topic = host.dataset.topic || inferTopicFromUrl();
+    if (!topic) { host.remove(); return; }
+    host.dataset.topic = topic;
+    host.hidden = false;
+
+    var form = host.querySelector('form.gov-subscribe');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    var out = form.querySelector('output');
+    var source = location.pathname.replace(/^\/+/, '');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      out.textContent = 'Submitting…';
+      var email = form.email.value.trim();
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, topic: topic, source: source }),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
+          out.textContent = res.d.message || 'Check your email to confirm.';
+          form.reset();
+        })
+        .catch(function (err) { out.textContent = 'Something went wrong: ' + err.message; });
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('.subscribe-block[data-topic]').forEach(attach);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>

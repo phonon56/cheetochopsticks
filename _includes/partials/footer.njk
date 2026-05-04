@@ -1,6 +1,26 @@
 <!-- ═══════════════════════════════════════════════════════════════════
      FOOTER — single source of truth, included by site.njk on every page.
 ════════════════════════════════════════════════════════════════════ -->
+
+{# ── Subscribe block (resolved per page) ─────────────────────────────
+   Topic resolution priority (handled in subscribe.njk's init script):
+     1. data-topic attribute, if non-empty (set from front-matter override)
+     2. URL inference: /microsites/{jurisdiction}/{agency}/...
+                       → "gov.{jurisdiction}.{agency}"
+     3. None → form removes itself (top-level pages, /microsites/shared/*).
+
+   Front-matter overrides (any/all optional):
+     subscribeTopic:   "gov.specialdistricts.LorsonRanch"
+     subscribeHeading: "Get email updates about Lorson Ranch districts"
+     subscribeDeck:    "When budgets, audits, or transparency notices..."
+     subscribeConsent: "By subscribing..."
+#}
+{% set sub_topic = subscribeTopic %}
+{% set sub_heading = subscribeHeading %}
+{% set sub_deck = subscribeDeck %}
+{% set sub_consent = subscribeConsent %}
+{% include "partials/subscribe.njk" %}
+
 <footer class="cc-footer" role="contentinfo">
   <div class="container">
     <p class="cc-footer-line">
@@ -21,6 +41,8 @@
       For informational purposes only.
       &nbsp;·&nbsp;
       Open source.
+      &nbsp;·&nbsp;
+      <a href="/preferences/">Manage your subscriptions</a>
     </p>
   </div>
 </footer>

@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Choose which government topics you want updates about, how often, and what else you&#39;re interested in.">
+  <title>Subscribe — CheetoChopsticks</title>
+
+  
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
+         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
+           text    #ede8dc → 15.3  AAA
+           muted   #96adc4 →  8.1  AAA
+           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
+           gold    #c8a84b →  8.2  AAA
+           gold-lt #fde68a → 15.0  AAA
+           red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
+           green   #4ade80 → 10.7  AAA
+           blue    #60a5fa →  7.4  AAA
+           amber   #fbbf24 → 11.2  AAA                                  */
+      --cc-bg:         #0c1220;
+      --cc-surface:    #141e2e;
+      --cc-surface2:   #1c2a3e;
+      --cc-surface3:   #233045;
+      --cc-border:     rgba(255,255,255,.14);
+      --cc-border-hi:  rgba(255,255,255,.28);
+      --cc-gold:       #c8a84b;
+      --cc-gold-dim:   rgba(200,168,75,.22);
+      --cc-gold-faint: rgba(200,168,75,.09);
+      --cc-gold-lt:    #fde68a;
+      --cc-text:       #ede8dc;
+      --cc-muted:      #96adc4;
+      --cc-quiet:      #8ca3b8;
+      --cc-mono:       'IBM Plex Mono', monospace;
+      --cc-sans:       'IBM Plex Sans', sans-serif;
+      --cc-serif:      'Playfair Display', Georgia, serif;
+      --cc-red:        #fca5a5;
+      --cc-red-dim:    rgba(252,165,165,.16);
+      --cc-green:      #4ade80;
+      --cc-green-dim:  rgba(74,222,128,.14);
+      --cc-blue:       #60a5fa;
+      --cc-blue-dim:   rgba(96,165,250,.14);
+      --cc-amber:      #fbbf24;
+      --cc-amber-dim:  rgba(251,191,36,.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* ── Skip link (ADA) ────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--cc-gold);
+      color: #0c1220;
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 10px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ── Focus visible — universal gold ring ─────────────────────── */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Serif subheadline ───────────────────────────────────────── */
+    .section-sub {
+      font-family: var(--cc-sans);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--cc-muted);
+      line-height: 1.6;
+      margin-top: 4px;
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+
+    body {
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    .nav {
+      border-bottom: 1px solid var(--cc-border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,26,.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 200;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nav-logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      margin-right: 32px;
+      flex-shrink: 0;
+    }
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+    .nav-logo:focus-visible {
+      outline: 2px solid var(--cc-gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    /* Legacy text-logo styles kept for any other surfaces that reference them */
+    .nav-logo-word {
+      font-family: var(--cc-sans);
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: -.01em;
+      color: var(--cc-text);
+    }
+    .nav-logo-dot { color: var(--cc-gold); font-size: .95rem; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+    .nav-link {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--cc-text); background: rgba(255,255,255,.04); }
+    .nav-link.you-link {
+      color: var(--cc-gold);
+      border-color: var(--cc-gold-dim);
+      background: var(--cc-gold-faint);
+    }
+    .nav-link.you-link:hover { background: var(--cc-gold-dim); }
+    .nav-link.active {
+      color: var(--cc-text);
+      border-color: var(--cc-border-hi);
+      background: rgba(255,255,255,.06);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold);
+      text-underline-offset: 3px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: all .18s;
+    }
+    .notif-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .notif-count {
+      background: var(--cc-red);
+      color: #0a0f1a;
+      font-size: .78rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 1px 5px;
+      font-family: var(--cc-mono);
+      line-height: 1.4;
+    }
+
+    /* ── NOTIFICATIONS PANEL ─────────────────────────────────────── */
+    .notif-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .notif-overlay.open { opacity: 1; pointer-events: all; }
+    .notif-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--cc-surface);
+      border-left: 1px solid var(--cc-border-hi);
+      z-index: 301;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.32,.72,0,1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .notif-panel.open { transform: translateX(0); }
+    .notif-panel-head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--cc-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .notif-panel-title {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-text);
+    }
+    .notif-close {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 3px;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: var(--cc-mono);
+      transition: all .15s;
+    }
+    .notif-close:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .notif-filters {
+      display: flex;
+      gap: 6px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--cc-border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .nf-btn {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--cc-border);
+      border-radius: 2px;
+      background: none;
+      color: var(--cc-muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .nf-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold); border-color: rgba(200,168,75,.3); }
+    .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .notif-group-label {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-quiet);
+      padding: 10px 20px 4px;
+    }
+    .notif-item {
+      padding: 12px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--cc-border);
+      transition: background .15s;
+      cursor: default;
+    }
+    .notif-item:hover { background: rgba(255,255,255,.02); }
+    .notif-item.hidden { display: none; }
+    .notif-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .nd-red    { background: var(--cc-red); }
+    .nd-amber  { background: var(--cc-amber); }
+    .nd-blue   { background: var(--cc-blue); }
+    .nd-green  { background: var(--cc-green); }
+    .nd-gold   { background: var(--cc-gold); }
+    .nd-quiet  { background: var(--cc-quiet); }
+    .notif-body { flex: 1; }
+    .notif-text {
+      font-size: .85rem;
+      color: var(--cc-text);
+      line-height: 1.55;
+      margin-bottom: 3px;
+    }
+    .notif-text strong { color: var(--cc-gold-lt); font-weight: 500; }
+    .notif-meta {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--cc-quiet);
+      margin-bottom: 4px;
+    }
+    .notif-action {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--cc-gold-dim);
+      padding-bottom: 1px;
+      transition: border-color .15s;
+    }
+    .notif-action:hover { border-color: var(--cc-gold); }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
+      border-top: 1px solid var(--cc-border);
+      padding: 32px 0 36px;
+      margin-top: 56px;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      position: relative;
+      z-index: 1;
+    }
+    .cc-footer .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .cc-footer-line {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .04em;
+      line-height: 1.9;
+      color: var(--cc-muted);
+      text-align: center;
+    }
+    .cc-footer-line a {
+      color: var(--cc-muted);
+      text-decoration: underline;
+      text-decoration-color: rgba(150, 173, 196, .35);
+      text-underline-offset: 3px;
+      transition: color .15s, text-decoration-color .15s;
+    }
+    .cc-footer-line a:hover,
+    .cc-footer-line a:focus-visible {
+      color: var(--cc-gold);
+      text-decoration-color: var(--cc-gold);
+    }
+    .cc-footer-ext {
+      display: inline-block;
+      font-size: .7em;
+      transform: translateY(-1px);
+      margin-left: 2px;
+      opacity: .7;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
+    }
+
+    /* ── MARKDOWN CONTENT (rendered .md docs) ───────────────────── */
+    .markdown-content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .markdown-header {
+      border-bottom: 1px solid var(--cc-border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .markdown-content > .markdown-header h1,
+    .markdown-content h1 {
+      font-family: var(--cc-serif);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--cc-text);
+      margin: 0 0 8px;
+    }
+    .markdown-subtitle {
+      font-style: italic;
+      color: var(--cc-muted);
+      font-size: 1.05rem;
+      margin: 0;
+    }
+    .markdown-content h2 {
+      font-family: var(--cc-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cc-text);
+      margin: 48px 0 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--cc-border);
+    }
+    .markdown-content h3 {
+      font-family: var(--cc-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cc-gold-lt);
+      margin: 32px 0 8px;
+    }
+    .markdown-content h4 {
+      font-family: var(--cc-mono);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 24px 0 6px;
+    }
+    .markdown-content p { margin: 0 0 16px; color: var(--cc-text); }
+    .markdown-content strong { color: var(--cc-gold-lt); font-weight: 600; }
+    .markdown-content em { color: var(--cc-muted); }
+    .markdown-content a {
+      color: var(--cc-gold);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold-dim);
+      text-underline-offset: 3px;
+    }
+    .markdown-content a:hover,
+    .markdown-content a:focus-visible {
+      color: var(--cc-gold-lt);
+      text-decoration-color: var(--cc-gold-lt);
+    }
+    .markdown-content ul, .markdown-content ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+    }
+    .markdown-content li { margin-bottom: 6px; color: var(--cc-text); }
+    .markdown-content li::marker { color: var(--cc-gold); }
+    .markdown-content blockquote {
+      border-left: 3px solid var(--cc-gold);
+      padding: 8px 16px;
+      margin: 16px 0;
+      color: var(--cc-muted);
+      font-style: italic;
+      background: var(--cc-surface);
+    }
+    .markdown-content code {
+      font-family: var(--cc-mono);
+      font-size: .92em;
+      color: var(--cc-gold-lt);
+      background: var(--cc-surface);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+    .markdown-content pre {
+      background: var(--cc-surface);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-size: .85rem;
+      line-height: 1.55;
+    }
+    .markdown-content pre code {
+      background: none;
+      padding: 0;
+      color: var(--cc-text);
+      font-size: inherit;
+    }
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: .92rem;
+    }
+    .markdown-content th, .markdown-content td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--cc-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .markdown-content th {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      border-bottom: 2px solid var(--cc-border);
+    }
+    .markdown-content hr {
+      border: none;
+      border-top: 1px solid var(--cc-border);
+      margin: 32px 0;
+    }
+    .markdown-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+</style>
+
+
+  
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NAV — sourced from a single partial; pages mark their active section
+     by setting `activeNav` in front-matter (one of: you, dashboards,
+     people, events).
+════════════════════════════════════════════════════════════════════ -->
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
+        <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Site sections">
+        <a class="nav-link you-link" href="/#you">You</a>
+        <a class="nav-link" href="/#dashboards">Dashboards</a>
+        <a class="nav-link" href="/#people">People</a>
+        <a class="nav-link" href="/#events">Events</a>
+      </nav>
+      <div class="nav-right">
+        <a class="subscribe-btn" href="/preferences/" aria-label="Subscribe to email updates">
+          <span>Subscribe</span>
+        </a>
+        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+          <span>Alerts</span>
+          <span class="notif-count" aria-live="polite">11</span>
+        </button>
+      </div>
+
+<style>
+  /* Subscribe button in the dark nav. Gold border + gold label on dark bg.
+     Contrast: cc-gold (#c8a84b) on cc-bg (#0c1220) = 8.2:1 (AAA). */
+  .subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--cc-gold);
+    border-radius: 4px;
+    padding: 7px 14px;
+    margin-right: 8px;
+    color: var(--cc-gold);
+    font-family: var(--cc-mono);
+    font-size: .75rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .18s, color .18s;
+    min-height: 32px;
+  }
+  .subscribe-btn:hover,
+  .subscribe-btn:focus-visible {
+    background: var(--cc-gold);
+    color: #0c1220;
+  }
+  @media (max-width: 600px) {
+    .subscribe-btn { padding: 7px 10px; }
+    .subscribe-btn span { display: none; }
+    .subscribe-btn::before {
+      content: "✉";
+      font-size: 1rem;
+      line-height: 1;
+    }
+  }
+</style>
+    </div>
+  </div>
+</header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NOTIFICATIONS PANEL
+════════════════════════════════════════════════════════════════════ -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">Alerts &amp; notifications</span>
+    <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
+  </div>
+  <div class="notif-filters" role="group" aria-label="Filter notifications">
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (11)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (5)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (3)</button>
+  </div>
+  <div class="notif-scroll">
+
+    <div class="notif-group-label">Critical — act now</div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
+        <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Downtown Funding and Records Search</strong> Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</div>
+        <div class="notif-meta">Annual adopted budget — C.R.S. 29-1-101 et seq · April 10, 2026</div>
+        <a class="notif-action" href="/microsites/downtown/downtown_cs_search_portal_v2_ada.html">Open the search portal <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+	  
+	      <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
+        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35 · April 8, 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">Open district audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access their own district's records.</div>
+        <div class="notif-meta">EPC Assessor audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See district audit <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021. No governance docs. No financials. One compliance letter fixes all 30+ simultaneously.</div>
+        <div class="notif-meta">Platform audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">High priority</div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes, budgets, and audit docs are almost certainly untagged. This is the real HB21-1110 failure — not the homepage.</div>
+        <div class="notif-meta">ADA document audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">View ADA analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it. This is the foundational legal document. Not one district links it publicly.</div>
+        <div class="notif-meta">Governance gap · §32-1-202</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106. Due to State Auditor by July 31. The clock is running.</div>
+        <div class="notif-meta">Governance gap · §32-1-106 · due July 31</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">Informational</div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records both awaiting reply. Response window is still open.</div>
+        <div class="notif-meta">CORA tracker · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/requests_tracker_and_military_numbers.html">View tracker <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
+        <div class="notif-meta">Compliance analysis · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
+        <div class="notif-meta">New · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CSPD Blotter — Weekly History is live.</strong> 271 incidents pulled directly from the live blotter feed, paired with a Poisson 95% confidence band to flag statistical anomalies week to week. Tabs are full APG-pattern keyboard accessible; every chart has an aria-label.</div>
+        <div class="notif-meta">New · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Lorson Ranch financial dashboard is live.</strong> Seven cross-pledged metro districts, $94.2M aggregate audited deficit, IGA money flows, and a per-home tax calculator — sourced from 2026 budgets and 2024 audits. Companion plain-language briefing available as a download.</div>
+        <div class="notif-meta">New · Special Districts · April 2026</div>
+        <a class="notif-action" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CBI Missing Persons form — accessible rebuild is live.</strong> Resolves all seven critical/serious findings from the ADA audit: skip link, live regions, focus management, EN/ES localization, real-time validation messaging. Drops into the existing Drupal Webform infrastructure with optional Claude API routing.</div>
+        <div class="notif-meta">New · State · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LexisNexis ADAM Program dashboard — accessible rebuild is live.</strong> Audit and reference rebuild of the missing-children dashboard: APG-pattern tabs with roving tabindex and full keyboard nav, solid amber focus rings (3:1 against any surface), darker success-green for AA contrast, and "View Poster" placeholders converted from dead anchors to real buttons.</div>
+        <div class="notif-meta">New · Private Sector · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <main id="main-content" tabindex="-1">
+    
+<style>
+  /* ── Preferences page ────────────────────────────────────
+     Uses the site's --cc-* design tokens (defined in shell-css.njk).
+     Site is dark-themed; this page matches.
+     Verified contrast (text on bg #0c1220):
+       cc-text   #ede8dc  → 15.3:1  AAA
+       cc-muted  #96adc4  →  8.1:1  AAA
+       cc-gold   #c8a84b  →  8.2:1  AAA  (also serves as CTA)
+       cc-red    #fca5a5  →  9.9:1  AAA
+       cc-green  #4ade80  → 10.7:1  AAA
+       cc-blue   #60a5fa  →  7.4:1  AAA
+     On surface (#141e2e) and surface2 (#1c2a3e) the ratios drop ~1
+     point but all remain ≥ AA.
+  */
+
+  .prefs-page {
+    padding: 56px 0 72px;
+    background: var(--cc-bg);
+    color: var(--cc-text);
+    min-height: 60vh;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .prefs-page .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .prefs-page h1 {
+    font-family: var(--cc-serif);
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+    margin: 0 0 8px;
+    color: var(--cc-text);
+    line-height: 1.15;
+  }
+  .prefs-page .deck {
+    color: var(--cc-muted);
+    margin: 0 0 24px;
+    font-size: 1.05rem;
+  }
+  .prefs-mode-switch {
+    margin-bottom: 24px;
+    font-size: 1rem;
+    color: var(--cc-muted);
+  }
+  .prefs-mode-switch a {
+    color: var(--cc-gold);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .prefs-mode-switch a:hover,
+  .prefs-mode-switch a:focus-visible { color: var(--cc-gold-lt); }
+
+  .prefs-card {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    border: 1px solid var(--cc-border-hi);
+    border-radius: 8px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .prefs-card h2 {
+    font-family: var(--cc-serif);
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+    color: var(--cc-text);
+    line-height: 1.25;
+  }
+  .prefs-card .help {
+    color: var(--cc-muted);
+    margin: 0 0 16px;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* ── Topics picker ─────────────────────────────────────── */
+  .prefs-jurisdiction { margin: 20px 0; border: 0; padding: 0; }
+  .prefs-jurisdiction:first-of-type { margin-top: 8px; }
+  .prefs-jurisdiction h3 {
+    font-family: var(--cc-sans);
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0 0 10px;
+    color: var(--cc-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--cc-gold-dim);
+    padding-bottom: 6px;
+  }
+  .prefs-agencies {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 16px;
+  }
+  @media (max-width: 600px) { .prefs-agencies { grid-template-columns: 1fr; } }
+
+  .prefs-agencies label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 6px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    color: var(--cc-text);
+    font-size: 1rem;
+  }
+  .prefs-agencies label:hover { background: var(--cc-surface2); }
+  .prefs-agencies input[type="checkbox"] {
+    width: 20px; height: 20px;
+    flex: 0 0 auto;
+    accent-color: var(--cc-gold);
+    cursor: pointer;
+  }
+
+  /* ── Frequency ─────────────────────────────────────────── */
+  .prefs-freq {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 4px 0 0;
+  }
+  .prefs-freq label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+    background: var(--cc-surface2);
+    cursor: pointer;
+    color: var(--cc-text);
+    font-size: 1rem;
+    transition: border-color 150ms ease, background 150ms ease;
+  }
+  .prefs-freq label:hover { border-color: var(--cc-gold); }
+  .prefs-freq input[type="radio"] { width: 18px; height: 18px; accent-color: var(--cc-gold); }
+  .prefs-freq input[type="radio"]:checked ~ span { font-weight: 600; }
+  .prefs-freq label:has(input:checked) {
+    border-color: var(--cc-gold);
+    background: var(--cc-gold-dim);
+    color: var(--cc-gold-lt);
+  }
+  .prefs-freq label:focus-within {
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 2px;
+  }
+
+  .prefs-banner {
+    background: var(--cc-blue-dim);
+    border-left: 4px solid var(--cc-blue);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 0.95rem;
+    color: var(--cc-text);
+    line-height: 1.6;
+  }
+  .prefs-banner strong { color: var(--cc-blue); }
+
+  /* ── Search-led topic picker ──────────────────────────── */
+  .topic-search {
+    position: relative;
+  }
+  .topic-search-hint {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--cc-quiet);
+  }
+  .selected-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 0;
+    min-height: 0;
+  }
+  .selected-chips:empty { margin-top: 0; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 6px 6px 12px;
+    background: var(--cc-gold-dim);
+    border: 1px solid var(--cc-gold);
+    color: var(--cc-gold-lt);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  .chip button {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    width: 24px; height: 24px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    line-height: 1;
+    padding: 0;
+  }
+  .chip button:hover,
+  .chip button:focus-visible {
+    background: var(--cc-gold);
+    color: #0c1220;
+  }
+  .topic-directory {
+    margin-top: 18px;
+    border: 1px solid var(--cc-border);
+    border-radius: 6px;
+    background: var(--cc-bg);
+  }
+  .topic-directory > summary {
+    cursor: pointer;
+    padding: 12px 16px;
+    list-style: none;
+    color: var(--cc-text);
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-radius: 6px;
+  }
+  .topic-directory > summary::-webkit-details-marker { display: none; }
+  .topic-directory > summary::after {
+    content: "▾";
+    color: var(--cc-muted);
+    transition: transform .2s ease;
+  }
+  .topic-directory[open] > summary::after { transform: rotate(180deg); }
+  .topic-directory > summary:hover,
+  .topic-directory > summary:focus-visible {
+    background: var(--cc-surface2);
+  }
+  .topic-directory-body { padding: 8px 16px 16px; }
+  .topic-result-count {
+    color: var(--cc-quiet);
+    font-size: 0.85rem;
+    margin-left: auto;
+  }
+  /* Hide agencies / jurisdictions that don't match the current search. */
+  .prefs-jurisdiction.filtered-out,
+  .prefs-agencies label.filtered-out {
+    display: none;
+  }
+  .topic-no-results {
+    padding: 16px 0 4px;
+    color: var(--cc-muted);
+    font-size: 0.95rem;
+  }
+  .topic-no-results em { color: var(--cc-gold-lt); font-style: normal; font-weight: 500; }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ── Interests + email ─────────────────────────────────── */
+  .prefs-input {
+    width: 100%;
+    padding: 12px;
+    font: inherit;
+    color: var(--cc-text);
+    background: var(--cc-surface2);
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+  }
+  .prefs-input:focus {
+    border-color: var(--cc-gold);
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 1px;
+  }
+  .prefs-input::placeholder {
+    color: var(--cc-quiet);   /* 7.2:1 on bg, 6.0:1 on surface2 — both AAA/AA */
+    opacity: 1;
+  }
+  .prefs-input[aria-invalid="true"] {
+    border-color: var(--cc-red);
+    box-shadow: 0 0 0 3px var(--cc-red-dim);
+  }
+  textarea.prefs-input { min-height: 96px; resize: vertical; }
+  .prefs-email-wrap label,
+  .prefs-email-label {
+    display: block;
+    font-weight: 600;
+    color: var(--cc-text);
+    margin-bottom: 6px;
+    font-size: 1rem;
+  }
+
+  /* ── Consent + actions ─────────────────────────────────── */
+  .prefs-consent {
+    color: var(--cc-muted);
+    font-size: 0.95rem;
+    margin: 12px 0 16px;
+    line-height: 1.65;
+  }
+  .prefs-consent em { color: var(--cc-quiet); font-style: italic; }
+  .prefs-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 8px;
+  }
+  .prefs-actions button {
+    min-height: 44px;
+    padding: 12px 24px;
+    font: 600 1rem var(--cc-sans);
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  }
+  .btn-save {
+    background: var(--cc-gold);
+    color: #0c1220;                 /* dark text on gold = 8.2:1 AAA */
+    border-color: var(--cc-gold);
+  }
+  .btn-save:hover, .btn-save:focus-visible {
+    background: var(--cc-gold-lt);
+    border-color: var(--cc-gold-lt);
+  }
+  .btn-unsub {
+    background: transparent;
+    color: var(--cc-red);            /* 9.9:1 on bg */
+    border-color: var(--cc-red);
+  }
+  .btn-unsub:hover, .btn-unsub:focus-visible {
+    background: var(--cc-red-dim);
+  }
+  .prefs-status {
+    display: block;
+    min-height: 1.4em;
+    color: var(--cc-text);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  .prefs-status[data-state="success"] { color: var(--cc-green); }
+  .prefs-status[data-state="error"]   { color: var(--cc-red); }
+
+  .prefs-hidden { display: none !important; }
+</style>
+
+<section class="prefs-page">
+  <div class="container">
+
+    
+    <div id="prefs-header-new">
+      <h1>Subscribe to government updates</h1>
+      <p class="deck">Choose what you want updates on, how often, and tell us what else you wish we covered. We'll send a one-time confirmation email at the end.</p>
+      <p class="prefs-mode-switch">Already subscribed? <a href="/preferences/?manage=1">Manage your existing subscriptions →</a></p>
+    </div>
+    <div id="prefs-header-manage" class="prefs-hidden">
+      <h1>Manage your subscriptions</h1>
+      <p class="deck">Update topics, frequency, or unsubscribe.</p>
+    </div>
+
+    
+    <div id="prefs-request" class="prefs-card prefs-hidden">
+      <h2>Get a sign-in link</h2>
+      <p class="help">Enter the email you subscribed with. We'll email you a one-time link to manage your preferences — no password needed.</p>
+      <form id="prefs-request-form" novalidate>
+        <label for="prefs-request-email" class="prefs-email-label">Email address</label>
+        <input id="prefs-request-email" type="email" name="email" class="prefs-input" required autocomplete="email" placeholder="you@example.com" aria-describedby="prefs-request-help">
+        <p id="prefs-request-help" class="prefs-consent">We'll only use this address to send the management link. If the email isn't subscribed, no message is sent.</p>
+        <div class="prefs-actions">
+          <button type="submit" class="btn-save">Send link</button>
+          <output role="status" aria-live="polite" class="prefs-status"></output>
+        </div>
+      </form>
+    </div>
+
+    
+    <form id="prefs-form" class="prefs-hidden" novalidate>
+      <div class="prefs-card">
+        <h2>1. What do you want updates about?</h2>
+        <p class="help">Tell us in your own words. We'll suggest matching topics — pick any that fit, and we'll save what you typed for the topics we don't have yet.</p>
+
+        <div class="topic-search">
+          <label for="topic-search-input" class="prefs-email-label">Tell us in your own words</label>
+          <input id="topic-search-input" type="text" class="prefs-input" name="interests_text"
+                 maxlength="1000"
+                 placeholder="e.g. police body cams, school board meetings, traffic on Powers Boulevard, water quality…"
+                 aria-describedby="topic-search-hint">
+          <p id="topic-search-hint" class="topic-search-hint">As you type, matching topics appear below. Or open the directory to browse all 6 jurisdictions.</p>
+        </div>
+
+        <div id="selected-chips" class="selected-chips" role="list" aria-label="Topics you've selected"></div>
+
+        <details id="topic-directory" class="topic-directory">
+          <summary>
+            <span>Browse topics by jurisdiction</span>
+            <span class="topic-result-count" id="topic-result-count" aria-live="polite"></span>
+          </summary>
+          <div class="topic-directory-body">
+            
+              <fieldset class="prefs-jurisdiction" data-jurisdiction="city">
+                <legend><h3>City</h3></legend>
+                <div class="prefs-agencies">
+                  
+                    <label data-agency="citizen connect" data-topic="gov.city.citizenconnect">
+                      <input type="checkbox" name="topic" value="gov.city.CitizenConnect">
+                      <span>Citizen Connect</span>
+                    </label>
+                  
+                    <label data-agency="budget" data-topic="gov.city.budget">
+                      <input type="checkbox" name="topic" value="gov.city.budget">
+                      <span>Budget</span>
+                    </label>
+                  
+                    <label data-agency="coraform" data-topic="gov.city.coraform">
+                      <input type="checkbox" name="topic" value="gov.city.coraform">
+                      <span>Coraform</span>
+                    </label>
+                  
+                    <label data-agency="forestry" data-topic="gov.city.forestry">
+                      <input type="checkbox" name="topic" value="gov.city.forestry">
+                      <span>Forestry</span>
+                    </label>
+                  
+                    <label data-agency="go gov" data-topic="gov.city.gogov">
+                      <input type="checkbox" name="topic" value="gov.city.goGov">
+                      <span>go Gov</span>
+                    </label>
+                  
+                    <label data-agency="housing" data-topic="gov.city.housing">
+                      <input type="checkbox" name="topic" value="gov.city.housing">
+                      <span>Housing</span>
+                    </label>
+                  
+                    <label data-agency="police" data-topic="gov.city.police">
+                      <input type="checkbox" name="topic" value="gov.city.police">
+                      <span>Police</span>
+                    </label>
+                  
+                    <label data-agency="traffic" data-topic="gov.city.traffic">
+                      <input type="checkbox" name="topic" value="gov.city.traffic">
+                      <span>Traffic</span>
+                    </label>
+                  
+                </div>
+              </fieldset>
+            
+              <fieldset class="prefs-jurisdiction" data-jurisdiction="county">
+                <legend><h3>County</h3></legend>
+                <div class="prefs-agencies">
+                  
+                    <label data-agency="bocc" data-topic="gov.county.bocc">
+                      <input type="checkbox" name="topic" value="gov.county.BOCC">
+                      <span>BOCC</span>
+                    </label>
+                  
+                    <label data-agency="citizen connect" data-topic="gov.county.citizenconnect">
+                      <input type="checkbox" name="topic" value="gov.county.CitizenConnect">
+                      <span>Citizen Connect</span>
+                    </label>
+                  
+                    <label data-agency="land" data-topic="gov.county.land">
+                      <input type="checkbox" name="topic" value="gov.county.land">
+                      <span>Land</span>
+                    </label>
+                  
+                    <label data-agency="sheriff" data-topic="gov.county.sheriff">
+                      <input type="checkbox" name="topic" value="gov.county.sheriff">
+                      <span>Sheriff</span>
+                    </label>
+                  
+                    <label data-agency="utilities" data-topic="gov.county.utilities">
+                      <input type="checkbox" name="topic" value="gov.county.utilities">
+                      <span>Utilities</span>
+                    </label>
+                  
+                </div>
+              </fieldset>
+            
+              <fieldset class="prefs-jurisdiction" data-jurisdiction="national">
+                <legend><h3>National</h3></legend>
+                <div class="prefs-agencies">
+                  
+                    <label data-agency="doj" data-topic="gov.national.doj">
+                      <input type="checkbox" name="topic" value="gov.national.DOJ">
+                      <span>DOJ</span>
+                    </label>
+                  
+                    <label data-agency="ftc" data-topic="gov.national.ftc">
+                      <input type="checkbox" name="topic" value="gov.national.FTC">
+                      <span>FTC</span>
+                    </label>
+                  
+                </div>
+              </fieldset>
+            
+              <fieldset class="prefs-jurisdiction" data-jurisdiction="privatesector">
+                <legend><h3>Privatesector</h3></legend>
+                <div class="prefs-agencies">
+                  
+                    <label data-agency="lexis nexis" data-topic="gov.privatesector.lexisnexis">
+                      <input type="checkbox" name="topic" value="gov.privatesector.LexisNexis">
+                      <span>Lexis Nexis</span>
+                    </label>
+                  
+                </div>
+              </fieldset>
+            
+              <fieldset class="prefs-jurisdiction" data-jurisdiction="specialdistricts">
+                <legend><h3>Specialdistricts</h3></legend>
+                <div class="prefs-agencies">
+                  
+                    <label data-agency="lorson ranch" data-topic="gov.specialdistricts.lorsonranch">
+                      <input type="checkbox" name="topic" value="gov.specialdistricts.LorsonRanch">
+                      <span>Lorson Ranch</span>
+                    </label>
+                  
+                    <label data-agency="teller911" data-topic="gov.specialdistricts.teller911">
+                      <input type="checkbox" name="topic" value="gov.specialdistricts.teller911">
+                      <span>Teller911</span>
+                    </label>
+                  
+                </div>
+              </fieldset>
+            
+              <fieldset class="prefs-jurisdiction" data-jurisdiction="state">
+                <legend><h3>State</h3></legend>
+                <div class="prefs-agencies">
+                  
+                    <label data-agency="cbi" data-topic="gov.state.cbi">
+                      <input type="checkbox" name="topic" value="gov.state.CBI">
+                      <span>CBI</span>
+                    </label>
+                  
+                    <label data-agency="cdphe" data-topic="gov.state.cdphe">
+                      <input type="checkbox" name="topic" value="gov.state.CDPHE">
+                      <span>CDPHE</span>
+                    </label>
+                  
+                    <label data-agency="ccrd" data-topic="gov.state.ccrd">
+                      <input type="checkbox" name="topic" value="gov.state.ccrd">
+                      <span>Ccrd</span>
+                    </label>
+                  
+                    <label data-agency="cdola" data-topic="gov.state.cdola">
+                      <input type="checkbox" name="topic" value="gov.state.cdola">
+                      <span>Cdola</span>
+                    </label>
+                  
+                    <label data-agency="colorado attorney general" data-topic="gov.state.colorado-attorney-general">
+                      <input type="checkbox" name="topic" value="gov.state.colorado-attorney-general">
+                      <span>Colorado Attorney General</span>
+                    </label>
+                  
+                    <label data-agency="coloradodepartmentofcorrections" data-topic="gov.state.coloradodepartmentofcorrections">
+                      <input type="checkbox" name="topic" value="gov.state.coloradodepartmentofcorrections">
+                      <span>Coloradodepartmentofcorrections</span>
+                    </label>
+                  
+                    <label data-agency="coloradogeneralassembly" data-topic="gov.state.coloradogeneralassembly">
+                      <input type="checkbox" name="topic" value="gov.state.coloradogeneralassembly">
+                      <span>Coloradogeneralassembly</span>
+                    </label>
+                  
+                    <label data-agency="judicial" data-topic="gov.state.judicial">
+                      <input type="checkbox" name="topic" value="gov.state.judicial">
+                      <span>Judicial</span>
+                    </label>
+                  
+                    <label data-agency="oedit" data-topic="gov.state.oedit">
+                      <input type="checkbox" name="topic" value="gov.state.oedit">
+                      <span>Oedit</span>
+                    </label>
+                  
+                </div>
+              </fieldset>
+            
+            <p id="topic-no-results" class="topic-no-results prefs-hidden">
+              No matching topics yet for <em id="topic-no-results-query"></em>.
+              That's still useful — we'll save what you typed and use it to decide what to add next.
+            </p>
+          </div>
+        </details>
+      </div>
+
+      <div class="prefs-card">
+        <h2>2. How often should we email?</h2>
+        <p class="help">Choose your delivery cadence.</p>
+        <div class="prefs-freq" role="radiogroup" aria-label="Delivery frequency">
+          <label><input type="radio" name="frequency" value="immediate" checked> <span>Immediate</span></label>
+          <label><input type="radio" name="frequency" value="daily">     <span>Daily digest</span></label>
+          <label><input type="radio" name="frequency" value="weekly">    <span>Weekly digest</span></label>
+          <label><input type="radio" name="frequency" value="monthly">   <span>Monthly digest</span></label>
+        </div>
+        <aside class="prefs-banner" aria-label="Note about digest delivery">
+          <span class="sr-only">Note: </span>
+          <strong>Heads up:</strong> digest delivery is launching soon. We'll record your choice now and start grouping messages on the schedule above as soon as it goes live. Until then, "immediate" is the only mode that actually sends.
+        </aside>
+      </div>
+
+      
+      <div id="prefs-email-block" class="prefs-card prefs-email-wrap">
+        <h2>3. Where should we send updates?</h2>
+        <label for="prefs-email">Email address</label>
+        <input id="prefs-email" type="email" name="email" class="prefs-input" required autocomplete="email" placeholder="you@example.com" aria-describedby="prefs-consent-text">
+        <p id="prefs-consent-text" class="prefs-consent">
+          By subscribing you agree to receive emails about the topics above. We'll send a confirmation link first to verify your address. You can update or unsubscribe at any time using the link in every email.
+          <em>(consent v2026-04-30-v1)</em>
+        </p>
+      </div>
+
+      <div id="prefs-email-readonly" class="prefs-card prefs-hidden">
+        <h2>Your email</h2>
+        <p><strong id="prefs-email-display"></strong></p>
+        <p class="help">To change your email, unsubscribe and resubscribe with the new address.</p>
+      </div>
+
+      <div class="prefs-actions">
+        <button type="submit" class="btn-save" id="prefs-submit-btn">Subscribe</button>
+        <button type="button" class="btn-unsub prefs-hidden" id="prefs-unsub-all">Unsubscribe from everything</button>
+        <output role="status" aria-live="polite" class="prefs-status" id="prefs-form-status"></output>
+      </div>
+    </form>
+
+    <div id="prefs-error" class="prefs-card prefs-hidden" role="alert">
+      <h2>Link expired or invalid</h2>
+      <p>Your sign-in link has expired or is invalid. <a href="/preferences/?manage=1">Request a new one →</a></p>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  var qs    = new URLSearchParams(location.search);
+  var token = qs.get('t');
+  var manageMode = qs.get('manage') === '1';
+
+  var headerNew   = document.getElementById('prefs-header-new');
+  var headerMng   = document.getElementById('prefs-header-manage');
+  var requestView = document.getElementById('prefs-request');
+  var formView    = document.getElementById('prefs-form');
+  var errorView   = document.getElementById('prefs-error');
+  var formStatus  = document.getElementById('prefs-form-status');
+  var emailBlock  = document.getElementById('prefs-email-block');
+  var emailReadonly = document.getElementById('prefs-email-readonly');
+  var emailDisplay  = document.getElementById('prefs-email-display');
+  var submitBtn   = document.getElementById('prefs-submit-btn');
+  var unsubBtn    = document.getElementById('prefs-unsub-all');
+
+  function setStatus(el, text, state) {
+    el.textContent = text;
+    if (state) el.dataset.state = state; else delete el.dataset.state;
+  }
+
+  // Clear aria-invalid as soon as the user starts correcting an errored field.
+  document.querySelectorAll('input[type="email"]').forEach(function (el) {
+    el.addEventListener('input', function () { el.removeAttribute('aria-invalid'); });
+  });
+
+  // ── Mode dispatch ─────────────────────────────────────
+  if (token) {
+    // Existing user, signed-in
+    headerNew.classList.add('prefs-hidden');
+    headerMng.classList.remove('prefs-hidden');
+    emailBlock.classList.add('prefs-hidden');
+    emailReadonly.classList.remove('prefs-hidden');
+    submitBtn.textContent = 'Save changes';
+    unsubBtn.classList.remove('prefs-hidden');
+    loadState();
+  } else if (manageMode) {
+    // Existing user, asking for a sign-in link
+    headerNew.classList.add('prefs-hidden');
+    headerMng.classList.remove('prefs-hidden');
+    requestView.classList.remove('prefs-hidden');
+  } else {
+    // New subscriber — full picker, email at the end
+    formView.classList.remove('prefs-hidden');
+    applyDeepLinkedTopics();
+  }
+
+  // Deep-linking from a microsite: /preferences/?topic=gov.city.forestry
+  // or /preferences/?topics=gov.city.forestry,gov.city.police
+  function applyDeepLinkedTopics() {
+    var wanted = [];
+    var single = qs.get('topic');
+    var multi  = qs.get('topics');
+    if (single) wanted.push(single.trim());
+    if (multi) multi.split(',').forEach(function (t) { t = t.trim(); if (t) wanted.push(t); });
+    if (!wanted.length) return;
+
+    var matched = 0;
+    wanted.forEach(function (t) {
+      var cb = formView.querySelector('input[name="topic"][value="' + CSS.escape(t) + '"]');
+      if (cb) { cb.checked = true; matched++; }
+    });
+    if (!matched) return;
+
+    renderChips();
+    // Quick visual confirmation: scroll the topic card into view
+    // and announce it to screen readers via the existing status output.
+    setTimeout(function () {
+      var card = formView.querySelector('.prefs-card');
+      if (card && card.scrollIntoView) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setStatus(formStatus, matched + ' topic' + (matched === 1 ? '' : 's') + ' pre-selected from your last page.', 'success');
+    }, 100);
+  }
+
+  // ── Magic-link request flow ──────────────────────────
+  var rf = document.getElementById('prefs-request-form');
+  rf.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var out = rf.querySelector('output');
+    var email = rf.email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      rf.email.setAttribute('aria-invalid', 'true');
+      setStatus(out, 'Please enter a valid email address.', 'error');
+      rf.email.focus();
+      return;
+    }
+    rf.email.removeAttribute('aria-invalid');
+    setStatus(out, 'Sending…');
+    fetch('/api/preferences/request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        setStatus(out, d.message || 'Check your email.', 'success');
+        if (d.dev_link) {
+          out.innerHTML += ' <a href="' + d.dev_link + '">[dev link]</a>';
+        }
+      })
+      .catch(function () { setStatus(out, 'Could not send. Try again.', 'error'); });
+  });
+
+  // ── Existing user: load state ────────────────────────
+  function loadState() {
+    fetch('/api/preferences?t=' + encodeURIComponent(token))
+      .then(function (r) { if (!r.ok) throw new Error('bad token'); return r.json(); })
+      .then(function (state) {
+        formView.querySelectorAll('input[name="topic"]').forEach(function (cb) {
+          cb.checked = state.topics.indexOf(cb.value) !== -1;
+        });
+        var freq = formView.querySelector('input[name="frequency"][value="' + state.frequency + '"]');
+        if (freq) freq.checked = true;
+        var interestsField = formView.querySelector('input[name="interests_text"]');
+        if (interestsField) interestsField.value = state.interests_text || '';
+        emailDisplay.textContent = state.email;
+        formView.classList.remove('prefs-hidden');
+        renderChips();
+        applyFilter();
+      })
+      .catch(function () { errorView.classList.remove('prefs-hidden'); });
+  }
+
+  // ── Save / Subscribe ─────────────────────────────────
+  function collectForm() {
+    var topics = [].slice.call(formView.querySelectorAll('input[name="topic"]:checked'))
+                       .map(function (cb) { return cb.value; });
+    var frequency = (formView.querySelector('input[name="frequency"]:checked') || {}).value || 'immediate';
+    var interests = (formView.querySelector('input[name="interests_text"]') || { value: '' }).value;
+    return { topics: topics, frequency: frequency, interests_text: interests };
+  }
+
+  // ── Search-led topic picker ──────────────────────────
+  var searchInput   = document.getElementById('topic-search-input');
+  var directory     = document.getElementById('topic-directory');
+  var resultCount   = document.getElementById('topic-result-count');
+  var noResults     = document.getElementById('topic-no-results');
+  var noResultsQ    = document.getElementById('topic-no-results-query');
+  var chipsHost     = document.getElementById('selected-chips');
+
+  // Tiny synonym map — extend as you spot patterns in interests_text data.
+  // Maps user phrasing → tokens that should match topic labels.
+  var SYNONYMS = {
+    'cops': 'police',
+    'cop': 'police',
+    'pd': 'police',
+    'cspd': 'police',
+    'dwi': 'police',
+    'tickets': 'traffic',
+    'speeding': 'traffic',
+    'records': 'cora',
+    'open records': 'cora',
+    'foia': 'cora',
+    'taxes': 'budget',
+    'mill levy': 'specialdistricts',
+    'metro district': 'specialdistricts',
+    'metro districts': 'specialdistricts'
+  };
+
+  function tokensFromQuery(q) {
+    var raw = q.toLowerCase().split(/[\s,;]+/).filter(Boolean);
+    var out = new Set(raw);
+    raw.forEach(function (t) { if (SYNONYMS[t]) out.add(SYNONYMS[t]); });
+    // Also match multi-word synonyms.
+    Object.keys(SYNONYMS).forEach(function (k) {
+      if (k.indexOf(' ') !== -1 && q.toLowerCase().indexOf(k) !== -1) out.add(SYNONYMS[k]);
+    });
+    return [...out];
+  }
+
+  function applyFilter() {
+    var q = searchInput.value.trim();
+    var tokens = tokensFromQuery(q);
+    var anyMatchTotal = 0;
+
+    formView.querySelectorAll('.prefs-jurisdiction').forEach(function (group) {
+      var jLabel = group.dataset.jurisdiction || '';
+      var groupHasMatch = false;
+      group.querySelectorAll('label[data-agency]').forEach(function (label) {
+        var hay = label.dataset.agency + ' ' + label.dataset.topic + ' ' + jLabel;
+        var match = !q ? true : tokens.some(function (t) { return hay.indexOf(t) !== -1; });
+        label.classList.toggle('filtered-out', !match);
+        if (match) { groupHasMatch = true; anyMatchTotal++; }
+      });
+      group.classList.toggle('filtered-out', !groupHasMatch && !!q);
+    });
+
+    if (q) {
+      directory.open = true;
+      resultCount.textContent = anyMatchTotal + ' match' + (anyMatchTotal === 1 ? '' : 'es');
+      noResults.classList.toggle('prefs-hidden', anyMatchTotal !== 0);
+      if (noResultsQ) noResultsQ.textContent = q;
+    } else {
+      resultCount.textContent = '';
+      noResults.classList.add('prefs-hidden');
+    }
+  }
+
+  function renderChips() {
+    chipsHost.innerHTML = '';
+    formView.querySelectorAll('input[name="topic"]:checked').forEach(function (cb) {
+      var label = cb.closest('label');
+      var name = label ? label.querySelector('span').textContent : cb.value;
+      var jurisdiction = label && label.closest('.prefs-jurisdiction');
+      var jLabel = jurisdiction ? jurisdiction.querySelector('h3').textContent : '';
+
+      var chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.setAttribute('role', 'listitem');
+      chip.innerHTML = '<span><strong>' + (jLabel ? jLabel + ' › ' : '') + '</strong>' + name + '</span>';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Remove ' + name);
+      btn.textContent = '✕';
+      btn.addEventListener('click', function () {
+        cb.checked = false;
+        cb.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      chip.appendChild(btn);
+      chipsHost.appendChild(chip);
+    });
+  }
+
+  if (searchInput) searchInput.addEventListener('input', applyFilter);
+  formView.querySelectorAll('input[name="topic"]').forEach(function (cb) {
+    cb.addEventListener('change', renderChips);
+  });
+
+  formView.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var data = collectForm();
+    if (!data.topics.length) {
+      setStatus(formStatus, 'Pick at least one topic.', 'error');
+      var firstCb = formView.querySelector('input[name="topic"]');
+      if (firstCb) firstCb.focus();
+      return;
+    }
+
+    if (token) {
+      // Manage mode: PATCH existing subscriber
+      setStatus(formStatus, 'Saving…');
+      fetch('/api/preferences?t=' + encodeURIComponent(token), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d.error || 'save failed');
+          setStatus(formStatus, 'Saved. (' + res.d.added + ' added, ' + res.d.removed + ' removed.)', 'success');
+        })
+        .catch(function (err) { setStatus(formStatus, 'Could not save: ' + err.message, 'error'); });
+      return;
+    }
+
+    // New-subscriber mode: validate email, then POST to /api/subscribe
+    var emailField = formView.querySelector('input[name="email"]');
+    var email = emailField.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailField.setAttribute('aria-invalid', 'true');
+      setStatus(formStatus, 'Please enter a valid email address.', 'error');
+      emailField.focus();
+      return;
+    }
+    emailField.removeAttribute('aria-invalid');
+    setStatus(formStatus, 'Submitting…');
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        topics: data.topics,
+        frequency: data.frequency,
+        interests_text: data.interests_text,
+        source: 'preferences-page',
+      }),
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
+        setStatus(formStatus, res.d.message || 'Check your email to confirm.', 'success');
+      })
+      .catch(function (err) { setStatus(formStatus, 'Could not subscribe: ' + err.message, 'error'); });
+  });
+
+  // ── Unsubscribe all (manage mode only) ──────────────
+  unsubBtn.addEventListener('click', function () {
+    if (!confirm('Unsubscribe from all topics? This stops every email from us.')) return;
+    setStatus(formStatus, 'Unsubscribing…');
+    fetch('/api/preferences?t=' + encodeURIComponent(token), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ unsubscribe_all: true }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        setStatus(formStatus, d.message || 'Done.', 'success');
+        formView.querySelectorAll('input[name="topic"]').forEach(function (cb) { cb.checked = false; });
+      })
+      .catch(function () { setStatus(formStatus, 'Could not unsubscribe. Try again.', 'error'); });
+  });
+})();
+</script>
+
+  </main>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     FOOTER — single source of truth, included by site.njk on every page.
+════════════════════════════════════════════════════════════════════ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  .subscribe-block {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    padding: 48px 0;
+    border-top: 1px solid var(--cc-border);
+  }
+  .subscribe-block .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+  .subscribe-block h2 {
+    font-family: var(--cc-serif);
+    margin: 0 0 12px;
+    color: var(--cc-text);
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .subscribe-block .deck {
+    color: var(--cc-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .gov-subscribe { display: flex; flex-direction: column; gap: 12px; }
+  .gov-subscribe label {
+    display: block;
+    font-family: var(--cc-sans);
+    font-size: 1rem;
+    color: var(--cc-text);
+    font-weight: 500;
+  }
+  .gov-subscribe input[type="email"] {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 12px;
+    font: inherit;
+    background: var(--cc-surface2);
+    color: var(--cc-text);
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+    min-height: 44px;
+  }
+  .gov-subscribe input[type="email"]::placeholder { color: var(--cc-quiet); opacity: 1; }
+  .gov-subscribe input[type="email"]:focus {
+    border-color: var(--cc-gold);
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 1px;
+  }
+  .gov-subscribe__consent {
+    font-size: 0.9rem;
+    color: var(--cc-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .gov-subscribe button[type="submit"] {
+    align-self: flex-start;
+    background: var(--cc-gold);
+    color: #0c1220;
+    border: 0;
+    padding: 12px 24px;
+    min-height: 44px;
+    font: 700 .85rem var(--cc-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+  .gov-subscribe button[type="submit"]:hover,
+  .gov-subscribe button[type="submit"]:focus-visible { background: var(--cc-gold-lt); }
+  .gov-subscribe output {
+    display: block;
+    min-height: 1.4em;
+    font-size: 0.95rem;
+    color: var(--cc-muted);
+  }
+</style>
+<section class="subscribe-block" aria-label="Subscribe to updates" data-topic="" hidden>
+  <div class="container">
+    <h2>Get email updates</h2>
+    <p class="deck">We&#39;ll email you a plain-language summary with links to the source documents whenever this office posts new public-record material.</p>
+
+    <form class="gov-subscribe" novalidate>
+      <label>
+        Email address
+        <input type="email" name="email" required autocomplete="email"
+               placeholder="you@example.com">
+      </label>
+      <p class="gov-subscribe__consent">
+        By subscribing you agree to receive emails about this topic. We&#39;ll send a confirmation link first. Unsubscribe any time. <em>(consent v2026-04-30-v1)</em>
+      </p>
+      <button type="submit">Subscribe</button>
+      <output role="status" aria-live="polite"></output>
+    </form>
+  </div>
+</section>
+
+
+<script>
+(function () {
+  if (window.__govSubscribeInit) return;
+  window.__govSubscribeInit = true;
+
+  // Skip top-level pages and /microsites/shared/* — no agency-specific topic.
+  var SKIP_JURISDICTIONS = { shared: 1 };
+
+  function inferTopicFromUrl() {
+    var parts = location.pathname.split('/').filter(Boolean);
+    // ["microsites", "<jurisdiction>", "<agency>", ...]
+    if (parts[0] !== 'microsites') return '';
+    if (!parts[1] || !parts[2]) return '';
+    if (SKIP_JURISDICTIONS[parts[1]]) return '';
+    return 'gov.' + parts[1] + '.' + parts[2];
+  }
+
+  function attach(host) {
+    // Resolve topic: explicit data-topic wins, else infer from URL.
+    var topic = host.dataset.topic || inferTopicFromUrl();
+    if (!topic) { host.remove(); return; }
+    host.dataset.topic = topic;
+    host.hidden = false;
+
+    var form = host.querySelector('form.gov-subscribe');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    var out = form.querySelector('output');
+    var source = location.pathname.replace(/^\/+/, '');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      out.textContent = 'Submitting…';
+      var email = form.email.value.trim();
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, topic: topic, source: source }),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
+          out.textContent = res.d.message || 'Check your email to confirm.';
+          form.reset();
+        })
+        .catch(function (err) { out.textContent = 'Something went wrong: ' + err.message; });
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('.subscribe-block[data-topic]').forEach(attach);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+
+<footer class="cc-footer" role="contentinfo">
+  <div class="container">
+    <p class="cc-footer-line">
+      &copy; 2026
+      CheetoChopsticks &amp;
+      <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener noreferrer">
+        StorySeed Studios<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      <a href="https://www.storyseedstudios.com/media-category/the-dais/" target="_blank" rel="noopener noreferrer">
+        The Dais<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      El Paso County, Colorado
+      &nbsp;·&nbsp;
+      For informational purposes only.
+      &nbsp;·&nbsp;
+      Open source.
+      &nbsp;·&nbsp;
+      <a href="/preferences/">Manage your subscriptions</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+/* ── Site nav + notifications panel scripts ──────────────────────────
+   Wrapped in an IIFE so locals never leak. The functions onclick handlers
+   call (openNotif, closeNotif, filterNotif) are explicitly attached to
+   `window` so a page's own scripts can't shadow them, and each function
+   is defensive about the DOM possibly being absent on a page that opted
+   out of the layout. */
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  var lastFocus;
+
+  function openNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    lastFocus = document.activeElement;
+    overlay.classList.add('open');
+    overlay.removeAttribute('aria-hidden');
+    panel.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { panel.focus(); }, 50);
+  }
+
+  function closeNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    panel.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  function filterNotif(tier, btn) {
+    document.querySelectorAll('.nf-btn').forEach(function (b) {
+      b.classList.remove('active');
+      b.removeAttribute('aria-pressed');
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    document.querySelectorAll('.notif-item').forEach(function (item) {
+      if (tier === 'all') {
+        item.classList.remove('hidden');
+        item.removeAttribute('aria-hidden');
+      } else {
+        var hide = item.dataset.tier !== tier;
+        item.classList.toggle('hidden', hide);
+        if (hide) item.setAttribute('aria-hidden', 'true');
+        else item.removeAttribute('aria-hidden');
+      }
+    });
+    document.querySelectorAll('.notif-group-label').forEach(function (label) {
+      label.style.display = tier === 'all' ? '' : 'none';
+    });
+  }
+
+  /* Escape closes the panel; Tab stays inside it while it's open. */
+  document.addEventListener('keydown', function (e) {
+    var panel = $('notif-panel');
+    if (!panel) return;
+    if (e.key === 'Escape') { closeNotif(); return; }
+    if (e.key === 'Tab' && panel.classList.contains('open')) {
+      var focusable = panel.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+
+  /* Active nav link on scroll — only runs when the index has the matching anchors. */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['you', 'dashboards', 'people', 'events'];
+  if (typeof IntersectionObserver === 'function' && navLinks.length) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function (l) {
+            var href = l.getAttribute('href') || '';
+            var active = href === '#' + id || href === '/#' + id;
+            l.classList.toggle('active', active);
+            if (active) l.setAttribute('aria-current', 'true');
+            else l.removeAttribute('aria-current');
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach(function (id) {
+      var el = $(id);
+      if (el) observer.observe(el);
+    });
+  }
+
+  /* Expose the click-target functions globally so inline onclick handlers
+     (and any page that needs them) can always reach them by name. */
+  window.openNotif   = openNotif;
+  window.closeNotif  = closeNotif;
+  window.filterNotif = filterNotif;
+})();
+</script>
+
+</body>
+</html>

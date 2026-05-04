@@ -16,11 +16,51 @@
         <a class="nav-link{% if activeNav == 'events' %} active{% endif %}" href="/#events">Events</a>
       </nav>
       <div class="nav-right">
+        <a class="subscribe-btn" href="/preferences/" aria-label="Subscribe to email updates">
+          <span>Subscribe</span>
+        </a>
         <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
           <span>Alerts</span>
           <span class="notif-count" aria-live="polite">11</span>
         </button>
       </div>
+
+<style>
+  /* Subscribe button in the dark nav. Gold border + gold label on dark bg.
+     Contrast: cc-gold (#c8a84b) on cc-bg (#0c1220) = 8.2:1 (AAA). */
+  .subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--cc-gold);
+    border-radius: 4px;
+    padding: 7px 14px;
+    margin-right: 8px;
+    color: var(--cc-gold);
+    font-family: var(--cc-mono);
+    font-size: .75rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .18s, color .18s;
+    min-height: 32px;
+  }
+  .subscribe-btn:hover,
+  .subscribe-btn:focus-visible {
+    background: var(--cc-gold);
+    color: #0c1220;
+  }
+  @media (max-width: 600px) {
+    .subscribe-btn { padding: 7px 10px; }
+    .subscribe-btn span { display: none; }
+    .subscribe-btn::before {
+      content: "✉";
+      font-size: 1rem;
+      line-height: 1;
+    }
+  }
+</style>
     </div>
   </div>
 </header>

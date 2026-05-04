@@ -1,0 +1,4020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A reference of trees suitable for Colorado Springs at 6,000–7,500 ft. Combines the city&#39;s Approved Street Tree List with curated private-property fruit and native options.">
+  <title>Trees for Colorado Springs — Forestry Reference</title>
+
+  
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
+         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
+           text    #ede8dc → 15.3  AAA
+           muted   #96adc4 →  8.1  AAA
+           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
+           gold    #c8a84b →  8.2  AAA
+           gold-lt #fde68a → 15.0  AAA
+           red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
+           green   #4ade80 → 10.7  AAA
+           blue    #60a5fa →  7.4  AAA
+           amber   #fbbf24 → 11.2  AAA                                  */
+      --cc-bg:         #0c1220;
+      --cc-surface:    #141e2e;
+      --cc-surface2:   #1c2a3e;
+      --cc-surface3:   #233045;
+      --cc-border:     rgba(255,255,255,.14);
+      --cc-border-hi:  rgba(255,255,255,.28);
+      --cc-gold:       #c8a84b;
+      --cc-gold-dim:   rgba(200,168,75,.22);
+      --cc-gold-faint: rgba(200,168,75,.09);
+      --cc-gold-lt:    #fde68a;
+      --cc-text:       #ede8dc;
+      --cc-muted:      #96adc4;
+      --cc-quiet:      #8ca3b8;
+      --cc-mono:       'IBM Plex Mono', monospace;
+      --cc-sans:       'IBM Plex Sans', sans-serif;
+      --cc-serif:      'Playfair Display', Georgia, serif;
+      --cc-red:        #fca5a5;
+      --cc-red-dim:    rgba(252,165,165,.16);
+      --cc-green:      #4ade80;
+      --cc-green-dim:  rgba(74,222,128,.14);
+      --cc-blue:       #60a5fa;
+      --cc-blue-dim:   rgba(96,165,250,.14);
+      --cc-amber:      #fbbf24;
+      --cc-amber-dim:  rgba(251,191,36,.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* ── Skip link (ADA) ────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--cc-gold);
+      color: #0c1220;
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 10px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ── Focus visible — universal gold ring ─────────────────────── */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Serif subheadline ───────────────────────────────────────── */
+    .section-sub {
+      font-family: var(--cc-sans);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--cc-muted);
+      line-height: 1.6;
+      margin-top: 4px;
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+
+    body {
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    .nav {
+      border-bottom: 1px solid var(--cc-border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,26,.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 200;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nav-logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      margin-right: 32px;
+      flex-shrink: 0;
+    }
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+    .nav-logo:focus-visible {
+      outline: 2px solid var(--cc-gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    /* Legacy text-logo styles kept for any other surfaces that reference them */
+    .nav-logo-word {
+      font-family: var(--cc-sans);
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: -.01em;
+      color: var(--cc-text);
+    }
+    .nav-logo-dot { color: var(--cc-gold); font-size: .95rem; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+    .nav-link {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--cc-text); background: rgba(255,255,255,.04); }
+    .nav-link.you-link {
+      color: var(--cc-gold);
+      border-color: var(--cc-gold-dim);
+      background: var(--cc-gold-faint);
+    }
+    .nav-link.you-link:hover { background: var(--cc-gold-dim); }
+    .nav-link.active {
+      color: var(--cc-text);
+      border-color: var(--cc-border-hi);
+      background: rgba(255,255,255,.06);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold);
+      text-underline-offset: 3px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: all .18s;
+    }
+    .notif-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .notif-count {
+      background: var(--cc-red);
+      color: #0a0f1a;
+      font-size: .78rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 1px 5px;
+      font-family: var(--cc-mono);
+      line-height: 1.4;
+    }
+
+    /* ── NOTIFICATIONS PANEL ─────────────────────────────────────── */
+    .notif-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .notif-overlay.open { opacity: 1; pointer-events: all; }
+    .notif-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--cc-surface);
+      border-left: 1px solid var(--cc-border-hi);
+      z-index: 301;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.32,.72,0,1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .notif-panel.open { transform: translateX(0); }
+    .notif-panel-head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--cc-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .notif-panel-title {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-text);
+    }
+    .notif-close {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 3px;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: var(--cc-mono);
+      transition: all .15s;
+    }
+    .notif-close:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .notif-filters {
+      display: flex;
+      gap: 6px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--cc-border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .nf-btn {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--cc-border);
+      border-radius: 2px;
+      background: none;
+      color: var(--cc-muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .nf-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold); border-color: rgba(200,168,75,.3); }
+    .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .notif-group-label {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-quiet);
+      padding: 10px 20px 4px;
+    }
+    .notif-item {
+      padding: 12px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--cc-border);
+      transition: background .15s;
+      cursor: default;
+    }
+    .notif-item:hover { background: rgba(255,255,255,.02); }
+    .notif-item.hidden { display: none; }
+    .notif-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .nd-red    { background: var(--cc-red); }
+    .nd-amber  { background: var(--cc-amber); }
+    .nd-blue   { background: var(--cc-blue); }
+    .nd-green  { background: var(--cc-green); }
+    .nd-gold   { background: var(--cc-gold); }
+    .nd-quiet  { background: var(--cc-quiet); }
+    .notif-body { flex: 1; }
+    .notif-text {
+      font-size: .85rem;
+      color: var(--cc-text);
+      line-height: 1.55;
+      margin-bottom: 3px;
+    }
+    .notif-text strong { color: var(--cc-gold-lt); font-weight: 500; }
+    .notif-meta {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--cc-quiet);
+      margin-bottom: 4px;
+    }
+    .notif-action {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--cc-gold-dim);
+      padding-bottom: 1px;
+      transition: border-color .15s;
+    }
+    .notif-action:hover { border-color: var(--cc-gold); }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
+      border-top: 1px solid var(--cc-border);
+      padding: 32px 0 36px;
+      margin-top: 56px;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      position: relative;
+      z-index: 1;
+    }
+    .cc-footer .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .cc-footer-line {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .04em;
+      line-height: 1.9;
+      color: var(--cc-muted);
+      text-align: center;
+    }
+    .cc-footer-line a {
+      color: var(--cc-muted);
+      text-decoration: underline;
+      text-decoration-color: rgba(150, 173, 196, .35);
+      text-underline-offset: 3px;
+      transition: color .15s, text-decoration-color .15s;
+    }
+    .cc-footer-line a:hover,
+    .cc-footer-line a:focus-visible {
+      color: var(--cc-gold);
+      text-decoration-color: var(--cc-gold);
+    }
+    .cc-footer-ext {
+      display: inline-block;
+      font-size: .7em;
+      transform: translateY(-1px);
+      margin-left: 2px;
+      opacity: .7;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
+    }
+
+    /* ── MARKDOWN CONTENT (rendered .md docs) ───────────────────── */
+    .markdown-content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .markdown-header {
+      border-bottom: 1px solid var(--cc-border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .markdown-content > .markdown-header h1,
+    .markdown-content h1 {
+      font-family: var(--cc-serif);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--cc-text);
+      margin: 0 0 8px;
+    }
+    .markdown-subtitle {
+      font-style: italic;
+      color: var(--cc-muted);
+      font-size: 1.05rem;
+      margin: 0;
+    }
+    .markdown-content h2 {
+      font-family: var(--cc-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cc-text);
+      margin: 48px 0 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--cc-border);
+    }
+    .markdown-content h3 {
+      font-family: var(--cc-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cc-gold-lt);
+      margin: 32px 0 8px;
+    }
+    .markdown-content h4 {
+      font-family: var(--cc-mono);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 24px 0 6px;
+    }
+    .markdown-content p { margin: 0 0 16px; color: var(--cc-text); }
+    .markdown-content strong { color: var(--cc-gold-lt); font-weight: 600; }
+    .markdown-content em { color: var(--cc-muted); }
+    .markdown-content a {
+      color: var(--cc-gold);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold-dim);
+      text-underline-offset: 3px;
+    }
+    .markdown-content a:hover,
+    .markdown-content a:focus-visible {
+      color: var(--cc-gold-lt);
+      text-decoration-color: var(--cc-gold-lt);
+    }
+    .markdown-content ul, .markdown-content ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+    }
+    .markdown-content li { margin-bottom: 6px; color: var(--cc-text); }
+    .markdown-content li::marker { color: var(--cc-gold); }
+    .markdown-content blockquote {
+      border-left: 3px solid var(--cc-gold);
+      padding: 8px 16px;
+      margin: 16px 0;
+      color: var(--cc-muted);
+      font-style: italic;
+      background: var(--cc-surface);
+    }
+    .markdown-content code {
+      font-family: var(--cc-mono);
+      font-size: .92em;
+      color: var(--cc-gold-lt);
+      background: var(--cc-surface);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+    .markdown-content pre {
+      background: var(--cc-surface);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-size: .85rem;
+      line-height: 1.55;
+    }
+    .markdown-content pre code {
+      background: none;
+      padding: 0;
+      color: var(--cc-text);
+      font-size: inherit;
+    }
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: .92rem;
+    }
+    .markdown-content th, .markdown-content td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--cc-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .markdown-content th {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      border-bottom: 2px solid var(--cc-border);
+    }
+    .markdown-content hr {
+      border: none;
+      border-top: 1px solid var(--cc-border);
+      margin: 32px 0;
+    }
+    .markdown-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+</style>
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500&family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NAV — sourced from a single partial; pages mark their active section
+     by setting `activeNav` in front-matter (one of: you, dashboards,
+     people, events).
+════════════════════════════════════════════════════════════════════ -->
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
+        <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Site sections">
+        <a class="nav-link you-link" href="/#you">You</a>
+        <a class="nav-link active" href="/#dashboards">Dashboards</a>
+        <a class="nav-link" href="/#people">People</a>
+        <a class="nav-link" href="/#events">Events</a>
+      </nav>
+      <div class="nav-right">
+        <a class="subscribe-btn" href="/preferences/" aria-label="Subscribe to email updates">
+          <span>Subscribe</span>
+        </a>
+        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+          <span>Alerts</span>
+          <span class="notif-count" aria-live="polite">11</span>
+        </button>
+      </div>
+
+<style>
+  /* Subscribe button in the dark nav. Gold border + gold label on dark bg.
+     Contrast: cc-gold (#c8a84b) on cc-bg (#0c1220) = 8.2:1 (AAA). */
+  .subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--cc-gold);
+    border-radius: 4px;
+    padding: 7px 14px;
+    margin-right: 8px;
+    color: var(--cc-gold);
+    font-family: var(--cc-mono);
+    font-size: .75rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .18s, color .18s;
+    min-height: 32px;
+  }
+  .subscribe-btn:hover,
+  .subscribe-btn:focus-visible {
+    background: var(--cc-gold);
+    color: #0c1220;
+  }
+  @media (max-width: 600px) {
+    .subscribe-btn { padding: 7px 10px; }
+    .subscribe-btn span { display: none; }
+    .subscribe-btn::before {
+      content: "✉";
+      font-size: 1rem;
+      line-height: 1;
+    }
+  }
+</style>
+    </div>
+  </div>
+</header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NOTIFICATIONS PANEL
+════════════════════════════════════════════════════════════════════ -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">Alerts &amp; notifications</span>
+    <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
+  </div>
+  <div class="notif-filters" role="group" aria-label="Filter notifications">
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (11)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (5)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (3)</button>
+  </div>
+  <div class="notif-scroll">
+
+    <div class="notif-group-label">Critical — act now</div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
+        <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Downtown Funding and Records Search</strong> Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</div>
+        <div class="notif-meta">Annual adopted budget — C.R.S. 29-1-101 et seq · April 10, 2026</div>
+        <a class="notif-action" href="/microsites/downtown/downtown_cs_search_portal_v2_ada.html">Open the search portal <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+	  
+	      <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
+        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35 · April 8, 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">Open district audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access their own district's records.</div>
+        <div class="notif-meta">EPC Assessor audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See district audit <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021. No governance docs. No financials. One compliance letter fixes all 30+ simultaneously.</div>
+        <div class="notif-meta">Platform audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">High priority</div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes, budgets, and audit docs are almost certainly untagged. This is the real HB21-1110 failure — not the homepage.</div>
+        <div class="notif-meta">ADA document audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">View ADA analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it. This is the foundational legal document. Not one district links it publicly.</div>
+        <div class="notif-meta">Governance gap · §32-1-202</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106. Due to State Auditor by July 31. The clock is running.</div>
+        <div class="notif-meta">Governance gap · §32-1-106 · due July 31</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">Informational</div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records both awaiting reply. Response window is still open.</div>
+        <div class="notif-meta">CORA tracker · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/requests_tracker_and_military_numbers.html">View tracker <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
+        <div class="notif-meta">Compliance analysis · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
+        <div class="notif-meta">New · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CSPD Blotter — Weekly History is live.</strong> 271 incidents pulled directly from the live blotter feed, paired with a Poisson 95% confidence band to flag statistical anomalies week to week. Tabs are full APG-pattern keyboard accessible; every chart has an aria-label.</div>
+        <div class="notif-meta">New · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Lorson Ranch financial dashboard is live.</strong> Seven cross-pledged metro districts, $94.2M aggregate audited deficit, IGA money flows, and a per-home tax calculator — sourced from 2026 budgets and 2024 audits. Companion plain-language briefing available as a download.</div>
+        <div class="notif-meta">New · Special Districts · April 2026</div>
+        <a class="notif-action" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CBI Missing Persons form — accessible rebuild is live.</strong> Resolves all seven critical/serious findings from the ADA audit: skip link, live regions, focus management, EN/ES localization, real-time validation messaging. Drops into the existing Drupal Webform infrastructure with optional Claude API routing.</div>
+        <div class="notif-meta">New · State · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LexisNexis ADAM Program dashboard — accessible rebuild is live.</strong> Audit and reference rebuild of the missing-children dashboard: APG-pattern tabs with roving tabindex and full keyboard nav, solid amber focus rings (3:1 against any surface), darker success-green for AA contrast, and "View Poster" placeholders converted from dead anchors to real buttons.</div>
+        <div class="notif-meta">New · Private Sector · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <main id="main-content" tabindex="-1">
+    
+<style>
+:root {
+  /* Colorado Springs / Tree City USA inspired palette */
+  --forest-deep:    #1F4D2C;   /* Tree City USA green */
+  --forest-mid:     #2E6E3F;
+  --forest-bright:  #4A9B5A;
+  --forest-pale:    #C8DDC9;
+  --paper:          #FAF6EB;   /* warm off-white */
+  --paper-dim:      #EFE7D2;
+  --paper-shadow:   #E0D7BD;
+  --ink:            #1A1A1A;
+  --ink-soft:       #3F3F3F;   /* darkened from #4A4A4A for tighter contrast on tags */
+  --ink-faint:      #5F5949;   /* darkened from #8A8275 — 5.7:1 on cream, 6.1:1 on white */
+  --rust:           #A04E37;   /* darkened from #B8593F — 5.3:1 on cream/highlight, holds against white */
+  --gold:           #B07F2A;   /* darkened from #C4923C for tag text */
+  --shrub:          #6B5A95;   /* darkened from #8A7BAE for white-on-purple tag */
+  --rule:           #B5A78A;   /* darkened slightly from #C5B79D */
+  --highlight:      #FFF6D8;
+
+  /* Type */
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --body:    'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono:    ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--body);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(31, 77, 44, 0.04) 0, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(184, 89, 63, 0.03) 0, transparent 35%);
+  min-height: 100vh;
+}
+
+/* =========================================================================
+   HEADER — matches Colorado Springs civic style with elevated typography
+========================================================================= */
+.cos-bar {
+  background: var(--forest-deep);
+  color: var(--paper);
+  padding: 8px 0;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+.cos-bar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.cos-bar a { color: var(--paper); text-decoration: none; opacity: 0.9; }
+.cos-bar a:hover { opacity: 1; text-decoration: underline; }
+
+header.site-header { display: block; }
+.site-header .site {
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  padding: 18px 0;
+}
+.site-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.logo-mark svg {
+  width: 56px;
+  height: 56px;
+}
+.logo-text {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--forest-deep);
+}
+.logo-text small {
+  display: block;
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 3px;
+}
+.crumb {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-left: auto;
+  font-weight: 500;
+}
+.crumb a { color: var(--forest-mid); text-decoration: none; }
+.crumb a:hover { text-decoration: underline; }
+.crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+/* =========================================================================
+   HERO
+========================================================================= */
+.hero {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 56px 24px 36px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: end;
+  border-bottom: 2px solid var(--forest-deep);
+}
+.hero-tag {
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 14px;
+}
+.hero h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(36px, 6vw, 68px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--forest-deep);
+  margin-bottom: 20px;
+}
+.hero h1 em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--rust);
+}
+.hero-lede {
+  font-size: 18px;
+  color: var(--ink-soft);
+  max-width: 640px;
+  line-height: 1.55;
+}
+.hero-lede a { color: var(--forest-mid); }
+.hero-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-family: var(--display);
+  text-align: right;
+}
+.stat {
+  font-size: 14px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.stat strong {
+  display: block;
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--forest-deep);
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+
+/* Decorative ornament */
+.ornament {
+  text-align: center;
+  margin: 24px 0;
+  color: var(--rule);
+}
+.ornament svg { width: 80px; height: 24px; }
+
+/* =========================================================================
+   FILTERS — sticky bar with rich controls
+========================================================================= */
+.filter-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  box-shadow: 0 4px 20px rgba(31, 77, 44, 0.04);
+  padding: 16px 0 14px;
+  margin-top: 8px;
+}
+.filter-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.filter-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-row + .filter-row { margin-top: 10px; }
+
+.search-box {
+  flex: 1;
+  min-width: 240px;
+  position: relative;
+}
+.search-box input {
+  width: 100%;
+  padding: 10px 14px 10px 40px;
+  border: 1.5px solid var(--rule);
+  border-radius: 6px;
+  background: white;
+  font-family: var(--body);
+  font-size: 15px;
+  color: var(--ink);
+  transition: border-color 0.15s;
+}
+.search-box input:focus {
+  outline: none;
+  border-color: var(--forest-mid);
+}
+.search-box::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A8275' stroke-width='2'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.pill-group {
+  display: inline-flex;
+  background: var(--paper-dim);
+  border-radius: 20px;
+  padding: 3px;
+  gap: 0;
+}
+.pill {
+  background: transparent;
+  border: none;
+  padding: 7px 14px;
+  font-family: var(--body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  border-radius: 18px;
+  transition: all 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.pill:hover { color: var(--ink); }
+.pill.active {
+  background: var(--forest-deep);
+  color: var(--paper);
+  box-shadow: 0 1px 2px rgba(31,77,44,0.2);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px 7px 9px;
+  background: transparent;
+  border: 1.5px solid var(--rule);
+  border-radius: 18px;
+  font-family: var(--body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.toggle:hover { border-color: var(--forest-mid); color: var(--ink); }
+.toggle .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--paper-dim);
+  border: 1.5px solid var(--rule);
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.toggle.active {
+  background: var(--forest-pale);
+  border-color: var(--forest-mid);
+  color: var(--forest-deep);
+}
+.toggle.active .dot {
+  background: var(--forest-deep);
+  border-color: var(--forest-deep);
+}
+.toggle.active.accent {
+  background: #FBE3D9;
+  border-color: var(--rust);
+  color: var(--rust);
+}
+.toggle.active.accent .dot { background: var(--rust); border-color: var(--rust); }
+
+.filter-label {
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-right: 4px;
+}
+
+.results-count {
+  margin-left: auto;
+  font-family: var(--display);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-faint);
+}
+.clear-all {
+  background: none;
+  border: none;
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--rust);
+  cursor: pointer;
+  padding: 4px 8px;
+  text-decoration: underline;
+}
+.clear-all:hover { color: var(--ink); }
+
+/* =========================================================================
+   MAIN — card grid
+========================================================================= */
+main { max-width: 1280px; margin: 0 auto; padding: 28px 24px 60px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 20px 20px 18px;
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+}
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--forest-mid);
+  box-shadow: 0 8px 24px rgba(31,77,44,0.10);
+}
+.card-head {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+.card-illust {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--paper-shadow);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-illust svg {
+  width: 52px;
+  height: 52px;
+}
+.card-name-block { flex: 1; min-width: 0; }
+.card h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.card .sci {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.tag {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: var(--paper-dim);
+  color: var(--ink-soft);
+}
+.tag.city { background: var(--forest-deep); color: var(--paper); }
+.tag.private { background: var(--gold); color: var(--ink); }
+.tag.both { background: var(--rust); color: var(--paper); }
+.tag.native { background: #45602F; color: var(--paper); }
+.tag.best { background: var(--highlight); color: var(--rust); border: 1px solid var(--rust); }
+.tag.fruit { background: var(--rust); color: var(--paper); }
+.tag.wildlife { background: #5F4525; color: var(--paper); }
+.tag.shrub { background: var(--shrub); color: var(--paper); }
+
+.card-blurb {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  flex: 1;
+  margin-bottom: 14px;
+}
+
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  font-size: 12px;
+  color: var(--ink-faint);
+  border-top: 1px solid var(--paper-dim);
+  padding-top: 12px;
+  margin-top: auto;
+}
+.card-meta strong {
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.empty {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--ink-faint);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 18px;
+}
+
+/* =========================================================================
+   MODAL — tree detail
+========================================================================= */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.55);
+  z-index: 100;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 5vh 20px;
+  overflow-y: auto;
+  backdrop-filter: blur(2px);
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: var(--paper);
+  max-width: 760px;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  position: relative;
+  margin-bottom: 5vh;
+}
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--paper-dim);
+  border: none;
+  font-size: 20px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: background 0.15s;
+}
+.modal-close:hover { background: var(--rust); color: var(--paper); }
+.modal-head {
+  padding: 36px 36px 20px;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.modal-illust {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid var(--paper-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-illust svg { width: 80px; height: 80px; }
+.modal h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--forest-deep);
+  margin-bottom: 4px;
+  padding-right: 32px;
+}
+.modal .modal-sci {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink-faint);
+  margin-bottom: 12px;
+}
+.modal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+.modal-blurb {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.modal-body { padding: 28px 36px 36px; }
+.section-h {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--rust);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--paper-shadow);
+}
+.section-h:not(:first-child) { margin-top: 28px; }
+.facts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px 22px;
+}
+.fact { font-size: 14px; }
+.fact .lbl {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  display: block;
+  margin-bottom: 2px;
+}
+.fact .val { color: var(--ink); font-weight: 500; }
+.list-tight { list-style: none; }
+.list-tight li {
+  padding: 5px 0 5px 16px;
+  position: relative;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.list-tight li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 13px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--rust);
+}
+.practical-box {
+  background: linear-gradient(135deg, #FFF9E6, var(--highlight));
+  border-left: 3px solid var(--gold);
+  padding: 14px 18px;
+  border-radius: 0 4px 4px 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  font-style: italic;
+}
+.howto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.howto {
+  background: var(--paper-dim);
+  padding: 12px 14px;
+  border-radius: 4px;
+}
+.howto .howto-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--forest-deep);
+  margin-bottom: 4px;
+}
+.howto .howto-val { font-size: 13.5px; line-height: 1.45; color: var(--ink); }
+
+.cost-display {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-top: 6px;
+}
+.cost-range {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--forest-deep);
+  letter-spacing: -0.01em;
+}
+.cost-detail {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+}
+
+/* =========================================================================
+   RECOMMEND-A-TREE SECTION
+========================================================================= */
+.recommend {
+  background: var(--forest-deep);
+  color: var(--paper);
+  padding: 60px 0;
+  margin-top: 60px;
+}
+.recommend-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 56px;
+  align-items: start;
+}
+.recommend h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 38px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+.recommend h2 em { font-style: italic; color: #E5C485; }
+.recommend p {
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.92;
+  margin-bottom: 12px;
+}
+.recommend a { color: #E5C485; }
+.form-card {
+  background: var(--paper);
+  color: var(--ink);
+  padding: 28px 32px 32px;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+}
+.form-card h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--forest-deep);
+  margin-bottom: 6px;
+}
+.form-card .form-help {
+  font-size: 13.5px;
+  color: var(--ink-faint);
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.field { margin-bottom: 14px; }
+.field label,
+.field .field-label-text {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 5px;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--rule);
+  border-radius: 4px;
+  font-family: var(--body);
+  font-size: 14px;
+  color: var(--ink);
+  background: white;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--forest-mid);
+}
+.field textarea { min-height: 100px; resize: vertical; font-family: var(--body); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 11px 22px;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary {
+  background: var(--forest-deep);
+  color: var(--paper);
+}
+.btn-primary:hover { background: var(--forest-mid); }
+.btn-secondary {
+  background: transparent;
+  color: var(--forest-deep);
+  border: 1.5px solid var(--forest-deep);
+}
+.btn-secondary:hover { background: var(--forest-pale); }
+.btn-tag {
+  background: var(--paper-dim);
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.btn-tag:hover { background: white; border-color: var(--forest-mid); }
+.btn-tag.active { background: var(--forest-pale); border-color: var(--forest-mid); color: var(--forest-deep); }
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--forest-deep);
+  color: var(--paper);
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 200;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* =========================================================================
+   FOOTER
+========================================================================= */
+footer.site {
+  background: var(--paper-dim);
+  border-top: 1px solid var(--rule);
+  padding: 48px 0 36px;
+  margin-top: 0;
+}
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+}
+.footer-block h4 {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--forest-deep);
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+.footer-block p, .footer-block a {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 4px;
+}
+.footer-block a:hover { color: var(--forest-mid); text-decoration: underline; }
+
+.footer-cite {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+/* =========================================================================
+   ACCESSIBILITY — focus indicators, skip link, screen-reader-only,
+   reduced motion preference
+========================================================================= */
+
+/* Visible focus ring for all keyboard-focused elements.
+   Thick + offset so it's clearly perceptible against any background. */
+:focus-visible {
+  outline: 3px solid var(--rust);
+  outline-offset: 2px;
+}
+.pill:focus-visible,
+.toggle:focus-visible {
+  outline: 3px solid var(--rust);
+  outline-offset: 3px;
+}
+.card:focus-visible {
+  outline: 3px solid var(--rust);
+  outline-offset: 4px;
+  border-color: var(--rust);
+}
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--rust);
+  outline-offset: 1px;
+  border-color: var(--forest-mid);
+}
+.btn:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: 0;
+  box-shadow: 0 0 0 6px var(--rust);
+}
+.btn-secondary:focus-visible {
+  outline: 3px solid var(--rust);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* Skip link — hidden until keyboard-focused */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  background: var(--forest-deep);
+  color: var(--paper);
+  padding: 10px 20px;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 4px;
+  transform: translateY(-150%);
+  transition: transform 0.15s;
+}
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 3px solid var(--rust);
+  outline-offset: 2px;
+}
+
+/* Visually hidden but accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Breadcrumb links distinguishable beyond color */
+.crumb a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(46, 110, 63, 0.45);
+}
+.crumb a:hover, .crumb a:focus {
+  text-decoration-color: var(--forest-mid);
+  text-decoration-thickness: 2px;
+}
+
+/* In-flow links underlined */
+.hero-lede a,
+.recommend a,
+.footer-cite a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .skip-link { transition: none; }
+}
+
+/* =========================================================================
+   RESPONSIVE
+========================================================================= */
+@media (max-width: 880px) {
+  .hero { grid-template-columns: 1fr; gap: 28px; }
+  .hero-stats { flex-direction: row; gap: 28px; text-align: left; }
+  .recommend-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .modal-head { grid-template-columns: 1fr; }
+  .modal-illust { margin: 0 auto; }
+  .modal h2 { padding-right: 0; }
+  .field-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .hero { padding: 40px 20px 24px; }
+  .crumb { display: none; }
+  .filter-row { gap: 8px; }
+  .modal-head, .modal-body { padding-left: 20px; padding-right: 20px; }
+}
+
+/* Print */
+@media print {
+  .filter-wrap, .recommend, footer.site { display: none; }
+  .card { break-inside: avoid; box-shadow: none; }
+}
+</style>
+
+<!-- ===================================================================
+     Site header (utility bar + branding)
+=================================================================== -->
+<header class="site-header" role="banner">
+  <div class="cos-bar">
+    <div class="cos-bar-inner">
+      <span><strong>Public Works</strong> &nbsp;·&nbsp; Forestry Division</span>
+      <span><a href="https://coloradosprings.gov/forestry">coloradosprings.gov/forestry</a></span>
+    </div>
+  </div>
+  <div class="site">
+    <div class="site-inner">
+      <a href="#" class="logo-mark" aria-label="Colorado Springs Forestry — Trees Reference home">
+        <!-- Stylized mountain/tree mark -->
+        <svg viewBox="0 0 56 56" fill="none" aria-hidden="true">
+          <circle cx="28" cy="28" r="26" fill="#FAF6EB" stroke="#1F4D2C" stroke-width="2"/>
+          <path d="M28 12 L20 28 L24 28 L18 40 L24 40 L20 46 L36 46 L32 40 L38 40 L32 28 L36 28 Z" fill="#1F4D2C"/>
+          <rect x="26" y="44" width="4" height="6" fill="#7A5230"/>
+        </svg>
+        <span class="logo-text">
+          Trees for Colorado&nbsp;Springs
+          <small>Forestry Reference · Revised 2026</small>
+        </span>
+      </a>
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="https://coloradosprings.gov/">Home</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <a href="https://coloradosprings.gov/forestry">Forestry</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <span aria-current="page">Tree Reference</span>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- ===================================================================
+     Hero
+=================================================================== -->
+<section class="hero">
+  <div>
+    <div class="hero-tag">Field guide & planting reference</div>
+    <h1>What grows here, <em>what bears fruit,</em> and what feeds the forest.</h1>
+    <p class="hero-lede">
+      A merged, filterable reference for trees suitable to Colorado Springs at 6,000 to 7,500 feet.
+      Combines the city's <a href="https://coloradosprings.gov/document/approvedstreettreelist2025.pdf">Approved Street Tree List</a> with curated private-property fruit and native fruit-bearing options.
+      Filter by source, by size, by what fruit they bear, by what they feed.
+      Tap any tree for the full picture: how it grows, what it costs, what it pairs with, what it gives back.
+    </p>
+  </div>
+  <div class="hero-stats" id="hero-stats">
+    <!-- Populated by JS -->
+  </div>
+</section>
+
+<div class="ornament" aria-hidden="true">
+  <svg viewBox="0 0 80 24" fill="none">
+    <line x1="0" y1="12" x2="28" y2="12" stroke="currentColor" stroke-width="1"/>
+    <circle cx="40" cy="12" r="3" fill="currentColor"/>
+    <line x1="52" y1="12" x2="80" y2="12" stroke="currentColor" stroke-width="1"/>
+  </svg>
+</div>
+
+<!-- ===================================================================
+     Filters
+=================================================================== -->
+<div class="filter-wrap">
+  <div class="filter-inner">
+    <div class="filter-row">
+      <div class="search-box">
+        <input type="search" id="search" placeholder="Search by name, scientific name, fruit, or use…" aria-label="Search trees" autocomplete="off">
+      </div>
+      <span class="filter-label" id="list-label">List</span>
+      <div class="pill-group" role="group" aria-labelledby="list-label">
+        <button class="pill active" data-filter="source" data-value="all" aria-pressed="true">All</button>
+        <button class="pill" data-filter="source" data-value="city" aria-pressed="false">City right-of-way</button>
+        <button class="pill" data-filter="source" data-value="private" aria-pressed="false">Private property</button>
+      </div>
+      <span class="filter-label" id="size-label">Size</span>
+      <div class="pill-group" role="group" aria-labelledby="size-label">
+        <button class="pill active" data-filter="size" data-value="all" aria-pressed="true">Any</button>
+        <button class="pill" data-filter="size" data-value="large" aria-pressed="false">Large</button>
+        <button class="pill" data-filter="size" data-value="medium" aria-pressed="false">Medium</button>
+        <button class="pill" data-filter="size" data-value="small" aria-pressed="false">Small</button>
+        <button class="pill" data-filter="size" data-value="shrub" aria-pressed="false">Shrub</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label" id="fruit-label">Fruit</span>
+      <div class="pill-group" role="group" aria-labelledby="fruit-label">
+        <button class="pill active" data-filter="fruit" data-value="all" aria-pressed="true">Any</button>
+        <button class="pill" data-filter="fruit" data-value="edible" aria-pressed="false">Edible (people)</button>
+        <button class="pill" data-filter="fruit" data-value="wildlife" aria-pressed="false">Wildlife</button>
+        <button class="pill" data-filter="fruit" data-value="none" aria-pressed="false">None / ornamental</button>
+      </div>
+      <button class="toggle" data-toggle="native" aria-pressed="false">
+        <span class="dot" aria-hidden="true"></span><span>Native</span>
+      </button>
+      <button class="toggle" data-toggle="selfFertile" aria-pressed="false">
+        <span class="dot" aria-hidden="true"></span><span>Self-fertile (one tree alone)</span>
+      </button>
+      <button class="toggle" data-toggle="powerlines" aria-pressed="false">
+        <span class="dot" aria-hidden="true"></span><span>OK under powerlines</span>
+      </button>
+      <button class="toggle accent" data-toggle="bestValue" aria-pressed="false">
+        <span class="dot" aria-hidden="true"></span><span>Best value</span>
+      </button>
+      <button class="toggle" data-toggle="hasHowTo" aria-pressed="false">
+        <span class="dot" aria-hidden="true"></span><span>Has planting how-to</span>
+      </button>
+      <button class="clear-all" id="clearAll">Reset filters</button>
+      <div class="results-count" id="resultsCount" aria-live="polite" aria-atomic="true"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================================
+     Card grid
+=================================================================== -->
+<h2 class="sr-only" id="catalog-heading">Tree catalog</h2>
+<section aria-labelledby="catalog-heading">
+  <div id="grid" class="grid"></div>
+</section>
+
+<!-- ===================================================================
+     Recommend a tree
+=================================================================== -->
+<section class="recommend" aria-labelledby="recommend-heading">
+  <div class="recommend-inner">
+    <div>
+      <h2 id="recommend-heading">Don't see what you'd plant? <em>Recommend it.</em></h2>
+      <p>This reference is a starting point — not the final list. If you've got a tree that thrives in your yard, a fruit cultivar that's bearing reliably at our altitude, or a native species that should be considered for the city right-of-way, send it in.</p>
+      <p>Recommendations route to <a href="mailto:Forestry.OperationsMain@ColoradoSprings.gov">Forestry.OperationsMain@ColoradoSprings.gov</a>. Not all suggestions become approved trees, but every one informs the conversation.</p>
+      <p style="margin-top: 22px; font-size: 14px; opacity: 0.8;">For accommodation requests or alternate formats of this page, contact the City's Office of Accessibility at <strong>719-385-5169</strong>.</p>
+    </div>
+    <form class="form-card" id="recForm" onsubmit="return submitRec(event)">
+      <h3>Suggest a tree</h3>
+      <p class="form-help">Sends a pre-filled email to City Forestry. You can also copy as text to paste elsewhere.</p>
+      <div class="field-row">
+        <div class="field">
+          <label for="rec-name">Your name (optional)</label>
+          <input type="text" id="rec-name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="rec-zip">ZIP code (optional)</label>
+          <input type="text" id="rec-zip" autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" maxlength="10">
+        </div>
+      </div>
+      <div class="field">
+        <label for="rec-tree">Tree (common name + variety/cultivar)</label>
+        <input type="text" id="rec-tree" placeholder="e.g., Saskatoon serviceberry — Smoky cultivar" required>
+      </div>
+      <div class="field" role="group" aria-labelledby="where-label">
+        <span class="field-label-text" id="where-label">Where would it fit?</span>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+          <button type="button" class="btn-tag" data-where="city" aria-pressed="false">City right-of-way</button>
+          <button type="button" class="btn-tag" data-where="private" aria-pressed="false">Private property</button>
+          <button type="button" class="btn-tag" data-where="parks" aria-pressed="false">Parks / trails</button>
+          <button type="button" class="btn-tag" data-where="schools" aria-pressed="false">Schools / community gardens</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="rec-why">Why this tree?</label>
+        <textarea id="rec-why" placeholder="Has it grown well at your altitude? Fruit, wildlife, shade, fall color, drought-tolerance, or something else? Any nonprofit you'd partner with to tend it?"></textarea>
+      </div>
+      <div class="form-buttons">
+        <button type="submit" class="btn btn-primary">Open in mail app</button>
+        <button type="button" class="btn btn-secondary" onclick="copyRecToClipboard()">Copy as text</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===================================================================
+     Modal
+=================================================================== -->
+<div class="modal-bg" id="modalBg" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close tree details"><span aria-hidden="true">×</span></button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ===================================================================
+     Subscribe block — forestry palette, deep-links to /preferences/
+=================================================================== -->
+<section class="forestry-subscribe" aria-labelledby="forestry-subscribe-heading">
+  <style>
+    .forestry-subscribe {
+      background: var(--forest-deep);
+      color: var(--paper);
+      padding: 56px 0;
+      margin-top: 40px;
+      position: relative;
+    }
+    .forestry-subscribe::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 30% 20%, rgba(74,155,90,0.18) 0, transparent 50%),
+                        radial-gradient(circle at 75% 80%, rgba(176,127,42,0.10) 0, transparent 45%);
+      pointer-events: none;
+    }
+    .forestry-subscribe-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+    }
+    .forestry-subscribe-eyebrow {
+      font: 600 13px/1.2 var(--body);
+      color: var(--forest-pale);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+    }
+    .forestry-subscribe h2 {
+      font-family: var(--display);
+      font-size: clamp(1.6rem, 1.2rem + 1.5vw, 2.1rem);
+      font-weight: 600;
+      line-height: 1.2;
+      margin: 0 0 12px;
+      color: var(--paper);
+    }
+    .forestry-subscribe h2 em {
+      font-style: italic;
+      color: var(--forest-pale);
+    }
+    .forestry-subscribe-deck {
+      font: 400 17px/1.6 var(--body);
+      color: var(--paper);
+      opacity: 0.92;
+      margin: 0 0 24px;
+      max-width: 56ch;
+    }
+    .forestry-subscribe-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: var(--paper);
+      color: var(--forest-deep);
+      font: 700 15px/1 var(--body);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      border-radius: 4px;
+      min-height: 44px;
+      transition: background 150ms ease, transform 150ms ease;
+    }
+    .forestry-subscribe-cta:hover,
+    .forestry-subscribe-cta:focus-visible {
+      background: var(--forest-pale);
+      transform: translateY(-1px);
+    }
+    .forestry-subscribe-cta:focus-visible {
+      outline: 3px solid var(--paper);
+      outline-offset: 2px;
+    }
+    .forestry-subscribe-meta {
+      margin: 16px 0 0;
+      font-size: 13px;
+      color: var(--paper);
+      opacity: 0.72;
+    }
+  </style>
+  <div class="forestry-subscribe-inner">
+    <p class="forestry-subscribe-eyebrow">Stay informed</p>
+    <h2 id="forestry-subscribe-heading">Get forestry updates <em>when they're posted.</em></h2>
+    <p class="forestry-subscribe-deck">
+      Approved Street Tree List revisions, new species, the Grow Shade Together program,
+      and other public Forestry Division notices — emailed to you in plain language with
+      links to the source documents.
+    </p>
+    <a class="forestry-subscribe-cta" href="/preferences/?topic=gov.city.forestry">
+      Subscribe to forestry updates →
+    </a>
+    <p class="forestry-subscribe-meta">
+      No marketing. Unsubscribe any time. <a href="/preferences/" style="color:var(--forest-pale);text-decoration:underline">Manage all subscriptions</a>.
+    </p>
+  </div>
+</section>
+
+<!-- ===================================================================
+     Forestry-specific contact footer (kept; cheetochopsticks footer
+     is added below by the site layout)
+=================================================================== -->
+<footer class="site" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-block">
+      <h4>About this reference</h4>
+      <p>A merged, filterable reference assembled from the City of Colorado Springs Approved Street Tree List (Forestry Division, revised April 2025) and curated private-property fruit and native options.</p>
+      <p style="margin-top: 12px;">Data sources: City Forestry, Heidrich's Colorado Tree Farm Nursery, Phelan Gardens, Rick's Garden Center, Bath Garden Center, CSU Extension Fact Sheet 7.423.</p>
+    </div>
+    <div class="footer-block">
+      <h4>City Forestry</h4>
+      <a href="tel:7193855942">719-385-5942</a>
+      <a href="mailto:Forestry.OperationsMain@ColoradoSprings.gov">Forestry email</a>
+      <a href="https://coloradosprings.gov/forestry">coloradosprings.gov/forestry</a>
+      <a href="https://coloradosprings.gov/GrowShadeTogether">Grow Shade Together</a>
+    </div>
+    <div class="footer-block">
+      <h4>Accessibility</h4>
+      <a href="https://coloradosprings.gov/TitleIIADA">Title II ADA</a>
+      <a href="https://coloradosprings.gov/TitleVILanguageAccess">Language access</a>
+      <a href="tel:7193855169">Office of Accessibility · 719-385-5169</a>
+    </div>
+  </div>
+  <div class="footer-cite">
+    Tree City USA since 1977 · This page is an unofficial supplement to the city's published lists.
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">Copied to clipboard</div>
+
+<!-- ===================================================================
+     SVG sprite — botanical illustrations
+     Loaded from external file via inline injection
+=================================================================== -->
+<svg style="display:none" aria-hidden="true">
+<!-- Botanical illustration sprite — flat field-guide aesthetic
+     All symbols use viewBox 0 0 100 100. Fruit color comes from CSS --fruit.
+     Earth palette: stems #6B4F2F, leaves #4A8B3F, accents #5B7A3D
+-->
+
+<!-- ============= ROUND/OVAL FRUITS ============= -->
+
+<symbol id="fruit-apple" viewBox="0 0 100 100">
+  <path d="M50 22 Q 48 18 52 14" stroke="#6B4F2F" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M52 14 Q 60 12 65 18 Q 60 22 54 20" fill="#5B7A3D"/>
+  <path d="M30 50 Q 25 32 42 28 Q 50 26 58 28 Q 75 32 70 50 Q 72 78 50 82 Q 28 78 30 50 Z" fill="var(--fruit)"/>
+  <path d="M38 38 Q 42 32 48 32" stroke="#FFF" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.55"/>
+</symbol>
+
+<symbol id="fruit-cherry" viewBox="0 0 100 100">
+  <path d="M40 18 Q 38 28 32 38" stroke="#6B4F2F" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M60 18 Q 62 28 68 38" stroke="#6B4F2F" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M40 18 Q 50 14 60 18" stroke="#6B4F2F" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M50 14 L 65 6 Q 70 12 60 16" fill="#5B7A3D"/>
+  <circle cx="32" cy="58" r="20" fill="var(--fruit)"/>
+  <circle cx="68" cy="62" r="22" fill="var(--fruit)"/>
+  <ellipse cx="27" cy="53" rx="4" ry="3" fill="#FFF" opacity="0.45"/>
+  <ellipse cx="63" cy="56" rx="4" ry="3" fill="#FFF" opacity="0.45"/>
+</symbol>
+
+<symbol id="fruit-cherry-small" viewBox="0 0 100 100">
+  <path d="M42 22 Q 40 32 35 42" stroke="#6B4F2F" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M58 22 Q 60 32 65 42" stroke="#6B4F2F" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M42 22 Q 50 18 58 22" stroke="#6B4F2F" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="35" cy="58" r="14" fill="var(--fruit)"/>
+  <circle cx="65" cy="60" r="15" fill="var(--fruit)"/>
+  <circle cx="48" cy="74" r="13" fill="var(--fruit)"/>
+  <ellipse cx="32" cy="55" rx="3" ry="2" fill="#FFF" opacity="0.4"/>
+</symbol>
+
+<symbol id="fruit-plum" viewBox="0 0 100 100">
+  <path d="M50 22 Q 48 18 52 14" stroke="#6B4F2F" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M52 14 Q 62 10 68 16" fill="#5B7A3D"/>
+  <ellipse cx="50" cy="56" rx="22" ry="26" fill="var(--fruit)"/>
+  <path d="M50 30 Q 50 56 50 82" stroke="#000" stroke-width="1" fill="none" opacity="0.25"/>
+  <ellipse cx="42" cy="46" rx="4" ry="6" fill="#FFF" opacity="0.4"/>
+</symbol>
+
+<symbol id="fruit-pear" viewBox="0 0 100 100">
+  <path d="M50 14 Q 48 18 50 24" stroke="#6B4F2F" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M50 14 Q 58 12 62 18" fill="#5B7A3D"/>
+  <path d="M50 24 Q 38 28 36 44 Q 30 60 32 70 Q 36 84 50 86 Q 64 84 68 70 Q 70 60 64 44 Q 62 28 50 24 Z" fill="var(--fruit)"/>
+  <ellipse cx="42" cy="50" rx="3.5" ry="6" fill="#FFF" opacity="0.45"/>
+</symbol>
+
+<symbol id="fruit-peach" viewBox="0 0 100 100">
+  <path d="M50 22 Q 50 18 52 14" stroke="#6B4F2F" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M52 14 Q 60 10 66 16 Q 60 20 54 18" fill="#5B7A3D"/>
+  <circle cx="50" cy="56" r="28" fill="var(--fruit)"/>
+  <path d="M50 30 Q 47 40 50 56 Q 53 72 50 82" stroke="#8C3A1F" stroke-width="1.2" fill="none" opacity="0.5"/>
+  <ellipse cx="40" cy="48" rx="5" ry="7" fill="#FFE4D0" opacity="0.55"/>
+</symbol>
+
+<symbol id="fruit-apricot" viewBox="0 0 100 100">
+  <path d="M50 22 Q 48 18 50 14" stroke="#6B4F2F" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M50 14 Q 58 12 62 18" fill="#5B7A3D"/>
+  <ellipse cx="50" cy="56" rx="24" ry="26" fill="var(--fruit)"/>
+  <path d="M50 30 L 50 82" stroke="#9C5826" stroke-width="1" fill="none" opacity="0.3"/>
+  <ellipse cx="42" cy="46" rx="4" ry="5" fill="#FFE4C0" opacity="0.5"/>
+</symbol>
+
+<!-- ============= CLUSTER FRUITS ============= -->
+
+<symbol id="fruit-serviceberry" viewBox="0 0 100 100">
+  <path d="M50 12 Q 48 30 50 50" stroke="#6B4F2F" stroke-width="1.8" fill="none"/>
+  <path d="M50 22 L 30 32 M 50 32 L 70 38 M 50 44 L 32 52 M 50 50 L 68 58 M 48 60 L 36 70 M 52 60 L 64 72" stroke="#6B4F2F" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <circle cx="28" cy="34" r="7" fill="var(--fruit)"/>
+  <circle cx="72" cy="40" r="7" fill="var(--fruit)"/>
+  <circle cx="30" cy="54" r="7" fill="var(--fruit)"/>
+  <circle cx="70" cy="60" r="7" fill="var(--fruit)"/>
+  <circle cx="34" cy="72" r="7" fill="var(--fruit)"/>
+  <circle cx="66" cy="74" r="7" fill="var(--fruit)"/>
+  <circle cx="50" cy="82" r="7" fill="var(--fruit)"/>
+  <circle cx="28" cy="33" r="2" fill="#FFF" opacity="0.5"/>
+  <circle cx="70" cy="59" r="2" fill="#FFF" opacity="0.5"/>
+</symbol>
+
+<symbol id="fruit-wildplum" viewBox="0 0 100 100">
+  <path d="M50 14 Q 48 30 50 46" stroke="#6B4F2F" stroke-width="1.8" fill="none"/>
+  <path d="M50 26 L 30 36 M 50 38 L 70 46 M 48 50 L 35 62 M 52 52 L 68 64" stroke="#6B4F2F" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="28" cy="40" rx="9" ry="11" fill="var(--fruit)"/>
+  <ellipse cx="72" cy="48" rx="9" ry="11" fill="var(--fruit)"/>
+  <ellipse cx="35" cy="68" rx="9" ry="11" fill="var(--fruit)"/>
+  <ellipse cx="65" cy="72" rx="9" ry="11" fill="var(--fruit)"/>
+  <ellipse cx="50" cy="84" rx="9" ry="10" fill="var(--fruit)"/>
+  <ellipse cx="26" cy="36" rx="2" ry="3" fill="#FFF" opacity="0.45"/>
+</symbol>
+
+<symbol id="fruit-crabapple" viewBox="0 0 100 100">
+  <path d="M30 18 Q 35 35 40 50" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M70 18 Q 65 35 60 50" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 14 Q 50 30 50 48" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <circle cx="30" cy="62" r="11" fill="var(--fruit)"/>
+  <circle cx="50" cy="58" r="11" fill="var(--fruit)"/>
+  <circle cx="70" cy="62" r="11" fill="var(--fruit)"/>
+  <circle cx="40" cy="78" r="11" fill="var(--fruit)"/>
+  <circle cx="62" cy="78" r="11" fill="var(--fruit)"/>
+  <circle cx="28" cy="60" r="2.5" fill="#FFF" opacity="0.45"/>
+  <circle cx="48" cy="56" r="2.5" fill="#FFF" opacity="0.45"/>
+  <circle cx="68" cy="60" r="2.5" fill="#FFF" opacity="0.45"/>
+</symbol>
+
+<symbol id="fruit-currant" viewBox="0 0 100 100">
+  <path d="M50 12 Q 48 36 50 60" stroke="#6B4F2F" stroke-width="1.8" fill="none"/>
+  <path d="M50 18 L 36 22 M 50 26 L 64 30 M 50 36 L 34 42 M 50 44 L 64 48 M 50 54 L 38 60 M 50 60 L 62 68" stroke="#6B4F2F" stroke-width="1.2" fill="none"/>
+  <circle cx="34" cy="22" r="5" fill="var(--fruit)"/>
+  <circle cx="66" cy="30" r="5" fill="var(--fruit)"/>
+  <circle cx="32" cy="42" r="5" fill="var(--fruit)"/>
+  <circle cx="66" cy="48" r="5" fill="var(--fruit)"/>
+  <circle cx="36" cy="60" r="5" fill="var(--fruit)"/>
+  <circle cx="64" cy="68" r="5" fill="var(--fruit)"/>
+  <circle cx="50" cy="76" r="5" fill="var(--fruit)"/>
+</symbol>
+
+<symbol id="fruit-buffaloberry" viewBox="0 0 100 100">
+  <ellipse cx="22" cy="32" rx="14" ry="6" fill="#B8C2A6" transform="rotate(-25 22 32)"/>
+  <ellipse cx="78" cy="32" rx="14" ry="6" fill="#B8C2A6" transform="rotate(25 78 32)"/>
+  <ellipse cx="22" cy="68" rx="14" ry="6" fill="#B8C2A6" transform="rotate(25 22 68)"/>
+  <ellipse cx="78" cy="68" rx="14" ry="6" fill="#B8C2A6" transform="rotate(-25 78 68)"/>
+  <path d="M40 50 Q 50 30 60 50" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <circle cx="40" cy="50" r="7" fill="var(--fruit)"/>
+  <circle cx="50" cy="42" r="7" fill="var(--fruit)"/>
+  <circle cx="60" cy="50" r="7" fill="var(--fruit)"/>
+  <circle cx="50" cy="58" r="7" fill="var(--fruit)"/>
+</symbol>
+
+<!-- ============= GENERIC BERRY CLUSTERS ============= -->
+
+<symbol id="berry-cluster-red" viewBox="0 0 100 100">
+  <path d="M50 14 Q 50 30 50 48" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M30 22 Q 40 32 48 38" stroke="#6B4F2F" stroke-width="1.5" fill="none"/>
+  <path d="M70 22 Q 60 32 52 38" stroke="#6B4F2F" stroke-width="1.5" fill="none"/>
+  <path d="M40 16 Q 30 8 22 14" fill="#5B7A3D"/>
+  <path d="M60 16 Q 70 8 78 14" fill="#5B7A3D"/>
+  <circle cx="30" cy="56" r="9" fill="var(--fruit)"/>
+  <circle cx="50" cy="60" r="10" fill="var(--fruit)"/>
+  <circle cx="70" cy="56" r="9" fill="var(--fruit)"/>
+  <circle cx="40" cy="76" r="9" fill="var(--fruit)"/>
+  <circle cx="60" cy="76" r="9" fill="var(--fruit)"/>
+  <circle cx="50" cy="86" r="8" fill="var(--fruit)"/>
+</symbol>
+
+<symbol id="berry-cluster-orange" viewBox="0 0 100 100">
+  <path d="M50 12 L 50 30" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 18 Q 35 22 25 30" stroke="#6B4F2F" stroke-width="1.5" fill="none"/>
+  <path d="M50 18 Q 65 22 75 30" stroke="#6B4F2F" stroke-width="1.5" fill="none"/>
+  <path d="M40 14 Q 32 6 26 12 Q 32 16 38 14" fill="#5B7A3D"/>
+  <path d="M60 14 Q 68 6 74 12 Q 68 16 62 14" fill="#5B7A3D"/>
+  <circle cx="22" cy="42" r="8" fill="var(--fruit)"/>
+  <circle cx="38" cy="50" r="8" fill="var(--fruit)"/>
+  <circle cx="55" cy="48" r="8" fill="var(--fruit)"/>
+  <circle cx="72" cy="46" r="8" fill="var(--fruit)"/>
+  <circle cx="32" cy="68" r="8" fill="var(--fruit)"/>
+  <circle cx="50" cy="70" r="8" fill="var(--fruit)"/>
+  <circle cx="68" cy="68" r="8" fill="var(--fruit)"/>
+  <circle cx="42" cy="86" r="8" fill="var(--fruit)"/>
+  <circle cx="60" cy="86" r="8" fill="var(--fruit)"/>
+</symbol>
+
+<symbol id="berry-cluster-dark" viewBox="0 0 100 100">
+  <path d="M30 14 Q 35 30 40 46" stroke="#6B4F2F" stroke-width="1.8" fill="none"/>
+  <path d="M70 14 Q 65 30 60 46" stroke="#6B4F2F" stroke-width="1.8" fill="none"/>
+  <path d="M22 18 Q 18 26 24 30" fill="#5B7A3D"/>
+  <path d="M78 18 Q 82 26 76 30" fill="#5B7A3D"/>
+  <circle cx="35" cy="58" r="8" fill="var(--fruit)"/>
+  <circle cx="55" cy="56" r="8" fill="var(--fruit)"/>
+  <circle cx="68" cy="62" r="7" fill="var(--fruit)"/>
+  <circle cx="42" cy="74" r="8" fill="var(--fruit)"/>
+  <circle cx="60" cy="76" r="7" fill="var(--fruit)"/>
+  <circle cx="50" cy="86" r="7" fill="var(--fruit)"/>
+</symbol>
+
+<symbol id="cherry-cluster-dark" viewBox="0 0 100 100">
+  <path d="M50 10 Q 48 26 50 42" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 18 L 36 30 M 50 26 L 64 36 M 50 32 L 36 44 M 50 40 L 64 48" stroke="#6B4F2F" stroke-width="1.4" fill="none"/>
+  <circle cx="32" cy="38" r="8" fill="var(--fruit)"/>
+  <circle cx="68" cy="42" r="8" fill="var(--fruit)"/>
+  <circle cx="32" cy="54" r="8" fill="var(--fruit)"/>
+  <circle cx="68" cy="58" r="8" fill="var(--fruit)"/>
+  <circle cx="50" cy="56" r="9" fill="var(--fruit)"/>
+  <circle cx="40" cy="74" r="8" fill="var(--fruit)"/>
+  <circle cx="60" cy="76" r="8" fill="var(--fruit)"/>
+  <circle cx="50" cy="86" r="7" fill="var(--fruit)"/>
+</symbol>
+
+<!-- ============= FLOWER CLUSTERS ============= -->
+
+<symbol id="flower-cluster-pink" viewBox="0 0 100 100">
+  <path d="M50 16 Q 50 50 50 80" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <g fill="var(--fruit)">
+    <circle cx="28" cy="32" r="10"/>
+    <circle cx="50" cy="26" r="11"/>
+    <circle cx="72" cy="32" r="10"/>
+    <circle cx="32" cy="56" r="10"/>
+    <circle cx="68" cy="56" r="10"/>
+    <circle cx="50" cy="70" r="10"/>
+  </g>
+  <g fill="#FFE5D8">
+    <circle cx="28" cy="32" r="3"/>
+    <circle cx="50" cy="26" r="3.5"/>
+    <circle cx="72" cy="32" r="3"/>
+    <circle cx="32" cy="56" r="3"/>
+    <circle cx="68" cy="56" r="3"/>
+    <circle cx="50" cy="70" r="3"/>
+  </g>
+</symbol>
+
+<symbol id="flower-cluster-white" viewBox="0 0 100 100">
+  <path d="M50 12 Q 50 50 50 86" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <g fill="#FFFEF7" stroke="#D4D0BC" stroke-width="1">
+    <circle cx="28" cy="28" r="8"/>
+    <circle cx="50" cy="22" r="9"/>
+    <circle cx="72" cy="28" r="8"/>
+    <circle cx="22" cy="50" r="8"/>
+    <circle cx="42" cy="50" r="9"/>
+    <circle cx="58" cy="50" r="9"/>
+    <circle cx="78" cy="50" r="8"/>
+    <circle cx="32" cy="72" r="8"/>
+    <circle cx="50" cy="74" r="9"/>
+    <circle cx="68" cy="72" r="8"/>
+  </g>
+  <g fill="#E8C84E">
+    <circle cx="28" cy="28" r="2"/>
+    <circle cx="50" cy="22" r="2.5"/>
+    <circle cx="72" cy="28" r="2"/>
+    <circle cx="22" cy="50" r="2"/>
+    <circle cx="42" cy="50" r="2.5"/>
+    <circle cx="58" cy="50" r="2.5"/>
+    <circle cx="78" cy="50" r="2"/>
+    <circle cx="32" cy="72" r="2"/>
+    <circle cx="50" cy="74" r="2.5"/>
+    <circle cx="68" cy="72" r="2"/>
+  </g>
+</symbol>
+
+<symbol id="flower-cluster-yellow" viewBox="0 0 100 100">
+  <path d="M50 88 Q 50 50 50 14" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 22 L 32 26 M 50 32 L 68 36 M 50 42 L 28 46 M 50 52 L 72 56 M 50 62 L 36 68 M 50 72 L 64 78" stroke="#6B4F2F" stroke-width="1.2" fill="none"/>
+  <g fill="var(--fruit)">
+    <circle cx="30" cy="28" r="6"/>
+    <circle cx="70" cy="38" r="6"/>
+    <circle cx="26" cy="48" r="6"/>
+    <circle cx="74" cy="58" r="6"/>
+    <circle cx="34" cy="70" r="6"/>
+    <circle cx="66" cy="80" r="6"/>
+    <circle cx="50" cy="20" r="5"/>
+    <circle cx="50" cy="40" r="5"/>
+    <circle cx="50" cy="60" r="5"/>
+  </g>
+</symbol>
+
+<symbol id="flower-cluster-cream" viewBox="0 0 100 100">
+  <path d="M50 14 Q 50 50 50 86" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 22 L 32 32 M 50 32 L 68 42 M 50 42 L 30 52 M 50 52 L 70 62 M 50 62 L 34 72" stroke="#6B4F2F" stroke-width="1.2" fill="none"/>
+  <g fill="#F5EDD2" stroke="#D4C8A0" stroke-width="0.8">
+    <circle cx="30" cy="32" r="5"/>
+    <circle cx="70" cy="42" r="5"/>
+    <circle cx="28" cy="52" r="5"/>
+    <circle cx="72" cy="62" r="5"/>
+    <circle cx="32" cy="72" r="5"/>
+    <circle cx="50" cy="22" r="5"/>
+    <circle cx="50" cy="38" r="5"/>
+    <circle cx="50" cy="58" r="5"/>
+    <circle cx="60" cy="76" r="5"/>
+    <circle cx="40" cy="20" r="4"/>
+    <circle cx="60" cy="28" r="4"/>
+  </g>
+</symbol>
+
+<!-- ============= LEAF SHAPES ============= -->
+
+<symbol id="leaf-large" viewBox="0 0 100 100">
+  <!-- Catalpa: large heart-shaped leaf -->
+  <path d="M50 90 L 50 30" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 30 Q 18 38 16 60 Q 18 80 36 86 Q 50 92 50 78 Q 50 92 64 86 Q 82 80 84 60 Q 82 38 50 30 Z" fill="#5B8C42" stroke="#3D6B2E" stroke-width="1.5"/>
+  <path d="M50 30 Q 50 60 50 78 M 50 50 L 30 56 M 50 50 L 70 56 M 50 65 L 34 74 M 50 65 L 66 74" stroke="#3D6B2E" stroke-width="1" fill="none" opacity="0.6"/>
+</symbol>
+
+<symbol id="leaf-elm" viewBox="0 0 100 100">
+  <path d="M16 50 L 80 50" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M82 50 Q 88 50 84 46 L 80 50" fill="#6B4F2F"/>
+  <path d="M16 50 Q 24 24 50 22 Q 76 24 84 50 Q 76 76 50 78 Q 24 76 16 50 Z" fill="#5B8C42" stroke="#3D6B2E" stroke-width="1.5"/>
+  <!-- serrated edge -->
+  <path d="M22 35 L 26 32 L 30 35 M 36 28 L 40 25 L 44 28 M 50 24 L 54 22 L 58 24 M 64 28 L 68 26 L 72 30" stroke="#3D6B2E" stroke-width="1" fill="none"/>
+  <!-- veins -->
+  <path d="M30 38 L 50 50 M 40 32 L 50 50 M 50 25 L 50 50 M 60 28 L 50 50 M 70 34 L 50 50 M 30 64 L 50 50 M 70 64 L 50 50" stroke="#3D6B2E" stroke-width="0.8" opacity="0.5"/>
+</symbol>
+
+<symbol id="leaf-ginkgo" viewBox="0 0 100 100">
+  <!-- Ginkgo fan -->
+  <path d="M50 90 L 50 56" stroke="#6B4F2F" stroke-width="2.5" fill="none"/>
+  <path d="M50 56 Q 16 50 18 28 Q 30 14 50 18 Q 70 14 82 28 Q 84 50 50 56 Z" fill="#C9B845" stroke="#9C8E2E" stroke-width="1.5"/>
+  <path d="M30 22 L 50 56 M 40 18 L 50 56 M 50 16 L 50 56 M 60 18 L 50 56 M 70 22 L 50 56" stroke="#9C8E2E" stroke-width="0.6" opacity="0.6"/>
+  <path d="M50 18 Q 48 30 50 18 Q 52 30 50 18" stroke="#9C8E2E" stroke-width="1" fill="none" opacity="0.4"/>
+  <!-- the central cleft -->
+  <path d="M48 24 L 50 36 L 52 24" stroke="#9C8E2E" stroke-width="1" fill="#9C8E2E" opacity="0.3"/>
+</symbol>
+
+<symbol id="leaf-fern" viewBox="0 0 100 100">
+  <!-- Compound pinnate leaf (honeylocust style) -->
+  <path d="M50 14 L 50 90" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <g fill="#5B8C42" stroke="#3D6B2E" stroke-width="1">
+    <ellipse cx="34" cy="22" rx="10" ry="4" transform="rotate(-25 34 22)"/>
+    <ellipse cx="66" cy="22" rx="10" ry="4" transform="rotate(25 66 22)"/>
+    <ellipse cx="30" cy="34" rx="11" ry="4.5" transform="rotate(-20 30 34)"/>
+    <ellipse cx="70" cy="34" rx="11" ry="4.5" transform="rotate(20 70 34)"/>
+    <ellipse cx="28" cy="48" rx="12" ry="5" transform="rotate(-15 28 48)"/>
+    <ellipse cx="72" cy="48" rx="12" ry="5" transform="rotate(15 72 48)"/>
+    <ellipse cx="30" cy="62" rx="11" ry="4.5" transform="rotate(-15 30 62)"/>
+    <ellipse cx="70" cy="62" rx="11" ry="4.5" transform="rotate(15 70 62)"/>
+    <ellipse cx="34" cy="76" rx="10" ry="4" transform="rotate(-15 34 76)"/>
+    <ellipse cx="66" cy="76" rx="10" ry="4" transform="rotate(15 66 76)"/>
+  </g>
+</symbol>
+
+<symbol id="leaf-heart" viewBox="0 0 100 100">
+  <!-- Linden: heart-shaped leaf -->
+  <path d="M50 90 L 50 36" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 24 Q 30 18 22 32 Q 14 50 28 70 Q 40 84 50 86 Q 60 84 72 70 Q 86 50 78 32 Q 70 18 50 24 Q 50 28 50 30" fill="#5B8C42" stroke="#3D6B2E" stroke-width="1.5"/>
+  <path d="M50 24 L 50 30 M 50 30 Q 35 30 28 38 M 50 30 Q 65 30 72 38" stroke="#3D6B2E" stroke-width="0.8" opacity="0.5"/>
+  <path d="M50 36 L 30 60 M 50 36 L 70 60 M 50 50 L 35 72 M 50 50 L 65 72" stroke="#3D6B2E" stroke-width="0.6" opacity="0.5" fill="none"/>
+</symbol>
+
+<symbol id="leaf-maple" viewBox="0 0 100 100">
+  <!-- Classic 5-lobed maple leaf -->
+  <path d="M50 96 L 50 62" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 62 L 50 6 L 38 24 L 18 18 L 28 36 L 8 44 L 28 56 L 22 76 L 42 64 L 50 84 L 58 64 L 78 76 L 72 56 L 92 44 L 72 36 L 82 18 L 62 24 Z" fill="#D14B2C" stroke="#9C2F1F" stroke-width="1.2"/>
+  <path d="M50 62 L 50 14 M 50 50 L 30 30 M 50 50 L 70 30 M 50 58 L 26 50 M 50 58 L 74 50 M 50 60 L 38 70 M 50 60 L 62 70" stroke="#9C2F1F" stroke-width="0.7" opacity="0.55"/>
+</symbol>
+
+<symbol id="leaf-oak" viewBox="0 0 100 100">
+  <!-- Lobed oak leaf -->
+  <path d="M50 96 L 50 12" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 12 Q 40 14 38 22 Q 24 22 24 32 Q 32 36 36 38 Q 24 42 24 50 Q 32 54 38 54 Q 26 60 28 68 Q 36 70 42 66 Q 38 76 46 80 Q 50 84 50 84 Q 50 84 54 80 Q 62 76 58 66 Q 64 70 72 68 Q 74 60 62 54 Q 68 54 76 50 Q 76 42 64 38 Q 68 36 76 32 Q 76 22 62 22 Q 60 14 50 12 Z" fill="#5B8C42" stroke="#3D6B2E" stroke-width="1.3"/>
+  <path d="M50 12 L 50 84 M 50 28 L 32 28 M 50 28 L 68 28 M 50 46 L 30 46 M 50 46 L 70 46 M 50 64 L 34 66 M 50 64 L 66 66" stroke="#3D6B2E" stroke-width="0.6" opacity="0.5"/>
+</symbol>
+
+<symbol id="leaf-palmate" viewBox="0 0 100 100">
+  <!-- Buckeye: palmate compound, 5 leaflets -->
+  <path d="M50 92 L 50 50" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <g fill="#5B8C42" stroke="#3D6B2E" stroke-width="1">
+    <ellipse cx="50" cy="22" rx="6" ry="20"/>
+    <ellipse cx="22" cy="32" rx="6" ry="20" transform="rotate(-50 22 32)"/>
+    <ellipse cx="78" cy="32" rx="6" ry="20" transform="rotate(50 78 32)"/>
+    <ellipse cx="14" cy="58" rx="5" ry="18" transform="rotate(-80 14 58)"/>
+    <ellipse cx="86" cy="58" rx="5" ry="18" transform="rotate(80 86 58)"/>
+  </g>
+  <circle cx="50" cy="50" r="3" fill="#3D6B2E"/>
+</symbol>
+
+<symbol id="leaf-purple" viewBox="0 0 100 100">
+  <!-- Purple-leaf plum: oval purple leaf -->
+  <path d="M50 90 L 50 28" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 14 Q 28 18 22 36 Q 18 56 32 76 Q 42 86 50 86 Q 58 86 68 76 Q 82 56 78 36 Q 72 18 50 14 Z" fill="#5C2548" stroke="#3D1530" stroke-width="1.3"/>
+  <path d="M50 14 L 50 86 M 50 30 L 28 38 M 50 30 L 72 38 M 50 50 L 26 58 M 50 50 L 74 58 M 50 70 L 36 78 M 50 70 L 64 78" stroke="#9C5085" stroke-width="0.6" opacity="0.45"/>
+</symbol>
+
+<symbol id="leaf-toothed" viewBox="0 0 100 100">
+  <!-- Filbert: toothed oval -->
+  <path d="M50 92 L 50 32" stroke="#6B4F2F" stroke-width="2" fill="none"/>
+  <path d="M50 14 Q 28 16 22 34 Q 18 56 30 76 Q 42 88 50 88 Q 58 88 70 76 Q 82 56 78 34 Q 72 16 50 14 Z" fill="#5B8C42" stroke="#3D6B2E" stroke-width="1.5"/>
+  <!-- serration -->
+  <path d="M22 30 L 24 26 L 26 30 M 30 22 L 32 18 L 34 22 M 38 18 L 40 14 L 42 18 M 46 14 L 48 10 L 50 14 M 54 14 L 56 10 L 58 14 M 62 18 L 64 14 L 66 18 M 70 22 L 72 18 L 74 22 M 76 30 L 78 26 L 80 30" stroke="#3D6B2E" stroke-width="0.8" fill="none"/>
+  <path d="M50 14 L 50 88 M 50 30 L 28 36 M 50 30 L 72 36 M 50 50 L 24 56 M 50 50 L 76 56 M 50 70 L 32 78 M 50 70 L 68 78" stroke="#3D6B2E" stroke-width="0.6" opacity="0.5"/>
+</symbol>
+
+<symbol id="needle-pine" viewBox="0 0 100 100">
+  <!-- Pine: needles + cone -->
+  <ellipse cx="65" cy="62" rx="14" ry="20" fill="#7A4F2A" stroke="#4A2F18" stroke-width="1.2"/>
+  <!-- cone scales -->
+  <path d="M55 50 Q 65 52 75 50 M 53 56 Q 65 58 77 56 M 53 62 Q 65 64 77 62 M 53 68 Q 65 70 77 68 M 55 74 Q 65 76 75 74" stroke="#4A2F18" stroke-width="1" fill="none"/>
+  <!-- needles bundle -->
+  <g stroke="#3D6B2E" stroke-width="2" stroke-linecap="round" fill="none">
+    <line x1="20" y1="26" x2="50" y2="20"/>
+    <line x1="20" y1="34" x2="50" y2="22"/>
+    <line x1="22" y1="42" x2="50" y2="24"/>
+    <line x1="20" y1="20" x2="48" y2="20"/>
+    <line x1="20" y1="14" x2="46" y2="22"/>
+    <line x1="14" y1="42" x2="48" y2="28"/>
+  </g>
+  <circle cx="50" cy="22" r="3" fill="#6B4F2F"/>
+</symbol>
+
+</svg>
+
+<!-- ===================================================================
+     Tree data
+=================================================================== -->
+<script>
+// trees-data.js — Tree database for Colorado Springs at 6,000-7,500 ft
+// Combines the city's Approved Street Tree List (revised April 2025) with
+// curated private-property fruit and native fruit-bearing options.
+
+const TREES = [
+  // ======================================================================
+  // CITY RIGHT-OF-WAY APPROVED — LARGE (>45ft)
+  // ======================================================================
+  {
+    id: 'catalpa', common: 'Catalpa', scientific: 'Catalpa speciosa',
+    source: ['city'], size: 'large', matureSize: '50-70 ft',
+    water: 'low', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-large', fruitColor: '#7DA866',
+    blurb: 'Big-leaved shade tree with showy white flower panicles in early summer. Drops long bean-like seed pods.',
+    practical: 'Large seed pods drop in fall — gathered and used in crafts by some, ignored by most. Cleanup is light raking.',
+    edibleUses: [], wildlifeValue: ['Hummingbirds visit flowers', 'Pods sometimes used by squirrels'],
+    cost: { range: '$$', low: 80, high: 180 }, bestValue: false,
+  },
+  {
+    id: 'elm-hybrid', common: 'Hybrid Elm', scientific: 'Ulmus sp. hybrids',
+    source: ['city'], size: 'large', matureSize: '45-60 ft',
+    water: 'low-med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-elm', fruitColor: '#9DB87D',
+    blurb: 'Disease-resistant modern elm hybrids — vase-shaped silhouette, classic American street tree look.',
+    practical: 'Watch for scale insects in older specimens. Modern hybrids resist Dutch elm disease.',
+    edibleUses: [], wildlifeValue: ['Songbirds nest in canopy'],
+    cost: { range: '$$$', low: 150, high: 280 }, bestValue: false,
+  },
+  {
+    id: 'ginkgo', common: 'Ginkgo (male only)', scientific: 'Ginkgo biloba',
+    source: ['city'], size: 'large', matureSize: '50-80 ft',
+    water: 'med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-ginkgo', fruitColor: '#E6C84A',
+    blurb: 'Living fossil with fan-shaped leaves that turn pure butter-yellow in fall. Plant male cultivars only.',
+    practical: 'Slow growing — but lives 1,000+ years. Female trees produce malodorous seeds; only male cultivars are approved.',
+    edibleUses: [], wildlifeValue: ['Fall color attracts photographers'],
+    cost: { range: '$$$', low: 180, high: 350 }, bestValue: false,
+  },
+  {
+    id: 'hackberry', common: 'Hackberry', scientific: 'Celtis occidentalis',
+    source: ['city'], size: 'large', matureSize: '40-60 ft',
+    water: 'low', powerlines: false, fruit: 'wildlife', native: true,
+    selfFertile: true, illustration: 'berry-cluster-dark', fruitColor: '#5A2E55',
+    blurb: 'Tough native shade tree. Small dark berries in fall feed many bird species. Underused in our region.',
+    practical: 'Drought-tolerant once established. Birds harvest the fruit before it drops. Native — no fuss.',
+    edibleUses: [], wildlifeValue: ['Cedar waxwings, robins, woodpeckers feast on berries through winter', 'Hackberry emperor butterflies use as host plant'],
+    cost: { range: '$$', low: 100, high: 200 }, bestValue: true,
+  },
+  {
+    id: 'honeylocust', common: 'Honeylocust', scientific: 'Gleditsia triacanthos',
+    source: ['city'], size: 'large', matureSize: '45-70 ft',
+    water: 'low', powerlines: false, fruit: 'wildlife', native: true,
+    selfFertile: true, illustration: 'leaf-fern', fruitColor: '#8B6F47',
+    blurb: 'Lacy compound leaves cast dappled shade — grass grows underneath. Modern thornless seedless cultivars are the workhorse.',
+    practical: 'Small leaves require almost no fall raking — they break down on their own. The single best low-care shade tree in the city catalog.',
+    edibleUses: [], wildlifeValue: ['Squirrels and deer eat seed pods (in older non-thornless varieties)'],
+    cost: { range: '$$', low: 120, high: 240 }, bestValue: true,
+  },
+  {
+    id: 'kentucky-coffeetree', common: 'Kentucky Coffeetree', scientific: 'Gymnocladus dioica',
+    source: ['city'], size: 'large', matureSize: '50-75 ft',
+    water: 'low', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-fern', fruitColor: '#7A5C3A',
+    blurb: 'Bold, sculptural winter silhouette and tropical-looking summer foliage. Seedless cultivars available.',
+    practical: 'Slow start, long-lived. Choose seedless cultivars for street planting. Late to leaf out in spring.',
+    edibleUses: [], wildlifeValue: [],
+    cost: { range: '$$$', low: 150, high: 300 }, bestValue: false,
+  },
+  {
+    id: 'linden-american', common: 'American Linden', scientific: 'Tilia americana',
+    source: ['city'], size: 'large', matureSize: '50-80 ft',
+    water: 'med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-heart', fruitColor: '#E5D068',
+    blurb: 'Heart-shaped leaves, fragrant pale-yellow flowers in early summer. A pollinator magnet when in bloom.',
+    practical: 'Not tolerant of road salt — choose carefully if planting near sidewalks where ice melt is used.',
+    edibleUses: ['Linden flower tea (traditional)'], wildlifeValue: ['Bees swarm flowers in June', 'Songbirds nest in canopy'],
+    cost: { range: '$$$', low: 150, high: 280 }, bestValue: false,
+  },
+  {
+    id: 'linden-silver', common: 'Silver Linden', scientific: 'Tilia tomentosa',
+    source: ['city'], size: 'large', matureSize: '50-70 ft',
+    water: 'med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-heart', fruitColor: '#E5D068',
+    blurb: 'Silver-undersided leaves shimmer in wind. More heat-tolerant than American linden.',
+    practical: 'Not tolerant of road salt. Spectacular wind effect in summer storms.',
+    edibleUses: ['Linden flower tea'], wildlifeValue: ['Fragrant flowers attract pollinators'],
+    cost: { range: '$$$', low: 150, high: 280 }, bestValue: false,
+  },
+  {
+    id: 'london-planetree', common: 'London Planetree', scientific: 'Platanus × acerifolia',
+    source: ['city'], size: 'large', matureSize: '50-80 ft',
+    water: 'med-high', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-maple', fruitColor: '#9B7C4F',
+    blurb: 'Camouflage-pattern peeling bark and large maple-like leaves. Iconic urban tree of European capitals.',
+    practical: 'Needs a protected site in our climate — wind and dry air can stress it. Best in courtyards or sheltered corridors.',
+    edibleUses: [], wildlifeValue: [],
+    cost: { range: '$$$', low: 180, high: 320 }, bestValue: false,
+  },
+  {
+    id: 'maple-freeman', common: 'Freeman Maple (Autumn Blaze etc.)', scientific: 'Acer × freemanii',
+    source: ['city'], size: 'large', matureSize: '40-60 ft',
+    water: 'med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-maple', fruitColor: '#D44E2E',
+    blurb: 'Hybrid red × silver maple. Brilliant orange-red fall color, fast growth.',
+    practical: 'Goes chlorotic (yellow leaves) in our alkaline soils — needs occasional iron supplement. Cultivars include Autumn Blaze, Armstrong, Sienna Glen.',
+    edibleUses: [], wildlifeValue: ['Maple seeds eaten by squirrels and finches'],
+    cost: { range: '$$$', low: 180, high: 320 }, bestValue: false,
+  },
+  {
+    id: 'maple-sugar', common: 'Sugar Maple', scientific: 'Acer saccharum',
+    source: ['city'], size: 'large', matureSize: '50-70 ft',
+    water: 'med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-maple', fruitColor: '#D67835',
+    blurb: 'The classic New England fall color tree. Yellow-orange-red autumn show.',
+    practical: 'Chlorotic in alkaline soils — supplement iron occasionally. Not as comfortable here as in the East but workable.',
+    edibleUses: ['Sap can be tapped for syrup (small yields at our latitude)'], wildlifeValue: [],
+    cost: { range: '$$$', low: 180, high: 320 }, bestValue: false,
+  },
+  {
+    id: 'oak-bur', common: 'Bur Oak', scientific: 'Quercus macrocarpa',
+    source: ['city'], size: 'large', matureSize: '60-80 ft',
+    water: 'low', powerlines: false, fruit: 'wildlife', native: true,
+    selfFertile: true, illustration: 'leaf-oak', fruitColor: '#7A5230',
+    blurb: 'Massive prairie native. Grows slowly, lives 300+ years. Largest acorns of any North American oak.',
+    practical: 'Large acorns are a feature, not a flaw — wildlife clears them quickly. The most drought-tolerant oak.',
+    edibleUses: ['Acorns edible after extensive leaching (traditional Indigenous food)'],
+    wildlifeValue: ['Acorns feed deer, turkey, squirrels, blue jays', 'Host to 500+ caterpillar species'],
+    cost: { range: '$$$', low: 180, high: 350 }, bestValue: true,
+  },
+  {
+    id: 'oak-chinkapin', common: 'Chinkapin Oak', scientific: 'Quercus muehlenbergii',
+    source: ['city'], size: 'large', matureSize: '50-70 ft',
+    water: 'low-med', powerlines: false, fruit: 'wildlife', native: true,
+    selfFertile: true, illustration: 'leaf-oak', fruitColor: '#7A5230',
+    blurb: 'Underused native with chestnut-like serrated leaves. Tolerates our alkaline soil better than most oaks.',
+    practical: 'Sweet-tasting acorns — wildlife favorite. Clean leaf drop.',
+    edibleUses: ['Sweetest acorns of any oak — minimal leaching needed'],
+    wildlifeValue: ['Acorns highly preferred by squirrels, turkey, deer'],
+    cost: { range: '$$$', low: 200, high: 380 }, bestValue: true,
+  },
+  {
+    id: 'oak-english', common: 'English Oak', scientific: 'Quercus robur',
+    source: ['city'], size: 'large', matureSize: '40-60 ft',
+    water: 'low-med', powerlines: false, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'leaf-oak', fruitColor: '#7A5230',
+    blurb: 'Long-lived European native — the oak of Sherwood Forest. Holds leaves bronze through winter.',
+    practical: 'Smaller acorns than bur oak, easier cleanup.',
+    edibleUses: [], wildlifeValue: ['Acorns feed deer, turkey, squirrels'],
+    cost: { range: '$$$', low: 180, high: 320 }, bestValue: false,
+  },
+  {
+    id: 'oak-pin', common: 'Pin Oak', scientific: 'Quercus palustris',
+    source: ['city'], size: 'large', matureSize: '50-75 ft',
+    water: 'med', powerlines: false, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'leaf-oak', fruitColor: '#7A5230',
+    blurb: 'Pyramidal silhouette, deep red fall color. Faster growing than most oaks.',
+    practical: 'Strongly chlorotic in alkaline soils — frequent iron supplementation needed. Plant only with eyes open.',
+    edibleUses: [], wildlifeValue: ['Acorns feed wildlife, but leaves persist on tree into winter (less leaf litter)'],
+    cost: { range: '$$', low: 150, high: 260 }, bestValue: false,
+  },
+  {
+    id: 'oak-red', common: 'Red Oak', scientific: 'Quercus rubra',
+    source: ['city'], size: 'large', matureSize: '60-80 ft',
+    water: 'med', powerlines: false, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'leaf-oak', fruitColor: '#7A5230',
+    blurb: 'Fast-growing oak (for an oak) with brilliant red fall color. Iconic Eastern hardwood.',
+    practical: 'More water-needy than bur oak; site accordingly.',
+    edibleUses: [], wildlifeValue: ['Acorns feed deer, turkey, squirrels'],
+    cost: { range: '$$$', low: 180, high: 300 }, bestValue: false,
+  },
+  {
+    id: 'oak-shumard', common: 'Shumard Oak', scientific: 'Quercus shumardii',
+    source: ['city'], size: 'large', matureSize: '50-80 ft',
+    water: 'med', powerlines: false, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'leaf-oak', fruitColor: '#7A5230',
+    blurb: 'Heat-tolerant southern oak. Glossy leaves, scarlet fall color. Tolerates urban conditions well.',
+    practical: 'Adaptable to compact soils, drought, and air pollution. Fine choice for street planting.',
+    edibleUses: [], wildlifeValue: ['Acorns feed birds and mammals'],
+    cost: { range: '$$$', low: 180, high: 300 }, bestValue: true,
+  },
+  {
+    id: 'oak-swamp-white', common: 'Swamp White Oak', scientific: 'Quercus bicolor',
+    source: ['city'], size: 'large', matureSize: '50-70 ft',
+    water: 'low-med', powerlines: false, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'leaf-oak', fruitColor: '#7A5230',
+    blurb: 'Tolerates both wet and dry conditions, with peeling cinnamon-colored bark. Great winter interest.',
+    practical: 'Avoid in extreme high-pH soils. Otherwise tough and adaptable.',
+    edibleUses: [], wildlifeValue: ['Sweet acorns favored by deer, squirrels'],
+    cost: { range: '$$$', low: 180, high: 300 }, bestValue: false,
+  },
+  {
+    id: 'oak-texas-red', common: 'Texas Red Oak', scientific: 'Quercus buckleyi',
+    source: ['city'], size: 'large', matureSize: '30-50 ft',
+    water: 'low', powerlines: false, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'leaf-oak', fruitColor: '#7A5230',
+    blurb: 'Smaller, drought-loving oak. Brilliant red fall color, even in dry years.',
+    practical: 'One of the most drought-tolerant oaks. Excellent for water-wise landscapes.',
+    edibleUses: [], wildlifeValue: ['Acorns feed wildlife'],
+    cost: { range: '$$$', low: 180, high: 300 }, bestValue: true,
+  },
+  {
+    id: 'oak-columnar', common: 'Columnar Oak (Fastigiate)', scientific: "Quercus sp. 'Fastigiata'",
+    source: ['city'], size: 'large', matureSize: '40-60 ft × 15-20 ft',
+    water: 'low-med', powerlines: false, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'leaf-oak', fruitColor: '#7A5230',
+    blurb: 'Narrow upright form for tight spaces. The oak you can plant where a regular oak would never fit.',
+    practical: 'Half the spread of standard oaks. Designed for urban settings.',
+    edibleUses: [], wildlifeValue: ['Acorns feed wildlife'],
+    cost: { range: '$$$$', low: 250, high: 450 }, bestValue: false,
+  },
+  {
+    id: 'ponderosa-pine', common: 'Ponderosa Pine', scientific: 'Pinus ponderosa',
+    source: ['city'], size: 'large', matureSize: '60-80 ft',
+    water: 'low', powerlines: false, fruit: 'wildlife', native: true,
+    selfFertile: true, illustration: 'needle-pine', fruitColor: '#A06F3D',
+    blurb: 'Iconic Front Range native — orange-puzzlepiece bark, vanilla-butterscotch scent in summer heat.',
+    practical: 'Watch for mountain pine beetle (regional risk). Otherwise the lowest-maintenance large evergreen for our region.',
+    edibleUses: ['Pine nuts (small yield from this species)', 'Inner bark traditionally used by Indigenous peoples'],
+    wildlifeValue: ['Seeds eaten by squirrels, nutcrackers, finches', 'Habitat for woodpeckers, owls, songbirds'],
+    cost: { range: '$$', low: 100, high: 280 }, bestValue: true,
+  },
+
+  // ======================================================================
+  // CITY RIGHT-OF-WAY APPROVED — MEDIUM (25-45ft)
+  // ======================================================================
+  {
+    id: 'amur-corktree', common: 'Amur Corktree (male only)', scientific: 'Phellodendron amurense',
+    source: ['city'], size: 'medium', matureSize: '30-45 ft',
+    water: 'low-med', powerlines: 'maybe', fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-fern', fruitColor: '#3F3A2C',
+    blurb: 'Gnarly corky bark and umbrella-shaped crown. Plant male-only cultivars (females are weedy).',
+    practical: 'Corky bark is the showpiece — gets more interesting with age.',
+    edibleUses: [], wildlifeValue: ['Birds use bark crevices'],
+    cost: { range: '$$$', low: 200, high: 350 }, bestValue: false,
+  },
+  {
+    id: 'crabapple-fruitless', common: 'Crabapple (fruitless cultivars)', scientific: 'Malus sp.',
+    source: ['city'], size: 'medium', matureSize: '15-25 ft',
+    water: 'low-med', powerlines: 'maybe', fruit: 'none', native: false,
+    selfFertile: true, illustration: 'flower-cluster-pink', fruitColor: '#E89BB8',
+    blurb: 'Spectacular spring bloom in pink, white, or red. City list permits fruitless cultivars only — Spring Snow is the standard.',
+    practical: 'For fruiting crabapples (heavy bird food), see the private property list — they are excellent if you want them.',
+    edibleUses: [], wildlifeValue: ['Spring bloom is a major pollinator event'],
+    cost: { range: '$$', low: 80, high: 180 }, bestValue: false,
+  },
+  {
+    id: 'golden-raintree', common: 'Golden Raintree', scientific: 'Koelreuteria paniculata',
+    source: ['city'], size: 'medium', matureSize: '25-40 ft',
+    water: 'low', powerlines: 'maybe', fruit: 'none', native: false,
+    selfFertile: true, illustration: 'flower-cluster-yellow', fruitColor: '#F2D24A',
+    blurb: 'Cascading yellow flower panicles in summer, followed by papery lantern seedpods. Unusual and lovely.',
+    practical: 'Drought tolerant once established. The summer-blooming small tree for our region.',
+    edibleUses: [], wildlifeValue: ['Late-summer flowers feed pollinators when little else is blooming'],
+    cost: { range: '$$', low: 100, high: 200 }, bestValue: true,
+  },
+  {
+    id: 'japanese-pagoda', common: 'Japanese Pagoda Tree', scientific: 'Styphnolobium japonicum',
+    source: ['city'], size: 'medium', matureSize: '40-50 ft',
+    water: 'low', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'flower-cluster-cream', fruitColor: '#F5EBC8',
+    blurb: 'Late-summer cream-colored flower panicles when nothing else is blooming. Known as Sophora.',
+    practical: 'Needs a protected site. Slow to establish, then long-lived.',
+    edibleUses: [], wildlifeValue: ['Late-summer flowers feed bees'],
+    cost: { range: '$$$', low: 200, high: 380 }, bestValue: false,
+  },
+  {
+    id: 'japanese-tree-lilac', common: 'Japanese Tree Lilac', scientific: 'Syringa reticulata',
+    source: ['city'], size: 'medium', matureSize: '20-30 ft',
+    water: 'low-med', powerlines: 'maybe', fruit: 'none', native: false,
+    selfFertile: true, illustration: 'flower-cluster-cream', fruitColor: '#F8F2DC',
+    blurb: 'Big creamy-white flower clusters in early summer. The lilac that grew up.',
+    practical: 'Needs a protected site. Honey-scented bloom is the highlight.',
+    edibleUses: [], wildlifeValue: ['Massive pollinator event during bloom'],
+    cost: { range: '$$', low: 100, high: 220 }, bestValue: true,
+  },
+  {
+    id: 'linden-littleleaf', common: 'Littleleaf Linden', scientific: 'Tilia cordata',
+    source: ['city'], size: 'medium', matureSize: '40-50 ft',
+    water: 'med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-heart', fruitColor: '#E5D068',
+    blurb: 'Smaller, neater linden than the American species. Pyramidal when young, rounded with age.',
+    practical: 'Not road-salt tolerant. Fragrant flowers attract crowds of bees in early summer.',
+    edibleUses: ['Linden flower tea'], wildlifeValue: ['Major pollinator forage in June'],
+    cost: { range: '$$', low: 150, high: 280 }, bestValue: false,
+  },
+  {
+    id: 'maple-bigtooth', common: 'Bigtooth Maple', scientific: 'Acer grandidentatum',
+    source: ['city'], size: 'medium', matureSize: '20-35 ft',
+    water: 'low', powerlines: false, fruit: 'none', native: true,
+    selfFertile: true, illustration: 'leaf-maple', fruitColor: '#E14D2E',
+    blurb: 'Native Rocky Mountain maple — sugar maple\'s drought-tolerant western cousin. Brilliant red-orange fall color.',
+    practical: 'Native to Colorado. Drought-tolerant once established. Single-stem form only on city list.',
+    edibleUses: [], wildlifeValue: ['Songbirds use canopy', 'Squirrels eat seeds'],
+    cost: { range: '$$$', low: 150, high: 280 }, bestValue: true,
+  },
+  {
+    id: 'maple-miyabe', common: 'Miyabe / State Street Maple', scientific: 'Acer miyabei',
+    source: ['city'], size: 'medium', matureSize: '40-50 ft',
+    water: 'low-med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-maple', fruitColor: '#E5C13B',
+    blurb: 'Tough urban maple from Japan. Yellow fall color, tolerates poor soils.',
+    practical: 'Better tolerance for our alkaline soils than most maples.',
+    edibleUses: [], wildlifeValue: [],
+    cost: { range: '$$$', low: 180, high: 320 }, bestValue: true,
+  },
+  {
+    id: 'maple-norway', common: 'Norway Maple', scientific: 'Acer platanoides',
+    source: ['city'], size: 'medium', matureSize: '40-50 ft',
+    water: 'med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-maple', fruitColor: '#E5C13B',
+    blurb: 'Dense shade tree with golden-yellow fall color. Heat tolerant.',
+    practical: 'Watch for leaf scorch and aphids. Casts heavy shade — grass struggles underneath.',
+    edibleUses: [], wildlifeValue: [],
+    cost: { range: '$$', low: 120, high: 220 }, bestValue: false,
+  },
+  {
+    id: 'maple-red', common: 'Red Maple', scientific: 'Acer rubrum',
+    source: ['city'], size: 'medium', matureSize: '40-50 ft',
+    water: 'med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-maple', fruitColor: '#D72D1F',
+    blurb: 'Brilliant scarlet fall color. The classic eastern red maple.',
+    practical: 'Strongly chlorotic in alkaline soils — needs ongoing iron supplementation. Plant with eyes open.',
+    edibleUses: [], wildlifeValue: ['Early spring flowers feed bees'],
+    cost: { range: '$$$', low: 150, high: 280 }, bestValue: false,
+  },
+  {
+    id: 'mountain-ash', common: 'Mountain Ash', scientific: 'Sorbus aucuparia',
+    source: ['city'], size: 'medium', matureSize: '20-40 ft',
+    water: 'med', powerlines: false, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'berry-cluster-orange', fruitColor: '#E85A2D',
+    blurb: 'Orange-red berry clusters all winter — a cedar waxwing magnet. White spring bloom, fiery fall color.',
+    practical: 'On the city street list AND a major wildlife food source. The model for "wildlife trees on the right-of-way."',
+    edibleUses: ['Bitter raw — used in jellies and traditional rowan-berry preparations'],
+    wildlifeValue: ['Cedar waxwings strip trees in flocks', 'Robins, finches feed all winter', 'Bears in late fall'],
+    cost: { range: '$$', low: 100, high: 220 }, bestValue: true,
+  },
+  {
+    id: 'ohio-buckeye', common: 'Ohio Buckeye', scientific: 'Aesculus glabra',
+    source: ['city'], size: 'medium', matureSize: '20-40 ft',
+    water: 'med', powerlines: false, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-palmate', fruitColor: '#7A4F2A',
+    blurb: 'Distinctive palmate leaves, creamy spring flower spikes. Glossy "buckeye" seeds in fall.',
+    practical: 'Large seed pods drop in autumn — popular with kids who collect them. Seeds are toxic if eaten.',
+    edibleUses: [], wildlifeValue: ['Squirrels eat seeds (immune to toxin)'],
+    cost: { range: '$$$', low: 180, high: 320 }, bestValue: false,
+  },
+  {
+    id: 'pear-ussurian-fruitless', common: 'Ussurian Pear (fruitless cultivars)', scientific: 'Pyrus ussuriensis',
+    source: ['city'], size: 'medium', matureSize: '25-35 ft',
+    water: 'low-med', powerlines: 'maybe', fruit: 'none', native: false,
+    selfFertile: true, illustration: 'flower-cluster-white', fruitColor: '#FAFAF0',
+    blurb: 'Spectacular white spring bloom. Cultivars Prairie Gem, Burgundy, Mt. Frost are fruitless and city-approved.',
+    practical: 'Watch for fireblight (city flagged this). Fruiting pears go on the private property list.',
+    edibleUses: [], wildlifeValue: ['Spring pollinator forage'],
+    cost: { range: '$$', low: 100, high: 200 }, bestValue: false,
+  },
+  {
+    id: 'pear-callery-fruitless', common: 'Callery Pear (fruitless cultivars)', scientific: 'Pyrus calleryana',
+    source: ['city'], size: 'medium', matureSize: '25-40 ft',
+    water: 'low-med', powerlines: 'maybe', fruit: 'none', native: false,
+    selfFertile: true, illustration: 'flower-cluster-white', fruitColor: '#FAFAF0',
+    blurb: 'White-cloud spring bloom and red-purple fall color. Cultivars Cleveland Select, Chanticleer, Aristocrat, Capital are city-approved.',
+    practical: 'Watch for fireblight. Pyramidal silhouette suits narrow streets.',
+    edibleUses: [], wildlifeValue: ['Spring pollinator forage'],
+    cost: { range: '$$', low: 100, high: 200 }, bestValue: false,
+  },
+  {
+    id: 'turkish-filbert', common: 'Turkish Filbert', scientific: 'Corylus colurna',
+    source: ['city'], size: 'medium', matureSize: '40-50 ft',
+    water: 'low-med', powerlines: false, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'leaf-toothed', fruitColor: '#7E5C36',
+    blurb: 'Pyramidal hazelnut tree — same family as commercial hazelnuts. Drought tolerant once established.',
+    practical: 'Edible nuts but small yield. Often raided by squirrels before you see them.',
+    edibleUses: ['Edible hazelnuts (small)'], wildlifeValue: ['Squirrels harvest nuts'],
+    cost: { range: '$$$', low: 180, high: 320 }, bestValue: false,
+  },
+
+  // ======================================================================
+  // CITY RIGHT-OF-WAY APPROVED — SMALL (<25ft, OK under powerlines)
+  // ======================================================================
+  {
+    id: 'chokecherry-amur', common: 'Amur Chokecherry', scientific: 'Prunus maackii',
+    source: ['city', 'private'], size: 'small', matureSize: '15-25 ft',
+    water: 'low-med', powerlines: true, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'cherry-cluster-dark', fruitColor: '#3A1414',
+    blurb: 'Cinnamon-colored peeling bark, white spring bloom, small black cherries. Already on the city street list.',
+    practical: 'Cherries are bird food first, jelly material second. Persistent through winter as cold-weather forage.',
+    edibleUses: ['Tart and tannic raw — used in jellies, syrups'],
+    wildlifeValue: ['Cedar waxwings, robins, woodpeckers', 'Pollinators in spring bloom'],
+    cost: { range: '$$', low: 80, high: 180 }, bestValue: true,
+  },
+  {
+    id: 'chokecherry-suckerpunch', common: 'Western Chokecherry (Sucker Punch)', scientific: 'Prunus virginiana',
+    source: ['city', 'private'], size: 'small', matureSize: '15-25 ft',
+    water: 'low-med', powerlines: true, fruit: 'wildlife', native: true,
+    selfFertile: true, illustration: 'cherry-cluster-dark', fruitColor: '#350F1A',
+    blurb: 'Native chokecherry in a single-trunk non-suckering form. The classic Front Range hedgerow tree, civilized.',
+    practical: 'Native — built for our soil and climate. Excellent jelly tree if harvested. Birds clean up if not.',
+    edibleUses: ['Famous chokecherry jelly and syrup', 'Traditional Indigenous food (cooked)'],
+    wildlifeValue: ['One of the highest-value native wildlife foods on the Front Range', 'Bears, foxes, coyotes, robins, waxwings'],
+    cost: { range: '$$', low: 80, high: 180 }, bestValue: true,
+  },
+  {
+    id: 'hawthorn-thornless', common: 'Hawthorn (thornless cultivars)', scientific: 'Crataegus sp.',
+    source: ['city', 'private'], size: 'small', matureSize: '15-25 ft',
+    water: 'low-med', powerlines: true, fruit: 'wildlife', native: false,
+    selfFertile: true, illustration: 'berry-cluster-red', fruitColor: '#B82531',
+    blurb: 'White spring bloom, red haws all winter. Wide-spreading horizontal branches.',
+    practical: 'Choose thornless cultivars (Crusader, Inermis). Persistent fruit feeds birds through snow.',
+    edibleUses: ['Haws used in jelly, traditional medicine'],
+    wildlifeValue: ['Songbirds eat haws into winter', 'Spring pollinators'],
+    cost: { range: '$$', low: 80, high: 180 }, bestValue: true,
+  },
+  {
+    id: 'maple-amur', common: 'Amur Maple', scientific: 'Acer ginnala',
+    source: ['city'], size: 'small', matureSize: '15-20 ft',
+    water: 'low-med', powerlines: true, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-maple', fruitColor: '#D63A2E',
+    blurb: 'Small, wide-spreading maple. Reliable scarlet fall color even in dry years.',
+    practical: 'Spreads wider than tall — siting matters. Tough and drought-tolerant.',
+    edibleUses: [], wildlifeValue: ['Seeds eaten by finches'],
+    cost: { range: '$$', low: 80, high: 180 }, bestValue: true,
+  },
+  {
+    id: 'maple-tatarian', common: 'Tatarian Maple', scientific: 'Acer tataricum',
+    source: ['city'], size: 'small', matureSize: '15-20 ft',
+    water: 'low-med', powerlines: true, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-maple', fruitColor: '#D63A2E',
+    blurb: 'Larger leaves than Amur maple. Bright red samaras (winged seeds) in summer.',
+    practical: 'Wide spreading — give room. Multi-stem form is acceptable for landscape, single stem for street.',
+    edibleUses: [], wildlifeValue: [],
+    cost: { range: '$$', low: 80, high: 180 }, bestValue: false,
+  },
+  {
+    id: 'plum-newport', common: 'Newport Plum', scientific: 'Prunus cerasifera',
+    source: ['city'], size: 'small', matureSize: '15-20 ft',
+    water: 'low-med', powerlines: true, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'leaf-purple', fruitColor: '#5A2E55',
+    blurb: 'Purple-leaved ornamental plum. Pink spring flowers; typically fruitless in our climate.',
+    practical: 'Bred for foliage color, not fruit. Adds rare burgundy tone to the streetscape.',
+    edibleUses: [], wildlifeValue: ['Spring bloom feeds pollinators'],
+    cost: { range: '$$', low: 80, high: 160 }, bestValue: false,
+  },
+  {
+    id: 'plum-princess-kay', common: "Princess Kay Plum", scientific: 'Prunus nigra',
+    source: ['city'], size: 'small', matureSize: '15-20 ft',
+    water: 'low-med', powerlines: true, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'flower-cluster-white', fruitColor: '#F2EAD8',
+    blurb: 'Showers of double white spring flowers. Typically fruitless. Canadian-bred for cold hardiness.',
+    practical: 'Pure ornamental. Plant for the spring spectacle.',
+    edibleUses: [], wildlifeValue: ['Spring pollinator event'],
+    cost: { range: '$$', low: 80, high: 160 }, bestValue: false,
+  },
+  {
+    id: 'redbud', common: 'Eastern Redbud (single trunk)', scientific: 'Cercis canadensis',
+    source: ['city'], size: 'small', matureSize: '15-25 ft',
+    water: 'med', powerlines: true, fruit: 'none', native: false,
+    selfFertile: true, illustration: 'flower-cluster-pink', fruitColor: '#D14B7C',
+    blurb: 'Magenta-pink flower clusters bloom directly on bare branches in early spring. Heart-shaped leaves.',
+    practical: 'Needs a protected site. The earliest-blooming small tree on the city list.',
+    edibleUses: ['Flowers are edible — pickled or in salads'], wildlifeValue: ['Early-season pollinator forage'],
+    cost: { range: '$$', low: 100, high: 220 }, bestValue: true,
+  },
+
+  // ======================================================================
+  // PRIVATE PROPERTY — APPLES (Tier 1, the foundation)
+  // ======================================================================
+  {
+    id: 'apple-honeycrisp', common: 'Honeycrisp Apple', scientific: 'Malus domestica "Honeycrisp"',
+    source: ['private'], size: 'medium', matureSize: '12-16 ft (semi-dwarf)',
+    water: 'med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Liberty, Wealthy, or any other apple variety',
+    illustration: 'fruit-apple', fruitColor: '#C4302B',
+    blurb: 'The benchmark home apple — crisp, sweet, popular, and reliable in our climate.',
+    practical: 'Drops fruit in fall — invite the neighbors and share. Pollinators love the spring bloom. A few yellowjackets in late summer mean a healthy yard.',
+    edibleUses: ['Fresh eating', 'Sauce', 'Baking', 'Stores into December'],
+    wildlifeValue: ['Spring pollinators', 'Songbirds + deer for dropped fruit', 'Bears in late season'],
+    cost: { range: '$$', low: 40, high: 90 }, bestValue: true,
+    howTo: {
+      when: 'Bare-root: late March to mid-April. Container: through May or in fall.',
+      spacing: '12-15 ft from other trees',
+      sun: 'Full sun (6+ hours daily)',
+      water: 'Deep weekly first 2-3 years; supplemental water in dry spells thereafter',
+      pruning: 'Yearly winter pruning for shape and fruit production',
+      partner: 'Plant with another apple variety within ~100 ft for cross-pollination',
+    },
+  },
+  {
+    id: 'apple-liberty', common: 'Liberty Apple', scientific: 'Malus domestica "Liberty"',
+    source: ['private'], size: 'medium', matureSize: '12-16 ft',
+    water: 'med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Honeycrisp, Wealthy, or any other apple',
+    illustration: 'fruit-apple', fruitColor: '#A82238',
+    blurb: 'Disease-resistant apple — best choice for low-spray or organic gardens. Tangy and crisp.',
+    practical: 'Resistant to apple scab, fire blight, cedar rust. The "spray nothing" apple. Drops fruit in fall — wildlife and neighbors clean up.',
+    edibleUses: ['Fresh eating', 'Cider', 'Baking'],
+    wildlifeValue: ['Same as Honeycrisp'],
+    cost: { range: '$$', low: 40, high: 80 }, bestValue: true,
+    howTo: { when: 'Spring bare-root or fall container', spacing: '12-15 ft', sun: 'Full sun', water: 'Deep weekly, year 1-3', pruning: 'Annual winter', partner: 'Any other apple variety' },
+  },
+  {
+    id: 'apple-haralson', common: 'Haralson Apple', scientific: 'Malus domestica "Haralson"',
+    source: ['private'], size: 'medium', matureSize: '12-16 ft',
+    water: 'med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Any apple variety blooming at same time',
+    illustration: 'fruit-apple', fruitColor: '#B82B1F',
+    blurb: 'University of Minnesota cold-hardy heirloom. Tart-sweet, excellent keeper.',
+    practical: 'Bred for the Northern Plains. Among the hardiest apples available — laughs at our late frosts.',
+    edibleUses: ['Pies', 'Sauce', 'Long storage'],
+    wildlifeValue: ['Standard apple wildlife profile'],
+    cost: { range: '$$', low: 40, high: 80 }, bestValue: true,
+    howTo: { when: 'Spring bare-root', spacing: '12-15 ft', sun: 'Full sun', water: 'Establishment watering 2-3 yrs', pruning: 'Annual winter', partner: 'Any apple' },
+  },
+  {
+    id: 'apple-sweet16', common: 'Sweet Sixteen Apple', scientific: 'Malus domestica "Sweet Sixteen"',
+    source: ['private'], size: 'medium', matureSize: '12-16 ft',
+    water: 'med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Any apple variety',
+    illustration: 'fruit-apple', fruitColor: '#921F1F',
+    blurb: 'Aromatic, dark-red fruit with sweet-spicy flavor. Stores into December.',
+    practical: 'Distinctive flavor — kids who think they know apples find this surprising.',
+    edibleUses: ['Fresh eating (best)', 'Stores well'],
+    wildlifeValue: ['Standard apple'],
+    cost: { range: '$$', low: 45, high: 85 }, bestValue: false,
+    howTo: { when: 'Spring bare-root', spacing: '12-15 ft', sun: 'Full sun', water: 'Year 1-3 deep weekly', pruning: 'Annual', partner: 'Any apple' },
+  },
+  {
+    id: 'apple-wealthy', common: 'Wealthy Apple', scientific: 'Malus domestica "Wealthy"',
+    source: ['private'], size: 'medium', matureSize: '12-16 ft',
+    water: 'med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Any apple',
+    illustration: 'fruit-apple', fruitColor: '#A82B26',
+    blurb: 'Old-time variety from 1860s Minnesota. Very hardy, early-bearing, multi-purpose.',
+    practical: 'Bears fruit faster than most apples — sometimes in 2-3 years from planting.',
+    edibleUses: ['Pies', 'Sauce', 'Cider', 'Fresh eating'],
+    wildlifeValue: ['Standard apple'],
+    cost: { range: '$$', low: 40, high: 75 }, bestValue: true,
+    howTo: { when: 'Spring bare-root', spacing: '12-15 ft', sun: 'Full sun', water: '1-3 yr establishment', pruning: 'Annual', partner: 'Any apple' },
+  },
+  {
+    id: 'apple-prairie-spy', common: 'Prairie Spy Apple', scientific: 'Malus domestica "Prairie Spy"',
+    source: ['private'], size: 'medium', matureSize: '12-16 ft',
+    water: 'med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Any apple',
+    illustration: 'fruit-apple', fruitColor: '#9C2526',
+    blurb: 'Late-ripening apple — picks in October, stores into spring.',
+    practical: 'The apple you eat in March from your own cellar.',
+    edibleUses: ['Long storage (champion)', 'Baking', 'Fresh eating'],
+    wildlifeValue: ['Standard'],
+    cost: { range: '$$', low: 40, high: 85 }, bestValue: false,
+    howTo: { when: 'Spring bare-root', spacing: '12-15 ft', sun: 'Full sun', water: '1-3 yr establishment', pruning: 'Annual', partner: 'Any apple' },
+  },
+  {
+    id: 'apple-babe-dwarf', common: 'Apple Babe (genetic dwarf)', scientific: 'Malus domestica "Apple Babe"',
+    source: ['private'], size: 'small', matureSize: '6-8 ft',
+    water: 'med', powerlines: true, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Any apple variety',
+    illustration: 'fruit-apple', fruitColor: '#B82B1F',
+    blurb: 'True genetic dwarf — bears full-sized apples on a 6-foot tree. Container-suitable. Kid-height.',
+    practical: 'Children can pick the fruit themselves. Fits any yard. Great for community gardens.',
+    edibleUses: ['Fresh eating', 'All standard apple uses'],
+    wildlifeValue: ['Standard apple'],
+    cost: { range: '$$', low: 50, high: 80 }, bestValue: true,
+    howTo: { when: 'Spring or fall', spacing: '6-8 ft', sun: 'Full sun', water: 'Steady, container or in-ground', pruning: 'Light annual', partner: 'Any apple within 100 ft (neighbor\'s tree counts)' },
+  },
+
+  // ======================================================================
+  // PRIVATE PROPERTY — SOUR / PIE CHERRIES (Tier 1, easy + reliable)
+  // ======================================================================
+  {
+    id: 'cherry-montmorency', common: 'Montmorency Sour Cherry', scientific: 'Prunus cerasus "Montmorency"',
+    source: ['private'], size: 'medium', matureSize: '12-16 ft',
+    water: 'low-med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: true, illustration: 'fruit-cherry', fruitColor: '#D11F2A',
+    blurb: 'The classic pie cherry. Self-fertile (one tree is enough), naturally pest-resistant, the easiest fruit tree most people will ever grow.',
+    practical: 'No partner needed. No spray needed. Birds will share the harvest if you let them. Ladders are optional — semi-dwarf trees stay reachable.',
+    edibleUses: ['Pie filling (the gold standard)', 'Jam', 'Dried cherries', 'Cherry juice'],
+    wildlifeValue: ['Robins, waxwings, orioles compete for fruit', 'Spring pollinators'],
+    cost: { range: '$$', low: 40, high: 75 }, bestValue: true,
+    howTo: { when: 'Spring bare-root or fall container', spacing: '15 ft', sun: 'Full sun', water: 'Deep weekly year 1-3', pruning: 'Light annual winter', partner: 'Self-fertile — one tree is enough' },
+  },
+  {
+    id: 'cherry-northstar', common: 'North Star Sour Cherry (dwarf)', scientific: 'Prunus cerasus "North Star"',
+    source: ['private'], size: 'small', matureSize: '6-8 ft',
+    water: 'low-med', powerlines: true, fruit: 'edible', native: false,
+    selfFertile: true, illustration: 'fruit-cherry', fruitColor: '#C41723',
+    blurb: 'Genetic dwarf sour cherry — a tree kids can pick from without a ladder. Self-fertile.',
+    practical: 'Kid-height harvest, full-sized fruit. Self-fertile, disease-resistant, drought-tolerant. The community-garden cherry.',
+    edibleUses: ['Pie cherries', 'Snacking', 'Jam'],
+    wildlifeValue: ['Songbirds, pollinators'],
+    cost: { range: '$$', low: 45, high: 80 }, bestValue: true,
+    howTo: { when: 'Spring or fall', spacing: '8-10 ft', sun: 'Full sun', water: 'Year 1-3 establishment', pruning: 'Light annual', partner: 'Self-fertile' },
+  },
+  {
+    id: 'cherry-meteor', common: 'Meteor Sour Cherry', scientific: 'Prunus cerasus "Meteor"',
+    source: ['private'], size: 'small', matureSize: '10-14 ft',
+    water: 'low-med', powerlines: true, fruit: 'edible', native: false,
+    selfFertile: true, illustration: 'fruit-cherry', fruitColor: '#D02830',
+    blurb: 'University of Minnesota dwarf sour cherry. Hardy and reliable, like Montmorency but smaller.',
+    practical: 'Self-fertile. Fits where Montmorency would be too big.',
+    edibleUses: ['Pies', 'Preserves', 'Snacking'],
+    wildlifeValue: ['Birds and pollinators'],
+    cost: { range: '$$', low: 40, high: 75 }, bestValue: true,
+    howTo: { when: 'Spring or fall', spacing: '12 ft', sun: 'Full sun', water: 'Establishment watering', pruning: 'Light annual', partner: 'Self-fertile' },
+  },
+  {
+    id: 'cherry-bali', common: "Bali (Evan's) Cherry", scientific: 'Prunus cerasus "Bali"',
+    source: ['private'], size: 'medium', matureSize: '12-14 ft',
+    water: 'low-med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: true, illustration: 'fruit-cherry', fruitColor: '#9D1525',
+    blurb: 'The high-altitude cherry — reportedly hardy to 9,000 ft. Sweeter than Montmorency, eaten fresh.',
+    practical: 'The cherry for foothills sites. Self-fertile, disease-resistant. Sweeter than other sour cherries.',
+    edibleUses: ['Fresh eating', 'Pies', 'Jam'],
+    wildlifeValue: ['Same as Montmorency'],
+    cost: { range: '$$', low: 50, high: 90 }, bestValue: true,
+    howTo: { when: 'Spring bare-root', spacing: '15 ft', sun: 'Full sun', water: 'Modest', pruning: 'Light annual', partner: 'Self-fertile' },
+  },
+
+  // ======================================================================
+  // PRIVATE PROPERTY — SWEET CHERRIES (Tier 2)
+  // ======================================================================
+  {
+    id: 'cherry-stella', common: 'Stella Sweet Cherry', scientific: 'Prunus avium "Stella"',
+    source: ['private'], size: 'medium', matureSize: '15-20 ft',
+    water: 'med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: true, illustration: 'fruit-cherry', fruitColor: '#5C0F1A',
+    blurb: 'Self-fertile sweet cherry. The most reliable sweet cherry for our region.',
+    practical: 'Sweet cherries are riskier here than sour cherries — late frosts can kill blossoms. Site in a protected spot.',
+    edibleUses: ['Fresh eating', 'Preserving'],
+    wildlifeValue: ['Birds compete fiercely for fruit'],
+    cost: { range: '$$', low: 50, high: 100 }, bestValue: false,
+    howTo: { when: 'Spring bare-root', spacing: '20 ft', sun: 'Full sun, sheltered from spring frost', water: 'Steady', pruning: 'Annual', partner: 'Self-fertile' },
+  },
+
+  // ======================================================================
+  // PRIVATE PROPERTY — PLUMS (Tier 1, low-maintenance)
+  // ======================================================================
+  {
+    id: 'plum-mount-royal', common: 'Mount Royal Plum', scientific: 'Prunus domestica "Mount Royal"',
+    source: ['private'], size: 'medium', matureSize: '12-15 ft',
+    water: 'low-med', powerlines: true, fruit: 'edible', native: false,
+    selfFertile: true, illustration: 'fruit-plum', fruitColor: '#3F1C4E',
+    blurb: 'Self-fertile European plum — Canadian-bred for cold. Sweet blue-purple fruit ready off the tree.',
+    practical: 'Plums shrug off the diseases and insects that bother apples and cherries. Self-fertile means one tree is enough.',
+    edibleUses: ['Fresh eating', 'Jam', 'Drying (prune)'],
+    wildlifeValue: ['Foxes, raccoons + birds eat dropped fruit', 'Spring pollinators heavy'],
+    cost: { range: '$$', low: 40, high: 80 }, bestValue: true,
+    howTo: { when: 'Spring or fall', spacing: '15 ft', sun: 'Full sun', water: 'Modest', pruning: 'Light annual', partner: 'Self-fertile' },
+  },
+  {
+    id: 'plum-pipestone', common: 'Pipestone Plum', scientific: 'Prunus "Pipestone"',
+    source: ['private'], size: 'medium', matureSize: '12-15 ft',
+    water: 'low-med', powerlines: true, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Toka, Superior, or other Japanese-American hybrid plum',
+    illustration: 'fruit-plum', fruitColor: '#A11F26',
+    blurb: 'American-Japanese hybrid. Large red plums with sweet yellow flesh. Very cold hardy.',
+    practical: 'Plant with Toka as pollinator. Heavy bearer once established.',
+    edibleUses: ['Fresh eating', 'Jam', 'Pies'],
+    wildlifeValue: ['Pollinators heavy', 'Birds, foxes, raccoons'],
+    cost: { range: '$$', low: 40, high: 80 }, bestValue: true,
+    howTo: { when: 'Spring bare-root', spacing: '15 ft', sun: 'Full sun', water: 'Modest', pruning: 'Light annual', partner: 'Toka (best) or any American-Japanese plum hybrid' },
+  },
+  {
+    id: 'plum-toka', common: 'Toka Plum', scientific: 'Prunus "Toka"',
+    source: ['private'], size: 'medium', matureSize: '12-15 ft',
+    water: 'low-med', powerlines: true, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Pipestone, Superior, or other hybrid plum',
+    illustration: 'fruit-plum', fruitColor: '#6E1A2E',
+    blurb: 'Spicy-fragrant plum. Excellent pollinator for other plums; the matchmaker of the orchard.',
+    practical: 'Often planted as a pollinator with another plum. Fragrant flowers in spring.',
+    edibleUses: ['Fresh eating', 'Jam'],
+    wildlifeValue: ['Heavy pollinator forage'],
+    cost: { range: '$$', low: 40, high: 80 }, bestValue: true,
+    howTo: { when: 'Spring bare-root', spacing: '15 ft', sun: 'Full sun', water: 'Modest', pruning: 'Light annual', partner: 'Pipestone, Superior, or any plum nearby' },
+  },
+  {
+    id: 'plum-stanley', common: 'Stanley Plum', scientific: 'Prunus domestica "Stanley"',
+    source: ['private'], size: 'medium', matureSize: '12-15 ft',
+    water: 'low-med', powerlines: true, fruit: 'edible', native: false,
+    selfFertile: true, illustration: 'fruit-plum', fruitColor: '#2D1140',
+    blurb: 'European prune-plum. Self-fertile. Dries beautifully into prunes.',
+    practical: 'Self-fertile. The drying plum.',
+    edibleUses: ['Drying (prune)', 'Fresh eating', 'Baking'],
+    wildlifeValue: ['Standard plum'],
+    cost: { range: '$$', low: 40, high: 80 }, bestValue: true,
+    howTo: { when: 'Spring or fall', spacing: '15 ft', sun: 'Full sun', water: 'Modest', pruning: 'Light annual', partner: 'Self-fertile' },
+  },
+
+  // ======================================================================
+  // PRIVATE PROPERTY — PEARS (Tier 1, slow but durable)
+  // ======================================================================
+  {
+    id: 'pear-patten', common: 'Patten Pear', scientific: 'Pyrus communis "Patten"',
+    source: ['private'], size: 'large', matureSize: '15-20 ft',
+    water: 'low-med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Ure, Summercrisp, or any other pear',
+    illustration: 'fruit-pear', fruitColor: '#C9B237',
+    blurb: 'Among the hardiest pears. Reliable bearer once established.',
+    practical: 'Pears are slow to bear (5-7 years), then bear for decades. Plant a pair.',
+    edibleUses: ['Fresh eating', 'Canning', 'Drying'],
+    wildlifeValue: ['Bees swarm spring bloom', 'Birds, deer for dropped fruit'],
+    cost: { range: '$$', low: 40, high: 90 }, bestValue: true,
+    howTo: { when: 'Spring bare-root', spacing: '20 ft', sun: 'Full sun', water: 'Modest once established', pruning: 'Annual winter — pears want strong central leader', partner: 'Another pear variety within 100 ft' },
+  },
+  {
+    id: 'pear-ure', common: 'Ure Pear', scientific: 'Pyrus communis "Ure"',
+    source: ['private'], size: 'medium', matureSize: '12-15 ft',
+    water: 'low-med', powerlines: true, fruit: 'edible', native: false,
+    selfFertile: false, pollinator: 'Patten, Summercrisp, or other pear',
+    illustration: 'fruit-pear', fruitColor: '#A38C2E',
+    blurb: 'Bred for the Canadian prairies. Very cold hardy. Smaller than Patten.',
+    practical: 'Smaller stature. Good companion pollinator for Patten.',
+    edibleUses: ['Fresh eating', 'Canning'],
+    wildlifeValue: ['Pollinators, birds'],
+    cost: { range: '$$', low: 45, high: 85 }, bestValue: true,
+    howTo: { when: 'Spring bare-root', spacing: '15 ft', sun: 'Full sun', water: 'Modest', pruning: 'Annual', partner: 'Any pear nearby' },
+  },
+
+  // ======================================================================
+  // PRIVATE PROPERTY — PEACHES (Tier 2 — only the hardiest)
+  // ======================================================================
+  {
+    id: 'peach-reliance', common: 'Reliance Peach', scientific: 'Prunus persica "Reliance"',
+    source: ['private'], size: 'medium', matureSize: '15 ft',
+    water: 'med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: true, illustration: 'fruit-peach', fruitColor: '#E68C3D',
+    blurb: 'The hardiest yellow-fleshed peach. Reportedly bears after −20°F freezes.',
+    practical: 'Peaches are gamblers — late frosts cost a crop in some years. Reliance is the most likely to deliver.',
+    edibleUses: ['Fresh eating', 'Freezing', 'Canning'],
+    wildlifeValue: ['Heavy pollinator bloom'],
+    cost: { range: '$$', low: 50, high: 95 }, bestValue: true,
+    howTo: { when: 'Spring bare-root', spacing: '15 ft', sun: 'Full sun, protected from spring frosts', water: 'Steady', pruning: 'Heavy annual — peaches fruit on new wood', partner: 'Self-fertile' },
+  },
+  {
+    id: 'peach-bonfire', common: 'Bonfire Dwarf Peach', scientific: 'Prunus persica "Bonfire"',
+    source: ['private'], size: 'small', matureSize: '5-6 ft',
+    water: 'med', powerlines: true, fruit: 'edible', native: false,
+    selfFertile: true, illustration: 'fruit-peach', fruitColor: '#D9663B',
+    blurb: 'Burgundy-leaved genetic dwarf peach — ornamental + edible. 5-6 feet at maturity.',
+    practical: 'Container-suitable. Distinctive deep-purple foliage in summer. Kid-friendly height.',
+    edibleUses: ['Fresh eating'],
+    wildlifeValue: ['Spring bloom'],
+    cost: { range: '$$', low: 55, high: 90 }, bestValue: false,
+    howTo: { when: 'Spring or fall', spacing: '6 ft / 24-inch container', sun: 'Full sun', water: 'Steady', pruning: 'Light annual', partner: 'Self-fertile' },
+  },
+
+  // ======================================================================
+  // PRIVATE PROPERTY — APRICOTS (Tier 3 — the gambler)
+  // ======================================================================
+  {
+    id: 'apricot-moorpark', common: 'Moorpark Apricot', scientific: 'Prunus armeniaca "Moorpark"',
+    source: ['private'], size: 'medium', matureSize: '15-20 ft',
+    water: 'low-med', powerlines: false, fruit: 'edible', native: false,
+    selfFertile: true, illustration: 'fruit-apricot', fruitColor: '#E69E40',
+    blurb: 'Self-fertile late-blooming apricot. The "least gambling" of the apricots — but still a gamble.',
+    practical: 'Even Moorpark loses crops to late frosts roughly 1 year in 3. Plant for the tree as much as the fruit. The flowers and foliage are gorgeous in any year.',
+    edibleUses: ['Fresh eating', 'Drying', 'Jam'],
+    wildlifeValue: ['Very early pollinator bloom'],
+    cost: { range: '$$', low: 50, high: 90 }, bestValue: false,
+    howTo: { when: 'Spring bare-root', spacing: '20 ft', sun: 'Full sun, sheltered from north wind', water: 'Modest', pruning: 'Light annual', partner: 'Self-fertile' },
+  },
+
+  // ======================================================================
+  // PRIVATE — NATIVE FRUIT-BEARERS (often the best community choice)
+  // ======================================================================
+  {
+    id: 'serviceberry', common: 'Serviceberry / Saskatoon', scientific: 'Amelanchier alnifolia',
+    source: ['private'], size: 'small', matureSize: '8-20 ft (large shrub or small tree)',
+    water: 'low-med', powerlines: true, fruit: 'edible', native: true,
+    selfFertile: true, illustration: 'fruit-serviceberry', fruitColor: '#3D2B58',
+    blurb: 'Native blueberry-like fruit in June. White spring flowers, brilliant fall color, smooth gray bark. Almost zero maintenance once established.',
+    practical: 'The single best multi-purpose plant on this list. Native, drought-tolerant, kid-height fruit, beautiful all year. Strong candidate for the city street list.',
+    edibleUses: ['Fresh eating (sweet)', 'Pies', 'Pancakes', 'Wine'],
+    wildlifeValue: ['Songbirds compete with humans for fruit', 'Spring pollinators heavy', 'Bears in larger settings'],
+    cost: { range: '$', low: 25, high: 55 }, bestValue: true,
+    howTo: { when: 'Spring or fall', spacing: '10-15 ft', sun: 'Full sun to part shade', water: 'Establishment watering only — drought-tolerant after', pruning: 'Almost none needed', partner: 'Self-fertile' },
+  },
+  {
+    id: 'wild-plum', common: 'Wild Plum (American)', scientific: 'Prunus americana',
+    source: ['private'], size: 'small', matureSize: '10-20 ft',
+    water: 'low-med', powerlines: true, fruit: 'edible', native: true,
+    selfFertile: false, pollinator: 'Other wild plum or any American-Japanese hybrid',
+    illustration: 'fruit-wildplum', fruitColor: '#C0394B',
+    blurb: 'Native thicket-forming plum. Tart-sweet red fruit, white spring bloom. Wildlife corridor in a tree.',
+    practical: 'Suckers to form thickets — feature, not bug, for wildlife habitat. Site in larger lots or as a hedgerow.',
+    edibleUses: ['Jam', 'Jelly', 'Wine', 'Fresh eating (tart)'],
+    wildlifeValue: ['Top-tier native wildlife forage', 'Pollinators heavy in spring', 'Foxes, coyotes, birds, bears'],
+    cost: { range: '$', low: 25, high: 55 }, bestValue: true,
+    howTo: { when: 'Spring bare-root', spacing: '15 ft (will sucker)', sun: 'Full sun', water: 'Drought tolerant after establishment', pruning: 'Optional', partner: 'Another wild plum or hybrid' },
+  },
+  {
+    id: 'pin-cherry', common: 'Pin Cherry', scientific: 'Prunus pensylvanica',
+    source: ['private'], size: 'small', matureSize: '15-30 ft',
+    water: 'low-med', powerlines: true, fruit: 'wildlife', native: true,
+    selfFertile: true, illustration: 'fruit-cherry-small', fruitColor: '#C8202B',
+    blurb: 'Native fast-growing cherry. Bright red small fruits feed migratory songbirds.',
+    practical: 'Faster-growing than most natives. The tree to plant for songbird habitat in 5 years.',
+    edibleUses: ['Jelly (tart, traditional)'],
+    wildlifeValue: ['Migration-season bird food', 'Foxes, coyotes, bears'],
+    cost: { range: '$', low: 25, high: 55 }, bestValue: true,
+    howTo: { when: 'Spring or fall', spacing: '15 ft', sun: 'Full sun', water: 'Drought tolerant', pruning: 'Optional', partner: 'Self-fertile' },
+  },
+  {
+    id: 'native-crabapple', common: 'Native Crabapple', scientific: 'Malus ioensis / Malus fusca',
+    source: ['private'], size: 'small', matureSize: '15-25 ft',
+    water: 'low-med', powerlines: true, fruit: 'wildlife', native: true,
+    selfFertile: true, illustration: 'fruit-crabapple', fruitColor: '#C42B33',
+    blurb: 'Persistent small fruit hangs through winter — top wildlife food. Spring pollinator powerhouse.',
+    practical: 'Cultivars like Prairifire and Adirondack hold fruit on the tree rather than dropping. Addresses the drop-on-sidewalk concern that excludes fruiting crabapples from the street list — these should be considered.',
+    edibleUses: ['Jelly', 'Pickled crabapples'],
+    wildlifeValue: ['#1 winter bird food on this list', 'Cedar waxwings, robins, finches, grosbeaks'],
+    cost: { range: '$$', low: 60, high: 150 }, bestValue: true,
+    howTo: { when: 'Spring or fall', spacing: '15-20 ft', sun: 'Full sun', water: 'Modest', pruning: 'Light annual', partner: 'Self-fertile' },
+  },
+  {
+    id: 'golden-currant', common: 'Golden Currant (shrub)', scientific: 'Ribes aureum',
+    source: ['private'], size: 'shrub', matureSize: '3-6 ft',
+    water: 'low', powerlines: true, fruit: 'edible', native: true,
+    selfFertile: true, illustration: 'fruit-currant', fruitColor: '#E5B83C',
+    blurb: 'Native shrub with fragrant yellow spring flowers and tart juicy berries. Vanilla-clove scent fills the yard.',
+    practical: 'Tiny footprint. Fits any garden. Among the most fragrant native plants on the Front Range.',
+    edibleUses: ['Fresh eating', 'Jelly', 'Pies'],
+    wildlifeValue: ['Pollinators, songbirds, hummingbirds'],
+    cost: { range: '$', low: 20, high: 40 }, bestValue: true,
+    howTo: { when: 'Spring or fall', spacing: '6 ft', sun: 'Full sun', water: 'Drought tolerant', pruning: 'Optional renewal pruning', partner: 'Self-fertile' },
+  },
+  {
+    id: 'buffaloberry', common: 'Buffaloberry (shrub)', scientific: 'Shepherdia argentea',
+    source: ['private'], size: 'shrub', matureSize: '6-18 ft',
+    water: 'low', powerlines: true, fruit: 'edible', native: true,
+    selfFertile: false, pollinator: 'Need male and female plants',
+    illustration: 'fruit-buffaloberry', fruitColor: '#D63E2A',
+    blurb: 'Silver-foliage native with bright red berries. Drought-hardy nitrogen-fixer. Plant a male and female.',
+    practical: 'Nitrogen-fixing — improves soil for nearby plants. Need male + female for fruit. Highest vitamin C of any native fruit.',
+    edibleUses: ['Traditional Indigenous food', 'Jelly', 'Wojapi (sauce)'],
+    wildlifeValue: ['Birds, mule deer, foxes'],
+    cost: { range: '$', low: 25, high: 50 }, bestValue: true,
+    howTo: { when: 'Spring or fall', spacing: '8 ft', sun: 'Full sun', water: 'Drought tolerant', pruning: 'Optional', partner: 'One male per 3-5 females needed' },
+  },
+];
+
+// Make available globally
+if (typeof window !== 'undefined') window.TREES = TREES;
+if (typeof module !== 'undefined') module.exports = TREES;
+
+</script>
+
+<!-- ===================================================================
+     App logic
+=================================================================== -->
+<script>
+// State
+const state = {
+  source: 'all',
+  size: 'all',
+  fruit: 'all',
+  native: false,
+  selfFertile: false,
+  powerlines: false,
+  bestValue: false,
+  hasHowTo: false,
+  search: '',
+};
+const recState = { where: new Set() };
+
+// =============================================================
+// Filtering
+// =============================================================
+function matches(tree) {
+  if (state.source === 'city' && !tree.source.includes('city')) return false;
+  if (state.source === 'private' && !tree.source.includes('private')) return false;
+  if (state.size !== 'all' && tree.size !== state.size) return false;
+  if (state.fruit !== 'all' && tree.fruit !== state.fruit) return false;
+  if (state.native && !tree.native) return false;
+  if (state.selfFertile && !tree.selfFertile) return false;
+  if (state.powerlines && tree.powerlines !== true) return false;
+  if (state.bestValue && !tree.bestValue) return false;
+  if (state.hasHowTo && !tree.howTo) return false;
+  if (state.search) {
+    const q = state.search.toLowerCase();
+    const blob = [
+      tree.common, tree.scientific, tree.blurb, tree.matureSize,
+      ...(tree.edibleUses||[]), ...(tree.wildlifeValue||[]), tree.practical
+    ].filter(Boolean).join(' ').toLowerCase();
+    if (!blob.includes(q)) return false;
+  }
+  return true;
+}
+
+// =============================================================
+// Render
+// =============================================================
+function tagsFor(tree) {
+  const t = [];
+  if (tree.source.length > 1) t.push('<span class="tag both">Both lists</span>');
+  else if (tree.source[0] === 'city') t.push('<span class="tag city">City right-of-way</span>');
+  else t.push('<span class="tag private">Private property</span>');
+  if (tree.native) t.push('<span class="tag native">Native</span>');
+  if (tree.bestValue) t.push('<span class="tag best">★ Best value</span>');
+  if (tree.fruit === 'edible') t.push('<span class="tag fruit">Edible fruit</span>');
+  if (tree.fruit === 'wildlife') t.push('<span class="tag wildlife">Wildlife fruit</span>');
+  if (tree.size === 'shrub') t.push('<span class="tag shrub">Shrub</span>');
+  return t.join('');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function svgUseFor(tree) {
+  const id = tree.illustration || 'leaf-generic';
+  const color = tree.fruitColor || '#4A9B5A';
+  return `<svg viewBox="0 0 100 100" aria-hidden="true" style="--fruit:${color}"><use href="#${id}"></use></svg>`;
+}
+
+function renderCard(tree) {
+  const water = { 'low': 'Low', 'low-med': 'Low-Med', 'med': 'Medium', 'med-high': 'Med-High' }[tree.water] || tree.water;
+  return `
+    <button class="card" onclick="openModal('${tree.id}')">
+      <div class="card-head">
+        <div class="card-illust">${svgUseFor(tree)}</div>
+        <div class="card-name-block">
+          <h3>${escapeHtml(tree.common)}</h3>
+          <div class="sci">${escapeHtml(tree.scientific)}</div>
+        </div>
+      </div>
+      <div class="card-tags">${tagsFor(tree)}</div>
+      <p class="card-blurb">${escapeHtml(tree.blurb)}</p>
+      <div class="card-meta">
+        <div><strong>Size</strong>${escapeHtml(tree.matureSize)}</div>
+        <div><strong>Water</strong>${water}</div>
+        <div><strong>Cost</strong>${tree.cost.range}</div>
+      </div>
+    </button>
+  `;
+}
+
+function renderGrid() {
+  const filtered = window.TREES.filter(matches);
+  const grid = document.getElementById('grid');
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty">No trees match these filters. Try removing a constraint or resetting filters.</div>';
+  } else {
+    grid.innerHTML = filtered.map(renderCard).join('');
+  }
+  document.getElementById('resultsCount').textContent =
+    `Showing ${filtered.length} of ${window.TREES.length} trees`;
+  renderHeroStats();
+}
+
+function renderHeroStats() {
+  const t = window.TREES;
+  const stats = [
+    { num: t.length, label: 'Trees catalogued' },
+    { num: t.filter(x => x.fruit === 'edible').length, label: 'Edible fruit' },
+    { num: t.filter(x => x.native).length, label: 'Colorado native' },
+  ];
+  document.getElementById('hero-stats').innerHTML =
+    stats.map(s => `<div class="stat"><strong>${s.num}</strong>${s.label}</div>`).join('');
+}
+
+// =============================================================
+// Modal — with focus management and trap
+// =============================================================
+let _lastFocusedBeforeModal = null;
+
+function _focusableInModal() {
+  const modal = document.getElementById('modal');
+  return Array.from(modal.querySelectorAll(
+    'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  )).filter(el => !el.disabled && el.offsetParent !== null);
+}
+
+function _trapFocus(e) {
+  if (e.key !== 'Tab') return;
+  const focusables = _focusableInModal();
+  if (focusables.length === 0) return;
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
+}
+
+function openModal(id) {
+  const tree = window.TREES.find(t => t.id === id);
+  if (!tree) return;
+  _lastFocusedBeforeModal = document.activeElement;
+  const water = { 'low': 'Low', 'low-med': 'Low-Med', 'med': 'Medium', 'med-high': 'Med-High' }[tree.water] || tree.water;
+  const powerlines = tree.powerlines === true ? 'Yes' : tree.powerlines === 'maybe' ? 'Maybe' : 'No';
+
+  let howToHtml = '';
+  if (tree.howTo) {
+    const h = tree.howTo;
+    const items = [
+      { l: 'When to plant', v: h.when },
+      { l: 'Spacing', v: h.spacing },
+      { l: 'Sun', v: h.sun },
+      { l: 'Watering', v: h.water },
+      { l: 'Pruning', v: h.pruning },
+      { l: 'Pollination partner', v: h.partner },
+    ].filter(x => x.v);
+    howToHtml = `
+      <h3 class="section-h">How to plant</h3>
+      <div class="howto-grid">
+        ${items.map(i => `<div class="howto"><div class="howto-lbl">${i.l}</div><div class="howto-val">${escapeHtml(i.v)}</div></div>`).join('')}
+      </div>
+    `;
+  }
+
+  let edibleHtml = '';
+  if (tree.edibleUses && tree.edibleUses.length) {
+    edibleHtml = `<h3 class="section-h">For people</h3><ul class="list-tight">${tree.edibleUses.map(u => `<li>${escapeHtml(u)}</li>`).join('')}</ul>`;
+  }
+  let wildlifeHtml = '';
+  if (tree.wildlifeValue && tree.wildlifeValue.length) {
+    wildlifeHtml = `<h3 class="section-h">For wildlife</h3><ul class="list-tight">${tree.wildlifeValue.map(u => `<li>${escapeHtml(u)}</li>`).join('')}</ul>`;
+  }
+
+  const facts = [
+    { l: 'Mature size', v: tree.matureSize },
+    { l: 'Water needs', v: water },
+    { l: 'Under powerlines', v: powerlines },
+    { l: 'Self-fertile', v: tree.selfFertile ? 'Yes — plant alone' : 'No — needs a partner' },
+    { l: 'Native', v: tree.native ? 'Yes (Colorado / Front Range)' : 'No' },
+    { l: 'Source list', v: tree.source.length > 1 ? 'Both city + private' : tree.source[0] === 'city' ? 'City right-of-way' : 'Private property' },
+  ];
+  if (tree.pollinator) facts.push({ l: 'Pollination partner', v: tree.pollinator });
+
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-head">
+      <div class="modal-illust" aria-hidden="true">${svgUseFor(tree)}</div>
+      <div>
+        <h2 id="modalTitle">${escapeHtml(tree.common)}</h2>
+        <div class="modal-sci">${escapeHtml(tree.scientific)}</div>
+        <div class="modal-tags">${tagsFor(tree)}</div>
+        <p class="modal-blurb">${escapeHtml(tree.blurb)}</p>
+      </div>
+    </div>
+    <div class="modal-body">
+      <h3 class="section-h">At a glance</h3>
+      <div class="facts-grid">
+        ${facts.map(f => `<div class="fact"><span class="lbl">${f.l}</span><span class="val">${escapeHtml(f.v)}</span></div>`).join('')}
+      </div>
+      <h3 class="section-h">Cost</h3>
+      <div class="cost-display">
+        <div class="cost-range" aria-label="Cost tier ${tree.cost.range}">${tree.cost.range}</div>
+        <div class="cost-detail">Typical retail: $${tree.cost.low}–$${tree.cost.high} for nursery-grade stock. Bare-root in early spring is the value tier.</div>
+      </div>
+      ${edibleHtml}
+      ${wildlifeHtml}
+      <h3 class="section-h">Practical considerations</h3>
+      <div class="practical-box">${escapeHtml(tree.practical)}</div>
+      ${howToHtml}
+    </div>
+  `;
+  document.getElementById('modalBg').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Move focus to close button after the modal renders
+  setTimeout(() => {
+    document.querySelector('.modal-close')?.focus();
+  }, 50);
+  // Install focus trap while open
+  document.addEventListener('keydown', _trapFocus);
+}
+
+function closeModal() {
+  document.getElementById('modalBg').classList.remove('open');
+  document.body.style.overflow = '';
+  document.removeEventListener('keydown', _trapFocus);
+  // Return focus to whatever opened the modal
+  if (_lastFocusedBeforeModal && typeof _lastFocusedBeforeModal.focus === 'function') {
+    _lastFocusedBeforeModal.focus();
+  }
+  _lastFocusedBeforeModal = null;
+}
+
+document.getElementById('modalBg').addEventListener('click', e => {
+  if (e.target.id === 'modalBg') closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// =============================================================
+// Filter wiring
+// =============================================================
+document.querySelectorAll('.pill').forEach(p => {
+  p.addEventListener('click', () => {
+    const f = p.dataset.filter, v = p.dataset.value;
+    state[f] = v;
+    document.querySelectorAll(`.pill[data-filter="${f}"]`).forEach(x => {
+      const active = x === p;
+      x.classList.toggle('active', active);
+      x.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    renderGrid();
+  });
+});
+document.querySelectorAll('.toggle').forEach(t => {
+  t.addEventListener('click', () => {
+    const k = t.dataset.toggle;
+    state[k] = !state[k];
+    t.classList.toggle('active', state[k]);
+    t.setAttribute('aria-pressed', state[k] ? 'true' : 'false');
+    renderGrid();
+  });
+});
+document.getElementById('search').addEventListener('input', e => {
+  state.search = e.target.value.trim();
+  renderGrid();
+});
+document.getElementById('clearAll').addEventListener('click', () => {
+  state.source = 'all'; state.size = 'all'; state.fruit = 'all';
+  state.native = false; state.selfFertile = false;
+  state.powerlines = false; state.bestValue = false; state.hasHowTo = false;
+  state.search = '';
+  document.querySelectorAll('.pill').forEach(p => {
+    const active = p.dataset.value === 'all';
+    p.classList.toggle('active', active);
+    p.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+  document.querySelectorAll('.toggle').forEach(t => {
+    t.classList.remove('active');
+    t.setAttribute('aria-pressed', 'false');
+  });
+  document.getElementById('search').value = '';
+  renderGrid();
+});
+
+// =============================================================
+// Recommend form
+// =============================================================
+document.querySelectorAll('.btn-tag[data-where]').forEach(b => {
+  b.addEventListener('click', () => {
+    const k = b.dataset.where;
+    if (recState.where.has(k)) {
+      recState.where.delete(k);
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    } else {
+      recState.where.add(k);
+      b.classList.add('active');
+      b.setAttribute('aria-pressed', 'true');
+    }
+  });
+});
+
+function buildRecBody() {
+  const name = document.getElementById('rec-name').value.trim();
+  const zip = document.getElementById('rec-zip').value.trim();
+  const tree = document.getElementById('rec-tree').value.trim();
+  const why = document.getElementById('rec-why').value.trim();
+  const where = [...recState.where].join(', ');
+  return [
+    'Hello City Forestry,',
+    '',
+    `I'd like to recommend the following tree for consideration${where ? ' on the city tree list(s) below' : ''}:`,
+    '',
+    `Tree: ${tree || '(not specified)'}`,
+    where ? `Where it would fit: ${where}` : '',
+    '',
+    why ? `Why this tree:\n${why}` : '',
+    '',
+    name ? `From: ${name}${zip ? ' · ZIP ' + zip : ''}` : (zip ? `ZIP: ${zip}` : ''),
+    '',
+    '— Submitted via the trees-for-cs reference page.'
+  ].filter(l => l !== null && l !== undefined).join('\n');
+}
+
+function submitRec(e) {
+  e.preventDefault();
+  const body = buildRecBody();
+  const subject = 'Tree recommendation for City Forestry consideration';
+  const link = `mailto:Forestry.OperationsMain@ColoradoSprings.gov?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = link;
+  return false;
+}
+
+function copyRecToClipboard() {
+  const text = 'To: Forestry.OperationsMain@ColoradoSprings.gov\nSubject: Tree recommendation for City Forestry consideration\n\n' + buildRecBody();
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Copied — paste into your email app');
+  }).catch(() => {
+    showToast('Could not copy — try Open in mail app');
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// =============================================================
+// Boot
+// =============================================================
+renderGrid();
+</script>
+
+  </main>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     FOOTER — single source of truth, included by site.njk on every page.
+════════════════════════════════════════════════════════════════════ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  .subscribe-block {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    padding: 48px 0;
+    border-top: 1px solid var(--cc-border);
+  }
+  .subscribe-block .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+  .subscribe-block h2 {
+    font-family: var(--cc-serif);
+    margin: 0 0 12px;
+    color: var(--cc-text);
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .subscribe-block .deck {
+    color: var(--cc-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .gov-subscribe { display: flex; flex-direction: column; gap: 12px; }
+  .gov-subscribe label {
+    display: block;
+    font-family: var(--cc-sans);
+    font-size: 1rem;
+    color: var(--cc-text);
+    font-weight: 500;
+  }
+  .gov-subscribe input[type="email"] {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 12px;
+    font: inherit;
+    background: var(--cc-surface2);
+    color: var(--cc-text);
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+    min-height: 44px;
+  }
+  .gov-subscribe input[type="email"]::placeholder { color: var(--cc-quiet); opacity: 1; }
+  .gov-subscribe input[type="email"]:focus {
+    border-color: var(--cc-gold);
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 1px;
+  }
+  .gov-subscribe__consent {
+    font-size: 0.9rem;
+    color: var(--cc-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .gov-subscribe button[type="submit"] {
+    align-self: flex-start;
+    background: var(--cc-gold);
+    color: #0c1220;
+    border: 0;
+    padding: 12px 24px;
+    min-height: 44px;
+    font: 700 .85rem var(--cc-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+  .gov-subscribe button[type="submit"]:hover,
+  .gov-subscribe button[type="submit"]:focus-visible { background: var(--cc-gold-lt); }
+  .gov-subscribe output {
+    display: block;
+    min-height: 1.4em;
+    font-size: 0.95rem;
+    color: var(--cc-muted);
+  }
+</style>
+<section class="subscribe-block" aria-label="Subscribe to updates" data-topic="gov.city.forestry" hidden>
+  <div class="container">
+    <h2>Get forestry updates from Colorado Springs</h2>
+    <p class="deck">When the city publishes new street tree guidelines, approves new species, or updates the Approved Street Tree List, we&#39;ll email you a plain-language summary. No marketing, no partners — just public-record updates.</p>
+
+    <form class="gov-subscribe" novalidate>
+      <label>
+        Email address
+        <input type="email" name="email" required autocomplete="email"
+               placeholder="you@example.com">
+      </label>
+      <p class="gov-subscribe__consent">
+        By subscribing you agree to receive emails about this topic. We&#39;ll send a confirmation link first. Unsubscribe any time. <em>(consent v2026-04-30-v1)</em>
+      </p>
+      <button type="submit">Subscribe</button>
+      <output role="status" aria-live="polite"></output>
+    </form>
+  </div>
+</section>
+
+
+<script>
+(function () {
+  if (window.__govSubscribeInit) return;
+  window.__govSubscribeInit = true;
+
+  // Skip top-level pages and /microsites/shared/* — no agency-specific topic.
+  var SKIP_JURISDICTIONS = { shared: 1 };
+
+  function inferTopicFromUrl() {
+    var parts = location.pathname.split('/').filter(Boolean);
+    // ["microsites", "<jurisdiction>", "<agency>", ...]
+    if (parts[0] !== 'microsites') return '';
+    if (!parts[1] || !parts[2]) return '';
+    if (SKIP_JURISDICTIONS[parts[1]]) return '';
+    return 'gov.' + parts[1] + '.' + parts[2];
+  }
+
+  function attach(host) {
+    // Resolve topic: explicit data-topic wins, else infer from URL.
+    var topic = host.dataset.topic || inferTopicFromUrl();
+    if (!topic) { host.remove(); return; }
+    host.dataset.topic = topic;
+    host.hidden = false;
+
+    var form = host.querySelector('form.gov-subscribe');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    var out = form.querySelector('output');
+    var source = location.pathname.replace(/^\/+/, '');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      out.textContent = 'Submitting…';
+      var email = form.email.value.trim();
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, topic: topic, source: source }),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
+          out.textContent = res.d.message || 'Check your email to confirm.';
+          form.reset();
+        })
+        .catch(function (err) { out.textContent = 'Something went wrong: ' + err.message; });
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('.subscribe-block[data-topic]').forEach(attach);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+
+<footer class="cc-footer" role="contentinfo">
+  <div class="container">
+    <p class="cc-footer-line">
+      &copy; 2026
+      CheetoChopsticks &amp;
+      <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener noreferrer">
+        StorySeed Studios<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      <a href="https://www.storyseedstudios.com/media-category/the-dais/" target="_blank" rel="noopener noreferrer">
+        The Dais<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      El Paso County, Colorado
+      &nbsp;·&nbsp;
+      For informational purposes only.
+      &nbsp;·&nbsp;
+      Open source.
+      &nbsp;·&nbsp;
+      <a href="/preferences/">Manage your subscriptions</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+/* ── Site nav + notifications panel scripts ──────────────────────────
+   Wrapped in an IIFE so locals never leak. The functions onclick handlers
+   call (openNotif, closeNotif, filterNotif) are explicitly attached to
+   `window` so a page's own scripts can't shadow them, and each function
+   is defensive about the DOM possibly being absent on a page that opted
+   out of the layout. */
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  var lastFocus;
+
+  function openNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    lastFocus = document.activeElement;
+    overlay.classList.add('open');
+    overlay.removeAttribute('aria-hidden');
+    panel.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { panel.focus(); }, 50);
+  }
+
+  function closeNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    panel.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  function filterNotif(tier, btn) {
+    document.querySelectorAll('.nf-btn').forEach(function (b) {
+      b.classList.remove('active');
+      b.removeAttribute('aria-pressed');
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    document.querySelectorAll('.notif-item').forEach(function (item) {
+      if (tier === 'all') {
+        item.classList.remove('hidden');
+        item.removeAttribute('aria-hidden');
+      } else {
+        var hide = item.dataset.tier !== tier;
+        item.classList.toggle('hidden', hide);
+        if (hide) item.setAttribute('aria-hidden', 'true');
+        else item.removeAttribute('aria-hidden');
+      }
+    });
+    document.querySelectorAll('.notif-group-label').forEach(function (label) {
+      label.style.display = tier === 'all' ? '' : 'none';
+    });
+  }
+
+  /* Escape closes the panel; Tab stays inside it while it's open. */
+  document.addEventListener('keydown', function (e) {
+    var panel = $('notif-panel');
+    if (!panel) return;
+    if (e.key === 'Escape') { closeNotif(); return; }
+    if (e.key === 'Tab' && panel.classList.contains('open')) {
+      var focusable = panel.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+
+  /* Active nav link on scroll — only runs when the index has the matching anchors. */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['you', 'dashboards', 'people', 'events'];
+  if (typeof IntersectionObserver === 'function' && navLinks.length) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function (l) {
+            var href = l.getAttribute('href') || '';
+            var active = href === '#' + id || href === '/#' + id;
+            l.classList.toggle('active', active);
+            if (active) l.setAttribute('aria-current', 'true');
+            else l.removeAttribute('aria-current');
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach(function (id) {
+      var el = $(id);
+      if (el) observer.observe(el);
+    });
+  }
+
+  /* Expose the click-target functions globally so inline onclick handlers
+     (and any page that needs them) can always reach them by name. */
+  window.openNotif   = openNotif;
+  window.closeNotif  = closeNotif;
+  window.filterNotif = filterNotif;
+})();
+</script>
+
+</body>
+</html>

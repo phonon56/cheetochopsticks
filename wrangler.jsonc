@@ -2,13 +2,28 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cheetochopsticks",
   "compatibility_date": "2026-04-06",
+  "main": "shared/notify/subscribe-worker.js",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "_site"
+    "directory": "_site",
+    "binding": "ASSETS"
   },
-  "compatibility_flags": [
-    "nodejs_compat"
+  "vars": {
+    "PUBLIC_ORIGIN": "https://cheetochopsticks.com",
+    "FROM_ADDRESS":  "notifications@cheetochopsticks.com",
+    "FROM_NAME":     "CheetoChopsticks Notifications",
+    "DEV_MODE":      "0"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "notify",
+      "database_id": "0a6318d4-3be7-4bf0-bdc0-a4fc8dca2813"
+    }
   ]
 }

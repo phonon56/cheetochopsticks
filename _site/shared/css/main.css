@@ -1539,6 +1539,41 @@ h1, h2, h3, h4, h5, h6 {
   transition: all .18s;
 }
 .notif-btn:hover { color: var(--paper); border-color: rgba(255,255,255,.18); }
+
+/* Subscribe link — sits next to Alerts in the nav.
+   Same visual rhythm as .notif-btn but uses the gold accent so it reads
+   as a primary CTA. Contrast: gold #c8a84b on ink #0a0f1a ≈ 11.7:1 (AAA). */
+.subscribe-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  margin-right: 8px;
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  letter-spacing: .06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all .18s;
+  min-height: 32px;
+}
+.subscribe-btn:hover,
+.subscribe-btn:focus-visible {
+  background: var(--gold);
+  color: var(--ink);
+}
+@media (max-width: 600px) {
+  .subscribe-btn span { display: none; }   /* hide label on narrow viewports */
+  .subscribe-btn::before {
+    content: "✉";
+    font-size: 1rem;
+    line-height: 1;
+  }
+}
 .notif-count {
   background: #f87171;
   color: var(--ink);
@@ -1708,7 +1743,76 @@ h1, h2, h3, h4, h5, h6 {
 .dt-wrap:not(.open) { display: none; }
 
 
-/* ── 21. Accessibility & focus ─────────────────────────────── */
+/* ── 22. Subscribe (gov-notify) ───────────────────────────── */
+/* Drop-in subscribe block. The host element supplies data-topic, e.g.:
+     <section class="subscribe-block" data-topic="gov.city.police">…</section>
+   Used by _includes/partials/subscribe.njk. */
+.subscribe-block {
+  background: var(--ink-mid);
+  color: var(--paper);
+  padding: 48px 0;
+  border-top: 1px solid var(--ink-border);
+}
+.subscribe-block .container { max-width: 640px; }
+.subscribe-block h2 {
+  font-family: var(--font-display);
+  margin: 0 0 12px;
+}
+.subscribe-block .deck {
+  color: var(--paper-mid);
+  font-size: 1rem;
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+
+.gov-subscribe { display: flex; flex-direction: column; gap: 12px; }
+.gov-subscribe label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--paper);
+}
+.gov-subscribe input[type="email"] {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px 12px;
+  font: inherit;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-sm);
+}
+.gov-subscribe input[type="email"]:focus-visible {
+  border-color: var(--gold);
+}
+.gov-subscribe__consent {
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+  line-height: 1.5;
+  margin: 0;
+}
+.gov-subscribe button[type="submit"] {
+  align-self: flex-start;
+  background: var(--gold);
+  color: var(--ink);
+  border: 0;
+  padding: 10px 20px;
+  font: 600 0.95rem var(--font-sans);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 150ms var(--ease);
+}
+.gov-subscribe button[type="submit"]:hover { background: var(--gold-light); }
+.gov-subscribe output {
+  display: block;
+  min-height: 1.4em;
+  font-size: 0.9rem;
+  color: var(--paper-mid);
+}
+
+
+/* ── 23. Accessibility & focus ─────────────────────────────── */
 :focus-visible {
   outline: var(--focus-ring);
   outline-offset: 3px;

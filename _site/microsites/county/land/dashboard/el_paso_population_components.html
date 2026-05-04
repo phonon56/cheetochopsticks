@@ -585,11 +585,51 @@
         <a class="nav-link" href="/#events">Events</a>
       </nav>
       <div class="nav-right">
+        <a class="subscribe-btn" href="/preferences/" aria-label="Subscribe to email updates">
+          <span>Subscribe</span>
+        </a>
         <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
           <span>Alerts</span>
           <span class="notif-count" aria-live="polite">11</span>
         </button>
       </div>
+
+<style>
+  /* Subscribe button in the dark nav. Gold border + gold label on dark bg.
+     Contrast: cc-gold (#c8a84b) on cc-bg (#0c1220) = 8.2:1 (AAA). */
+  .subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--cc-gold);
+    border-radius: 4px;
+    padding: 7px 14px;
+    margin-right: 8px;
+    color: var(--cc-gold);
+    font-family: var(--cc-mono);
+    font-size: .75rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .18s, color .18s;
+    min-height: 32px;
+  }
+  .subscribe-btn:hover,
+  .subscribe-btn:focus-visible {
+    background: var(--cc-gold);
+    color: #0c1220;
+  }
+  @media (max-width: 600px) {
+    .subscribe-btn { padding: 7px 10px; }
+    .subscribe-btn span { display: none; }
+    .subscribe-btn::before {
+      content: "✉";
+      font-size: 1rem;
+      line-height: 1;
+    }
+  }
+</style>
     </div>
   </div>
 </header>
@@ -618,7 +658,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
         <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
-        <a class="notif-action" href="microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -627,7 +667,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>Downtown Funding and Records Search</strong> Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</div>
         <div class="notif-meta">Annual adopted budget — C.R.S. 29-1-101 et seq · April 10, 2026</div>
-        <a class="notif-action" href="microsites/downtown/downtown_cs_search_portal_v2_ada.html">Open the search portal <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/downtown/downtown_cs_search_portal_v2_ada.html">Open the search portal <span aria-hidden="true">→</span></a>
       </div>
     </div>
 	  
@@ -636,7 +676,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
         <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35 · April 8, 2026</div>
-        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">Open district audit dashboard <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">Open district audit dashboard <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -645,7 +685,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access their own district's records.</div>
         <div class="notif-meta">EPC Assessor audit · April 2026</div>
-        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">See district audit <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See district audit <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -654,7 +694,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021. No governance docs. No financials. One compliance letter fixes all 30+ simultaneously.</div>
         <div class="notif-meta">Platform audit · April 2026</div>
-        <a class="notif-action" href="microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -665,7 +705,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes, budgets, and audit docs are almost certainly untagged. This is the real HB21-1110 failure — not the homepage.</div>
         <div class="notif-meta">ADA document audit · April 2026</div>
-        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">View ADA analysis <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">View ADA analysis <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -674,7 +714,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it. This is the foundational legal document. Not one district links it publicly.</div>
         <div class="notif-meta">Governance gap · §32-1-202</div>
-        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -683,7 +723,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106. Due to State Auditor by July 31. The clock is running.</div>
         <div class="notif-meta">Governance gap · §32-1-106 · due July 31</div>
-        <a class="notif-action" href="microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -694,7 +734,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records both awaiting reply. Response window is still open.</div>
         <div class="notif-meta">CORA tracker · April 2026</div>
-        <a class="notif-action" href="microsites/shared/requests_tracker_and_military_numbers.html">View tracker <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/shared/requests_tracker_and_military_numbers.html">View tracker <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -703,7 +743,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
         <div class="notif-meta">Compliance analysis · April 2026</div>
-        <a class="notif-action" href="microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -712,7 +752,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
         <div class="notif-meta">New · April 2026</div>
-        <a class="notif-action" href="microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -721,7 +761,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>CSPD Blotter — Weekly History is live.</strong> 271 incidents pulled directly from the live blotter feed, paired with a Poisson 95% confidence band to flag statistical anomalies week to week. Tabs are full APG-pattern keyboard accessible; every chart has an aria-label.</div>
         <div class="notif-meta">New · April 2026 · WCAG 2.1 AA</div>
-        <a class="notif-action" href="microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -730,7 +770,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>Lorson Ranch financial dashboard is live.</strong> Seven cross-pledged metro districts, $94.2M aggregate audited deficit, IGA money flows, and a per-home tax calculator — sourced from 2026 budgets and 2024 audits. Companion plain-language briefing available as a download.</div>
         <div class="notif-meta">New · Special Districts · April 2026</div>
-        <a class="notif-action" href="microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -739,7 +779,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>CBI Missing Persons form — accessible rebuild is live.</strong> Resolves all seven critical/serious findings from the ADA audit: skip link, live regions, focus management, EN/ES localization, real-time validation messaging. Drops into the existing Drupal Webform infrastructure with optional Claude API routing.</div>
         <div class="notif-meta">New · State · April 2026 · WCAG 2.1 AA</div>
-        <a class="notif-action" href="microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -748,7 +788,7 @@
       <div class="notif-body">
         <div class="notif-text"><strong>LexisNexis ADAM Program dashboard — accessible rebuild is live.</strong> Audit and reference rebuild of the missing-children dashboard: APG-pattern tabs with roving tabindex and full keyboard nav, solid amber focus rings (3:1 against any surface), darker success-green for AA contrast, and "View Poster" placeholders converted from dead anchors to real buttons.</div>
         <div class="notif-meta">New · Private Sector · April 2026 · WCAG 2.1 AA</div>
-        <a class="notif-action" href="microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -998,6 +1038,174 @@ new Chart(document.getElementById('chartBirths'),{
   <!-- ═══════════════════════════════════════════════════════════════════
      FOOTER — single source of truth, included by site.njk on every page.
 ════════════════════════════════════════════════════════════════════ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  .subscribe-block {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    padding: 48px 0;
+    border-top: 1px solid var(--cc-border);
+  }
+  .subscribe-block .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+  .subscribe-block h2 {
+    font-family: var(--cc-serif);
+    margin: 0 0 12px;
+    color: var(--cc-text);
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .subscribe-block .deck {
+    color: var(--cc-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .gov-subscribe { display: flex; flex-direction: column; gap: 12px; }
+  .gov-subscribe label {
+    display: block;
+    font-family: var(--cc-sans);
+    font-size: 1rem;
+    color: var(--cc-text);
+    font-weight: 500;
+  }
+  .gov-subscribe input[type="email"] {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 12px;
+    font: inherit;
+    background: var(--cc-surface2);
+    color: var(--cc-text);
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+    min-height: 44px;
+  }
+  .gov-subscribe input[type="email"]::placeholder { color: var(--cc-quiet); opacity: 1; }
+  .gov-subscribe input[type="email"]:focus {
+    border-color: var(--cc-gold);
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 1px;
+  }
+  .gov-subscribe__consent {
+    font-size: 0.9rem;
+    color: var(--cc-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .gov-subscribe button[type="submit"] {
+    align-self: flex-start;
+    background: var(--cc-gold);
+    color: #0c1220;
+    border: 0;
+    padding: 12px 24px;
+    min-height: 44px;
+    font: 700 .85rem var(--cc-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+  .gov-subscribe button[type="submit"]:hover,
+  .gov-subscribe button[type="submit"]:focus-visible { background: var(--cc-gold-lt); }
+  .gov-subscribe output {
+    display: block;
+    min-height: 1.4em;
+    font-size: 0.95rem;
+    color: var(--cc-muted);
+  }
+</style>
+<section class="subscribe-block" aria-label="Subscribe to updates" data-topic="" hidden>
+  <div class="container">
+    <h2>Get email updates</h2>
+    <p class="deck">We&#39;ll email you a plain-language summary with links to the source documents whenever this office posts new public-record material.</p>
+
+    <form class="gov-subscribe" novalidate>
+      <label>
+        Email address
+        <input type="email" name="email" required autocomplete="email"
+               placeholder="you@example.com">
+      </label>
+      <p class="gov-subscribe__consent">
+        By subscribing you agree to receive emails about this topic. We&#39;ll send a confirmation link first. Unsubscribe any time. <em>(consent v2026-04-30-v1)</em>
+      </p>
+      <button type="submit">Subscribe</button>
+      <output role="status" aria-live="polite"></output>
+    </form>
+  </div>
+</section>
+
+
+<script>
+(function () {
+  if (window.__govSubscribeInit) return;
+  window.__govSubscribeInit = true;
+
+  // Skip top-level pages and /microsites/shared/* — no agency-specific topic.
+  var SKIP_JURISDICTIONS = { shared: 1 };
+
+  function inferTopicFromUrl() {
+    var parts = location.pathname.split('/').filter(Boolean);
+    // ["microsites", "<jurisdiction>", "<agency>", ...]
+    if (parts[0] !== 'microsites') return '';
+    if (!parts[1] || !parts[2]) return '';
+    if (SKIP_JURISDICTIONS[parts[1]]) return '';
+    return 'gov.' + parts[1] + '.' + parts[2];
+  }
+
+  function attach(host) {
+    // Resolve topic: explicit data-topic wins, else infer from URL.
+    var topic = host.dataset.topic || inferTopicFromUrl();
+    if (!topic) { host.remove(); return; }
+    host.dataset.topic = topic;
+    host.hidden = false;
+
+    var form = host.querySelector('form.gov-subscribe');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    var out = form.querySelector('output');
+    var source = location.pathname.replace(/^\/+/, '');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      out.textContent = 'Submitting…';
+      var email = form.email.value.trim();
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, topic: topic, source: source }),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
+          out.textContent = res.d.message || 'Check your email to confirm.';
+          form.reset();
+        })
+        .catch(function (err) { out.textContent = 'Something went wrong: ' + err.message; });
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('.subscribe-block[data-topic]').forEach(attach);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+
 <footer class="cc-footer" role="contentinfo">
   <div class="container">
     <p class="cc-footer-line">
@@ -1018,6 +1226,8 @@ new Chart(document.getElementById('chartBirths'),{
       For informational purposes only.
       &nbsp;·&nbsp;
       Open source.
+      &nbsp;·&nbsp;
+      <a href="/preferences/">Manage your subscriptions</a>
     </p>
   </div>
 </footer>
