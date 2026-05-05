@@ -927,6 +927,67 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
 
+/* ===== PLAN PANEL (SAP content) ===== */
+.plus-wrap{max-width:1400px;margin:0 auto;padding:24px 16px 60px;}
+.plus-head{margin-bottom:18px;}
+.plus-head .eyebrow{color:#c8a84b;margin-bottom:6px;}
+.plus-head h2{font-size:clamp(20px,2.4vw,28px);font-weight:700;color:#fff;margin-bottom:8px;}
+.plus-lede{font-size:14px;color:#a8bbd4;line-height:1.65;max-width:75ch;}
+
+.plus-tabs{display:flex;gap:0;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.12);margin-top:8px;padding:0 4px;}
+.plus-tab-btn{padding:10px 18px;font-size:13px;font-weight:600;font-family:var(--sans);
+  background:transparent;color:#9ab0c8;border:none;cursor:pointer;
+  border-bottom:2px solid transparent;border-radius:4px 4px 0 0;letter-spacing:.01em;
+  transition:background .15s,color .15s;margin-right:2px;}
+.plus-tab-btn:hover{background:rgba(255,255,255,.06);color:#d4e4f4;}
+.plus-tab-btn[aria-selected="true"]{background:var(--white);color:var(--ink);border-bottom-color:var(--gold-ink);}
+.plus-tab-btn:focus-visible{outline:3px solid var(--gold);outline-offset:-2px;box-shadow:0 0 0 5px rgba(0,0,0,0.55);}
+
+.plus-tab-panel{background:var(--white);border:1px solid var(--rule);border-top:none;
+  border-radius:0 4px 4px 4px;padding:22px 24px;}
+.plus-tab-panel[hidden]{display:none;}
+.plus-tab-panel h3{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+.plus-tab-panel > p{font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:12px;max-width:75ch;}
+
+.plus-pdf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+@media (max-width:640px){.plus-pdf-row{grid-template-columns:1fr;}}
+.plus-pdf-card{background:var(--off);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;}
+.plus-pdf-card .ppc-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.plus-pdf-card h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.plus-pdf-card .ppc-meta{font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+.plus-pdf-card a{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:13px;
+  padding:6px 10px;border-radius:3px;text-decoration:none;background:var(--blue);color:#fff;border:1px solid var(--blue);}
+.plus-pdf-card a:hover{background:var(--navy);border-color:var(--navy);}
+
+.plus-tab-panel p.plus-comments-line{font-size:14px;color:var(--ink);line-height:1.6;
+  margin:0 0 18px;padding:12px 14px;background:var(--off);border-radius:4px;
+  border-left:3px solid var(--gold-ink);max-width:none;}
+.plus-comments-line a{margin-left:6px;color:var(--blue);text-decoration:none;
+  border-bottom:1px dotted var(--blue);font-weight:600;}
+.plus-comments-line a:hover{border-bottom-style:solid;}
+
+.plus-timeline{position:relative;padding-left:26px;border-left:2px solid var(--rule);
+  display:flex;flex-direction:column;gap:12px;}
+.plus-tl-row{position:relative;}
+.plus-tl-row::before{content:'';position:absolute;left:-32px;top:6px;width:10px;height:10px;
+  border-radius:50%;background:var(--rule);border:2px solid var(--white);box-shadow:0 0 0 1px var(--rule);}
+.plus-tl-row.done::before{background:var(--blue);box-shadow:0 0 0 1px var(--blue);}
+.plus-tl-row.now::before{background:var(--gold-ink);box-shadow:0 0 0 1px var(--gold-ink),0 0 0 4px rgba(115,85,4,.18);width:12px;height:12px;left:-33px;}
+.plus-tl-row.future::before{background:var(--white);}
+.plus-tl-date{font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;font-weight:600;}
+.plus-tl-row.now .plus-tl-date{color:var(--gold-ink);}
+.plus-tl-row.done .plus-tl-date{color:var(--blue);}
+.plus-tl-text{font-size:14px;color:var(--ink);line-height:1.5;}
+.plus-tl-row.done .plus-tl-text{color:var(--muted);}
+
+.plus-contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+.plus-contact-block{background:var(--off);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;}
+.plus-contact-block h3{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600;}
+.plus-contact-block p{font-size:13.5px;color:var(--ink);line-height:1.55;}
+.plus-contact-block p + p{margin-top:6px;}
+.plus-contact-block a{color:var(--blue);text-decoration:none;border-bottom:1px dotted var(--blue);}
+.plus-contact-block a:hover{border-bottom-style:solid;}
+
 /* ===== COMING SOON PANEL ===== */
 .coming-soon-wrap{
   max-width:1400px;margin:0 auto;padding:60px 24px;
@@ -1164,9 +1225,9 @@ thead th{background:var(--navy);color:#fff;text-align:left;padding:10px 12px;fon
 thead th button{background:none;border:none;color:inherit;cursor:pointer;font:inherit;font-weight:600;font-size:13px;
   display:flex;align-items:center;gap:4px;padding:0;white-space:nowrap;}
 thead th button:focus{outline:2px solid #c8a84b;outline-offset:2px;border-radius:1px;}
-thead th button[aria-sort="ascending"]::after{content:' ↑';}
-thead th button[aria-sort="descending"]::after{content:' ↓';}
-thead th button[aria-sort="none"]::after{content:' ↕';opacity:.4;}
+thead th[aria-sort="ascending"] button::after{content:' ↑';}
+thead th[aria-sort="descending"] button::after{content:' ↓';}
+thead th[aria-sort="none"] button::after{content:' ↕';opacity:.4;}
 tbody tr{border-bottom:1px solid var(--rule);}
 tbody tr:last-child{border:none;}
 tbody tr:nth-child(even){background:#fafbfd;}
@@ -1194,6 +1255,18 @@ td.num{text-align:right;font-family:var(--mono);}
 .tool-footer{margin-top:32px;padding:16px;background:#fff;border:1px solid var(--rule);
   border-radius:3px;font-size:13px;color:var(--muted);line-height:1.7;}
 .tool-footer strong{color:var(--ink);}
+
+/* ===== SIBLING PAGE NAV ===== */
+.page-nav{max-width:1400px;margin:0 auto;padding:24px 16px 16px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;
+  border-top:1px solid rgba(255,255,255,.12);}
+.page-nav-card{display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  border-radius:5px;padding:14px 18px;text-decoration:none;transition:background .15s,border-color .15s;}
+.page-nav-card:hover{background:rgba(255,255,255,.07);border-color:rgba(200,168,75,.4);}
+.page-nav-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  color:#c8a84b;margin-bottom:5px;}
+.page-nav-card h3{font-family:var(--sans);font-size:15px;font-weight:600;color:#e2e8f0;margin-bottom:3px;}
+.page-nav-card p{font-size:13px;color:#9ab0c8;line-height:1.5;}
 
 /* ===== FOOTER ===== */
 .dash-footer{background:#0d1117;border-top:1px solid #1e293b;padding:16px 24px;text-align:center;}
@@ -1259,8 +1332,8 @@ td.num{text-align:right;font-family:var(--mono);}
         onclick="switchBrand('plus')" role="tab" aria-selected="false"
         aria-controls="brand-panel-plus" id="brand-btn-plus">
         <span class="bp-icon">✦</span>
-        <span class="bp-name">Plus</span>
-        <span class="bp-sub">Extended Network</span>
+        <span class="bp-name">Plan</span>
+        <span class="bp-sub">Policy &amp; Context</span>
       </button>
     </div>
   </div>
@@ -1474,16 +1547,16 @@ td.num{text-align:right;font-family:var(--mono);}
       <table id="crash-table" aria-label="Colorado Springs crash records">
         <thead>
           <tr>
-            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Date">Date</button></th>
-            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Time">Time</button></th>
-            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Location">Location</button></th>
-            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Type">Type</button></th>
-            <th scope="col"><button type="button" aria-sort="none" data-col="Severity">Severity</button></th>
-            <th scope="col"><button type="button" aria-sort="none" data-col="Road_Conditions">Road</button></th>
-            <th scope="col"><button type="button" aria-sort="none" data-col="Lighting_Conditions">Lighting</button></th>
-            <th scope="col"><button type="button" aria-sort="none" data-col="Impaired">Impaired</button></th>
-            <th scope="col"><button type="button" aria-sort="none" data-col="F__Fatalities">Fatalities</button></th>
-            <th scope="col"><button type="button" aria-sort="none" data-col="F__Susp__Serious_Injury">Serious Inj.</button></th>
+            <th scope="col" aria-sort="none"><button type="button" data-col="Crash_Date">Date</button></th>
+            <th scope="col" aria-sort="none"><button type="button" data-col="Crash_Time">Time</button></th>
+            <th scope="col" aria-sort="none"><button type="button" data-col="Crash_Location">Location</button></th>
+            <th scope="col" aria-sort="none"><button type="button" data-col="Crash_Type">Type</button></th>
+            <th scope="col" aria-sort="none"><button type="button" data-col="Severity">Severity</button></th>
+            <th scope="col" aria-sort="none"><button type="button" data-col="Road_Conditions">Road</button></th>
+            <th scope="col" aria-sort="none"><button type="button" data-col="Lighting_Conditions">Lighting</button></th>
+            <th scope="col" aria-sort="none"><button type="button" data-col="Impaired">Impaired</button></th>
+            <th scope="col" aria-sort="none"><button type="button" data-col="F__Fatalities">Fatalities</button></th>
+            <th scope="col" aria-sort="none"><button type="button" data-col="F__Susp__Serious_Injury">Serious Inj.</button></th>
           </tr>
         </thead>
         <tbody id="crash-tbody">
@@ -1979,37 +2052,122 @@ td.num{text-align:right;font-family:var(--mono);}
   </div>
 </div>
 
-<!-- ===== PLUS PANEL ===== -->
+<!-- ===== PLAN PANEL (Safety Action Plan) ===== -->
 <div id="brand-panel-plus" style="display:none;">
-  <div class="coming-soon-wrap">
-    <div class="coming-soon-icon">✦</div>
-    <h2>The Dais Plus — Extended Network</h2>
-    <p>Plus is where the story gets bigger. It connects local crash patterns to federal policy, regional economics, and cross-jurisdictional data that no single agency dashboard shows. Think of it as the view from 30,000 feet — grounded in the same street-level data, but mapped against forces that shape every city simultaneously.</p>
-    <div class="cs-badge">Planned · No ETA</div>
-    <div class="coming-soon-items">
-      <div class="cs-feature">
-        <div class="csf-icon">🇺🇸</div>
-        <div class="csf-label">Federal Flows</div>
-        <div class="csf-text">IIJA / BIL funding flowing into Colorado — what was promised vs. what arrived</div>
-      </div>
-      <div class="cs-feature">
-        <div class="csf-icon">📡</div>
-        <div class="csf-label">Regional Patterns</div>
-        <div class="csf-text">Mountain West peer cities — Albuquerque, Boise, Salt Lake, Tucson</div>
-      </div>
-      <div class="cs-feature">
-        <div class="csf-icon">🔬</div>
-        <div class="csf-label">Deep Analysis</div>
-        <div class="csf-text">Corridor-level LOSS ratings, conflict zone mapping, pedestrian equity gaps</div>
-      </div>
-      <div class="cs-feature">
-        <div class="csf-icon">🤝</div>
-        <div class="csf-label">Who knows</div>
-        <div class="csf-text">This is the room we haven't built yet. If you have ideas, reach out.</div>
+  <div class="plus-wrap">
+    <header class="plus-head">
+      <p class="eyebrow">Policy &amp; Context</p>
+      <h2>The Safety Action Plan</h2>
+      <p class="plus-lede">The City&rsquo;s policy document built on this data. The federal Safe Streets for All grant ($280K, awarded March 2024) required a Safety Action Plan for the funding to flow. Residents had a comment period in March – April 2026; the plan goes to Council adoption May 2026.</p>
+    </header>
+
+    <div class="plus-tabs" role="tablist" aria-label="Safety Action Plan sections">
+      <button id="plus-tab-plan" class="plus-tab-btn" role="tab" aria-selected="true" aria-controls="plus-panel-plan" tabindex="0">The plan &amp; comments</button>
+      <button id="plus-tab-timeline" class="plus-tab-btn" role="tab" aria-selected="false" aria-controls="plus-panel-timeline" tabindex="-1">Timeline</button>
+      <button id="plus-tab-contact" class="plus-tab-btn" role="tab" aria-selected="false" aria-controls="plus-panel-contact" tabindex="-1">Contact &amp; funding</button>
+    </div>
+
+    <div id="plus-panel-plan" class="plus-tab-panel" role="tabpanel" aria-labelledby="plus-tab-plan" tabindex="0">
+      <p class="plus-comments-line">
+        Comment period: <strong>March 18 – April 2, 2026</strong> · now closed.
+        <a href="/microsites/city/traffic/SafetyPlan/sap-comments.html">View what 79 residents said →</a>
+      </p>
+      <div class="plus-pdf-row">
+        <article class="plus-pdf-card">
+          <p class="ppc-tag">Draft Plan</p>
+          <h3>Colorado Springs Safety Action Plan — Draft</h3>
+          <a href="/microsites/city/traffic/SafetyPlan/sap-draft-plan.pdf" download>Download tagged PDF ↓</a>
+        </article>
+        <article class="plus-pdf-card">
+          <p class="ppc-tag">Appendices</p>
+          <h3>Draft Appendices A – D</h3>
+          <a href="/microsites/city/traffic/SafetyPlan/sap-appendices.pdf" download>Download tagged PDF ↓</a>
+        </article>
       </div>
     </div>
+
+    <div id="plus-panel-timeline" class="plus-tab-panel" role="tabpanel" aria-labelledby="plus-tab-timeline" tabindex="0" hidden>
+      <h3>Project timeline</h3>
+      <p>Where the plan stands. The comment period closed April 2, 2026 — Council adoption is targeted for May 2026.</p>
+      <div class="plus-timeline" role="list" aria-label="Project timeline">
+        <div class="plus-tl-row done" role="listitem">
+          <div class="plus-tl-date">March 2024</div>
+          <div class="plus-tl-text"><strong>Grant received.</strong> $280,000 awarded through the federal Safe Streets for All program for the 2024 – 2026 plan cycle.</div>
+        </div>
+        <div class="plus-tl-row done" role="listitem">
+          <div class="plus-tl-date">January – March 2025</div>
+          <div class="plus-tl-text"><strong>Crash data analysis.</strong> Existing studies and crash data assembled to identify safety countermeasures and strategies.</div>
+        </div>
+        <div class="plus-tl-row done" role="listitem">
+          <div class="plus-tl-date">March – July 2025</div>
+          <div class="plus-tl-text"><strong>Public &amp; stakeholder engagement.</strong> Targeted outreach to develop the plan&rsquo;s priorities.</div>
+        </div>
+        <div class="plus-tl-row done" role="listitem">
+          <div class="plus-tl-date">June – September 2025</div>
+          <div class="plus-tl-text"><strong>Draft plan development.</strong> Recommendations, actions, and strategies drafted.</div>
+        </div>
+        <div class="plus-tl-row done" role="listitem">
+          <div class="plus-tl-date">September – November 2025</div>
+          <div class="plus-tl-text"><strong>Plan refinement.</strong> Project team revised aspects of the plan.</div>
+        </div>
+        <div class="plus-tl-row done" role="listitem">
+          <div class="plus-tl-date">December 2025</div>
+          <div class="plus-tl-text"><strong>Final draft completed</strong> and posted for public review.</div>
+        </div>
+        <div class="plus-tl-row now" role="listitem">
+          <div class="plus-tl-date">March – April 2026 · public review</div>
+          <div class="plus-tl-text"><strong>Comment period.</strong> Draft Plan and Appendices on Konveio for line-level annotation. Closed April 2, 2026 — see <a href="/microsites/city/traffic/SafetyPlan/sap-comments.html" style="color:var(--blue);">the comment archive</a>.</div>
+        </div>
+        <div class="plus-tl-row future" role="listitem">
+          <div class="plus-tl-date">May 2026</div>
+          <div class="plus-tl-text"><strong>Plan adoption</strong> targeted for May 2026.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="plus-panel-contact" class="plus-tab-panel" role="tabpanel" aria-labelledby="plus-tab-contact" tabindex="0" hidden>
+      <h3>Who runs it, and where the money comes from</h3>
+      <p>Project contact, City accessibility office, and the federal funding source for the plan.</p>
+      <div class="plus-contact">
+        <div class="plus-contact-block">
+          <h3>Project contact</h3>
+          <p><strong>Colleen Guillotte</strong><br>Traffic and Transportation Engineering<br>City of Colorado Springs</p>
+          <p>
+            <a href="tel:7193857627">(719) 385-7627</a><br>
+            <a href="mailto:Traffic-Engineering.SMB@coloradosprings.gov">Traffic-Engineering.SMB@coloradosprings.gov</a>
+          </p>
+        </div>
+        <div class="plus-contact-block">
+          <h3>Office of Accessibility</h3>
+          <p>Title II ADA coordination, accessible information technology, and the City&rsquo;s quarterly ADA forum.</p>
+          <p>
+            <a href="tel:7193855175">(719) 385-5175</a><br>
+            <a href="mailto:ADAcompliance@coloradosprings.gov">ADAcompliance@coloradosprings.gov</a>
+          </p>
+        </div>
+        <div class="plus-contact-block">
+          <h3>Funding source</h3>
+          <p>Safe Streets for All (SS4A), administered by the U.S. Department of Transportation. Established by the Infrastructure Investment and Jobs Act with $5 billion appropriated 2022 – 2026 to reduce roadway deaths and serious injuries through the Safe System Approach.</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<!-- ===== SIBLING PAGE NAV ===== -->
+<nav class="page-nav" aria-label="Related Safety Action Plan pages">
+  <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/sap-comments.html">
+    <p class="page-nav-tag">Section 2 · Drafts &amp; Comments</p>
+    <h3>Public comments archive</h3>
+    <p>79 resident comments mirrored from Konveio, with live search.</p>
+  </a>
+  <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/sap-context.html">
+    <p class="page-nav-tag">Section 3 · Context</p>
+    <h3>Project background &amp; timeline</h3>
+    <p>Funding, plan adoption schedule, contact, public engagement record.</p>
+  </a>
+</nav>
 
 <!-- ===== FOOTER ===== -->
 
@@ -2029,8 +2187,8 @@ const BRAND_DEFS = {
     text: '<strong>State of Colorado</strong> — All 64 counties statewide. Data from CDOT\'s crash database and the Colorado Department of Transportation full project spending database.'
   },
   plus: {
-    badge: 'plus', badgeText: 'Plus',
-    text: '<strong>The Dais + StorySeed Extended Network</strong> — Regional, federal, and cross-jurisdictional datasets connecting local crash patterns to national policy, peer-city benchmarks, and long-horizon funding analysis.'
+    badge: 'plus', badgeText: 'Plan',
+    text: '<strong>Safety Action Plan</strong> — The City\'s policy document built on this data. Federal Safe Streets for All grant-funded; comment period closed April 2, 2026; Council adoption May 2026.'
   }
 };
 
@@ -2440,7 +2598,7 @@ function resetFilters(){
   document.getElementById('zip-summary').classList.remove('visible');
   filtered=[...allData];
   sortCol='Crash_Date';sortDir='desc';currentPage=1;
-  document.querySelectorAll('thead th button').forEach(b=>b.setAttribute('aria-sort','none'));
+  document.querySelectorAll('thead th[aria-sort]').forEach(th=>th.setAttribute('aria-sort','none'));
   document.getElementById('record-count').textContent=`${allData.length.toLocaleString()} records`;
   renderTable();announce('All filters cleared.');
 }
@@ -2459,14 +2617,42 @@ document.querySelectorAll('thead th button').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const col=btn.dataset.col;
     if(sortCol===col){sortDir=sortDir==='asc'?'desc':'asc';}else{sortCol=col;sortDir='desc';}
-    document.querySelectorAll('thead th button').forEach(b=>b.setAttribute('aria-sort','none'));
-    btn.setAttribute('aria-sort',sortDir==='asc'?'ascending':'descending');
+    document.querySelectorAll('thead th[aria-sort]').forEach(th=>th.setAttribute('aria-sort','none'));
+    btn.closest('th').setAttribute('aria-sort',sortDir==='asc'?'ascending':'descending');
     sortData();currentPage=1;renderTable();
     announce(`Sorted by ${btn.textContent.trim()}, ${sortDir==='asc'?'ascending':'descending'}.`);
   });
 });
 
 loadAll();
+
+// ====== PLAN PANEL TABS (WAI-ARIA APG pattern, scoped) ======
+(() => {
+  const tablist = document.querySelector('.plus-tabs');
+  if (!tablist) return;
+  const tabs = Array.from(tablist.querySelectorAll('.plus-tab-btn'));
+  const panels = tabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
+  function activate(idx, focus) {
+    tabs.forEach((t, i) => {
+      const isActive = i === idx;
+      t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      t.tabIndex = isActive ? 0 : -1;
+      if (panels[i]) panels[i].hidden = !isActive;
+    });
+    if (focus) tabs[idx].focus();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => activate(i, false));
+    t.addEventListener('keydown', e => {
+      let idx = null;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') idx = (i + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') idx = (i - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') idx = 0;
+      else if (e.key === 'End') idx = tabs.length - 1;
+      if (idx !== null) { e.preventDefault(); activate(idx, true); }
+    });
+  });
+})();
 </script>
   </main>
   <!-- ═══════════════════════════════════════════════════════════════════

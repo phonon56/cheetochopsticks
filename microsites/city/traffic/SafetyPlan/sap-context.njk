@@ -1,0 +1,361 @@
+---
+layout: site.njk
+permalink: /microsites/city/traffic/SafetyPlan/sap-context.html
+title: "Project Background · Colorado Springs Safety Action Plan · StorySeed / The Dais"
+description: "Funding, timeline, contact, and the public engagement record for the Colorado Springs Safety Action Plan — a Safe Streets for All federally-funded transportation safety initiative."
+activeNav: "dashboards"
+---
+
+<style>
+/* ===== DESIGN TOKENS ===== — palette inherited from cos-traffic-hub.
+   ink #0f172a → 17.06 AAA · navy #001a4d → 15.99 AAA · muted #3d5166 → 7.82 AAA
+   blue #0049b1 → 7.76 AAA · green #065f46 → 7.34 AAA
+   amber-ink #92400e → 6.78 AA · gold-ink #735504 → 6.62 AA */
+:root {
+  --navy:#001a4d; --blue:#0049b1; --sky:#1d6fa4; --teal:#0b7a75;
+  --red:#991b1b; --amber:#d97706; --gold:#c8a84b; --green:#065f46;
+  --amber-ink:#92400e; --gold-ink:#735504;
+  --purple:#5b21b6; --ink:#0f172a; --muted:#3d5166; --rule:#e2e8f0;
+  --off:#f8fafc; --white:#ffffff;
+  --mono:'Courier New',monospace;
+  --sans:system-ui,-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:15px;scroll-behavior:smooth;}
+body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
+
+.skip{position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;
+  padding:8px 16px;border-radius:3px;font-family:var(--mono);font-size:13px;text-decoration:none;z-index:999;}
+.skip:focus{left:8px;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:2px;
+  box-shadow:0 0 0 5px rgba(0,0,0,0.55);}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+/* ===== HERO ===== */
+.dashboard-header{
+  background:linear-gradient(135deg,#001030 0%,#00205c 60%,#0d3d6e 100%);
+  border-bottom:2px solid var(--gold);padding:22px 28px 18px;}
+.header-inner{max-width:1240px;margin:0 auto;}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:#c8a84b;margin-bottom:6px;}
+.dashboard-header h1{font-family:var(--sans);font-size:clamp(22px,3.2vw,34px);font-weight:700;
+  color:#fff;margin-bottom:6px;letter-spacing:-.01em;line-height:1.15;}
+.dashboard-header h1 em{font-style:italic;color:#ffd577;font-weight:600;}
+.sub{font-size:14px;color:#a8bbd4;margin-bottom:14px;max-width:70ch;line-height:1.55;}
+.header-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.meta-pill{font-family:var(--mono);font-size:13px;letter-spacing:.06em;padding:3px 10px;
+  border-radius:10px;border:1px solid rgba(255,255,255,.25);color:#a8bbd4;}
+.meta-pill.live{border-color:rgba(100,200,100,.5);color:#86efac;}
+.meta-pill.amber{border-color:rgba(217,119,6,.55);color:#fbbf24;}
+
+.page-body{max-width:1240px;margin:0 auto;padding:24px 28px 64px;}
+
+/* Section heading */
+.section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;margin-top:32px;flex-wrap:wrap;}
+.section-head:first-of-type{margin-top:0;}
+.section-head h2{font-family:var(--sans);font-size:18px;font-weight:600;color:#e2e8f0;letter-spacing:-.005em;}
+.section-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border-radius:10px;background:rgba(255,255,255,.1);color:#a8bbd4;}
+
+/* Card */
+.card{background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:20px 24px;}
+.card-tight{padding:14px 18px;}
+
+/* Stat-card grid (matches cos-traffic-hub) */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media(max-width:880px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--white);border-radius:6px;padding:14px 16px;
+  border:1px solid var(--rule);border-top:3px solid var(--rule);}
+.stat-card.blue{border-top-color:var(--blue);}
+.stat-card.green{border-top-color:var(--green);}
+.stat-card.amber{border-top-color:var(--amber-ink);}
+.stat-card.gold{border-top-color:var(--gold-ink);}
+.stat-card.red{border-top-color:var(--red);}
+.stat-label{font-family:var(--mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:5px;}
+.stat-num{font-family:var(--sans);font-size:clamp(20px,2.5vw,30px);font-weight:700;line-height:1;color:var(--ink);}
+.stat-num.blue{color:var(--blue);}.stat-num.green{color:var(--green);}.stat-num.amber{color:var(--amber-ink);}
+.stat-sub{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.4;}
+
+/* Two-column block */
+.two-col{display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:0;}
+@media (max-width:900px){.two-col{grid-template-columns:1fr;}}
+
+/* Timeline */
+.timeline{position:relative;padding-left:28px;border-left:2px solid var(--rule);
+  display:flex;flex-direction:column;gap:14px;}
+.tl-row{position:relative;padding-bottom:0;}
+.tl-row::before{content:'';position:absolute;left:-34px;top:7px;width:10px;height:10px;
+  border-radius:50%;background:var(--rule);border:2px solid var(--white);box-shadow:0 0 0 1px var(--rule);}
+.tl-row.done::before{background:var(--blue);box-shadow:0 0 0 1px var(--blue);}
+.tl-row.now::before{background:var(--gold-ink);box-shadow:0 0 0 1px var(--gold-ink),0 0 0 4px rgba(115,85,4,.18);
+  width:12px;height:12px;left:-35px;}
+.tl-row.future::before{background:var(--white);}
+.tl-date{font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:2px;font-weight:600;}
+.tl-row.now .tl-date{color:var(--gold-ink);}
+.tl-row.done .tl-date{color:var(--blue);}
+.tl-text{font-size:14.5px;color:var(--ink);line-height:1.5;}
+.tl-row.done .tl-text{color:var(--muted);}
+.tl-text strong{color:var(--ink);font-weight:600;}
+
+/* Side blocks (contact, funding) */
+.side-stack{display:flex;flex-direction:column;gap:12px;}
+.meta-block{background:var(--off);border:1px solid var(--rule);border-radius:5px;padding:14px 16px;}
+.meta-block h3{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;font-weight:600;}
+.meta-block p, .meta-block li{font-size:14px;color:var(--ink);line-height:1.55;}
+.meta-block p + p{margin-top:6px;}
+.meta-block ul{list-style:none;}
+.meta-block li{padding-left:14px;position:relative;}
+.meta-block li::before{content:'·';position:absolute;left:4px;color:var(--muted);font-weight:700;}
+.meta-block a{color:var(--blue);text-decoration:none;border-bottom:1px dotted var(--blue);}
+.meta-block a:hover{border-bottom-style:solid;}
+
+/* Engagement events */
+.events-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}
+.event{background:var(--off);border:1px solid var(--rule);border-radius:5px;padding:12px 14px;}
+.event-date{font-family:var(--mono);font-size:13px;color:var(--muted);letter-spacing:.04em;margin-bottom:3px;}
+.event-name{font-size:14px;font-weight:600;color:var(--ink);}
+
+/* Narrative card (dark blue, matches cos-traffic-hub) */
+.narrative{background:linear-gradient(135deg,#0f1c3f 0%,#1a2e5e 100%);
+  border-radius:6px;padding:22px 26px;margin-top:18px;}
+.narrative h2{font-family:var(--sans);font-size:18px;font-weight:700;color:#fff;margin-bottom:10px;}
+.narrative p{font-size:14px;line-height:1.75;margin-bottom:8px;color:#d0dcea;}
+.narrative p:last-child{margin-bottom:0;}
+.narrative strong{color:#fff;}
+.narrative em{color:#ffd577;font-style:italic;}
+
+/* CTA buttons */
+.cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.btn-primary{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);
+  font-size:13px;padding:8px 14px;border-radius:3px;text-decoration:none;
+  background:var(--blue);color:#fff;border:1px solid var(--blue);}
+.btn-primary:hover{background:var(--navy);border-color:var(--navy);}
+.btn-outline{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);
+  font-size:13px;padding:8px 14px;border-radius:3px;text-decoration:none;
+  background:transparent;color:#a8bbd4;border:1px solid rgba(255,255,255,.3);}
+.btn-outline:hover{background:rgba(255,255,255,.07);color:#fff;border-color:#fff;}
+
+/* Sibling page nav */
+.page-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;
+  margin-top:36px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);}
+.page-nav-card{display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  border-radius:5px;padding:14px 18px;text-decoration:none;transition:background .15s,border-color .15s;}
+.page-nav-card:hover{background:rgba(255,255,255,.07);border-color:rgba(200,168,75,.4);}
+.page-nav-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  color:#c8a84b;margin-bottom:5px;}
+.page-nav-card h3{font-family:var(--sans);font-size:15px;font-weight:600;color:#e2e8f0;margin-bottom:3px;}
+.page-nav-card p{font-size:13px;color:#9ab0c8;line-height:1.5;}
+</style>
+
+<!-- ===== HEADER ===== -->
+<header class="dashboard-header" role="region" aria-label="Page header">
+  <div class="header-inner">
+    <p class="eyebrow">StorySeed Studios · The Dais · Project Background · SAP</p>
+    <h1>Why <em>this plan</em>, and where it stands</h1>
+    <p class="sub">Funding, timeline, public engagement record, and the contact information for the people running it. This is the &ldquo;about&rdquo; that the City&rsquo;s SAP page splits across three duplicated tabs — gathered here once.</p>
+    <div class="header-meta">
+      <span class="meta-pill amber">Plan adoption · May 2026</span>
+      <span class="meta-pill">SS4A federal grant · $280,000</span>
+      <span class="meta-pill">Awarded March 2024</span>
+      <span class="meta-pill">Comment period closed Apr 2026</span>
+    </div>
+  </div>
+</header>
+
+<div class="page-body">
+
+  <!-- ===== AT A GLANCE ===== -->
+  <div class="section-head">
+    <h2>At a glance</h2>
+    <span class="section-tag">Headline numbers</span>
+  </div>
+  <div class="stat-grid" role="list" aria-label="Project headline figures">
+    <div class="stat-card blue" role="listitem">
+      <div class="stat-label">Federal grant</div>
+      <div class="stat-num blue">$280K</div>
+      <div class="stat-sub">Safe Streets for All (SS4A) · awarded 2024</div>
+    </div>
+    <div class="stat-card amber" role="listitem">
+      <div class="stat-label">Plan adoption</div>
+      <div class="stat-num amber">May 2026</div>
+      <div class="stat-sub">Final draft completed Dec 2025</div>
+    </div>
+    <div class="stat-card green" role="listitem">
+      <div class="stat-label">Stakeholders</div>
+      <div class="stat-num green">40+</div>
+      <div class="stat-sub">Citywide partner agencies and organizations</div>
+    </div>
+    <div class="stat-card gold" role="listitem">
+      <div class="stat-label">Public events</div>
+      <div class="stat-num">5</div>
+      <div class="stat-sub">Outreach tabling events · June 2025</div>
+    </div>
+  </div>
+
+  <!-- ===== TIMELINE + SIDE META ===== -->
+  <div class="section-head">
+    <h2>Project timeline</h2>
+    <span class="section-tag">Merged from sidebar &amp; tabs</span>
+  </div>
+
+  <div class="two-col">
+
+    <div class="card">
+      <div class="timeline" role="list" aria-label="Project timeline">
+
+        <div class="tl-row done" role="listitem">
+          <div class="tl-date">March 2024</div>
+          <div class="tl-text"><strong>Grant received.</strong> City of Colorado Springs awarded $280,000 through the federal Safe Streets for All competitive grant program for development of the citywide Safety Action Plan, 2024–2026.</div>
+        </div>
+
+        <div class="tl-row done" role="listitem">
+          <div class="tl-date">January – March 2025</div>
+          <div class="tl-text"><strong>Crash data analysis.</strong> Several crash analyses and previous studies were used to determine appropriate safety countermeasures and strategies.</div>
+        </div>
+
+        <div class="tl-row done" role="listitem">
+          <div class="tl-date">March – July 2025</div>
+          <div class="tl-text"><strong>Public &amp; stakeholder engagement.</strong> Project team held conversations with stakeholders and conducted targeted outreach to develop the Safety Action Plan&rsquo;s priorities.</div>
+        </div>
+
+        <div class="tl-row done" role="listitem">
+          <div class="tl-date">June – September 2025</div>
+          <div class="tl-text"><strong>Draft plan development.</strong> The Safety Action Plan was drafted to include potential recommendations, actions, and strategies.</div>
+        </div>
+
+        <div class="tl-row done" role="listitem">
+          <div class="tl-date">September – November 2025</div>
+          <div class="tl-text"><strong>Plan refinement.</strong> Project team revised and refined aspects of the plan during this timeframe.</div>
+        </div>
+
+        <div class="tl-row done" role="listitem">
+          <div class="tl-date">December 2025</div>
+          <div class="tl-text"><strong>Final draft completed.</strong> The final Draft Safety Action Plan was completed for public review.</div>
+        </div>
+
+        <div class="tl-row now" role="listitem">
+          <div class="tl-date">March – April 2026 · public review</div>
+          <div class="tl-text"><strong>Comment period.</strong> Draft Plan and Appendices posted on Konveio for line-level annotation. Commenting closed April 2, 2026 — see <a href="/microsites/city/traffic/SafetyPlan/sap-comments.html" style="color:var(--blue);text-decoration:none;border-bottom:1px dotted var(--blue);">the comment archive</a> for what residents said.</div>
+        </div>
+
+        <div class="tl-row future" role="listitem">
+          <div class="tl-date">May 2026</div>
+          <div class="tl-text"><strong>Plan adoption</strong> targeted for May 2026.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="side-stack">
+
+      <div class="meta-block">
+        <h3>Project contact</h3>
+        <p><strong>Colleen Guillotte</strong><br>
+        Traffic and Transportation Engineering<br>
+        City of Colorado Springs</p>
+        <p>
+          <a href="tel:7193857627">(719) 385-7627</a><br>
+          <a href="mailto:Traffic-Engineering.SMB@coloradosprings.gov">Traffic-Engineering.SMB@coloradosprings.gov</a>
+        </p>
+      </div>
+
+      <div class="meta-block">
+        <h3>Office of Accessibility</h3>
+        <p>Title II ADA coordination, accessible information technology, and the City&rsquo;s quarterly ADA forum.</p>
+        <p>
+          <a href="tel:7193855175">(719) 385-5175</a><br>
+          <a href="mailto:ADAcompliance@coloradosprings.gov">ADAcompliance@coloradosprings.gov</a>
+        </p>
+      </div>
+
+      <div class="meta-block">
+        <h3>Funding source</h3>
+        <p>Safe Streets for All (SS4A), administered by the U.S. Department of Transportation. Established by the Infrastructure Investment and Jobs Act with $5 billion appropriated 2022–2026 for reducing roadway deaths and serious injuries through the Safe System Approach.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ===== STAKEHOLDER MEETINGS ===== -->
+  <div class="section-head">
+    <h2>Stakeholder meetings</h2>
+    <span class="section-tag">2025</span>
+  </div>
+  <div class="card">
+    <div class="events-grid">
+      <div class="event">
+        <div class="event-date">April 2025</div>
+        <div class="event-name">Stakeholder Meeting #1</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.5;margin-top:4px;">40+ partnering citywide agencies convened to determine existing traffic safety successes, challenges, and partnership opportunities.</p>
+      </div>
+      <div class="event">
+        <div class="event-date">September 2025</div>
+        <div class="event-name">Stakeholder Meeting #2</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.5;margin-top:4px;">Partnering agencies identified responsible and supporting parties for traffic-safety policies, programs, and partnerships.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PUBLIC OUTREACH ===== -->
+  <div class="section-head">
+    <h2>Public outreach</h2>
+    <span class="section-tag">Tabling events</span>
+  </div>
+  <div class="card">
+    <div class="events-grid">
+      <div class="event">
+        <div class="event-date">June 7, 2025</div>
+        <div class="event-name">Get Outdoors Day</div>
+      </div>
+      <div class="event">
+        <div class="event-date">June 8, 2025</div>
+        <div class="event-name">Southeast Colorado Springs Farmers Market</div>
+      </div>
+      <div class="event">
+        <div class="event-date">June 18, 2025</div>
+        <div class="event-name">Sand Creek Library</div>
+      </div>
+      <div class="event">
+        <div class="event-date">June 22, 2025</div>
+        <div class="event-name">Southeast Colorado Springs Farmers Market</div>
+      </div>
+      <div class="event">
+        <div class="event-date">June 26, 2025</div>
+        <div class="event-name">Community Meeting</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NARRATIVE ===== -->
+  <section class="narrative" aria-labelledby="why-heading">
+    <h2 id="why-heading">Why this exists</h2>
+    <p>Stakeholders engaged in traffic safety across the City and region noticed a significant rise in aggressive driving, serious injury crashes, and traffic fatalities over the past few years. To combat these trends, the City applied and acquired funds through the federal Safe Streets for All grant program — a federally-funded program designed to reduce deaths and serious injuries using the <strong>Safe System Approach</strong>.</p>
+    <p>The Colorado Springs Safety Action Plan outlines five systemic improvements and specific projects to reduce serious and deadly crashes. The data behind the plan is published as a public ArcGIS feature service — the same feed used by the City&rsquo;s own dashboard. Our <a href="/microsites/city/traffic/SafetyPlan/cos-traffic-hub.html" style="color:#ffd577;">Traffic Safety Dashboard</a> consumes that same feed in a fully accessible interface, with zip-code search, exportable records, and screen-reader friendly chart fallbacks.</p>
+    <p><em>None of the data behind this plan was secret. It just wasn&rsquo;t in a form residents could use.</em></p>
+    <div class="cta-row">
+      <a class="btn-primary" href="/microsites/city/traffic/SafetyPlan/cos-traffic-hub.html">Open the dashboard →</a>
+      <a class="btn-outline" href="/microsites/city/traffic/SafetyPlan/sap-comments.html">Read the public comments →</a>
+      <a class="btn-outline" href="https://coloradosprings.gov/SafetyActionPlan" target="_blank" rel="noopener noreferrer">City&rsquo;s SAP page <span class="sr-only">(opens in new window)</span>↗</a>
+    </div>
+  </section>
+
+  <!-- ===== SIBLING NAV ===== -->
+  <nav class="page-nav" aria-label="Related Safety Action Plan pages">
+    <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/cos-traffic-hub.html">
+      <p class="page-nav-tag">Section 1 · Data</p>
+      <h3>Traffic Safety Dashboard</h3>
+      <p>64,434 crash records, FHWA funding analysis, and zip-code search — same ArcGIS feed the City uses.</p>
+    </a>
+    <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/sap-comments.html">
+      <p class="page-nav-tag">Section 2 · Drafts &amp; comments</p>
+      <h3>Public comments archive</h3>
+      <p>79 resident comments mirrored from Konveio, with live search and full keyboard accessibility.</p>
+    </a>
+  </nav>
+
+</div>

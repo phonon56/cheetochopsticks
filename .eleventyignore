@@ -17,9 +17,14 @@ package-lock.json
 .eleventy.js
 node_modules/**
 
+# Claude Code worktrees — temporary repo copies, never serve
+.claude/worktrees/**
+**/.claude/worktrees/**
+
 # .md files that are notes / project docs, not pages we want rendered.
 # Only the explicitly-curated docs in microsites/.../housing-drupal-arp-formADA/*.md
 # are intended as pages — anything else stays raw or is excluded.
 README.md
 microsites/state/CBI/CBI_Missing_Children_Reports_ADA_Audit.md
+microsites/city/traffic/SafetyPlan/TODO.md
 shared/optimizingScripts/Wage_Data/methodology.md

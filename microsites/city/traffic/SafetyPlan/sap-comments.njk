@@ -1,0 +1,528 @@
+---
+layout: site.njk
+permalink: /microsites/city/traffic/SafetyPlan/sap-comments.html
+title: "Public Comments on the SAP Draft · Colorado Springs Safety Action Plan · StorySeed / The Dais"
+description: "Searchable, accessible mirror of the public comments left on the Colorado Springs Safety Action Plan draft and appendices, March – April 2026."
+activeNav: "dashboards"
+---
+
+<style>
+/* ===== DESIGN TOKENS ===== — palette inherited from cos-traffic-hub.
+   Verified WCAG 2.1 AA/AAA on card backgrounds (--off #f8fafc, --white).
+   ink #0f172a → 17.06 AAA · navy #001a4d → 15.99 AAA · muted #3d5166 → 7.82 AAA
+   blue #0049b1 → 7.76 AAA · green #065f46 → 7.34 AAA
+   red #991b1b → 6.18 AA · amber-ink #92400e → 6.78 AA · gold-ink #735504 → 6.62 AA
+   gold #c8a84b kept for borders only — NOT text-safe (2.19 FAIL). */
+:root {
+  --navy:#001a4d; --blue:#0049b1; --sky:#1d6fa4; --teal:#0b7a75;
+  --red:#991b1b; --amber:#d97706; --gold:#c8a84b; --green:#065f46;
+  --amber-ink:#92400e; --gold-ink:#735504;
+  --purple:#5b21b6; --ink:#0f172a; --muted:#3d5166; --rule:#e2e8f0;
+  --off:#f8fafc; --white:#ffffff;
+  --mono:'Courier New',monospace;
+  --sans:system-ui,-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:15px;scroll-behavior:smooth;}
+body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
+
+.skip{position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;
+  padding:8px 16px;border-radius:3px;font-family:var(--mono);font-size:13px;text-decoration:none;z-index:999;}
+.skip:focus{left:8px;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:2px;
+  box-shadow:0 0 0 5px rgba(0,0,0,0.55);}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+/* ===== HERO ===== — same gradient as cos-traffic-hub */
+.dashboard-header{
+  background:linear-gradient(135deg,#001030 0%,#00205c 60%,#0d3d6e 100%);
+  border-bottom:2px solid var(--gold);padding:22px 28px 18px;}
+.header-inner{max-width:1240px;margin:0 auto;}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:#c8a84b;margin-bottom:6px;}
+.dashboard-header h1{font-family:var(--sans);font-size:clamp(22px,3.2vw,34px);font-weight:700;
+  color:#fff;margin-bottom:6px;letter-spacing:-.01em;line-height:1.15;}
+.dashboard-header h1 em{font-style:italic;color:#ffd577;font-weight:600;}
+.sub{font-size:14px;color:#a8bbd4;margin-bottom:14px;max-width:70ch;line-height:1.55;}
+.header-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.meta-pill{font-family:var(--mono);font-size:13px;letter-spacing:.06em;padding:3px 10px;
+  border-radius:10px;border:1px solid rgba(255,255,255,.25);color:#a8bbd4;}
+.meta-pill.live{border-color:rgba(100,200,100,.5);color:#86efac;}
+.meta-pill.warn{border-color:rgba(217,119,6,.55);color:#fbbf24;}
+
+/* ===== MAIN CANVAS ===== */
+.page-body{max-width:1240px;margin:0 auto;padding:24px 28px 64px;}
+
+/* Disclosure card */
+.disclosure{background:rgba(200,168,75,.07);border-left:3px solid var(--gold);
+  padding:14px 18px;border-radius:0 4px 4px 0;font-size:13.5px;color:#cbd5e1;
+  line-height:1.6;margin-bottom:24px;}
+.disclosure strong{color:#e2e8f0;}
+
+/* PDF surface block */
+.pdf-block{background:var(--off);border:1px solid var(--rule);border-radius:6px;
+  padding:18px 22px;margin-bottom:24px;}
+.pdf-block-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.pdf-block-head h2{font-family:var(--sans);font-size:18px;font-weight:600;color:var(--ink);
+  letter-spacing:-.005em;}
+.pdf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+@media (max-width:680px){.pdf-grid{grid-template-columns:1fr;}}
+.pdf-card{background:var(--white);border:1px solid var(--rule);border-radius:5px;
+  padding:14px 16px;}
+.pdf-card-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;}
+.pdf-card h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.pdf-card p{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:10px;}
+.pdf-actions{display:flex;flex-wrap:wrap;gap:6px;}
+.pdf-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);
+  font-size:13px;padding:5px 10px;border-radius:3px;text-decoration:none;
+  border:1px solid var(--rule);color:var(--blue);background:var(--white);}
+.pdf-btn.primary{background:var(--blue);color:#fff;border-color:var(--blue);}
+.pdf-btn:hover{background:var(--off);border-color:var(--blue);}
+.pdf-btn.primary:hover{background:var(--navy);border-color:var(--navy);}
+.pdf-pending{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);
+  font-size:12.5px;padding:5px 10px;border-radius:3px;
+  border:1px dashed var(--rule);color:var(--muted);background:var(--white);}
+
+/* Filter bar */
+.filters{background:var(--white);border:1px solid var(--rule);border-radius:6px;
+  padding:18px 20px;margin-bottom:20px;position:sticky;top:8px;z-index:30;
+  box-shadow:0 1px 0 rgba(0,0,0,.04);}
+.filters-row{display:grid;grid-template-columns:1fr auto auto auto;gap:12px;align-items:end;}
+@media (max-width:880px){.filters-row{grid-template-columns:1fr 1fr;}
+  .filters-row > .filter-search{grid-column:1/-1;}}
+.filter-label{display:block;font-family:var(--mono);font-size:13px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600;}
+.filter-search{position:relative;}
+.filter-search input,.filter-select select{
+  width:100%;padding:9px 14px;font-family:var(--sans);font-size:14px;color:var(--ink);
+  background:var(--off);border:1.5px solid var(--rule);border-radius:3px;
+  transition:border-color .15s,background .15s;}
+.filter-search input{padding-left:34px;}
+.filter-search::before{content:'⌕';position:absolute;left:11px;top:30px;font-size:16px;
+  color:var(--muted);pointer-events:none;}
+.filter-search input:hover,.filter-select select:hover{border-color:var(--muted);background:var(--white);}
+.filter-search input:focus,.filter-select select:focus{border-color:var(--blue);background:var(--white);}
+
+.filter-chips{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.filter-chips-label{font-family:var(--mono);font-size:13px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-right:6px;font-weight:600;}
+.chip{font-family:var(--sans);font-size:13px;padding:6px 12px;border:1.5px solid var(--rule);
+  background:var(--off);color:var(--muted);border-radius:100px;cursor:pointer;
+  transition:all .15s;font-weight:500;}
+.chip:hover{border-color:var(--muted);color:var(--ink);background:var(--white);}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff;}
+.chip-count{font-family:var(--mono);font-size:13px;color:var(--muted);margin-left:5px;}
+.chip[aria-pressed="true"] .chip-count{color:rgba(255,255,255,.85);}
+
+.result-line{margin-top:14px;padding-top:12px;border-top:1px dashed var(--rule);
+  font-family:var(--mono);font-size:13px;color:var(--muted);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.reset-btn{background:var(--white);border:1px solid var(--rule);color:var(--ink);
+  padding:5px 12px;border-radius:3px;cursor:pointer;font-family:var(--mono);
+  font-size:13px;letter-spacing:.04em;text-transform:uppercase;}
+.reset-btn:hover{border-color:var(--blue);color:var(--blue);}
+
+/* Comment cards */
+.comment-list{display:flex;flex-direction:column;gap:12px;}
+article.comment{background:var(--white);border:1px solid var(--rule);border-left:3px solid var(--navy);
+  padding:18px 22px;border-radius:5px;}
+article.comment.is-reply{border-left-color:var(--amber);background:#fffaf0;margin-left:24px;}
+@media (max-width:600px){article.comment.is-reply{margin-left:10px;}}
+.comment-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin-bottom:6px;}
+.author{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.005em;}
+.author-anon{font-style:italic;color:var(--muted);font-weight:500;}
+.comment-meta{font-family:var(--mono);font-size:13px;color:var(--muted);
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.meta-sep{color:var(--rule);}
+.badge{font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 8px;border-radius:100px;font-weight:600;}
+.badge-doc{background:#e0e7f3;color:var(--navy);}
+.badge-type{background:var(--off);color:var(--muted);border:1px solid var(--rule);}
+.badge-type-idea{background:#dcfce7;color:var(--green);border-color:transparent;}
+.badge-type-question{background:#fef3c7;color:var(--amber-ink);border-color:transparent;}
+.badge-type-answer{background:#dbeafe;color:var(--navy);border-color:transparent;}
+.badge-type-typo{background:#f1f5f9;color:var(--muted);border-color:transparent;}
+
+.reply-marker{font-family:var(--mono);font-size:13px;color:var(--ink);background:transparent;
+  margin-bottom:8px;display:inline-flex;align-items:center;gap:6px;font-weight:500;}
+.reply-marker::before{content:'↪';font-size:16px;color:var(--amber-ink);font-weight:600;}
+
+.comment-body{color:var(--ink);font-size:14.5px;line-height:1.65;margin:8px 0 12px;
+  overflow-wrap:break-word;}
+.comment-body p{margin-bottom:.7em;}
+.comment-body p:last-child{margin-bottom:0;}
+
+.comment-foot{display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+  padding-top:8px;border-top:1px dashed var(--rule);
+  font-family:var(--mono);font-size:13px;color:var(--muted);}
+.comment-foot a{color:var(--blue);text-decoration:none;border-bottom:1px dotted var(--blue);}
+.comment-foot a:hover{border-bottom-style:solid;}
+
+mark{background:#fef3c7;color:var(--ink);padding:0 2px;border-radius:2px;font-weight:500;}
+
+.empty{text-align:center;padding:48px 24px;background:var(--white);border:1.5px dashed var(--rule);
+  border-radius:5px;color:var(--muted);}
+.empty-title{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+
+/* Page-bottom links to siblings */
+.page-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;
+  margin-top:36px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);}
+.page-nav-card{display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  border-radius:5px;padding:14px 18px;text-decoration:none;transition:background .15s,border-color .15s;}
+.page-nav-card:hover{background:rgba(255,255,255,.07);border-color:rgba(200,168,75,.4);}
+.page-nav-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  color:#c8a84b;margin-bottom:5px;}
+.page-nav-card h3{font-family:var(--sans);font-size:15px;font-weight:600;color:#e2e8f0;margin-bottom:3px;}
+.page-nav-card p{font-size:13px;color:#9ab0c8;line-height:1.5;}
+</style>
+
+<div id="live-announce" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+<!-- ===== HEADER ===== -->
+<header class="dashboard-header" role="region" aria-label="Page header">
+  <div class="header-inner">
+    <p class="eyebrow">StorySeed Studios · The Dais · Public Record · SAP Draft</p>
+    <h1>What residents <em>actually said</em> about the Safety Action Plan</h1>
+    <p class="sub">A searchable mirror of every public comment left on the Draft Plan and Appendices through Konveio, between March 18 and April 2, 2026, before commenting closed. Same words, same authors, same page references — surfaced in a form that's keyboard-operable, screen-reader friendly, and indexable by search engines.</p>
+    <div class="header-meta">
+      <span class="meta-pill">79 Comments</span>
+      <span class="meta-pill">24 Residents</span>
+      <span class="meta-pill">Pages 1–40</span>
+      <span class="meta-pill">2 Documents</span>
+      <span class="meta-pill warn">Commenting closed</span>
+    </div>
+  </div>
+</header>
+
+<div class="page-body">
+
+  <!-- Disclosure -->
+  <aside class="disclosure" aria-label="About this archive">
+    <strong>About this archive.</strong> Konveio renders comments as plain HTML on the public document pages, but does not provide a search across the whole conversation. This page mirrors those public comments and adds the search. Names appear exactly as residents posted them. Each comment links back to its document on Konveio so you can see it in context. <strong>This page is not the official record</strong> — it is a courtesy reading aid, hosted under StorySeed / The Dais. Showing the initial Konveio comment load · a full pagination scrape requires browser access we don't have.
+  </aside>
+
+  <!-- PDF surface -->
+  <section class="pdf-block" aria-label="Source documents">
+    <div class="pdf-block-head">
+      <h2>Source documents</h2>
+      <span class="meta-pill" style="border-color:var(--rule);color:var(--muted);">Read the draft</span>
+    </div>
+    <div class="pdf-grid">
+
+      <article class="pdf-card">
+        <p class="pdf-card-tag">Draft Plan</p>
+        <h3>Colorado Springs Safety Action Plan — Draft</h3>
+        <p>The 40-page main planning document, dated March 11, 2026. Covers policies, programs, partnerships, and recommended countermeasures. <strong>Source PDF is properly tagged</strong> for accessibility.</p>
+        <div class="pdf-actions">
+          <a class="pdf-btn primary" href="/microsites/city/traffic/SafetyPlan/sap-draft-plan.pdf" download>
+            Download tagged PDF <span class="sr-only">(downloads file)</span>↓
+          </a>
+          <a class="pdf-btn" href="https://olsson.konveio.com/cossapdraft" target="_blank" rel="noopener noreferrer">
+            View on Konveio <span class="sr-only">(opens in new window)</span>↗
+          </a>
+        </div>
+      </article>
+
+      <article class="pdf-card">
+        <p class="pdf-card-tag">Appendices</p>
+        <h3>Draft Appendices A – D</h3>
+        <p>40-page companion document covering engagement, crash analysis, countermeasure toolbox, and project scoring. <strong>Source PDF is properly tagged</strong> for accessibility.</p>
+        <div class="pdf-actions">
+          <a class="pdf-btn primary" href="/microsites/city/traffic/SafetyPlan/sap-appendices.pdf" download>
+            Download tagged PDF <span class="sr-only">(downloads file)</span>↓
+          </a>
+          <a class="pdf-btn" href="https://olsson.konveio.com/cossapdraftappendices" target="_blank" rel="noopener noreferrer">
+            View on Konveio <span class="sr-only">(opens in new window)</span>↗
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <form class="filters" role="search" aria-label="Filter and search comments" id="filter-form">
+
+    <div class="filters-row">
+
+      <div class="filter-search">
+        <label for="search-input" class="filter-label">Search</label>
+        <input
+          type="search"
+          id="search-input"
+          name="q"
+          placeholder="Search authors and comment text…"
+          autocomplete="off"
+          aria-describedby="search-help"
+        >
+        <span id="search-help" class="sr-only">
+          Type to filter comments by keyword. Results update as you type.
+        </span>
+      </div>
+
+      <div class="filter-select">
+        <label for="document-select" class="filter-label">Document</label>
+        <select id="document-select" name="document">
+          <option value="all">All documents</option>
+          <option value="Draft Plan">Draft Plan</option>
+          <option value="Appendices">Appendices</option>
+        </select>
+      </div>
+
+      <div class="filter-select">
+        <label for="author-select" class="filter-label">Author</label>
+        <select id="author-select" name="author">
+          <option value="all">All authors</option>
+          <!-- author options injected at build time -->
+        </select>
+      </div>
+
+      <div class="filter-select">
+        <label for="sort-select" class="filter-label">Sort</label>
+        <select id="sort-select" name="sort">
+          <option value="newest">Most recent</option>
+          <option value="oldest">Oldest first</option>
+          <option value="page">By page (low → high)</option>
+          <option value="author">By author (A → Z)</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="filter-chips" role="group" aria-label="Filter by comment type">
+      <span class="filter-chips-label" id="type-label">Type</span>
+      <button type="button" class="chip" data-type-chip="all" aria-pressed="true" aria-labelledby="type-label">All <span class="chip-count">(79)</span></button>
+      <button type="button" class="chip" data-type-chip="Idea" aria-pressed="false" aria-labelledby="type-label">Idea <span class="chip-count">(46)</span></button>
+      <button type="button" class="chip" data-type-chip="Question" aria-pressed="false" aria-labelledby="type-label">Question <span class="chip-count">(9)</span></button>
+      <button type="button" class="chip" data-type-chip="Answer" aria-pressed="false" aria-labelledby="type-label">Answer <span class="chip-count">(5)</span></button>
+      <button type="button" class="chip" data-type-chip="Typo" aria-pressed="false" aria-labelledby="type-label">Typo <span class="chip-count">(0)</span></button>
+      <button type="button" class="chip" data-type-chip="Comment" aria-pressed="false" aria-labelledby="type-label">Comment <span class="chip-count">(19)</span></button>
+    </div>
+
+    <div class="result-line">
+      <span id="result-count" aria-live="polite" aria-atomic="true">Showing all 79 comments.</span>
+      <button type="button" class="reset-btn" id="reset-btn">Reset filters</button>
+    </div>
+
+  </form>
+
+  <!-- Comments -->
+  <h2 class="sr-only">Comments</h2>
+  <div class="comment-list" id="comment-list" role="feed" aria-busy="false" aria-labelledby="result-count">
+    <!-- comments injected by JS -->
+  </div>
+
+  <!-- Sibling page nav -->
+  <nav class="page-nav" aria-label="Related Safety Action Plan pages">
+    <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/cos-traffic-hub.html">
+      <p class="page-nav-tag">Section 1 · Data</p>
+      <h3>Traffic Safety Dashboard</h3>
+      <p>64,434 crash records, FHWA funding analysis, and zip-code search — same ArcGIS feed the City uses.</p>
+    </a>
+    <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/sap-context.html">
+      <p class="page-nav-tag">Section 3 · Context</p>
+      <h3>Project background &amp; timeline</h3>
+      <p>Funding, plan adoption schedule, contact information, and the public engagement record.</p>
+    </a>
+  </nav>
+
+</div>
+
+<!-- ===== DATA + LOGIC ===== -->
+{% raw %}
+<script id="comments-data" type="application/json">[{"id": "draft-plan-anonymous-3-2026-04-02t22-22-00-23", "author": "anonymous 3", "date": "2026-04-02T22:22:00", "page": 23, "type": "Idea", "body": "This table item refers to roads, but I'd also love to see more grade-separated pedestrian crossings, especially for major trails. For example, an extension of the Austin Bluffs spine trail will connect down to Union Blvd, and a bridge crossing to Union Meadows would be great.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t22-19-00-30", "author": "anonymous 3", "date": "2026-04-02T22:19:00", "page": 30, "type": "Idea", "body": "The manner of applying the neighborhood traffic calming program is important; sometimes, while it's helpful to give attention to a neighborhood, the most typical treatments aren't all that beneficial.\n\nFor example, with University Park traffic calming, the city's meeting results indicated that a majority of survey respondents declined speed bumps, although one might not realize that going by the more vocal meeting attendees.\n\nOur collector roads (Rockhurst, Collegiate) have 30mph design speeds (which surprised me; I would've guessed 35) and are posted at 25mph, which is, of course, ignored. Effort is better spent slowing egregious speeders (and there are very bad ones, especially on Collegiate) down to 30 and improving pedestrian crossings than trying to get all drivers to 25 or below.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t22-01-00-34", "author": "anonymous 3", "date": "2026-04-02T22:01:00", "page": 34, "type": "Idea", "body": "On arterials, specifically? Please don't.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t21-59-00-25", "author": "anonymous 3", "date": "2026-04-02T21:59:00", "page": 25, "type": "Idea", "body": "Yes, please. This applies to all-way stops, too.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t21-57-00-24", "author": "anonymous 3", "date": "2026-04-02T21:57:00", "page": 24, "type": "Idea", "body": "Correctly not here is adding stop signs for interrupting traffic. The city has some dubious all-way stops, like Centennial & Allegheny (north) and Woodmen & Orchard Valley. With the low cross traffic (and not exceptionally high main main road traffic), there's a lot of technically bad driver behavior through these, and people at the cross streets can't be very confident in the main road's drivers.\n\nIt would be nice if the city explored other treatments in iffy cases like these, like roundabouts or bump-outs.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t21-49-00-24", "author": "anonymous 3", "date": "2026-04-02T21:49:00", "page": 24, "type": "Idea", "body": "Very supportive of more roundabouts, including mini ones. Design is important, though; some of our relatively older ones, like on Rockhurst Blvd south of University Park Blvd, have little to no deflection, so straight-through traffic may not slow down for the intersection.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t21-47-00-24", "author": "anonymous 3", "date": "2026-04-02T21:47:00", "page": 24, "type": "Idea", "body": "After growing up in a COS speed bump neighborhood, I'd have to say I'm not really thrilled with the idea of more. They seem too localized, and there's a lot of noise associated with them (vehicles hitting them, engines revving right after them). If we have to have a speed bump, I'd rather make it do some work as a raised crosswalk. Otherwise, I'd prefer bump-outs and median [refuge] islands.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t21-45-00-23", "author": "anonymous 3", "date": "2026-04-02T21:45:00", "page": 23, "type": "Idea", "body": "I'd love more of these, especially on collector roads. Allegheny, Oak Hills, Montebello, Mount View, etc. The wide Old/Near North End intersections could benefit, as well.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t21-42-00-23", "author": "anonymous 3", "date": "2026-04-02T21:42:00", "page": 23, "type": "Idea", "body": "Yes, please. There are some weird access management choices around the city, some relatively recent (like the 7-11 curb cut on Academy south of Dublin). I wish the city had better arterial access control and encouraged more off-arterial connectivity.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t21-41-00-23", "author": "anonymous 3", "date": "2026-04-02T21:41:00", "page": 23, "type": "Idea", "body": "I feel like raised crosswalks can be a really beneficial treatment when applied well, providing a more comfortable/visible crossing and demanding drivers' attention at exactly the right spot. (This may be in contrast to regular speed bumps, which don't necessarily correspond to anything.) I'd love to prioritize these over plain speed bumps.\n\nThe War Eagle Dr crossing is nice, for example (although people park awfully close to it); it would've been nice to swap out a speed bump on Allegheny Dr for a raised crosswalk at Foothills Elementary.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t21-37-00-14", "author": "anonymous 3", "date": "2026-04-02T21:37:00", "page": 14, "type": "Idea", "body": "It's important to distinguish between posted speed limits and actual travel speeds. Research and history show that drivers base their speeds more on the design of the road than the posted speed limit; just swapping out the limit signs to for lower numbers will usually have little effect, especially on roads that were designed for higher speeds. At worst, that misleads people on typical driver behavior, leading to greater speed differences, more aggressive driving, and more crashes.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-anonymous-3-2026-04-02t21-30-00-26", "author": "anonymous 3", "date": "2026-04-02T21:30:00", "page": 26, "type": "Idea", "body": "Setting speed limits appropriately is extremely important. The city seems to apply \"lower posted speed limit by 5\" as a quick response to complaints or bad driver behavior on roads where it doesn't fit the design (e.g., the wide, straight, access-controlled section of Centennial Blvd, or Vickers Dr after widening the lanes); then, the change is disregarded, and people register it as another road where you can go an extra 5mph faster. Research has shown that people predominantly base their driving speed on the road's design, and we should keep that in mind: just changing the signs is usually not helpful.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-molly-2026-04-02t07-27-00-5", "author": "Molly", "date": "2026-04-02T07:27:00", "page": 5, "type": "Question", "body": "I have read the comments and the plan and even read the comments on the post and I get frustrated because the city receives plenty of feedback on what we would like to see and it's NEVER listened to. We're growing increasingly frustrated because of the timing of the lights. I watch someone run a red light at EVERY red light because they have been stopped at the last 3 lights. My son attends Coronado HS. We live 1.3 miles from the school and it's a 6 min drive because I get stuck at all 3 lights. You are either lobbied to do this for stop and go or you have the most incompetent engineer working the lights. And yet climate change and climate control is constantly pushed down our throats. What will it take to listen to the people here? There are such great recommendations, and I bet we don't see any action take, other than what you've printed here.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-chris-2026-04-01t23-04-00-31", "author": "Chris", "date": "2026-04-01T23:04:00", "page": 31, "type": null, "body": "If there are design standards for safety (4), those should be included into the traffic impact studies required of private development (3).", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-chris-2026-04-01t22-50-00-26", "author": "Chris", "date": "2026-04-01T22:50:00", "page": 26, "type": "Question", "body": "I am curious why these are in place on North Nevada (Old North End) and not on the New South End portion of that road as well, where there is arguably more foot/scooter traffic with all the new apartments that have been added there in the past 3-5 years. Vehicle speeds increase, especially between Rio Grande and Las Vegas because there are no stoplights to slow them down.", "replyTo": "Harrison", "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t22-20-00-34", "author": "Seth Palmer Harris", "date": "2026-04-01T22:20:00", "page": 34, "type": "Idea", "body": "Denver does this with buses and it's very effective at keeping them moving even when there's traffic. Annoys some drivers, but they get over it.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t22-19-00-34", "author": "Seth Palmer Harris", "date": "2026-04-01T22:19:00", "page": 34, "type": "Idea", "body": "Unless they're static, so people know where to expect them, I haven't seen great evidence that speed cameras have a sustainable effect on behavior. Up earlier I commented that I'm in favor of permanent speed cameras in school zones, and that's true, but if it's just a camera van occasionally arbitrarily showing up on different streets I'm not convinced. But what do I know.", "replyTo": "Joan Stang", "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t22-17-00-33", "author": "Seth Palmer Harris", "date": "2026-04-01T22:17:00", "page": 33, "type": "Answer", "body": "I agree with you. I'm not sure changing the law would change behavior in this case, but I agree with you.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t22-16-00-33", "author": "Seth Palmer Harris", "date": "2026-04-01T22:16:00", "page": 33, "type": "Idea", "body": "Our public transit is laughable. May we do radically better soon.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t22-15-00-33", "author": "Seth Palmer Harris", "date": "2026-04-01T22:15:00", "page": 33, "type": "Idea", "body": "In general I'd say I'm not a fan of speed cameras, as limited deployment tends not to change behavior and so ultimately I see them as arbitrary punishment of economically disadvantaged folks for whom the fine is more of a burden. That said, I am absolutely in favor of every school zone with anything like a busy road near it (I live near Columbia Elementary and Boulder St on its south side is a good example) should have a speed camera. Then it's predictable such that it changes behavior and actually helps to keep kids safer.", "replyTo": "Daniel", "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t21-57-00-28", "author": "Seth Palmer Harris", "date": "2026-04-01T21:57:00", "page": 28, "type": "Answer", "body": "There's been quite a lot of data presented throughout this whole draft.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t17-15-00-22", "author": "Seth Palmer Harris", "date": "2026-04-01T17:15:00", "page": 22, "type": "Idea", "body": "There are a lot of instances where physical space isn't really sufficient, depending on the road. Swapping bike lanes and parking lanes can be an effective way of dealing with that. I'd also love to see more physical barriers between bike lanes and car lanes where there is no parking present.", "replyTo": "Jim", "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t17-14-00-22", "author": "Seth Palmer Harris", "date": "2026-04-01T17:14:00", "page": 22, "type": "Answer", "body": "That strikes me as kind of a sunk cost fallacy. Just because we've already built it one way doesn't mean we should keep it that way just because it would've been less expensive to do it differently in the first place.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t17-12-00-22", "author": "Seth Palmer Harris", "date": "2026-04-01T17:12:00", "page": 22, "type": "Idea", "body": "These definitely have a learning curve. When they were installed in Denver, I constantly saw them ignored. That seems to have improved with time, though. So maybe a public education campaign with them if they're installed.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t17-11-00-24", "author": "Seth Palmer Harris", "date": "2026-04-01T17:11:00", "page": 24, "type": "Idea", "body": "There's no need, for instance, for Boulder from Wahsatch to Union, Wahsatch anywhere, or even most of Nevada to have more than one lane in each direction. The kinds of speeding I see down these in largely residential neighborhoods (one of them my own) is outrageous.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t17-09-00-24", "author": "Seth Palmer Harris", "date": "2026-04-01T17:09:00", "page": 24, "type": "Question", "body": "As I said in another comment, I think this is already in the city code, isn't it? 10.12.101.F-H. No parking within 20 feet of a crosswalk or 30 feet of a stop sign or stop light.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-seth-palmer-harris-2026-04-01t17-05-00-24", "author": "Seth Palmer Harris", "date": "2026-04-01T17:05:00", "page": 24, "type": "Idea", "body": "This is a big one. There are so many intersections where cars are parked right up to the street I'm on, making it impossible to see oncoming intersecting traffic without being halfway into the road. I think this is a matter of code enforcement as, as I understand it, city code prohibits parking within 30 feet of the approach to a stop sign or traffic light. Signage frequently contradicts that, however.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-james-bensberg-2026-04-01t13-20-00-16", "author": "James Bensberg", "date": "2026-04-01T13:20:00", "page": 16, "type": "Answer", "body": "Regarding Motorcycle Crashes:\nThe Draft Plan states \"Data indicated that motorcycle crashes are more likely to occur away from intersections, likely due to maneuvers like lane filtering, land splitting and overtaking. This indicates severe motorcycle crashes are often the result of risky driver behavior.\"\nLane filtering is legal in Colorado. Lane splitting is not. There is no data provided in this Plan to indicate any fatalities or serious injuries have occurred due to the now widely accepted practice of lane filtering by motorcyclists in Colorado. To say that this practice is \"likely\" to result in fatalities or injury is simply not supported by any data. In fact, there are data and studies to support the law which allows filtering indicating motorcyclists are far less likely to be struck from the rear when traffic is stopped.", "replyTo": "Jim", "document": "Draft Plan"}, {"id": "draft-plan-peter-frantz-2026-03-31t22-46-00-5", "author": "Peter Frantz", "date": "2026-03-31T22:46:00", "page": 5, "type": null, "body": "I think Jim has a good point. If you have one road segment with 10,000 vpd and one with 10 vpd, and they both have 5 fatalities in one year, then one would reasonably conclude that the smaller road is much higher risk to the user and deserves attention. However, the city standards for HRN inclusion appear to neglect this consideration.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-peter-frantz-2026-03-31t22-34-00-2", "author": "Peter Frantz", "date": "2026-03-31T22:34:00", "page": 2, "type": null, "body": "24 of the 36 stakeholders appear to be on some kind of government payroll. Many of the rest are business representatives. I sincerely hope that the concerns of citizens that are posted in these comments have a substantial impact on the final composition of this document. If not, then this truly has the appearance of being composed to serve the interests of government and business, and neglecting the interests of the people that the government is here to serve.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-chris-2026-03-31t22-24-00-14", "author": "Chris", "date": "2026-03-31T22:24:00", "page": 14, "type": null, "body": "I think it's important to keep in mind that most drivers are driving faster than the posted speed limits, except maybe in active school zones. So when a speed limit is 35 mph, drivers are likely doing anywhere from 45-50. Speed limits should reflect this reality, meaning if we want people to drive 35 mph, then the sign/limit should read 25 mph.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-peter-frantz-2026-03-31t22-24-00-2", "author": "Peter Frantz", "date": "2026-03-31T22:24:00", "page": 2, "type": null, "body": "It has always baffled me that neighborhood groups are not considered to hold a stake in projects like this.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-jchapman-2026-03-30t20-59-00-26", "author": "JChapman", "date": "2026-03-30T20:59:00", "page": 26, "type": "Idea", "body": "Excellent. Thanks for including this in the draft. Decades of research shows that speed limit compliance is low, and yet many cities continue to use the \"85th-percentile\" method, the traditional practice of setting speed limits based on how the driver feels when driving on a road. All other considerations, like the safety of non-drivers, are too often secondary. We need to re-frame urban safety by using other metrics rather than the 85th-percentile method.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-jchapman-2026-03-30t20-51-00-6", "author": "JChapman", "date": "2026-03-30T20:51:00", "page": 6, "type": "Idea", "body": "Slow roads save lives. It's simple physics. Why else do city planners use statutory speed limit authority to lower speed limits at school zones and some parks to 20mph? The speed choice of drivers is outweighed by the safety of others, and, as a community, we prioritize safety in those settings.\n\nWhy not use the same logic in other areas where vulnerable users of streets and sidewalks are as present as vehicles?", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-jchapman-2026-03-30t20-48-00-6", "author": "JChapman", "date": "2026-03-30T20:48:00", "page": 6, "type": "Idea", "body": "We are a car-centric community. Any Safety Action Plan in which road designers, city planners and engineers promote urban streets that are People-Centric is an improvement. Putting safety as a priority over speed moves consideration of people's lives from the fringes to being the central component for road design and speed limits.", "replyTo": "Jim 1", "document": "Draft Plan"}, {"id": "draft-plan-shamus-peterson-2026-03-30t17-28-00-1", "author": "Shamus Peterson", "date": "2026-03-30T17:28:00", "page": 1, "type": "Idea", "body": "Self-driving cars are already really great today and getting better, but they are NOT a replacement for mass public transit and dense urban design that makes everything accessible without needing to use a car, self-driving or not.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-jenny-weber-2026-03-30t16-06-00-20", "author": "Jenny Weber", "date": "2026-03-30T16:06:00", "page": 20, "type": "Idea", "body": "Unlike most other parts of this map, note that the section of N. Nevada between Fillmore and Uintah is almost entirely residential. Yet it is listed as a high-risk stretch of road. Because it is residential, this should be a much higher priority for the city that it currently is.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-jim-1-2026-03-30t10-43-00-1", "author": "Jim 1", "date": "2026-03-30T10:43:00", "page": 1, "type": "Idea", "body": "Since this is a plan, it should plan for various future aspects.\nOne very near-term future technology that the city should plan for is widespread use of self-driving cars, including self-driving taxis or ride shares. The city should carefully consider what's best for the people of the Springs. We should NOT blindly copy policies from places like Denver, NY, LA, etc. We should also NOT blindly respond in luddite fashion (banning or restricting things we don't understand), nor should we bow to interest groups (taxi drivers, etc.) that want to restrict self-driving cars to the detriment of residents.\n\nIf done well, the introduction and use of self-driving cars should substantially improve public safety.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-brittany-jones-2026-03-29t16-52-00-7", "author": "Brittany Jones", "date": "2026-03-29T16:52:00", "page": 7, "type": "Question", "body": "The current federal transportation policy has shifted to a more auto-oriented, highway-capacity-first approach. Does this federal reduction in support for multi-modal transit, bicycle, and pedestrian projects jeopordize COS's plan (and budget) to incorporate the needs of vulnerable road users?", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-brittany-jones-2026-03-29t16-14-00-23", "author": "Brittany Jones", "date": "2026-03-29T16:14:00", "page": 23, "type": "Question", "body": "I cross Uintah at 23rd or 24th (Thorndale Park) on foot or bike nearly every day. 1 in 20 car drivers pay any attention to those flashing beacons. Nearly all are driving 10-20mph over the posted speed limit. Neither speed limit signs nor flashing beacon signs overcome road design that encourages high speeds. How are we determining whether a sign will change driver behavior in a given location?", "replyTo": "Joan Stang", "document": "Draft Plan"}, {"id": "draft-plan-brittany-jones-2026-03-29t15-48-00-15", "author": "Brittany Jones", "date": "2026-03-29T15:48:00", "page": 15, "type": null, "body": "The fact that it isn't a straight intersection, but that trail users need to \"jog\" down 21st, then cut across oncoming traffic. Awful design. Followed closely by the Pikes Peak Greenway offshoot that runs you literally through the middle of Trader Joe's parking lot.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-shamus-peterson-2026-03-28t02-14-00-26", "author": "Shamus Peterson", "date": "2026-03-28T02:14:00", "page": 26, "type": "Idea", "body": "Roads should have traffic calming that reflects their speed limit, so the driver doesn't feel safe speeding and the speed limit will enforce itself. Driving is a subconscious activity, and drivers who aren't staring at their speedometer will always speed if it feels safe.", "replyTo": "Jim", "document": "Draft Plan"}, {"id": "draft-plan-shamus-peterson-2026-03-28t01-27-00-26", "author": "Shamus Peterson", "date": "2026-03-28T01:27:00", "page": 26, "type": "Idea", "body": "If all the HPS streetlights in the city are replaced with LED lights, they would be more effective at improving visibility, and LED lighting will last much longer than HPS bulbs, saving the city money in the long run in maintenance costs.", "replyTo": "Jim", "document": "Draft Plan"}, {"id": "draft-plan-shamus-peterson-2026-03-28t00-54-00-22", "author": "Shamus Peterson", "date": "2026-03-28T00:54:00", "page": 22, "type": null, "body": "Keep in mind that we can repurpose existing parts of a roadway into bike lanes, where the money to build it in the first place was already spent.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-shamus-peterson-2026-03-27t22-25-00-23", "author": "Shamus Peterson", "date": "2026-03-27T22:25:00", "page": 23, "type": "Idea", "body": "Raised crosswalks will be way easier for wheelchair users to cross, and they will force drivers to slow down before they reach the crosswalk and will be less likely to stop in the middle of the crosswalk.", "replyTo": "Joan Stang", "document": "Draft Plan"}, {"id": "draft-plan-shamus-peterson-2026-03-27t20-25-00-33", "author": "Shamus Peterson", "date": "2026-03-27T20:25:00", "page": 33, "type": "Idea", "body": "Improved public transit will definitely result in less cars on the road as the people who don't want to drive or cannot drive safely will have a safe alternative.\n\nIf possible, I'd love for the traffic signals to give the transit routes higher priority over cars to help keep the buses on schedule and a single bus could easily be carrying more passengers than all the cars waiting at an intersection combined.", "replyTo": "Richard", "document": "Draft Plan"}, {"id": "draft-plan-daniel-2026-03-27t16-35-00-31", "author": "Daniel", "date": "2026-03-27T16:35:00", "page": 31, "type": null, "body": "Public comment is open twice a month as Item 13 on the City Council agenda.", "replyTo": "Nicole", "document": "Draft Plan"}, {"id": "draft-plan-daniel-2026-03-27t16-31-00-28", "author": "Daniel", "date": "2026-03-27T16:31:00", "page": 28, "type": null, "body": "Agreed. The amount of personal property (4,000lbs of steel) a citizen brings on their journey, shouldn't entitle them to more space or safety on our public rights-of-way.", "replyTo": null, "document": "Draft Plan"}, {"id": "draft-plan-daniel-2026-03-27t16-22-00-20", "author": "Daniel", "date": "2026-03-27T16:22:00", "page": 20, "type": null, "body": "HRN right by Palmer HS with tons of kids walking. Need to fix this now before more people are hurt.", "replyTo": "Rebecca", "document": "Draft Plan"}, {"id": "draft-plan-daniel-2026-03-27t16-10-00-1", "author": "Daniel", "date": "2026-03-27T16:10:00", "page": 1, "type": "Idea", "body": "Agreed. This is also largely driven by ZONING code that requires separation of uses in combination with massive developments that necessitate owning a vehicle. Fix the code. Please, give us options to take care of life within walking distance!", "replyTo": null, "document": "Draft Plan"}, {"id": "appendices-erik-fogle-2026-04-01t12-28-00-40", "author": "Erik Fogle", "date": "2026-04-01T12:28:00", "page": 40, "type": "Answer", "body": "The time for real action on N Nevada has passed years ago. It needs to be made a priority immediately. North Nevada is not just a thoroughfare; it is a residential neighborhood home to many families and young children. Every morning and afternoon, a high volume of students walk this corridor to attend our local elementary school. We see a consistent flow of pedestrians throughout the day. Under current conditions, these residents are forced to navigate a high-risk network where vehicles regularly exceed the 30 mph limit by 10 mph or more.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-ardith-hanson-2026-04-01t03-47-00-40", "author": "Ardith Hanson", "date": "2026-04-01T03:47:00", "page": 40, "type": "Idea", "body": "In Re to SAP-OOT OSP-196 Nevada Avenue Road Reconfiguration.\nI think this is a great idea, thoroughly researched and long overdue.\nWe have had a working plumber killed by a car drifting right into the (very close) parking lane. We have, personally, had THREE cars demolished while parked, usually by cars that drift. It's not just the deaths, though those are the MOST serious but the carnage on parked cars is also something I have not seen on any other street.\nWe almost never park on the street anymore because of the current configuration. I warn EVERY workman to NEVER turn their back on this dangerous stretch of street.\nI really support moving to ONE lane, like Cascade ... I believe that would reduce MANY of these accidents by having more space between moving cars and parked cars.\nJust repainting the lanes to a new configurations cannot be as expensive as the deaths and demolished cars.\nThank you for your consideration.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-peter-frantz-1-2026-03-31t21-41-00-40", "author": "Peter Frantz 1", "date": "2026-03-31T21:41:00", "page": 40, "type": "Idea", "body": "This project must be done during or after the reconfiguration project on Nevada, which is listed as SAP-00T. However, it receives considerably higher priority in Table D.1. This must be an error. Please raise the Nevada reconfiguration project to this (or higher) priority level to fix this inconsistency.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-peter-frantz-1-2026-03-31t21-35-00-40", "author": "Peter Frantz 1", "date": "2026-03-31T21:35:00", "page": 40, "type": "Idea", "body": "Yes! Wahsatch and Nevada should be reconfigured immediately. These projects should not be relegated to this low priority group.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-peter-frantz-1-2026-03-31t21-31-00-40", "author": "Peter Frantz 1", "date": "2026-03-31T21:31:00", "page": 40, "type": null, "body": "This stretch of minor arterial roadway has had 5 fatalities in 5 years, or 17 fatalities per 100 mVMT. This is 15 times the COS average and more than any one-mile segment that we can find. Yet this project scored 0.5 on F1LOSS and HRN. We've had a pedestrian fatality, numerous vehicles striking houses and motorcycle fatalities in the past 15 years, yet it scored a 0.5 on the PED/MOTO topic. We've had 49 residents write letters to the city begging for traffic calming and 345 signed a petition 2019, yet this ranked a 0.5 on local preference. How can these rankings be taken seriously?", "replyTo": null, "document": "Appendices"}, {"id": "appendices-mary-blake-2026-03-31t12-20-00-40", "author": "Mary Blake", "date": "2026-03-31T12:20:00", "page": 40, "type": "Idea", "body": "This intersection is the site of where a car literally crashed through someone's house/front window. Another time a pickup truck screeched and rolled across the median, destroying three or four trees. A roundabout would be great for this historic neighborhood...for a street that has a 30 mph speed limit, we often see cars, pickups and even semi trucks blow through the intersections going over 50 mph. It might help deter the \"drag-racing\" that occurs daily/nightly in the Old North End. Please make this a priority, to help prevent more deaths and destruction in our neighborhood.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-mary-blake-2026-03-31t12-08-00-40", "author": "Mary Blake", "date": "2026-03-31T12:08:00", "page": 40, "type": "Idea", "body": "Please make this project (OSP-196) a priority. This is the proverbial can that's been kicked down the road for over a decade. I have lived along Nevada for over 15 years now, and I'm tired of the blue and red lights that have wiggled for hours on my bedroom ceiling at 1 a.m. that pretty much indicate that there has been another death on my street. Ot the late night screech then crash that curdles your stomach with dread...again. I was originally against the \"road dieting\" but now that I've seen the data of the Cascade Ave success, and have heard comments from Emergency Vehicle drivers that they would not be affected, I am begging the city to finally take care of this. My hope is that it would reduce deaths and collisions, & help alleviate some of the motorcycle and pickup-truck drag-racing that plagues us and many other neighborhoods in the city. Thank you for considering this.", "replyTo": "Cully Radvillas", "document": "Appendices"}, {"id": "appendices-shamus-peterson-2026-03-31t08-54-00-35", "author": "Shamus Peterson", "date": "2026-03-31T08:54:00", "page": 35, "type": null, "body": "We should absolutely be okay with mildly inconveniencing drivers if it means everyone is safer.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-shamus-peterson-2026-03-31t07-32-00-35", "author": "Shamus Peterson", "date": "2026-03-31T07:32:00", "page": 35, "type": "Idea", "body": "Woah there! We should not intentionally force bicyclists to cross the path of high-speed motor vehicle traffic! It may be better to have bike lanes to the right of right turn lanes and to have dedicated signals for bicyclists while prohibiting right turns on red.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-donald-verhaeghe-2026-03-30t20-35-00-40", "author": "Donald Verhaeghe", "date": "2026-03-30T20:35:00", "page": 40, "type": null, "body": "Getting a roundabout added to N Nevada at Fontanero would be a great idea to help calm the traffic going through our historic neighborhood. Consider moving this up in priority so that we can make the neighborhood safer sooner rather than later.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-donald-verhaeghe-2026-03-30t20-31-00-40", "author": "Donald Verhaeghe", "date": "2026-03-30T20:31:00", "page": 40, "type": "Idea", "body": "My wife and I have lived on N Nevada for 39 years between Uintah and Fillmore. There have been *countless* safety studies done showing this 1-mile stretch of road is one of the DEADLIEST in the city. We have been fighting to improve the safety of our neighborhood for years. SAP-00T is finally on the list to get N Nevada reduced to one lane. But how on earth is this so FAR down the priority list? It is mind boggling how this is not at the top of the list since it has been an issue for YEARS. Do the right thing finally and get this moved up significantly in priority so that it can finally be address this year!", "replyTo": null, "document": "Appendices"}, {"id": "appendices-peter-frantz-2026-03-30t17-39-00-39", "author": "Peter Frantz", "date": "2026-03-30T17:39:00", "page": 39, "type": "Idea", "body": "Traffic counts on Chelton were found to be nearly 17,000 vpd in December of 2018, exceeding the 14,000 vpd threshold shown in the \"Toolbox\" table above. I am happy to see that the City is willing to violate their standards for the purposes of public safety. However, there was one fatality on this entire corridor in the past five years, and we've had five fatalities in a single mile segment of North Nevada in the same time period, where the traffic counts are actually below the 14,000 threshold. The City must increase the priority of measures like this on streets that are truly dangerous.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-jenny-weber-2026-03-30t16-17-00-38", "author": "Jenny Weber", "date": "2026-03-30T16:17:00", "page": 38, "type": "Idea", "body": "I totally agree with the idea of a roundabout. Speed is a major problem on N. Nevada in the Old North End, especially after dark (the speed indicators erected last year do nothing to slow speeds at night). Given the number and severity of accidents along this stretch, the human and capital losses that result, and the fact that this is a residential area, I *strongly* urge the city to push this considerably higher on the priority list. Residents have been working in good faith with the city on this for more than a decade, yet the city has done almost nothing other than conduct more studies. Meanwhile, given that this area has been identified repeatedly as a dangerous area to drive, the city is opening itself up for negligence lawsuits for not addressing the issue in a timely manner. Please help the residents of this neighborhood.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-adam-jeffrey-2026-03-30t13-58-00-1", "author": "Adam Jeffrey", "date": "2026-03-30T13:58:00", "page": 1, "type": "Idea", "body": "Thank you for doing this work with a very detailed examination of what it takes to work towards a \"Goal Zero\" vision. That must be the goal. The emphasis must be on safety and part of that is allowing all the other modes of transports shown in this graphic be considered in every instance. Especially around both motorized and non-motorized bicycles, scooters and other transportation methods that also benefit the reduced demands of vehicle traffic on our roads.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-adam-yanasak-2026-03-30t12-28-00-40", "author": "Adam Yanasak", "date": "2026-03-30T12:28:00", "page": 40, "type": null, "body": "Lane reductions and roundabouts on Nevada Ave will significantly improve safety to pedestrians and drivers in this one mile section of street. This goes through an elementary school zone where vehicles and motor cycles regularly speed at 50+ mph, including blowing through stop lights in a school zone.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-caitlin-2026-03-30t11-58-00-40", "author": "Caitlin", "date": "2026-03-30T11:58:00", "page": 40, "type": "Idea", "body": "This is great for safety! All day long cars go 50MPH at this intersection which is way over the speed limit and is also in a school zone. This is a residential street and motorcycles use this stretch of Nevada to race and go super fast all day long... which makes the road very dangerous for pedestrians. And pedestrians walk this road all the time because it is a beautiful historic neighborhood close to downtown where people like to walk places. The roundabout would definitely help slow down the motorcycles! Please prioritize this!", "replyTo": null, "document": "Appendices"}, {"id": "appendices-caitlin-2026-03-30t11-54-00-40", "author": "Caitlin", "date": "2026-03-30T11:54:00", "page": 40, "type": "Idea", "body": "For OSP-196, N Nevada Ave from Uintah st to Rock Island Railroad: This project is great and should be prioritized! This section of Nevada has people speeding throughout the day at over 50MPH (the speed limit is 30).... I cross this street daily with my two toddlers. Also, people live on this road and multiple people have been killed on this stretch of road. It should be a priority for safety and also to protect one of the oldest and historic neighborhoods in the city.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-peter-frantz-2026-03-30t10-23-00-35", "author": "Peter Frantz", "date": "2026-03-30T10:23:00", "page": 35, "type": null, "body": "Here's a direct quote from a federal guidebook on traffic calming: \"The FHWA advises that roadways with ADT of 20,000 vpd or less may be good candidates for a Road Diet\". NACTO says \"...some 19,000 to 25,000...still qualify for road diets.\" So why is the City so dedicated to violating conventional safety standards by limiting such countermeasures to absurdly low limit of 14,000?", "replyTo": null, "document": "Appendices"}, {"id": "appendices-zurit-2026-03-25t08-53-00-39", "author": "zurit", "date": "2026-03-25T08:53:00", "page": 39, "type": "Idea", "body": "I may have missed it but we would really benefit from a light for the left hand turn out of the Uintah Gardens parking lot onto Uintah. It is so dangerous.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-karl-stang-2026-03-22t15-18-00-39", "author": "Karl Stang", "date": "2026-03-22T15:18:00", "page": 39, "type": "Question", "body": "The CDOT data indicates significant pedestrian/bicycle serious injuries and fatalities all along Platte Ave east of downtown to Circle Dr. and even Murry Ave. In the detailed project list the only non-motorist projects for the Platte Ave corridor appear to be downtown.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-karl-stang-2026-03-22t15-02-00-22", "author": "Karl Stang", "date": "2026-03-22T15:02:00", "page": 22, "type": "Idea", "body": "The high number of fixed object crashes indicate that COS has a speeding epidemic.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-karl-stang-2026-03-22t15-01-00-21", "author": "Karl Stang", "date": "2026-03-22T15:01:00", "page": 21, "type": "Question", "body": "How did you address the issue with CDOT crash data where a surprisingly large number of older records do not have latitude/longitude values? CDOT crash data is very incomplete to begin with and data quality issues only exacerbate the picture.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-karl-stang-2026-03-22t14-55-00-2", "author": "Karl Stang", "date": "2026-03-22T14:55:00", "page": 2, "type": "Question", "body": "Why are we not also talking about Front Range Passenger Rail, light rail, and bus rapid transit solutions to both connect COS to other cities in the region as well as offer east/west public transit options that do not involve sitting in line with all of the congestion on our roads?", "replyTo": null, "document": "Appendices"}, {"id": "appendices-karl-stang-2026-03-22t14-53-00-2", "author": "Karl Stang", "date": "2026-03-22T14:53:00", "page": 2, "type": "Idea", "body": "It is unfortunate that we have not been embracing innovative designs and speed reduction techniques as we have been expanding the road network in COS. The Centennial Blvd extension to I-25 comes to mind. The new road section looks like a 4 lane highway and motorists drive it like it is a highway and ignoring the negative impacts to the adjoining neighborhoods.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-cully-radvillas-2026-03-20t09-40-00-35", "author": "Cully Radvillas", "date": "2026-03-20T09:40:00", "page": 35, "type": null, "body": "prohibiting right Turn on Red would be a huge improvement for pedestrian safety", "replyTo": null, "document": "Appendices"}, {"id": "appendices-cully-radvillas-2026-03-20t09-38-00-35", "author": "Cully Radvillas", "date": "2026-03-20T09:38:00", "page": 35, "type": null, "body": "yes the more that can be done to improve visibility the better", "replyTo": null, "document": "Appendices"}, {"id": "appendices-cully-radvillas-2026-03-20t09-36-00-35", "author": "Cully Radvillas", "date": "2026-03-20T09:36:00", "page": 35, "type": null, "body": "The focus of this document should be to increase safety, please don't introduce policies that would knowingly increase severe crash risk.", "replyTo": null, "document": "Appendices"}, {"id": "appendices-cully-radvillas-2026-03-20t09-32-00-35", "author": "Cully Radvillas", "date": "2026-03-20T09:32:00", "page": 35, "type": null, "body": "Additional sliplanes (AKA free right turn lanes) would be less safe for pedestrian. even with raised crossings, sliplanes are generally uncontrolled right turns which don't give pedestrians priority", "replyTo": null, "document": "Appendices"}, {"id": "appendices-doug-baker-2026-03-18t13-52-00-40", "author": "Doug Baker", "date": "2026-03-18T13:52:00", "page": 40, "type": "Question", "body": "Table D-2, SAP-00T OSP-193.\nHow do I find out what the details of 'Road reconfiguration' are?\nSeveral years ago I was a stakeholder reviewing road improvements including along major corridors (e.g. Platte Ave.) and there were Platte Ave (Academy to Cascade) modification considerations which (I remember) were tabled/deferred/delayed and for which some consideration of Platte and Boulder traffic flows and safety improvements were being considered. One thing that came about along Boulder was 'One Way No Way' by Middle Shooks Run Neighborhood residents. But safety issues along Platte Ave, primarily Union:Wahsatch were not addressed while at the same time COS removed part of the N El Paso overhead on Platte was removed.\nSo,...\nWhat is 'Road reconfiguration' for Boulder St as I would like to consdier how that might be a preliminary move to change Boulder in such as way as to position future Platte Ave changes being considered.\nThank you,\nDoug", "replyTo": null, "document": "Appendices"}]</script>
+
+<script>
+(() => {
+  'use strict';
+
+  const RAW = JSON.parse(document.getElementById('comments-data').textContent);
+
+  const KONVEIO_URL = {
+    'Draft Plan': 'https://olsson.konveio.com/cossapdraft',
+    'Appendices': 'https://olsson.konveio.com/cossapdraftappendices',
+  };
+
+  // Build author dropdown from data
+  const authorSel = document.getElementById('author-select');
+  const authors = [...new Set(RAW.map(c => c.author))].sort((a, b) => a.localeCompare(b));
+  authors.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a;
+    opt.textContent = a;
+    authorSel.appendChild(opt);
+  });
+
+  // ── DOM ──
+  const list = document.getElementById('comment-list');
+  const search = document.getElementById('search-input');
+  const docSel = document.getElementById('document-select');
+  const sortSel = document.getElementById('sort-select');
+  const chips = Array.from(document.querySelectorAll('[data-type-chip]'));
+  const resultCount = document.getElementById('result-count');
+  const resetBtn = document.getElementById('reset-btn');
+  const form = document.getElementById('filter-form');
+  const announce = document.getElementById('live-announce');
+
+  let activeType = 'all';
+
+  function fmtDate(iso) {
+    const d = new Date(iso);
+    const opts = { year: 'numeric', month: 'short', day: 'numeric' };
+    const tOpts = { hour: 'numeric', minute: '2-digit' };
+    return d.toLocaleDateString('en-US', opts) + ' · ' + d.toLocaleTimeString('en-US', tOpts);
+  }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function highlight(text, q) {
+    if (!q) return text;
+    const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    return text.replace(re, '<mark>$1</mark>');
+  }
+
+  function renderBody(body, q) {
+    return body.split(/\n\n+|\n/).filter(Boolean)
+      .map(p => '<p>' + highlight(esc(p), q) + '</p>')
+      .join('');
+  }
+
+  function isAnonymous(name) {
+    return /^anonymous(\s+\d+)?$/i.test(name);
+  }
+
+  function typeBadgeClass(t) {
+    if (!t) return 'badge-type';
+    return 'badge-type badge-type-' + t.toLowerCase();
+  }
+
+  function applyFilters() {
+    const q = (search.value || '').trim().toLowerCase();
+    const docF = docSel.value;
+    const authorF = authorSel.value;
+    const typeF = activeType;
+    const sortF = sortSel.value;
+
+    let rows = RAW.slice();
+
+    if (typeF !== 'all') {
+      rows = rows.filter(c => (c.type || 'Comment') === typeF);
+    }
+    if (docF !== 'all') rows = rows.filter(c => c.document === docF);
+    if (authorF !== 'all') rows = rows.filter(c => c.author === authorF);
+    if (q) {
+      rows = rows.filter(c =>
+        c.body.toLowerCase().includes(q) ||
+        c.author.toLowerCase().includes(q)
+      );
+    }
+
+    rows.sort((a, b) => {
+      switch (sortF) {
+        case 'oldest': return a.date.localeCompare(b.date);
+        case 'page':   return (a.page - b.page) || a.date.localeCompare(b.date);
+        case 'author': return a.author.localeCompare(b.author) || b.date.localeCompare(a.date);
+        case 'newest':
+        default:       return b.date.localeCompare(a.date);
+      }
+    });
+
+    render(rows, q);
+  }
+
+  function render(rows, q) {
+    if (rows.length === 0) {
+      list.innerHTML = `
+        <div class="empty">
+          <div class="empty-title">No comments match those filters</div>
+          <div>Try a different search term, clear a filter, or hit Reset.</div>
+        </div>`;
+      resultCount.textContent = 'No comments match the current filters.';
+      announce.textContent = 'No comments match the current filters.';
+      return;
+    }
+
+    const total = RAW.length;
+    const msg = rows.length === total
+      ? `Showing all ${total} comments.`
+      : `Showing ${rows.length} of ${total} comments.`;
+    resultCount.textContent = msg;
+    announce.textContent = msg;
+
+    const html = rows.map(c => {
+      const isReply = !!c.replyTo;
+      const typeLabel = c.type || 'Comment';
+      const authorClass = isAnonymous(c.author) ? ' author-anon' : '';
+      const konveioUrl = KONVEIO_URL[c.document] || '#';
+
+      return `
+        <article class="comment${isReply ? ' is-reply' : ''}"
+                 aria-labelledby="cmt-${c.id}-author"
+                 id="cmt-${c.id}">
+          ${isReply ? `<div class="reply-marker">In reply to ${esc(c.replyTo)}</div>` : ''}
+          <div class="comment-head">
+            <span class="author${authorClass}" id="cmt-${c.id}-author">${esc(c.author)}</span>
+            <span class="comment-meta">
+              <time datetime="${c.date}">${fmtDate(c.date)}</time>
+              <span class="meta-sep" aria-hidden="true">·</span>
+              <span>page ${c.page}</span>
+              <span class="meta-sep" aria-hidden="true">·</span>
+              <span class="badge badge-doc">${esc(c.document)}</span>
+              <span class="${typeBadgeClass(c.type)}">${esc(typeLabel)}</span>
+            </span>
+          </div>
+          <div class="comment-body">${renderBody(c.body, q)}</div>
+          <div class="comment-foot">
+            <a href="${konveioUrl}" rel="noopener" aria-label="View ${esc(c.author)}'s comment in context on Konveio (page ${c.page})">
+              View on Konveio (page ${c.page}) →
+            </a>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    list.innerHTML = html;
+  }
+
+  // ── Wire up ──
+  let searchTimer;
+  search.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(applyFilters, 120);
+  });
+  docSel.addEventListener('change', applyFilters);
+  authorSel.addEventListener('change', applyFilters);
+  sortSel.addEventListener('change', applyFilters);
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const v = chip.dataset.typeChip;
+      chips.forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+      activeType = v;
+      applyFilters();
+    });
+  });
+
+  resetBtn.addEventListener('click', () => {
+    search.value = '';
+    docSel.value = 'all';
+    authorSel.value = 'all';
+    sortSel.value = 'newest';
+    activeType = 'all';
+    chips.forEach(c => c.setAttribute('aria-pressed', String(c.dataset.typeChip === 'all')));
+    applyFilters();
+    search.focus();
+  });
+
+  form.addEventListener('submit', e => e.preventDefault());
+
+  applyFilters();
+})();
+</script>
+{% endraw %}
