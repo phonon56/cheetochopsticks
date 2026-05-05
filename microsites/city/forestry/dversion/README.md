@@ -120,6 +120,33 @@ uses. Add to your theme's `*.libraries.yml` under the same library:
    the host typography — no extra fonts needed. Only load Fraunces /
    Public Sans if you opt into `--themed`.
 
+## Accessibility & responsiveness
+
+The build preserves the source page's accessibility and responsive
+behavior verbatim — only the site header/breadcrumb/footer were
+stripped (Drupal's theme replaces those):
+
+- All ARIA attributes, `role` values, `sr-only` utilities, focus-visible
+  outlines, and `prefers-reduced-motion` overrides survive intact.
+- The four responsive breakpoints (`@media`) all transfer through
+  `@scope` unchanged — the catalog reflows the same way it does in
+  Eleventy Labs.
+- The subscribe CTA's 44px touch target (`min-height: 44px`) is
+  preserved.
+
+One thing the Drupal dev should decide: the partial includes a
+`<h1>What grows here…</h1>` at the top of the hero. If your Drupal
+node template already renders a page title `<h1>`, you'll have two
+on the page. Either hide the node title for pages hosting this
+block, or change the `<h1>` to `<h2>` in `forestry.html` after pasting
+(safe; the source CSS targets `.hero h1` and would also need the same
+selector adjustment, or you can add a `.hero h2 { … }` rule mirroring
+the `.hero h1` block).
+
+Drupal's theme should also be providing its own skip-to-content link
+in the page header — the partial doesn't ship one (the source page
+relied on the Eleventy `site.njk` layout for that).
+
 ## Re-running the build
 
 After any edit to `../trees-of-colorado-springs.njk`:

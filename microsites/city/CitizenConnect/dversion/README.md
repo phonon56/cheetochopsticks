@@ -104,6 +104,28 @@ themed mode will fall back to system fonts.
    needs to allow the partial's tags, classes, and inline SVG. Adjust
    the format whitelist if anything renders stripped.
 
+## Accessibility & responsiveness
+
+The build preserves the source page's accessibility and responsive
+behavior verbatim — every `aria-*`, `role`, `sr-only` utility, and
+focus-visible outline transfers byte-for-byte. The two responsive
+`@media` breakpoints and the `prefers-reduced-motion` override all
+survive `@scope` wrapping unchanged.
+
+Two notes for the Drupal dev:
+
+- **Heading hierarchy.** The partial's top-level heading is `<h1>` (it
+  was the page title in Eleventy Labs). If your Drupal node template
+  also renders the page title as `<h1>`, you'll have two on the page.
+  Either hide the node title on pages hosting the block, or change the
+  partial's `<h1>` to `<h2>` after pasting.
+
+- **Skip-link.** The source CSS contains a `.skip` rule (visually-hidden
+  link that becomes visible on focus), but the source markup never
+  included the actual `<a class="skip" href="#main">` anchor — so the
+  rule is dormant. Drupal's theme should be providing its own skip-link
+  in the page chrome.
+
 ## Re-running the build
 
 After any edit to `../city-permits-licenses-records.njk`:

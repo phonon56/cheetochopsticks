@@ -26,5 +26,7 @@ shared/optimizingScripts/Wage_Data/methodology.md
 
 # DVersion folders are Drupal-handoff bundles (live on GitHub, not the
 # cheetochopsticks.com site). Each contains a build script, README,
-# scoped dist files, and a self-contained preview harness.
+# scoped dist files, and a self-contained preview harness. The shared
+# build library at microsites/_dversion-build.mjs is internal infrastructure.
 microsites/**/dversion/**
+microsites/_dversion-build.mjs
