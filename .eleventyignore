@@ -24,7 +24,7 @@ README.md
 microsites/state/CBI/CBI_Missing_Children_Reports_ADA_Audit.md
 shared/optimizingScripts/Wage_Data/methodology.md
 
-# Forestry DVersion is a Drupal-handoff bundle (lives on GitHub, not the
-# cheetochopsticks.com site). Excludes the build script, README, scoped
-# dist files, and the self-contained preview harness.
-microsites/city/forestry/dversion/**
+# DVersion folders are Drupal-handoff bundles (live on GitHub, not the
+# cheetochopsticks.com site). Each contains a build script, README,
+# scoped dist files, and a self-contained preview harness.
+microsites/**/dversion/**
