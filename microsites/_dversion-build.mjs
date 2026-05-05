@@ -173,18 +173,38 @@ function transformCss({ rawCss, ns }) {
 // body-only scan misses dynamic handlers (e.g. openModal('id') in a
 // card-rendering template string). Also handles attribute values that
 // start with `return ` like  onsubmit="return submitRec(event)".
+//
+// IMPORTANT: a name only counts if it's actually DECLARED at the top
+// level of the JS source (function foo, const foo = …, let foo = …,
+// var foo = …). Inline attribute values frequently call methods on
+// other objects — event.preventDefault(), classList.toggle(),
+// document.getElementById() — and the regex would otherwise pick up
+// "preventDefault", "toggle", "getElementById" as handler names. The
+// IIFE then crashes on  window.preventDefault = preventDefault  because
+// no such top-level binding exists.
 function detectInlineHandlers(body, js) {
-  const names = new Set();
+  // 1. Collect every identifier-followed-by-( inside an on* attribute.
+  const candidates = new Set();
   const haystack = body + '\n' + js;
-  // Capture any identifier-followed-by-( that appears inside an on*
-  // attribute's value. The leading `return ` (and similar) is allowed.
-  const re = /\son[a-z]+\s*=\s*["'][^"']*?\b([a-zA-Z_$][\w$]*)\s*\(/g;
-  let m;
-  while ((m = re.exec(haystack)) !== null) {
+  const callRe = /\son[a-z]+\s*=\s*["'][^"']*?\b([a-zA-Z_$][\w$]*)\s*\(/g;
+  for (let m; (m = callRe.exec(haystack)) !== null; ) {
     if (m[1] === 'return') continue;
-    names.add(m[1]);
+    candidates.add(m[1]);
   }
-  return [...names];
+
+  // 2. Collect every name actually declared at the top level of the
+  //    JS source. Indentation is the heuristic for "top level":
+  //    declarations inside functions/blocks are indented (or at least
+  //    preceded by something other than start-of-line).
+  const declared = new Set();
+  const declRe = /(?:^|\n)(?:function\s+([a-zA-Z_$][\w$]*)|(?:const|let|var)\s+([a-zA-Z_$][\w$]*)\s*=)/g;
+  for (let m; (m = declRe.exec(js)) !== null; ) {
+    const name = m[1] || m[2];
+    if (name) declared.add(name);
+  }
+
+  // 3. Intersect — only expose names the source actually defines.
+  return [...candidates].filter((n) => declared.has(n));
 }
 
 function transformJs({ rawJs, ns, handlers }) {
@@ -334,11 +354,16 @@ function buildPreview({ ns, fileBase, prettyName, hostNav, hostHeadline, scopedC
  *                                          with real fonts. Sources that load fonts
  *                                          via @import don't need this — those are
  *                                          already hoisted into the scoped CSS.
+ * @param {string}   [cfg.previewName]      preview filename within previewDir
+ *                                          (default: "index.html"). Set per-page
+ *                                          when a parent folder hosts multiple
+ *                                          DVersions in one preview directory.
  */
 export function buildDversion(cfg) {
   const { src, outDir, previewDir, ns, fileBase, prettyName, hostNav, hostHeadline } = cfg;
   const stripPatterns = cfg.stripPatterns ?? [];
   const previewFontHrefs = cfg.previewFontHrefs ?? [];
+  const previewName = cfg.previewName ?? 'index.html';
 
   const raw = readFileSync(src, 'utf8');
   const afterFm = extractFrontMatter(raw);
@@ -370,14 +395,14 @@ export function buildDversion(cfg) {
   writeFileSync(resolve(outDir, `${fileBase}.js`), scopedJs);
 
   mkdirSync(previewDir, { recursive: true });
-  writeFileSync(resolve(previewDir, 'index.html'), previewHtml);
+  writeFileSync(resolve(previewDir, previewName), previewHtml);
 
   console.log(
     `${prettyName} DVersion built:\n` +
     `  ${outDir}/${fileBase}.html  (${partial.length.toLocaleString()} bytes)\n` +
     `  ${outDir}/${fileBase}.css   (${scopedCss.length.toLocaleString()} bytes)\n` +
     `  ${outDir}/${fileBase}.js    (${scopedJs.length.toLocaleString()} bytes)\n` +
-    `  ${previewDir}/index.html  (${previewHtml.length.toLocaleString()} bytes, self-contained)\n` +
+    `  ${previewDir}/${previewName}  (${previewHtml.length.toLocaleString()} bytes, self-contained)\n` +
     `  hoisted ${(scopedCss.match(/^@import/gm) || []).length} @import; ` +
     `exposed ${handlers.length} inline handler(s); ` +
     `body styles re-applied in themed mode.`,
