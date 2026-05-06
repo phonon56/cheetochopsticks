@@ -1,87 +1,50 @@
 # Pikes Peak Regional Emergency Operations Plan
 
-Two delivery formats of the same page, sharing identical content, identical visual design, and identical CSS naming conventions:
+Source of truth for the Pikes Peak Regional EOP (adopted January 2026 by El
+Paso County and the City of Colorado Springs).
 
 | Path | Use case |
 | --- | --- |
-| `pikes-peak-regional-eop.html` | Original draft. Preserved as-is for reference. |
-| [`standalone/pikes-peak-regional-eop.html`](standalone/pikes-peak-regional-eop.html) | Single-file deliverable. Open directly in a browser. All CSS and JS inline. Naming aligned with shared system. |
-| [`drupal/`](drupal/) | Drupal integration bundle. CSS, JS, Twig, and libraries.yml split into the standard module layout. |
+| [`pikes-peak-regional-eop.html`](pikes-peak-regional-eop.html) | Standalone HTML page. Open in a browser. The source the DVersion build derives from. |
+| [`dversion/`](dversion/) | Drupal-handoff bundle. Generated from the source via `node dversion/build.mjs`. Same convention as the other DVersion partials in this repo. |
 
-## Naming convention map
+## DVersion conventions
 
-The standalone and Drupal versions both use the same class names and tokens. They mirror the conventions in [`shared/css/main.css`](../../../shared/css/main.css) and [`shared/js/main.js`](../../../shared/js/main.js).
+This page follows the standard pattern documented in
+[`microsites/_dversion-build.mjs`](../../_dversion-build.mjs) and used by
+the forestry, CitizenConnect, traffic SafetyPlan, and police DVersion
+bundles:
 
-### Wrapper
+- **Namespace class.** Root is `<div class="cc-pikes-peak-eop">`. Add
+  `cc-pikes-peak-eop--themed` for the source's editorial palette.
+- **CSS isolation.** Whole stylesheet wrapped in
+  `@scope (.cc-pikes-peak-eop) { … }`; design tokens hoisted outside
+  `@scope` to set custom properties on the partial root.
+- **JS isolation.** Behaviors wrapped in an IIFE; `document.*` lookups
+  proxied to resolve against the partial root.
+- **Build artifact.** `dversion/dist/` (HTML + CSS + JS) is the deliverable
+  for the Drupal team. `dversion/preview/index.html` is a self-contained
+  harness simulating a Drupal host page with a default/themed toggle.
 
-Everything renders inside a single `<div class="eop-page">`. All CSS selectors are scoped under that wrapper, so the page is safe to load alongside any other shared library or theme without collisions.
+See [`dversion/README.md`](dversion/README.md) for Drupal integration
+instructions.
 
-### Tokens
+## Source notes
 
-| Type | Convention | Examples |
-| --- | --- | --- |
-| Shared, overridden inside `.eop-page` | Same name as in `shared/css/main.css`, redefined locally | `--paper`, `--ink`, `--gold`, `--navy`, `--font-display` |
-| Page-specific | `--eop-` prefix | `--eop-rust`, `--eop-pine`, `--eop-rule`, `--eop-muted`, `--eop-paper-2`, `--eop-navy-hi`, `--eop-risk-{negligible,low,moderate,high}`, `--eop-font-body`, `--eop-space-1..9`, `--eop-measure`, `--eop-container` |
+Unlike the other DVersion sources in this repo (which are `.njk` body
+fragments rendered by Eleventy's `site.njk` layout), the EOP source is a
+complete HTML document with its own `<head>` and inline `<style>` /
+`<script>`. The DVersion build's `stripPatterns` config peels off the
+document-level wrappers (DOCTYPE, `<html>`, `<head>`, `<body>`, skip link)
+so the partial body is only the EOP content. Style and script blocks are
+extracted *before* the strip patterns run, so they survive the wrapper
+removal.
 
-This means a developer reading the page sees the familiar `var(--gold)` and `var(--paper)` and gets the editorial palette inside `.eop-page`, while every other page on the site keeps the dark theme's values for those same tokens.
+## Re-running the build
 
-### Class names
+```sh
+node microsites/shared/PikesPeakEmergencyManagement/dversion/build.mjs
+```
 
-BEM, prefixed with `eop-`. State classes use `is-` (matches `shared/js/main.js`).
-
-| Component | Classes |
-| --- | --- |
-| Wrapper | `.eop-page` |
-| Topbar | `.eop-topbar`, `.eop-topbar__inner`, `.eop-topbar__btn` |
-| Masthead | `.eop-masthead`, `.eop-masthead__inner`, `.eop-masthead__eyebrow`, `.eop-masthead__lede`, `.eop-masthead__meta` |
-| Layout | `.eop-layout` |
-| Table of contents | `.eop-toc`, `.eop-toc__title`, `.eop-toc__list`, `.eop-toc__sub` |
-| Section block | `.eop-section`, `.eop-section--wide`, `.eop-section__num` |
-| Lead paragraph | `.eop-lead` |
-| Callout | `.eop-callout`, `.eop-callout__label` |
-| Contact card | `.eop-contact-card` |
-| Hazard grid | `.eop-hazard-grid` |
-| Risk table | `.eop-table-wrap`, `.eop-data-table`, `.eop-risk`, `.eop-risk--{negligible,low,moderate,high}`, `.eop-legend`, `.eop-legend__item`, `.eop-legend__swatch` |
-| ESF list | `.eop-esf-list`, `.eop-esf`, `.eop-esf__num`, `.eop-esf__agencies` |
-| Phases timeline | `.eop-phases` |
-| Policy table | `.eop-policy-table` |
-| Glossary | `.eop-glossary` |
-| Divider | `.eop-divider` |
-| Back-to-top | `.eop-back-to-top` (state: `.is-visible`) |
-| Footer | `.eop-footer`, `.eop-footer__inner` |
-| Utilities (constraints) | `.eop-measure` |
-
-### Reused from shared
-
-These classes are **not** redefined in the page. The standalone version provides them inline; the Drupal version expects them from `shared/css/main.css`:
-
-- `.skip-link`
-- `.sr-only`
-- `:focus-visible`
-
-### Active interactions
-
-State is communicated through `.is-visible` and through ARIA attributes (`aria-current="location"` on the active TOC link, `aria-expanded` on the print button context). No bespoke state classes — all standard.
-
-## What's the same across versions
-
-- Visual design (palette, fonts, layout, spacing, typography)
-- Class names and BEM modifiers
-- Token names
-- Behaviors (back-to-top + scroll-spy)
-- Accessibility features (skip link, focus rings, scope/aria-labelledby, semantic landmarks, reduced-motion respect, print styles)
-
-## What's different
-
-| Aspect | Standalone | Drupal |
-| --- | --- | --- |
-| `<html>` / `<head>` / `<body>` | Yes | Skipped — Drupal provides them |
-| Meta tags, OG, JSON-LD | Inline | Move to Metatag module or `hook_page_attachments` |
-| Skip link & `.sr-only` | Inline (defined locally) | Expected from `shared/css/main.css` |
-| CSS | Inline `<style>` block | External `pikes-peak-eop.css` via library |
-| JS pattern | Vanilla IIFE | `Drupal.behaviors` + `core/once` |
-| Static content | Hard-coded | Twig variables for masthead metadata, contact, signatories |
-
-## Migrating from the original file
-
-The pre-existing `pikes-peak-regional-eop.html` is preserved untouched. To replace its references in the build pipeline (Eleventy or whatever generates `_site/`), point at the standalone version under `standalone/`. The two render identically.
+After any edit to `pikes-peak-regional-eop.html`. The DVersion is always
+derived — never hand-edit anything in `dversion/dist/`.

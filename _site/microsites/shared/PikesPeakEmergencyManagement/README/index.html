@@ -1,5 +1,6 @@
 <h1>Pikes Peak Regional Emergency Operations Plan</h1>
-<p>Two delivery formats of the same page, sharing identical content, identical visual design, and identical CSS naming conventions:</p>
+<p>Source of truth for the Pikes Peak Regional EOP (adopted January 2026 by El
+Paso County and the City of Colorado Springs).</p>
 <table>
 <thead>
 <tr>
@@ -9,192 +10,45 @@
 </thead>
 <tbody>
 <tr>
-<td><code>pikes-peak-regional-eop.html</code></td>
-<td>Original draft. Preserved as-is for reference.</td>
+<td><a href="pikes-peak-regional-eop.html"><code>pikes-peak-regional-eop.html</code></a></td>
+<td>Standalone HTML page. Open in a browser. The source the DVersion build derives from.</td>
 </tr>
 <tr>
-<td><a href="standalone/pikes-peak-regional-eop.html"><code>standalone/pikes-peak-regional-eop.html</code></a></td>
-<td>Single-file deliverable. Open directly in a browser. All CSS and JS inline. Naming aligned with shared system.</td>
-</tr>
-<tr>
-<td><a href="drupal/"><code>drupal/</code></a></td>
-<td>Drupal integration bundle. CSS, JS, Twig, and libraries.yml split into the standard module layout.</td>
+<td><a href="dversion/"><code>dversion/</code></a></td>
+<td>Drupal-handoff bundle. Generated from the source via <code>node dversion/build.mjs</code>. Same convention as the other DVersion partials in this repo.</td>
 </tr>
 </tbody>
 </table>
-<h2>Naming convention map</h2>
-<p>The standalone and Drupal versions both use the same class names and tokens. They mirror the conventions in <a href="../../../shared/css/main.css"><code>shared/css/main.css</code></a> and <a href="../../../shared/js/main.js"><code>shared/js/main.js</code></a>.</p>
-<h3>Wrapper</h3>
-<p>Everything renders inside a single <code>&lt;div class=&quot;eop-page&quot;&gt;</code>. All CSS selectors are scoped under that wrapper, so the page is safe to load alongside any other shared library or theme without collisions.</p>
-<h3>Tokens</h3>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Convention</th>
-<th>Examples</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Shared, overridden inside <code>.eop-page</code></td>
-<td>Same name as in <code>shared/css/main.css</code>, redefined locally</td>
-<td><code>--paper</code>, <code>--ink</code>, <code>--gold</code>, <code>--navy</code>, <code>--font-display</code></td>
-</tr>
-<tr>
-<td>Page-specific</td>
-<td><code>--eop-</code> prefix</td>
-<td><code>--eop-rust</code>, <code>--eop-pine</code>, <code>--eop-rule</code>, <code>--eop-muted</code>, <code>--eop-paper-2</code>, <code>--eop-navy-hi</code>, <code>--eop-risk-{negligible,low,moderate,high}</code>, <code>--eop-font-body</code>, <code>--eop-space-1..9</code>, <code>--eop-measure</code>, <code>--eop-container</code></td>
-</tr>
-</tbody>
-</table>
-<p>This means a developer reading the page sees the familiar <code>var(--gold)</code> and <code>var(--paper)</code> and gets the editorial palette inside <code>.eop-page</code>, while every other page on the site keeps the dark theme's values for those same tokens.</p>
-<h3>Class names</h3>
-<p>BEM, prefixed with <code>eop-</code>. State classes use <code>is-</code> (matches <code>shared/js/main.js</code>).</p>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Classes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Wrapper</td>
-<td><code>.eop-page</code></td>
-</tr>
-<tr>
-<td>Topbar</td>
-<td><code>.eop-topbar</code>, <code>.eop-topbar__inner</code>, <code>.eop-topbar__btn</code></td>
-</tr>
-<tr>
-<td>Masthead</td>
-<td><code>.eop-masthead</code>, <code>.eop-masthead__inner</code>, <code>.eop-masthead__eyebrow</code>, <code>.eop-masthead__lede</code>, <code>.eop-masthead__meta</code></td>
-</tr>
-<tr>
-<td>Layout</td>
-<td><code>.eop-layout</code></td>
-</tr>
-<tr>
-<td>Table of contents</td>
-<td><code>.eop-toc</code>, <code>.eop-toc__title</code>, <code>.eop-toc__list</code>, <code>.eop-toc__sub</code></td>
-</tr>
-<tr>
-<td>Section block</td>
-<td><code>.eop-section</code>, <code>.eop-section--wide</code>, <code>.eop-section__num</code></td>
-</tr>
-<tr>
-<td>Lead paragraph</td>
-<td><code>.eop-lead</code></td>
-</tr>
-<tr>
-<td>Callout</td>
-<td><code>.eop-callout</code>, <code>.eop-callout__label</code></td>
-</tr>
-<tr>
-<td>Contact card</td>
-<td><code>.eop-contact-card</code></td>
-</tr>
-<tr>
-<td>Hazard grid</td>
-<td><code>.eop-hazard-grid</code></td>
-</tr>
-<tr>
-<td>Risk table</td>
-<td><code>.eop-table-wrap</code>, <code>.eop-data-table</code>, <code>.eop-risk</code>, <code>.eop-risk--{negligible,low,moderate,high}</code>, <code>.eop-legend</code>, <code>.eop-legend__item</code>, <code>.eop-legend__swatch</code></td>
-</tr>
-<tr>
-<td>ESF list</td>
-<td><code>.eop-esf-list</code>, <code>.eop-esf</code>, <code>.eop-esf__num</code>, <code>.eop-esf__agencies</code></td>
-</tr>
-<tr>
-<td>Phases timeline</td>
-<td><code>.eop-phases</code></td>
-</tr>
-<tr>
-<td>Policy table</td>
-<td><code>.eop-policy-table</code></td>
-</tr>
-<tr>
-<td>Glossary</td>
-<td><code>.eop-glossary</code></td>
-</tr>
-<tr>
-<td>Divider</td>
-<td><code>.eop-divider</code></td>
-</tr>
-<tr>
-<td>Back-to-top</td>
-<td><code>.eop-back-to-top</code> (state: <code>.is-visible</code>)</td>
-</tr>
-<tr>
-<td>Footer</td>
-<td><code>.eop-footer</code>, <code>.eop-footer__inner</code></td>
-</tr>
-<tr>
-<td>Utilities (constraints)</td>
-<td><code>.eop-measure</code></td>
-</tr>
-</tbody>
-</table>
-<h3>Reused from shared</h3>
-<p>These classes are <strong>not</strong> redefined in the page. The standalone version provides them inline; the Drupal version expects them from <code>shared/css/main.css</code>:</p>
+<h2>DVersion conventions</h2>
+<p>This page follows the standard pattern documented in
+<a href="../../_dversion-build.mjs"><code>microsites/_dversion-build.mjs</code></a> and used by
+the forestry, CitizenConnect, traffic SafetyPlan, and police DVersion
+bundles:</p>
 <ul>
-<li><code>.skip-link</code></li>
-<li><code>.sr-only</code></li>
-<li><code>:focus-visible</code></li>
+<li><strong>Namespace class.</strong> Root is <code>&lt;div class=&quot;cc-pikes-peak-eop&quot;&gt;</code>. Add
+<code>cc-pikes-peak-eop--themed</code> for the source's editorial palette.</li>
+<li><strong>CSS isolation.</strong> Whole stylesheet wrapped in
+<code>@scope (.cc-pikes-peak-eop) { … }</code>; design tokens hoisted outside
+<code>@scope</code> to set custom properties on the partial root.</li>
+<li><strong>JS isolation.</strong> Behaviors wrapped in an IIFE; <code>document.*</code> lookups
+proxied to resolve against the partial root.</li>
+<li><strong>Build artifact.</strong> <code>dversion/dist/</code> (HTML + CSS + JS) is the deliverable
+for the Drupal team. <code>dversion/preview/index.html</code> is a self-contained
+harness simulating a Drupal host page with a default/themed toggle.</li>
 </ul>
-<h3>Active interactions</h3>
-<p>State is communicated through <code>.is-visible</code> and through ARIA attributes (<code>aria-current=&quot;location&quot;</code> on the active TOC link, <code>aria-expanded</code> on the print button context). No bespoke state classes — all standard.</p>
-<h2>What's the same across versions</h2>
-<ul>
-<li>Visual design (palette, fonts, layout, spacing, typography)</li>
-<li>Class names and BEM modifiers</li>
-<li>Token names</li>
-<li>Behaviors (back-to-top + scroll-spy)</li>
-<li>Accessibility features (skip link, focus rings, scope/aria-labelledby, semantic landmarks, reduced-motion respect, print styles)</li>
-</ul>
-<h2>What's different</h2>
-<table>
-<thead>
-<tr>
-<th>Aspect</th>
-<th>Standalone</th>
-<th>Drupal</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>&lt;html&gt;</code> / <code>&lt;head&gt;</code> / <code>&lt;body&gt;</code></td>
-<td>Yes</td>
-<td>Skipped — Drupal provides them</td>
-</tr>
-<tr>
-<td>Meta tags, OG, JSON-LD</td>
-<td>Inline</td>
-<td>Move to Metatag module or <code>hook_page_attachments</code></td>
-</tr>
-<tr>
-<td>Skip link &amp; <code>.sr-only</code></td>
-<td>Inline (defined locally)</td>
-<td>Expected from <code>shared/css/main.css</code></td>
-</tr>
-<tr>
-<td>CSS</td>
-<td>Inline <code>&lt;style&gt;</code> block</td>
-<td>External <code>pikes-peak-eop.css</code> via library</td>
-</tr>
-<tr>
-<td>JS pattern</td>
-<td>Vanilla IIFE</td>
-<td><code>Drupal.behaviors</code> + <code>core/once</code></td>
-</tr>
-<tr>
-<td>Static content</td>
-<td>Hard-coded</td>
-<td>Twig variables for masthead metadata, contact, signatories</td>
-</tr>
-</tbody>
-</table>
-<h2>Migrating from the original file</h2>
-<p>The pre-existing <code>pikes-peak-regional-eop.html</code> is preserved untouched. To replace its references in the build pipeline (Eleventy or whatever generates <code>_site/</code>), point at the standalone version under <code>standalone/</code>. The two render identically.</p>
+<p>See <a href="dversion/README.md"><code>dversion/README.md</code></a> for Drupal integration
+instructions.</p>
+<h2>Source notes</h2>
+<p>Unlike the other DVersion sources in this repo (which are <code>.njk</code> body
+fragments rendered by Eleventy's <code>site.njk</code> layout), the EOP source is a
+complete HTML document with its own <code>&lt;head&gt;</code> and inline <code>&lt;style&gt;</code> /
+<code>&lt;script&gt;</code>. The DVersion build's <code>stripPatterns</code> config peels off the
+document-level wrappers (DOCTYPE, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>, skip link)
+so the partial body is only the EOP content. Style and script blocks are
+extracted <em>before</em> the strip patterns run, so they survive the wrapper
+removal.</p>
+<h2>Re-running the build</h2>
+<pre><code class="language-sh">node microsites/shared/PikesPeakEmergencyManagement/dversion/build.mjs
+</code></pre>
+<p>After any edit to <code>pikes-peak-regional-eop.html</code>. The DVersion is always
+derived — never hand-edit anything in <code>dversion/dist/</code>.</p>

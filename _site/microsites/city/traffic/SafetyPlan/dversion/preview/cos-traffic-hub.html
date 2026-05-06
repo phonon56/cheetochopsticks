@@ -1,804 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Colorado Springs traffic safety intelligence — 64,434 crash records, 12 charts, FHWA funding analysis.">
-  <title>Colorado Springs · Traffic Safety Intelligence · StorySeed / The Dais</title>
-
-  
-  
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
-         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
-           text    #ede8dc → 15.3  AAA
-           muted   #96adc4 →  8.1  AAA
-           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
-           gold    #c8a84b →  8.2  AAA
-           gold-lt #fde68a → 15.0  AAA
-           red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
-           green   #4ade80 → 10.7  AAA
-           blue    #60a5fa →  7.4  AAA
-           amber   #fbbf24 → 11.2  AAA                                  */
-      --cc-bg:         #0c1220;
-      --cc-surface:    #141e2e;
-      --cc-surface2:   #1c2a3e;
-      --cc-surface3:   #233045;
-      --cc-border:     rgba(255,255,255,.14);
-      --cc-border-hi:  rgba(255,255,255,.28);
-      --cc-gold:       #c8a84b;
-      --cc-gold-dim:   rgba(200,168,75,.22);
-      --cc-gold-faint: rgba(200,168,75,.09);
-      --cc-gold-lt:    #fde68a;
-      --cc-text:       #ede8dc;
-      --cc-muted:      #96adc4;
-      --cc-quiet:      #8ca3b8;
-      --cc-mono:       'IBM Plex Mono', monospace;
-      --cc-sans:       'IBM Plex Sans', sans-serif;
-      --cc-serif:      'Playfair Display', Georgia, serif;
-      --cc-red:        #fca5a5;
-      --cc-red-dim:    rgba(252,165,165,.16);
-      --cc-green:      #4ade80;
-      --cc-green-dim:  rgba(74,222,128,.14);
-      --cc-blue:       #60a5fa;
-      --cc-blue-dim:   rgba(96,165,250,.14);
-      --cc-amber:      #fbbf24;
-      --cc-amber-dim:  rgba(251,191,36,.16);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    /* ── Skip link (ADA) ────────────────────────────────────── */
-    .skip-link {
-      position: absolute;
-      top: -100px;
-      left: 16px;
-      background: var(--cc-gold);
-      color: #0c1220;
-      font-family: var(--cc-mono);
-      font-size: .78rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-      padding: 10px 18px;
-      border-radius: 3px;
-      text-decoration: none;
-      z-index: 9999;
-      transition: top .2s;
-    }
-    .skip-link:focus { top: 16px; }
-
-    /* ── Focus visible — universal gold ring ─────────────────────── */
-    *:focus { outline: none; }
-    *:focus-visible {
-      outline: 3px solid var(--cc-gold);
-      outline-offset: 3px;
-      border-radius: 2px;
-    }
-
-    /* ── Serif subheadline ───────────────────────────────────────── */
-    .section-sub {
-      font-family: var(--cc-sans);
-      font-style: normal;
-      font-weight: 400;
-      font-size: 1.05rem;
-      color: var(--cc-muted);
-      line-height: 1.6;
-      margin-top: 4px;
-      margin-bottom: 28px;
-      max-width: 560px;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .ticker-track { animation: none; }
-      * { transition-duration: 0.01ms !important; }
-    }
-
-    body {
-      background: var(--cc-bg);
-      color: var(--cc-text);
-      font-family: var(--cc-sans);
-      font-size: 18px;
-      line-height: 1.7;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
-
-    /* ── NAV ─────────────────────────────────────────────────────── */
-    .nav {
-      border-bottom: 1px solid var(--cc-border);
-      padding: 14px 0;
-      position: sticky;
-      top: 0;
-      background: rgba(10,15,26,.94);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      z-index: 200;
-    }
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      gap: 0;
-    }
-    .nav-logo {
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 1px;
-      margin-right: 32px;
-      flex-shrink: 0;
-    }
-    .nav-logo-img {
-      height: 42px;
-      width: auto;
-      display: block;
-    }
-    .nav-logo:focus-visible {
-      outline: 2px solid var(--cc-gold);
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-    /* Legacy text-logo styles kept for any other surfaces that reference them */
-    .nav-logo-word {
-      font-family: var(--cc-sans);
-      font-weight: 600;
-      font-size: .95rem;
-      letter-spacing: -.01em;
-      color: var(--cc-text);
-    }
-    .nav-logo-dot { color: var(--cc-gold); font-size: .95rem; }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      flex: 1;
-    }
-    .nav-link {
-      font-family: var(--cc-mono);
-      font-size: .78rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--cc-muted);
-      text-decoration: none;
-      padding: 6px 12px;
-      border-radius: 3px;
-      border: 1px solid transparent;
-      transition: all .18s;
-      white-space: nowrap;
-    }
-    .nav-link:hover { color: var(--cc-text); background: rgba(255,255,255,.04); }
-    .nav-link.you-link {
-      color: var(--cc-gold);
-      border-color: var(--cc-gold-dim);
-      background: var(--cc-gold-faint);
-    }
-    .nav-link.you-link:hover { background: var(--cc-gold-dim); }
-    .nav-link.active {
-      color: var(--cc-text);
-      border-color: var(--cc-border-hi);
-      background: rgba(255,255,255,.06);
-      text-decoration: underline;
-      text-decoration-color: var(--cc-gold);
-      text-underline-offset: 3px;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-left: auto;
-      flex-shrink: 0;
-    }
-    .notif-btn {
-      position: relative;
-      background: none;
-      border: 1px solid var(--cc-border);
-      border-radius: 4px;
-      padding: 6px 10px;
-      cursor: pointer;
-      color: var(--cc-muted);
-      font-size: .78rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--cc-mono);
-      letter-spacing: .06em;
-      transition: all .18s;
-    }
-    .notif-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
-    .notif-count {
-      background: var(--cc-red);
-      color: #0a0f1a;
-      font-size: .78rem;
-      font-weight: 700;
-      border-radius: 10px;
-      padding: 1px 5px;
-      font-family: var(--cc-mono);
-      line-height: 1.4;
-    }
-
-    /* ── NOTIFICATIONS PANEL ─────────────────────────────────────── */
-    .notif-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.4);
-      z-index: 300;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .25s;
-    }
-    .notif-overlay.open { opacity: 1; pointer-events: all; }
-    .notif-panel {
-      position: fixed;
-      top: 0; right: 0; bottom: 0;
-      width: 360px;
-      background: var(--cc-surface);
-      border-left: 1px solid var(--cc-border-hi);
-      z-index: 301;
-      transform: translateX(100%);
-      transition: transform .28s cubic-bezier(.32,.72,0,1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .notif-panel.open { transform: translateX(0); }
-    .notif-panel-head {
-      padding: 20px 20px 14px;
-      border-bottom: 1px solid var(--cc-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-    .notif-panel-title {
-      font-family: var(--cc-mono);
-      font-size: .78rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--cc-text);
-    }
-    .notif-close {
-      background: none;
-      border: 1px solid var(--cc-border);
-      border-radius: 3px;
-      color: var(--cc-muted);
-      font-size: .78rem;
-      padding: 4px 10px;
-      cursor: pointer;
-      font-family: var(--cc-mono);
-      transition: all .15s;
-    }
-    .notif-close:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
-    .notif-filters {
-      display: flex;
-      gap: 6px;
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--cc-border);
-      flex-shrink: 0;
-      flex-wrap: wrap;
-    }
-    .nf-btn {
-      font-family: var(--cc-mono);
-      font-size: .78rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border: 1px solid var(--cc-border);
-      border-radius: 2px;
-      background: none;
-      color: var(--cc-muted);
-      cursor: pointer;
-      transition: all .15s;
-    }
-    .nf-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
-    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold); border-color: rgba(200,168,75,.3); }
-    .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
-    .notif-group-label {
-      font-family: var(--cc-mono);
-      font-size: .78rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--cc-quiet);
-      padding: 10px 20px 4px;
-    }
-    .notif-item {
-      padding: 12px 20px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      border-bottom: 1px solid var(--cc-border);
-      transition: background .15s;
-      cursor: default;
-    }
-    .notif-item:hover { background: rgba(255,255,255,.02); }
-    .notif-item.hidden { display: none; }
-    .notif-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 5px;
-    }
-    .nd-red    { background: var(--cc-red); }
-    .nd-amber  { background: var(--cc-amber); }
-    .nd-blue   { background: var(--cc-blue); }
-    .nd-green  { background: var(--cc-green); }
-    .nd-gold   { background: var(--cc-gold); }
-    .nd-quiet  { background: var(--cc-quiet); }
-    .notif-body { flex: 1; }
-    .notif-text {
-      font-size: .85rem;
-      color: var(--cc-text);
-      line-height: 1.55;
-      margin-bottom: 3px;
-    }
-    .notif-text strong { color: var(--cc-gold-lt); font-weight: 500; }
-    .notif-meta {
-      font-family: var(--cc-mono);
-      font-size: .78rem;
-      letter-spacing: .08em;
-      color: var(--cc-quiet);
-      margin-bottom: 4px;
-    }
-    .notif-action {
-      font-family: var(--cc-mono);
-      font-size: .78rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--cc-gold);
-      text-decoration: none;
-      border-bottom: 1px solid var(--cc-gold-dim);
-      padding-bottom: 1px;
-      transition: border-color .15s;
-    }
-    .notif-action:hover { border-color: var(--cc-gold); }
-
-    /* ── FOOTER ─────────────────────────────────────────────────── */
-    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
-       rules can't overpaint it on pages with their own theme. */
-    footer.cc-footer {
-      border-top: 1px solid var(--cc-border);
-      padding: 32px 0 36px;
-      margin-top: 56px;
-      background: var(--cc-bg);
-      color: var(--cc-text);
-      position: relative;
-      z-index: 1;
-    }
-    .cc-footer .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-    .cc-footer-line {
-      font-family: var(--cc-mono);
-      font-size: .78rem;
-      letter-spacing: .04em;
-      line-height: 1.9;
-      color: var(--cc-muted);
-      text-align: center;
-    }
-    .cc-footer-line a {
-      color: var(--cc-muted);
-      text-decoration: underline;
-      text-decoration-color: rgba(150, 173, 196, .35);
-      text-underline-offset: 3px;
-      transition: color .15s, text-decoration-color .15s;
-    }
-    .cc-footer-line a:hover,
-    .cc-footer-line a:focus-visible {
-      color: var(--cc-gold);
-      text-decoration-color: var(--cc-gold);
-    }
-    .cc-footer-ext {
-      display: inline-block;
-      font-size: .7em;
-      transform: translateY(-1px);
-      margin-left: 2px;
-      opacity: .7;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden; clip: rect(0,0,0,0);
-      white-space: nowrap; border: 0;
-    }
-
-    /* ── MARKDOWN CONTENT (rendered .md docs) ───────────────────── */
-    .markdown-content {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-      color: var(--cc-text);
-      font-family: var(--cc-sans);
-      font-size: 1rem;
-      line-height: 1.7;
-    }
-    .markdown-header {
-      border-bottom: 1px solid var(--cc-border);
-      padding-bottom: 24px;
-      margin-bottom: 32px;
-    }
-    .markdown-content > .markdown-header h1,
-    .markdown-content h1 {
-      font-family: var(--cc-serif);
-      font-size: clamp(1.8rem, 4vw, 2.4rem);
-      font-weight: 700;
-      line-height: 1.2;
-      color: var(--cc-text);
-      margin: 0 0 8px;
-    }
-    .markdown-subtitle {
-      font-style: italic;
-      color: var(--cc-muted);
-      font-size: 1.05rem;
-      margin: 0;
-    }
-    .markdown-content h2 {
-      font-family: var(--cc-serif);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--cc-text);
-      margin: 48px 0 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--cc-border);
-    }
-    .markdown-content h3 {
-      font-family: var(--cc-serif);
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--cc-gold-lt);
-      margin: 32px 0 8px;
-    }
-    .markdown-content h4 {
-      font-family: var(--cc-mono);
-      font-size: .85rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--cc-muted);
-      margin: 24px 0 6px;
-    }
-    .markdown-content p { margin: 0 0 16px; color: var(--cc-text); }
-    .markdown-content strong { color: var(--cc-gold-lt); font-weight: 600; }
-    .markdown-content em { color: var(--cc-muted); }
-    .markdown-content a {
-      color: var(--cc-gold);
-      text-decoration: underline;
-      text-decoration-color: var(--cc-gold-dim);
-      text-underline-offset: 3px;
-    }
-    .markdown-content a:hover,
-    .markdown-content a:focus-visible {
-      color: var(--cc-gold-lt);
-      text-decoration-color: var(--cc-gold-lt);
-    }
-    .markdown-content ul, .markdown-content ol {
-      margin: 0 0 16px;
-      padding-left: 24px;
-    }
-    .markdown-content li { margin-bottom: 6px; color: var(--cc-text); }
-    .markdown-content li::marker { color: var(--cc-gold); }
-    .markdown-content blockquote {
-      border-left: 3px solid var(--cc-gold);
-      padding: 8px 16px;
-      margin: 16px 0;
-      color: var(--cc-muted);
-      font-style: italic;
-      background: var(--cc-surface);
-    }
-    .markdown-content code {
-      font-family: var(--cc-mono);
-      font-size: .92em;
-      color: var(--cc-gold-lt);
-      background: var(--cc-surface);
-      padding: 1px 6px;
-      border-radius: 2px;
-    }
-    .markdown-content pre {
-      background: var(--cc-surface);
-      border: 1px solid var(--cc-border);
-      border-radius: 4px;
-      padding: 16px;
-      overflow-x: auto;
-      margin: 16px 0;
-      font-size: .85rem;
-      line-height: 1.55;
-    }
-    .markdown-content pre code {
-      background: none;
-      padding: 0;
-      color: var(--cc-text);
-      font-size: inherit;
-    }
-    .markdown-content table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 16px 0;
-      font-size: .92rem;
-    }
-    .markdown-content th, .markdown-content td {
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--cc-border);
-      text-align: left;
-      vertical-align: top;
-    }
-    .markdown-content th {
-      font-family: var(--cc-mono);
-      font-size: .78rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--cc-muted);
-      border-bottom: 2px solid var(--cc-border);
-    }
-    .markdown-content hr {
-      border: none;
-      border-top: 1px solid var(--cc-border);
-      margin: 32px 0;
-    }
-    .markdown-content img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 4px;
-    }
-
-</style>
-
-
-  
-</head>
-<body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  <!-- ═══════════════════════════════════════════════════════════════════
-     NAV — sourced from a single partial; pages mark their active section
-     by setting `activeNav` in front-matter (one of: you, dashboards,
-     people, events).
-════════════════════════════════════════════════════════════════════ -->
-<header class="nav" role="banner">
-  <div class="container">
-    <div class="nav-inner">
-      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
-        <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
-      </a>
-      <nav class="nav-links" id="nav-links" aria-label="Site sections">
-        <a class="nav-link you-link" href="/#you">You</a>
-        <a class="nav-link active" href="/#dashboards">Dashboards</a>
-        <a class="nav-link" href="/#people">People</a>
-        <a class="nav-link" href="/#events">Events</a>
-      </nav>
-      <div class="nav-right">
-        <a class="subscribe-btn" href="/preferences/" aria-label="Subscribe to email updates">
-          <span>Subscribe</span>
-        </a>
-        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
-          <span>Alerts</span>
-          <span class="notif-count" aria-live="polite">11</span>
-        </button>
-      </div>
-
+<meta charset="utf-8">
+<title>Colorado Springs Traffic Safety Intelligence Hub DVersion — preview harness</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  /* Subscribe button in the dark nav. Gold border + gold label on dark bg.
-     Contrast: cc-gold (#c8a84b) on cc-bg (#0c1220) = 8.2:1 (AAA). */
-  .subscribe-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: transparent;
-    border: 1px solid var(--cc-gold);
-    border-radius: 4px;
-    padding: 7px 14px;
-    margin-right: 8px;
-    color: var(--cc-gold);
-    font-family: var(--cc-mono);
-    font-size: .75rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: background .18s, color .18s;
-    min-height: 32px;
+  :root {
+    --host-bg: #f4f1ec;
+    --host-fg: #1d2733;
+    --host-accent: #1a4f8b;
+    --host-rule: #c9c2b6;
   }
-  .subscribe-btn:hover,
-  .subscribe-btn:focus-visible {
-    background: var(--cc-gold);
-    color: #0c1220;
-  }
-  @media (max-width: 600px) {
-    .subscribe-btn { padding: 7px 10px; }
-    .subscribe-btn span { display: none; }
-    .subscribe-btn::before {
-      content: "✉";
-      font-size: 1rem;
-      line-height: 1;
-    }
-  }
+  html, body { margin: 0; background: var(--host-bg); color: var(--host-fg);
+               font: 16px/1.55 'Times New Roman', Georgia, serif; }
+  .host-bar { background: var(--host-accent); color: #fff; padding: 12px 20px; font-size: 14px; }
+  .host-nav { background: #fff; border-bottom: 1px solid var(--host-rule); padding: 14px 20px; }
+  .host-nav strong { font-size: 18px; color: var(--host-accent); }
+  .host-content { max-width: 1240px; margin: 0 auto; padding: 28px 20px; }
+  .host-content > h1 { font: 30px/1.2 'Times New Roman', Georgia, serif; margin: 0 0 8px; }
+  .host-content > p { margin: 0 0 18px; max-width: 64ch; }
+  .host-toggle { display: inline-flex; gap: 8px; margin: 12px 0 24px; padding: 6px;
+                 border: 1px solid var(--host-rule); border-radius: 6px; background: #fff; }
+  .host-toggle button { border: 0; padding: 6px 12px; cursor: pointer; font: inherit;
+                        color: var(--host-fg); background: transparent; border-radius: 4px;
+                        min-height: 36px; }
+  .host-toggle button[aria-pressed="true"] { background: var(--host-accent); color: #fff; }
+  .host-toggle button:focus-visible { outline: 3px solid var(--host-accent); outline-offset: 2px; }
+  .host-footer { border-top: 1px solid var(--host-rule); padding: 18px 20px;
+                 color: #555; font-size: 13px; text-align: center; }
 </style>
-    </div>
-  </div>
-</header>
+<style id="cos-traffic-hub-css">
+/* Scoped to .cc-traffic-hub via CSS @scope. Generated by
+   microsites/_dversion-build.mjs — do not edit dist/ by hand. */
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-     NOTIFICATIONS PANEL
-════════════════════════════════════════════════════════════════════ -->
-<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
-<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
-  <div class="notif-panel-head">
-    <span class="notif-panel-title">Alerts &amp; notifications</span>
-    <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
-  </div>
-  <div class="notif-filters" role="group" aria-label="Filter notifications">
-    <button class="nf-btn active" onclick="filterNotif('all', this)">All (11)</button>
-    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (5)</button>
-    <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
-    <button class="nf-btn" onclick="filterNotif('info', this)">Info (3)</button>
-  </div>
-  <div class="notif-scroll">
+/* Design tokens for the partial root. Defined OUTSIDE @scope so
+   they actually set custom properties on the .cc-traffic-hub element
+   (inside @scope, .cc-traffic-hub would only match descendants of the root). */
+.cc-traffic-hub {
+  --navy:#001a4d; --blue:#0049b1; --sky:#1d6fa4; --teal:#0b7a75;
+  --red:#991b1b; --amber:#d97706; --gold:#c8a84b; --green:#065f46;
+  --amber-ink:#92400e; --gold-ink:#735504;
+  --purple:#5b21b6; --ink:#0f172a; --muted:#3d5166; --rule:#e2e8f0;
+  --off:#f8fafc; --white:#ffffff;
+  --mono:'Courier New',monospace; --sans:system-ui,-apple-system,sans-serif;
+}
 
-    <div class="notif-group-label">Critical — act now</div>
-
-    <div class="notif-item" data-tier="critical">
-      <div class="notif-dot nd-red"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
-        <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
-        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="critical">
-      <div class="notif-dot nd-red"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>Downtown Funding and Records Search</strong> Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</div>
-        <div class="notif-meta">Annual adopted budget — C.R.S. 29-1-101 et seq · April 10, 2026</div>
-        <a class="notif-action" href="/microsites/downtown/downtown_cs_search_portal_v2_ada.html">Open the search portal <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-	  
-	      <div class="notif-item" data-tier="critical">
-      <div class="notif-dot nd-red"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
-        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35 · April 8, 2026</div>
-        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">Open district audit dashboard <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="critical">
-      <div class="notif-dot nd-red"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access their own district's records.</div>
-        <div class="notif-meta">EPC Assessor audit · April 2026</div>
-        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See district audit <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="critical">
-      <div class="notif-dot nd-red"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021. No governance docs. No financials. One compliance letter fixes all 30+ simultaneously.</div>
-        <div class="notif-meta">Platform audit · April 2026</div>
-        <a class="notif-action" href="/microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-group-label">High priority</div>
-
-    <div class="notif-item" data-tier="high">
-      <div class="notif-dot nd-amber"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes, budgets, and audit docs are almost certainly untagged. This is the real HB21-1110 failure — not the homepage.</div>
-        <div class="notif-meta">ADA document audit · April 2026</div>
-        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">View ADA analysis <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="high">
-      <div class="notif-dot nd-amber"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it. This is the foundational legal document. Not one district links it publicly.</div>
-        <div class="notif-meta">Governance gap · §32-1-202</div>
-        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="high">
-      <div class="notif-dot nd-amber"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106. Due to State Auditor by July 31. The clock is running.</div>
-        <div class="notif-meta">Governance gap · §32-1-106 · due July 31</div>
-        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-group-label">Informational</div>
-
-    <div class="notif-item" data-tier="info">
-      <div class="notif-dot nd-blue"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records both awaiting reply. Response window is still open.</div>
-        <div class="notif-meta">CORA tracker · April 2026</div>
-        <a class="notif-action" href="/microsites/shared/requests_tracker_and_military_numbers.html">View tracker <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="info">
-      <div class="notif-dot nd-blue"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
-        <div class="notif-meta">Compliance analysis · April 2026</div>
-        <a class="notif-action" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="info">
-      <div class="notif-dot nd-green"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
-        <div class="notif-meta">New · April 2026</div>
-        <a class="notif-action" href="/microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="info">
-      <div class="notif-dot nd-green"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>CSPD Blotter — Weekly History is live.</strong> 271 incidents pulled directly from the live blotter feed, paired with a Poisson 95% confidence band to flag statistical anomalies week to week. Tabs are full APG-pattern keyboard accessible; every chart has an aria-label.</div>
-        <div class="notif-meta">New · April 2026 · WCAG 2.1 AA</div>
-        <a class="notif-action" href="/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="info">
-      <div class="notif-dot nd-blue"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>Lorson Ranch financial dashboard is live.</strong> Seven cross-pledged metro districts, $94.2M aggregate audited deficit, IGA money flows, and a per-home tax calculator — sourced from 2026 budgets and 2024 audits. Companion plain-language briefing available as a download.</div>
-        <div class="notif-meta">New · Special Districts · April 2026</div>
-        <a class="notif-action" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="info">
-      <div class="notif-dot nd-green"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>CBI Missing Persons form — accessible rebuild is live.</strong> Resolves all seven critical/serious findings from the ADA audit: skip link, live regions, focus management, EN/ES localization, real-time validation messaging. Drops into the existing Drupal Webform infrastructure with optional Claude API routing.</div>
-        <div class="notif-meta">New · State · April 2026 · WCAG 2.1 AA</div>
-        <a class="notif-action" href="/microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="notif-item" data-tier="info">
-      <div class="notif-dot nd-green"></div>
-      <div class="notif-body">
-        <div class="notif-text"><strong>LexisNexis ADAM Program dashboard — accessible rebuild is live.</strong> Audit and reference rebuild of the missing-children dashboard: APG-pattern tabs with roving tabindex and full keyboard nav, solid amber focus rings (3:1 against any surface), darker success-green for AA contrast, and "View Poster" placeholders converted from dead anchors to real buttons.</div>
-        <div class="notif-meta">New · Private Sector · April 2026 · WCAG 2.1 AA</div>
-        <a class="notif-action" href="/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-  <main id="main-content" tabindex="-1">
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<style>
+@scope (.cc-traffic-hub) {
 /* ===== DESIGN TOKENS =====
    Palette verified for WCAG 2.1 AA/AAA on card backgrounds (--off #f8fafc, --white)
    ink        #0f172a → 17.06 AAA · navy #001a4d → 15.99 AAA
@@ -807,17 +54,9 @@
    red        #b91c1c →  6.18 AA
    gold-ink   #735504 →  6.62 AA   (text-safe; --gold #c8a84b kept for borders only, 2.19 FAIL as text)
    amber-ink  #92400e →  6.78 AA   (text-safe; --amber #d97706 kept for borders only, 3.04 FAIL as text) */
-:root {
-  --navy:#001a4d; --blue:#0049b1; --sky:#1d6fa4; --teal:#0b7a75;
-  --red:#991b1b; --amber:#d97706; --gold:#c8a84b; --green:#065f46;
-  --amber-ink:#92400e; --gold-ink:#735504;
-  --purple:#5b21b6; --ink:#0f172a; --muted:#3d5166; --rule:#e2e8f0;
-  --off:#f8fafc; --white:#ffffff;
-  --mono:'Courier New',monospace; --sans:system-ui,-apple-system,sans-serif;
-}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{font-size:15px;scroll-behavior:smooth;}
-body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
+
 .skip{position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;
   padding:8px 16px;border-radius:3px;font-family:var(--mono);font-size:13px;text-decoration:none;z-index:999;}
 .skip:focus{left:8px;}
@@ -903,7 +142,7 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 .scope-type-badge.city{background:rgba(74,158,255,.2);color:#7dc8ff;border:1px solid rgba(74,158,255,.3);}
 .scope-type-badge.county{background:rgba(45,212,191,.15);color:#5eead4;border:1px solid rgba(45,212,191,.25);}
 .scope-type-badge.state{background:rgba(167,139,250,.15);color:#c4b5fd;border:1px solid rgba(167,139,250,.25);}
-.scope-type-badge.plus{background:rgba(200,168,75,.15);color:#c8a84b;border:1px solid rgba(200,168,75,.25);}
+.scope-type-badge.plus{background:rgba(200,168,75,.15);color:var(--gold-ink);border:1px solid rgba(200,168,75,.25);}
 
 .scope-divider{width:1px;height:14px;background:rgba(255,255,255,.2);flex-shrink:0;}
 .scope-def-text{font-size:13px;color:#9ab0c8;line-height:1.5;font-family:var(--mono);}
@@ -926,67 +165,6 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 /* ===== TAB PANELS ===== */
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
-
-/* ===== PLAN PANEL (SAP content) ===== */
-.plus-wrap{max-width:1400px;margin:0 auto;padding:24px 16px 60px;}
-.plus-head{margin-bottom:18px;}
-.plus-head .eyebrow{color:#c8a84b;margin-bottom:6px;}
-.plus-head h2{font-size:clamp(20px,2.4vw,28px);font-weight:700;color:#fff;margin-bottom:8px;}
-.plus-lede{font-size:14px;color:#a8bbd4;line-height:1.65;max-width:75ch;}
-
-.plus-tabs{display:flex;gap:0;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.12);margin-top:8px;padding:0 4px;}
-.plus-tab-btn{padding:10px 18px;font-size:13px;font-weight:600;font-family:var(--sans);
-  background:transparent;color:#9ab0c8;border:none;cursor:pointer;
-  border-bottom:2px solid transparent;border-radius:4px 4px 0 0;letter-spacing:.01em;
-  transition:background .15s,color .15s;margin-right:2px;}
-.plus-tab-btn:hover{background:rgba(255,255,255,.06);color:#d4e4f4;}
-.plus-tab-btn[aria-selected="true"]{background:var(--white);color:var(--ink);border-bottom-color:var(--gold-ink);}
-.plus-tab-btn:focus-visible{outline:3px solid var(--gold);outline-offset:-2px;box-shadow:0 0 0 5px rgba(0,0,0,0.55);}
-
-.plus-tab-panel{background:var(--white);border:1px solid var(--rule);border-top:none;
-  border-radius:0 4px 4px 4px;padding:22px 24px;}
-.plus-tab-panel[hidden]{display:none;}
-.plus-tab-panel h3{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:8px;}
-.plus-tab-panel > p{font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:12px;max-width:75ch;}
-
-.plus-pdf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
-@media (max-width:640px){.plus-pdf-row{grid-template-columns:1fr;}}
-.plus-pdf-card{background:var(--off);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;}
-.plus-pdf-card .ppc-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-.plus-pdf-card h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;}
-.plus-pdf-card .ppc-meta{font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
-.plus-pdf-card a{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:13px;
-  padding:6px 10px;border-radius:3px;text-decoration:none;background:var(--blue);color:#fff;border:1px solid var(--blue);}
-.plus-pdf-card a:hover{background:var(--navy);border-color:var(--navy);}
-
-.plus-tab-panel p.plus-comments-line{font-size:14px;color:var(--ink);line-height:1.6;
-  margin:0 0 18px;padding:12px 14px;background:var(--off);border-radius:4px;
-  border-left:3px solid var(--gold-ink);max-width:none;}
-.plus-comments-line a{margin-left:6px;color:var(--blue);text-decoration:none;
-  border-bottom:1px dotted var(--blue);font-weight:600;}
-.plus-comments-line a:hover{border-bottom-style:solid;}
-
-.plus-timeline{position:relative;padding-left:26px;border-left:2px solid var(--rule);
-  display:flex;flex-direction:column;gap:12px;}
-.plus-tl-row{position:relative;}
-.plus-tl-row::before{content:'';position:absolute;left:-32px;top:6px;width:10px;height:10px;
-  border-radius:50%;background:var(--rule);border:2px solid var(--white);box-shadow:0 0 0 1px var(--rule);}
-.plus-tl-row.done::before{background:var(--blue);box-shadow:0 0 0 1px var(--blue);}
-.plus-tl-row.now::before{background:var(--gold-ink);box-shadow:0 0 0 1px var(--gold-ink),0 0 0 4px rgba(115,85,4,.18);width:12px;height:12px;left:-33px;}
-.plus-tl-row.future::before{background:var(--white);}
-.plus-tl-date{font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;font-weight:600;}
-.plus-tl-row.now .plus-tl-date{color:var(--gold-ink);}
-.plus-tl-row.done .plus-tl-date{color:var(--blue);}
-.plus-tl-text{font-size:14px;color:var(--ink);line-height:1.5;}
-.plus-tl-row.done .plus-tl-text{color:var(--muted);}
-
-.plus-contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
-.plus-contact-block{background:var(--off);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;}
-.plus-contact-block h3{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600;}
-.plus-contact-block p{font-size:13.5px;color:var(--ink);line-height:1.55;}
-.plus-contact-block p + p{margin-top:6px;}
-.plus-contact-block a{color:var(--blue);text-decoration:none;border-bottom:1px dotted var(--blue);}
-.plus-contact-block a:hover{border-bottom-style:solid;}
 
 /* ===== COMING SOON PANEL ===== */
 .coming-soon-wrap{
@@ -1225,9 +403,9 @@ thead th{background:var(--navy);color:#fff;text-align:left;padding:10px 12px;fon
 thead th button{background:none;border:none;color:inherit;cursor:pointer;font:inherit;font-weight:600;font-size:13px;
   display:flex;align-items:center;gap:4px;padding:0;white-space:nowrap;}
 thead th button:focus{outline:2px solid #c8a84b;outline-offset:2px;border-radius:1px;}
-thead th[aria-sort="ascending"] button::after{content:' ↑';}
-thead th[aria-sort="descending"] button::after{content:' ↓';}
-thead th[aria-sort="none"] button::after{content:' ↕';opacity:.4;}
+thead th button[aria-sort="ascending"]::after{content:' ↑';}
+thead th button[aria-sort="descending"]::after{content:' ↓';}
+thead th button[aria-sort="none"]::after{content:' ↕';opacity:.4;}
 tbody tr{border-bottom:1px solid var(--rule);}
 tbody tr:last-child{border:none;}
 tbody tr:nth-child(even){background:#fafbfd;}
@@ -1256,18 +434,6 @@ td.num{text-align:right;font-family:var(--mono);}
   border-radius:3px;font-size:13px;color:var(--muted);line-height:1.7;}
 .tool-footer strong{color:var(--ink);}
 
-/* ===== SIBLING PAGE NAV ===== */
-.page-nav{max-width:1400px;margin:0 auto;padding:24px 16px 16px;
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;
-  border-top:1px solid rgba(255,255,255,.12);}
-.page-nav-card{display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
-  border-radius:5px;padding:14px 18px;text-decoration:none;transition:background .15s,border-color .15s;}
-.page-nav-card:hover{background:rgba(255,255,255,.07);border-color:rgba(200,168,75,.4);}
-.page-nav-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
-  color:#c8a84b;margin-bottom:5px;}
-.page-nav-card h3{font-family:var(--sans);font-size:15px;font-weight:600;color:#e2e8f0;margin-bottom:3px;}
-.page-nav-card p{font-size:13px;color:#9ab0c8;line-height:1.5;}
-
 /* ===== FOOTER ===== */
 .dash-footer{background:#0d1117;border-top:1px solid #1e293b;padding:16px 24px;text-align:center;}
 .dash-footer p{font-family:var(--mono);font-size:13px;color:#475569;letter-spacing:.04em;}
@@ -1279,7 +445,59 @@ td.num{text-align:right;font-family:var(--mono);}
   .brand-pill{min-width:80px;padding:12px 14px 10px;}
   .brand-pill .bp-name{font-size:13px;}
 }
+}
+
+/* Default (un-themed) mode: redefine typography/text tokens to
+   "inherit" so descendant rules using those vars resolve to the
+   host page's font and color. Brand accent colors stay so the
+   partial keeps its identity. */
+.cc-traffic-hub:not(.cc-traffic-hub--themed) {
+  --display: inherit;
+  --body: inherit;
+  --serif: inherit;
+  --sans: inherit;
+  --mono: ui-monospace, monospace;
+  --ink: inherit;
+  --ink-soft: inherit;
+  --ink-faint: inherit;
+  --ink-mid: inherit;
+  --ink-mute: inherit;
+  font-family: inherit;
+  color: inherit;
+  background: transparent;
+}
+
+/* Themed mode: re-apply the source page's  body { … }  declarations
+   to the partial root so the catalog renders with its full visual
+   identity (background, typography, smoothing, gradients). */
+.cc-traffic-hub.cc-traffic-hub--themed {
+background:#0d1117;
+  color:var(--ink);
+  font-family:var(--sans);
+}
+
 </style>
+</head>
+<body>
+<div class="host-bar">cheetochopsticks.gov · simulated Drupal host page</div>
+<div class="host-nav"><strong>City of Colorado Springs</strong> &nbsp; · &nbsp; Traffic · Hub</div>
+<main class="host-content">
+  <h1>Traffic Safety Intelligence Hub (Drupal-hosted)</h1>
+  <p>The block below is the <code>cc-traffic-hub</code> partial. Use the toggle to compare default (inherit host typography) vs. themed (cheetochopsticks).</p>
+  <div class="host-toggle" role="group" aria-label="Theme mode">
+    <button id="mode-inherit" aria-pressed="true">Default (inherit host)</button>
+    <button id="mode-themed" aria-pressed="false">Themed (cheetochopsticks)</button>
+  </div>
+<!-- Colorado Springs Traffic Safety Intelligence Hub — Drupal partial.
+     Generated by microsites/_dversion-build.mjs.
+     Drop into a Drupal Custom Block (Source/HTML view) and attach
+     cos-traffic-hub.css and cos-traffic-hub.js as a library. -->
+
+<!-- Add  cc-traffic-hub--themed  to the root for the cheetochopsticks palette;
+     omit it to inherit the host site's typography and color. -->
+<div class="cc-traffic-hub">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
 <div id="live-region" role="status" aria-live="polite" class="sr-only"></div>
 <div id="live-announce" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
@@ -1332,8 +550,8 @@ td.num{text-align:right;font-family:var(--mono);}
         onclick="switchBrand('plus')" role="tab" aria-selected="false"
         aria-controls="brand-panel-plus" id="brand-btn-plus">
         <span class="bp-icon">✦</span>
-        <span class="bp-name">Plan</span>
-        <span class="bp-sub">Policy &amp; Context</span>
+        <span class="bp-name">Plus</span>
+        <span class="bp-sub">Extended Network</span>
       </button>
     </div>
   </div>
@@ -1547,16 +765,16 @@ td.num{text-align:right;font-family:var(--mono);}
       <table id="crash-table" aria-label="Colorado Springs crash records">
         <thead>
           <tr>
-            <th scope="col" aria-sort="none"><button type="button" data-col="Crash_Date">Date</button></th>
-            <th scope="col" aria-sort="none"><button type="button" data-col="Crash_Time">Time</button></th>
-            <th scope="col" aria-sort="none"><button type="button" data-col="Crash_Location">Location</button></th>
-            <th scope="col" aria-sort="none"><button type="button" data-col="Crash_Type">Type</button></th>
-            <th scope="col" aria-sort="none"><button type="button" data-col="Severity">Severity</button></th>
-            <th scope="col" aria-sort="none"><button type="button" data-col="Road_Conditions">Road</button></th>
-            <th scope="col" aria-sort="none"><button type="button" data-col="Lighting_Conditions">Lighting</button></th>
-            <th scope="col" aria-sort="none"><button type="button" data-col="Impaired">Impaired</button></th>
-            <th scope="col" aria-sort="none"><button type="button" data-col="F__Fatalities">Fatalities</button></th>
-            <th scope="col" aria-sort="none"><button type="button" data-col="F__Susp__Serious_Injury">Serious Inj.</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Date">Date</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Time">Time</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Location">Location</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Crash_Type">Type</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Severity">Severity</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Road_Conditions">Road</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Lighting_Conditions">Lighting</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="Impaired">Impaired</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="F__Fatalities">Fatalities</button></th>
+            <th scope="col"><button type="button" aria-sort="none" data-col="F__Susp__Serious_Injury">Serious Inj.</button></th>
           </tr>
         </thead>
         <tbody id="crash-tbody">
@@ -2052,126 +1270,64 @@ td.num{text-align:right;font-family:var(--mono);}
   </div>
 </div>
 
-<!-- ===== PLAN PANEL (Safety Action Plan) ===== -->
+<!-- ===== PLUS PANEL ===== -->
 <div id="brand-panel-plus" style="display:none;">
-  <div class="plus-wrap">
-    <header class="plus-head">
-      <p class="eyebrow">Policy &amp; Context</p>
-      <h2>The Safety Action Plan</h2>
-      <p class="plus-lede">The City&rsquo;s policy document built on this data. The federal Safe Streets for All grant ($280K, awarded March 2024) required a Safety Action Plan for the funding to flow. Residents had a comment period in March – April 2026; the plan goes to Council adoption May 2026.</p>
-    </header>
-
-    <div class="plus-tabs" role="tablist" aria-label="Safety Action Plan sections">
-      <button id="plus-tab-plan" class="plus-tab-btn" role="tab" aria-selected="true" aria-controls="plus-panel-plan" tabindex="0">The plan &amp; comments</button>
-      <button id="plus-tab-timeline" class="plus-tab-btn" role="tab" aria-selected="false" aria-controls="plus-panel-timeline" tabindex="-1">Timeline</button>
-      <button id="plus-tab-contact" class="plus-tab-btn" role="tab" aria-selected="false" aria-controls="plus-panel-contact" tabindex="-1">Contact &amp; funding</button>
-    </div>
-
-    <div id="plus-panel-plan" class="plus-tab-panel" role="tabpanel" aria-labelledby="plus-tab-plan" tabindex="0">
-      <p class="plus-comments-line">
-        Comment period: <strong>March 18 – April 2, 2026</strong> · now closed.
-        <a href="/microsites/city/traffic/SafetyPlan/sap-comments.html">View what 79 residents said →</a>
-      </p>
-      <div class="plus-pdf-row">
-        <article class="plus-pdf-card">
-          <p class="ppc-tag">Draft Plan</p>
-          <h3>Colorado Springs Safety Action Plan — Draft</h3>
-          <a href="/microsites/city/traffic/SafetyPlan/sap-draft-plan.pdf" download>Download tagged PDF ↓</a>
-        </article>
-        <article class="plus-pdf-card">
-          <p class="ppc-tag">Appendices</p>
-          <h3>Draft Appendices A – D</h3>
-          <a href="/microsites/city/traffic/SafetyPlan/sap-appendices.pdf" download>Download tagged PDF ↓</a>
-        </article>
+  <div class="coming-soon-wrap">
+    <div class="coming-soon-icon">✦</div>
+    <h2>The Dais Plus — Extended Network</h2>
+    <p>Plus is where the story gets bigger. It connects local crash patterns to federal policy, regional economics, and cross-jurisdictional data that no single agency dashboard shows. Think of it as the view from 30,000 feet — grounded in the same street-level data, but mapped against forces that shape every city simultaneously.</p>
+    <div class="cs-badge">Planned · No ETA</div>
+    <div class="coming-soon-items">
+      <div class="cs-feature">
+        <div class="csf-icon">🇺🇸</div>
+        <div class="csf-label">Federal Flows</div>
+        <div class="csf-text">IIJA / BIL funding flowing into Colorado — what was promised vs. what arrived</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">📡</div>
+        <div class="csf-label">Regional Patterns</div>
+        <div class="csf-text">Mountain West peer cities — Albuquerque, Boise, Salt Lake, Tucson</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">🔬</div>
+        <div class="csf-label">Deep Analysis</div>
+        <div class="csf-text">Corridor-level LOSS ratings, conflict zone mapping, pedestrian equity gaps</div>
+      </div>
+      <div class="cs-feature">
+        <div class="csf-icon">🤝</div>
+        <div class="csf-label">Who knows</div>
+        <div class="csf-text">This is the room we haven't built yet. If you have ideas, reach out.</div>
       </div>
     </div>
-
-    <div id="plus-panel-timeline" class="plus-tab-panel" role="tabpanel" aria-labelledby="plus-tab-timeline" tabindex="0" hidden>
-      <h3>Project timeline</h3>
-      <p>Where the plan stands. The comment period closed April 2, 2026 — Council adoption is targeted for May 2026.</p>
-      <div class="plus-timeline" role="list" aria-label="Project timeline">
-        <div class="plus-tl-row done" role="listitem">
-          <div class="plus-tl-date">March 2024</div>
-          <div class="plus-tl-text"><strong>Grant received.</strong> $280,000 awarded through the federal Safe Streets for All program for the 2024 – 2026 plan cycle.</div>
-        </div>
-        <div class="plus-tl-row done" role="listitem">
-          <div class="plus-tl-date">January – March 2025</div>
-          <div class="plus-tl-text"><strong>Crash data analysis.</strong> Existing studies and crash data assembled to identify safety countermeasures and strategies.</div>
-        </div>
-        <div class="plus-tl-row done" role="listitem">
-          <div class="plus-tl-date">March – July 2025</div>
-          <div class="plus-tl-text"><strong>Public &amp; stakeholder engagement.</strong> Targeted outreach to develop the plan&rsquo;s priorities.</div>
-        </div>
-        <div class="plus-tl-row done" role="listitem">
-          <div class="plus-tl-date">June – September 2025</div>
-          <div class="plus-tl-text"><strong>Draft plan development.</strong> Recommendations, actions, and strategies drafted.</div>
-        </div>
-        <div class="plus-tl-row done" role="listitem">
-          <div class="plus-tl-date">September – November 2025</div>
-          <div class="plus-tl-text"><strong>Plan refinement.</strong> Project team revised aspects of the plan.</div>
-        </div>
-        <div class="plus-tl-row done" role="listitem">
-          <div class="plus-tl-date">December 2025</div>
-          <div class="plus-tl-text"><strong>Final draft completed</strong> and posted for public review.</div>
-        </div>
-        <div class="plus-tl-row now" role="listitem">
-          <div class="plus-tl-date">March – April 2026 · public review</div>
-          <div class="plus-tl-text"><strong>Comment period.</strong> Draft Plan and Appendices on Konveio for line-level annotation. Closed April 2, 2026 — see <a href="/microsites/city/traffic/SafetyPlan/sap-comments.html" style="color:var(--blue);">the comment archive</a>.</div>
-        </div>
-        <div class="plus-tl-row future" role="listitem">
-          <div class="plus-tl-date">May 2026</div>
-          <div class="plus-tl-text"><strong>Plan adoption</strong> targeted for May 2026.</div>
-        </div>
-      </div>
-    </div>
-
-    <div id="plus-panel-contact" class="plus-tab-panel" role="tabpanel" aria-labelledby="plus-tab-contact" tabindex="0" hidden>
-      <h3>Who runs it, and where the money comes from</h3>
-      <p>Project contact, City accessibility office, and the federal funding source for the plan.</p>
-      <div class="plus-contact">
-        <div class="plus-contact-block">
-          <h3>Project contact</h3>
-          <p><strong>Colleen Guillotte</strong><br>Traffic and Transportation Engineering<br>City of Colorado Springs</p>
-          <p>
-            <a href="tel:7193857627">(719) 385-7627</a><br>
-            <a href="mailto:Traffic-Engineering.SMB@coloradosprings.gov">Traffic-Engineering.SMB@coloradosprings.gov</a>
-          </p>
-        </div>
-        <div class="plus-contact-block">
-          <h3>Office of Accessibility</h3>
-          <p>Title II ADA coordination, accessible information technology, and the City&rsquo;s quarterly ADA forum.</p>
-          <p>
-            <a href="tel:7193855175">(719) 385-5175</a><br>
-            <a href="mailto:ADAcompliance@coloradosprings.gov">ADAcompliance@coloradosprings.gov</a>
-          </p>
-        </div>
-        <div class="plus-contact-block">
-          <h3>Funding source</h3>
-          <p>Safe Streets for All (SS4A), administered by the U.S. Department of Transportation. Established by the Infrastructure Investment and Jobs Act with $5 billion appropriated 2022 – 2026 to reduce roadway deaths and serious injuries through the Safe System Approach.</p>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
-<!-- ===== SIBLING PAGE NAV ===== -->
-<nav class="page-nav" aria-label="Related Safety Action Plan pages">
-  <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/sap-comments.html">
-    <p class="page-nav-tag">Section 2 · Drafts &amp; Comments</p>
-    <h3>Public comments archive</h3>
-    <p>79 resident comments mirrored from Konveio, with live search.</p>
-  </a>
-  <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/sap-context.html">
-    <p class="page-nav-tag">Section 3 · Context</p>
-    <h3>Project background &amp; timeline</h3>
-    <p>Funding, plan adoption schedule, contact, public engagement record.</p>
-  </a>
-</nav>
-
 <!-- ===== FOOTER ===== -->
+</div>
+</main>
+<div class="host-footer">© Simulated Drupal host page · the partial above is fully scoped.</div>
+<script id="cos-traffic-hub-js">
+// Scoped to .cc-traffic-hub. Generated by microsites/_dversion-build.mjs.
+(function () {
+  // Use window.document explicitly here — declaring  const document
+  // = …  later in this scope hoists the binding to the top of the
+  // function as TDZ, so plain  document.querySelector  on this line
+  // would throw "Cannot access 'document' before initialization".
+  const ROOT = window.document.querySelector('.cc-traffic-hub');
+  if (!ROOT) return;
 
-<script>
+  // Re-bind document.* lookups to resolve against the partial root,
+  // so IDs and class selectors can't collide with the host Drupal page.
+  const document = new Proxy(window.document, {
+    get(target, prop) {
+      if (prop === 'getElementById') return (id) => ROOT.querySelector('#' + CSS.escape(id));
+      if (prop === 'querySelector') return (sel) => ROOT.querySelector(sel);
+      if (prop === 'querySelectorAll') return (sel) => ROOT.querySelectorAll(sel);
+      const v = target[prop];
+      return typeof v === 'function' ? v.bind(target) : v;
+    },
+  });
+
 // ====== BRAND SWITCHING ======
 const BRAND_DEFS = {
   city: {
@@ -2187,8 +1343,8 @@ const BRAND_DEFS = {
     text: '<strong>State of Colorado</strong> — All 64 counties statewide. Data from CDOT\'s crash database and the Colorado Department of Transportation full project spending database.'
   },
   plus: {
-    badge: 'plus', badgeText: 'Plan',
-    text: '<strong>Safety Action Plan</strong> — The City\'s policy document built on this data. Federal Safe Streets for All grant-funded; comment period closed April 2, 2026; Council adoption May 2026.'
+    badge: 'plus', badgeText: 'Plus',
+    text: '<strong>The Dais + StorySeed Extended Network</strong> — Regional, federal, and cross-jurisdictional datasets connecting local crash patterns to national policy, peer-city benchmarks, and long-horizon funding analysis.'
   }
 };
 
@@ -2598,7 +1754,7 @@ function resetFilters(){
   document.getElementById('zip-summary').classList.remove('visible');
   filtered=[...allData];
   sortCol='Crash_Date';sortDir='desc';currentPage=1;
-  document.querySelectorAll('thead th[aria-sort]').forEach(th=>th.setAttribute('aria-sort','none'));
+  document.querySelectorAll('thead th button').forEach(b=>b.setAttribute('aria-sort','none'));
   document.getElementById('record-count').textContent=`${allData.length.toLocaleString()} records`;
   renderTable();announce('All filters cleared.');
 }
@@ -2617,8 +1773,8 @@ document.querySelectorAll('thead th button').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const col=btn.dataset.col;
     if(sortCol===col){sortDir=sortDir==='asc'?'desc':'asc';}else{sortCol=col;sortDir='desc';}
-    document.querySelectorAll('thead th[aria-sort]').forEach(th=>th.setAttribute('aria-sort','none'));
-    btn.closest('th').setAttribute('aria-sort',sortDir==='asc'?'ascending':'descending');
+    document.querySelectorAll('thead th button').forEach(b=>b.setAttribute('aria-sort','none'));
+    btn.setAttribute('aria-sort',sortDir==='asc'?'ascending':'descending');
     sortData();currentPage=1;renderTable();
     announce(`Sorted by ${btn.textContent.trim()}, ${sortDir==='asc'?'ascending':'descending'}.`);
   });
@@ -2626,346 +1782,24 @@ document.querySelectorAll('thead th button').forEach(btn=>{
 
 loadAll();
 
-// ====== PLAN PANEL TABS (WAI-ARIA APG pattern, scoped) ======
-(() => {
-  const tablist = document.querySelector('.plus-tabs');
-  if (!tablist) return;
-  const tabs = Array.from(tablist.querySelectorAll('.plus-tab-btn'));
-  const panels = tabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
-  function activate(idx, focus) {
-    tabs.forEach((t, i) => {
-      const isActive = i === idx;
-      t.setAttribute('aria-selected', isActive ? 'true' : 'false');
-      t.tabIndex = isActive ? 0 : -1;
-      if (panels[i]) panels[i].hidden = !isActive;
-    });
-    if (focus) tabs[idx].focus();
-  }
-  tabs.forEach((t, i) => {
-    t.addEventListener('click', () => activate(i, false));
-    t.addEventListener('keydown', e => {
-      let idx = null;
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') idx = (i + 1) % tabs.length;
-      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') idx = (i - 1 + tabs.length) % tabs.length;
-      else if (e.key === 'Home') idx = 0;
-      else if (e.key === 'End') idx = tabs.length - 1;
-      if (idx !== null) { e.preventDefault(); activate(idx, true); }
-    });
-  });
+  // Expose handlers used by inline on* attributes (the IIFE would otherwise hide them).
+  window.switchBrand = switchBrand;
+  window.switchTab = switchTab;
 })();
+
 </script>
-  </main>
-  <!-- ═══════════════════════════════════════════════════════════════════
-     FOOTER — single source of truth, included by site.njk on every page.
-════════════════════════════════════════════════════════════════════ -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style>
-  .subscribe-block {
-    background: var(--cc-surface);
-    color: var(--cc-text);
-    padding: 48px 0;
-    border-top: 1px solid var(--cc-border);
-  }
-  .subscribe-block .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
-  .subscribe-block h2 {
-    font-family: var(--cc-serif);
-    margin: 0 0 12px;
-    color: var(--cc-text);
-    font-size: 1.5rem;
-    line-height: 1.25;
-  }
-  .subscribe-block .deck {
-    color: var(--cc-muted);
-    font-size: 1rem;
-    line-height: 1.6;
-    margin: 0 0 20px;
-  }
-  .gov-subscribe { display: flex; flex-direction: column; gap: 12px; }
-  .gov-subscribe label {
-    display: block;
-    font-family: var(--cc-sans);
-    font-size: 1rem;
-    color: var(--cc-text);
-    font-weight: 500;
-  }
-  .gov-subscribe input[type="email"] {
-    display: block;
-    width: 100%;
-    margin-top: 4px;
-    padding: 12px;
-    font: inherit;
-    background: var(--cc-surface2);
-    color: var(--cc-text);
-    border: 1.5px solid var(--cc-border-hi);
-    border-radius: 4px;
-    min-height: 44px;
-  }
-  .gov-subscribe input[type="email"]::placeholder { color: var(--cc-quiet); opacity: 1; }
-  .gov-subscribe input[type="email"]:focus {
-    border-color: var(--cc-gold);
-    outline: 2px solid var(--cc-gold);
-    outline-offset: 1px;
-  }
-  .gov-subscribe__consent {
-    font-size: 0.9rem;
-    color: var(--cc-muted);
-    line-height: 1.55;
-    margin: 0;
-  }
-  .gov-subscribe button[type="submit"] {
-    align-self: flex-start;
-    background: var(--cc-gold);
-    color: #0c1220;
-    border: 0;
-    padding: 12px 24px;
-    min-height: 44px;
-    font: 700 .85rem var(--cc-mono);
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background 150ms ease;
-  }
-  .gov-subscribe button[type="submit"]:hover,
-  .gov-subscribe button[type="submit"]:focus-visible { background: var(--cc-gold-lt); }
-  .gov-subscribe output {
-    display: block;
-    min-height: 1.4em;
-    font-size: 0.95rem;
-    color: var(--cc-muted);
-  }
-</style>
-<section class="subscribe-block" aria-label="Subscribe to updates" data-topic="" hidden>
-  <div class="container">
-    <h2>Get email updates</h2>
-    <p class="deck">We&#39;ll email you a plain-language summary with links to the source documents whenever this office posts new public-record material.</p>
-
-    <form class="gov-subscribe" novalidate>
-      <label>
-        Email address
-        <input type="email" name="email" required autocomplete="email"
-               placeholder="you@example.com">
-      </label>
-      <p class="gov-subscribe__consent">
-        By subscribing you agree to receive emails about this topic. We&#39;ll send a confirmation link first. Unsubscribe any time. <em>(consent v2026-04-30-v1)</em>
-      </p>
-      <button type="submit">Subscribe</button>
-      <output role="status" aria-live="polite"></output>
-    </form>
-  </div>
-</section>
-
-
 <script>
 (function () {
-  if (window.__govSubscribeInit) return;
-  window.__govSubscribeInit = true;
-
-  // Skip top-level pages and /microsites/shared/* — no agency-specific topic.
-  var SKIP_JURISDICTIONS = { shared: 1 };
-
-  function inferTopicFromUrl() {
-    var parts = location.pathname.split('/').filter(Boolean);
-    // ["microsites", "<jurisdiction>", "<agency>", ...]
-    if (parts[0] !== 'microsites') return '';
-    if (!parts[1] || !parts[2]) return '';
-    if (SKIP_JURISDICTIONS[parts[1]]) return '';
-    return 'gov.' + parts[1] + '.' + parts[2];
-  }
-
-  function attach(host) {
-    // Resolve topic: explicit data-topic wins, else infer from URL.
-    var topic = host.dataset.topic || inferTopicFromUrl();
-    if (!topic) { host.remove(); return; }
-    host.dataset.topic = topic;
-    host.hidden = false;
-
-    var form = host.querySelector('form.gov-subscribe');
-    if (!form || form.dataset.bound) return;
-    form.dataset.bound = '1';
-    var out = form.querySelector('output');
-    var source = location.pathname.replace(/^\/+/, '');
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      out.textContent = 'Submitting…';
-      var email = form.email.value.trim();
-      var timezone = '';
-      try { timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) {}
-      fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, topic: topic, source: source, timezone: timezone }),
-      })
-        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
-        .then(function (res) {
-          if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
-          out.textContent = res.d.message || 'Check your email to confirm.';
-          form.reset();
-        })
-        .catch(function (err) { out.textContent = 'Something went wrong: ' + err.message; });
-    });
-  }
-
-  function init() {
-    document.querySelectorAll('.subscribe-block[data-topic]').forEach(attach);
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  const root = () => document.querySelector('.cc-traffic-hub');
+  const setMode = (themed) => {
+    const r = root(); if (!r) return;
+    r.classList.toggle('cc-traffic-hub--themed', themed);
+    document.getElementById('mode-inherit').setAttribute('aria-pressed', String(!themed));
+    document.getElementById('mode-themed').setAttribute('aria-pressed', String(themed));
+  };
+  document.getElementById('mode-inherit').addEventListener('click', () => setMode(false));
+  document.getElementById('mode-themed').addEventListener('click', () => setMode(true));
 })();
 </script>
-
-
-<footer class="cc-footer" role="contentinfo">
-  <div class="container">
-    <p class="cc-footer-line">
-      &copy; 2026
-      CheetoChopsticks &amp;
-      <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener noreferrer">
-        StorySeed Studios<span class="cc-footer-ext" aria-hidden="true">↗</span>
-        <span class="sr-only">(opens in a new window)</span>
-      </a>
-      &nbsp;·&nbsp;
-      <a href="https://www.storyseedstudios.com/media-category/the-dais/" target="_blank" rel="noopener noreferrer">
-        The Dais<span class="cc-footer-ext" aria-hidden="true">↗</span>
-        <span class="sr-only">(opens in a new window)</span>
-      </a>
-      &nbsp;·&nbsp;
-      El Paso County, Colorado
-      &nbsp;·&nbsp;
-      For informational purposes only.
-      &nbsp;·&nbsp;
-      Open source.
-      &nbsp;·&nbsp;
-      <a href="/preferences/">Manage your subscriptions</a>
-    </p>
-  </div>
-</footer>
-
-  <script>
-/* ── Site nav + notifications panel scripts ──────────────────────────
-   Wrapped in an IIFE so locals never leak. The functions onclick handlers
-   call (openNotif, closeNotif, filterNotif) are explicitly attached to
-   `window` so a page's own scripts can't shadow them, and each function
-   is defensive about the DOM possibly being absent on a page that opted
-   out of the layout. */
-(function () {
-  function $(id) { return document.getElementById(id); }
-
-  var lastFocus;
-
-  function openNotif() {
-    var overlay = $('notif-overlay');
-    var panel   = $('notif-panel');
-    var btn     = document.querySelector('.notif-btn');
-    if (!overlay || !panel || !btn) return;
-    lastFocus = document.activeElement;
-    overlay.classList.add('open');
-    overlay.removeAttribute('aria-hidden');
-    panel.classList.add('open');
-    btn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-    setTimeout(function () { panel.focus(); }, 50);
-  }
-
-  function closeNotif() {
-    var overlay = $('notif-overlay');
-    var panel   = $('notif-panel');
-    var btn     = document.querySelector('.notif-btn');
-    if (!overlay || !panel || !btn) return;
-    overlay.classList.remove('open');
-    overlay.setAttribute('aria-hidden', 'true');
-    panel.classList.remove('open');
-    btn.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
-  }
-
-  function filterNotif(tier, btn) {
-    document.querySelectorAll('.nf-btn').forEach(function (b) {
-      b.classList.remove('active');
-      b.removeAttribute('aria-pressed');
-    });
-    if (btn) {
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
-    }
-    document.querySelectorAll('.notif-item').forEach(function (item) {
-      if (tier === 'all') {
-        item.classList.remove('hidden');
-        item.removeAttribute('aria-hidden');
-      } else {
-        var hide = item.dataset.tier !== tier;
-        item.classList.toggle('hidden', hide);
-        if (hide) item.setAttribute('aria-hidden', 'true');
-        else item.removeAttribute('aria-hidden');
-      }
-    });
-    document.querySelectorAll('.notif-group-label').forEach(function (label) {
-      label.style.display = tier === 'all' ? '' : 'none';
-    });
-  }
-
-  /* Escape closes the panel; Tab stays inside it while it's open. */
-  document.addEventListener('keydown', function (e) {
-    var panel = $('notif-panel');
-    if (!panel) return;
-    if (e.key === 'Escape') { closeNotif(); return; }
-    if (e.key === 'Tab' && panel.classList.contains('open')) {
-      var focusable = panel.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
-      if (!focusable.length) return;
-      var first = focusable[0], last = focusable[focusable.length - 1];
-      if (e.shiftKey) {
-        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
-      } else {
-        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
-      }
-    }
-  });
-
-  /* Active nav link on scroll — only runs when the index has the matching anchors. */
-  var navLinks = document.querySelectorAll('.nav-link');
-  var sections = ['you', 'dashboards', 'people', 'events'];
-  if (typeof IntersectionObserver === 'function' && navLinks.length) {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          var id = entry.target.id;
-          navLinks.forEach(function (l) {
-            var href = l.getAttribute('href') || '';
-            var active = href === '#' + id || href === '/#' + id;
-            l.classList.toggle('active', active);
-            if (active) l.setAttribute('aria-current', 'true');
-            else l.removeAttribute('aria-current');
-          });
-        }
-      });
-    }, { rootMargin: '-40% 0px -50% 0px' });
-    sections.forEach(function (id) {
-      var el = $(id);
-      if (el) observer.observe(el);
-    });
-  }
-
-  /* Expose the click-target functions globally so inline onclick handlers
-     (and any page that needs them) can always reach them by name. */
-  window.openNotif   = openNotif;
-  window.closeNotif  = closeNotif;
-  window.filterNotif = filterNotif;
-})();
-</script>
-
 </body>
 </html>
