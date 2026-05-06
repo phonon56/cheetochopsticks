@@ -1,0 +1,1822 @@
+---
+layout: site.njk
+permalink: "/microsites/shared/PikesPeakEmergencyManagement/index.html"
+title: "Pikes Peak Regional Emergency Operations Plan (January 2026) | El Paso County & Colorado Springs"
+description: "The official Pikes Peak Regional Emergency Operations Plan (EOP), adopted January 2026 by El Paso County and the City of Colorado Springs. Coordinates preparedness, response, and recovery for all hazards across the Pikes Peak region."
+activeNav: "dashboards"
+subscribeTopic: "gov.shared.pproem"
+subscribeHeading: "Get emergency-management updates from PPROEM"
+subscribeDeck: "When PPROEM activates the ECC, updates the regional Emergency Operations Plan, or revises hazard mitigation guidance, we'll email you a plain-language summary. No marketing — just public-record updates."
+headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">'
+---
+
+  <style>
+    /* ============================================
+       DESIGN TOKENS
+       ============================================ */
+    :root {
+      /* Mountain-civic palette */
+      --color-ink:        #14181f;
+      --color-paper:      #faf7f1;
+      --color-paper-2:    #f3eee4;
+      --color-rule:       #d8d0bf;
+      --color-muted:      #5b6473;
+      --color-navy:       #0a2540;
+      --color-navy-2:     #1a4480;
+      --color-rust:       #a4441f;
+      --color-pine:       #2f5d50;
+      --color-gold:       #b78628;
+
+      /* Risk levels */
+      --risk-negligible:  #e8e2d2;
+      --risk-low:         #d4e4d0;
+      --risk-moderate:    #f3d99a;
+      --risk-high:        #e8a78c;
+
+      /* Typography */
+      --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+      --font-body:    "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+      /* Spacing scale */
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --space-7: 3rem;
+      --space-8: 4rem;
+      --space-9: 6rem;
+
+      /* Layout */
+      --measure: 68ch;
+      --container: 1280px;
+    }
+
+    /* ============================================
+       RESET + BASE
+       ============================================ */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 5rem;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.65;
+      color: var(--color-ink);
+      background: var(--color-paper);
+      font-feature-settings: "kern", "liga", "calt";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ============================================
+       ACCESSIBILITY UTILITIES
+       ============================================ */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translateY(-110%);
+      background: var(--color-navy);
+      color: var(--color-paper);
+      padding: 0.875rem 1.5rem;
+      font-weight: 600;
+      text-decoration: none;
+      z-index: 1000;
+      border-bottom-right-radius: 4px;
+      transition: transform 150ms ease;
+    }
+    .skip-link:focus {
+      transform: translateY(0);
+      outline: 3px solid var(--color-gold);
+      outline-offset: 2px;
+    }
+
+    /* Visible, high-contrast focus ring everywhere */
+    :focus-visible {
+      outline: 3px solid var(--color-gold);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    /* ============================================
+       MASTHEAD
+       ============================================ */
+    .topbar {
+      background: var(--color-navy);
+      color: var(--color-paper);
+      font-size: 0.8125rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.5rem 0;
+    }
+    .topbar__inner {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .topbar a, .topbar__btn {
+      color: var(--color-paper);
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(250, 247, 241, 0.4);
+      background: none;
+      border-top: 0;
+      border-left: 0;
+      border-right: 0;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      cursor: pointer;
+      padding: 0;
+    }
+    .topbar a:hover, .topbar__btn:hover { border-bottom-style: solid; }
+
+    .masthead {
+      background:
+        linear-gradient(180deg, rgba(10, 37, 64, 0.92) 0%, rgba(10, 37, 64, 0.78) 100%),
+        radial-gradient(ellipse at 30% 20%, #1a4480 0%, #0a2540 70%);
+      color: var(--color-paper);
+      padding: var(--space-8) 0 var(--space-7);
+      border-bottom: 6px solid var(--color-rust);
+      position: relative;
+      overflow: hidden;
+    }
+    .masthead::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          135deg,
+          transparent 0,
+          transparent 60px,
+          rgba(250, 247, 241, 0.03) 60px,
+          rgba(250, 247, 241, 0.03) 61px
+        );
+      pointer-events: none;
+    }
+    .masthead__inner {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+    }
+    .masthead__eyebrow {
+      font-family: var(--font-body);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-gold);
+      margin: 0 0 1rem;
+    }
+    .masthead h1 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(2.25rem, 5vw + 1rem, 4.25rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin: 0 0 1.25rem;
+      max-width: 22ch;
+      font-variation-settings: "opsz" 144;
+    }
+    .masthead__lede {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-style: italic;
+      font-size: clamp(1.125rem, 1.5vw + 0.75rem, 1.5rem);
+      line-height: 1.4;
+      max-width: 50ch;
+      color: rgba(250, 247, 241, 0.88);
+      margin: 0 0 var(--space-6);
+    }
+    .masthead__meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-5);
+      max-width: 800px;
+      padding-top: var(--space-5);
+      border-top: 1px solid rgba(250, 247, 241, 0.2);
+    }
+    .masthead__meta dt {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-gold);
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+    }
+    .masthead__meta dd {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--color-paper);
+    }
+
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    .layout {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-7);
+      padding-top: var(--space-7);
+      padding-bottom: var(--space-9);
+    }
+
+    @media (min-width: 960px) {
+      .layout {
+        grid-template-columns: 260px 1fr;
+        gap: var(--space-8);
+      }
+    }
+
+    /* ============================================
+       TABLE OF CONTENTS (sidebar)
+       ============================================ */
+    .toc {
+      font-size: 0.9375rem;
+    }
+    @media (min-width: 960px) {
+      .toc {
+        position: sticky;
+        top: 1.5rem;
+        max-height: calc(100vh - 3rem);
+        overflow-y: auto;
+        padding-right: 0.5rem;
+      }
+      .toc::-webkit-scrollbar { width: 6px; }
+      .toc::-webkit-scrollbar-thumb { background: var(--color-rule); border-radius: 3px; }
+    }
+    .toc__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--color-rust);
+      margin: 0 0 1rem;
+      padding-bottom: 0.625rem;
+      border-bottom: 2px solid var(--color-ink);
+    }
+    .toc__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .toc__list li { margin: 0; }
+    .toc__list a {
+      display: block;
+      padding: 0.625rem 0.75rem 0.625rem 0.875rem;
+      margin-left: -0.875rem;
+      color: var(--color-ink);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: border-color 120ms ease, color 120ms ease, background 120ms ease;
+      line-height: 1.35;
+      min-height: 44px;
+      box-sizing: border-box;
+    }
+    .toc__list a:hover {
+      color: var(--color-navy);
+      border-left-color: var(--color-rust);
+      background: var(--color-paper-2);
+    }
+    .toc__list a[aria-current="location"] {
+      color: var(--color-navy);
+      border-left-color: var(--color-rust);
+      background: var(--color-paper-2);
+      font-weight: 600;
+    }
+    .toc__list .toc__sub a {
+      font-size: 0.875rem;
+      color: var(--color-muted);
+      padding-left: 1.625rem;
+      min-height: 36px;
+    }
+    .toc__sub {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* ============================================
+       MAIN CONTENT
+       ============================================ */
+    main {
+      min-width: 0; /* Prevent grid blowout */
+    }
+
+    .section {
+      margin-bottom: var(--space-9);
+      max-width: var(--measure);
+    }
+    .section--wide {
+      max-width: none;
+    }
+
+    .section__num {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-style: italic;
+      font-size: 0.875rem;
+      color: var(--color-rust);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(1.75rem, 2.5vw + 0.75rem, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      color: var(--color-navy);
+      margin: 0 0 1rem;
+      font-variation-settings: "opsz" 144;
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.375rem;
+      line-height: 1.25;
+      color: var(--color-ink);
+      margin: var(--space-6) 0 0.75rem;
+      font-variation-settings: "opsz" 36;
+    }
+
+    h4 {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1.0625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-rust);
+      margin: var(--space-5) 0 0.5rem;
+    }
+
+    p { margin: 0 0 1.125rem; }
+
+    a {
+      color: var(--color-navy-2);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+    a:hover {
+      color: var(--color-rust);
+      text-decoration-thickness: 2px;
+    }
+
+    ul, ol { padding-left: 1.5rem; margin: 0 0 1.125rem; }
+    li { margin-bottom: 0.375rem; }
+    li::marker { color: var(--color-rust); }
+
+    strong { font-weight: 700; color: var(--color-navy); }
+
+    blockquote {
+      margin: var(--space-5) 0;
+      padding: var(--space-4) var(--space-5);
+      border-left: 4px solid var(--color-rust);
+      background: var(--color-paper-2);
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.125rem;
+      line-height: 1.5;
+    }
+
+    /* Section divider */
+    .divider {
+      border: 0;
+      height: 1px;
+      background: var(--color-rule);
+      margin: var(--space-7) 0;
+    }
+
+    /* ============================================
+       LEAD / EXECUTIVE SUMMARY
+       ============================================ */
+    .lead {
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 1.5vw + 0.75rem, 1.5rem);
+      line-height: 1.45;
+      font-weight: 400;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+      max-width: 32em;
+    }
+    .lead::first-letter {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 4.5em;
+      float: left;
+      line-height: 0.85;
+      margin: 0.05em 0.08em -0.05em 0;
+      color: var(--color-rust);
+    }
+
+    /* ============================================
+       INFO CARDS / CALLOUT
+       ============================================ */
+    .callout {
+      background: var(--color-paper-2);
+      border: 1px solid var(--color-rule);
+      border-left: 4px solid var(--color-pine);
+      padding: var(--space-5);
+      margin: var(--space-5) 0;
+      border-radius: 2px;
+    }
+    .callout__label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      color: var(--color-pine);
+      margin: 0 0 0.5rem;
+    }
+    .callout p:last-child { margin-bottom: 0; }
+
+    .contact-card {
+      background: var(--color-navy);
+      color: var(--color-paper);
+      padding: var(--space-5);
+      border-radius: 2px;
+      margin: var(--space-5) 0;
+    }
+    .contact-card h3 {
+      color: var(--color-paper);
+      margin-top: 0;
+      font-size: 1.25rem;
+    }
+    .contact-card a { color: var(--color-gold); }
+    .contact-card address {
+      font-style: normal;
+      line-height: 1.6;
+    }
+
+    /* ============================================
+       HAZARD GRID
+       ============================================ */
+    .hazard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-3);
+      margin: var(--space-5) 0;
+      list-style: none;
+      padding: 0;
+    }
+    .hazard-grid li {
+      background: var(--color-paper-2);
+      border-top: 3px solid var(--color-rust);
+      padding: var(--space-4);
+      margin: 0;
+    }
+    .hazard-grid h4 {
+      margin: 0 0 0.5rem;
+      color: var(--color-navy);
+    }
+    .hazard-grid ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.9375rem;
+    }
+    .hazard-grid ul li {
+      background: none;
+      border: none;
+      padding: 0.125rem 0;
+      color: var(--color-muted);
+    }
+
+    /* ============================================
+       DATA TABLE (Hazard Risk by Jurisdiction)
+       ============================================ */
+    .table-wrap {
+      max-width: 100%;
+      overflow-x: auto;
+      margin: var(--space-5) 0;
+      border: 1px solid var(--color-rule);
+      border-radius: 2px;
+    }
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      background: white;
+      min-width: 800px;
+    }
+    table.data caption {
+      caption-side: top;
+      text-align: left;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--color-navy);
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-paper-2);
+      border-bottom: 1px solid var(--color-rule);
+    }
+    table.data th, table.data td {
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-rule);
+    }
+    table.data thead th {
+      background: var(--color-navy);
+      color: var(--color-paper);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      position: sticky;
+      top: 0;
+    }
+    table.data tbody th {
+      font-weight: 600;
+      background: var(--color-paper-2);
+      color: var(--color-ink);
+      white-space: nowrap;
+    }
+    table.data tbody tr:hover { background: var(--color-paper); }
+
+    .risk { padding: 0.125rem 0.5rem; border-radius: 2px; font-weight: 600; font-size: 0.8125rem; }
+    .risk--negligible { background: var(--risk-negligible); color: #4a4332; }
+    .risk--low        { background: var(--risk-low); color: #2c4a28; }
+    .risk--moderate   { background: var(--risk-moderate); color: #6e4d10; }
+    .risk--high       { background: var(--risk-high); color: #6e2a14; }
+
+    .legend {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 1rem 0 0;
+      padding: 0.75rem var(--space-4);
+      background: var(--color-paper-2);
+      font-size: 0.8125rem;
+      border-top: 1px solid var(--color-rule);
+    }
+    .legend__item { display: inline-flex; align-items: center; gap: 0.375rem; }
+    .legend__swatch { width: 14px; height: 14px; display: inline-block; border-radius: 2px; }
+
+    /* ============================================
+       ESF LIST
+       ============================================ */
+    .esf-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+      counter-reset: esf;
+    }
+    @media (min-width: 640px) { .esf-list { grid-template-columns: 1fr 1fr; } }
+
+    .esf {
+      background: white;
+      border: 1px solid var(--color-rule);
+      padding: var(--space-4);
+      border-radius: 2px;
+      margin: 0;
+      transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    }
+    .esf:hover {
+      transform: translateY(-1px);
+      border-color: var(--color-rust);
+      box-shadow: 0 4px 12px rgba(20, 24, 31, 0.05);
+    }
+    .esf__num {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--color-rust);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .esf h3 {
+      font-size: 1.0625rem;
+      margin: 0.25rem 0 0.5rem;
+      color: var(--color-navy);
+    }
+    .esf p {
+      font-size: 0.9375rem;
+      margin: 0 0 0.5rem;
+      color: var(--color-muted);
+    }
+    .esf__agencies {
+      font-size: 0.8125rem;
+      color: var(--color-ink);
+    }
+    .esf__agencies strong {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-pine);
+      margin-bottom: 0.25rem;
+    }
+
+    /* ============================================
+       PHASE TIMELINE
+       ============================================ */
+    .phases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-3);
+      margin: var(--space-5) 0;
+      list-style: none;
+      padding: 0;
+      counter-reset: phase;
+    }
+    .phases li {
+      background: var(--color-paper-2);
+      padding: var(--space-4);
+      border-top: 3px solid var(--color-pine);
+      margin: 0;
+      position: relative;
+    }
+    .phases li::before {
+      counter-increment: phase;
+      content: counter(phase, decimal-leading-zero);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--color-pine);
+      letter-spacing: 0.08em;
+    }
+    .phases h4 {
+      margin: 0.25rem 0 0.5rem;
+      color: var(--color-navy);
+    }
+    .phases p { font-size: 0.9375rem; color: var(--color-muted); margin: 0; }
+
+    /* ============================================
+       POLICY GROUP TABLE
+       ============================================ */
+    .policy-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-4) 0;
+      font-size: 0.9375rem;
+    }
+    .policy-table caption {
+      caption-side: top;
+      text-align: left;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.125rem;
+      color: var(--color-navy);
+      padding-bottom: 0.5rem;
+    }
+    .policy-table th, .policy-table td {
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-rule);
+    }
+    .policy-table thead th {
+      background: var(--color-paper-2);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-navy);
+    }
+
+    /* ============================================
+       DEFINITION LIST
+       ============================================ */
+    dl.glossary {
+      margin: var(--space-4) 0;
+    }
+    dl.glossary dt {
+      font-weight: 700;
+      color: var(--color-navy);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: var(--space-4);
+    }
+    dl.glossary dd {
+      margin: 0.25rem 0 0;
+      color: var(--color-ink);
+    }
+
+    /* ============================================
+       BACK TO TOP
+       ============================================ */
+    .back-to-top {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--color-navy);
+      color: var(--color-paper);
+      border: 2px solid var(--color-paper);
+      box-shadow: 0 4px 16px rgba(20, 24, 31, 0.25);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 200ms ease, transform 200ms ease, background 150ms ease;
+      z-index: 50;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+    .back-to-top.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .back-to-top:hover { background: var(--color-rust); }
+    .back-to-top:focus-visible {
+      outline: 3px solid var(--color-gold);
+      outline-offset: 3px;
+    }
+    @media print { .back-to-top { display: none; } }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    footer.site-footer {
+      background: var(--color-ink);
+      color: var(--color-paper);
+      padding: var(--space-7) 0;
+      margin-top: var(--space-9);
+    }
+    .footer__inner {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+    @media (min-width: 720px) {
+      .footer__inner { grid-template-columns: 2fr 1fr 1fr; }
+    }
+    .footer__inner h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-gold);
+      margin: 0 0 0.75rem;
+      font-family: var(--font-body);
+    }
+    footer.site-footer a { color: var(--color-paper); }
+    footer.site-footer p { font-size: 0.875rem; color: rgba(250, 247, 241, 0.7); }
+
+    /* ============================================
+       PRINT STYLES
+       ============================================ */
+    @media print {
+      .topbar, .toc, .skip-link, footer.site-footer { display: none; }
+      .layout { grid-template-columns: 1fr; padding: 0; }
+      body { background: white; color: black; font-size: 11pt; }
+      .masthead {
+        background: white !important;
+        color: black !important;
+        border-bottom: 2pt solid black;
+        padding: 1rem 0;
+      }
+      .masthead h1, .masthead__lede, .masthead__meta dd { color: black; }
+      .masthead__eyebrow, .masthead__meta dt { color: #555; }
+      h2, h3 { color: black; page-break-after: avoid; }
+      .section { page-break-inside: avoid; max-width: none; }
+      a { color: black; text-decoration: none; }
+      a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #666; }
+    }
+  </style>
+
+  <!-- ============================================
+       TOP BAR
+       ============================================ -->
+  <div class="topbar" role="region" aria-label="Site notice">
+    <div class="topbar__inner">
+      <span>Official document — Pikes Peak Regional Office of Emergency Management</span>
+      <span><a href="#contacts">Contact PPROEM</a> · <button type="button" class="topbar__btn" onclick="window.print()" aria-label="Print this document">Print</button></span>
+    </div>
+  </div>
+
+  <!-- ============================================
+       MASTHEAD
+       ============================================ -->
+  <header class="masthead" role="banner">
+    <div class="masthead__inner">
+      <p class="masthead__eyebrow">El Paso County · City of Colorado Springs · January 2026</p>
+      <h1>Pikes Peak Regional Emergency Operations Plan</h1>
+      <p class="masthead__lede">A comprehensive all-hazards framework for coordinating preparedness, response, and recovery across the Pikes Peak region — building a resilient region together.</p>
+
+      <dl class="masthead__meta" aria-label="Plan metadata">
+        <div>
+          <dt>Adopted</dt>
+          <dd><time datetime="2026-01-16">January 16, 2026</time></dd>
+        </div>
+        <div>
+          <dt>Supersedes</dt>
+          <dd>EOP dated February 2, 2021</dd>
+        </div>
+        <div>
+          <dt>Issued by</dt>
+          <dd>PPROEM</dd>
+        </div>
+        <div>
+          <dt>Coverage</dt>
+          <dd>2,127 sq. mi. · 752,772 residents</dd>
+        </div>
+      </dl>
+    </div>
+  </header>
+
+  <!-- ============================================
+       MAIN LAYOUT (TOC + CONTENT)
+       ============================================ -->
+  <div class="layout">
+
+    <!-- TABLE OF CONTENTS -->
+    <nav class="toc" aria-label="Table of contents">
+      <h2 class="toc__title">Contents</h2>
+      <ol class="toc__list">
+        <li><a href="#contacts">Contacts</a></li>
+        <li><a href="#promulgation">Promulgation &amp; Adoption</a></li>
+        <li><a href="#summary">Executive Summary</a></li>
+        <li>
+          <a href="#situation">The Situation</a>
+          <ul class="toc__sub">
+            <li><a href="#hazards">Hazard Identification</a></li>
+            <li><a href="#risk-table">Risk by Jurisdiction</a></li>
+            <li><a href="#capability">Capability Assessment</a></li>
+          </ul>
+        </li>
+        <li><a href="#purpose">Purpose</a></li>
+        <li><a href="#scope">Scope</a></li>
+        <li><a href="#authorities">Authorities &amp; References</a></li>
+        <li><a href="#assumptions">Planning Assumptions</a></li>
+        <li>
+          <a href="#concept-of-ops">Concept of Operations</a>
+          <ul class="toc__sub">
+            <li><a href="#phases">Phases of EM</a></li>
+            <li><a href="#government-levels">Levels of Government</a></li>
+            <li><a href="#declarations">Disaster Declarations</a></li>
+            <li><a href="#policy-groups">Policy Groups</a></li>
+            <li><a href="#roles">Roles &amp; Responsibilities</a></li>
+          </ul>
+        </li>
+        <li><a href="#nims">NIMS &amp; ICS</a></li>
+        <li>
+          <a href="#ecc">Emergency Coordination Center</a>
+          <ul class="toc__sub">
+            <li><a href="#ecc-sections">ECC Sections</a></li>
+            <li><a href="#activation">Activation Levels</a></li>
+          </ul>
+        </li>
+        <li><a href="#esfs">Emergency Support Functions</a></li>
+        <li>
+          <a href="#resources">Resource Management</a>
+          <ul class="toc__sub">
+            <li><a href="#resource-cycle">The Four-Step Cycle</a></li>
+          </ul>
+        </li>
+        <li><a href="#recovery">Transition to Recovery</a></li>
+        <li><a href="#appendix">Appendix A: Adoption</a></li>
+      </ol>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="eop-main">
+
+      <!-- ===== CONTACTS ===== -->
+      <section class="section" id="contacts" aria-labelledby="contacts-heading">
+        <span class="section__num">§ 01</span>
+        <h2 id="contacts-heading">Contacts</h2>
+        <p>Contact the Pikes Peak Regional Office of Emergency Management with any questions about this plan, related procedures, or coordination support.</p>
+
+        <div class="contact-card">
+          <h3>Pikes Peak Regional Office of Emergency Management</h3>
+          <address>
+            3755 Mark Dabling Blvd.<br>
+            Colorado Springs, CO 80907<br>
+            Telephone: <a href="tel:+17195758400">719-575-8400</a>
+          </address>
+        </div>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== PROMULGATION ===== -->
+      <section class="section" id="promulgation" aria-labelledby="promulgation-heading">
+        <span class="section__num">§ 02</span>
+        <h2 id="promulgation-heading">Promulgation &amp; Adoption</h2>
+        <p>The El Paso County Board of Commissioners approved this plan by resolution on <time datetime="2026-01-13">January 13, 2026</time>, and the City of Colorado Springs Mayor approved it by signature on <time datetime="2026-01-16">January 16, 2026</time>.</p>
+        <p>This plan provides planning and program guidance for activating and implementing the Emergency Operations Plan, supporting plans, guidelines, and processes — ensuring the organization can conduct its essential missions and functions under all hazards, threats, and conditions.</p>
+        <p>The plan is developed in accordance with the National Response Framework (NRF), Comprehensive Preparedness Guide 101 (CPG 101), and State of Colorado Department of Homeland Security and Emergency Management (DHSEM) guidance. It supersedes the previously issued Pikes Peak Regional EOP dated <time datetime="2021-02-02">February 2, 2021</time> and is effective <time datetime="2026-01-16">January 16, 2026</time>.</p>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== EXECUTIVE SUMMARY ===== -->
+      <section class="section" id="summary" aria-labelledby="summary-heading">
+        <span class="section__num">§ 03</span>
+        <h2 id="summary-heading">Executive Summary</h2>
+        <p class="lead">PPROEM is a joint office of the City of Colorado Springs and El Paso County, established in January 2019 through an Intergovernmental Agreement. It is the intent of this plan to maintain an inclusive — rather than exclusive — relationship with other municipalities, towns, and special districts in El Paso County.</p>
+
+        <p>As outlined in this plan, PPROEM coordinates regional response during emergencies and disasters. The EOP establishes roles, responsibilities, and authorities for local, regional, state, and federal agencies, and ensures that operations align with the National Incident Management System (NIMS) and the National Response Framework (NRF).</p>
+
+        <p>The plan supports a flexible, all-hazards approach — enabling rapid, coordinated response to natural and human-caused emergencies. It emphasizes the importance of local decision-making authority while outlining mechanisms for requesting and integrating supplemental state and federal resources when local capabilities are exceeded.</p>
+
+        <p>The plan identifies common regional hazards, describes emergency management concepts of operations, and delineates the responsibilities of participating agencies through Emergency Support Functions (ESFs) and Emergency Coordination Center (ECC) sections. It incorporates considerations for vulnerable populations, individuals with access and functional needs, and the whole community to ensure inclusive, equitable response and recovery efforts.</p>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== SITUATION ===== -->
+      <section class="section section--wide" id="situation" aria-labelledby="situation-heading">
+        <span class="section__num">§ 04</span>
+        <h2 id="situation-heading">The Situation</h2>
+        <div style="max-width: var(--measure)">
+          <p>PPROEM was created from an integration of the City of Colorado Springs Office of Emergency Management and the El Paso County Office of Emergency Management. The combined region encompasses <strong>2,127 square miles</strong> and varies in terrain from high plains to the Rocky Mountains, culminating in 14,115-foot Pikes Peak.</p>
+
+          <p>The 2024 census places El Paso County's population at <strong>752,772</strong>, making it Colorado's most populated county. The City of Colorado Springs is the second-largest municipality in Colorado, with a 2024 population of <strong>493,554</strong>.</p>
+
+          <p>The region includes major regional facilities such as the United States Olympic Training Center, the United States Air Force Academy, Fort Carson, NORAD, Peterson Air Force Base, Schriever Air Force Base, and Cheyenne Mountain Air Force Base, along with multiple national non-governmental and corporate headquarters.</p>
+
+          <div class="callout">
+            <p class="callout__label">Regional scope</p>
+            <p>El Paso County contains <strong>8 municipal jurisdictions</strong>, <strong>25 fire departments and districts</strong>, <strong>8 law enforcement agencies</strong>, over <strong>200 special districts</strong>, <strong>5 military installations</strong>, a university, a state college with three campuses, two private colleges, and <strong>17 K-12 school districts</strong> plus multiple charter and private schools.</p>
+          </div>
+        </div>
+
+        <!-- Hazards -->
+        <h3 id="hazards">Hazard Identification</h3>
+        <p style="max-width: var(--measure)">The hazard categories identified for the 2026 Pikes Peak Regional Multi-Hazard Mitigation Plan (HMP) and used for the regional risk assessment are grouped as follows:</p>
+
+        <ul class="hazard-grid" aria-label="Hazard categories">
+          <li>
+            <h4>Flood</h4>
+            <ul>
+              <li>Flood</li>
+              <li>Mud / Debris flow</li>
+              <li>Dam / Levee failure</li>
+            </ul>
+          </li>
+          <li>
+            <h4>Severe Weather</h4>
+            <ul>
+              <li>Hail</li>
+              <li>Drought &amp; extreme heat</li>
+              <li>Lightning</li>
+              <li>Tornado</li>
+              <li>Wind</li>
+              <li>Winter storm</li>
+            </ul>
+          </li>
+          <li>
+            <h4>Avalanche</h4>
+            <ul><li>Avalanche</li></ul>
+          </li>
+          <li>
+            <h4>Geologic</h4>
+            <ul>
+              <li>Earthquake</li>
+              <li>Subsidence &amp; sinkholes</li>
+              <li>Landslide &amp; rockfall</li>
+            </ul>
+          </li>
+          <li>
+            <h4>Wildfire</h4>
+            <ul><li>Wildfire</li></ul>
+          </li>
+          <li>
+            <h4>Human-Caused</h4>
+            <ul>
+              <li>Hazardous materials</li>
+              <li>Extreme acts of violence</li>
+              <li>Cyber attack</li>
+              <li>Pandemic / epidemic</li>
+              <li>Major aircraft incident</li>
+            </ul>
+          </li>
+        </ul>
+
+        <!-- Risk Table -->
+        <h3 id="risk-table">Hazard Risk by Jurisdiction</h3>
+        <p style="max-width: var(--measure)">From the 2026 Hazard Mitigation Plan. Risk is scored by probability and community impact for each hazard.</p>
+
+        <div class="table-wrap" role="region" aria-labelledby="risk-table-caption" tabindex="0">
+          <table class="data">
+            <caption id="risk-table-caption">Regional hazard risk ratings — 2026 Pikes Peak Regional Multi-Hazard Mitigation Plan</caption>
+            <thead>
+              <tr>
+                <th scope="col">Hazard</th>
+                <th scope="col">Calhan</th>
+                <th scope="col">Colorado Springs</th>
+                <th scope="col">El Paso County</th>
+                <th scope="col">Fountain</th>
+                <th scope="col">Green Mtn Falls</th>
+                <th scope="col">Manitou Springs</th>
+                <th scope="col">Monument</th>
+                <th scope="col">Palmer Lake</th>
+                <th scope="col">Ramah</th>
+                <th scope="col">Region</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Avalanche</th><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--low">Low</span></td></tr>
+              <tr><th scope="row">Cyber Attack</th><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Dam / Levee Failure</th><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Drought &amp; Extreme Heat</th><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Earthquake</th><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Extreme Acts of Violence</th><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td></tr>
+              <tr><th scope="row">Flood</th><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Hail</th><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Hazardous Materials</th><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Landslide / Rockfall</th><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--low">Low</span></td></tr>
+              <tr><th scope="row">Lightning</th><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Major Aircraft Incident</th><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Mud / Debris Flow</th><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Pandemic / Epidemic</th><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Subsidence / Sinkholes</th><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--negligible">Negligible</span></td><td><span class="risk risk--low">Low</span></td></tr>
+              <tr><th scope="row">Tornado</th><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--low">Low</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Wind</th><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+              <tr><th scope="row">Wildfire</th><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--high">High</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--high">High</span></td></tr>
+              <tr><th scope="row">Winter Storm</th><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td><td><span class="risk risk--moderate">Moderate</span></td></tr>
+            </tbody>
+          </table>
+          <div class="legend" aria-label="Risk legend">
+            <span class="legend__item"><span class="legend__swatch" aria-hidden="true" style="background:var(--risk-negligible)"></span> Negligible</span>
+            <span class="legend__item"><span class="legend__swatch" aria-hidden="true" style="background:var(--risk-low)"></span> Low</span>
+            <span class="legend__item"><span class="legend__swatch" aria-hidden="true" style="background:var(--risk-moderate)"></span> Moderate</span>
+            <span class="legend__item"><span class="legend__swatch" aria-hidden="true" style="background:var(--risk-high)"></span> High</span>
+          </div>
+        </div>
+
+        <!-- Capability Assessment -->
+        <h3 id="capability">Capability Assessment</h3>
+        <div style="max-width: var(--measure)">
+          <p>PPROEM's <strong>Continuous Improvement Program (CIP)</strong> is a structured, iterative process designed to build and assess emergency management capability over time. It links real-world performance and lessons learned to planning, training, and evaluation.</p>
+
+          <ol>
+            <li><strong>Structured After-Action Process</strong> — captures lessons learned from real-world incidents and exercises through Evaluation Plans, Exercise Evaluation Guides (EEGs), feedback forms, hotwashes, surveys, interviews, and After-Action Reports (AARs).</li>
+            <li><strong>Action Tracking and Accountability</strong> — ensures identified improvements are documented, implemented, and monitored using Veoci updates, quarterly reports to senior leadership, and action status dashboards.</li>
+            <li><strong>Evaluation and Integration</strong> — measures effectiveness of implemented actions and integrates them into future planning, exercise design, and the Integrated Preparedness Plan (IPP).</li>
+          </ol>
+
+          <p>The 2026 Hazard Mitigation Plan capability assessment evaluated four areas: planning and regulatory capabilities, administrative and technical capabilities, fiscal capabilities, and integration with other plans and programs.</p>
+        </div>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== PURPOSE ===== -->
+      <section class="section" id="purpose" aria-labelledby="purpose-heading">
+        <span class="section__num">§ 05</span>
+        <h2 id="purpose-heading">Purpose</h2>
+        <p>This EOP is developed for use by PPROEM in support of county and municipal governments, and to support and coordinate with individual agencies to ensure prevention, preparedness, mitigation, response, and recovery for hazards affecting Colorado Springs, other municipalities, and unincorporated areas in El Paso County.</p>
+
+        <p>The EOP is intended to:</p>
+        <ul>
+          <li>Identify the roles, responsibilities, and actions required of participating agencies, municipalities, departments, and enterprises in preparing for and responding to all-hazard emergencies and disasters.</li>
+          <li>Ensure a coordinated response by City, County, State, and Federal governments — saving lives, preventing injuries, and protecting property and the environment.</li>
+          <li>Provide a framework for decision-making, established policies, objectives, and approaches across jurisdictions.</li>
+          <li>Provide for the integration and coordination of volunteer agencies and private organizations.</li>
+          <li>Establish a whole-community framework for all plans developed and used by participating agencies, departments, and enterprises.</li>
+          <li>Guide operational decision-making — outlining procedures for activation, coordination, communication, resource management, and recovery.</li>
+          <li>Ensure local and regional compliance with the City of Colorado Springs Charter, El Paso County policies, and State and Federal guidelines.</li>
+        </ul>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== SCOPE ===== -->
+      <section class="section" id="scope" aria-labelledby="scope-heading">
+        <span class="section__num">§ 06</span>
+        <h2 id="scope-heading">Scope</h2>
+        <p>This EOP establishes the regulatory framework, legal authorities, and organizational structures that guide emergency management activities within El Paso County and the City of Colorado Springs. It defines the decision-making authorities at the local level and outlines how direction and control are maintained before, during, and after an emergency or disaster.</p>
+
+        <p>The EOP is based on an all-hazards approach that considers the region's common natural and human-caused hazards. It outlines how emergency operations begin with the jurisdiction having authority and how support is organized when an incident exceeds local capabilities. PPROEM provides coordination and assistance to local jurisdictions during significant incidents or when a routine emergency has the potential to escalate.</p>
+
+        <p>State assistance may be provided as a supplement to local and regional efforts, and will be requested by local agencies on behalf of El Paso County and/or the City of Colorado Springs when incident needs exceed regional capacity. Federal assistance may be requested through the State of Colorado in accordance with statutory authorities and established processes, as approved by the Governor.</p>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== AUTHORITIES ===== -->
+      <section class="section" id="authorities" aria-labelledby="authorities-heading">
+        <span class="section__num">§ 07</span>
+        <h2 id="authorities-heading">Authorities &amp; References</h2>
+        <p>This EOP aligns with the requirements set forth in <a href="https://leg.colorado.gov/colorado-revised-statutes" rel="noopener">C.R.S. §§ 24-33.5-701 et seq.</a>, the Colorado Disaster Emergency Act, and is consistent with the National Response Framework (NRF) and National Incident Management System (NIMS).</p>
+
+        <h3>Federal</h3>
+        <ul>
+          <li>Homeland Security Presidential Directive HSPD-5: Management of Domestic Incidents</li>
+          <li>Homeland Security Act of 2002</li>
+          <li>Presidential Policy Directive PPD-8: National Preparedness</li>
+          <li>Robert T. Stafford Disaster Relief and Emergency Assistance Act (as amended May 2021)</li>
+          <li>Post Katrina Emergency Management Reform Act of 2006 (PKEMRA)</li>
+          <li>Pets Evacuation and Transportation Standards Act of 2006 (PETS Act)</li>
+          <li>Emergency Planning and Community Right-to-Know Act of 1986 (SARA Title III)</li>
+          <li>National Prevention, Protection, Mitigation, and Response Frameworks</li>
+          <li>National Disaster Recovery Framework (3rd ed., 2024)</li>
+          <li>National Incident Management System (NIMS), 2016, updated 2020</li>
+          <li>FEMA Comprehensive Preparedness Guide (CPG) 101, 3.1, May 2025</li>
+          <li>Plain Language Guidance</li>
+          <li>Americans with Disabilities Act, 1990</li>
+        </ul>
+
+        <h3>State of Colorado</h3>
+        <ul>
+          <li>C.R.S. §§ 24-33.5-701 et seq. (Colorado Disaster Emergency Act)</li>
+          <li>Colorado State Emergency Operations Plan</li>
+          <li>Article IV, Constitution of the State of Colorado (Executive Department)</li>
+          <li>Executive Order D 011 04, National Incident Management System, June 2009</li>
+        </ul>
+
+        <h3>El Paso County</h3>
+        <ul>
+          <li>BoCC Resolution No. <strong>23-102</strong>, April 4, 2023 — establishing PPROEM</li>
+          <li>BoCC Resolution No. <strong>20-455</strong>, December 15, 2020 — adopting the Multi-Jurisdictional Hazard Mitigation Plan</li>
+          <li>BoCC Resolutions <strong>14-369A</strong> and <strong>14-369</strong>, September 23, 2014 — re-establishing BoCC oversight of OEM</li>
+        </ul>
+
+        <h3>City of Colorado Springs</h3>
+        <ul>
+          <li>City Resolution <strong>32-23</strong>, April 4, 2023 — establishing PPROEM</li>
+          <li>City Code §8.7.101 — Legislative Declaration</li>
+          <li>City Code §8.7.201 — Office of Emergency Management Established</li>
+          <li>City Code §8.7.203 — Duties of OEM</li>
+          <li>City Code §8.7.204 — Emergency Operations Plan</li>
+        </ul>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== ASSUMPTIONS ===== -->
+      <section class="section" id="assumptions" aria-labelledby="assumptions-heading">
+        <span class="section__num">§ 08</span>
+        <h2 id="assumptions-heading">Planning Assumptions</h2>
+        <p>The following assumptions apply to this plan:</p>
+        <ul>
+          <li>Emergency management activities within the region will be conducted in accordance with NIMS.</li>
+          <li>Emergencies and disasters will be managed at the lowest jurisdictional level with the authority and capability to effectively respond.</li>
+          <li>Local authorities retain operational control and decision-making responsibility within their jurisdiction unless superseded by statute, legal delegation, or established agreements.</li>
+          <li>Mutual aid will be requested when needed and provided to the extent available.</li>
+          <li>Mitigation activities conducted before an incident will reduce the likelihood and severity of impacts.</li>
+          <li>Supporting plans, procedures, and checklists maintained by departments, agencies, and partner organizations will be kept current.</li>
+          <li>Incidents may occur with little or no warning and may escalate rapidly, requiring immediate coordinated response.</li>
+          <li>Resources may become limited, damaged, or overwhelmed during a major emergency or disaster.</li>
+          <li>Communication and information systems may be degraded or disrupted, requiring alternate methods and redundant systems.</li>
+          <li>The whole-community approach guides all emergency management activities — programs, services, and activities will be inclusive of individuals with disabilities and others with access and functional needs.</li>
+        </ul>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== CONCEPT OF OPERATIONS ===== -->
+      <section class="section" id="concept-of-ops" aria-labelledby="concept-heading">
+        <span class="section__num">§ 09</span>
+        <h2 id="concept-heading">Concept of Operations</h2>
+        <p>Pikes Peak regional jurisdictions use NIMS and the Incident Command System (ICS) as the foundation for managing emergencies and disasters. These systems provide a standardized, flexible, and scalable structure for organizing response operations, coordinating resources, and supporting decision-making.</p>
+
+        <p>Emergency management activities across the region align with five mission areas — prevention, protection, mitigation, response, and recovery. Preparedness actions are conducted year-round and documented in the PPROEM Integrated Preparedness Plan (IPP).</p>
+
+        <h3 id="phases">Phases of Emergency Management</h3>
+        <p>Preparedness serves as the foundation for all phases — the ongoing, proactive effort to ensure communities, organizations, and individuals are ready to respond and recover effectively.</p>
+
+        <ol class="phases" aria-label="Phases of emergency management">
+          <li>
+            <h4>Prevention</h4>
+            <p>Actions to avoid or stop an incident from occurring — public health interventions, law enforcement and intelligence, code enforcement, and security measures.</p>
+          </li>
+          <li>
+            <h4>Protection</h4>
+            <p>Strategies to safeguard people, property, infrastructure, and the environment — physical security, public warning systems, and coordination to reduce exposure.</p>
+          </li>
+          <li>
+            <h4>Mitigation</h4>
+            <p>Long-term measures to minimize disaster impact — land use planning, building codes, flood control, wildfire fuel reduction, and infrastructure investments.</p>
+          </li>
+          <li>
+            <h4>Response</h4>
+            <p>Immediate, short-term action to save lives — ICS/ECC activation, search and rescue, sheltering, public information, and resource coordination.</p>
+          </li>
+          <li>
+            <h4>Recovery</h4>
+            <p>Restoration and improvement of community functionality — infrastructure restoration, economic recovery, mental health services, and after-action learning.</p>
+          </li>
+        </ol>
+
+        <h3 id="mac-group">Multi-Agency Coordination (MAC) Group</h3>
+        <p>The PPROEM MAC Group serves as a central mechanism for enhancing regional preparedness, coordination, and unified action. It is composed of representatives from key partner agencies and jurisdictions across the Pikes Peak Region and is activated to support large-scale or complex emergencies that require cross-agency collaboration — coordinating communication, resource sharing, policy and decision-making, problem solving, and information sharing.</p>
+
+        <h3 id="government-levels">Levels of Government</h3>
+        <dl class="glossary">
+          <dt>Local Government Management</dt>
+          <dd>The authority having jurisdiction maintains direction and control before, during, and after an emergency. The hierarchy depends on the type of declared state of emergency.</dd>
+
+          <dt>Incident Level Management</dt>
+          <dd>A local incident management system that incorporates the functions, principles, and components of NIMS is adopted and used. Common terminology and a flexible, expandable structure make this system suitable for multi-functional response.</dd>
+
+          <dt>Local Level Management</dt>
+          <dd>Local governments are responsible for overall coordination of support for emergency operations. The on-scene Incident Commander manages activities at the incident site; local government coordinates administrative and off-site functions. The ECC is activated when an incident threatens to exceed local capabilities, including mutual aid.</dd>
+
+          <dt>State Level Management</dt>
+          <dd>When an emergency overwhelms the resources and capability of a local jurisdiction, the Governor may exercise authority to deploy state resources. DHSEM implements the State's response, coordinating acquisition, prioritization, and distribution of state, federal, and private resources.</dd>
+
+          <dt>Federal Level Management</dt>
+          <dd>When an emergency exceeds state and local capabilities, federal support is provided consistent with the National Response Framework. FEMA, under the Department of Homeland Security, is the primary agency for coordinating federal disaster assistance.</dd>
+        </dl>
+
+        <h3 id="declarations">Incident to Disaster &amp; Declaration Process</h3>
+        <p>Emergency operations typically begin locally under the authority having jurisdiction (AHJ). An incident becomes classified as a disaster when its scale, complexity, or impact exceeds the capability of local response agencies.</p>
+
+        <p>Upon a local disaster declaration and ECC activation, PPROEM assumes responsibility for regional support and coordination. In the Pikes Peak region, a disaster may be declared by the Board of County Commissioners for El Paso County or the Mayor for the City of Colorado Springs. The declaration triggers activation of the EOP and associated ESFs, authorizes resource requests beyond local capabilities, and enables the implementation of emergency authorities as provided by law.</p>
+
+        <h3 id="policy-groups">Policy Groups</h3>
+        <p>The PPROEM Director is the connection between the ECC and the City and County Policy Groups. During a disaster, the Policy Group may convene to provide strategic direction — establishing emergency management policies, drafting and supporting implementation of a disaster declaration, and making policy-level decisions such as evacuation orders or curfews.</p>
+
+        <table class="policy-table">
+          <caption>Policy Group Membership</caption>
+          <thead>
+            <tr>
+              <th scope="col">City of Colorado Springs</th>
+              <th scope="col">El Paso County</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Mayor</td><td>BoCC Chair</td></tr>
+            <tr><td>Chief of Staff</td><td>BoCC Vice-Chair / Commissioner of district impacted</td></tr>
+            <tr><td>Deputy Chiefs of Staff</td><td>County Administrator</td></tr>
+            <tr><td>Fire Chief</td><td>Deputy County Administrator</td></tr>
+            <tr><td>Chief of Police</td><td>El Paso County Sheriff or Undersheriff</td></tr>
+            <tr><td>Chief Communications Officer</td><td>Public Communicators Director</td></tr>
+            <tr><td>City Attorney / Chief Legal Officer</td><td>Relevant elected official(s)</td></tr>
+            <tr><td>Chief Financial Officer</td><td>Chief Financial Officer</td></tr>
+            <tr><td>Chief of HR &amp; Risk Officer</td><td>Director of Human Resources</td></tr>
+            <tr><td>Public Works Director</td><td>Director of Public Works</td></tr>
+            <tr><td>Director of PPROEM</td><td>Director of PPROEM</td></tr>
+            <tr><td>Other department directors, as needed</td><td>Other department directors, as needed</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="roles">Roles &amp; Responsibilities</h3>
+
+        <h4>Board of County Commissioners (BoCC)</h4>
+        <ul>
+          <li>Provide policy-level guidance to county departments and personnel engaged in disaster response and recovery.</li>
+          <li>Determine and authorize the level of commitment of county resources and funds.</li>
+          <li>Approve and sign a disaster declaration when an extraordinary event has occurred or is imminent.</li>
+          <li>Approve a delegation of authority when management is delegated to a state or federal entity.</li>
+        </ul>
+
+        <h4>Mayor</h4>
+        <ul>
+          <li>Approve and commit City resources and funds for disaster purposes.</li>
+          <li>Formally declare or terminate a City emergency or disaster.</li>
+          <li>Order evacuations of premises, vehicles, or other property within City limits for the duration of an emergency.</li>
+          <li>Lead dissemination of public information and maintain overall responsibility for City operations.</li>
+        </ul>
+
+        <h4>City Council</h4>
+        <ul>
+          <li>Approve emergency financial authorizations as requested.</li>
+          <li>Terminate emergency declarations at any time by majority vote.</li>
+          <li>Suspend City Code provisions by emergency ordinance.</li>
+          <li>Coordinate closely with the Executive Branch on public communications.</li>
+        </ul>
+
+        <h4>PPROEM</h4>
+        <ul>
+          <li>Develop and maintain a comprehensive emergency management program with whole-community partners.</li>
+          <li>Manage, organize, and coordinate ECC activations.</li>
+          <li>Serve as intergovernmental liaison and initiate formal requests for outside assistance.</li>
+          <li>Maintain current Mutual Aid Agreements, MOUs, and IGAs.</li>
+          <li>Serve as the BoCC's Designated Emergency Response Authority (DERA) for hazardous materials in unincorporated El Paso County.</li>
+          <li>Participate in the Local Emergency Planning Committee (LEPC) for El Paso County under SARA Title III.</li>
+        </ul>
+
+        <h4>Department Directors</h4>
+        <ul>
+          <li>Ensure NIMS compliance based on PPROEM training guidance.</li>
+          <li>Develop, maintain, and implement Continuity of Operations Plans (COOPs).</li>
+          <li>Provide representatives to the ECC based on the situation and functions activated.</li>
+          <li>Maintain complete and accurate records of incident costs and expenditures.</li>
+          <li>Provide current resource lists and on-call personnel lists.</li>
+        </ul>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== NIMS ===== -->
+      <section class="section" id="nims" aria-labelledby="nims-heading">
+        <span class="section__num">§ 10</span>
+        <h2 id="nims-heading">NIMS &amp; Incident Command Structure</h2>
+        <p>NIMS provides a consistent framework for all levels of government, NGOs, and the private sector to work together to prevent, protect against, mitigate, respond to, and recover from incidents. It establishes a common vocabulary, standardized organizational structures, and processes that enable stakeholders to coordinate effectively.</p>
+
+        <p>Key elements of NIMS include:</p>
+        <ul>
+          <li><strong>Modular organization</strong> — ICS and ECC structures expand or contract based on incident size, complexity, and hazard environment.</li>
+          <li><strong>Unified command</strong> — multiple jurisdictions or agencies set priorities and approve joint objectives when no single entity has full authority.</li>
+          <li><strong>Common terminology</strong> — standardized language ensures clear communication across agencies and hazards.</li>
+          <li><strong>Integrated communications</strong> — connectivity, situational awareness, and information sharing across all levels of response.</li>
+          <li><strong>Incident command</strong> — clear chain of authority for on-scene management while coordinating support from agencies, the ECC, and other resources.</li>
+        </ul>
+
+        <h3>Incident Types</h3>
+        <p>NIMS/ICS uses a 5-level scale to categorize incident size, magnitude, and complexity — with Type 1 the most complex (catastrophic, requiring national resources) and Type 5 the most routine (handled by local on-scene resources). Approximately 95% of incidents are Type 5, 4, or 3.</p>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== ECC ===== -->
+      <section class="section" id="ecc" aria-labelledby="ecc-heading">
+        <span class="section__num">§ 11</span>
+        <h2 id="ecc-heading">Emergency Coordination Center (ECC)</h2>
+        <p>The ECC's organizational structure is based on NIMS principles, operating as a function-based system that is flexible and scalable to meet the region's needs. It is designed to facilitate coordination and communication among municipal, county, state, and other partner agencies.</p>
+
+        <p>PPROEM has identified <strong>seven critical functions</strong> of the ECC: Policy Group and ECC Leadership Coordination, Operational Coordination, Resource Management, Public Communication, Information Management, Community Support, and Transition to Recovery.</p>
+
+        <div class="callout">
+          <p class="callout__label">Information system</p>
+          <p>The ECC uses <strong>Veoci</strong> as its disaster management software for information management, resource mobilization, and records and documentation retention.</p>
+        </div>
+
+        <h3 id="ecc-sections">ECC Sections</h3>
+
+        <h4>Direction</h4>
+        <p>Provides overall leadership, strategic guidance, and administrative support. The PPROEM Director serves as the primary liaison to the Policy Group; the ECC Manager oversees the ECC's daily operations; the ECC Deputy Manager supports continuity.</p>
+
+        <h4>Resource</h4>
+        <p>Manages acquisition, allocation, and accountability of personnel, equipment, supplies, and funding. Oversees procurement of emergency supplies, maintains detailed financial records, coordinates reporting for state and federal reimbursements, and provides funding guidance.</p>
+
+        <h4>Coordination</h4>
+        <p>Ensures effective collaboration among municipal, county, state, and partner agencies. Organized into the <strong>Infrastructure Group</strong> (public works, engineering, transportation, utilities, lifeline functions) and the <strong>Emergency Services Group</strong> (fire, law enforcement, and other emergency operations).</p>
+
+        <h4>Information</h4>
+        <p>Manages collection, analysis, and dissemination of information. Provides situation reports, planning support, and documentation; coordinates with communication partners and jurisdictional GIS staff to maintain situational awareness.</p>
+
+        <h4>Community Services</h4>
+        <p>Addresses the needs of the whole community, including vulnerable populations and individuals with access and functional needs. Coordinates mass care operations, social services support, and community assistance activities.</p>
+
+        <h3 id="activation">ECC Activation Levels</h3>
+        <dl class="glossary">
+          <dt>PPROEM On-Call — Daily Operations</dt>
+          <dd>PPROEM staff carries on-call phone and actively monitors response activity using radios, weather radar, CAD, and paging systems. The On-Call provides situational awareness to PPROEM Leadership.</dd>
+
+          <dt>PPROEM Monitoring &amp; Coordination</dt>
+          <dd>Triggered when threat indicators are high — Red Flag Warning, Fire Weather Watch, significant planned event, snow event watch and warning, flood advisory/watch/warning. May include Everbridge notifications and direct coordination with City, County, and partner departments.</dd>
+
+          <dt>PPROEM Staff Activation</dt>
+          <dd>At least two PPROEM staff are actively engaged in support of an incident, remotely or in the ECC. Support includes information management, public information, coordination, and resource ordering.</dd>
+
+          <dt>ECC Activation</dt>
+          <dd>Opening of the PPROEM ECC at 3755 Mark Dabling Blvd. Includes Everbridge notifications to fill essential positions in needed sections (Direction, Information, Resources, Coordination, Community Services), notification of policy group members, and notification of partner departments.</dd>
+        </dl>
+
+        <h4>Authority to Activate</h4>
+        <p>The PPROEM ECC may be activated by the Emergency Management Director, PPROEM staff, the El Paso County Administrator or Assistant Administrator, the Board of County Commissioners, the Sheriff or Undersheriff, the Public Health Director, the Colorado Springs Chief of Staff or Deputy Chief of Staff, the Mayor, the Fire Chief, or the Police Chief — or their designees.</p>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== ESFs ===== -->
+      <section class="section section--wide" id="esfs" aria-labelledby="esfs-heading">
+        <span class="section__num">§ 12</span>
+        <h2 id="esfs-heading">Emergency Support Functions</h2>
+        <div style="max-width: var(--measure)">
+          <p>There are <strong>28 ESFs</strong> and additional groups within the ECC organizational structure. Participating localities, departments, non-profits, and community-based organizations have been assigned responsibilities for implementing these functions. ECC Position Playbooks (annexes to this EOP) contain the mission, concepts of operations, and specific responsibilities of each function.</p>
+        </div>
+
+        <ul class="esf-list" aria-label="Emergency Support Functions">
+
+          <li class="esf">
+            <span class="esf__num">ESF #1</span>
+            <h3>Transportation Infrastructure</h3>
+            <p>Processes and coordinates requests for transportation support, and coordinates alternate transportation services and equipment for affected populations.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Public Works · City of Colorado Springs Public Works</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #2a</span>
+            <h3>Dispatch</h3>
+            <p>Technical communications support for City and County agencies — radio, phone, paging, messaging. Activates emergency notification systems for warning the public.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> EPSO Dispatch · CSPD Dispatch · El Paso Teller 911 Authority</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #2b</span>
+            <h3>Special Communications Unit</h3>
+            <p>Provides digital video, UHF, VHF, and specialized communications support during a disaster.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County SCU · PPROEM</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #3a</span>
+            <h3>Public Works</h3>
+            <p>Public works and road and bridge support — pre- and post-incident infrastructure assessments, emergency contract support, technical assistance, and debris management.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Public Works · City of Colorado Springs Public Works</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #3b</span>
+            <h3>Engineering</h3>
+            <p>Pre- and post-incident assessments and technical assistance — engineering expertise, construction management, contracting, real estate services, and inspection of structures.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Public Works (Engineering) · City of Colorado Springs Engineering</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #4</span>
+            <h3>Fire</h3>
+            <p>Coordinates detection, prevention, and suppression of wildland, urban, and structural fires. Assists in assessing fire-related damage.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> EPSO Wildland Fire Team · Colorado Springs Fire Department · Impacted jurisdiction fire department</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #6</span>
+            <h3>Mass Care</h3>
+            <p>Coordinates shelter, feeding, disaster welfare information, distribution of emergency relief items, and other human services.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Human Services · American Red Cross · Salvation Army · Pikes Peak VOAD</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #8a</span>
+            <h3>Public Health</h3>
+            <p>Coordinates local public health response to all-hazards incidents — adequate healthcare, protection of medical infrastructure, prevention of exposure to harmful agents.</p>
+            <p class="esf__agencies"><strong>Primary agency</strong> El Paso County Public Health and Environment</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #8b</span>
+            <h3>Behavioral Health</h3>
+            <p>Mental and behavioral health services during and after a disaster — assessing needs, crisis counseling, and coordinating community-based services.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> Diversus Health · El Paso County Public Health and Environment</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #8c</span>
+            <h3>Environmental Health</h3>
+            <p>Environmental health services — monitoring environmental hazards, ensuring safe water and food, vector control and sanitation, technical guidance to prevent disease.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Public Health and Environment · Colorado Department of Public Health and Environment</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #8d</span>
+            <h3>Healthcare &amp; SCHCC</h3>
+            <p>Healthcare facility operations — continuity of care in hospitals, clinics, and long-term care facilities; patient movement and surge capacity; medical staffing and supplies.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Public Health and Environment · South Central Health Care Coalition</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #9</span>
+            <h3>Search and Rescue</h3>
+            <p>Supports SAR field operations, assists with resource ordering, provides subject matter expertise, and contributes to situational awareness.</p>
+            <p class="esf__agencies"><strong>Primary agency</strong> El Paso County Search and Rescue</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #10</span>
+            <h3>Hazardous Materials</h3>
+            <p>Coordinated response to actual or potential hazardous materials incidents with the local Designated Emergency Response Agency (DERA).</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County HAZMAT Team · Colorado Springs Fire Department HAZMAT Team</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #11</span>
+            <h3>Large &amp; Small Animal Sheltering</h3>
+            <p>Ensures displaced or at-risk household pets, service animals, and livestock receive safe shelter, food, water, and medical care during emergencies.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> PPROEM · Humane Society of the Pikes Peak Region (CART) · Pikes Peak VOAD</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #12</span>
+            <h3>Utilities</h3>
+            <p>Collects and shares information on energy and utility system damage and outages — production, refining, transport, generation, transmission, distribution.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> Colorado Springs Utilities · Impacted utility company representative</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #13</span>
+            <h3>Law Enforcement</h3>
+            <p>Public safety and order — traffic and crowd control, evacuation support, search and rescue assistance, and coordination with mutual aid partners.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Sheriff's Office · Colorado Springs Police Department · Impacted jurisdiction LE</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #15</span>
+            <h3>Joint Information System / Center</h3>
+            <p>Public information, media relations, and community engagement through the JIS and JIC. Develops timely, accurate, accessible messaging including for vulnerable populations.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Public Communications · City of Colorado Springs Communications</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #16</span>
+            <h3>Emergency Medical Services</h3>
+            <p>Coordinated pre-hospital EMS support during incidents that exceed normal capacity. Facilitates communication between EMS providers, hospitals, and the ECC.</p>
+            <p class="esf__agencies"><strong>Primary agency</strong> American Medical Response</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #17</span>
+            <h3>Animal Control &amp; Enforcement</h3>
+            <p>Animal rescue, control, evacuation, and enforcement operations during emergencies — humane treatment of animals and public safety.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> Humane Society of the Pikes Peak Region (Animal Law Enforcement) · Pikes Peak VOAD</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #18</span>
+            <h3>Military</h3>
+            <p>Includes Air Force Academy, Cheyenne Mountain AFB, Fort Carson, Peterson AFB, Schriever AFB, and the Colorado National Guard. Manages bases and may provide support to civilian authority.</p>
+            <p class="esf__agencies"><strong>Primary agency</strong> Impacted military installation</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #19</span>
+            <h3>Facilities</h3>
+            <p>Coordinates buildings, structures, and designated space — staging points, operational centers, shelters, distribution hubs, and Continuity of Operations support.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Facilities · City of Colorado Springs Facilities</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #20</span>
+            <h3>Cybersecurity</h3>
+            <p>Subject matter expertise and liaison for entities responding to cybersecurity incidents impacting systems within El Paso County. Maintains cyber situational awareness.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Digital, Strategy &amp; Technology · City of Colorado Springs IT</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #21</span>
+            <h3>Meteorology</h3>
+            <p>Meteorological support — forecasting, predictive modeling, weather reporting, and climatic influences. Works closely with the JIC on public warning messages.</p>
+            <p class="esf__agencies"><strong>Primary agency</strong> National Weather Service</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #22</span>
+            <h3>GIS &amp; Mapping</h3>
+            <p>All Geographic Information Systems services during activation — data development, impact assessment, map production, and public information mapping.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County GIS · City of Colorado Springs GIS</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #23</span>
+            <h3>Economic Vitality</h3>
+            <p>Provides the business community with situational awareness — affected areas, infrastructure impacts, road closures, evacuation zones, re-entry, and damage assessment for recovery.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Economic Development · City of Colorado Springs Economic Development</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #24</span>
+            <h3>Parks, Natural &amp; Cultural Resources</h3>
+            <p>Evaluates historical sites possibly affected, coordinates with preservation organizations, and assesses cultural sites and environmental locations for damage.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> El Paso County Parks and Recreation · City of Colorado Springs Parks, Recreation and Cultural Services</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #25</span>
+            <h3>Evacuation Coordination</h3>
+            <p>Provides critical transportation resources to support evacuation of people and animals. May also help transport supplies in support of an incident.</p>
+            <p class="esf__agencies"><strong>Primary agency</strong> Pikes Peak Regional Transportation Coalition</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #26</span>
+            <h3>Volunteer &amp; Donations Management</h3>
+            <p>Coordinates volunteers and donations — tracking spontaneous and unaffiliated volunteers, encouraging monetary donations, and partnering with VOADs, NGOs, and FBOs.</p>
+            <p class="esf__agencies"><strong>Primary partners</strong> Seventh Day Adventist Community Services Disaster Response · Pikes Peak Community Foundation</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #27</span>
+            <h3>Pre-K – 12th Grade Schools</h3>
+            <p>Coordinates support from school districts and serves as a vital link between school operation centers — communications, transportation, sheltering, and mass care requests.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> Impacted school district(s)</p>
+          </li>
+
+          <li class="esf">
+            <span class="esf__num">ESF #28</span>
+            <h3>Higher Education</h3>
+            <p>Information sharing and operational collaboration between higher education institutions and the ECC — campus impacts, emergency notifications, and student/faculty/staff needs.</p>
+            <p class="esf__agencies"><strong>Primary agencies</strong> Impacted higher education institution(s)</p>
+          </li>
+        </ul>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== RESOURCES ===== -->
+      <section class="section" id="resources" aria-labelledby="resources-heading">
+        <span class="section__num">§ 13</span>
+        <h2 id="resources-heading">Resource Management</h2>
+        <p>During a disaster, personnel, equipment, supplies, and financial resources may be needed to protect life and property. <strong>Clarity, efficiency, and accountability</strong> in resource management are critical.</p>
+
+        <p>The resource management process follows a structured four-step cycle that ensures personnel, equipment, supplies, and facilities are identified and requested, acquired and mobilized, assigned and tracked, and demobilized in an organized manner.</p>
+
+        <h3 id="resource-cycle">The Four-Step Cycle</h3>
+        <ol class="phases" aria-label="Resource management framework">
+          <li>
+            <h4>Request</h4>
+            <p>Operational entities identify needs and request resources.</p>
+          </li>
+          <li>
+            <h4>Mobilize</h4>
+            <p>Ordering agencies acquire and mobilize the requested resource.</p>
+          </li>
+          <li>
+            <h4>Utilize</h4>
+            <p>Operational entities receive, distribute, and track resources.</p>
+          </li>
+          <li>
+            <h4>Demobilize</h4>
+            <p>Operational entity demobilizes unneeded resources.</p>
+          </li>
+        </ol>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== RECOVERY ===== -->
+      <section class="section" id="recovery" aria-labelledby="recovery-heading">
+        <span class="section__num">§ 14</span>
+        <h2 id="recovery-heading">ECC Transition to Recovery</h2>
+        <p>The transition from emergency response to recovery is a critical phase. The ECC facilitates this transition by coordinating with all activated ESFs, local jurisdictions, and supporting agencies — ensuring immediate response operations are safely concluded while recovery priorities are established.</p>
+
+        <p>This process includes identifying affected populations, assessing infrastructure and facility impacts, and coordinating the collection and dissemination of damage and needs assessment data to support timely recovery actions.</p>
+
+        <p>Recovery operations in the Pikes Peak region are guided by the <strong>PPROEM Recovery Plan</strong>, which outlines the framework for short-term and long-term recovery — restoration of critical services, infrastructure rehabilitation, and support for impacted individuals and communities. The ECC serves as the central hub for transitioning operational control, maintaining situational awareness, and communicating recovery priorities to all partners.</p>
+      </section>
+
+      <hr class="divider">
+
+      <!-- ===== APPENDIX ===== -->
+      <section class="section" id="appendix" aria-labelledby="appendix-heading">
+        <span class="section__num">Appendix A</span>
+        <h2 id="appendix-heading">Adoption Resolutions &amp; Signatures</h2>
+        <p>The Pikes Peak Regional Emergency Operations Plan has been reviewed and approved by the undersigned authorities. This plan supersedes all previous versions and is effective as of the date of the last signature.</p>
+
+        <table class="policy-table">
+          <caption>Signatures of adoption</caption>
+          <thead>
+            <tr>
+              <th scope="col">Authority</th>
+              <th scope="col">Signatory</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Chair, El Paso County Board of County Commissioners</td>
+              <td>Carrie Geitner</td>
+              <td><time datetime="2026-01-13">January 13, 2026</time></td>
+            </tr>
+            <tr>
+              <td>Mayor, City of Colorado Springs</td>
+              <td>Blessing A. Mobolade</td>
+              <td><time datetime="2026-01-16">January 16, 2026</time></td>
+            </tr>
+            <tr>
+              <td>Regional Emergency Management and Recovery Executive Director, PPROEM</td>
+              <td>Andrew Notbohm</td>
+              <td><time datetime="2026-01-16">January 16, 2026</time></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>El Paso County Board of County Commissioners — Resolution No. 26-31</h3>
+        <p>By resolution adopted January 13, 2026, the El Paso County Board of County Commissioners approved the 2026 Pikes Peak Regional Emergency Operations Plan, finding that it meets the requirements of C.R.S. Title 24, Article 33.5, Part 701 et seq. (Colorado Disaster Emergency Act) and is aligned with the National Response Framework and National Incident Management System.</p>
+
+        <p>The resolution authorizes County and PPROEM staff to negotiate and execute amendments that are ministerial in nature but still within the overall substantive nature of the EOP.</p>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ============================================
+       FOOTER
+       ============================================ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer__inner">
+      <div>
+        <h2>About this plan</h2>
+        <p>The Pikes Peak Regional Emergency Operations Plan is the official all-hazards plan for El Paso County and the City of Colorado Springs, maintained by the Pikes Peak Regional Office of Emergency Management (PPROEM).</p>
+        <p>Document adopted <time datetime="2026-01-16">January 16, 2026</time>. This plan is reviewed annually and fully revised every five years.</p>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <address style="font-style: normal; font-size: 0.875rem; line-height: 1.6; color: rgba(250, 247, 241, 0.85);">
+          PPROEM<br>
+          3755 Mark Dabling Blvd.<br>
+          Colorado Springs, CO 80907<br>
+          <a href="tel:+17195758400">719-575-8400</a>
+        </address>
+      </div>
+      <div>
+        <h2>Accessibility</h2>
+        <p>This document targets <a href="https://www.w3.org/WAI/WCAG21/quickref/?currentsidebar=%23col_customize&amp;levels=aaa" rel="noopener">WCAG 2.1 Level AA</a> — semantic landmarks, keyboard navigation, screen-reader labeling, scalable text, reflow at 320 px, contrast ≥4.5:1 throughout, and respect for reduced-motion preferences. If you encounter an accessibility barrier, contact PPROEM at <a href="tel:+17195758400">719-575-8400</a>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button type="button" class="back-to-top" aria-label="Back to top of document">
+    <span aria-hidden="true">↑</span>
+  </button>
+  <script>
+    /* ====================================================================
+       Accessibility enhancements (progressive — no JS, page still works)
+       ==================================================================== */
+    (function () {
+      'use strict';
+
+      /* --- Back-to-top button --- */
+      var btn = document.querySelector('.back-to-top');
+      var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function toggleBtn() {
+        if (window.scrollY > 600) btn.classList.add('is-visible');
+        else btn.classList.remove('is-visible');
+      }
+      window.addEventListener('scroll', toggleBtn, { passive: true });
+      btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: prefersReduce ? 'auto' : 'smooth' });
+        // Move focus to skip-link target so keyboard users land at the top
+        var main = document.getElementById('main-content');
+        if (main) main.focus({ preventScroll: true });
+      });
+
+      /* --- Scroll-spy: mark current TOC item with aria-current --- */
+      var tocLinks = document.querySelectorAll('.toc__list a[href^="#"]');
+      if (!('IntersectionObserver' in window) || tocLinks.length === 0) return;
+
+      var linkById = {};
+      tocLinks.forEach(function (a) {
+        var id = a.getAttribute('href').slice(1);
+        linkById[id] = a;
+      });
+
+      var visible = new Set();
+      function setCurrent() {
+        // Pick the topmost visible section
+        var topId = null, topY = Infinity;
+        visible.forEach(function (id) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          var y = el.getBoundingClientRect().top;
+          if (y < topY) { topY = y; topId = id; }
+        });
+        tocLinks.forEach(function (a) { a.removeAttribute('aria-current'); });
+        if (topId && linkById[topId]) {
+          linkById[topId].setAttribute('aria-current', 'location');
+        }
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var id = e.target.id;
+          if (e.isIntersecting) visible.add(id);
+          else visible.delete(id);
+        });
+        setCurrent();
+      }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+
+      Object.keys(linkById).forEach(function (id) {
+        var section = document.getElementById(id);
+        if (section) observer.observe(section);
+      });
+    })();
+  </script>
