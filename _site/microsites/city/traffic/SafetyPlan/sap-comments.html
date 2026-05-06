@@ -956,17 +956,6 @@ mark{background:#fef3c7;color:var(--ink);padding:0 2px;border-radius:2px;font-we
 .empty{text-align:center;padding:48px 24px;background:var(--white);border:1.5px dashed var(--rule);
   border-radius:5px;color:var(--muted);}
 .empty-title{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--ink);margin-bottom:6px;}
-
-/* Page-bottom links to siblings */
-.page-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;
-  margin-top:36px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);}
-.page-nav-card{display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
-  border-radius:5px;padding:14px 18px;text-decoration:none;transition:background .15s,border-color .15s;}
-.page-nav-card:hover{background:rgba(255,255,255,.07);border-color:rgba(200,168,75,.4);}
-.page-nav-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
-  color:#c8a84b;margin-bottom:5px;}
-.page-nav-card h3{font-family:var(--sans);font-size:15px;font-weight:600;color:#e2e8f0;margin-bottom:3px;}
-.page-nav-card p{font-size:13px;color:#9ab0c8;line-height:1.5;}
 </style>
 
 <div id="live-announce" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
@@ -1104,20 +1093,6 @@ mark{background:#fef3c7;color:var(--ink);padding:0 2px;border-radius:2px;font-we
   <div class="comment-list" id="comment-list" role="feed" aria-busy="false" aria-labelledby="result-count">
     <!-- comments injected by JS -->
   </div>
-
-  <!-- Sibling page nav -->
-  <nav class="page-nav" aria-label="Related Safety Action Plan pages">
-    <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/cos-traffic-hub.html">
-      <p class="page-nav-tag">Section 1 · Data</p>
-      <h3>Traffic Safety Dashboard</h3>
-      <p>64,434 crash records, FHWA funding analysis, and zip-code search — same ArcGIS feed the City uses.</p>
-    </a>
-    <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/sap-context.html">
-      <p class="page-nav-tag">Section 3 · Context</p>
-      <h3>Project background &amp; timeline</h3>
-      <p>Funding, plan adoption schedule, contact information, and the public engagement record.</p>
-    </a>
-  </nav>
 
 </div>
 

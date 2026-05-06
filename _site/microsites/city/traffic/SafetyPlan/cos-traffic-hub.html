@@ -838,11 +838,10 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 .meta-pill{font-family:var(--mono);font-size:13px;letter-spacing:.06em;padding:3px 10px;
   border-radius:10px;border:1px solid rgba(255,255,255,.25);color:#a8bbd4;}
 .meta-pill.live{border-color:rgba(100,200,100,.5);color:#86efac;}
-.arcgis-btn{margin-left:auto;display:inline-flex;align-items:center;gap:6px;
-  background:rgba(255,255,255,.1);color:#fff;padding:6px 12px;border-radius:4px;
-  text-decoration:none;font-family:var(--mono);font-size:13px;letter-spacing:.06em;
-  border:1px solid rgba(255,255,255,.2);}
-.arcgis-btn:hover{background:rgba(255,255,255,.18);}
+.callout-arcgis{margin-top:10px;padding-top:10px;border-top:1px dashed var(--rule);
+  font-size:13px;color:var(--muted);line-height:1.5;}
+.callout-arcgis a{color:var(--blue);text-decoration:none;border-bottom:1px dotted var(--blue);}
+.callout-arcgis a:hover{border-bottom-style:solid;}
 
 /* ===== DISNEY+-STYLE BRAND BAR ===== */
 .brand-bar{
@@ -1256,18 +1255,6 @@ td.num{text-align:right;font-family:var(--mono);}
   border-radius:3px;font-size:13px;color:var(--muted);line-height:1.7;}
 .tool-footer strong{color:var(--ink);}
 
-/* ===== SIBLING PAGE NAV ===== */
-.page-nav{max-width:1400px;margin:0 auto;padding:24px 16px 16px;
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;
-  border-top:1px solid rgba(255,255,255,.12);}
-.page-nav-card{display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
-  border-radius:5px;padding:14px 18px;text-decoration:none;transition:background .15s,border-color .15s;}
-.page-nav-card:hover{background:rgba(255,255,255,.07);border-color:rgba(200,168,75,.4);}
-.page-nav-tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
-  color:#c8a84b;margin-bottom:5px;}
-.page-nav-card h3{font-family:var(--sans);font-size:15px;font-weight:600;color:#e2e8f0;margin-bottom:3px;}
-.page-nav-card p{font-size:13px;color:#9ab0c8;line-height:1.5;}
-
 /* ===== FOOTER ===== */
 .dash-footer{background:#0d1117;border-top:1px solid #1e293b;padding:16px 24px;text-align:center;}
 .dash-footer p{font-family:var(--mono);font-size:13px;color:#475569;letter-spacing:.04em;}
@@ -1294,11 +1281,6 @@ td.num{text-align:right;font-family:var(--mono);}
       <span class="meta-pill">9 Years</span>
       <span class="meta-pill">64,434 Crashes</span>
       <span class="meta-pill">El Paso County · City of Colorado Springs</span>
-      <a href="https://www.arcgis.com/apps/dashboards/2d2b29f62bcb466a9b0b193a05a67d42"
-         class="arcgis-btn" target="_blank" rel="noopener noreferrer"
-         aria-label="View interactive map dashboard on ArcGIS (opens in new window)">
-        🗺 View Map Dashboard <span class="sr-only">(opens in new window)</span>
-      </a>
     </div>
   </div>
 </header>
@@ -1383,6 +1365,7 @@ td.num{text-align:right;font-family:var(--mono);}
       Data comes directly from the City's public crash data service — no login required, no map required.
       Built by two residents at a kitchen table while waiting for USAA to call back.
       Part of the <strong>cheetochopsticks.com</strong> spec — offered to the city for use by residents and staff.
+      <p class="callout-arcgis">Prefer a spatial view? <a href="https://www.arcgis.com/apps/dashboards/2d2b29f62bcb466a9b0b193a05a67d42" target="_blank" rel="noopener noreferrer">Open the City's official ArcGIS map dashboard<span class="sr-only"> (opens in new window)</span></a> ↗</p>
     </div>
 
     <div class="callout-amber" role="note" aria-label="Note about danger ratings">
@@ -2154,20 +2137,6 @@ td.num{text-align:right;font-family:var(--mono);}
 
   </div>
 </div>
-
-<!-- ===== SIBLING PAGE NAV ===== -->
-<nav class="page-nav" aria-label="Related Safety Action Plan pages">
-  <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/sap-comments.html">
-    <p class="page-nav-tag">Section 2 · Drafts &amp; Comments</p>
-    <h3>Public comments archive</h3>
-    <p>79 resident comments mirrored from Konveio, with live search.</p>
-  </a>
-  <a class="page-nav-card" href="/microsites/city/traffic/SafetyPlan/sap-context.html">
-    <p class="page-nav-tag">Section 3 · Context</p>
-    <h3>Project background &amp; timeline</h3>
-    <p>Funding, plan adoption schedule, contact, public engagement record.</p>
-  </a>
-</nav>
 
 <!-- ===== FOOTER ===== -->
 
