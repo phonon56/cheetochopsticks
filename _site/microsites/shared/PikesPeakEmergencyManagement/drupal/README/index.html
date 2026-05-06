@@ -1,0 +1,110 @@
+<h1>Pikes Peak Regional EOP — Drupal integration bundle</h1>
+<p>This folder contains the EOP page split into Drupal-friendly assets:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pikes_peak_eop.libraries.yml</code></td>
+<td>Library definition. Declares the CSS/JS to attach.</td>
+</tr>
+<tr>
+<td><code>pikes-peak-eop.css</code></td>
+<td>All page styles, namespaced under <code>.eop-page</code>.</td>
+</tr>
+<tr>
+<td><code>pikes-peak-eop.js</code></td>
+<td>Back-to-top + TOC scroll-spy, wrapped in <code>Drupal.behaviors</code>.</td>
+</tr>
+<tr>
+<td><code>pikes-peak-eop.html.twig</code></td>
+<td>Body fragment — no <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, or <code>&lt;body&gt;</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2>Install</h2>
+<ol>
+<li>
+<p><strong>Drop into a custom module.</strong> Most common path. Create <code>modules/custom/pikes_peak_eop/</code>, copy these four files in, and add a one-line module file:</p>
+<pre><code class="language-php">// modules/custom/pikes_peak_eop/pikes_peak_eop.module
+&lt;?php
+</code></pre>
+<p>…plus the standard <code>pikes_peak_eop.info.yml</code>:</p>
+<pre><code class="language-yaml">name: 'Pikes Peak Regional EOP'
+type: module
+description: 'Renders the Pikes Peak Regional Emergency Operations Plan.'
+core_version_requirement: ^10 || ^11
+package: 'Custom'
+</code></pre>
+</li>
+<li>
+<p><strong>Register the template.</strong> Either expose it as a theme hook in the <code>.module</code> file, or copy the Twig file into your theme's <code>templates/</code> directory and rename it to match a Drupal template suggestion (e.g. <code>node--emergency-plan.html.twig</code>).</p>
+</li>
+<li>
+<p><strong>Enable the module</strong> and clear caches: <code>drush en pikes_peak_eop -y &amp;&amp; drush cr</code>.</p>
+</li>
+<li>
+<p><strong>Render.</strong> From any controller, block, or preprocess hook:</p>
+<pre><code class="language-php">return [
+  '#theme' =&gt; 'pikes_peak_eop',
+  '#attached' =&gt; ['library' =&gt; ['pikes_peak_eop/eop']],
+];
+</code></pre>
+<p>Or include the Twig directly in another template:</p>
+<pre><code class="language-twig">{% include '@pikes_peak_eop/pikes-peak-eop.html.twig' %}
+</code></pre>
+</li>
+</ol>
+<h2>Template variables</h2>
+<p>The Twig template accepts an optional <code>eop</code> object with these keys (defaults are baked in for the January 2026 plan):</p>
+<pre><code class="language-twig">{
+  title:         'Pikes Peak Regional Emergency Operations Plan',
+  eyebrow:       'El Paso County · City of Colorado Springs · January 2026',
+  lede:          '…',
+  adopted:       '2026-01-16',          {# ISO date #}
+  adopted_label: 'January 16, 2026',
+  supersedes:    'EOP dated February 2, 2021',
+  issued_by:     'PPROEM',
+  coverage:      '2,127 sq. mi. · 752,772 residents',
+  contact: {
+    name, street, city_state_zip, phone, phone_href
+  },
+  signatories: [
+    { authority, name, date, date_label }, …
+  ]
+}
+</code></pre>
+<p>Pass it from a preprocess hook:</p>
+<pre><code class="language-php">function pikes_peak_eop_preprocess_pikes_peak_eop(&amp;$variables) {
+  $variables['eop'] = [
+    'title' =&gt; \Drupal::config('pikes_peak_eop.settings')-&gt;get('title'),
+    // …
+  ];
+}
+</code></pre>
+<h2>Conventions</h2>
+<ul>
+<li><strong>Wrapper class.</strong> Everything renders inside <code>&lt;div class=&quot;eop-page&quot;&gt;</code>. The CSS file scopes every selector under that wrapper, so it's safe to load alongside any Drupal theme without selector collisions.</li>
+<li><strong>Token overrides.</strong> Within <code>.eop-page</code>, the shared tokens <code>--paper</code>, <code>--ink</code>, <code>--gold</code>, <code>--navy</code>, and <code>--font-display</code> are overridden with editorial values. Outside <code>.eop-page</code>, the global theme keeps its values.</li>
+<li><strong>Page-specific tokens</strong> use the <code>--eop-</code> prefix (<code>--eop-rust</code>, <code>--eop-pine</code>, <code>--eop-rule</code>, <code>--eop-muted</code>, <code>--eop-risk-*</code>, etc.).</li>
+<li><strong>State class.</strong> Use <code>.is-visible</code> for transient state (matches the convention in <code>shared/js/main.js</code>).</li>
+<li><strong>Skip link / sr-only.</strong> Not redefined here — Drupal's outer theme should provide them. The shared <code>shared/css/main.css</code> already has both.</li>
+</ul>
+<h2>Drupal-specific gotchas to know about</h2>
+<ul>
+<li><strong><code>once</code></strong> is imported from <code>core/once</code> in <code>libraries.yml</code>. If you target Drupal &lt; 9.4, swap to <code>jquery.once</code> and adjust the JS.</li>
+<li><strong>CKEditor stripping.</strong> If editors paste this HTML into a CKEditor body field, the WYSIWYG filter will strip class attributes by default. Render via Twig template, not body field.</li>
+<li><strong>Sticky TOC</strong> uses <code>position: sticky</code> with <code>top: 1.5rem</code>. If your theme uses a fixed admin toolbar (~79 px), bump the <code>top</code> value or the TOC will sit under the toolbar.</li>
+<li><strong>Print styles</strong> hide topbar, TOC, and footer — verify against any Drupal page-level print stylesheet that may also be loading.</li>
+<li><strong>Library cache.</strong> After editing the CSS or JS files, run <code>drush cr</code> or hit <code>?ays-clear-cache=1</code> to bust Drupal's library cache.</li>
+</ul>
+<h2>What's NOT in this bundle</h2>
+<ul>
+<li>The original meta tags (<code>&lt;title&gt;</code>, OpenGraph, Twitter, schema.org JSON-LD). Those belong in the page's <code>&lt;head&gt;</code> and Drupal handles them via metatag module or <code>hook_page_attachments</code>. See the standalone version for reference values.</li>
+<li>Skip link and <code>.sr-only</code> utility — provided by <code>shared/css/main.css</code>.</li>
+<li>The <code>&lt;html lang=&quot;en&quot;&gt;</code> declaration — Drupal sets this from the site's interface language.</li>
+</ul>
