@@ -166,25 +166,9 @@ headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link re
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
-  .nav {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .nav a {
-    color: var(--text);
-    text-decoration: none;
-    padding: 8px 14px;
-    border-radius: var(--radius);
-    font-size: 14px;
-    font-weight: 500;
-    transition: background 0.15s;
-  }
-  .nav a:hover { background: var(--bg); }
-  .nav a.current {
-    background: var(--bg);
-    color: var(--brand);
-  }
+  /* .nav rules removed — they styled the page's stripped <nav class="nav">
+     and were colliding with site.njk's <header class="nav"> (turning the
+     cc nav links dark-on-dark, invisible until hover). */
   .cta-button {
     background: var(--accent);
     color: white;
@@ -994,7 +978,8 @@ headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link re
 
   @media (max-width: 640px) {
     .topbar-inner { padding: 12px 16px; gap: 12px; }
-    .nav { display: none; }
+    /* removed `.nav { display: none }` here — was hiding site.njk's
+       <header class="nav"> on mobile. */
     .hero { padding: 32px 16px 24px; }
     .status-strip { padding: 0 16px 20px; gap: 12px; }
     .main { padding: 0 16px 32px; }
