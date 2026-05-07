@@ -755,7 +755,13 @@
     max-width: 520px;
     width: 100%;
     max-height: 90vh;
-    overflow-y: auto;
+    /* Flex column so the body scrolls but header + footer stay visible.
+       Without this, the whole modal scrolled together — the Subscribe
+       button at the bottom of the footer disappeared as soon as the
+       user scrolled into the checkboxes. */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     box-shadow: var(--shadow-lg);
     animation: slideUp 0.25s ease;
   }
@@ -767,17 +773,27 @@
     padding: 24px 28px 20px;
     border-bottom: 1px solid var(--border);
     position: relative;
+    flex-shrink: 0;          /* always visible — does not scroll with body */
   }
   .modal-header h2 {
     font-family: 'Fraunces', serif;
-    font-weight: 500;
+    font-weight: 600;        /* was 500 — Fraunces 500 reads thin at 22px */
     font-size: 22px;
     letter-spacing: -0.01em;
     margin-bottom: 6px;
+    color: var(--text);      /* explicit; #14181F on #FFFFFF = ~16.8:1 (AAA) */
+    /* Reserve room for the absolutely-positioned close button in the
+       top-right so the title can never collide with it on narrow modals. */
+    padding-right: 40px;
   }
   .modal-header p {
     font-size: 14px;
-    color: var(--text-muted);
+    /* Was var(--text-muted) (#5C6573) which gives ~6.0:1 on white —
+       passes AA but fails AAA. Use full --text and let the smaller
+       size + lower font-weight carry the visual hierarchy. Now ~16.8:1. */
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.5;
   }
   .modal-close {
     position: absolute;
@@ -797,6 +813,12 @@
   .modal-close:hover { background: var(--bg); }
   .modal-body {
     padding: 24px 28px;
+    flex: 1 1 auto;          /* take remaining height between header and footer */
+    overflow-y: auto;        /* scroll when content exceeds available space */
+    min-height: 0;           /* required: lets a flex child shrink below its content size */
+    /* Subtle drop-shadow into the sticky footer so users can see when
+       there's more content below the fold. */
+    overscroll-behavior: contain;
   }
   .address-binding {
     background: var(--surface-2);
@@ -820,6 +842,11 @@
     color: var(--text);
   }
   .form-group { margin-bottom: 16px; }
+  /* Fieldset variant — strips the browser-default border + padding so
+     the visual matches a plain .form-group, but keeps the semantics
+     (a <legend> child is announced by SR as the group's accessible
+     name and read once when entering any of the grouped controls). */
+  .form-group--fieldset { border: 0; padding: 0; min-width: 0; }
   .form-label {
     display: block;
     font-size: 13px;
@@ -827,6 +854,18 @@
     margin-bottom: 6px;
     color: var(--text);
   }
+  legend.form-label { padding: 0; }
+  .form-label-hint {
+    color: var(--text);
+    font-weight: 400;
+    opacity: 0.75;       /* ~12.6:1 effective on white — still AAA */
+  }
+  .footer-link {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+  .footer-link:hover,
+  .footer-link:focus-visible { color: var(--brand-dark); }
   .form-input {
     width: 100%;
     padding: 11px 14px;
@@ -891,11 +930,19 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;          /* pins to the bottom — Subscribe button always visible */
+    /* Soft top-shadow so users can tell the body has scrollable content
+       above when the modal is short enough that it scrolls. */
+    box-shadow: 0 -4px 12px rgba(20, 24, 31, 0.04);
   }
   .modal-footer-note {
     font-size: 12px;
-    color: var(--text-muted);
+    /* Was var(--text-muted) at 12px — small + 6:1 contrast feels marginal.
+       Using --text gives ~16.8:1 and the smaller font-size still keeps it
+       visually subordinate to the Subscribe button. */
+    color: var(--text);
     flex: 1;
+    line-height: 1.4;
   }
   .btn-large {
     padding: 12px 24px;

@@ -827,24 +827,11 @@
     --radius-lg: 10px;
   }
 
-  /* CSS scoping for cheetochopsticks integration: site.njk wraps this
-     content in its own dark <header class="nav"> + <footer class="cc-footer">.
-     The standalone version of this page resets every element with
-     `* { margin:0; padding:0 }` and styles <body> directly — both bleed
-     into site.njk's chrome (zeroing nav-link padding, swapping the nav's
-     IBM Plex font and dark bg for this page's IBM Plex + cream). Scope
-     those rules to .alerts-main and .modal-backdrop (the modal sits
-     outside .alerts-main but is still page content). */
-  .alerts-main, .alerts-main *, .alerts-main *::before, .alerts-main *::after,
-  .modal-backdrop, .modal-backdrop *, .modal-backdrop *::before, .modal-backdrop *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html { scroll-behavior: smooth; }
 
-  .alerts-main {
+  body {
     font-family: 'IBM Plex Sans', system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -855,7 +842,6 @@
     background-image:
       radial-gradient(circle at 20% 10%, rgba(30,58,95,0.025), transparent 50%),
       radial-gradient(circle at 80% 80%, rgba(184,65,12,0.02), transparent 50%);
-    min-height: 100vh;
   }
 
   /* Skip link */
@@ -953,9 +939,25 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
-  /* .nav rules removed — they styled the page's stripped <nav class="nav">
-     and were colliding with site.njk's <header class="nav"> (turning the
-     cc nav links dark-on-dark, invisible until hover). */
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .nav a {
+    color: var(--text);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .nav a:hover { background: var(--bg); }
+  .nav a.current {
+    background: var(--bg);
+    color: var(--brand);
+  }
   .cta-button {
     background: var(--accent);
     color: white;
@@ -1560,7 +1562,13 @@
     max-width: 520px;
     width: 100%;
     max-height: 90vh;
-    overflow-y: auto;
+    /* Flex column so the body scrolls but header + footer stay visible.
+       Without this, the whole modal scrolled together — the Subscribe
+       button at the bottom of the footer disappeared as soon as the
+       user scrolled into the checkboxes. */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     box-shadow: var(--shadow-lg);
     animation: slideUp 0.25s ease;
   }
@@ -1572,17 +1580,27 @@
     padding: 24px 28px 20px;
     border-bottom: 1px solid var(--border);
     position: relative;
+    flex-shrink: 0;          /* always visible — does not scroll with body */
   }
   .modal-header h2 {
     font-family: 'Fraunces', serif;
-    font-weight: 500;
+    font-weight: 600;        /* was 500 — Fraunces 500 reads thin at 22px */
     font-size: 22px;
     letter-spacing: -0.01em;
     margin-bottom: 6px;
+    color: var(--text);      /* explicit; #14181F on #FFFFFF = ~16.8:1 (AAA) */
+    /* Reserve room for the absolutely-positioned close button in the
+       top-right so the title can never collide with it on narrow modals. */
+    padding-right: 40px;
   }
   .modal-header p {
     font-size: 14px;
-    color: var(--text-muted);
+    /* Was var(--text-muted) (#5C6573) which gives ~6.0:1 on white —
+       passes AA but fails AAA. Use full --text and let the smaller
+       size + lower font-weight carry the visual hierarchy. Now ~16.8:1. */
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.5;
   }
   .modal-close {
     position: absolute;
@@ -1602,6 +1620,12 @@
   .modal-close:hover { background: var(--bg); }
   .modal-body {
     padding: 24px 28px;
+    flex: 1 1 auto;          /* take remaining height between header and footer */
+    overflow-y: auto;        /* scroll when content exceeds available space */
+    min-height: 0;           /* required: lets a flex child shrink below its content size */
+    /* Subtle drop-shadow into the sticky footer so users can see when
+       there's more content below the fold. */
+    overscroll-behavior: contain;
   }
   .address-binding {
     background: var(--surface-2);
@@ -1625,6 +1649,11 @@
     color: var(--text);
   }
   .form-group { margin-bottom: 16px; }
+  /* Fieldset variant — strips the browser-default border + padding so
+     the visual matches a plain .form-group, but keeps the semantics
+     (a <legend> child is announced by SR as the group's accessible
+     name and read once when entering any of the grouped controls). */
+  .form-group--fieldset { border: 0; padding: 0; min-width: 0; }
   .form-label {
     display: block;
     font-size: 13px;
@@ -1632,6 +1661,18 @@
     margin-bottom: 6px;
     color: var(--text);
   }
+  legend.form-label { padding: 0; }
+  .form-label-hint {
+    color: var(--text);
+    font-weight: 400;
+    opacity: 0.75;       /* ~12.6:1 effective on white — still AAA */
+  }
+  .footer-link {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+  .footer-link:hover,
+  .footer-link:focus-visible { color: var(--brand-dark); }
   .form-input {
     width: 100%;
     padding: 11px 14px;
@@ -1696,11 +1737,19 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;          /* pins to the bottom — Subscribe button always visible */
+    /* Soft top-shadow so users can tell the body has scrollable content
+       above when the modal is short enough that it scrolls. */
+    box-shadow: 0 -4px 12px rgba(20, 24, 31, 0.04);
   }
   .modal-footer-note {
     font-size: 12px;
-    color: var(--text-muted);
+    /* Was var(--text-muted) at 12px — small + 6:1 contrast feels marginal.
+       Using --text gives ~16.8:1 and the smaller font-size still keeps it
+       visually subordinate to the Subscribe button. */
+    color: var(--text);
     flex: 1;
+    line-height: 1.4;
   }
   .btn-large {
     padding: 12px 24px;
@@ -1765,8 +1814,7 @@
 
   @media (max-width: 640px) {
     .topbar-inner { padding: 12px 16px; gap: 12px; }
-    /* removed `.nav { display: none }` here — was hiding site.njk's
-       <header class="nav"> on mobile. */
+    .nav { display: none; }
     .hero { padding: 32px 16px 24px; }
     .status-strip { padding: 0 16px 20px; gap: 12px; }
     .main { padding: 0 16px 32px; }
@@ -1779,8 +1827,6 @@
     .result-actions { padding: 16px 20px; }
   }
 </style>
-
-
 
 <div class="alerts-main">
   <section class="hero">
@@ -1875,17 +1921,20 @@
   </section>
 </div>
 
-
-
 <!-- Subscribe Modal -->
-<div class="modal-backdrop" id="subscribe-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true" onclick="if(event.target===this)closeSubscribe()">
+<div class="modal-backdrop" id="subscribe-modal" role="dialog"
+     aria-modal="true"
+     aria-labelledby="modal-title"
+     aria-describedby="modal-desc"
+     aria-hidden="true"
+     onclick="if(event.target===this)closeSubscribe()">
   <div class="modal">
     <div class="modal-header">
       <button type="button" class="modal-close" onclick="closeSubscribe()" aria-label="Close subscribe form">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
       <h2 id="modal-title">Get alerts for this address</h2>
-      <p>We'll only contact you about activity at the address below — no marketing, no county-wide spam.</p>
+      <p id="modal-desc">We'll only contact you about activity at the address below — no marketing, no county-wide spam.</p>
     </div>
     <div class="modal-body">
       <div class="address-binding" id="modal-address-binding">
@@ -1894,51 +1943,67 @@
       </div>
       <div class="form-group">
         <label for="email-input" class="form-label">Email address</label>
-        <input type="email" id="email-input" class="form-input" placeholder="you@example.com">
+        <input type="email"
+               id="email-input"
+               name="email"
+               class="form-input"
+               placeholder="you@example.com"
+               autocomplete="email"
+               required
+               aria-required="true">
       </div>
       <div class="form-group">
-        <label for="phone-input" class="form-label">Mobile phone <span style="color: var(--text-muted); font-weight: 400;">(optional, for SMS)</span></label>
-        <input type="tel" id="phone-input" class="form-input" placeholder="(719) 555-0123">
-        <div class="form-help">Standard message rates apply. Reply STOP to unsubscribe at any time.</div>
+        <label for="phone-input" class="form-label">
+          Mobile phone <span class="form-label-hint">(optional, for SMS)</span>
+        </label>
+        <input type="tel"
+               id="phone-input"
+               name="phone"
+               class="form-input"
+               placeholder="(719) 555-0123"
+               autocomplete="tel"
+               inputmode="tel"
+               aria-describedby="phone-help">
+        <div class="form-help" id="phone-help">Standard message rates apply. Reply STOP to unsubscribe at any time.</div>
       </div>
-      <div class="form-group" style="margin-bottom: 4px;">
-        <label class="form-label">Notify me about</label>
-        <div class="checkboxes">
-          <label class="checkbox-item">
-            <input type="checkbox" checked>
+      <fieldset class="form-group form-group--fieldset" style="margin-bottom: 4px;">
+        <legend class="form-label">Notify me about</legend>
+        <div class="checkboxes" role="group" aria-label="Alert topics to subscribe to">
+          <label class="checkbox-item" for="topic-evac">
+            <input type="checkbox" id="topic-evac" name="topics" value="evacuation" checked aria-describedby="topic-evac-desc">
             <div>
-              <span class="checkbox-label">Evacuation orders & warnings</span>
-              <span class="checkbox-desc">Life-safety alerts. Sent immediately.</span>
+              <span class="checkbox-label">Evacuation orders &amp; warnings</span>
+              <span class="checkbox-desc" id="topic-evac-desc">Life-safety alerts. Sent immediately.</span>
             </div>
           </label>
-          <label class="checkbox-item">
-            <input type="checkbox" checked>
+          <label class="checkbox-item" for="topic-road">
+            <input type="checkbox" id="topic-road" name="topics" value="road-closures" checked aria-describedby="topic-road-desc">
             <div>
-              <span class="checkbox-label">Road closures & detours</span>
-              <span class="checkbox-desc">When roads near this address are blocked.</span>
+              <span class="checkbox-label">Road closures &amp; detours</span>
+              <span class="checkbox-desc" id="topic-road-desc">When roads near this address are blocked.</span>
             </div>
           </label>
-          <label class="checkbox-item">
-            <input type="checkbox">
+          <label class="checkbox-item" for="topic-air">
+            <input type="checkbox" id="topic-air" name="topics" value="air-quality" aria-describedby="topic-air-desc">
             <div>
               <span class="checkbox-label">Air quality advisories</span>
-              <span class="checkbox-desc">Smoke, ozone, particulate warnings.</span>
+              <span class="checkbox-desc" id="topic-air-desc">Smoke, ozone, particulate warnings.</span>
             </div>
           </label>
-          <label class="checkbox-item">
-            <input type="checkbox">
+          <label class="checkbox-item" for="topic-permit">
+            <input type="checkbox" id="topic-permit" name="topics" value="permits" aria-describedby="topic-permit-desc">
             <div>
-              <span class="checkbox-label">Permit & project activity at this parcel</span>
-              <span class="checkbox-desc">New permits, hearings, or proposals affecting this address.</span>
+              <span class="checkbox-label">Permit &amp; project activity at this parcel</span>
+              <span class="checkbox-desc" id="topic-permit-desc">New permits, hearings, or proposals affecting this address.</span>
             </div>
           </label>
         </div>
-      </div>
+      </fieldset>
     </div>
     <div class="modal-footer">
-      <div class="modal-footer-note">
-        We never share your contact info. <a href="#" style="color: var(--brand);">Privacy policy</a>.
-      </div>
+      <p class="modal-footer-note">
+        We never share your contact info. <a href="#" class="footer-link" aria-label="Privacy policy (placeholder link)">Privacy&nbsp;policy</a>.
+      </p>
       <button type="button" class="btn-primary btn-large" onclick="handleSubscribe()">Subscribe</button>
     </div>
   </div>
