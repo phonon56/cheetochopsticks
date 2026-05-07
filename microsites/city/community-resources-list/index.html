@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helping Hands — El Paso County Community Resources</title>
+<meta name="description" content="A searchable index of community resources in El Paso County, Colorado. Adapted from the Pikes Peak Library District Helping Hands guide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#f6f1e7;
+    --cream-2:#efe7d4;
+    --ink:#1a1d1a;
+    --ink-2:#3a4039;
+    --muted:#6a6f68;
+    --line:#d9d0bb;
+    --forest:#1f4731;
+    --forest-2:#2d6448;
+    --rust:#a8421a;
+    --rust-2:#c25127;
+    --gold:#b8893a;
+    --crisis:#7a1a1a;
+    --crisis-bg:#fbe8e3;
+    --ok:#1f4731;
+    --shadow: 0 1px 0 rgba(26,29,26,.04), 0 8px 24px -12px rgba(26,29,26,.18);
+    --radius: 4px;
+  }
+  .hh-page,.hh-page *,.hh-page *::before,.hh-page *::after{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  .hh-page{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Public Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size:17px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .hh-page ::selection{background:var(--forest);color:var(--cream)}
+
+  /* Visually hidden but available to screen readers — used for off-screen
+     labels paired with placeholder-driven inputs. The previous markup
+     had inline `style="position:absolute;left:-9999px"` doing the work
+     and the .visually-hidden class had no rule; this defines it. */
+  .visually-hidden{
+    position:absolute !important;
+    width:1px !important;
+    height:1px !important;
+    padding:0 !important;
+    margin:-1px !important;
+    overflow:hidden !important;
+    clip:rect(0,0,0,0) !important;
+    white-space:nowrap !important;
+    border:0 !important;
+  }
+
+  /* Skip link */
+  .skip-link{
+    position:absolute;left:-9999px;top:0;
+    background:var(--ink);color:var(--cream);
+    padding:.75rem 1rem;text-decoration:none;font-weight:600;
+    z-index:1000;
+  }
+  .skip-link:focus{left:0;top:0}
+
+  /* Crisis banner */
+  .crisis-banner{
+    background:var(--crisis);
+    color:#fff;
+    padding:.65rem 1rem;
+    text-align:center;
+    font-weight:500;
+    font-size:.95rem;
+  }
+  .crisis-banner a{
+    color:#fff;
+    text-decoration:underline;
+    text-underline-offset:3px;
+    font-weight:700;
+    margin:0 .15rem;
+  }
+  .crisis-banner a:hover, .crisis-banner a:focus{
+    background:#fff;color:var(--crisis);text-decoration:none;padding:0 .25rem;
+  }
+
+  /* Header */
+  header.site-header{
+    background:var(--cream);
+    border-bottom:1px solid var(--line);
+    padding:2.5rem 1.5rem 1.75rem;
+  }
+  .hh-container{max-width:1240px;margin:0 auto}
+  .brand{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+  .brand-mark{display:flex;align-items:baseline;gap:.85rem}
+  .brand-mark .glyph{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:2.4rem;
+    color:var(--rust);
+    line-height:1;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:clamp(1.85rem, 4vw, 2.6rem);
+    margin:0;
+    letter-spacing:-.02em;
+    line-height:1;
+  }
+  .brand p.kicker{
+    margin:.4rem 0 0;
+    font-size:.95rem;
+    color:var(--muted);
+    font-weight:500;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .meta{
+    text-align:right;
+    font-size:.85rem;
+    color:var(--muted);
+    line-height:1.4;
+  }
+  .meta strong{color:var(--ink-2);font-weight:600}
+
+  /* Need finder */
+  .need-finder{
+    background:linear-gradient(180deg, var(--cream) 0%, var(--cream-2) 100%);
+    border-bottom:1px solid var(--line);
+    padding:3rem 1.5rem 2.5rem;
+  }
+  .need-finder .hh-container{max-width:880px}
+  .need-finder h2{
+    font-family:'Fraunces',serif;
+    font-weight:400;
+    font-size:clamp(1.7rem, 3.5vw, 2.4rem);
+    margin:0 0 .25rem;
+    letter-spacing:-.015em;
+    color:var(--ink);
+  }
+  .need-finder h2 em{
+    font-style:italic;
+    color:var(--rust);
+    font-weight:500;
+  }
+  .need-finder p.lede{
+    margin:0 0 1.5rem;
+    color:var(--ink-2);
+    font-size:1.05rem;
+  }
+  .need-input-wrap{
+    position:relative;
+    background:#fff;
+    border:1.5px solid var(--ink-2);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .need-input-wrap:focus-within{
+    border-color:var(--forest);
+    box-shadow:0 0 0 3px rgba(31,71,49,.15), var(--shadow);
+  }
+  #needInput{
+    width:100%;
+    border:0;
+    background:transparent;
+    padding:1.15rem 1.25rem 1.15rem 3.25rem;
+    font:inherit;
+    font-size:1.1rem;
+    color:var(--ink);
+    outline:0;
+  }
+  .need-input-wrap::before{
+    content:"";
+    position:absolute;
+    left:1.15rem;
+    top:50%;
+    transform:translateY(-50%);
+    width:1.4rem;height:1.4rem;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f4731' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>");
+    background-repeat:no-repeat;
+  }
+  .chips{
+    display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;
+  }
+  .chips .label{
+    font-size:.85rem;
+    color:var(--muted);
+    margin-right:.25rem;
+    align-self:center;
+    font-weight:500;
+  }
+  .chip{
+    background:#fff;
+    border:1px solid var(--line);
+    color:var(--ink-2);
+    padding:.35rem .85rem;
+    border-radius:999px;
+    font:inherit;
+    font-size:.88rem;
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .chip:hover, .chip:focus{
+    background:var(--forest);
+    color:#fff;
+    border-color:var(--forest);
+    outline:0;
+  }
+
+  /* Results section */
+  main.results-section{
+    padding:2.5rem 1.5rem 4rem;
+  }
+  .toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    flex-wrap:wrap;
+    margin-bottom:1.5rem;
+    padding-bottom:1rem;
+    border-bottom:1px solid var(--line);
+  }
+  .toolbar-left{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
+  .toolbar-right{display:flex;gap:.5rem;align-items:center}
+  .result-count{
+    font-family:'Fraunces',serif;
+    font-size:1.15rem;
+    font-weight:500;
+    color:var(--ink);
+  }
+  .result-count strong{color:var(--rust);font-weight:600}
+  select, .text-search{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:.55rem .75rem;
+    font:inherit;
+    font-size:.92rem;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  select:focus, .text-search:focus{
+    outline:0;border-color:var(--forest);
+    box-shadow:0 0 0 3px rgba(31,71,49,.15);
+  }
+  .text-search{cursor:text;min-width:200px}
+  .view-toggle{display:flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .view-toggle button{
+    background:#fff;border:0;padding:.55rem .75rem;font:inherit;font-size:.85rem;
+    cursor:pointer;color:var(--ink-2);
+    display:inline-flex;align-items:center;gap:.35rem;
+    transition:background .15s, color .15s;
+  }
+  .view-toggle button + button{border-left:1px solid var(--line)}
+  .view-toggle button:hover{background:var(--cream-2)}
+  .view-toggle button[aria-pressed="true"]{
+    background:var(--forest);color:#fff;
+  }
+  .view-toggle button[aria-pressed="true"]:hover{background:var(--forest-2)}
+
+  /* ===== ROW VIEW ===== */
+  #resultsGrid.is-rows{
+    grid-template-columns:1fr;
+    gap:10px;
+    background:transparent;
+  }
+  #resultsGrid.is-rows .res{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:#fff;
+    padding:1rem 1.25rem;
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name      side"
+      "cats      side"
+      "desc      side"
+      "fields    fields";
+    column-gap:1.5rem;
+    row-gap:.3rem;
+    transform:none !important;
+    box-shadow:none !important;
+  }
+  #resultsGrid.is-rows .res:hover{
+    background:#fff;
+    border-color:var(--forest);
+  }
+  #resultsGrid.is-rows .res-header{
+    grid-area:name;
+    display:block;
+    margin:0;
+  }
+  #resultsGrid.is-rows .res-name{
+    font-size:1.08rem;
+    display:inline;
+  }
+  #resultsGrid.is-rows .score{
+    grid-area:side;
+    align-self:start;
+    font-size:.78rem;
+  }
+  #resultsGrid.is-rows .res-cats{
+    grid-area:cats;
+    margin:0;
+    font-size:.74rem;
+  }
+  #resultsGrid.is-rows .res-desc{
+    grid-area:desc;
+    margin:.15rem 0 .35rem;
+    font-size:.9rem;
+    line-height:1.45;
+  }
+  #resultsGrid.is-rows .res-fields{
+    grid-area:fields;
+    border-top:1px dashed var(--line);
+    padding-top:.5rem;
+    margin-top:.25rem;
+    display:flex;
+    flex-wrap:wrap;
+    gap:.2rem 1.5rem;
+    font-size:.85rem;
+  }
+  #resultsGrid.is-rows .res-field{
+    align-items:baseline;
+    gap:.35rem;
+  }
+  #resultsGrid.is-rows .res-field .lbl{
+    min-width:auto;
+    font-size:.7rem;
+    padding-top:0;
+  }
+  /* On narrow rows, stack the side block under name */
+  @media (max-width:540px){
+    #resultsGrid.is-rows .res{
+      grid-template-columns:1fr;
+      grid-template-areas:
+        "name"
+        "side"
+        "cats"
+        "desc"
+        "fields";
+      row-gap:.4rem;
+    }
+    #resultsGrid.is-rows .score{align-items:flex-start}
+  }
+
+  /* Suggested top results */
+  .top-suggestions{
+    background:var(--cream-2);
+    border:1px solid var(--line);
+    border-left:4px solid var(--rust);
+    padding:1rem 1.25rem;
+    margin-bottom:1.5rem;
+    border-radius:var(--radius);
+  }
+  .top-suggestions h3{
+    margin:0 0 .25rem;
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:1.05rem;
+    color:var(--rust);
+  }
+  .top-suggestions p{margin:0;font-size:.92rem;color:var(--ink-2)}
+
+  /* Results grid */
+  #resultsGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:1.25rem;
+  }
+  .res{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:1.15rem 1.25rem 1rem;
+    display:flex;
+    flex-direction:column;
+    transition:border-color .15s, transform .15s, box-shadow .15s;
+    position:relative;
+  }
+  .res:hover{
+    border-color:var(--forest);
+    transform:translateY(-2px);
+    box-shadow:var(--shadow);
+  }
+  .res-header{display:flex;justify-content:space-between;gap:.5rem;margin-bottom:.5rem}
+  .res-name{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:1.18rem;
+    line-height:1.25;
+    margin:0;
+    color:var(--ink);
+    letter-spacing:-.01em;
+  }
+  .score{
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    gap:.25rem;
+    font-size:.78rem;
+    color:var(--muted);
+    font-weight:500;
+  }
+  .score-dots{display:flex;gap:2px}
+  .score-dots span{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--line);
+  }
+  .score-dots span.on{background:var(--forest)}
+  .res-cats{
+    margin:0 0 .85rem;
+    font-size:.78rem;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    font-weight:500;
+  }
+  .res-desc{
+    color:var(--ink-2);
+    font-size:.92rem;
+    line-height:1.5;
+    margin:0 0 .85rem;
+    flex:1;
+  }
+  .res-fields{
+    display:grid;
+    gap:.4rem;
+    border-top:1px dashed var(--line);
+    padding-top:.85rem;
+    font-size:.9rem;
+  }
+  .res-field{
+    display:flex;
+    gap:.5rem;
+    align-items:flex-start;
+    line-height:1.4;
+  }
+  .res-field .lbl{
+    color:var(--muted);
+    font-size:.78rem;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    font-weight:600;
+    flex-shrink:0;
+    min-width:55px;
+    padding-top:2px;
+  }
+  .res-field .val{color:var(--ink);word-break:break-word}
+  .res-field a{color:var(--forest-2);text-decoration:none;border-bottom:1px solid var(--line);transition:border-color .15s}
+  .res-field a:hover, .res-field a:focus{border-color:var(--forest-2);outline:0}
+  .res-field .phone-link{
+    font-weight:600;
+    color:var(--rust);
+    border-bottom-color:var(--rust);
+  }
+  .res-field .phone-link:hover{border-color:var(--rust)}
+  .badge{
+    display:inline-block;
+    padding:1px 7px;
+    border-radius:3px;
+    font-size:.7rem;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-left:.3rem;
+    vertical-align:middle;
+  }
+  .badge-247{background:var(--crisis-bg);color:var(--crisis)}
+  .badge-unverified{background:#fff5e0;color:#8a6810;border:1px solid #e8d68f}
+
+  /* Convenience legend */
+  .legend{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:1rem 1.25rem;
+    margin-bottom:2rem;
+    font-size:.88rem;
+  }
+  .legend summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--ink);
+    list-style:none;
+  }
+  .legend summary::-webkit-details-marker{display:none}
+  .legend summary::before{content:"▸ ";color:var(--rust);transition:transform .15s;display:inline-block}
+  .legend[open] summary::before{transform:rotate(90deg)}
+  .legend dl{margin:.85rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.5rem 1rem}
+  .legend dt{font-weight:600;color:var(--forest);font-family:'Fraunces',serif}
+  .legend dd{margin:0;color:var(--ink-2)}
+
+  /* PDF viewer */
+  .pdf-section{
+    background:var(--cream-2);
+    border-top:1px solid var(--line);
+    padding:3rem 1.5rem;
+    margin-top:3rem;
+  }
+  .pdf-section h2{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:1.7rem;
+    margin:0 0 .5rem;
+    letter-spacing:-.01em;
+  }
+  .pdf-section p{margin:0 0 1.25rem;color:var(--ink-2)}
+  .pdf-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.25rem}
+  .hh-btn{
+    background:var(--forest);
+    color:#fff;
+    border:0;
+    padding:.65rem 1.15rem;
+    font:inherit;
+    font-size:.95rem;
+    font-weight:500;
+    border-radius:var(--radius);
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    transition:background .15s;
+  }
+  .hh-btn:hover, .hh-btn:focus{background:var(--forest-2);outline:0}
+  .hh-btn-secondary{background:#fff;color:var(--forest);border:1.5px solid var(--forest)}
+  .hh-btn-secondary:hover{background:var(--forest);color:#fff}
+  .pdf-frame{
+    width:100%;
+    height:80vh;
+    min-height:600px;
+    border:1px solid var(--ink-2);
+    border-radius:var(--radius);
+    background:#fff;
+  }
+
+  /* Footer */
+  footer{
+    background:var(--ink);
+    color:var(--cream);
+    padding:2.5rem 1.5rem;
+    font-size:.92rem;
+  }
+  footer .hh-container{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem}
+  footer h3{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    color:var(--cream);
+    margin:0 0 .5rem;
+    font-size:1.1rem;
+  }
+  footer a{color:var(--cream);border-bottom:1px solid rgba(246,241,231,.3)}
+  footer a:hover{border-color:var(--cream)}
+  footer p{margin:.25rem 0;color:rgba(246,241,231,.85)}
+
+  /* Empty / no-results */
+  .empty{
+    text-align:center;
+    padding:3rem 1rem;
+    color:var(--muted);
+    grid-column:1/-1;
+  }
+  .empty h3{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    color:var(--ink-2);
+    margin:0 0 .5rem;
+  }
+
+  /* Responsive */
+  @media (max-width:680px){
+    body{font-size:16px}
+    .brand{flex-direction:column;align-items:flex-start}
+    .meta{text-align:left}
+    .toolbar{flex-direction:column;align-items:stretch}
+    .toolbar-left, .toolbar-right{width:100%}
+    .text-search{flex:1}
+    footer .hh-container{grid-template-columns:1fr}
+    .pdf-frame{height:65vh}
+    #resultsGrid{grid-template-columns:1fr}
+  }
+
+  /* Print */
+  @media print{
+    .crisis-banner, .need-finder, .toolbar, .pdf-section, footer, .legend{display:none}
+    body{background:#fff;color:#000;font-size:11pt}
+    .res{break-inside:avoid;border:1px solid #999;margin-bottom:.5rem;page-break-inside:avoid}
+    #resultsGrid{display:block}
+    .res:hover{transform:none;box-shadow:none}
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion:reduce){
+    *, *::before, *::after{
+      animation-duration:.01ms !important;
+      transition-duration:.01ms !important;
+    }
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+<div class="hh-page">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<aside class="crisis-banner" role="region" aria-label="Crisis hotlines">
+  <strong>In crisis?</strong>
+  Call <a href="tel:911">911</a> for emergencies ·
+  <a href="tel:988">988</a> for mental health ·
+  <a href="tel:211">211</a> to find help ·
+  <a href="tel:7196333819">719-633-3819</a> for TESSA (24-hr domestic violence)
+</aside>
+
+<header class="site-header">
+  <div class="hh-container brand">
+    <div>
+      <div class="brand-mark">
+        <span class="glyph" aria-hidden="true">✦</span>
+        <h1>Helping Hands</h1>
+      </div>
+      <p class="kicker">El Paso County Community Resources</p>
+    </div>
+    <div class="meta">
+      <p><strong>Adapted from</strong> the Pikes Peak Library District guide<br>
+      <strong>Source:</strong> <a href="https://research.ppld.org/HelpingHands">research.ppld.org/HelpingHands</a></p>
+    </div>
+  </div>
+</header>
+
+<section class="need-finder" aria-labelledby="need-h">
+  <div class="hh-container">
+    <h2 id="need-h">What do you <em>really</em> need?</h2>
+    <p class="lede" id="need-lede">Tell us what's going on in plain English. We'll find the right help — fastest first.</p>
+    <form role="search" class="need-form" onsubmit="event.preventDefault(); applyFilters();">
+      <div class="need-input-wrap">
+        <label for="needInput" class="visually-hidden">Describe what you need</label>
+        <input
+          type="search"
+          id="needInput"
+          autocomplete="off"
+          spellcheck="true"
+          aria-describedby="need-lede"
+          placeholder="e.g. 'My kids are hungry' or 'I'm being hurt at home' or 'I need a place to sleep'">
+      </div>
+      <div class="chips" role="group" aria-label="Common needs">
+        <span class="label" id="chips-label">Try:</span>
+        <button type="button" class="chip" data-q="I'm hungry">I'm hungry</button>
+        <button type="button" class="chip" data-q="place to sleep tonight">A place to sleep</button>
+        <button type="button" class="chip" data-q="help with rent">Help with rent</button>
+        <button type="button" class="chip" data-q="mental health crisis">Mental health crisis</button>
+        <button type="button" class="chip" data-q="domestic violence">Being hurt at home</button>
+        <button type="button" class="chip" data-q="job training">A job</button>
+        <button type="button" class="chip" data-q="addiction help">Addiction help</button>
+        <button type="button" class="chip" data-q="veteran benefits">Veteran services</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<main id="main" class="results-section">
+  <div class="hh-container">
+
+    <details class="legend">
+      <summary>About convenience scoring (●●●●● fastest help · ● longest process)</summary>
+      <dl>
+        <dt>●●●●●</dt><dd><strong>24/7 hotline.</strong> Pick up the phone, get a human, anytime. (911, 988, TESSA crisis line)</dd>
+        <dt>●●●●○</dt><dd><strong>Same-day, walk-in.</strong> Daily hours, no appointment needed. (Soup kitchens, emergency shelters, ERs)</dd>
+        <dt>●●●○○</dt><dd><strong>Same-day phone.</strong> Business hours, may direct you to next step. (Most clinics, info lines)</dd>
+        <dt>●●○○○</dt><dd><strong>Appointment-based.</strong> Schedule needed, may be a wait. (Counseling, dental, legal aid)</dd>
+        <dt>●○○○○</dt><dd><strong>Application required.</strong> Eligibility check, paperwork, possible weeks of processing. (LEAP, housing programs, vocational rehab)</dd>
+      </dl>
+    </details>
+
+    <div id="topSuggestions" class="top-suggestions" hidden>
+      <h3>Best matches for what you described</h3>
+      <p id="topSuggestionsText"></p>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <span class="result-count" aria-live="polite"><strong id="resultCount">—</strong> resources</span>
+        <select id="categoryFilter" aria-label="Filter by category">
+          <option value="">All categories</option>
+        </select>
+        <select id="convenienceFilter" aria-label="Filter by minimum speed of help">
+          <option value="">Any speed of help</option>
+          <option value="5">●●●●● — 24/7 hotline only</option>
+          <option value="4">●●●●○ or faster — Same-day walk-in</option>
+          <option value="3">●●●○○ or faster — Same-day phone</option>
+          <option value="2">●●○○○ or faster — Appointment-based</option>
+          <option value="1">●○○○○ or faster — Any (incl. application)</option>
+        </select>
+      </div>
+      <div class="toolbar-right">
+        <input type="search" id="textSearch" class="text-search" placeholder="Find by name…" aria-label="Search by organization name">
+        <div class="view-toggle" role="group" aria-label="Display style">
+          <button type="button" id="viewCards" aria-pressed="true" title="Card view">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1"/><rect x="9" y="9" width="5.5" height="5.5" rx="1"/></svg>
+            Cards
+          </button>
+          <button type="button" id="viewRows" aria-pressed="false" title="Row view">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><line x1="1.5" y1="3" x2="14.5" y2="3"/><line x1="1.5" y1="8" x2="14.5" y2="8"/><line x1="1.5" y1="13" x2="14.5" y2="13"/></svg>
+            Rows
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="resultsGrid" role="region" aria-live="polite" aria-label="Resource results"></div>
+
+  </div>
+</main>
+
+<section class="pdf-section" id="pdfView">
+  <div class="hh-container">
+    <h2>Original PDF Document</h2>
+    <p>The complete Helping Hands guide as published by Pikes Peak Library District. Updated 04/28/2023.</p>
+    <div class="pdf-actions">
+      <a class="hh-btn" href="Helping-Hands-Directory.pdf" download>↓ Download PDF</a>
+      <a class="hh-btn hh-btn-secondary" href="Helping-Hands-Directory.pdf" target="_blank" rel="noopener">Open in new tab</a>
+      <a class="hh-btn hh-btn-secondary" href="https://research.ppld.org/HelpingHands" target="_blank" rel="noopener">View live PPLD guide ↗</a>
+    </div>
+    <iframe class="pdf-frame" src="Helping-Hands-Directory.pdf#view=FitH" title="Helping Hands PDF — full document" loading="lazy">
+      <p>Your browser can't display PDFs inline.
+        <a href="Helping-Hands-Directory.pdf" download>Download the Helping Hands PDF</a>
+        or <a href="https://research.ppld.org/HelpingHands" target="_blank" rel="noopener">view the live guide on PPLD</a>.</p>
+    </iframe>
+  </div>
+</section>
+
+<footer>
+  <div class="hh-container">
+    <div>
+      <h3>Helping Hands</h3>
+      <p>An indexed, searchable adaptation of the El Paso County Community Resources directory maintained by the <a href="https://ppld.org">Pikes Peak Library District</a>.</p>
+      <p>For corrections or additions, contact PPLD or call <a href="tel:211">211</a>.</p>
+    </div>
+    <div>
+      <h3>Crisis Lines</h3>
+      <p><a href="tel:911">911</a> · Emergency</p>
+      <p><a href="tel:988">988</a> · Mental Health / Suicide</p>
+      <p><a href="tel:211">211</a> · Find a service</p>
+      <p><a href="tel:7196333819">719-633-3819</a> · TESSA (24h)</p>
+    </div>
+    <div>
+      <h3>About this site</h3>
+      <p>Built as a Drupal-ready prototype. Each resource is a structured record (parcel-style) with text fields extracted from the source PDF, which remains preserved and viewable.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// =============================================================================
+// HELPING HANDS — Resource Index
+// =============================================================================
+// Each resource is a structured record. Fields:
+//   n  = name
+//   p  = primary phone (display)
+//   pl = phone (tel: link, digits only, optional - auto-derived if missing)
+//   p2 = secondary phone (e.g. crisis line)
+//   c  = categories (array)
+//   w  = website (URL)
+//   e  = email
+//   h  = hours / availability text
+//   a  = address (if known)
+//   d  = plain-language description
+//   s  = convenience score 1-5
+//   t  = tags (keywords for "what do you need" matching)
+//   v  = verified flag (false = needs editor review)
+//   tf = "twenty-four-seven" flag for badge
+// =============================================================================
+
+const RESOURCES = [
+  // ===== EMERGENCY / CRISIS LINES =====
+  {n:"911 Emergency", p:"911", c:["Emergency Services","Crisis Services"], h:"24/7", d:"Police, fire, ambulance — life-threatening emergencies.", s:5, t:["emergency","fire","police","ambulance","help now","dying","accident"], v:true, tf:true},
+  {n:"988 Suicide & Crisis Lifeline", p:"988", c:["Crisis Services","Mental Health"], w:"https://988lifeline.org", h:"24/7", d:"Free, confidential mental health crisis support. Call, text, or chat.", s:5, t:["suicide","kill myself","crisis","mental health","want to die","hopeless","despair","self harm"], v:true, tf:true},
+  {n:"211 — United Way Resource Line", p:"211", p2:"719-955-0742", c:["Emergency Services"], w:"https://211colorado.org", h:"24/7", d:"Statewide line that connects you to the right local service for any need: food, shelter, utilities, mental health, eldercare.", s:5, t:["help","need","find","resource","information","referral","what do i do","i don't know"], v:true, tf:true},
+  {n:"Veterans Crisis Line", p:"988 (press 1)", c:["Crisis Services","Veterans Services","Mental Health"], w:"https://veteranscrisisline.net", h:"24/7", d:"Confidential support for veterans and their families in crisis.", s:5, t:["veteran","vet","military","suicide","crisis","ptsd"], v:true, tf:true},
+  {n:"TESSA — Domestic Violence & Sexual Assault", p:"719-633-3819", p2:"719-633-1462", c:["Crisis Services","Domestic Violence Services","Legal Information & Advice"], w:"https://tessacs.org", h:"24/7 crisis line", d:"Safe House, advocacy, legal help, counseling for survivors of domestic violence and sexual assault.", s:5, t:["domestic violence","abuse","beaten","hit","rape","sexual assault","scared of partner","unsafe at home","abusive"], v:true, tf:true},
+  {n:"Colorado Crisis Services", p:"1-844-493-8255", c:["Crisis Services","Mental Health"], w:"https://coloradocrisisservices.org", h:"24/7", d:"Free statewide mental health crisis support. Walk-in centers also available.", s:5, t:["crisis","mental health","suicide","panic","breakdown"], v:true, tf:true},
+  {n:"Pikes Peak Suicide Prevention Partnership", p:"1-844-493-8255", p2:"719-573-7447", c:["Crisis Services","Mental Health"], w:"https://pikespeaksuicideprevention.org", h:"24/7 crisis line", d:"Local suicide prevention coalition with crisis line, trainings, and survivor support.", s:5, t:["suicide","prevention","crisis"], v:true, tf:true},
+  {n:"Safe2Tell", p:"1-877-542-7233", c:["Crisis Services"], w:"https://safe2tell.org", h:"24/7 anonymous", d:"Anonymous reporting for school violence, bullying, threats, abuse — for kids, teens, parents.", s:5, t:["bullying","school","threat","report","anonymous","kids","teen"], v:true, tf:true},
+  {n:"National Runaway Safeline", p:"1-800-786-2929", c:["Crisis Services"], w:"https://1800runaway.org", h:"24/7", d:"Crisis support for youth who have run away or are thinking about it. Family reunification help.", s:5, t:["runaway","ran away","teen","youth","missing kid"], v:true, tf:true},
+  {n:"Trans Lifeline", p:"1-877-565-8860", c:["Crisis Services","Mental Health"], w:"https://translifeline.org", h:"24/7", d:"Peer support hotline run by and for trans people in crisis.", s:5, t:["trans","transgender","lgbtq","crisis","gender"], v:true, tf:true},
+  {n:"The Trevor Project (LGBTQ+)", p:"1-866-488-7386", c:["Crisis Services","Mental Health"], w:"https://thetrevorproject.org", h:"24/7", d:"Crisis intervention and suicide prevention for LGBTQ+ youth under 25.", s:5, t:["lgbtq","gay","lesbian","bi","trans","queer","youth","teen","suicide"], v:true, tf:true},
+  {n:"Call Blackline (BIPOC LGBTQ+)", p:"1-800-604-5841", c:["Crisis Services","Mental Health"], w:"https://callblackline.com", h:"24/7", d:"Peer support for Black, brown, native, and muslim LGBTQ+ folks.", s:5, t:["bipoc","black","brown","lgbtq","crisis","racism"], v:true, tf:true},
+  {n:"Boys Town Hotline (parenting)", p:"1-800-448-3000", c:["Crisis Services","Parenting & Pregnancy"], w:"https://boystown.org", h:"24/7", d:"Crisis line for parents, kids, and families in any kind of trouble.", s:5, t:["parent","kid","child","help","family","crisis"], v:true, tf:true},
+  {n:"Never Use Alone Hotline", p:"1-800-484-3731", c:["Crisis Services","Substance Use"], w:"https://neverusealone.com", h:"24/7", d:"If you're going to use alone, call. They stay on the line and call EMS if you stop responding.", s:5, t:["overdose","drugs","heroin","fentanyl","using alone","addiction"], v:true, tf:true},
+  {n:"Mental Health Emergency", p:"988", c:["Crisis Services","Mental Health"], h:"24/7", d:"Same as 988 lifeline.", s:5, t:["mental health","emergency","crisis"], v:true, tf:true},
+  {n:"Cedar Springs Hospital", p:"719-633-4114", p2:"1-800-888-1088", c:["Crisis Services","Mental Health"], w:"https://cedarspringsbhs.com", h:"24/7 admissions", a:"2135 Southgate Road, Colorado Springs, CO 80906", d:"Inpatient and outpatient mental health for kids, teens, adults — civilian, military, and veteran.", s:4, t:["mental health","inpatient","psychiatric","hospital","crisis"], v:true},
+  {n:"Crossroads Detox Center", p:"719-203-6550", c:["Crisis Services","Substance Use"], h:"24/7 admissions", d:"Medical detox for alcohol, opioids, benzodiazepines.", s:4, t:["detox","alcohol","drugs","withdrawal","addiction"], v:true},
+  {n:"Diversus Health (Lighthouse — crisis)", p:"719-572-6100", c:["Crisis Services","Mental Health"], w:"https://diversushealth.org", h:"Walk-in crisis center 24/7", a:"115 S Parkside Drive", d:"Walk-in mental health crisis stabilization. No appointment.", s:5, t:["mental health","crisis","walk in","stabilization"], v:true, tf:true},
+  {n:"Peak View Behavioral Health (crisis)", p:"1-888-235-9475", c:["Crisis Services","Mental Health"], w:"https://peakviewbh.com", h:"24/7 admissions", d:"Inpatient and partial-hospitalization mental health programs.", s:4, t:["mental health","inpatient","hospital"], v:true},
+  {n:"Kingdom Builder's (DV crisis)", p:"719-464-4647", c:["Crisis Services","Domestic Violence Services"], w:"https://kingdombuildersfamily.org", h:"24/7 crisis", d:"Domestic violence crisis line and family life center.", s:5, t:["domestic violence","abuse","crisis"], v:true, tf:true},
+  {n:"Adult Protective Services hotline", p:"719-444-5755", c:["Emergency Services"], h:"Business hours; after-hours via 911", d:"Report suspected abuse, neglect, or exploitation of an at-risk adult.", s:4, t:["abuse","elderly","disabled","neglect","report","adult"], v:true},
+  {n:"Child Abuse hotline", p:"1-844-264-5437", c:["Emergency Services","Parenting & Pregnancy"], w:"https://co4kids.org", h:"24/7", d:"Statewide hotline to report suspected child abuse or neglect.", s:5, t:["child abuse","kid","report","neglect"], v:true, tf:true},
+  {n:"Colorado Safe Haven for Newborns", p:"1-888-510-2229", c:["Parenting & Pregnancy","Crisis Services"], w:"https://coloradosafehaven.org", h:"24/7", d:"Surrender a newborn (under 72 hours) anonymously and safely at any fire station or hospital. No questions, no charges.", s:5, t:["newborn","baby","surrender","safe haven","pregnancy"], v:true, tf:true},
+
+  // ===== EMERGENCY SERVICES (non-crisis) =====
+  {n:"Colorado Springs Fire Department", p:"719-385-5950", c:["Emergency Services"], w:"https://coloradosprings.gov/fire", h:"Non-emergency line; 911 for emergencies", d:"Non-emergency contact for CSFD.", s:3, t:["fire","csfd"], v:true},
+  {n:"CSFD Community & Public Health", p:"719-385-2273", c:["Emergency Services","Medical"], w:"https://coloradosprings.gov/fire", h:"Mon-Fri business hours", d:"Falls prevention, smoke alarms, community paramedic visits.", s:3, t:["fire","health","paramedic","fall","smoke alarm"], v:true},
+  {n:"Colorado Springs Police Department", p:"719-444-7000", c:["Emergency Services"], w:"https://coloradosprings.gov/police", h:"Non-emergency line", d:"CSPD non-emergency dispatch and reporting.", s:3, t:["police","report","cspd"], v:true},
+  {n:"CSPD Homeless Outreach Team", p:"719-444-7666", c:["Emergency Services","Shelter & Housing"], h:"Business hours", d:"Police-led team that connects unhoused residents with shelter and services.", s:3, t:["homeless","outreach","police","unhoused"], v:true},
+  {n:"CSPD Victim Advocacy", p:"719-444-7777", c:["Emergency Services","Domestic Violence Services","Legal Information & Advice"], h:"24/7 callback", d:"Crisis support, court accompaniment, and resources for victims of crime.", s:4, t:["victim","crime","advocacy","court","domestic violence"], v:true},
+  {n:"Colorado State Patrol", p:"303-239-4500", c:["Emergency Services"], w:"https://csp.colorado.gov", h:"24/7 dispatch", d:"State troopers — highway, traffic, and statewide enforcement.", s:3, t:["state patrol","highway","trooper"], v:true},
+  {n:"El Paso County Sheriff's Office", p:"719-390-5555", c:["Emergency Services"], w:"https://epcsheriffsoffice.com", h:"24/7 dispatch (non-emergency)", d:"Sheriff non-emergency reporting and inquiries.", s:3, t:["sheriff","county","report"], v:true},
+  {n:"El Paso County Department of Human Services", p:"719-636-0000", c:["Emergency Services","Financial Assistance","Medical"], w:"https://dhs.elpasoco.com", h:"Mon-Fri 8am-5pm", d:"Apply for SNAP (food stamps), Medicaid, TANF cash assistance, child care assistance, child support.", s:2, t:["snap","food stamps","medicaid","cash assistance","welfare","tanf"], v:true},
+  {n:"KPC Respite Center", p:"719-634-5439", c:["Emergency Services","Mental Health"], h:"Walk-in", d:"Short-term respite for adults in mental health distress.", s:4, t:["respite","mental health","walk in"], v:true},
+  {n:"Planned Parenthood", p:"719-475-7162", c:["Medical","Parenting & Pregnancy","Emergency Services"], w:"https://plannedparenthood.org", h:"Mon-Sat varies", a:"3480 Centennial Blvd", d:"Reproductive health, contraception, STI testing, abortion services, gender-affirming care.", s:3, t:["birth control","contraception","sti","abortion","reproductive","gender","plan b"], v:true},
+  {n:"Catholic Charities — Family Connections @ Helen Hunt Campus (families)", p:"719-636-2345", c:["Emergency Services","Clothing & Hygiene","Miscellaneous Counseling & Assistance"], w:"https://ccharitiescc.org", h:"Mon-Fri", d:"Case management, financial help, child care, computers, gas/bus passes for families with kids.", s:3, t:["family","kids","case management","financial","child care"], v:true},
+  {n:"Catholic Charities — Marian House (adult individuals)", p:"719-475-7314", c:["Emergency Services","Financial Assistance","Food"], w:"https://ccharitiescc.org/marianhouse", h:"Daily — soup kitchen 10:30am-12:30pm", a:"14 W Bijou St", d:"Daily hot meals, ID help, mail service, employment, financial assistance for low-income adults, working poor, seniors, veterans.", s:4, t:["meal","food","homeless","adult","case management","id"], v:true},
+
+  // ===== FOOD =====
+  {n:"Care and Share Food Bank", p:"719-528-1247", c:["Food"], w:"https://careandshare.org", h:"Mon-Fri 8am-4:30pm", a:"2605 Preamble Point", d:"Regional food bank — find a pantry, mobile food market schedule, summer meals for kids.", s:3, t:["food","hungry","pantry","kids","summer meals"], v:true},
+  {n:"Catholic Charities — Marian House Soup Kitchen", p:"719-475-7314", c:["Food"], w:"https://ccharitiescc.org/marianhouse", h:"Daily 10:30am-12:30pm", a:"14 W Bijou St", d:"Free hot lunch every single day — no questions, no ID required.", s:4, t:["meal","hungry","lunch","soup","hot food","daily","walk in"], v:true},
+  {n:"Catholic Charities — Market Place Food Pantry", p:"719-636-2345", c:["Food"], w:"https://ccharitiescc.org", h:"Tue/Wed/Thu 9am-3pm", d:"Choice-style food pantry — pick what your family needs.", s:3, t:["food","pantry","groceries","family"], v:true},
+  {n:"Springs Rescue Mission", p:"719-632-1822", c:["Food","Shelter & Housing","Clothing & Hygiene"], w:"https://springsrescuemission.org", h:"Daily meals; 24/7 shelter intake", a:"5 W Las Vegas St", d:"Three meals daily, 346-bed men's shelter, women's shelter, addiction recovery, day services.", s:4, t:["food","meal","shelter","homeless","men","addiction","recovery"], v:true},
+  {n:"Mercy's Gate", p:"719-277-7470", c:["Food","Financial Assistance","Clothing & Hygiene","Weatherization & Utilities"], w:"https://mercysgate.org", h:"Tue/Wed/Thu by appointment", a:"4360 Montebello Dr, Suite 300", d:"Rent, mortgage, utility assistance, food pantry, transportation, faith community nurse, legal help. Northeast COS.", s:2, t:["rent","mortgage","utilities","food","help","emergency"], v:true},
+  {n:"Westside CARES", p:"719-389-0759", c:["Food","Financial Assistance","Medical","Clothing & Hygiene"], w:"https://westsidecares.org", h:"Mon-Thu 9am-12pm", a:"Westside Colorado Springs", d:"Food pantry, financial help, medical/dental clinic for the westside community.", s:3, t:["food","financial","medical","westside","help"], v:true},
+  {n:"Tri-Lakes Cares", p:"719-481-4864", c:["Food","Financial Assistance","Medical"], w:"https://tri-lakescares.org", h:"Mon-Fri varies", a:"235 Jefferson St, Monument", d:"Food, financial assistance, medical/dental for Tri-Lakes/D38 area only.", s:3, t:["food","tri lakes","monument","palmer lake","help"], v:true},
+  {n:"Silver Key Senior Services", p:"719-884-2300", c:["Food","Senior Services","Transportation","Financial Assistance"], w:"https://silverkey.org", h:"Mon-Fri 8am-5pm", a:"1625 S Murray Blvd", d:"Meals on wheels, dining centers, transportation, food pantry, financial help — seniors 60+.", s:3, t:["senior","elderly","meals on wheels","food","transportation","old"], v:true},
+  {n:"Action in Action Ministries", p:"719-619-9412", c:["Food"], h:"Verify hours", d:"Food assistance.", s:3, t:["food"], v:false},
+  {n:"Bethany Baptist Church food pantry", p:"719-634-7232", c:["Food"], h:"Verify hours", d:"Church-run food pantry.", s:3, t:["food","church"], v:false},
+  {n:"Black Forest Lutheran Church", p:"719-495-2221", c:["Food"], a:"Black Forest 80908", d:"Food pantry serving the Black Forest area.", s:3, t:["food","black forest","church"], v:false},
+  {n:"Charity's Hope Food & Clothing Pantry", p:"719-332-2360", c:["Food","Clothing & Hygiene","Financial Assistance"], h:"Verify hours", d:"Food, clothing, school supplies, and financial assistance.", s:3, t:["food","clothing","school supplies","help"], v:false},
+  {n:"Crossfire Ministries", p:"719-447-1806", c:["Food","Clothing & Hygiene"], w:"https://crossfireministries.org", h:"Verify hours", d:"Food pantry and clothing closet.", s:3, t:["food","clothing","pantry"], v:false},
+  {n:"Deerfield Hills Community Center", p:"719-385-5996", c:["Food"], w:"https://coloradosprings.gov/parks/page/deerfield-hills-community-center", h:"Mon-Fri", a:"4290 Deerfield Hills Rd", d:"City community center — food distribution and youth programs.", s:3, t:["food","community center","kids"], v:true},
+  {n:"Divine Redeemer Catholic Church", p:"719-633-5559", c:["Food"], h:"Verify hours", d:"Parish food pantry.", s:3, t:["food","church"], v:false},
+  {n:"Eastborough Food Pantry", p:"719-596-1929", c:["Food"], h:"Verify hours", d:"Neighborhood food pantry.", s:3, t:["food","pantry"], v:false},
+  {n:"Eastern Plains Community Pantry (Calhan)", p:"719-347-3062", c:["Food"], a:"Calhan", d:"Food pantry for the eastern plains.", s:3, t:["food","calhan","eastern plains","rural"], v:false},
+  {n:"Food to Power Hillside Hub", p:"719-470-2737", c:["Food"], w:"https://foodtopower.org", h:"Tue/Thu/Sat varies", a:"2330 N Hancock Ave", d:"No-cost grocery program plus urban farm and community kitchen on the Hillside.", s:4, t:["food","groceries","hillside","free","farm"], v:true},
+  {n:"Fresh Start Center", p:"719-495-3123", c:["Food"], a:"Falcon/Peyton area", d:"Food assistance for the Falcon and Peyton areas.", s:3, t:["food","falcon","peyton","rural"], v:false},
+  {n:"God's Pantry (Fountain)", p:"719-382-0643", c:["Food","Clothing & Hygiene"], a:"Fountain", d:"Food and clothing pantry for the Fountain area.", s:3, t:["food","fountain","clothing"], v:false},
+  {n:"Good News Foundation", p:"719-638-8985", c:["Food"], h:"Verify hours", d:"Food assistance.", s:3, t:["food"], v:false},
+  {n:"Good Shepherd United Methodist Church", p:"719-392-5782", c:["Food"], h:"Verify hours", d:"Church-run food pantry.", s:3, t:["food","church"], v:false},
+  {n:"Holy Cross Lutheran Church", p:"719-596-0661", c:["Food"], a:"East side 80909/15/16", d:"Food pantry for the east side.", s:3, t:["food","church","east"], v:false},
+  {n:"Lord of Glory Church Manna", p:"719-635-1057", c:["Food"], h:"Verify hours", d:"Manna ministry food distribution.", s:3, t:["food","church","manna"], v:false},
+  {n:"Meadows Park Community Center", p:"719-385-7940", c:["Food"], w:"https://coloradosprings.gov/parks", h:"Mon-Fri", a:"1943 S Chelton Rd", d:"City community center — food and youth services.", s:3, t:["food","community center","kids"], v:true},
+  {n:"Project Angel Heart", p:"719-323-0084", c:["Food","Medical"], w:"https://projectangelheart.org", h:"Mon-Fri", d:"Free medically-tailored meals delivered to people with serious illness.", s:2, t:["food","meal delivery","sick","cancer","hiv","illness"], v:true},
+  {n:"Salvation Army Colorado Springs", p:"719-636-3891", c:["Food","Financial Assistance","Weatherization & Utilities"], w:"https://rmsalvationarmy.org", h:"Mon-Fri 9am-12pm, 1-3pm", a:"908 Yuma St", d:"Food pantry, utility help, rent assistance, holiday programs.", s:3, t:["food","utility","rent","help"], v:true},
+  {n:"Salvation Army — Fountain Valley", p:"719-382-1182", c:["Food","Financial Assistance","Weatherization & Utilities"], w:"https://rmsalvationarmy.org", h:"Verify hours", a:"Fountain", d:"Fountain Valley branch — food, utilities, rent help.", s:3, t:["food","fountain","utility","rent"], v:true},
+  {n:"Sanctuary Church", p:"719-634-7232", c:["Food","Clothing & Hygiene"], h:"Verify hours", d:"Food pantry and shower house.", s:3, t:["food","shower","church"], v:false},
+  {n:"Seventh Day Adventist Community Center", p:"719-578-5616", c:["Food","Clothing & Hygiene"], h:"Verify hours", d:"Food and clothing for community.", s:3, t:["food","clothing"], v:false},
+  {n:"Solid Rock Community Food Bank", p:"719-985-8935", c:["Food"], h:"Verify hours", d:"Community food bank.", s:3, t:["food"], v:false},
+  {n:"St. Dominic Catholic Church (Security-Widefield)", p:"719-392-7653", c:["Food"], a:"Security-Widefield", d:"Parish food pantry for south county.", s:3, t:["food","security","widefield","church"], v:false},
+  {n:"St. John's Food Pantry", p:"719-634-5388", c:["Food"], h:"Verify hours", d:"Food pantry.", s:3, t:["food","pantry"], v:false},
+  {n:"St. Patrick's Catholic Church", p:"719-598-3595", c:["Food"], h:"Verify hours", d:"Parish food pantry.", s:3, t:["food","church"], v:false},
+  {n:"Trinity United Methodist Church", p:"719-633-9295", c:["Food"], h:"Verify hours", d:"Church-run food pantry.", s:3, t:["food","church"], v:false},
+  {n:"True Spirit Baptist Church", p:"719-575-9287", c:["Food"], h:"Verify hours", d:"Church-run food pantry.", s:3, t:["food","church"], v:false},
+  {n:"Voces Unidas for Justice", p:"720-588-8219", c:["Food","Domestic Violence Services","Employment & Training","Miscellaneous Counseling & Assistance"], w:"https://vocesunidasforjustice.org", h:"Mon-Fri", d:"Latine-led organization — food, DV advocacy, immigration, workforce support in Spanish and English.", s:3, t:["latino","spanish","food","immigration","domestic violence","work"], v:true},
+  {n:"WIC Program — El Paso County Health", p:"719-578-3199", c:["Food","Parenting & Pregnancy","Medical"], w:"https://elpasocountyhealth.org/wic", h:"Mon-Fri 7:30am-4:30pm", d:"Food benefits, breastfeeding support, nutrition education for pregnant/postpartum women and kids under 5.", s:2, t:["wic","baby","pregnant","kids","nutrition","food","breastfeeding"], v:true},
+
+  // ===== SHELTER & HOUSING =====
+  {n:"Springs Rescue Mission (shelter)", p:"719-632-1822", c:["Shelter & Housing","Food"], w:"https://springsrescuemission.org", h:"24/7 intake; check-in late afternoon", a:"5 W Las Vegas St", d:"Largest emergency shelter — 346 men's beds, women's wing, day services, addiction recovery.", s:4, t:["shelter","homeless","sleep","bed","tonight","men","women"], v:true},
+  {n:"Salvation Army RJ Montgomery Center (family shelter)", p:"719-578-9190", c:["Shelter & Housing"], w:"https://rmsalvationarmy.org", h:"24/7 intake — call first", d:"Emergency shelter for families with children experiencing homelessness.", s:4, t:["shelter","family","kids","homeless"], v:true},
+  {n:"Salvation Army (transitional housing)", p:"719-635-1287", c:["Shelter & Housing"], w:"https://rmsalvationarmy.org", h:"Application required", d:"Longer-term transitional housing for individuals and families.", s:1, t:["transitional","housing","apartment"], v:true},
+  {n:"The Place (youth shelter, ages 15-20)", p:"719-244-3959", p2:"719-205-7129", c:["Shelter & Housing","Crisis Services"], w:"https://theplacecos.org", h:"24/7 — call after-hours line outside business hours", d:"Emergency shelter and drop-in for homeless and at-risk youth ages 15-20.", s:4, t:["youth","teen","shelter","homeless","kicked out","runaway"], v:true, tf:true},
+  {n:"TESSA Safe House", p:"719-633-3819", c:["Shelter & Housing","Domestic Violence Services","Crisis Services"], w:"https://tessacs.org", h:"24/7", d:"Confidential emergency shelter for survivors of domestic violence.", s:5, t:["shelter","domestic violence","abuse","safe","tonight"], v:true, tf:true},
+  {n:"Family Promise (transitional housing for families)", p:"719-329-1244", c:["Shelter & Housing"], w:"https://familypromisecs.com", h:"Mon-Fri 9am-5pm", d:"Transitional shelter for families with kids using a network of host congregations.", s:2, t:["family","shelter","transitional","kids"], v:true},
+  {n:"Partners in Housing (families)", p:"719-473-8890", c:["Shelter & Housing"], w:"https://partnersinhousing.org", h:"Mon-Fri", d:"Transitional and supportive housing for families experiencing homelessness.", s:1, t:["family","housing","transitional"], v:true},
+  {n:"Greccio Housing", p:"719-475-1422", c:["Shelter & Housing"], w:"https://greccio.org", h:"Mon-Fri 8am-5pm", d:"Affordable rental housing across the Pikes Peak region — apply through their portfolio.", s:1, t:["housing","apartment","affordable","rent"], v:true},
+  {n:"Homeward Pikes Peak", p:"719-473-5557", c:["Shelter & Housing","Substance Use"], w:"https://homewardpikespeak.org", h:"Mon-Fri", d:"Housing-first services and addiction recovery for chronically homeless adults.", s:2, t:["homeless","housing first","addiction","recovery"], v:true},
+  {n:"Colorado Springs Housing Authority", p:"719-387-6700", c:["Shelter & Housing"], w:"https://csha.us", h:"Mon-Fri 8am-5pm", d:"Public housing and Section 8 vouchers in Colorado Springs.", s:1, t:["section 8","public housing","voucher","affordable"], v:true},
+  {n:"Fountain Housing Authority", p:"719-382-5639", c:["Shelter & Housing"], h:"Mon-Fri", a:"Fountain", d:"Public housing and vouchers for Fountain residents.", s:1, t:["section 8","public housing","fountain","voucher"], v:true},
+  {n:"Colorado Housing & Finance Authority (CHFA)", p:"1-800-877-2432", c:["Shelter & Housing"], w:"https://chfainfo.com", h:"Mon-Fri 8am-5pm", d:"Statewide housing finance — first-time homebuyer loans, down payment assistance, rental help.", s:1, t:["mortgage","first time buyer","down payment","loan"], v:true},
+  {n:"Pikes Peak Habitat for Humanity", p:"719-475-7800", c:["Shelter & Housing"], w:"https://pikespeakhabitat.org", h:"Mon-Fri 9am-5pm", d:"Builds and sells homes to qualifying low-income families. Sweat-equity required.", s:1, t:["habitat","home","ownership","build"], v:true},
+  {n:"Rocky Mountain Community Land Trust", p:"719-447-9300", c:["Shelter & Housing"], w:"https://rmclt.org", h:"Mon-Fri", d:"Permanently-affordable home ownership through community land trust model.", s:1, t:["affordable","home","ownership","land trust"], v:true},
+  {n:"Ascending to Health Respite Care", p:"719-635-7639", c:["Shelter & Housing","Medical"], w:"https://ascendingtohealth.org", h:"24/7 intake", d:"Medical respite for homeless people discharged from hospitals.", s:3, t:["homeless","medical","respite","hospital"], v:true},
+  {n:"Dale House Project (youth)", p:"719-471-0642", c:["Shelter & Housing"], w:"https://dalehouse.org", h:"Application required", d:"Residential program for youth ages 16-20 transitioning to independence.", s:2, t:["youth","teen","residential","independence"], v:true},
+  {n:"Dream Centers Mary's Home (single mothers)", p:"719-301-5411", c:["Shelter & Housing","Parenting & Pregnancy"], w:"https://dreamcenters.org", h:"Application required", d:"Long-term supportive housing for single mothers and their kids.", s:1, t:["single mother","mom","kids","housing"], v:true},
+  {n:"Family Life Services (single mothers)", p:"719-632-4661", c:["Shelter & Housing","Parenting & Pregnancy"], h:"Referral only", d:"Maternity home for pregnant women and new mothers.", s:1, t:["pregnant","single mother","maternity","baby"], v:true},
+  {n:"Gospel Homes for Women", p:"719-291-3406", c:["Shelter & Housing"], h:"Application required", d:"Christian residential program for women.", s:1, t:["women","christian","residential"], v:false},
+  {n:"Ithaka Housing", p:"719-578-1629", c:["Shelter & Housing"], w:"https://ithakaland.org", h:"Mon-Fri", d:"Affordable housing development in central Colorado Springs.", s:1, t:["affordable","housing","central"], v:false},
+  {n:"Kingdom Builders Family Life Center (DV)", p:"719-247-8190", c:["Shelter & Housing","Domestic Violence Services"], w:"https://kingdombuildersfamily.org", h:"Mon-Fri; 24h crisis: 719-464-4647", d:"Shelter and services for survivors of domestic violence and human trafficking.", s:3, t:["domestic violence","shelter","trafficking"], v:true},
+  {n:"Sarah's Home (sex trafficking survivors)", p:"719-347-3026", c:["Shelter & Housing"], w:"https://sarahshome.com", h:"Application required", d:"Residential recovery home for adolescent girls who have survived sex trafficking.", s:1, t:["trafficking","girls","teen","recovery"], v:true},
+  {n:"Rocky Mountain Human Services (veterans)", p:"1-855-838-7428", p2:"719-323-2600", c:["Shelter & Housing","Veterans Services","Financial Assistance"], w:"https://rmhumanservices.org", h:"Mon-Fri 8am-5pm", d:"Homelessness prevention and rapid rehousing for veterans (HUD-VASH partner).", s:2, t:["veteran","housing","homeless","rapid rehousing"], v:true},
+
+  // ===== CLOTHING & HYGIENE =====
+  {n:"Catholic Charities — Family Connections (kids' clothing)", p:"719-636-2345", c:["Clothing & Hygiene"], w:"https://ccharitiescc.org", h:"Mon-Fri", d:"Children's clothing closet for low-income families.", s:3, t:["kids clothing","children","family"], v:true},
+  {n:"Community Outreach Center (Calhan)", p:"719-347-7638", c:["Clothing & Hygiene","Food","Weatherization & Utilities","Miscellaneous Counseling & Assistance"], a:"Calhan", d:"Food, clothing, utility help for the Calhan / eastern plains area.", s:3, t:["calhan","clothing","food","rural"], v:false},
+  {n:"Connie's Cupboard (Fountain)", p:"719-205-5853", c:["Clothing & Hygiene"], a:"Fountain", d:"Clothing closet in Fountain.", s:3, t:["clothing","fountain"], v:false},
+  {n:"Goodwill Stores", p:"719-635-4483", c:["Clothing & Hygiene","Employment & Training"], w:"https://discovermygoodwill.org", h:"Daily 9am-9pm typical", d:"Affordable clothing and household goods. Multiple locations.", s:4, t:["clothing","cheap","thrift","household"], v:true},
+  {n:"Laundry Love", p:"719-440-8235", c:["Clothing & Hygiene"], w:"https://laundrylove.org", h:"Monthly events", d:"Free laundry events at participating laundromats.", s:3, t:["laundry","wash clothes","free"], v:true},
+  {n:"Life Network — Family Thrift Store", p:"719-344-9904", c:["Clothing & Hygiene"], w:"https://elifenetwork.com", h:"Tue-Sat", d:"Thrift store and family resource center.", s:3, t:["thrift","clothing","family"], v:true},
+  {n:"The Place — Drop In Center (youth)", p:"719-244-3959", c:["Clothing & Hygiene","Shelter & Housing"], w:"https://theplacecos.org", h:"Mon-Fri drop-in hours", d:"Showers, laundry, food, case management for youth up to age 24.", s:4, t:["youth","teen","shower","laundry","drop in"], v:true},
+  {n:"Salvation Army (clothing - no vouchers)", p:"719-574-4335", c:["Clothing & Hygiene"], w:"https://rmsalvationarmy.org", h:"Daily store hours", d:"Affordable clothing at thrift store. Note: no clothing vouchers issued.", s:4, t:["clothing","thrift","cheap"], v:true},
+  {n:"Sanctuary Church — Shower House", p:"719-634-7232", c:["Clothing & Hygiene"], h:"Verify hours", d:"Free showers.", s:3, t:["shower","wash","hygiene","homeless"], v:false},
+
+  // ===== FINANCIAL ASSISTANCE =====
+  {n:"Catholic Charities — Marian House (financial)", p:"719-866-6285", c:["Financial Assistance"], w:"https://ccharitiescc.org/marianhouse", h:"By appointment", d:"Limited emergency financial assistance for low-income individuals.", s:2, t:["financial","emergency","help","money"], v:true},
+  {n:"Mt. Carmel Veterans Service Center", p:"719-772-7000", c:["Financial Assistance","Veterans Services","Employment & Training"], w:"https://veteranscenter.org", h:"Mon-Fri 8am-5pm", a:"530 Communication Cir", d:"One-stop center for veterans — benefits navigation, employment, financial help, mental health.", s:2, t:["veteran","benefits","financial","employment"], v:true},
+  {n:"Pikes Peak Veteran Housing Fund", p:"719-323-2600", c:["Financial Assistance","Veterans Services","Shelter & Housing"], w:"https://rmhumanservices.org", h:"Mon-Fri", d:"Emergency housing assistance for veterans facing eviction or homelessness.", s:2, t:["veteran","housing","eviction"], v:true},
+  {n:"The Place (youth financial help)", p:"719-244-3959", c:["Financial Assistance"], w:"https://theplacecos.org", h:"Mon-Fri", d:"Limited financial assistance for youth up to age 24.", s:2, t:["youth","teen","money","help"], v:true},
+  {n:"Volunteers of America (veterans)", p:"719-491-1974", c:["Financial Assistance","Veterans Services","Shelter & Housing"], w:"https://voacolorado.org", h:"Mon-Fri", d:"Veteran-focused services including housing and supportive services.", s:2, t:["veteran","housing","help"], v:true},
+  {n:"Southern Colorado Health Network (HIV)", p:"719-578-9092", c:["Financial Assistance","Medical"], w:"https://s-chn.org", h:"Mon-Fri", d:"Financial, housing, and medical support for individuals living with HIV.", s:2, t:["hiv","aids","medical","housing"], v:true},
+
+  // ===== MEDICAL =====
+  {n:"Peak Vista Community Health Centers", p:"719-632-5700", c:["Medical","Mental Health"], w:"https://peakvista.org", h:"Mon-Fri 7am-7pm; Sat AM at some sites", a:"Multiple locations", d:"Federally Qualified Health Center — primary care, dental, behavioral health on sliding fee scale. Accepts Medicaid and uninsured.", s:2, t:["doctor","clinic","sliding fee","medicaid","uninsured","primary care"], v:true},
+  {n:"Peak Vista Dental Health Center", p:"719-475-0783", c:["Medical"], w:"https://peakvista.org", h:"Mon-Fri", d:"Sliding-fee dental for kids and adults. Medicaid accepted.", s:2, t:["dental","teeth","cavity","cleaning"], v:true},
+  {n:"Mission Medical Clinic", p:"719-219-3402", c:["Medical"], w:"https://missionmedical.net", h:"Mon-Thu 8am-5pm", a:"2125 E La Salle St", d:"Free primary care for adults without insurance, working poor.", s:2, t:["free","clinic","uninsured","doctor"], v:true},
+  {n:"Open Bible Medical Clinic", p:"719-475-0972", c:["Medical"], w:"https://openbibleclinic.com", h:"Tue 5-9pm, Thu 10am-2pm, Sat 9am-1pm", a:"824 S Union Blvd", d:"Free Christian medical clinic for working uninsured adults.", s:2, t:["free","clinic","uninsured","christian"], v:true},
+  {n:"Community Dental Health", p:"719-310-3315", c:["Medical"], w:"https://communitydentalhealth.org", h:"Mon-Fri", d:"Sliding-scale dental clinic.", s:2, t:["dental","sliding fee","teeth"], v:true},
+  {n:"Eye Love Care", p:"719-596-2020", c:["Medical"], w:"https://eyelovecare.org", h:"By appointment", d:"Free glasses for low-income people on a fixed income.", s:2, t:["glasses","eye","vision","free"], v:true},
+  {n:"Health First Colorado (Medicaid & CHP+)", p:"1-800-221-3943", c:["Medical","Financial Assistance"], w:"https://healthfirstcolorado.com", h:"Mon-Fri 7:30am-5:15pm", d:"State Medicaid program — apply for free/low-cost health coverage.", s:1, t:["medicaid","health insurance","chp+","kids","apply"], v:true},
+  {n:"Memorial Hospital Health Link (info)", p:"719-444-2273", c:["Medical"], w:"https://uchealth.org", h:"Mon-Fri", d:"Find a UCHealth doctor or service.", s:3, t:["doctor","referral","memorial","uchealth"], v:true},
+  {n:"Memorial Hospital Central", p:"719-365-5000", c:["Medical","Emergency Services"], w:"https://uchealth.org", h:"24/7 ER", a:"1400 E Boulder St", d:"Full-service hospital with ER. Operated by UCHealth.", s:4, t:["hospital","emergency","er","memorial","uchealth"], v:true},
+  {n:"Penrose Hospital (CommonSpirit)", p:"719-776-5000", c:["Medical","Emergency Services"], w:"https://commonspirit.org", h:"24/7 ER", a:"2222 N Nevada Ave", d:"Full-service Catholic hospital with ER.", s:4, t:["hospital","emergency","er","penrose","catholic"], v:true},
+  {n:"St. Francis Hospital (CommonSpirit)", p:"719-571-1000", c:["Medical","Emergency Services"], w:"https://commonspirit.org", h:"24/7 ER", a:"6001 E Woodmen Rd", d:"Full-service hospital with ER and Level III trauma center on the north side.", s:4, t:["hospital","emergency","er","st francis","north"], v:true},
+  {n:"Grandview Hospital (UCHealth)", p:"719-365-3300", c:["Medical","Emergency Services"], w:"https://uchealth.org", h:"24/7 ER", a:"5623 Pulpit Peak View", d:"Orthopedic, sports medicine, and emergency care.", s:4, t:["hospital","emergency","orthopedic","sports"], v:true},
+  {n:"El Paso County Public Health", p:"719-578-3199", c:["Medical","Parenting & Pregnancy"], w:"https://elpasocountyhealth.org", h:"Mon-Fri 7:30am-4:30pm", d:"Immunizations, STI testing, family planning, TB testing, tobacco cessation. Sliding fee. Spanish providers.", s:3, t:["immunization","vaccine","sti","family planning","tb"], v:true},
+  {n:"El Paso County DHS — Family Medical (apply)", p:"719-444-5349", c:["Medical","Financial Assistance"], w:"https://dhs.elpasoco.com", h:"Mon-Fri", d:"Apply for Medicaid, CHP+, family medical assistance.", s:1, t:["medicaid","apply","family","kids"], v:true},
+  {n:"NAMI (mental health support)", p:"719-473-8477", c:["Medical","Mental Health"], w:"https://namicoloradosprings.org", h:"Mon-Fri", d:"Family support groups, peer-led classes, education, and advocacy for mental illness.", s:3, t:["mental health","support group","family","schizophrenia","bipolar"], v:true},
+  {n:"Colorado Community Health Alliance (CCHA Medicaid RAE)", p:"719-598-1540", c:["Medical","Mental Health","Substance Use"], w:"https://cchacares.com", h:"Mon-Fri", d:"Care coordination for Medicaid members in Region 7. Find PCP, behavioral health, transportation.", s:2, t:["medicaid","care coordination","find doctor"], v:true},
+  {n:"Rocky Mountain Health Care Services", p:"719-314-2327", c:["Medical","Senior Services"], w:"https://rmhcare.org", h:"Mon-Fri", d:"PACE program for elderly + brain injury services.", s:2, t:["pace","senior","brain injury","elderly"], v:true},
+  {n:"SET Family Medical Clinics", p:"719-776-8850", c:["Medical"], w:"https://setclinic.org", h:"Mon-Fri", d:"Family medicine clinics across the region.", s:3, t:["doctor","family","clinic"], v:true},
+  {n:"SET Homeless Clinic", p:"719-475-7314", c:["Medical","Shelter & Housing"], w:"https://setclinic.org", h:"Days vary", a:"Marian House", d:"Medical care for people experiencing homelessness, at Marian House.", s:3, t:["homeless","clinic","doctor"], v:true},
+  {n:"Colorado Springs Pregnancy Center (Galley)", p:"719-679-3105", c:["Medical","Parenting & Pregnancy"], w:"https://cspregnancy.org", h:"Mon-Fri", a:"Galley Rd", d:"Free pregnancy tests, ultrasounds, options counseling, baby supplies. Christian-affiliated.", s:3, t:["pregnant","pregnancy test","baby","ultrasound"], v:true},
+  {n:"Colorado Springs Pregnancy Center (Fountain)", p:"719-695-7030", c:["Medical","Parenting & Pregnancy"], w:"https://cspregnancy.org", h:"Mon-Fri", a:"Fountain", d:"Pregnancy services in Fountain.", s:3, t:["pregnant","fountain","baby"], v:true},
+  {n:"Colorado Springs Pregnancy Center (Westside)", p:"719-451-7586", c:["Medical","Parenting & Pregnancy"], w:"https://cspregnancy.org", h:"Mon-Fri", a:"Westside", d:"Pregnancy services on the westside.", s:3, t:["pregnant","westside","baby"], v:true},
+  {n:"Dream Center Women's Clinic", p:"719-388-1594", c:["Medical","Parenting & Pregnancy"], w:"https://dreamcenters.org/womens-clinic", h:"Mon-Fri", d:"Free women's health, pregnancy, and family planning services.", s:3, t:["women","pregnancy","clinic","free"], v:true},
+  {n:"Genetic Counseling (Memorial Hospital)", p:"719-365-6845", c:["Medical","Miscellaneous Counseling & Assistance"], w:"https://uchealth.org", h:"Mon-Fri by referral", d:"Counseling for inherited conditions, prenatal screening.", s:2, t:["genetic","prenatal","inherited"], v:true},
+  {n:"DNA Testing (El Paso County Child Support)", p:"719-457-6331", c:["Medical","Legal Information & Advice"], w:"https://elpasoco.com", h:"Mon-Fri", d:"DNA paternity testing through child support services.", s:2, t:["dna","paternity","child support"], v:true},
+  {n:"Cheyenne Village (adults with disabilities)", p:"719-592-0200", c:["Medical","Disability Resources"], w:"https://cheyennevillage.org", h:"Mon-Fri", d:"Personal care, supported living, and day programs for adults with intellectual/developmental disabilities.", s:2, t:["disability","intellectual","developmental","supported living"], v:true},
+  {n:"The Independence Center (disabled medical)", p:"719-471-8181", c:["Medical","Disability Resources","Veterans Services"], w:"https://the-ic.org", h:"Mon-Fri 8am-5pm", a:"729 S Tejon St", d:"Independent living center — home health, advocacy, peer support, equipment loans.", s:3, t:["disability","independent living","wheelchair","home health"], v:true},
+  {n:"Next Chapter (veterans)", p:"1-888-719-8387", c:["Medical","Veterans Services","Mental Health"], w:"https://nextchapter.org", h:"Mon-Fri", d:"PTSD and TBI treatment for post-9/11 veterans.", s:2, t:["veteran","ptsd","tbi","brain injury"], v:true},
+  {n:"PPACG — AAA Senior Insurance Assistance (SHIP)", p:"719-471-2096", c:["Medical","Senior Services"], w:"https://ppacg.org", h:"Mon-Fri", d:"Free Medicare counseling — benefits, plans, drug coverage.", s:2, t:["medicare","senior","insurance","drug"], v:true},
+
+  // ===== MENTAL HEALTH =====
+  {n:"Diversus Health", p:"719-572-6100", p2:"1-844-493-8255", c:["Mental Health","Substance Use"], w:"https://diversushealth.org", h:"Mon-Fri 8am-5pm; 24/7 walk-in crisis", a:"Multiple sites", d:"Region's largest community mental health provider — therapy, psychiatry, substance use treatment, crisis services.", s:3, t:["therapy","counseling","psychiatrist","mental health","crisis"], v:true},
+  {n:"Insight Services", p:"719-447-0370", c:["Mental Health","Substance Use","Miscellaneous Counseling & Assistance"], w:"https://insightservices.org", h:"Mon-Fri", d:"Outpatient mental health and substance use counseling, including DUI classes.", s:2, t:["counseling","therapy","dui","substance"], v:true},
+  {n:"LifeStance Health", p:"970-310-3406", c:["Mental Health","Miscellaneous Counseling & Assistance"], w:"https://lifestance.com", h:"Mon-Fri varies by clinician", d:"Outpatient therapy and psychiatry, multiple Colorado Springs locations.", s:2, t:["therapy","counseling","psychiatrist"], v:true},
+  {n:"Peak View Behavioral Health", p:"719-444-8484", c:["Mental Health"], w:"https://peakviewbh.com", h:"Mon-Fri intake", d:"Inpatient psychiatric and addiction treatment.", s:2, t:["psychiatric","inpatient","addiction"], v:true},
+  {n:"The Patterson Center for Resiliency", p:"719-300-5735", c:["Mental Health"], w:"https://pattersoncenter.org", h:"By appointment", d:"Trauma-focused therapy for first responders and military.", s:2, t:["trauma","first responder","military","ptsd"], v:true},
+  {n:"Another Life Foundation", p:"719-216-7238", c:["Mental Health"], w:"https://anotherlifefoundation.org", h:"Verify hours", d:"Mental illness and suicide prevention support; minority mental health.", s:3, t:["mental health","suicide","minority"], v:false},
+  {n:"Dos Madres — RESTORE", p:"719-510-6981", c:["Mental Health","Miscellaneous Counseling & Assistance"], h:"Verify hours", d:"Trauma counseling.", s:2, t:["trauma","counseling"], v:false},
+
+  // ===== SUBSTANCE USE =====
+  {n:"Colorado Springs Alcoholics Anonymous", p:"719-573-5020", c:["Substance Use"], w:"https://coloradospringsaa.org", h:"24/7 hotline; meetings daily", d:"Free peer-support meetings for anyone wanting to stop drinking.", s:4, t:["alcohol","aa","drinking","meeting","sober"], v:true, tf:true},
+  {n:"Pikes Peak Area of Narcotics Anonymous", p:"719-637-1580", c:["Substance Use"], w:"https://ppana.org", h:"24/7 hotline; meetings daily", d:"Free peer-support meetings for people in recovery from addiction.", s:4, t:["narcotics","na","drugs","recovery","meeting","sober"], v:true, tf:true},
+  {n:"Achieve Whole Recovery", p:"719-373-9703", c:["Substance Use"], w:"https://achievewholerecovery.com", h:"Mon-Fri", d:"Outpatient addiction treatment with MAT.", s:2, t:["addiction","mat","outpatient"], v:true},
+  {n:"Front Range Clinic", p:"719-419-7735", c:["Substance Use","Medical"], w:"https://frontrangeclinic.com", h:"Mon-Fri", d:"Medication-assisted treatment for opioid and alcohol use disorder.", s:2, t:["mat","opioid","suboxone","methadone"], v:true},
+  {n:"Phoenix Multisport (drug & alcohol)", p:"719-434-3387", c:["Substance Use"], w:"https://thephoenix.org", h:"Daily classes", d:"Free sober-active community — fitness, climbing, CrossFit, social events. 48 hours sober required.", s:4, t:["sober","fitness","community","recovery"], v:true},
+  {n:"Recovery Unlimited", p:"719-358-7338", c:["Substance Use"], h:"Verify hours", d:"Substance use treatment.", s:2, t:["substance","treatment"], v:false},
+  {n:"Sandstone Care", p:"720-674-7380", c:["Substance Use","Mental Health"], w:"https://sandstonecare.com", h:"Mon-Fri", d:"Teen and young-adult substance use and mental health treatment.", s:2, t:["teen","young adult","substance","treatment"], v:true},
+  {n:"Serenity Recovery Connection", p:"719-465-2295", c:["Substance Use"], w:"https://serenityrecoveryconnection.org", h:"Mon-Fri", d:"Peer recovery coaching, recovery community center.", s:3, t:["peer","recovery","sober","coaching"], v:true},
+  {n:"Love Alive", p:"719-283-6197", c:["Substance Use"], h:"Verify hours", d:"Faith-based recovery program.", s:2, t:["faith","recovery"], v:false},
+  {n:"Oxford House (sober living)", p:"1-800-689-6411", c:["Substance Use","Shelter & Housing"], w:"https://oxfordhouse.org", h:"Apply by phone", d:"Self-run sober living houses across Colorado Springs.", s:2, t:["sober living","recovery","housing"], v:true},
+  {n:"Homeward Pikes Peak Addiction Recovery", p:"719-473-5557", c:["Substance Use","Shelter & Housing"], w:"https://homewardpikespeak.org", h:"Mon-Fri", d:"Recovery + housing for chronically homeless adults.", s:2, t:["recovery","housing","homeless"], v:true},
+
+  // ===== EMPLOYMENT & TRAINING =====
+  {n:"Pikes Peak Workforce Center", p:"719-667-3700", c:["Employment & Training"], w:"https://ppwfc.org", h:"Mon-Fri 8am-5pm", a:"1675 Garden of the Gods Rd", d:"Free job search help, resume support, training programs, employer connections.", s:3, t:["job","work","career","resume","unemployed","training"], v:true},
+  {n:"Catholic Charities — Hanifen Employment Center", p:"719-866-6285", c:["Employment & Training","Legal Information & Advice"], w:"https://ccharitiescc.org", h:"Mon-Fri", a:"At Marian House", d:"Job coaching, resume help, computer access for adults — including those with barriers.", s:3, t:["job","employment","resume","barriers"], v:true},
+  {n:"Center for Employment Opportunities (re-entry)", p:"719-694-5450", c:["Employment & Training","Justice Involved Services"], w:"https://ceoworks.org", h:"Mon-Fri", d:"Same-day work, training, and full-time job placement for people recently released from incarceration.", s:3, t:["job","reentry","prison","incarceration","felon"], v:true},
+  {n:"Goodwill Career Development Program", p:"719-635-4483", c:["Employment & Training","Disability Resources"], w:"https://discovermygoodwill.org", h:"Mon-Fri", d:"Free job training, certifications, resume help, paid work experience.", s:3, t:["job","training","resume","career","certification"], v:true},
+  {n:"Colorado Division of Vocational Rehabilitation", p:"719-635-3585", c:["Employment & Training","Disability Resources"], w:"https://dvr.colorado.gov", h:"Mon-Fri", d:"Help people with disabilities prepare for, get, and keep jobs.", s:1, t:["disability","job","vocational","work"], v:true},
+  {n:"Community Works Colorado Springs", p:"719-203-4758", c:["Employment & Training"], h:"Mon-Fri", d:"Workforce development for people with barriers to employment.", s:2, t:["job","barriers","workforce"], v:false},
+  {n:"PCs for People", p:"720-278-7725", c:["Employment & Training"], w:"https://pcsforpeople.org", h:"By appointment", d:"Low-cost computers and internet for low-income individuals and families.", s:2, t:["computer","internet","low income","technology"], v:true},
+  {n:"PPLD Adult Education", p:"719-531-6333 ext 2225", c:["Employment & Training"], w:"https://ppld.org/adult-education", h:"Mon-Sat library hours", d:"Free GED prep, ESL, online high school diploma, basic computer skills.", s:3, t:["ged","high school","esl","english","diploma"], v:true},
+  {n:"Senior Community Service Employment Program (SCSEP/AARP)", p:"719-635-3579", c:["Employment & Training","Senior Services"], w:"https://aarp.org/scsep", h:"Mon-Fri", d:"Paid training program for low-income job seekers age 55+.", s:2, t:["senior","job","aarp","55","training"], v:true},
+  {n:"Urban League of Pikes Peak Region", p:"719-634-1525", c:["Employment & Training"], w:"https://ulppr.org", h:"Mon-Fri", d:"Workforce development, financial empowerment, and advocacy for Black community and underserved populations.", s:3, t:["job","black","minority","financial","advocacy"], v:true},
+
+  // ===== CHILD CARE =====
+  {n:"Child Care Resource and Referral (Colorado Shines)", p:"1-877-338-2273", c:["Child Care Information"], w:"https://coloradoshines.org", h:"Mon-Fri 8am-5pm", d:"Find licensed child care, quality ratings, and parent resources statewide.", s:3, t:["child care","daycare","preschool","babysitter"], v:true},
+  {n:"Colorado Child Care Assistance Program (CCAP)", p:"719-444-8178", c:["Child Care Information","Financial Assistance"], w:"https://dhs.elpasoco.com", h:"Mon-Fri", d:"Pays for child care for low-income working / training families. Apply through DHS.", s:1, t:["ccap","child care","subsidy","apply"], v:true},
+  {n:"CPCD giving children a head start", p:"719-635-1536", c:["Child Care Information"], w:"https://cpcdheadstart.org", h:"Mon-Fri", d:"Free Head Start preschool for income-eligible families with kids 0-5.", s:2, t:["head start","preschool","free","kids"], v:true},
+  {n:"Pikes Peak Region Family Child Care Association", p:"719-475-8828", c:["Child Care Information"], h:"Verify hours", d:"Network of in-home licensed family child care providers.", s:3, t:["child care","daycare","home","family"], v:false},
+
+  // ===== PARENTING & PREGNANCY =====
+  {n:"Catholic Charities Counseling Services", p:"719-866-6535", c:["Parenting & Pregnancy","Mental Health","Miscellaneous Counseling & Assistance"], w:"https://ccharitiescc.org", h:"Mon-Fri by appointment", d:"Sliding-fee individual, couples, and family counseling.", s:2, t:["counseling","therapy","family","couples"], v:true},
+  {n:"Center on Fathering", p:"719-634-7797", c:["Parenting & Pregnancy"], w:"https://centeronfathering.org", h:"Mon-Fri", d:"Programs and support for fathers — visitation, mediation, parenting classes.", s:2, t:["father","dad","custody","visitation","parenting"], v:true},
+  {n:"Life Network", p:"719-591-2609", c:["Parenting & Pregnancy"], w:"https://elifenetwork.com", h:"Mon-Fri", d:"Pregnancy resource center — free testing, ultrasounds, parenting education, baby supplies.", s:3, t:["pregnant","pregnancy","baby","christian"], v:true},
+  {n:"Lutheran Family Services", p:"719-227-7571", c:["Parenting & Pregnancy","Miscellaneous Counseling & Assistance"], w:"https://lfsrm.org", h:"Mon-Fri", d:"Adoption, foster care, counseling, refugee resettlement.", s:2, t:["adoption","foster","counseling","refugee"], v:true},
+  {n:"Lutheran Family Services — Refugee & Asylee", p:"719-227-8899", c:["Miscellaneous Counseling & Assistance"], w:"https://lfsrm.org/refugee", h:"Mon-Fri", d:"Resettlement, ESL, employment, and case management for refugees and asylum seekers.", s:2, t:["refugee","asylum","immigrant","resettlement"], v:true},
+  {n:"Safe Families for Children", p:"719-357-7080", c:["Parenting & Pregnancy"], w:"https://safe-families.org", h:"Mon-Fri", d:"Volunteer host families care for kids when parents face crisis — without involving CPS.", s:2, t:["foster","host","family","crisis","kids"], v:true},
+
+  // ===== SENIOR SERVICES =====
+  {n:"Colorado Springs Senior Center", p:"719-955-3400", c:["Senior Services"], w:"https://csseniorcenter.com", h:"Mon-Fri 8am-4pm", a:"1514 N Hancock Ave", d:"Classes, fitness, dining, social events for adults 50+.", s:3, t:["senior","activities","dining","fitness"], v:true},
+  {n:"Fountain Valley Senior Center", p:"719-600-2644", c:["Senior Services","Transportation"], h:"Mon-Fri", a:"Fountain", d:"Activities, meals, transportation for seniors in Fountain.", s:3, t:["senior","fountain"], v:false},
+  {n:"PPACG Area Agency on Aging", p:"719-471-2096", c:["Senior Services"], w:"https://ppacg.org/aging", h:"Mon-Fri", d:"Aging information, benefits counseling, ombudsman, caregiver support.", s:2, t:["aging","senior","caregiver","ombudsman"], v:true},
+  {n:"AAA Family Caregiver Support Center", p:"719-886-7526", c:["Senior Services"], w:"https://ppacg.org/aging", h:"Mon-Fri", d:"Support, training, respite for family caregivers.", s:2, t:["caregiver","family","respite"], v:true},
+  {n:"Rocky Mountain PACE", p:"719-314-2327", c:["Senior Services","Medical"], w:"https://rmhcare.org/pace", h:"Mon-Fri", d:"All-inclusive day program for seniors who would otherwise need a nursing home.", s:1, t:["pace","senior","nursing home","day program"], v:true},
+  {n:"UCCS Aging Center", p:"719-255-8002", c:["Senior Services","Mental Health"], w:"https://uccs.edu/aging", h:"Mon-Fri", d:"Sliding-fee mental health and counseling for older adults.", s:2, t:["senior","counseling","mental health"], v:true},
+
+  // ===== TRANSPORTATION =====
+  {n:"Mountain Metro Mobility", p:"719-385-7433", c:["Transportation","Disability Resources"], w:"https://mmtransit.com", h:"Daily; book in advance", d:"ADA paratransit for people who can't use the regular bus.", s:2, t:["paratransit","disabled","wheelchair","transportation"], v:true},
+  {n:"Envida (transportation)", p:"719-633-4677", c:["Transportation","Disability Resources","Senior Services"], w:"https://envidacares.org", h:"Mon-Fri; book ahead", d:"Door-through-door transportation for seniors and people with disabilities.", s:2, t:["transportation","senior","disabled","ride"], v:true},
+  {n:"GoodWheels — Goodwill", p:"719-442-2077", c:["Transportation","Disability Resources"], w:"https://discovermygoodwill.org/goodwheels", h:"Mon-Fri", d:"Affordable transportation for seniors and people with disabilities.", s:2, t:["transportation","senior","disabled","ride"], v:true},
+  {n:"IntelliRide — Health First Colorado", p:"719-766-4660", c:["Transportation","Medical"], w:"https://gointelliride.com/colorado", h:"Mon-Fri; book 48hr ahead", d:"Free non-emergency medical transportation for Medicaid members.", s:2, t:["medicaid","transportation","medical","ride","appointment"], v:true},
+  {n:"Silver Key Para Transit", p:"719-884-2300", c:["Transportation","Senior Services"], w:"https://silverkey.org", h:"Mon-Fri; book ahead", d:"Transportation for seniors 60+.", s:2, t:["senior","transportation","ride"], v:true},
+
+  // ===== VETERANS =====
+  {n:"El Paso County Veterans Services", p:"719-520-7750", c:["Veterans Services"], w:"https://elpasoco.com/veterans", h:"Mon-Fri 8am-5pm", d:"Help filing VA benefits claims, navigation, advocacy.", s:2, t:["veteran","va","benefits","claim"], v:true},
+  {n:"Veterans Administration", p:"719-471-9992", c:["Veterans Services","Medical"], w:"https://va.gov", h:"Mon-Fri", d:"VA benefits, healthcare enrollment, claims.", s:2, t:["veteran","va","benefits","healthcare"], v:true},
+  {n:"PFC Floyd K. Lindstrom VA Outpatient Clinic", p:"719-327-5660", c:["Veterans Services","Medical"], w:"https://va.gov/eastern-colorado-health-care", h:"Mon-Fri 7am-4:30pm", a:"3141 Centennial Blvd", d:"Primary care, mental health, lab, pharmacy for enrolled veterans.", s:2, t:["veteran","va","clinic","doctor"], v:true},
+  {n:"Home Front Military Care Network", p:"719-577-7417", c:["Veterans Services"], w:"https://homefrontcares.org", h:"Mon-Fri", d:"Financial assistance and support for active-duty and veteran families.", s:2, t:["veteran","military","family","financial"], v:true},
+  {n:"UCCS Veterans Health & Trauma Clinic", p:"719-255-8003", c:["Veterans Services","Mental Health"], w:"https://uccs.edu/vhtc", h:"By appointment", d:"Free counseling for veterans, active-duty, and family members.", s:2, t:["veteran","counseling","trauma","ptsd","free"], v:true},
+
+  // ===== LEGAL =====
+  {n:"Colorado Legal Services", p:"719-471-0380", c:["Legal Information & Advice"], w:"https://coloradolegalservices.org", h:"Mon-Fri intake", d:"Free civil legal aid for low-income — eviction, family law, public benefits, consumer.", s:2, t:["lawyer","legal","free","eviction","family law"], v:true},
+  {n:"Public Defenders Office", p:"719-475-1235", c:["Legal Information & Advice","Justice Involved Services"], w:"https://coloradodefenders.us", h:"Mon-Fri", a:"30 E Pikes Peak Ave", d:"Court-appointed defense for those who cannot afford a lawyer in criminal cases.", s:2, t:["lawyer","criminal","defense","arrested"], v:true},
+  {n:"The Justice Center", p:"719-473-6212", c:["Legal Information & Advice"], h:"Mon-Fri", d:"Court information.", s:3, t:["court","legal"], v:false},
+  {n:"Pro Se Self-Help Center", p:"719-452-5000", c:["Legal Information & Advice"], w:"https://courts.state.co.us", h:"Mon-Fri", a:"270 S Tejon St", d:"Help filling out court forms when representing yourself.", s:3, t:["court","self help","forms","pro se"], v:true},
+  {n:"Family Court Facilitators", p:"719-452-5104", c:["Legal Information & Advice","Parenting & Pregnancy"], w:"https://courts.state.co.us", h:"Mon-Fri", d:"Help with divorce, custody, and parenting plan forms.", s:2, t:["divorce","custody","parenting plan","family court"], v:true},
+  {n:"Child Support Services (El Paso County)", p:"719-457-6331", c:["Legal Information & Advice","Parenting & Pregnancy"], w:"https://dhs.elpasoco.com", h:"Mon-Fri", d:"Establish, enforce, and collect child support.", s:2, t:["child support","custody","paternity"], v:true},
+  {n:"Neighborhood Justice Center (mediation)", p:"719-520-6000", c:["Legal Information & Advice","Miscellaneous Counseling & Assistance"], w:"https://elpasoco.com", h:"Mon-Fri", d:"Free mediation for neighbor disputes, landlord-tenant, family.", s:2, t:["mediation","dispute","neighbor","landlord"], v:true},
+  {n:"Catholic Charities — Legal Immigration Counseling", p:"719-636-2345", c:["Legal Information & Advice"], w:"https://ccharitiescc.org", h:"Mon-Fri", d:"DOJ-accredited immigration legal services.", s:2, t:["immigration","green card","citizenship","daca","asylum"], v:true},
+  {n:"Disability Law Colorado", p:"303-722-0300", c:["Legal Information & Advice","Disability Resources"], w:"https://disabilitylawco.org", h:"Mon-Fri", d:"Legal advocacy for people with disabilities — discrimination, services, benefits.", s:2, t:["disability","legal","discrimination","ada"], v:true},
+  {n:"Colorado Cross-Disability Coalition", p:"303-869-1775", c:["Legal Information & Advice","Disability Resources"], w:"https://ccdconline.org", h:"Mon-Fri", d:"Civil rights advocacy for people with all disabilities.", s:2, t:["disability","civil rights","advocacy"], v:true},
+  {n:"Rocky Mountain Victim Law Center", p:"303-295-2001", c:["Legal Information & Advice","Domestic Violence Services"], w:"https://rmvictimlaw.org", h:"Mon-Fri", d:"Free legal representation for victims of crime — privacy, protection orders, restitution.", s:2, t:["victim","crime","protection order","privacy"], v:true},
+  {n:"Colorado Child Protection Ombudsman", p:"720-625-8640", c:["Legal Information & Advice","Parenting & Pregnancy"], w:"https://coloradocpo.org", h:"Mon-Fri", d:"Independent oversight of child welfare system. Investigates concerns about CPS.", s:2, t:["child protection","cps","ombudsman","kids"], v:true},
+  {n:"The ARC of the Pikes Peak Region", p:"1-855-828-8476", c:["Legal Information & Advice","Disability Resources"], w:"https://thearcppr.org", h:"Mon-Fri", d:"Advocacy and rights protection for people with intellectual / developmental disabilities.", s:2, t:["disability","intellectual","developmental","advocacy"], v:true},
+
+  // ===== JUSTICE INVOLVED =====
+  {n:"ComCor, Inc.", p:"719-473-4460", c:["Justice Involved Services"], w:"https://comcor.org", h:"Mon-Fri", d:"Community corrections — residential supervision, treatment for adults transitioning from prison.", s:2, t:["community corrections","prison","reentry"], v:true},
+  {n:"Community Alternatives of El Paso County", p:"719-390-1303", c:["Justice Involved Services"], h:"Mon-Fri", d:"Community-based alternative to incarceration.", s:2, t:["alternative","corrections","sentencing"], v:false},
+  {n:"Department of Corrections — Community Re-Entry", p:"719-633-1469 ext 2325", c:["Justice Involved Services"], w:"https://doc.colorado.gov", h:"Mon-Fri", d:"Re-entry services for people leaving Colorado state prison.", s:2, t:["reentry","prison","parole"], v:true},
+  {n:"Forge Evolution", p:"719-475-7815", c:["Justice Involved Services","Substance Use"], w:"https://forgeevolution.org", h:"Mon-Fri", d:"Mentorship and support for justice-involved men.", s:2, t:["mentorship","reentry","men"], v:true},
+  {n:"Gateway Through the Rockies", p:"719-390-2129", c:["Justice Involved Services"], h:"Mon-Fri", d:"Re-entry services and transitional housing.", s:2, t:["reentry","transitional housing"], v:false},
+  {n:"Mercy Today Ministries (Cañon City)", p:"719-276-9242", c:["Justice Involved Services"], a:"Cañon City", d:"Faith-based prison ministry and re-entry support.", s:2, t:["prison","faith","reentry"], v:false},
+  {n:"My Precious Hope", p:"915-319-6481", c:["Justice Involved Services","Domestic Violence Services"], h:"Verify hours", d:"Support for women coming out of incarceration or trafficking.", s:2, t:["women","reentry","trafficking"], v:false},
+  {n:"Remerg", p:"303-993-3551", c:["Justice Involved Services"], w:"https://remerg.com", h:"Online directory", d:"Statewide re-entry resource directory.", s:3, t:["reentry","directory","resources"], v:true},
+  {n:"Zebulon Pike Youth Service Center", p:"719-385-3370", c:["Justice Involved Services"], h:"Mon-Fri", d:"Youth detention and assessment center.", s:3, t:["youth","detention","juvenile"], v:false},
+  {n:"Colorado Laser Clinic — Gang Tattoo Removal (under 25)", p:"719-596-4000", c:["Justice Involved Services"], h:"By appointment", d:"Free gang tattoo removal for people under age 25.", s:2, t:["tattoo","gang","removal","youth","free"], v:false},
+
+  // ===== DISABILITY (additional) =====
+  {n:"Colorado School for the Deaf and Blind", p:"719-578-2100", c:["Disability Resources"], w:"https://csdb.org", h:"School year", a:"33 N Institute St", d:"K-12 education for deaf, blind, and deaf-blind students statewide.", s:2, t:["deaf","blind","school","kids","education"], v:true},
+  {n:"Colorado Springs Down Syndrome Association", p:"719-633-1133", c:["Disability Resources"], w:"https://csdsa.org", h:"Mon-Fri", d:"Family support, advocacy, and education for the Down syndrome community.", s:3, t:["down syndrome","family","advocacy"], v:true},
+  {n:"Colorado Springs Therapeutic Recreation Program", p:"719-385-5940", c:["Disability Resources"], w:"https://coloradosprings.gov/parks", h:"Mon-Fri", d:"City recreation programs adapted for people with disabilities.", s:3, t:["recreation","disability","sports"], v:true},
+  {n:"Colorado Springs Therapeutic Riding Center", p:"719-634-4173", c:["Disability Resources"], w:"https://cstrc.org", h:"By appointment", d:"Therapeutic horseback riding for kids and adults with disabilities.", s:2, t:["horse","therapy","disability"], v:true},
+  {n:"Special Kids Special Families", p:"719-447-8983", c:["Disability Resources","Parenting & Pregnancy"], w:"https://sksfcolorado.org", h:"Mon-Fri", d:"Respite, foster care, family support for kids with special needs.", s:2, t:["special needs","kids","respite","foster"], v:true},
+  {n:"PEAK Parent Center", p:"719-531-9400", c:["Disability Resources","Parenting & Pregnancy"], w:"https://peakparent.org", h:"Mon-Fri", d:"Parent training and information on special education and disability rights.", s:2, t:["parent","disability","iep","special education"], v:true},
+  {n:"P2P: Parent to Parent of Colorado", p:"1-877-472-7201", c:["Disability Resources","Parenting & Pregnancy"], w:"https://p2p-co.org", h:"Mon-Fri", d:"One-to-one peer support for parents of kids with disabilities.", s:3, t:["parent","disability","peer support","kids"], v:true},
+  {n:"The Resource Exchange", p:"719-380-1100", c:["Disability Resources"], w:"https://tre.org", h:"Mon-Fri", d:"Community-Centered Board for IDD — case management, services for kids and adults.", s:2, t:["idd","developmental","case management","ccb"], v:true},
+  {n:"PASCO", p:"719-960-4995", c:["Disability Resources"], w:"https://pascohh.com", h:"Mon-Fri", d:"In-home support services for people with disabilities, including CDASS.", s:2, t:["home health","disability","cdass"], v:true},
+  {n:"Empowered Care", p:"719-465-3905", c:["Disability Resources"], h:"Mon-Fri", d:"Adult day program for people with developmental disabilities.", s:2, t:["day program","disability","adults"], v:false},
+  {n:"PlayDate Behavioral Interventions", p:"719-465-3989", c:["Disability Resources"], h:"Mon-Fri", d:"ABA therapy for kids with autism.", s:2, t:["autism","aba","therapy","kids"], v:false},
+  {n:"Roundup School", p:"719-447-9333", c:["Disability Resources"], h:"School year", d:"School for kids with significant developmental disabilities.", s:2, t:["school","disability","kids"], v:false},
+  {n:"StableStrides", p:"719-495-3908", c:["Disability Resources"], w:"https://stablestrides.org", h:"Mon-Sat", d:"Equine-assisted therapy and learning for kids and adults.", s:2, t:["horse","therapy","disability","equine"], v:true},
+  {n:"Cerebral Palsy Association of Colorado Springs", p:"719-638-0808", c:["Disability Resources"], h:"Mon-Fri", d:"Family support, advocacy, services for people with cerebral palsy.", s:3, t:["cerebral palsy","cp","disability"], v:false},
+  {n:"Colorado Network for Developmental Disabilities", p:"719-344-8015", c:["Disability Resources"], h:"Mon-Fri", d:"Coordination and advocacy network.", s:2, t:["developmental","disability","network"], v:false},
+  {n:"Achilles Pikes Peak", p:"828-712-3737", c:["Disability Resources"], w:"https://achillesinternational.org", h:"Run club meetings", d:"Adaptive running and athletics for people with disabilities.", s:3, t:["running","sports","disability","athlete"], v:true},
+  {n:"Assistance League of Colorado Springs", p:"719-475-1029", c:["Disability Resources","Clothing & Hygiene"], w:"https://assistanceleague.org/colorado-springs", h:"Mon-Fri", d:"Operation School Bell — clothing for kids; assault survivor kits; senior outreach.", s:3, t:["school","clothing","kids","assault"], v:true},
+  {n:"Cheyenne Village", p:"719-592-0200", c:["Disability Resources"], w:"https://cheyennevillage.org", h:"Mon-Fri", d:"Personal care, supported living, day programs for adults with IDD.", s:2, t:["disability","supported living","adult"], v:true},
+  {n:"CaptionCall", p:"833-691-1600", c:["Disability Resources"], w:"https://captioncall.com", h:"Mon-Fri", d:"Free captioned phone for people with hearing loss.", s:3, t:["hearing","deaf","phone","caption"], v:true},
+  {n:"Sign Language Network", p:"719-599-4517", c:["Disability Resources"], h:"Mon-Fri", d:"ASL interpreting services.", s:3, t:["asl","sign language","interpreter","deaf"], v:false},
+  {n:"Relay Colorado", p:"711", c:["Disability Resources"], w:"https://relaycolorado.com", h:"24/7", d:"Free phone relay service for deaf, hard-of-hearing, deaf-blind, speech-disabled callers.", s:5, t:["deaf","relay","phone","hearing"], v:true, tf:true},
+  {n:"HEARS of El Paso County", p:"719-352-5124", c:["Disability Resources"], h:"Mon-Fri", d:"Hearing equipment and resource sharing.", s:3, t:["hearing","deaf","equipment"], v:false},
+  {n:"HEARSCOSP", p:"719-314-8605", c:["Disability Resources"], h:"Mon-Fri", d:"Hearing services.", s:3, t:["hearing","deaf"], v:false},
+  {n:"Colorado Department of Education (SWAAAC)", p:"303-315-1276", c:["Disability Resources"], w:"https://swaaac.com", h:"Mon-Fri", d:"Statewide assistive technology assessment and assistance.", s:2, t:["assistive technology","at","disability","school"], v:true},
+  {n:"Peak Vista Developmental Disabilities Health Center", p:"719-632-5700", c:["Disability Resources","Medical"], w:"https://peakvista.org", h:"Mon-Fri", d:"Medical home for adults with intellectual and developmental disabilities.", s:2, t:["disability","medical","developmental"], v:true},
+  {n:"Special Olympics of Colorado", p:"720-359-3100", c:["Disability Resources"], w:"https://specialolympicsco.org", h:"Mon-Fri", d:"Year-round sports training and competition for athletes with intellectual disabilities.", s:3, t:["sports","disability","athlete","olympics"], v:true},
+  {n:"Social Security Administration (SSDI & SSI)", p:"1-800-772-1213", c:["Disability Resources","Financial Assistance"], w:"https://ssa.gov", h:"Mon-Fri 8am-7pm", d:"Apply for disability benefits, retirement, survivors.", s:1, t:["ssi","ssdi","disability","benefits","retirement"], v:true},
+  {n:"Department of Human Services (AND & VA benefits)", p:"719-636-0000", c:["Disability Resources","Financial Assistance"], w:"https://dhs.elpasoco.com", h:"Mon-Fri", d:"Aid to the Needy Disabled (AND), state disability benefits.", s:1, t:["and","disability","cash","aid"], v:true},
+
+  // ===== DOMESTIC VIOLENCE (additional) =====
+  {n:"Centro de la Familia", p:"719-227-9170", c:["Domestic Violence Services"], h:"Mon-Fri", d:"Spanish-language domestic violence advocacy and counseling.", s:2, t:["latino","spanish","domestic violence","family"], v:false},
+  {n:"Haseya Advocate Program (Native Americans)", p:"719-600-3939", c:["Domestic Violence Services"], w:"https://haseyaadvocate.com", h:"Mon-Fri", d:"Culturally-grounded advocacy for Native American survivors of violence.", s:2, t:["native american","indigenous","domestic violence","advocacy"], v:true},
+
+  // ===== MISC COUNSELING =====
+  {n:"Benefits in Action", p:"1-888-496-4252", c:["Miscellaneous Counseling & Assistance","Senior Services"], w:"https://benefitsinaction.org", h:"Mon-Fri", d:"Helps elderly and underserved access SNAP, Medicare, Medicaid, and other benefits.", s:2, t:["snap","medicare","medicaid","benefits","apply"], v:true},
+  {n:"Envision: You (LGBTQ behavioral health)", p:"303-214-2119", c:["Miscellaneous Counseling & Assistance","Mental Health"], w:"https://envision-you.org", h:"Mon-Fri", d:"Behavioral health support and resources for LGBTQ+ Coloradans.", s:3, t:["lgbtq","mental health","behavioral"], v:true},
+  {n:"Inside Out Youth Services (LGBTQ+)", p:"719-328-1056", c:["Miscellaneous Counseling & Assistance","Crisis Services"], w:"https://insideoutys.org", h:"Mon-Fri drop-in", a:"343 N Tejon St", d:"Drop-in space, support groups, advocacy for LGBTQ+ youth ages 13-24.", s:3, t:["lgbtq","youth","teen","drop in"], v:true},
+  {n:"Servicios de la Raza", p:"303-458-5851", c:["Miscellaneous Counseling & Assistance"], w:"https://serviciosdelaraza.org", h:"Mon-Fri", d:"Latine cultural services — counseling, victim advocacy, financial wellness.", s:2, t:["latino","spanish","counseling","family"], v:true},
+
+  // ===== WEATHERIZATION & UTILITIES =====
+  {n:"LEAP (Low-Income Energy Assistance)", p:"1-866-432-8435", c:["Weatherization & Utilities","Financial Assistance"], w:"https://cdhs.colorado.gov/leap", h:"Apply Nov 1 - Apr 30", d:"Helps pay heating bills for low-income households during winter.", s:1, t:["leap","heat","utility","winter","apply","gas","electric"], v:true},
+  {n:"Energy Resource Center", p:"719-591-0772", c:["Weatherization & Utilities"], w:"https://erc-co.org", h:"Mon-Fri", d:"Free home weatherization and furnace repair for low-income homeowners and renters.", s:1, t:["weatherization","furnace","insulation","free"], v:true},
+  {n:"Brothers Redevelopment", p:"719-888-9134", c:["Weatherization & Utilities","Shelter & Housing"], w:"https://brothersredevelopment.org", h:"Mon-Fri", d:"Home repair, weatherization, and housing counseling.", s:1, t:["home repair","weatherization","housing counseling"], v:true},
+  {n:"Project COPE", p:"719-448-4800", c:["Weatherization & Utilities"], w:"https://projectcope.com", h:"Mon-Fri", d:"Utility bill assistance.", s:2, t:["utility","bill","help"], v:true},
+  {n:"Red Cross", p:"719-632-3563", c:["Weatherization & Utilities","Emergency Services"], w:"https://redcross.org", h:"24/7 disaster response", d:"Emergency disaster assistance — fires, floods, displacement.", s:4, t:["disaster","fire","flood","emergency"], v:true, tf:true},
+];
+
+// Tag synonym map for "what do you really need" intent matching
+const SYNONYMS = {
+  "hungry":["food","meal","pantry","starving","eat","feed","kids hungry"],
+  "food":["hungry","meal","pantry","groceries","eat"],
+  "sleep":["shelter","homeless","bed","tonight","place to stay","kicked out","no home"],
+  "shelter":["sleep","homeless","bed","tonight","place to stay"],
+  "homeless":["shelter","sleep","bed","tonight","unhoused"],
+  "abused":["domestic violence","beaten","hit","scared of partner","unsafe at home","abusive","hurt","being hurt","violence"],
+  "abuse":["domestic violence","beaten","hit","abusive","hurt"],
+  "domestic violence":["abused","beaten","hit","abusive","scared of partner","hurt","being hurt at home"],
+  "hit":["domestic violence","abused","beaten","violence","hurt"],
+  "hurt":["domestic violence","abused","beaten","violence","hit","abuse"],
+  "being hurt":["domestic violence","abused","abuse","hit"],
+  "hurt at home":["domestic violence","abused","abuse","hit"],
+  "rape":["sexual assault","abused","domestic violence"],
+  "violence":["domestic violence","abused","abuse","hit"],
+  "suicide":["kill myself","want to die","crisis","mental health","hopeless"],
+  "kill myself":["suicide","want to die","crisis","hopeless"],
+  "crisis":["suicide","mental health","emergency","panic","breakdown"],
+  "mental health":["therapy","counseling","crisis","suicide","psychiatrist","depressed","anxious"],
+  "depressed":["mental health","therapy","counseling","sad"],
+  "anxious":["mental health","therapy","counseling","panic"],
+  "drugs":["addiction","detox","withdrawal","substance","heroin","fentanyl","using"],
+  "addiction":["drugs","detox","alcohol","recovery","substance"],
+  "drinking":["alcohol","aa","addiction","sober"],
+  "alcohol":["drinking","aa","addiction","detox","sober"],
+  "rent":["financial","utility","mortgage","help","emergency","eviction"],
+  "eviction":["rent","financial","housing","emergency","legal"],
+  "utility":["heat","gas","electric","leap","weatherization","bill"],
+  "heat":["utility","gas","leap","winter","weatherization"],
+  "veteran":["va","military","benefits","ptsd"],
+  "vet":["veteran","va","military"],
+  "military":["veteran","va","ptsd","family"],
+  "kids":["child","children","family","parenting","teen","youth"],
+  "child":["kids","children","family","parenting","teen"],
+  "daycare":["child care","preschool","kids"],
+  "job":["work","career","employment","training","unemployed","resume"],
+  "work":["job","career","employment","unemployed"],
+  "training":["job","career","employment","education"],
+  "elderly":["senior","aging","old","caregiver","grandma","grandpa","grandparent"],
+  "senior":["elderly","aging","old","caregiver","grandma","grandpa","grandparent","60+","55+"],
+  "old":["senior","elderly","aging","grandma","grandpa"],
+  "grandma":["senior","elderly","aging","caregiver","grandparent"],
+  "grandpa":["senior","elderly","aging","caregiver","grandparent"],
+  "grandparent":["senior","elderly","aging","caregiver"],
+  "mom":["mother","parent","family","kids"],
+  "dad":["father","parent","family","kids"],
+  "disabled":["disability","wheelchair","deaf","blind","developmental"],
+  "disability":["disabled","wheelchair","deaf","blind","developmental"],
+  "deaf":["disability","hearing","asl","sign language"],
+  "blind":["disability","vision"],
+  "lgbtq":["gay","lesbian","trans","queer","bi","gender"],
+  "gay":["lgbtq","queer","lesbian"],
+  "trans":["transgender","lgbtq","gender","queer"],
+  "doctor":["clinic","medical","health","sick","medicine"],
+  "sick":["doctor","clinic","medical","health"],
+  "medicine":["doctor","clinic","medical","prescription"],
+  "lawyer":["legal","court","rights","attorney","free legal"],
+  "court":["legal","lawyer","rights","custody","divorce"],
+  "divorce":["family law","custody","court","legal","family court","parenting plan"],
+  "custody":["divorce","family law","court","legal","child support","parenting plan"],
+  "pregnant":["pregnancy","baby","prenatal","wic"],
+  "baby":["pregnant","pregnancy","wic","newborn","kids"],
+  "immigration":["refugee","green card","citizenship","daca","asylum","spanish","latino"],
+  "spanish":["latino","immigration","refugee"],
+  "felon":["reentry","prison","incarceration","jail"],
+  "prison":["reentry","incarceration","felon","jail","corrections"],
+  "reentry":["prison","felon","incarceration","jail"],
+};
+
+// =============================================================================
+// APP LOGIC
+// =============================================================================
+
+const $ = sel => document.querySelector(sel);
+const grid = $('#resultsGrid');
+const countEl = $('#resultCount');
+const needInput = $('#needInput');
+const textSearch = $('#textSearch');
+const categoryFilter = $('#categoryFilter');
+const convenienceFilter = $('#convenienceFilter');
+const topSuggestions = $('#topSuggestions');
+const topSuggestionsText = $('#topSuggestionsText');
+
+// Build category filter dynamically
+const ALL_CATS = [...new Set(RESOURCES.flatMap(r => r.c))].sort();
+ALL_CATS.forEach(cat => {
+  const opt = document.createElement('option');
+  opt.value = cat;
+  opt.textContent = cat;
+  categoryFilter.appendChild(opt);
+});
+
+// Helpers
+function telLink(phone){
+  const digits = phone.replace(/[^\d]/g,'');
+  return digits.length >= 3 ? digits : null;
+}
+
+function scoreDots(n){
+  return '<span class="score-dots" aria-label="Convenience: '+n+' of 5">'+
+    [1,2,3,4,5].map(i => '<span class="'+(i<=n?'on':'')+'" aria-hidden="true"></span>').join('')+
+  '</span>';
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderResource(r){
+  const cats = r.c.join(' · ');
+  const phoneTel = telLink(r.p);
+  const phone2Tel = r.p2 ? telLink(r.p2) : null;
+  const badge247 = r.tf ? '<span class="badge badge-247">24/7</span>' : '';
+  const badgeUnv = !r.v ? '<span class="badge badge-unverified" title="Hours / website not yet verified">Verify</span>' : '';
+
+  let fields = '';
+  if (r.p) fields += `<div class="res-field"><span class="lbl">Phone</span><span class="val">${phoneTel ? `<a class="phone-link" href="tel:${phoneTel}">${escapeHtml(r.p)}</a>` : escapeHtml(r.p)}${badge247}</span></div>`;
+  if (r.p2) fields += `<div class="res-field"><span class="lbl">Also</span><span class="val">${phone2Tel ? `<a class="phone-link" href="tel:${phone2Tel}">${escapeHtml(r.p2)}</a>` : escapeHtml(r.p2)}</span></div>`;
+  if (r.h) fields += `<div class="res-field"><span class="lbl">Hours</span><span class="val">${escapeHtml(r.h)}</span></div>`;
+  if (r.a) fields += `<div class="res-field"><span class="lbl">Where</span><span class="val">${escapeHtml(r.a)}</span></div>`;
+  if (r.w) fields += `<div class="res-field"><span class="lbl">Web</span><span class="val"><a href="${escapeHtml(r.w)}" target="_blank" rel="noopener">${escapeHtml(r.w.replace(/^https?:\/\//,''))}</a></span></div>`;
+  if (r.e) fields += `<div class="res-field"><span class="lbl">Email</span><span class="val"><a href="mailto:${escapeHtml(r.e)}">${escapeHtml(r.e)}</a></span></div>`;
+
+  return `
+    <article class="res" data-cats="${escapeHtml(r.c.join('|'))}">
+      <header class="res-header">
+        <h3 class="res-name">${escapeHtml(r.n)} ${badgeUnv}</h3>
+        ${scoreDots(r.s)}
+      </header>
+      <p class="res-cats">${escapeHtml(cats)}</p>
+      ${r.d ? `<p class="res-desc">${escapeHtml(r.d)}</p>` : ''}
+      <div class="res-fields">${fields}</div>
+    </article>
+  `;
+}
+
+function expandQuery(q){
+  // Expand a free-text query into a set of matching tokens using SYNONYMS
+  const lower = q.toLowerCase().trim();
+  if (!lower) return new Set();
+  const tokens = new Set();
+  // Add raw words
+  lower.split(/[^a-z0-9']+/).filter(w => w.length > 2).forEach(w => tokens.add(w));
+  // Add the whole phrase
+  tokens.add(lower);
+  // Expand via synonyms
+  for (const [key, syns] of Object.entries(SYNONYMS)){
+    if (lower.includes(key)) {
+      tokens.add(key);
+      syns.forEach(s => tokens.add(s));
+    }
+    syns.forEach(s => {
+      if (lower.includes(s)) {
+        tokens.add(s);
+        tokens.add(key);
+      }
+    });
+  }
+  return tokens;
+}
+
+function scoreMatch(r, tokens){
+  if (tokens.size === 0) return 0;
+  let tagHits = 0;
+  let hayHits = 0;
+  // Pad with spaces so word-boundary regex works on edges
+  const haystack = ' ' + (r.n + ' ' + r.d + ' ' + r.c.join(' ')).toLowerCase() + ' ';
+  for (const tok of tokens){
+    if (r.t.includes(tok)) {
+      tagHits++;
+    } else {
+      // Word-boundary match — "work" matches "work" and "works" but not "framework"
+      const safe = tok.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      const re = new RegExp('\\b' + safe + '\\b', 'i');
+      if (re.test(haystack)) hayHits++;
+    }
+  }
+  // Relevance gate: must have a curated tag hit OR multiple incidental hits
+  if (tagHits === 0 && hayHits < 2) return 0;
+  // Tag hits weighted heavily because they're editor-curated intent signals
+  return tagHits * 5 + hayHits * 2 + r.s * 0.3;
+}
+
+function applyFilters(){
+  const need = needInput.value.trim();
+  const text = textSearch.value.trim().toLowerCase();
+  const cat = categoryFilter.value;
+  const minConv = convenienceFilter.value ? parseInt(convenienceFilter.value, 10) : null;
+
+  let list = RESOURCES.slice();
+
+  // Need-based ranking
+  let usingNeed = false;
+  if (need) {
+    const tokens = expandQuery(need);
+    const scored = list.map(r => ({r, s: scoreMatch(r, tokens)}))
+                       .filter(x => x.s > 0)
+                       .sort((a,b) => b.s - a.s);
+    if (scored.length){
+      list = scored.map(x => x.r);
+      usingNeed = true;
+    } else {
+      list = [];
+    }
+  }
+
+  // Text filter (organization name contains)
+  if (text){
+    list = list.filter(r => r.n.toLowerCase().includes(text));
+  }
+
+  // Category filter
+  if (cat){
+    list = list.filter(r => r.c.includes(cat));
+  }
+
+  // Convenience filter — minimum threshold (>=). Picking "●●●○○" shows
+  // 3 4 5 (same-day phone or faster), not just 3. The "●●●●● 24/7 only"
+  // option is the exception (handled by being labelled explicitly).
+  if (minConv !== null){
+    list = list.filter(r => r.s >= minConv);
+  }
+
+  // Default sort if not using need: by convenience desc, then name
+  if (!usingNeed && !text){
+    list.sort((a,b) => b.s - a.s || a.n.localeCompare(b.n));
+  }
+
+  // Render
+  countEl.textContent = list.length;
+  if (list.length === 0){
+    grid.innerHTML = `
+      <div class="empty">
+        <h3>Nothing matched.</h3>
+        <p>Try a different word, clear the filters, or call <a href="tel:211">211</a> — they will help you find help.</p>
+        <p><button type="button" class="hh-btn" id="clearFiltersBtn">Clear all filters</button></p>
+      </div>`;
+    const btn = document.getElementById('clearFiltersBtn');
+    if (btn) btn.addEventListener('click', clearAllFilters);
+  } else {
+    grid.innerHTML = list.map(renderResource).join('');
+  }
+
+  // Top suggestion banner
+  if (usingNeed && list.length){
+    const top = list.slice(0, Math.min(3, list.length));
+    const names = top.map(r => r.n).join(', ');
+    topSuggestionsText.innerHTML = `Based on what you wrote, start with <strong>${escapeHtml(names)}</strong>. Listed first below.`;
+    topSuggestions.hidden = false;
+  } else {
+    topSuggestions.hidden = true;
+  }
+}
+
+function clearAllFilters(){
+  needInput.value = '';
+  textSearch.value = '';
+  categoryFilter.value = '';
+  convenienceFilter.value = '';
+  applyFilters();
+  needInput.focus();
+}
+
+// Event wiring
+let needTimer;
+needInput.addEventListener('input', () => {
+  clearTimeout(needTimer);
+  needTimer = setTimeout(applyFilters, 150);
+});
+textSearch.addEventListener('input', applyFilters);
+categoryFilter.addEventListener('change', applyFilters);
+convenienceFilter.addEventListener('change', applyFilters);
+
+// Chip clicks
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    needInput.value = chip.dataset.q || chip.textContent;
+    applyFilters();
+    needInput.scrollIntoView({behavior:'smooth', block:'start'});
+    needInput.focus();
+  });
+});
+
+// View toggle (cards / rows) with persisted preference
+const viewCardsBtn = $('#viewCards');
+const viewRowsBtn = $('#viewRows');
+function setView(mode){
+  const isRows = mode === 'rows';
+  grid.classList.toggle('is-rows', isRows);
+  viewCardsBtn.setAttribute('aria-pressed', String(!isRows));
+  viewRowsBtn.setAttribute('aria-pressed', String(isRows));
+  try { localStorage.setItem('hh-view', mode); } catch(e){}
+}
+viewCardsBtn.addEventListener('click', () => setView('cards'));
+viewRowsBtn.addEventListener('click', () => setView('rows'));
+// Restore saved preference
+try {
+  const saved = localStorage.getItem('hh-view');
+  if (saved === 'rows') setView('rows');
+} catch(e){}
+
+// Initial render
+applyFilters();
+
+// Expose for inline on* attributes that chain multiple calls — the
+// dversion build's auto-detect regex only catches the first identifier
+// per attribute (it picked up `preventDefault` from `onsubmit` and
+// stopped). The standalone .html doesn't strictly need this (no IIFE),
+// but publishing to window is harmless here and required in the
+// dversion partial where the JS runs inside an IIFE.
+if (typeof window !== 'undefined') {
+  window.applyFilters = applyFilters;
+  window.clearAllFilters = clearAllFilters;
+}
+</script>
+
+</div><!-- /.hh-page -->
+</body>
+</html>
