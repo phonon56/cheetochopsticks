@@ -77,7 +77,7 @@
   }
 
   /* Top bar */
-  .topbar {
+  .pproem-topbar {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
     position: sticky;
@@ -86,7 +86,7 @@
     backdrop-filter: blur(8px);
     background: rgba(255,255,255,0.92);
   }
-  .topbar-inner {
+  .pproem-topbar-inner {
     max-width: 1400px;
     margin: 0 auto;
     padding: 14px 32px;
@@ -95,14 +95,14 @@
     justify-content: space-between;
     gap: 32px;
   }
-  .brand {
+  .pproem-brand {
     display: flex;
     align-items: center;
     gap: 12px;
     text-decoration: none;
     color: var(--text);
   }
-  .brand-mark {
+  .pproem-brand-mark {
     width: 36px;
     height: 36px;
     background: var(--brand);
@@ -115,29 +115,29 @@
     font-size: 16px;
     letter-spacing: -0.02em;
   }
-  .brand-text {
+  .pproem-brand-text {
     display: flex;
     flex-direction: column;
     line-height: 1.1;
   }
-  .brand-text strong {
+  .pproem-brand-text strong {
     font-family: 'Fraunces', serif;
     font-weight: 600;
     font-size: 16px;
     letter-spacing: -0.01em;
   }
-  .brand-text span {
+  .pproem-brand-text span {
     font-size: 11px;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
-  .brand-nav {
+  .pproem-brand-nav {
     display: flex;
     align-items: center;
     gap: 4px;
   }
-  .brand-nav a {
+  .pproem-brand-nav a {
     color: var(--text);
     text-decoration: none;
     padding: 8px 14px;
@@ -146,12 +146,12 @@
     font-weight: 500;
     transition: background 0.15s;
   }
-  .brand-nav a:hover { background: var(--bg); }
-  .brand-nav a.current {
+  .pproem-brand-nav a:hover { background: var(--bg); }
+  .pproem-brand-nav a.current {
     background: var(--bg);
     color: var(--brand);
   }
-  .brand-cta {
+  .pproem-brand-cta {
     background: var(--accent);
     color: white;
     border: none;
@@ -166,9 +166,9 @@
     align-items: center;
     gap: 8px;
   }
-  .brand-cta:hover { background: var(--accent-hover); }
-  .brand-cta:active { transform: translateY(1px); }
-  .brand-cta svg { width: 16px; height: 16px; }
+  .pproem-brand-cta:hover { background: var(--accent-hover); }
+  .pproem-brand-cta:active { transform: translateY(1px); }
+  .pproem-brand-cta svg { width: 16px; height: 16px; }
 
   /* Hero */
   .hero {
@@ -1006,8 +1006,8 @@
   }
 
   @media (max-width: 640px) {
-    .topbar-inner { padding: 12px 16px; gap: 12px; }
-    .brand-nav { display: none; }
+    .pproem-topbar-inner { padding: 12px 16px; gap: 12px; }
+    .pproem-brand-nav { display: none; }
     .hero { padding: 32px 16px 24px; }
     .status-strip { padding: 0 16px 20px; gap: 12px; }
     .main { padding: 0 16px 32px; }

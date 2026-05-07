@@ -613,7 +613,7 @@
           <div class="result-guidance">${g.body}</div>
         </div>
         <div class="result-actions">
-          <button type="button" class="btn-primary" onclick="openSubscribe()">
+          <button type="button" class="btn-primary" onclick="pproemOpenSubscribe()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
             Get alerts for this address
           </button>
@@ -651,7 +651,7 @@
   // while it's open, return focus to the element that opened it.
   let _modalLastFocus = null;
 
-  function openSubscribe() {
+  function pproemOpenSubscribe() {
     const binding = document.getElementById('modal-address-binding');
     if (currentSearchedAddress) {
       binding.querySelector('.address-binding-value').textContent =
@@ -668,7 +668,7 @@
     setTimeout(() => document.getElementById('email-input').focus(), 100);
   }
 
-  function closeSubscribe() {
+  function pproemCloseSubscribe() {
     const modal = document.getElementById('subscribe-modal');
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
@@ -701,18 +701,18 @@
     }
   });
 
-  function handleSubscribe() {
+  function pproemHandleSubscribe() {
     const email = document.getElementById('email-input').value;
     if (!email) {
       document.getElementById('email-input').focus();
       return;
     }
-    closeSubscribe();
+    pproemCloseSubscribe();
     alert('Subscribed! In production this would write to your alerts database (replacing the Everbridge dependency).');
   }
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeSubscribe();
+    if (e.key === 'Escape') pproemCloseSubscribe();
   });
 
   // ============ Bootstrap (live data on load + auto-refresh) ============
@@ -789,12 +789,12 @@
   setInterval(loadLiveZones, REFRESH_MS);
 
   // Expose handlers used by inline on* attributes (the IIFE would otherwise hide them).
-  window.openSubscribe = openSubscribe;
+  window.pproemOpenSubscribe = pproemOpenSubscribe;
   window.handleSearch = handleSearch;
   window.demoSearch = demoSearch;
   window.switchTab = switchTab;
   window.onTabKeydown = onTabKeydown;
-  window.closeSubscribe = closeSubscribe;
-  window.handleSubscribe = handleSubscribe;
+  window.pproemCloseSubscribe = pproemCloseSubscribe;
+  window.pproemHandleSubscribe = pproemHandleSubscribe;
   window.focusZone = focusZone;
 })();

@@ -8,26 +8,26 @@
 <div class="cc-pproem-alerts">
 <!-- ════════════════════════════════════════════════════════════════
      PPROEM brand-bar header.
-     DELETE THIS ENTIRE <header class="topbar"> ELEMENT if your host
+     DELETE THIS ENTIRE <header class="pproem-topbar"> ELEMENT if your host
      site (typically WordPress) already provides PPROEM branding in
      its own theme header — keeping both produces duplicate chrome.
      ════════════════════════════════════════════════════════════════ -->
-<header class="topbar">
-  <div class="topbar-inner">
-    <a href="https://pproem.com/" class="brand" rel="noopener" aria-label="Pikes Peak Regional Emergency Management home">
-      <div class="brand-mark" aria-hidden="true">PP</div>
-      <div class="brand-text">
+<header class="pproem-topbar">
+  <div class="pproem-topbar-inner">
+    <a href="https://pproem.com/" class="pproem-brand" rel="noopener" aria-label="Pikes Peak Regional Emergency Management home">
+      <div class="pproem-brand-mark" aria-hidden="true">PP</div>
+      <div class="pproem-brand-text">
         <strong>Pikes Peak Regional</strong>
         <span>Emergency Management</span>
       </div>
     </a>
-    <nav class="brand-nav" aria-label="PPROEM sections">
+    <nav class="pproem-brand-nav" aria-label="PPROEM sections">
       <a href="https://pproem.com/alerts" class="current" rel="noopener">Current Alerts</a>
       <a href="https://pproem.com/preparedness" rel="noopener">Preparedness</a>
       <a href="https://pproem.com/resources" rel="noopener">Resources</a>
       <a href="https://pproem.com/about" rel="noopener">About</a>
     </nav>
-    <button type="button" class="brand-cta" onclick="openSubscribe()" aria-label="Get emergency alerts for your address">
+    <button type="button" class="pproem-brand-cta" onclick="pproemOpenSubscribe()" aria-label="Get emergency alerts for your address">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
         <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
@@ -138,10 +138,10 @@
      aria-labelledby="modal-title"
      aria-describedby="modal-desc"
      aria-hidden="true"
-     onclick="if(event.target===this)closeSubscribe()">
+     onclick="if(event.target===this)pproemCloseSubscribe()">
   <div class="modal">
     <div class="modal-header">
-      <button type="button" class="modal-close" onclick="closeSubscribe()" aria-label="Close subscribe form">
+      <button type="button" class="modal-close" onclick="pproemCloseSubscribe()" aria-label="Close subscribe form">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
       <h2 id="modal-title">Get alerts for this address</h2>
@@ -215,7 +215,7 @@
       <p class="modal-footer-note">
         We never share your contact info. <a href="#" class="footer-link" aria-label="Privacy policy (placeholder link)">Privacy&nbsp;policy</a>.
       </p>
-      <button type="button" class="btn-primary btn-large" onclick="handleSubscribe()">Subscribe</button>
+      <button type="button" class="btn-primary btn-large" onclick="pproemHandleSubscribe()">Subscribe</button>
     </div>
   </div>
 </div>
