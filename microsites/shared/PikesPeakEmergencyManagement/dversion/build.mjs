@@ -50,7 +50,15 @@ const pages = [
     prettyName: 'PPROEM Current Alerts',
     hostNav: 'Office of Emergency Management',
     hostHeadline: 'PPROEM Current Alerts (Drupal-hosted)',
-    stripPatterns: documentWrapperStrips,
+    // Document wrappers + the page's own brand-bar header and bottom
+    // footer. Drupal/WordPress hosts already provide site nav and
+    // footer; rendering the page's own chrome would stack two headers
+    // and double up the "Alerts" CTA.
+    stripPatterns: [
+      ...documentWrapperStrips,
+      /<header class="topbar">[\s\S]*?<\/header>/,
+      /<footer class="footer">[\s\S]*?<\/footer>/,
+    ],
     // The alerts page also loads Leaflet (CSS + JS) from unpkg in its
     // <head>. Those tags are stripped along with the rest of <head>
     // — the production Drupal library YAML must add them back, e.g.

@@ -994,30 +994,14 @@ headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link re
   }
 </style>
 
-<header class="topbar">
-  <div class="topbar-inner">
-    <a href="#" class="brand" aria-label="Pikes Peak Regional Emergency Management home">
-      <div class="brand-mark" aria-hidden="true">PP</div>
-      <div class="brand-text">
-        <strong>Pikes Peak Regional</strong>
-        <span>Emergency Management</span>
-      </div>
-    </a>
-    <nav class="nav" aria-label="Main">
-      <a href="#" class="current">Current Alerts</a>
-      <a href="#">Preparedness</a>
-      <a href="#">Resources</a>
-      <a href="#">About</a>
-    </nav>
-    <button type="button" class="cta-button" onclick="openSubscribe()" aria-label="Get emergency alerts for your address">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
-        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
-      </svg>
-      Get Alerts
-    </button>
-  </div>
-</header>
+{# Page-level <header class="topbar"> and <footer class="footer"> from
+   the standalone version are intentionally stripped here. site.njk
+   provides the cheetochopsticks nav (with the Subscribe + Alerts
+   buttons) and footer; rendering the page's own chrome on top would
+   stack two headers and put two "Alerts" controls in the same area.
+   The "Get Alerts" subscribe button still lives in the result-section
+   actions and the address-search modal opener; that's enough surface
+   for the subscribe flow without a competing top-level CTA. #}
 
 <div class="alerts-main">
   <section class="hero">
@@ -1112,17 +1096,9 @@ headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link re
   </section>
 </div>
 
-<footer class="footer">
-  <div class="footer-inner">
-    <div>© 2026 Pikes Peak Regional Office of Emergency Management</div>
-    <div>
-      <a href="#">Accessibility</a>
-      <a href="#">Privacy</a>
-      <a href="#">Translate</a>
-      <a href="#">Contact</a>
-    </div>
-  </div>
-</footer>
+{# Page <footer class="footer"> stripped — site.njk provides .cc-footer.
+   Subscribe modal still ships below; it's a body-level overlay, not
+   chrome, and remains needed for the subscribe flow. #}
 
 <!-- Subscribe Modal -->
 <div class="modal-backdrop" id="subscribe-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true" onclick="if(event.target===this)closeSubscribe()">
