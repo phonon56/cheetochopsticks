@@ -19,8 +19,33 @@
     },
   });
 
-// ============ Zone Data ============
-  const zones = [
+// ============ Live data sources ============
+  // PPROEM publishes hazard zones and road closures as ArcGIS feature
+  // services (the same ones their public viewer at experience.arcgis.com
+  // reads). El Paso County publishes a public parcels MapServer. ArcGIS
+  // World Geocoder turns user-typed addresses into lat/long. All four
+  // are CORS-enabled and free to use anonymously from a browser.
+  //
+  // PPROEM's other alert mechanism — Peak Alerts via Everbridge — is
+  // PUSH-only (subscribers receive SMS/email). It has no public pull
+  // API. The "Get alerts for this address" button below routes users
+  // there to subscribe; the page itself reads its zone status from the
+  // ArcGIS feed because that's the authoritative machine-readable
+  // source PPROEM exposes.
+  const SOURCES = {
+    hazards:      'https://services3.arcgis.com/4RbSpZqACDsi1hHk/arcgis/rest/services/Hazard_Boundary/FeatureServer/0',
+    roadClosures: 'https://services3.arcgis.com/4RbSpZqACDsi1hHk/arcgis/rest/services/Road_Closure/FeatureServer/0',
+    parcels:      'https://gisservices.elpasoco.com/arcgis2/rest/services/HubPublic/Parcels/MapServer/0',
+    geocoder:     'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates',
+    peakAlerts:   'https://member.everbridge.net/1772417038942752/new'
+  };
+  const REFRESH_MS = 5 * 60 * 1000;
+  // Bounding box for El Paso County (approx). Used to constrain the
+  // geocoder so "123 Main St" doesn't return a hit in another state.
+  const EL_PASO_BBOX = '-105.07,38.51,-104.02,39.13';
+
+  // ============ Mock fallback (used if live fetch fails) ============
+  const MOCK_ZONES = [
     {
       id: 'EPC-S012',
       name: 'Lorson Ranch / Bradley',
@@ -101,6 +126,10 @@
     }
   ];
 
+  // Hot-replaced once live data lands.
+  let zones = MOCK_ZONES.slice();
+  let isLiveData = false;
+
   const statusColors = {
     evac: '#A4161A',
     warning: '#C2410C',
@@ -108,32 +137,175 @@
     clear: '#2D7A4E'
   };
 
-  // ============ Demo Addresses ============
-  const demoAddresses = {
-    lorson: {
-      address: '4720 Lorson Ranch Parkway',
-      city: 'Colorado Springs, CO 80925',
-      parcel: '6401303008',
-      zoneId: 'EPC-S012',
-      coords: [38.762, -104.690]
-    },
-    blackforest: {
-      address: '8901 Black Forest Road',
-      city: 'Colorado Springs, CO 80908',
-      parcel: '5208104017',
-      zoneId: 'EPC-N004',
-      coords: [39.007, -104.695]
-    },
-    downtown: {
-      address: '123 N Tejon Street',
-      city: 'Colorado Springs, CO 80903',
-      parcel: '7402211005',
-      zoneId: 'EPC-C001',
-      coords: [38.835, -104.821]
-    }
-  };
-
   let currentSearchedAddress = null;
+
+  // ============ Live fetchers ============
+
+  // Map ArcGIS Hazard_Boundary BoundaryType + Status onto the four
+  // display tiers the rest of the page understands. Inactive features
+  // are filtered out before this is called, but we map them anyway in
+  // case PPROEM adds a "cleared but recent" status.
+  function classifyHazard(boundaryType, status) {
+    const t = (boundaryType || '').toLowerCase();
+    const s = (status || '').toLowerCase();
+    if (s.includes('inactive') || s.includes('cleared')) return 'clear';
+    if (t.includes('evacuation order') || /\bmandatory\b/.test(t) || t === 'evacuation') return 'evac';
+    if (t.includes('warning') || t.includes('pre-evac')) return 'warning';
+    if (t.includes('advisory') || t.includes('shelter') || t.includes('air quality')) return 'advisory';
+    // Fire boundaries with no other classifier are treated as warnings
+    // (the fire perimeter itself isn't an evacuation order, but residents
+    // inside should be on alert).
+    if (t.includes('fire')) return 'warning';
+    return 'advisory';
+  }
+
+  function statusLabelFor(status) {
+    return ({
+      evac: 'Evacuation Order',
+      warning: 'Evacuation Warning',
+      advisory: 'Advisory',
+      clear: 'No Active Alerts'
+    })[status] || 'Active';
+  }
+
+  // GeoJSON polygon coordinates are [lng, lat]; Leaflet wants [lat, lng].
+  function ringToLeaflet(ring) {
+    return ring.map(([lng, lat]) => [lat, lng]);
+  }
+
+  function centroidOf(ring) {
+    if (!ring.length) return [38.835, -104.821];
+    let lat = 0, lng = 0;
+    for (const [a, b] of ring) { lat += a; lng += b; }
+    return [lat / ring.length, lng / ring.length];
+  }
+
+  function featureToZone(feat) {
+    const a = feat.properties || feat.attributes || {};
+    const geom = feat.geometry;
+    if (!geom) return null;
+    let rings;
+    if (geom.type === 'Polygon') {
+      rings = geom.coordinates;
+    } else if (geom.type === 'MultiPolygon') {
+      rings = geom.coordinates.flat();
+    } else if (geom.rings) {
+      // Esri JSON (when f=json instead of f=geojson)
+      rings = geom.rings;
+    } else {
+      return null;
+    }
+    if (!rings || !rings.length) return null;
+    const outer = ringToLeaflet(rings[0]);
+    const status = classifyHazard(a.BoundaryType, a.Status);
+    const issuedAt = a.EditDate || a.CreationDate;
+    return {
+      id: 'EPC-' + (a.OBJECTID ?? Math.floor(Math.random() * 10000)),
+      name: a.Comments || a.Notes || a.Event || a.BoundaryType || 'Hazard area',
+      status,
+      statusLabel: statusLabelFor(status),
+      desc: a.Notes || a.Comments
+        || (a.Event ? `${a.BoundaryType || 'Hazard'} — ${a.Event}. Monitor PPROEM Peak Alerts for current guidance.`
+                    : `${a.BoundaryType || 'Hazard'} active. Monitor PPROEM Peak Alerts for current guidance.`),
+      coords: outer,
+      center: centroidOf(outer),
+      issued: issuedAt ? new Date(issuedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : null,
+      affected: Math.round(a.Acres || 0),
+      raw: a
+    };
+  }
+
+  async function fetchActiveHazards() {
+    // f=geojson is the cleanest output format; falls back to f=json
+    // automatically if the server doesn't support it.
+    const params = new URLSearchParams({
+      where: "Status='Active'",
+      outFields: '*',
+      returnGeometry: 'true',
+      f: 'geojson'
+    });
+    const res = await fetch(`${SOURCES.hazards}/query?${params}`);
+    if (!res.ok) throw new Error(`hazard fetch ${res.status}`);
+    const data = await res.json();
+    const features = data.features || [];
+    return features.map(featureToZone).filter(Boolean);
+  }
+
+  async function geocodeAddress(query) {
+    const params = new URLSearchParams({
+      singleLine: query,
+      searchExtent: EL_PASO_BBOX,
+      countryCode: 'USA',
+      outFields: 'Match_addr,Addr_type,StAddr,City,Postal',
+      forStorage: 'false',
+      maxLocations: '1',
+      f: 'json'
+    });
+    const res = await fetch(`${SOURCES.geocoder}?${params}`);
+    if (!res.ok) throw new Error(`geocode ${res.status}`);
+    const data = await res.json();
+    const cand = (data.candidates || [])[0];
+    if (!cand || cand.score < 80) return null;
+    return {
+      address: cand.attributes.StAddr || cand.attributes.Match_addr,
+      city: [cand.attributes.City, cand.attributes.Postal].filter(Boolean).join(' '),
+      coords: [cand.location.y, cand.location.x],
+      _matchAddr: cand.attributes.Match_addr
+    };
+  }
+
+  async function lookupParcelAt(lat, lng) {
+    const params = new URLSearchParams({
+      geometry: `${lng},${lat}`,
+      geometryType: 'esriGeometryPoint',
+      inSR: '4326',
+      spatialRel: 'esriSpatialRelIntersects',
+      outFields: 'PARCEL,HYPERLINK',
+      returnGeometry: 'false',
+      f: 'json'
+    });
+    const res = await fetch(`${SOURCES.parcels}/query?${params}`);
+    if (!res.ok) throw new Error(`parcel ${res.status}`);
+    const data = await res.json();
+    const parcel = (data.features || [])[0];
+    return parcel ? parcel.attributes : null;
+  }
+
+  // Ray-casting point-in-polygon. Returns the most-severe matching zone.
+  function findZoneForPoint(lat, lng) {
+    const severity = { evac: 4, warning: 3, advisory: 2, clear: 1 };
+    let best = null;
+    for (const z of zones) {
+      let inside = false;
+      const ring = z.coords;
+      for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+        const [iy, ix] = ring[i];
+        const [jy, jx] = ring[j];
+        if (((iy > lat) !== (jy > lat)) &&
+            (lng < (jx - ix) * (lat - iy) / (jy - iy) + ix)) {
+          inside = !inside;
+        }
+      }
+      if (inside && (!best || severity[z.status] > severity[best.status])) best = z;
+    }
+    return best;
+  }
+
+  // Synthesize a "no active alerts" zone for addresses outside any
+  // active hazard boundary — keeps renderResult happy.
+  function clearZoneFor(addr) {
+    return {
+      id: 'EPC-CLEAR',
+      name: addr.city || 'Outside active zones',
+      status: 'clear',
+      statusLabel: 'No Active Alerts',
+      desc: 'No emergency conditions at this address.',
+      coords: [],
+      center: addr.coords,
+      issued: null,
+      affected: 0
+    };
+  }
 
   // ============ Map Setup ============
   const map = L.map('map', {
@@ -148,25 +320,39 @@
   }).addTo(map);
 
   const zonePolygons = {};
-  zones.forEach(zone => {
-    const polygon = L.polygon(zone.coords, {
-      color: statusColors[zone.status],
-      fillColor: statusColors[zone.status],
-      fillOpacity: zone.status === 'clear' ? 0.15 : 0.35,
-      weight: 2,
-      opacity: zone.status === 'clear' ? 0.5 : 0.9
-    }).addTo(map);
 
-    polygon.bindPopup(`
-      <div class="popup-title">${zone.name}</div>
-      <div class="popup-id">${zone.id}</div>
-      <div><strong>${zone.statusLabel}</strong></div>
-      <div style="margin-top: 6px; color: var(--text-muted);">${zone.desc}</div>
-    `);
+  function clearPolygons() {
+    for (const k of Object.keys(zonePolygons)) {
+      map.removeLayer(zonePolygons[k]);
+      delete zonePolygons[k];
+    }
+  }
 
-    polygon.on('click', () => highlightZone(zone.id));
-    zonePolygons[zone.id] = polygon;
-  });
+  function drawZones() {
+    clearPolygons();
+    zones.forEach(zone => {
+      if (!zone.coords || !zone.coords.length) return;
+      const polygon = L.polygon(zone.coords, {
+        color: statusColors[zone.status],
+        fillColor: statusColors[zone.status],
+        fillOpacity: zone.status === 'clear' ? 0.15 : 0.35,
+        weight: 2,
+        opacity: zone.status === 'clear' ? 0.5 : 0.9
+      }).addTo(map);
+
+      polygon.bindPopup(`
+        <div class="popup-title">${zone.name}</div>
+        <div class="popup-id">${zone.id}</div>
+        <div><strong>${zone.statusLabel}</strong></div>
+        <div style="margin-top: 6px; color: var(--text-muted);">${zone.desc}</div>
+      `);
+
+      polygon.on('click', () => highlightZone(zone.id));
+      zonePolygons[zone.id] = polygon;
+    });
+  }
+
+  drawZones();
 
   // ============ Zone List ============
   function renderZoneList(filter = 'active') {
@@ -221,33 +407,96 @@
   }
 
   // ============ Search ============
-  function handleSearch(event) {
-    event.preventDefault();
-    const value = document.getElementById('address-input').value.trim().toLowerCase();
-    if (!value) return;
+  // Live pipeline:  ArcGIS World Geocoder → EPC Parcels MapServer →
+  // point-in-polygon against active hazard zones.
+  //
+  // Demo fallbacks remain for the three pinned addresses on the
+  // chiclet bar; these keep the page demo-able when the network is
+  // offline or rate-limited and let users see all three guidance
+  // tiers (evac / warning / clear) without waiting for a real
+  // hazard event.
+  const DEMO_ADDRESSES = {
+    lorson:      { address: '4720 Lorson Ranch Pkwy',  city: 'Colorado Springs, CO 80925', parcel: '6401303008', zoneId: 'EPC-S012', coords: [38.762, -104.690] },
+    blackforest: { address: '8901 Black Forest Rd',     city: 'Colorado Springs, CO 80908', parcel: '5208104017', zoneId: 'EPC-N004', coords: [39.007, -104.695] },
+    downtown:    { address: '123 N Tejon St',           city: 'Colorado Springs, CO 80903', parcel: '7402211005', zoneId: 'EPC-C001', coords: [38.835, -104.821] }
+  };
 
-    if (value.includes('lorson') || value === '6401303008') {
-      demoSearch('lorson');
-    } else if (value.includes('black forest') || value === '5208104017') {
-      demoSearch('blackforest');
-    } else if (value.includes('tejon') || value === '7402211005' || value.includes('downtown')) {
-      demoSearch('downtown');
-    } else {
-      // Default: treat as Downtown for demo
-      demoSearch('downtown');
+  function setSearchBusy(busy) {
+    const form = document.querySelector('.search-form');
+    if (form) form.classList.toggle('busy', busy);
+  }
+
+  async function handleSearch(event) {
+    event.preventDefault();
+    const value = document.getElementById('address-input').value.trim();
+    if (!value) return;
+    setSearchBusy(true);
+    try {
+      // 1. Geocode the typed address.
+      const geo = await geocodeAddress(value);
+      if (!geo) {
+        renderSearchError(`We couldn't find "${value}" in El Paso County. Try a full street address — number, street, city.`);
+        return;
+      }
+      // 2. Look up parcel polygon at the geocoded point.
+      let parcel = null;
+      try { parcel = await lookupParcelAt(geo.coords[0], geo.coords[1]); } catch (e) { /* parcel lookup is optional */ }
+      const addr = {
+        address: geo.address,
+        city: geo.city,
+        parcel: parcel ? parcel.PARCEL : '—',
+        parcelLink: parcel ? parcel.HYPERLINK : null,
+        coords: geo.coords
+      };
+      currentSearchedAddress = addr;
+      // 3. Find the active hazard zone covering this point (if any).
+      const zone = findZoneForPoint(geo.coords[0], geo.coords[1]) || clearZoneFor(addr);
+
+      document.getElementById('address-input').value = addr.address;
+      map.setView(addr.coords, 14, { animate: true });
+      if (zonePolygons[zone.id]) zonePolygons[zone.id].openPopup();
+      highlightZone(zone.id);
+      renderResult(addr, zone);
+      setTimeout(() => {
+        document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    } catch (err) {
+      console.warn('Search failed, falling back to demo:', err);
+      renderSearchError("Live address lookup is unavailable right now. Try one of the demo addresses below.");
+    } finally {
+      setSearchBusy(false);
     }
   }
 
-  function demoSearch(key) {
-    const addr = demoAddresses[key];
-    const zone = zones.find(z => z.id === addr.zoneId);
-    currentSearchedAddress = addr;
+  function renderSearchError(msg) {
+    const sec = document.getElementById('result-section');
+    sec.classList.add('active');
+    sec.innerHTML = `
+      <div class="result-card">
+        <div class="result-status-block warning">
+          <div class="result-status-headline">Search unavailable</div>
+          <div class="result-guidance"><p>${msg}</p></div>
+        </div>
+      </div>`;
+  }
 
+  function demoSearch(key) {
+    const addr = DEMO_ADDRESSES[key];
+    if (!addr) return;
+    // In demo mode the canned address is paired with a mock zone; in
+    // live mode the same address is geocoded and tested against the
+    // current live zones (which may produce a different status).
+    if (isLiveData) {
+      document.getElementById('address-input').value = addr.address;
+      handleSearch({ preventDefault() {} });
+      return;
+    }
+    const zone = zones.find(z => z.id === addr.zoneId) || clearZoneFor(addr);
+    currentSearchedAddress = addr;
     document.getElementById('address-input').value = addr.address;
     map.setView(addr.coords, 13, { animate: true });
     if (zonePolygons[zone.id]) zonePolygons[zone.id].openPopup();
     highlightZone(zone.id);
-
     renderResult(addr, zone);
     setTimeout(() => {
       document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -398,6 +647,79 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeSubscribe();
   });
+
+  // ============ Bootstrap (live data on load + auto-refresh) ============
+  // Status banner — a small strip just under the topbar that shows
+  // whether the zones came from PPROEM's live ArcGIS feed or from the
+  // mock fallback. Inserted only if the host markup hasn't already
+  // provided one (so the same script can run in standalone, .njk, and
+  // dversion contexts without duplicating the banner).
+  function ensureStatusBanner() {
+    let bar = document.getElementById('data-status-bar');
+    if (bar) return bar;
+    bar = document.createElement('div');
+    bar.id = 'data-status-bar';
+    bar.style.cssText = 'padding:8px 16px;font-size:13px;border-bottom:1px solid var(--border, #E5DDD0);background:var(--surface, #fff);color:var(--text-muted, #5C6573);display:flex;gap:12px;align-items:center;flex-wrap:wrap';
+    bar.setAttribute('role', 'status');
+    bar.setAttribute('aria-live', 'polite');
+    const main = document.getElementById('main-content') || document.querySelector('.alerts-main, main');
+    if (main && main.parentNode) main.parentNode.insertBefore(bar, main);
+    return bar;
+  }
+
+  function setDataStatus(state, count) {
+    const bar = ensureStatusBanner();
+    const dot = (color) => `<span aria-hidden="true" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};margin-right:6px;vertical-align:middle"></span>`;
+    if (state === 'loading') {
+      bar.innerHTML = `${dot('#A37000')}Loading current alerts from PPROEM…`;
+    } else if (state === 'live') {
+      bar.innerHTML = `${dot('#2D7A4E')}<strong>Live data</strong> — ${count} active hazard ${count === 1 ? 'zone' : 'zones'} from PPROEM. Last refreshed ${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}. Auto-refreshes every 5 minutes.`;
+    } else if (state === 'live-empty') {
+      bar.innerHTML = `${dot('#2D7A4E')}<strong>Live data</strong> — no active hazard zones in El Paso County. Last checked ${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}.`;
+    } else if (state === 'demo') {
+      bar.innerHTML = `${dot('#A4161A')}<strong>Demo data</strong> — couldn't reach the live PPROEM hazard feed. Showing mock zones. <a href="https://pproem.com/alerts" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Check the official PPROEM alerts page</a> for current information.`;
+    }
+  }
+
+  async function loadLiveZones() {
+    try {
+      const live = await fetchActiveHazards();
+      if (live && live.length) {
+        zones = live;
+        isLiveData = true;
+        drawZones();
+        renderZoneList('active');
+        setDataStatus('live', live.length);
+      } else {
+        // Endpoint returned 0 active zones — that's a normal state, not
+        // an error. Use a clean "no active alerts" placeholder so the
+        // rendering stays consistent.
+        zones = [{
+          id: 'EPC-NONE',
+          name: 'El Paso County',
+          status: 'clear',
+          statusLabel: 'No Active Alerts',
+          desc: 'No active hazard zones reported by PPROEM at this time.',
+          coords: [],
+          center: [38.835, -104.821],
+          issued: null,
+          affected: 0
+        }];
+        isLiveData = true;
+        drawZones();
+        renderZoneList('active');
+        setDataStatus('live-empty');
+      }
+    } catch (err) {
+      console.warn('PPROEM hazard fetch failed, keeping mock data:', err);
+      isLiveData = false;
+      setDataStatus('demo');
+    }
+  }
+
+  setDataStatus('loading');
+  loadLiveZones();
+  setInterval(loadLiveZones, REFRESH_MS);
 
   // Expose handlers used by inline on* attributes (the IIFE would otherwise hide them).
   window.openSubscribe = openSubscribe;

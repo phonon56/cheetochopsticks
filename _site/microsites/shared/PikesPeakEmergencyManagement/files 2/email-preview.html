@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPROEM Alerts — Concept Preview</title>
+</head>
+<body style="margin:0;padding:0;background:#F5F1EA;font-family:Arial,Helvetica,sans-serif;color:#14181F;-webkit-text-size-adjust:100%;">
+
+<!-- Outer wrapper table for email client compatibility -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#F5F1EA;padding:24px 0;">
+  <tr>
+    <td align="center">
+
+      <!-- Email-width container: 600px is the reliable max for email -->
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px;max-width:600px;background:#FFFFFF;border:1px solid #E5DDD0;border-radius:8px;overflow:hidden;">
+
+        <!-- ============ HEADER BAR ============ -->
+        <tr>
+          <td style="background:#FFFFFF;border-bottom:1px solid #E5DDD0;padding:16px 24px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+              <tr>
+                <td align="left" style="vertical-align:middle;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td style="background:#1E3A5F;color:#FFFFFF;width:32px;height:32px;border-radius:16px;font-family:Georgia,serif;font-weight:bold;font-size:13px;text-align:center;line-height:32px;padding:0;">PP</td>
+                      <td style="padding-left:10px;font-family:Georgia,serif;font-weight:bold;font-size:14px;color:#14181F;line-height:1.2;">
+                        Pikes Peak Regional<br>
+                        <span style="font-family:Arial,Helvetica,sans-serif;font-weight:normal;font-size:10px;color:#5C6573;letter-spacing:0.5px;text-transform:uppercase;">Emergency Management</span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <td align="right" style="vertical-align:middle;">
+                  <span style="background:#B8410C;color:#FFFFFF;padding:8px 14px;border-radius:5px;font-size:12px;font-weight:bold;font-family:Arial,Helvetica,sans-serif;">Get Alerts</span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ============ HERO ============ -->
+        <tr>
+          <td style="padding:32px 24px 24px 24px;">
+            <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#5C6573;margin-bottom:14px;">
+              <span style="display:inline-block;width:8px;height:8px;background:#A4161A;border-radius:4px;margin-right:6px;vertical-align:middle;"></span>
+              Live · El Paso County · Updated 2 min ago
+            </div>
+            <h1 style="margin:0 0 12px 0;font-family:Georgia,serif;font-weight:normal;font-size:32px;line-height:1.1;color:#14181F;letter-spacing:-0.5px;">
+              Is your address <span style="font-style:italic;color:#1E3A5F;">affected?</span>
+            </h1>
+            <p style="margin:0 0 18px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5C6573;">
+              Search any address or parcel ID in El Paso County. See active alerts, exactly what to do, and every record connected to your property — in plain language.
+            </p>
+
+            <!-- Search field mockup -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:8px;">
+              <tr>
+                <td style="background:#FFFFFF;border:1.5px solid #D4CABA;border-right:none;border-radius:5px 0 0 5px;padding:12px 14px;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#8A8F9B;">
+                  🔍&nbsp;&nbsp;Enter address or parcel ID…
+                </td>
+                <td style="background:#1E3A5F;border-radius:0 5px 5px 0;padding:12px 18px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;color:#FFFFFF;white-space:nowrap;">
+                  Check address
+                </td>
+              </tr>
+            </table>
+            <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8F9B;">
+              Try: 4720 Lorson Ranch Pkwy &nbsp;·&nbsp; 8901 Black Forest Rd &nbsp;·&nbsp; 123 N Tejon St
+            </p>
+          </td>
+        </tr>
+
+        <!-- ============ STATUS STRIP ============ -->
+        <tr>
+          <td style="background:#FBF7F0;border-top:1px solid #E5DDD0;border-bottom:1px solid #E5DDD0;padding:14px 24px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#5C6573;">
+            <span style="display:inline-block;background:#F8DCDD;color:#A4161A;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;margin-right:8px;">● 1 Evacuation</span>
+            <span style="display:inline-block;background:#FCEAD9;color:#C2410C;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;margin-right:8px;">● 1 Warning</span>
+            <span style="display:inline-block;background:#FAF1DA;color:#A37000;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;margin-right:12px;">● 1 Advisory</span>
+            <span>~14,200 residents affected</span>
+          </td>
+        </tr>
+
+        <!-- ============ ACTIVE ZONES LIST (replaces the live map) ============ -->
+        <tr>
+          <td style="padding:24px 24px 8px 24px;">
+            <h2 style="margin:0 0 4px 0;font-family:Georgia,serif;font-weight:normal;font-size:18px;color:#14181F;">Active Zones</h2>
+            <p style="margin:0 0 14px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#8A8F9B;">
+              The interactive map and zone-click experience is in the live version — link below.
+            </p>
+
+            <!-- Zone card 1: Evacuation -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FFFFFF;border:1px solid #E5DDD0;border-radius:6px;margin-bottom:8px;">
+              <tr>
+                <td style="padding:14px 16px;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr>
+                      <td style="vertical-align:top;">
+                        <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;color:#14181F;">Lorson Ranch / Bradley</div>
+                        <div style="font-family:'Courier New',monospace;font-size:10px;color:#8A8F9B;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">EPC-S012</div>
+                      </td>
+                      <td align="right" style="vertical-align:top;white-space:nowrap;">
+                        <span style="background:#F8DCDD;color:#A4161A;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;font-family:Arial,Helvetica,sans-serif;">Evacuation Order</span>
+                      </td>
+                    </tr>
+                  </table>
+                  <p style="margin:8px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.45;color:#5C6573;">
+                    Wildfire approaching from the south. Residents must leave immediately via Powers Blvd north.
+                  </p>
+                  <div style="margin-top:8px;font-family:'Courier New',monospace;font-size:10px;color:#8A8F9B;">
+                    Issued 13:42 &nbsp;·&nbsp; ~4,800 residents
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Zone card 2: Warning -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FFFFFF;border:1px solid #E5DDD0;border-radius:6px;margin-bottom:8px;">
+              <tr>
+                <td style="padding:14px 16px;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr>
+                      <td style="vertical-align:top;">
+                        <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;color:#14181F;">Black Forest North</div>
+                        <div style="font-family:'Courier New',monospace;font-size:10px;color:#8A8F9B;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">EPC-N004</div>
+                      </td>
+                      <td align="right" style="vertical-align:top;white-space:nowrap;">
+                        <span style="background:#FCEAD9;color:#C2410C;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;font-family:Arial,Helvetica,sans-serif;">Evac Warning</span>
+                      </td>
+                    </tr>
+                  </table>
+                  <p style="margin:8px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.45;color:#5C6573;">
+                    Be prepared to leave on short notice. Pack go-bags, fuel vehicles, monitor conditions.
+                  </p>
+                  <div style="margin-top:8px;font-family:'Courier New',monospace;font-size:10px;color:#8A8F9B;">
+                    Issued 14:15 &nbsp;·&nbsp; ~7,200 residents
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Zone card 3: Advisory -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FFFFFF;border:1px solid #E5DDD0;border-radius:6px;margin-bottom:0;">
+              <tr>
+                <td style="padding:14px 16px;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr>
+                      <td style="vertical-align:top;">
+                        <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;color:#14181F;">Falcon West</div>
+                        <div style="font-family:'Courier New',monospace;font-size:10px;color:#8A8F9B;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">EPC-E021</div>
+                      </td>
+                      <td align="right" style="vertical-align:top;white-space:nowrap;">
+                        <span style="background:#FAF1DA;color:#A37000;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;font-family:Arial,Helvetica,sans-serif;">Air Quality</span>
+                      </td>
+                    </tr>
+                  </table>
+                  <p style="margin:8px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.45;color:#5C6573;">
+                    Heavy smoke from southern fire. Sensitive groups should remain indoors with windows closed.
+                  </p>
+                </td>
+              </tr>
+            </table>
+
+          </td>
+        </tr>
+
+        <!-- ============ DIVIDER LABEL ============ -->
+        <tr>
+          <td style="padding:28px 24px 12px 24px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+              <tr>
+                <td style="border-top:1px solid #E5DDD0;line-height:0;font-size:0;">&nbsp;</td>
+              </tr>
+            </table>
+            <p style="margin:14px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#8A8F9B;">
+              Example result — searching "4720 Lorson Ranch Pkwy"
+            </p>
+          </td>
+        </tr>
+
+        <!-- ============ ADDRESS RESULT CARD ============ -->
+        <tr>
+          <td style="padding:0 24px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FFFFFF;border:1px solid #E5DDD0;border-radius:8px;overflow:hidden;">
+
+              <!-- Result header -->
+              <tr>
+                <td style="padding:20px;border-bottom:1px solid #E5DDD0;">
+                  <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#5C6573;margin-bottom:6px;">Address</div>
+                  <h3 style="margin:0 0 8px 0;font-family:Georgia,serif;font-weight:normal;font-size:22px;color:#14181F;">4720 Lorson Ranch Parkway</h3>
+                  <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#5C6573;">
+                    Colorado Springs, CO 80925 &nbsp;·&nbsp;
+                    Parcel <span style="font-family:'Courier New',monospace;font-weight:bold;color:#14181F;">6401303008</span> &nbsp;·&nbsp;
+                    Zone <span style="font-family:'Courier New',monospace;font-weight:bold;color:#14181F;">EPC-S012</span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Status block: EVAC -->
+              <tr>
+                <td style="padding:24px 20px;background:#F8DCDD;border-bottom:3px solid #A4161A;">
+                  <h2 style="margin:0 0 10px 0;font-family:Georgia,serif;font-weight:normal;font-size:24px;line-height:1.2;color:#A4161A;">EVACUATION ORDER — Leave now.</h2>
+                  <p style="margin:0 0 10px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#14181F;">
+                    <strong>Your address is inside an active evacuation zone.</strong> Leave immediately. Do not wait for further instruction.
+                  </p>
+                  <p style="margin:0 0 10px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#14181F;">
+                    <strong>Route:</strong> Take Powers Boulevard <em>north</em> toward Briargate. Avoid Highway 115 — emergency vehicles only.
+                  </p>
+                  <p style="margin:0 0 10px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#14181F;">
+                    <strong>Bring:</strong> Identification, medications, pets, phone charger, important documents. Leave everything else.
+                  </p>
+                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#14181F;">
+                    <strong>Shelter:</strong> American Red Cross shelter open at <strong>Sand Creek High School</strong>, 7005 N Carefree Cir. Pet-friendly.
+                  </p>
+                </td>
+              </tr>
+
+              <!-- Connected records -->
+              <tr>
+                <td style="padding:20px;">
+                  <h4 style="margin:0 0 4px 0;font-family:Georgia,serif;font-weight:normal;font-size:15px;color:#14181F;">Connected records</h4>
+                  <p style="margin:0 0 14px 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8F9B;">
+                    Every document, permit, meeting item, and notice attached to this parcel.
+                  </p>
+
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr>
+                      <td style="padding-bottom:8px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FBF7F0;border:1px solid #E5DDD0;border-radius:5px;">
+                          <tr>
+                            <td style="padding:10px 12px;">
+                              <div style="font-family:'Courier New',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:#1E3A5F;font-weight:bold;margin-bottom:4px;">📄 Evacuation Order</div>
+                              <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;color:#14181F;line-height:1.35;">Order EVAC-2026-0047 — Lorson Ranch Mandatory Evacuation</div>
+                              <div style="font-family:'Courier New',monospace;font-size:10px;color:#8A8F9B;margin-top:3px;">PDF · Issued 13:42 · El Paso County Sheriff</div>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding-bottom:8px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FBF7F0;border:1px solid #E5DDD0;border-radius:5px;">
+                          <tr>
+                            <td style="padding:10px 12px;">
+                              <div style="font-family:'Courier New',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:#1E3A5F;font-weight:bold;margin-bottom:4px;">🚧 Road Closure</div>
+                              <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;color:#14181F;line-height:1.35;">Highway 115 closed southbound from Powers to Penrose</div>
+                              <div style="font-family:'Courier New',monospace;font-size:10px;color:#8A8F9B;margin-top:3px;">Permit ROAD-2026-1108 · Active</div>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding-bottom:8px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FBF7F0;border:1px solid #E5DDD0;border-radius:5px;">
+                          <tr>
+                            <td style="padding:10px 12px;">
+                              <div style="font-family:'Courier New',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:#1E3A5F;font-weight:bold;margin-bottom:4px;">🏠 Shelter Activation</div>
+                              <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;color:#14181F;line-height:1.35;">Sand Creek High School emergency shelter opened</div>
+                              <div style="font-family:'Courier New',monospace;font-size:10px;color:#8A8F9B;margin-top:3px;">Activation 14:00 · Red Cross + EPC</div>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FBF7F0;border:1px solid #E5DDD0;border-radius:5px;">
+                          <tr>
+                            <td style="padding:10px 12px;">
+                              <div style="font-family:'Courier New',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:#1E3A5F;font-weight:bold;margin-bottom:4px;">📅 Meeting Item</div>
+                              <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;color:#14181F;line-height:1.35;">BoCC Emergency Session — Wildfire Response</div>
+                              <div style="font-family:'Courier New',monospace;font-size:10px;color:#8A8F9B;margin-top:3px;">Today 16:00 · Item 3 on agenda</div>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Subscribe CTA strip -->
+              <tr>
+                <td style="background:#FBF7F0;border-top:1px solid #E5DDD0;padding:16px 20px;text-align:center;">
+                  <span style="display:inline-block;background:#B8410C;color:#FFFFFF;padding:10px 22px;border-radius:5px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;">
+                    🔔  Get alerts for this address
+                  </span>
+                  <p style="margin:10px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#5C6573;">
+                    Email + optional SMS, bound to this parcel. No marketing, no county-wide spam.
+                  </p>
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+
+        <!-- ============ FOOTER WITH LIVE LINK ============ -->
+        <tr>
+          <td style="padding:28px 24px;text-align:center;">
+            <p style="margin:0 0 12px 0;font-family:Georgia,serif;font-style:italic;font-size:14px;color:#5C6573;line-height:1.5;">
+              The interactive version has a live map of El Paso County, three demo addresses you can search, and a working subscribe modal.
+            </p>
+            <p style="margin:0;">
+              <a href="https://your-wordpress-domain.com/pproem-prototype" style="display:inline-block;background:#1E3A5F;color:#FFFFFF;padding:12px 24px;border-radius:5px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;">
+                Open the interactive prototype →
+              </a>
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer note -->
+        <tr>
+          <td style="background:#142A47;color:#FFFFFF;padding:18px 24px;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.5;">
+            Concept preview &nbsp;·&nbsp; Not affiliated with PPROEM &nbsp;·&nbsp; Built for civic-design conversation
+          </td>
+        </tr>
+
+      </table>
+
+      <!-- Caption below the email-card -->
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px;max-width:600px;margin-top:14px;">
+        <tr>
+          <td style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8F9B;text-align:center;line-height:1.5;padding:0 24px;">
+            Static HTML preview. Live map, address search, and subscribe form available in the linked interactive version.
+          </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

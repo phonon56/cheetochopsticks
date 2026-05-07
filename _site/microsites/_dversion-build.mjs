@@ -202,7 +202,7 @@ function detectInlineHandlers(body, js) {
   //    collide with an inline handler call (rare; the symptom would be
   //    a runtime ReferenceError in the IIFE, which surfaces immediately).
   const declared = new Set();
-  const declRe = /(?:^|\n)[ \t]*(?:function\s+([a-zA-Z_$][\w$]*)|(?:const|let|var)\s+([a-zA-Z_$][\w$]*)\s*=)/g;
+  const declRe = /(?:^|\n)[ \t]*(?:(?:async\s+)?function\s+([a-zA-Z_$][\w$]*)|(?:const|let|var)\s+([a-zA-Z_$][\w$]*)\s*=)/g;
   for (let m; (m = declRe.exec(js)) !== null; ) {
     const name = m[1] || m[2];
     if (name) declared.add(name);

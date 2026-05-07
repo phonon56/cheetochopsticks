@@ -34,7 +34,8 @@ Long-form policy doc: TOC, 14 sections, appendix, signatories.</p>
 </table>
 <h3>2. PPROEM Current Alerts</h3>
 <p>Live regional alerts dashboard. Leaflet map, zone status table, address
-search, subscribe modal.</p>
+search, subscribe modal. <strong>Wired to live data</strong> — see &quot;Live data
+sources&quot; below.</p>
 <table>
 <thead>
 <tr>
@@ -126,6 +127,56 @@ simulates a host page with a default/themed toggle.</li>
 <p>See <a href="dversion/README.md"><code>dversion/README.md</code></a> for both <strong>Drupal</strong> and
 <strong>WordPress</strong> integration instructions (including WPBakery / Visual
 Composer steps).</p>
+<h2>Live data sources (alerts page)</h2>
+<p>The alerts page reads from four CORS-friendly public endpoints. No
+auth, no API keys, no proxy — they're called directly from the browser
+in production:</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Purpose</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>https://services3.arcgis.com/4RbSpZqACDsi1hHk/arcgis/rest/services/Hazard_Boundary/FeatureServer/0</code></td>
+<td>Active hazard zones</td>
+<td>PPROEM-hosted ArcGIS feature service. The same feed their public viewer at <a href="https://experience.arcgis.com/experience/5a3a0e8317ca46689371b0f116a3231b/">experience.arcgis.com</a> reads. Filter <code>where=Status='Active'</code> for current zones; fields include <code>BoundaryType</code>, <code>Event</code>, <code>Status</code>, <code>Acres</code>, <code>Comments</code>, <code>Notes</code>.</td>
+</tr>
+<tr>
+<td><code>https://gisservices.elpasoco.com/arcgis2/rest/services/HubPublic/Parcels/MapServer/0</code></td>
+<td>El Paso County parcels</td>
+<td>Public Hub layer. Spatial query at a lat/long returns the parcel <code>PARCEL</code> ID and a <code>HYPERLINK</code> to the Spatialest property page.</td>
+</tr>
+<tr>
+<td><code>https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates</code></td>
+<td>Address → lat/long</td>
+<td>ArcGIS World Geocoder. Free for anonymous, browser-side use. We constrain <code>searchExtent</code> to the El Paso County bbox so addresses geocode locally.</td>
+</tr>
+<tr>
+<td><code>https://member.everbridge.net/1772417038942752/new</code></td>
+<td>Peak Alerts opt-in</td>
+<td>Where the <strong>subscribe</strong> modal sends users. PPROEM's actual push channel is Everbridge / Peak Alerts; it has no public pull API, so the page reads zone status from the ArcGIS feed (above) but writes subscriptions to Everbridge.</td>
+</tr>
+</tbody>
+</table>
+<h3>How PPROEM publishes alerts</h3>
+<p>PPROEM has two parallel alert channels:</p>
+<ul>
+<li><strong>Push (opt-in):</strong> <a href="https://member.everbridge.net/1772417038942752/new">Peak Alerts</a> on Everbridge — SMS, email, voice. Subscribers set their address and receive alerts that affect that location. No public pull API; the alert content lives inside Everbridge's tenant.</li>
+<li><strong>Pull (public-facing):</strong> the <a href="https://experience.arcgis.com/experience/5a3a0e8317ca46689371b0f116a3231b/">PPROEM Public Viewer</a> ArcGIS Experience reads from the <code>Hazard_Boundary</code>, <code>Road_Closure</code>, <code>Shelter_Public_View</code> feature services on <code>services3.arcgis.com/4RbSpZqACDsi1hHk/</code>. PPROEM staff edit features in those layers when they activate / clear a zone. Edits propagate to anyone querying the service in seconds.</li>
+</ul>
+<p>The alerts page on this site reads the <strong>pull</strong> side because it's the only machine-readable source. The Subscribe button routes users to the <strong>push</strong> side because that's the official notification channel.</p>
+<h3>Fallback behavior</h3>
+<p>If the live hazard fetch fails (network down, CORS hiccup, service outage), the page falls back to a small mock zone set so the page still demonstrates evacuation / warning / advisory / clear states. The status banner at the top of the page makes the data source explicit:</p>
+<ul>
+<li><strong>green dot, &quot;Live data — N active hazard zones&quot;</strong> — pulled from PPROEM</li>
+<li><strong>green dot, &quot;Live data — no active hazard zones&quot;</strong> — query succeeded but returned zero (a clear day)</li>
+<li><strong>red dot, &quot;Demo data — couldn't reach the live PPROEM hazard feed&quot;</strong> — fallback in effect</li>
+</ul>
+<p>Auto-refreshes every 5 minutes.</p>
 <h2>Source notes</h2>
 <p>Unlike the other DVersion sources in this repo (which are <code>.njk</code> body
 fragments rendered by Eleventy's <code>site.njk</code> layout), the PPROEM source

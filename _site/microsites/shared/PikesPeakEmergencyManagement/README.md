@@ -20,7 +20,8 @@ Long-form policy doc: TOC, 14 sections, appendix, signatories.
 ### 2. PPROEM Current Alerts
 
 Live regional alerts dashboard. Leaflet map, zone status table, address
-search, subscribe modal.
+search, subscribe modal. **Wired to live data** — see "Live data
+sources" below.
 
 | Path | Use case | Served at |
 | --- | --- | --- |
@@ -90,6 +91,38 @@ bundles:
 See [`dversion/README.md`](dversion/README.md) for both **Drupal** and
 **WordPress** integration instructions (including WPBakery / Visual
 Composer steps).
+
+## Live data sources (alerts page)
+
+The alerts page reads from four CORS-friendly public endpoints. No
+auth, no API keys, no proxy — they're called directly from the browser
+in production:
+
+| Endpoint | Purpose | Notes |
+| --- | --- | --- |
+| `https://services3.arcgis.com/4RbSpZqACDsi1hHk/arcgis/rest/services/Hazard_Boundary/FeatureServer/0` | Active hazard zones | PPROEM-hosted ArcGIS feature service. The same feed their public viewer at [experience.arcgis.com](https://experience.arcgis.com/experience/5a3a0e8317ca46689371b0f116a3231b/) reads. Filter `where=Status='Active'` for current zones; fields include `BoundaryType`, `Event`, `Status`, `Acres`, `Comments`, `Notes`. |
+| `https://gisservices.elpasoco.com/arcgis2/rest/services/HubPublic/Parcels/MapServer/0` | El Paso County parcels | Public Hub layer. Spatial query at a lat/long returns the parcel `PARCEL` ID and a `HYPERLINK` to the Spatialest property page. |
+| `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates` | Address → lat/long | ArcGIS World Geocoder. Free for anonymous, browser-side use. We constrain `searchExtent` to the El Paso County bbox so addresses geocode locally. |
+| `https://member.everbridge.net/1772417038942752/new` | Peak Alerts opt-in | Where the **subscribe** modal sends users. PPROEM's actual push channel is Everbridge / Peak Alerts; it has no public pull API, so the page reads zone status from the ArcGIS feed (above) but writes subscriptions to Everbridge. |
+
+### How PPROEM publishes alerts
+
+PPROEM has two parallel alert channels:
+
+- **Push (opt-in):** [Peak Alerts](https://member.everbridge.net/1772417038942752/new) on Everbridge — SMS, email, voice. Subscribers set their address and receive alerts that affect that location. No public pull API; the alert content lives inside Everbridge's tenant.
+- **Pull (public-facing):** the [PPROEM Public Viewer](https://experience.arcgis.com/experience/5a3a0e8317ca46689371b0f116a3231b/) ArcGIS Experience reads from the `Hazard_Boundary`, `Road_Closure`, `Shelter_Public_View` feature services on `services3.arcgis.com/4RbSpZqACDsi1hHk/`. PPROEM staff edit features in those layers when they activate / clear a zone. Edits propagate to anyone querying the service in seconds.
+
+The alerts page on this site reads the **pull** side because it's the only machine-readable source. The Subscribe button routes users to the **push** side because that's the official notification channel.
+
+### Fallback behavior
+
+If the live hazard fetch fails (network down, CORS hiccup, service outage), the page falls back to a small mock zone set so the page still demonstrates evacuation / warning / advisory / clear states. The status banner at the top of the page makes the data source explicit:
+
+- **green dot, "Live data — N active hazard zones"** — pulled from PPROEM
+- **green dot, "Live data — no active hazard zones"** — query succeeded but returned zero (a clear day)
+- **red dot, "Demo data — couldn't reach the live PPROEM hazard feed"** — fallback in effect
+
+Auto-refreshes every 5 minutes.
 
 ## Source notes
 

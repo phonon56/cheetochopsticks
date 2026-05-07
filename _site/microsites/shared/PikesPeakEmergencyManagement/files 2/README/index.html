@@ -1,0 +1,117 @@
+<h1>PPROEM Civic Platform — Concept &amp; Accessibility Audit</h1>
+<p>A constructive proposal and accessibility audit for the <strong>Pikes Peak Regional Office of Emergency Management</strong> alerts page at <a href="https://pproem.com/alerts">pproem.com/alerts</a>, prepared by an El Paso County resident.</p>
+<p>This repository contains three things:</p>
+<ol>
+<li>A formal <strong>WCAG 2.1 Level AA accessibility audit</strong> of the current alerts page</li>
+<li>A working <strong>prototype</strong> of a parcel-keyed civic platform that addresses the structural issues the audit revealed</li>
+<li>A <strong>letter to PPROEM leadership</strong> presenting both, in case the work is useful</li>
+</ol>
+<blockquote>
+<p><em>Nothing here is a product pitch. Nothing here is for sale. The audit and the prototype are offered as civic contribution.</em></p>
+</blockquote>
+<hr>
+<h2>What's the problem?</h2>
+<p>The current PPROEM alerts page is built around three vendor products stitched together:</p>
+<ul>
+<li>An <strong>ArcGIS</strong> map iframe for showing alert zones</li>
+<li>An <strong>Everbridge</strong> form iframe for alert subscriptions</li>
+<li>A <strong>Drupal</strong> CMS for surrounding content</li>
+</ul>
+<p>None of these systems know about each other. A resident asking &quot;is my address under evacuation order?&quot; has to learn three separate UIs, none of which are parcel-aware, and at least one of which (the embedded ArcGIS map) is inaccessible to assistive-technology users.</p>
+<p>The accessibility audit identifies fifteen issues against WCAG 2.1 Level AA, of which five are critical Level A failures. The most consequential is that the embedded map — the page's primary mechanism for communicating where alerts are active — has no text-based alternative. Blind, low-vision, and keyboard-only residents cannot determine whether an active alert applies to their address.</p>
+<h2>What's the proposed solution?</h2>
+<p>A single platform where every civic record — alert, permit, road closure, meeting item, financial line — lives on the <strong>parcel</strong> it affects. Any resident searches their address or parcel ID and sees everything that touches their property in plain language, in chronological order, with the underlying documents preserved.</p>
+<p>The prototype borrows three patterns the public-safety field has already validated:</p>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Source</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Address-to-zone map</td>
+<td>Genasys Protect (formerly Zonehaven)</td>
+<td>Resolves an address to a zone, shows zone status</td>
+</tr>
+<tr>
+<td>Address-bound subscribe</td>
+<td>PG&amp;E PSPS lookup</td>
+<td>Binds notifications to a specific address, not a generic list</td>
+</tr>
+<tr>
+<td>Plain-language content</td>
+<td>Watch Duty</td>
+<td>Translates raw alert data into actionable guidance</td>
+</tr>
+</tbody>
+</table>
+<p>The architectural contribution underneath is the <strong>parcel as universal key</strong> — every record in every module (alerts, permits, meetings, requests, finance) joins on parcel ID, so search across the whole platform returns everything connected to that property.</p>
+<hr>
+<h2>What's in this repo</h2>
+<pre><code>pproem-platform/
+│
+├── README.md                          ← you are here
+├── LETTER.md                          ← kind letter to PPROEM leadership
+│
+├── docs/
+│   └── pproem-accessibility-audit.docx  ← formal WCAG 2.1 AA audit (18 pages)
+│
+└── prototype/
+    ├── index.html                     ← interactive version (Leaflet map, JS, full UI)
+    └── email-preview.html             ← static HTML version, email-safe
+</code></pre>
+<hr>
+<h2>How to view the prototype</h2>
+<h3>Interactive version (recommended)</h3>
+<p>The interactive version uses real OpenStreetMap tiles via Leaflet, with simulated evacuation zones over Colorado Springs. Three demo addresses are seeded so you can see different alert states.</p>
+<p><strong>Option A — view it hosted:</strong>
+<a href="https://your-wordpress-domain.com/pproem-prototype">https://your-wordpress-domain.com/pproem-prototype</a></p>
+<p><strong>Option B — clone and open locally:</strong></p>
+<pre><code class="language-bash">git clone https://github.com/your-handle/pproem-platform.git
+cd pproem-platform/prototype
+open index.html        # macOS
+xdg-open index.html    # Linux
+</code></pre>
+<p>No build step. No dependencies. The Leaflet library is loaded from CDN.</p>
+<p><strong>Try these in the search box:</strong></p>
+<ul>
+<li><code>4720 Lorson Ranch Pkwy</code> — shows an active evacuation order</li>
+<li><code>8901 Black Forest Rd</code> — shows an evacuation warning</li>
+<li><code>123 N Tejon St</code> — shows the all-clear state with property records</li>
+</ul>
+<h3>Email-safe preview</h3>
+<p><code>email-preview.html</code> is a flat, table-based HTML version with no JavaScript or iframes. It renders inside Gmail, Outlook, and Apple Mail and is intended to be embedded in correspondence so recipients can see the concept without leaving their inbox.</p>
+<pre><code class="language-bash">open prototype/email-preview.html
+</code></pre>
+<hr>
+<h2>How to read the audit</h2>
+<p><code>docs/pproem-accessibility-audit.docx</code> is an 18-page formal report structured as a deliverable that can be routed through legal, IT, and procurement.</p>
+<ul>
+<li><strong>Sections 1–3:</strong> Executive summary, regulatory framework (Title II, the 2024 Final Rule, the April 2026 Interim Final Rule extending the deadline to <strong>April 26, 2027</strong>), scope and methodology</li>
+<li><strong>Section 4:</strong> Twelve things the page does correctly</li>
+<li><strong>Section 5:</strong> One-page findings summary table, color-coded by severity</li>
+<li><strong>Section 6:</strong> Detailed findings — each with a metadata strip, issue narrative, and remediation guidance</li>
+<li><strong>Sections 7–8:</strong> Risk assessment and a phased remediation plan with hour estimates</li>
+<li><strong>Appendices:</strong> Standards, references, conformance statement</li>
+</ul>
+<p>The five critical Level A failures are estimated at 4–8 developer hours of markup work in total. The audit is offered freely for use in vendor conversations, internal planning, or wherever it's useful.</p>
+<hr>
+<h2>Standards and references</h2>
+<ul>
+<li><strong>Title II of the Americans with Disabilities Act</strong> — 42 U.S.C. § 12131 et seq.</li>
+<li><strong>DOJ Final Rule</strong> — 89 Fed. Reg. 31320 (April 24, 2024), codified at 28 CFR Part 35</li>
+<li><strong>DOJ Interim Final Rule</strong> — 91 Fed. Reg. 16793 (effective April 20, 2026), extending compliance deadlines by one year</li>
+<li><strong>WCAG 2.1, Levels A and AA</strong> — W3C Recommendation, the technical standard adopted by DOJ</li>
+<li><strong>Genasys Protect</strong> — <a href="https://protect.genasys.com">protect.genasys.com</a></li>
+<li><strong>Watch Duty</strong> — <a href="https://www.watchduty.org">watchduty.org</a></li>
+</ul>
+<hr>
+<h2>Contact</h2>
+<p>This work was prepared by [Your Name], a resident of El Paso County. If you're with PPROEM, the County, or the City and would like to talk about the audit, the prototype, or the underlying architecture, the letter in <code>LETTER.md</code> is addressable to your office.</p>
+<p><a href="mailto:your-email@example.com">your-email@example.com</a></p>
+<hr>
+<h2>License</h2>
+<p>The code in <code>prototype/</code> is released under the MIT License — use it, fork it, adapt it freely. The accessibility audit in <code>docs/</code> is offered to PPROEM and the relevant public entities for any internal use without attribution required.</p>

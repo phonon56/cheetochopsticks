@@ -38,10 +38,47 @@ the build's `stripPatterns` peel off DOCTYPE / `<html>` / `<head>` /
 > `leaflet.js`) from unpkg in its `<head>`. Those tags are stripped along
 > with the rest of `<head>`. Whichever CMS hosts the partial must load
 > Leaflet alongside (CSS before `pproem-alerts.css`, JS before
-> `pproem-alerts.js`). The preview harness loads Leaflet's stylesheet via
-> `previewFontHrefs`, but Leaflet's JS isn't loaded in preview, so the
-> map shows as a gray panel there — the partial works correctly in
-> production once Leaflet is available.
+> `pproem-alerts.js`). The preview harness loads both Leaflet's CSS
+> (via `previewFontHrefs`) and Leaflet's JS (via `previewExtraScripts`),
+> so the local preview/pproem-alerts.html harness renders the map
+> end-to-end without any production-host wiring.
+
+### Live data sources (alerts page)
+
+The alerts partial calls four CORS-friendly public APIs from the
+browser. The host CMS does NOT need to proxy these — same-origin or
+not, they're public:
+
+| Endpoint | Purpose |
+| --- | --- |
+| `services3.arcgis.com/4RbSpZqACDsi1hHk/.../Hazard_Boundary/FeatureServer/0` | Active hazard zones (the live PPROEM feed) |
+| `gisservices.elpasoco.com/arcgis2/.../HubPublic/Parcels/MapServer/0` | El Paso County parcels (point-in-polygon at the geocoded address) |
+| `geocode.arcgis.com/.../World/GeocodeServer/findAddressCandidates` | Address → lat/long (ArcGIS World Geocoder, free anonymous use) |
+| `member.everbridge.net/1772417038942752/new` | Subscribe (Peak Alerts opt-in via Everbridge) |
+
+If any of these become unreachable, the page falls back to a mock zone
+set and shows a red "Demo data" banner at the top.
+
+PPROEM publishes alerts through two parallel channels: **push** via
+Everbridge / Peak Alerts (opt-in, no public pull API) and **pull** via
+the Hazard_Boundary feature service above. The partial reads from the
+pull side and routes the subscribe button to the push side.
+
+#### CORS / CSP gotchas
+
+- **Drupal:** if your site sends a strict `Content-Security-Policy`
+  with a narrow `connect-src`, add the four hostnames above. Example
+  add to your Security Kit / `services.yml`:
+  ```
+  connect-src 'self' services3.arcgis.com gisservices.elpasoco.com geocode.arcgis.com;
+  ```
+  (Everbridge isn't called by JS; the modal links there directly.)
+- **WordPress:** same applies if a plugin like Wordfence or HTTP
+  Headers configures CSP. Most default WP installs have no CSP and
+  the partial works out of the box.
+- **iframe sandbox:** if the partial is rendered inside a sandboxed
+  iframe (rare), grant `allow-scripts` and `allow-same-origin` so
+  fetches and L.map() work.
 
 ---
 
