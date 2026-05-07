@@ -6,6 +6,37 @@
 <!-- Add  cc-pproem-alerts--themed  to the root for the cheetochopsticks palette;
      omit it to inherit the host site's typography and color. -->
 <div class="cc-pproem-alerts">
+<!-- ════════════════════════════════════════════════════════════════
+     PPROEM brand-bar header.
+     DELETE THIS ENTIRE <header class="topbar"> ELEMENT if your host
+     site (typically WordPress) already provides PPROEM branding in
+     its own theme header — keeping both produces duplicate chrome.
+     ════════════════════════════════════════════════════════════════ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="https://pproem.com/" class="brand" rel="noopener" aria-label="Pikes Peak Regional Emergency Management home">
+      <div class="brand-mark" aria-hidden="true">PP</div>
+      <div class="brand-text">
+        <strong>Pikes Peak Regional</strong>
+        <span>Emergency Management</span>
+      </div>
+    </a>
+    <nav class="brand-nav" aria-label="PPROEM sections">
+      <a href="https://pproem.com/alerts" class="current" rel="noopener">Current Alerts</a>
+      <a href="https://pproem.com/preparedness" rel="noopener">Preparedness</a>
+      <a href="https://pproem.com/resources" rel="noopener">Resources</a>
+      <a href="https://pproem.com/about" rel="noopener">About</a>
+    </nav>
+    <button type="button" class="brand-cta" onclick="openSubscribe()" aria-label="Get emergency alerts for your address">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+      </svg>
+      Get Alerts
+    </button>
+  </div>
+</header>
+
 <main id="main-content" tabindex="-1">
   <section class="hero">
     <div class="hero-eyebrow">
@@ -34,25 +65,25 @@
     </div>
   </section>
 
-  <div class="status-strip" role="status" aria-live="polite">
-    <div class="status-strip-item">
-      <span class="status-badge status-evac">1 Evacuation Order</span>
+  <div class="status-strip" role="status" aria-live="polite" id="status-strip">
+    <div class="status-strip-item" data-strip-cell="evac">
+      <span class="status-badge status-evac"><span id="count-evac">—</span> Evacuation Orders</span>
     </div>
     <div class="status-strip-divider" aria-hidden="true"></div>
-    <div class="status-strip-item">
-      <span class="status-badge status-warning">1 Warning</span>
+    <div class="status-strip-item" data-strip-cell="warning">
+      <span class="status-badge status-warning"><span id="count-warning">—</span> Warnings</span>
     </div>
     <div class="status-strip-divider" aria-hidden="true"></div>
-    <div class="status-strip-item">
-      <span class="status-badge status-advisory">1 Advisory</span>
+    <div class="status-strip-item" data-strip-cell="advisory">
+      <span class="status-badge status-advisory"><span id="count-advisory">—</span> Advisories</span>
     </div>
     <div class="status-strip-divider" aria-hidden="true"></div>
-    <div class="status-strip-item">
-      <strong>~14,200</strong> residents affected
+    <div class="status-strip-item" data-strip-cell="acres">
+      <strong id="count-acres">—</strong> acres covered
     </div>
     <div class="status-strip-divider" aria-hidden="true"></div>
-    <div class="status-strip-item">
-      Data verified by El Paso County OEM · <strong>02:47 PM MST</strong>
+    <div class="status-strip-item" data-strip-cell="updated">
+      Live from PPROEM · <strong id="status-timestamp">checking…</strong>
     </div>
   </div>
 

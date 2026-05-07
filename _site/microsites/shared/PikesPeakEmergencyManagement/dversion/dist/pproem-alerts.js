@@ -789,6 +789,7 @@
   setInterval(loadLiveZones, REFRESH_MS);
 
   // Expose handlers used by inline on* attributes (the IIFE would otherwise hide them).
+  window.openSubscribe = openSubscribe;
   window.handleSearch = handleSearch;
   window.demoSearch = demoSearch;
   window.switchTab = switchTab;
@@ -796,5 +797,4 @@
   window.closeSubscribe = closeSubscribe;
   window.handleSubscribe = handleSubscribe;
   window.focusZone = focusZone;
-  window.openSubscribe = openSubscribe;
 })();

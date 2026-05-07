@@ -50,13 +50,17 @@ const pages = [
     prettyName: 'PPROEM Current Alerts',
     hostNav: 'Office of Emergency Management',
     hostHeadline: 'PPROEM Current Alerts (Drupal-hosted)',
-    // Document wrappers + the page's own brand-bar header and bottom
-    // footer. Drupal/WordPress hosts already provide site nav and
-    // footer; rendering the page's own chrome would stack two headers
-    // and double up the "Alerts" CTA.
+    // Document wrappers only. The PPROEM brand-bar <header class="topbar">
+    // stays in the dversion partial so Drupal hosts (which often want
+    // PPROEM identity displayed on the page) get it for free; WordPress
+    // hosts (which typically already place a PPROEM logo in their theme
+    // header) can delete the <header class="topbar"> block — there's an
+    // HTML comment in the partial markup labeling it for removal. The
+    // page's own bottom <footer class="footer"> (placeholder links to
+    // Accessibility / Privacy / Translate / Contact) is still stripped
+    // because the host's site footer is the right place for those.
     stripPatterns: [
       ...documentWrapperStrips,
-      /<header class="topbar">[\s\S]*?<\/header>/,
       /<footer class="footer">[\s\S]*?<\/footer>/,
     ],
     // The alerts page also loads Leaflet (CSS + JS) from unpkg in its
