@@ -3831,7 +3831,49 @@ font-family: "Instrument Sans", -apple-system, system-ui, sans-serif;
     renderPersons();
     renderCaseList();
 
-  // (No inline on* handlers detected — nothing to expose on window.)
+  // Expose handlers used by inline on* attributes (the IIFE would otherwise hide them).
+  window.toggleCaseList = toggleCaseList;
+  window.toggleAllSections = toggleAllSections;
+  window.toggleSection = toggleSection;
+  window.stepN = stepN;
+  window.validateKilled = validateKilled;
+  window.toggleOn = toggleOn;
+  window.addPerson = addPerson;
+  window.bulkMoveToStandard = bulkMoveToStandard;
+  window.bulkMoveToSensitive = bulkMoveToSensitive;
+  window.bulkDelete = bulkDelete;
+  window.clearSelection = clearSelection;
+  window.toggleBin = toggleBin;
+  window.onBinDragOver = onBinDragOver;
+  window.onBinDragLeave = onBinDragLeave;
+  window.onBinDrop = onBinDrop;
+  window.stopRecording = stopRecording;
+  window.downloadAudio = downloadAudio;
+  window.deleteAudio = deleteAudio;
+  window.submitCase = submitCase;
+  window.lightboxBackdropClick = lightboxBackdropClick;
+  window.closeLightbox = closeLightbox;
+  window.lightboxNav = lightboxNav;
+  window.lightboxUpdateTag = lightboxUpdateTag;
+  window.lightboxToggleSensitivity = lightboxToggleSensitivity;
+  window.lightboxDelete = lightboxDelete;
+  window.lightboxCaptionInput = lightboxCaptionInput;
+  window.toggleLightboxMic = toggleLightboxMic;
+  window.loadCase = loadCase;
+  window.onCardDragStart = onCardDragStart;
+  window.onCardDragEnd = onCardDragEnd;
+  window.toggleMediaSelection = toggleMediaSelection;
+  window.openLightbox = openLightbox;
+  window.updateMediaTag = updateMediaTag;
+  window.toggleSensitivity = toggleSensitivity;
+  window.deleteMedia = deleteMedia;
+  window.updateMediaCaption = updateMediaCaption;
+  window.toggleMediaMic = toggleMediaMic;
+  window.removePerson = removePerson;
+  window.updatePerson = updatePerson;
+  window.updatePersonNotes = updatePersonNotes;
+  window.togglePersonNotesMic = togglePersonNotesMic;
+  window.togglePersonNotes = togglePersonNotes;
 })();
 
 </script>

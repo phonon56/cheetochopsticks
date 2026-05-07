@@ -101,5 +101,7 @@ function toggleSection(btn) {
       });
     }
 
-  // (No inline on* handlers detected — nothing to expose on window.)
+  // Expose handlers used by inline on* attributes (the IIFE would otherwise hide them).
+  window.toggleSection = toggleSection;
+  window.stepN = stepN;
 })();

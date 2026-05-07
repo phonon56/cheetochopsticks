@@ -1,0 +1,1487 @@
+---
+layout: site.njk
+permalink: "/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts/index.html"
+title: "Current Alerts | Pikes Peak Regional Office of Emergency Management"
+description: "Live regional emergency alerts and zone status for the Pikes Peak region — wildfire, flood, and severe weather coverage from PPROEM with an interactive map."
+activeNav: "dashboards"
+subscribeTopic: "gov.shared.pproem"
+subscribeHeading: "Get emergency-management updates from PPROEM"
+subscribeDeck: "When PPROEM activates the ECC, issues a regional alert, or updates the zone map, we'll email you a plain-language summary. No marketing — just public-record updates."
+headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>'
+---
+
+  :root {
+    --bg: #F5F1EA;
+    --surface: #FFFFFF;
+    --surface-2: #FBF7F0;
+    --text: #14181F;
+    --text-muted: #5C6573;
+    --text-subtle: #8A8F9B;
+    --border: #E5DDD0;
+    --border-strong: #D4CABA;
+    --brand: #1E3A5F;
+    --brand-dark: #142A47;
+    --accent: #B8410C;
+    --accent-hover: #9A3508;
+    --status-clear: #2D7A4E;
+    --status-clear-bg: #E8F2EC;
+    --status-advisory: #A37000;
+    --status-advisory-bg: #FAF1DA;
+    --status-warning: #C2410C;
+    --status-warning-bg: #FCEAD9;
+    --status-evac: #A4161A;
+    --status-evac-bg: #F8DCDD;
+    --shadow-sm: 0 1px 2px rgba(20,24,31,0.04), 0 1px 3px rgba(20,24,31,0.06);
+    --shadow-md: 0 2px 4px rgba(20,24,31,0.06), 0 4px 12px rgba(20,24,31,0.08);
+    --shadow-lg: 0 8px 24px rgba(20,24,31,0.12), 0 2px 8px rgba(20,24,31,0.08);
+    --radius-sm: 4px;
+    --radius: 6px;
+    --radius-lg: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(30,58,95,0.025), transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(184,65,12,0.02), transparent 50%);
+  }
+
+  /* Skip link */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--brand);
+    color: white;
+    padding: 10px 16px;
+    text-decoration: none;
+    border-radius: 0 0 var(--radius) 0;
+    z-index: 1000;
+    font-weight: 600;
+  }
+  .skip-link:focus { top: 0; }
+
+  /* Focus styles */
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Top bar */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.92);
+  }
+  .topbar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--brand);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  .brand-text strong {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+  }
+  .brand-text span {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .nav a {
+    color: var(--text);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .nav a:hover { background: var(--bg); }
+  .nav a.current {
+    background: var(--bg);
+    color: var(--brand);
+  }
+  .cta-button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .cta-button:hover { background: var(--accent-hover); }
+  .cta-button:active { transform: translateY(1px); }
+  .cta-button svg { width: 16px; height: 16px; }
+
+  /* Hero */
+  .hero {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px 32px 32px;
+  }
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--status-evac);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(36px, 5vw, 56px);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 14px;
+    max-width: 800px;
+    font-variation-settings: "opsz" 96;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--brand);
+  }
+  .hero-sub {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  /* Search */
+  .search-form {
+    display: flex;
+    gap: 8px;
+    max-width: 720px;
+    margin-bottom: 16px;
+  }
+  .search-wrap {
+    flex: 1;
+    position: relative;
+  }
+  .search-input {
+    width: 100%;
+    padding: 16px 16px 16px 48px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--text);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-shadow: var(--shadow-sm);
+  }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(30,58,95,0.15);
+  }
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  .search-button {
+    background: var(--brand);
+    color: white;
+    border: none;
+    padding: 0 28px;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .search-button:hover { background: var(--brand-dark); }
+
+  .demo-pills {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .demo-pills span { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-right: 4px; }
+  .demo-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    transition: all 0.15s;
+  }
+  .demo-pill:hover {
+    background: var(--brand);
+    color: white;
+    border-color: var(--brand);
+  }
+
+  /* Status strip */
+  .status-strip {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-size: 14px;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+  .status-strip-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .status-strip-item strong {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .status-strip-divider {
+    width: 1px;
+    height: 16px;
+    background: var(--border-strong);
+  }
+
+  /* Main grid */
+  .main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px 64px;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 24px;
+  }
+
+  /* Map panel */
+  .map-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    min-height: 600px;
+  }
+  #map {
+    width: 100%;
+    height: 600px;
+    background: #E8E4DC;
+  }
+  .map-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .map-header h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  .map-legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  /* Sidebar panel */
+  .side-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+  }
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+  .tab {
+    flex: 1;
+    padding: 14px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    background: var(--surface);
+    color: var(--brand);
+    border-bottom-color: var(--brand);
+  }
+  .tab-count {
+    display: inline-block;
+    background: var(--bg);
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    margin-left: 6px;
+    font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .tab.active .tab-count {
+    background: var(--brand);
+    color: white;
+  }
+  .tab-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+  }
+
+  /* Zone card */
+  .zone-card {
+    padding: 16px;
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    color: inherit;
+  }
+  .zone-card:hover {
+    background: var(--surface-2);
+    border-color: var(--border);
+  }
+  .zone-card.highlighted {
+    background: var(--surface-2);
+    border-color: var(--brand);
+    box-shadow: 0 0 0 1px var(--brand);
+  }
+  .zone-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .zone-card-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .zone-card-id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .status-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .status-evac { background: var(--status-evac-bg); color: var(--status-evac); }
+  .status-evac::before { background: var(--status-evac); }
+  .status-warning { background: var(--status-warning-bg); color: var(--status-warning); }
+  .status-warning::before { background: var(--status-warning); }
+  .status-advisory { background: var(--status-advisory-bg); color: var(--status-advisory); }
+  .status-advisory::before { background: var(--status-advisory); }
+  .status-clear { background: var(--status-clear-bg); color: var(--status-clear); }
+  .status-clear::before { background: var(--status-clear); }
+  .zone-card-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin-top: 6px;
+  }
+  .zone-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* Address result section */
+  .result-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px 64px;
+    display: none;
+  }
+  .result-section.active { display: block; }
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+  .result-header {
+    padding: 28px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .result-address {
+    flex: 1;
+    min-width: 280px;
+  }
+  .result-address-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .result-address h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .result-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .result-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .result-meta strong {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .result-status-block {
+    padding: 28px 32px;
+  }
+  .result-status-block.evac {
+    background: linear-gradient(180deg, var(--status-evac-bg) 0%, transparent 100%);
+    border-bottom: 3px solid var(--status-evac);
+  }
+  .result-status-block.clear {
+    background: linear-gradient(180deg, var(--status-clear-bg) 0%, transparent 100%);
+    border-bottom: 3px solid var(--status-clear);
+  }
+  .result-status-block.warning {
+    background: linear-gradient(180deg, var(--status-warning-bg) 0%, transparent 100%);
+    border-bottom: 3px solid var(--status-warning);
+  }
+  .result-status-headline {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .result-status-block.evac .result-status-headline { color: var(--status-evac); }
+  .result-status-block.clear .result-status-headline { color: var(--status-clear); }
+  .result-status-block.warning .result-status-headline { color: var(--status-warning); }
+
+  .result-guidance {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text);
+    max-width: 720px;
+  }
+  .result-guidance p { margin-bottom: 12px; }
+  .result-guidance p:last-child { margin-bottom: 0; }
+
+  .result-actions {
+    padding: 24px 32px;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    padding: 12px 22px;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s;
+  }
+  .btn-secondary:hover { background: var(--bg); }
+
+  /* Connected records section */
+  .records-section {
+    padding: 28px 32px;
+    border-top: 1px solid var(--border);
+  }
+  .records-section h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .records-subhead {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+  .records-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .record-item {
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: all 0.15s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .record-item:hover {
+    border-color: var(--brand);
+    background: var(--surface-2);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+  .record-item-type {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .record-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--brand);
+  }
+  .record-item-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
+    margin-bottom: 4px;
+  }
+  .record-item-meta {
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,24,31,0.55);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-backdrop.open { display: flex; }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .modal {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    max-width: 520px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .modal-header h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .modal-header p {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.15s;
+  }
+  .modal-close:hover { background: var(--bg); }
+  .modal-body {
+    padding: 24px 28px;
+  }
+  .address-binding {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--brand);
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .address-binding-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .address-binding-value {
+    font-weight: 600;
+    color: var(--text);
+  }
+  .form-group { margin-bottom: 16px; }
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .form-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 15px;
+    background: var(--surface);
+    transition: border-color 0.15s;
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(30,58,95,0.15);
+  }
+  .form-help {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .checkboxes {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .checkbox-item:last-child { border-bottom: none; }
+  .checkbox-item:hover { background: var(--surface-2); }
+  .checkbox-item input[type="checkbox"] {
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--brand);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .checkbox-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .checkbox-desc {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-weight: 400;
+  }
+  .modal-footer {
+    padding: 20px 28px;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .modal-footer-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    flex: 1;
+  }
+  .btn-large {
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--brand-dark);
+    color: rgba(255,255,255,0.85);
+    padding: 32px 0;
+    margin-top: 32px;
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+  }
+  .footer a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    margin-right: 20px;
+  }
+  .footer a:hover { color: white; text-decoration: underline; }
+
+  /* Leaflet customization */
+  .leaflet-popup-content-wrapper {
+    border-radius: var(--radius);
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .leaflet-popup-content {
+    margin: 14px 16px;
+    font-size: 13px;
+  }
+  .popup-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .popup-id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 1024px) {
+    .main { grid-template-columns: 1fr; }
+    .side-panel { min-height: 400px; }
+    #map { height: 450px; }
+    .map-panel { min-height: 0; }
+  }
+
+  @media (max-width: 640px) {
+    .topbar-inner { padding: 12px 16px; gap: 12px; }
+    .nav { display: none; }
+    .hero { padding: 32px 16px 24px; }
+    .status-strip { padding: 0 16px 20px; gap: 12px; }
+    .main { padding: 0 16px 32px; }
+    .result-section { padding: 0 16px 32px; }
+    .search-form { flex-direction: column; }
+    .search-button { padding: 14px 24px; }
+    .result-header { padding: 20px; }
+    .result-status-block { padding: 20px; }
+    .records-section { padding: 20px; }
+    .result-actions { padding: 16px 20px; }
+  }
+</style>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="#" class="brand" aria-label="Pikes Peak Regional Emergency Management home">
+      <div class="brand-mark" aria-hidden="true">PP</div>
+      <div class="brand-text">
+        <strong>Pikes Peak Regional</strong>
+        <span>Emergency Management</span>
+      </div>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#" class="current">Current Alerts</a>
+      <a href="#">Preparedness</a>
+      <a href="#">Resources</a>
+      <a href="#">About</a>
+    </nav>
+    <button class="cta-button" onclick="openSubscribe()" aria-label="Get emergency alerts for your address">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+      </svg>
+      Get Alerts
+    </button>
+  </div>
+</header>
+
+<div class="alerts-main">
+  <section class="hero">
+    <div class="hero-eyebrow">
+      <span class="live-dot" aria-hidden="true"></span>
+      Live · El Paso County · Updated 2 minutes ago
+    </div>
+    <h1>Is your address <em>affected?</em></h1>
+    <p class="hero-sub">Search any address or parcel ID in El Paso County. See active alerts, exactly what to do, and every record connected to your property — in plain language.</p>
+
+    <form class="search-form" onsubmit="handleSearch(event)" role="search">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input type="text" id="address-input" class="search-input" placeholder="Enter address or parcel ID (e.g., 6401303008)" aria-label="Address or parcel ID search">
+      </div>
+      <button type="submit" class="search-button">Check this address</button>
+    </form>
+
+    <div class="demo-pills">
+      <span>Try:</span>
+      <button class="demo-pill" onclick="demoSearch('lorson')">4720 Lorson Ranch Pkwy</button>
+      <button class="demo-pill" onclick="demoSearch('blackforest')">8901 Black Forest Rd</button>
+      <button class="demo-pill" onclick="demoSearch('downtown')">123 N Tejon St</button>
+    </div>
+  </section>
+
+  <div class="status-strip" role="status" aria-live="polite">
+    <div class="status-strip-item">
+      <span class="status-badge status-evac">1 Evacuation Order</span>
+    </div>
+    <div class="status-strip-divider" aria-hidden="true"></div>
+    <div class="status-strip-item">
+      <span class="status-badge status-warning">1 Warning</span>
+    </div>
+    <div class="status-strip-divider" aria-hidden="true"></div>
+    <div class="status-strip-item">
+      <span class="status-badge status-advisory">1 Advisory</span>
+    </div>
+    <div class="status-strip-divider" aria-hidden="true"></div>
+    <div class="status-strip-item">
+      <strong>~14,200</strong> residents affected
+    </div>
+    <div class="status-strip-divider" aria-hidden="true"></div>
+    <div class="status-strip-item">
+      Data verified by El Paso County OEM · <strong>02:47 PM MST</strong>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="map-panel">
+      <div class="map-header">
+        <h2>Active Zones Map</h2>
+        <div class="map-legend" role="img" aria-label="Map legend">
+          <div class="legend-item"><span class="legend-swatch" style="background:#A4161A;"></span>Evacuation</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#C2410C;"></span>Warning</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#A37000;"></span>Advisory</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#2D7A4E;"></span>Clear</div>
+        </div>
+      </div>
+      <div id="map" role="application" aria-label="Interactive map of El Paso County evacuation zones. Use the active zones list to the right for an accessible alternative."></div>
+    </div>
+
+    <aside class="side-panel" aria-label="Active alerts list">
+      <div class="tabs" role="tablist">
+        <button class="tab active" role="tab" aria-selected="true" onclick="switchTab(event, 'active')">
+          Active Alerts <span class="tab-count">3</span>
+        </button>
+        <button class="tab" role="tab" aria-selected="false" onclick="switchTab(event, 'all')">
+          All Zones <span class="tab-count">42</span>
+        </button>
+      </div>
+      <div class="tab-content" id="zone-list">
+        <!-- Populated by JS -->
+      </div>
+    </aside>
+  </div>
+
+  <section class="result-section" id="result-section" aria-live="polite">
+    <!-- Populated by JS when address searched -->
+  </section>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>© 2026 Pikes Peak Regional Office of Emergency Management</div>
+    <div>
+      <a href="#">Accessibility</a>
+      <a href="#">Privacy</a>
+      <a href="#">Translate</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Subscribe Modal -->
+<div class="modal-backdrop" id="subscribe-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closeSubscribe()">
+  <div class="modal">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeSubscribe()" aria-label="Close subscribe form">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+
+<script>
+  // ============ Zone Data ============
+  const zones = [
+    {
+      id: 'EPC-S012',
+      name: 'Lorson Ranch / Bradley',
+      status: 'evac',
+      statusLabel: 'Evacuation Order',
+      desc: 'Wildfire approaching from the south. Residents must leave immediately via Powers Blvd north.',
+      coords: [
+        [38.745, -104.720],[38.745, -104.660],[38.778, -104.660],[38.778, -104.720]
+      ],
+      center: [38.762, -104.690],
+      issued: '13:42',
+      affected: 4800
+    },
+    {
+      id: 'EPC-N004',
+      name: 'Black Forest North',
+      status: 'warning',
+      statusLabel: 'Evacuation Warning',
+      desc: 'Be prepared to leave on short notice. Pack go-bags, fuel vehicles, monitor conditions.',
+      coords: [
+        [38.985, -104.730],[38.985, -104.660],[39.030, -104.660],[39.030, -104.730]
+      ],
+      center: [39.007, -104.695],
+      issued: '14:15',
+      affected: 7200
+    },
+    {
+      id: 'EPC-E021',
+      name: 'Falcon West',
+      status: 'advisory',
+      statusLabel: 'Air Quality Advisory',
+      desc: 'Heavy smoke from southern fire. Sensitive groups should remain indoors with windows closed.',
+      coords: [
+        [38.920, -104.640],[38.920, -104.580],[38.965, -104.580],[38.965, -104.640]
+      ],
+      center: [38.942, -104.610],
+      issued: '14:30',
+      affected: 2200
+    },
+    {
+      id: 'EPC-C001',
+      name: 'Downtown Colorado Springs',
+      status: 'clear',
+      statusLabel: 'No Active Alerts',
+      desc: 'No emergency conditions at this time.',
+      coords: [
+        [38.815, -104.840],[38.815, -104.800],[38.855, -104.800],[38.855, -104.840]
+      ],
+      center: [38.833, -104.821],
+      issued: null,
+      affected: 0
+    },
+    {
+      id: 'EPC-W007',
+      name: 'Manitou Springs',
+      status: 'clear',
+      statusLabel: 'No Active Alerts',
+      desc: 'No emergency conditions at this time.',
+      coords: [
+        [38.840, -104.940],[38.840, -104.895],[38.875, -104.895],[38.875, -104.940]
+      ],
+      center: [38.857, -104.917],
+      issued: null,
+      affected: 0
+    },
+    {
+      id: 'EPC-N009',
+      name: 'Monument',
+      status: 'clear',
+      statusLabel: 'No Active Alerts',
+      desc: 'No emergency conditions at this time.',
+      coords: [
+        [39.075, -104.900],[39.075, -104.845],[39.110, -104.845],[39.110, -104.900]
+      ],
+      center: [39.091, -104.872],
+      issued: null,
+      affected: 0
+    }
+  ];
+
+  const statusColors = {
+    evac: '#A4161A',
+    warning: '#C2410C',
+    advisory: '#A37000',
+    clear: '#2D7A4E'
+  };
+
+  // ============ Demo Addresses ============
+  const demoAddresses = {
+    lorson: {
+      address: '4720 Lorson Ranch Parkway',
+      city: 'Colorado Springs, CO 80925',
+      parcel: '6401303008',
+      zoneId: 'EPC-S012',
+      coords: [38.762, -104.690]
+    },
+    blackforest: {
+      address: '8901 Black Forest Road',
+      city: 'Colorado Springs, CO 80908',
+      parcel: '5208104017',
+      zoneId: 'EPC-N004',
+      coords: [39.007, -104.695]
+    },
+    downtown: {
+      address: '123 N Tejon Street',
+      city: 'Colorado Springs, CO 80903',
+      parcel: '7402211005',
+      zoneId: 'EPC-C001',
+      coords: [38.835, -104.821]
+    }
+  };
+
+  let currentSearchedAddress = null;
+
+  // ============ Map Setup ============
+  const map = L.map('map', {
+    zoomControl: true,
+    scrollWheelZoom: false
+  }).setView([38.870, -104.790], 10);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  const zonePolygons = {};
+  zones.forEach(zone => {
+    const polygon = L.polygon(zone.coords, {
+      color: statusColors[zone.status],
+      fillColor: statusColors[zone.status],
+      fillOpacity: zone.status === 'clear' ? 0.15 : 0.35,
+      weight: 2,
+      opacity: zone.status === 'clear' ? 0.5 : 0.9
+    }).addTo(map);
+
+    polygon.bindPopup(`
+      <div class="popup-title">${zone.name}</div>
+      <div class="popup-id">${zone.id}</div>
+      <div><strong>${zone.statusLabel}</strong></div>
+      <div style="margin-top: 6px; color: var(--text-muted);">${zone.desc}</div>
+    `);
+
+    polygon.on('click', () => highlightZone(zone.id));
+    zonePolygons[zone.id] = polygon;
+  });
+
+  // ============ Zone List ============
+  function renderZoneList(filter = 'active') {
+    const list = document.getElementById('zone-list');
+    const filteredZones = filter === 'active'
+      ? zones.filter(z => z.status !== 'clear')
+      : zones;
+
+    list.innerHTML = filteredZones.map(zone => `
+      <button class="zone-card" data-zone-id="${zone.id}" onclick="focusZone('${zone.id}')">
+        <div class="zone-card-header">
+          <div>
+            <div class="zone-card-name">${zone.name}</div>
+            <div class="zone-card-id">${zone.id}</div>
+          </div>
+          <span class="status-badge status-${zone.status}">${zone.statusLabel}</span>
+        </div>
+        <div class="zone-card-desc">${zone.desc}</div>
+        ${zone.issued ? `<div class="zone-card-meta">
+          <span>Issued ${zone.issued}</span>
+          <span>·</span>
+          <span>~${zone.affected.toLocaleString()} residents</span>
+        </div>` : ''}
+      </button>
+    `).join('');
+  }
+
+  renderZoneList('active');
+
+  function switchTab(event, tab) {
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    event.currentTarget.classList.add('active');
+    event.currentTarget.setAttribute('aria-selected', 'true');
+    renderZoneList(tab);
+  }
+
+  function focusZone(zoneId) {
+    const zone = zones.find(z => z.id === zoneId);
+    if (!zone) return;
+    map.setView(zone.center, 12, { animate: true });
+    zonePolygons[zoneId].openPopup();
+    highlightZone(zoneId);
+  }
+
+  function highlightZone(zoneId) {
+    document.querySelectorAll('.zone-card').forEach(card => {
+      card.classList.toggle('highlighted', card.dataset.zoneId === zoneId);
+    });
+  }
+
+  // ============ Search ============
+  function handleSearch(event) {
+    event.preventDefault();
+    const value = document.getElementById('address-input').value.trim().toLowerCase();
+    if (!value) return;
+
+    if (value.includes('lorson') || value === '6401303008') {
+      demoSearch('lorson');
+    } else if (value.includes('black forest') || value === '5208104017') {
+      demoSearch('blackforest');
+    } else if (value.includes('tejon') || value === '7402211005' || value.includes('downtown')) {
+      demoSearch('downtown');
+    } else {
+      // Default: treat as Downtown for demo
+      demoSearch('downtown');
+    }
+  }
+
+  function demoSearch(key) {
+    const addr = demoAddresses[key];
+    const zone = zones.find(z => z.id === addr.zoneId);
+    currentSearchedAddress = addr;
+
+    document.getElementById('address-input').value = addr.address;
+    map.setView(addr.coords, 13, { animate: true });
+    if (zonePolygons[zone.id]) zonePolygons[zone.id].openPopup();
+    highlightZone(zone.id);
+
+    renderResult(addr, zone);
+    setTimeout(() => {
+      document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
+  }
+
+  function renderResult(addr, zone) {
+    const guidance = {
+      evac: {
+        headline: 'EVACUATION ORDER — Leave now.',
+        body: `<p><strong>Your address is inside an active evacuation zone.</strong> Leave immediately. Do not wait for further instruction.</p>
+               <p><strong>Route:</strong> Take Powers Boulevard <em>north</em> toward Briargate. Avoid Highway 115 — emergency vehicles only.</p>
+               <p><strong>Bring:</strong> Identification, medications, pets, phone charger, important documents. Leave everything else.</p>
+               <p><strong>Shelter:</strong> American Red Cross shelter open at <strong>Sand Creek High School</strong>, 7005 N Carefree Cir. Pet-friendly.</p>`,
+        cls: 'evac'
+      },
+      warning: {
+        headline: 'EVACUATION WARNING — Be ready to leave.',
+        body: `<p><strong>Your address is in an evacuation warning area.</strong> Conditions could change rapidly. Prepare to leave on short notice.</p>
+               <p><strong>Now:</strong> Pack go-bags, gather medications and documents, fuel your vehicle, move pets to carriers.</p>
+               <p><strong>Plan your route:</strong> Primary exit is Highway 83 south. Identify a backup route.</p>
+               <p><strong>Stay informed:</strong> Subscribe below for immediate notification if this is upgraded to an evacuation order.</p>`,
+        cls: 'warning'
+      },
+      advisory: {
+        headline: 'AIR QUALITY ADVISORY in effect.',
+        body: `<p>Heavy smoke from a wildfire to the south is affecting air quality at your address.</p>
+               <p><strong>Sensitive groups</strong> (children, elderly, those with respiratory conditions) should stay indoors with windows closed.</p>
+               <p><strong>Run HVAC on recirculate.</strong> Avoid outdoor exercise. N95 masks recommended if you must be outside.</p>`,
+        cls: 'warning'
+      },
+      clear: {
+        headline: 'No active alerts at this address.',
+        body: `<p>Your address is not currently under any evacuation order, warning, or advisory.</p>
+               <p>Conditions are normal as of <strong>02:47 PM MST</strong>. We'll notify you immediately if anything changes — subscribe below to make sure you don't miss it.</p>`,
+        cls: 'clear'
+      }
+    };
+
+    const g = guidance[zone.status];
+
+    const records = zone.status === 'evac' ? [
+      { type: 'Evacuation Order', icon: 'doc', title: 'Order EVAC-2026-0047 — Lorson Ranch Mandatory Evacuation', meta: 'PDF · Issued 13:42 · El Paso County Sheriff' },
+      { type: 'Road Closure', icon: 'cone', title: 'Highway 115 closed southbound from Powers to Penrose', meta: 'Permit ROAD-2026-1108 · Active' },
+      { type: 'Shelter Activation', icon: 'home', title: 'Sand Creek High School emergency shelter opened', meta: 'Activation 14:00 · Red Cross + EPC' },
+      { type: 'Meeting Item', icon: 'meeting', title: 'BoCC Emergency Session — Wildfire Response', meta: 'Today 16:00 · Item 3 on agenda' }
+    ] : zone.status === 'warning' ? [
+      { type: 'Warning Notice', icon: 'doc', title: 'Notice EVAC-2026-0048 — Black Forest North Warning', meta: 'PDF · Issued 14:15 · El Paso County OEM' },
+      { type: 'Fire Permit', icon: 'doc', title: 'Burn permits suspended countywide through Sunday', meta: 'Order FIRE-2026-0019 · Active' },
+      { type: 'Meeting Item', icon: 'meeting', title: 'Black Forest Fire Mitigation — recurring discussion', meta: 'Last covered 2026-04-22 BoCC' }
+    ] : zone.status === 'advisory' ? [
+      { type: 'Advisory', icon: 'doc', title: 'Air Quality Advisory AQ-2026-0033', meta: 'PDF · Issued 14:30 · CDPHE + EPC Health' }
+    ] : [
+      { type: 'Property Record', icon: 'home', title: 'Parcel ' + addr.parcel + ' — Single family residential', meta: 'El Paso County Assessor · Last updated 2025-09-12' },
+      { type: 'Permit History', icon: 'doc', title: 'No active permits on this parcel', meta: 'Pikes Peak Regional Building Department' },
+      { type: 'Mill Levy', icon: 'doc', title: 'Total mill levy 2026: 78.412', meta: 'Includes county, school, fire, library' }
+    ];
+
+    const iconSvg = {
+      doc: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+      cone: '<path d="m16.5 18 1.4-7H6.1L7.5 18"/><path d="M2 22h20"/><path d="m12 2 4 9H8z"/>',
+      home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+      meeting: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>'
+    };
+
+    document.getElementById('result-section').classList.add('active');
+    document.getElementById('result-section').innerHTML = `
+      <div class="result-card">
+        <div class="result-header">
+          <div class="result-address">
+            <div class="result-address-label">Address</div>
+            <h2>${addr.address}</h2>
+            <div class="result-meta">
+              <span>${addr.city}</span>
+              <span>·</span>
+              <span>Parcel <strong>${addr.parcel}</strong></span>
+              <span>·</span>
+              <span>Zone <strong>${zone.id}</strong></span>
+            </div>
+          </div>
+          <span class="status-badge status-${zone.status}" style="font-size: 13px; padding: 6px 14px;">${zone.statusLabel}</span>
+        </div>
+        <div class="result-status-block ${g.cls}">
+          <div class="result-status-headline">${g.headline}</div>
+          <div class="result-guidance">${g.body}</div>
+        </div>
+        <div class="result-actions">
+          <button class="btn-primary" onclick="openSubscribe()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            Get alerts for this address
+          </button>
+          <button class="btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            Share
+          </button>
+          <button class="btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print
+          </button>
+        </div>
+        <div class="records-section">
+          <h3>Connected records</h3>
+          <p class="records-subhead">Every document, permit, meeting item, and notice attached to this parcel — searchable, in chronological order.</p>
+          <div class="records-grid">
+            ${records.map(r => `
+              <a href="#" class="record-item">
+                <div class="record-item-type">
+                  <svg class="record-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${iconSvg[r.icon]}</svg>
+                  ${r.type}
+                </div>
+                <div class="record-item-title">${r.title}</div>
+                <div class="record-item-meta">${r.meta}</div>
+              </a>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ============ Subscribe Modal ============
+  function openSubscribe() {
+    const binding = document.getElementById('modal-address-binding');
+    if (currentSearchedAddress) {
+      binding.querySelector('.address-binding-value').textContent =
+        currentSearchedAddress.address + ' · Parcel ' + currentSearchedAddress.parcel;
+    } else {
+      binding.querySelector('.address-binding-value').textContent = 'All of El Paso County (no address selected)';
+    }
+    document.getElementById('subscribe-modal').classList.add('open');
+    setTimeout(() => document.getElementById('email-input').focus(), 100);
+  }
+
+  function closeSubscribe() {
+    document.getElementById('subscribe-modal').classList.remove('open');
+  }
+
+  function handleSubscribe() {
+    const email = document.getElementById('email-input').value;
+    if (!email) {
+      document.getElementById('email-input').focus();
+      return;
+    }
+    closeSubscribe();
+    alert('Subscribed! In production this would write to your alerts database (replacing the Everbridge dependency).');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSubscribe();
+  });
+</script>

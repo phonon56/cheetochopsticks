@@ -193,11 +193,16 @@ function detectInlineHandlers(body, js) {
   }
 
   // 2. Collect every name actually declared at the top level of the
-  //    JS source. Indentation is the heuristic for "top level":
-  //    declarations inside functions/blocks are indented (or at least
-  //    preceded by something other than start-of-line).
+  //    JS source. Indentation is NOT a reliable "top level" heuristic
+  //    when the source is HTML-embedded — the <script> block content is
+  //    typically indented two or four spaces under the tag, so an
+  //    anchored ^function would miss every declaration. The intersection
+  //    step below filters by inline-handler reference, so a permissive
+  //    declaration scan only matters when an inner-block name happens to
+  //    collide with an inline handler call (rare; the symptom would be
+  //    a runtime ReferenceError in the IIFE, which surfaces immediately).
   const declared = new Set();
-  const declRe = /(?:^|\n)(?:function\s+([a-zA-Z_$][\w$]*)|(?:const|let|var)\s+([a-zA-Z_$][\w$]*)\s*=)/g;
+  const declRe = /(?:^|\n)[ \t]*(?:function\s+([a-zA-Z_$][\w$]*)|(?:const|let|var)\s+([a-zA-Z_$][\w$]*)\s*=)/g;
   for (let m; (m = declRe.exec(js)) !== null; ) {
     const name = m[1] || m[2];
     if (name) declared.add(name);
