@@ -151,12 +151,12 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
-  .nav {
+  .brand-nav {
     display: flex;
     align-items: center;
     gap: 4px;
   }
-  .nav a {
+  .brand-nav a {
     color: var(--text);
     text-decoration: none;
     padding: 8px 14px;
@@ -165,12 +165,12 @@
     font-weight: 500;
     transition: background 0.15s;
   }
-  .nav a:hover { background: var(--bg); }
-  .nav a.current {
+  .brand-nav a:hover { background: var(--bg); }
+  .brand-nav a.current {
     background: var(--bg);
     color: var(--brand);
   }
-  .cta-button {
+  .brand-cta {
     background: var(--accent);
     color: white;
     border: none;
@@ -185,9 +185,9 @@
     align-items: center;
     gap: 8px;
   }
-  .cta-button:hover { background: var(--accent-hover); }
-  .cta-button:active { transform: translateY(1px); }
-  .cta-button svg { width: 16px; height: 16px; }
+  .brand-cta:hover { background: var(--accent-hover); }
+  .brand-cta:active { transform: translateY(1px); }
+  .brand-cta svg { width: 16px; height: 16px; }
 
   /* Hero */
   .hero {
@@ -1026,7 +1026,7 @@
 
   @media (max-width: 640px) {
     .topbar-inner { padding: 12px 16px; gap: 12px; }
-    .nav { display: none; }
+    .brand-nav { display: none; }
     .hero { padding: 32px 16px 24px; }
     .status-strip { padding: 0 16px 20px; gap: 12px; }
     .main { padding: 0 16px 32px; }
@@ -1052,13 +1052,13 @@
         <span>Emergency Management</span>
       </div>
     </a>
-    <nav class="nav" aria-label="Main">
+    <nav class="brand-nav" aria-label="Main">
       <a href="#" class="current">Current Alerts</a>
       <a href="#">Preparedness</a>
       <a href="#">Resources</a>
       <a href="#">About</a>
     </nav>
-    <button type="button" class="cta-button" onclick="openSubscribe()" aria-label="Get emergency alerts for your address">
+    <button type="button" class="brand-cta" onclick="openSubscribe()" aria-label="Get emergency alerts for your address">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
         <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
