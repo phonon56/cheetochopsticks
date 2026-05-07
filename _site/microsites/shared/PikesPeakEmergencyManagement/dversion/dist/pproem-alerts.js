@@ -362,7 +362,7 @@
       : zones;
 
     list.innerHTML = filteredZones.map(zone => `
-      <button class="zone-card" data-zone-id="${zone.id}" onclick="focusZone('${zone.id}')">
+      <button type="button" class="zone-card" data-zone-id="${zone.id}" onclick="focusZone('${zone.id}')" aria-label="${zone.name}, ${zone.statusLabel}. Show on map.">
         <div class="zone-card-header">
           <div>
             <div class="zone-card-name">${zone.name}</div>
@@ -383,13 +383,42 @@
   renderZoneList('active');
 
   function switchTab(event, tab) {
+    // Roving-tabindex pattern (per ARIA Authoring Practices) — only
+    // the currently-selected tab is in the page tab order; the others
+    // are reachable via Arrow keys (see onTabKeydown below).
     document.querySelectorAll('.tab').forEach(t => {
       t.classList.remove('active');
       t.setAttribute('aria-selected', 'false');
+      t.setAttribute('tabindex', '-1');
     });
     event.currentTarget.classList.add('active');
     event.currentTarget.setAttribute('aria-selected', 'true');
+    event.currentTarget.setAttribute('tabindex', '0');
+    // Re-point the tabpanel's aria-labelledby at the new tab so SR
+    // users hear the right context when they enter the panel.
+    const panel = document.getElementById('zone-list');
+    if (panel) panel.setAttribute('aria-labelledby', event.currentTarget.id);
     renderZoneList(tab);
+  }
+
+  // Arrow-key navigation across the tablist. Left/Right and Home/End
+  // move focus and activate (per the "automatic activation" pattern,
+  // which is appropriate here since switching the tab has no cost
+  // beyond a re-render).
+  function onTabKeydown(event) {
+    const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    if (!keys.includes(event.key)) return;
+    event.preventDefault();
+    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+    const idx = tabs.indexOf(event.currentTarget);
+    let next;
+    if (event.key === 'ArrowRight') next = tabs[(idx + 1) % tabs.length];
+    else if (event.key === 'ArrowLeft') next = tabs[(idx - 1 + tabs.length) % tabs.length];
+    else if (event.key === 'Home') next = tabs[0];
+    else if (event.key === 'End') next = tabs[tabs.length - 1];
+    if (!next) return;
+    next.focus();
+    next.click();
   }
 
   function focusZone(zoneId) {
@@ -584,16 +613,16 @@
           <div class="result-guidance">${g.body}</div>
         </div>
         <div class="result-actions">
-          <button class="btn-primary" onclick="openSubscribe()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <button type="button" class="btn-primary" onclick="openSubscribe()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
             Get alerts for this address
           </button>
-          <button class="btn-secondary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          <button type="button" class="btn-secondary" aria-label="Share this address result">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
             Share
           </button>
-          <button class="btn-secondary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <button type="button" class="btn-secondary" onclick="window.print()" aria-label="Print this address result">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
             Print
           </button>
         </div>
@@ -618,6 +647,10 @@
   }
 
   // ============ Subscribe Modal ============
+  // Focus management is critical for ADA: trap Tab inside the modal
+  // while it's open, return focus to the element that opened it.
+  let _modalLastFocus = null;
+
   function openSubscribe() {
     const binding = document.getElementById('modal-address-binding');
     if (currentSearchedAddress) {
@@ -626,13 +659,47 @@
     } else {
       binding.querySelector('.address-binding-value').textContent = 'All of El Paso County (no address selected)';
     }
-    document.getElementById('subscribe-modal').classList.add('open');
+    _modalLastFocus = document.activeElement;
+    const modal = document.getElementById('subscribe-modal');
+    modal.classList.add('open');
+    modal.removeAttribute('aria-hidden');
+    // Lock background scroll so Tab can't escape into the page below.
+    document.body.style.overflow = 'hidden';
     setTimeout(() => document.getElementById('email-input').focus(), 100);
   }
 
   function closeSubscribe() {
-    document.getElementById('subscribe-modal').classList.remove('open');
+    const modal = document.getElementById('subscribe-modal');
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    // Return focus to whatever opened the modal so keyboard users
+    // don't get dumped at the top of the page.
+    if (_modalLastFocus && typeof _modalLastFocus.focus === 'function') {
+      _modalLastFocus.focus();
+    }
+    _modalLastFocus = null;
   }
+
+  // Tab focus trap — keeps focus inside .modal while the modal is open.
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') return;
+    const modal = document.getElementById('subscribe-modal');
+    if (!modal || !modal.classList.contains('open')) return;
+    const focusable = modal.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
 
   function handleSubscribe() {
     const email = document.getElementById('email-input').value;
@@ -726,6 +793,7 @@
   window.handleSearch = handleSearch;
   window.demoSearch = demoSearch;
   window.switchTab = switchTab;
+  window.onTabKeydown = onTabKeydown;
   window.closeSubscribe = closeSubscribe;
   window.handleSubscribe = handleSubscribe;
   window.focusZone = focusZone;

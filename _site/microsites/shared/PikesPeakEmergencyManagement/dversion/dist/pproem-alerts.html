@@ -21,7 +21,7 @@
       <a href="#">Resources</a>
       <a href="#">About</a>
     </nav>
-    <button class="cta-button" onclick="openSubscribe()" aria-label="Get emergency alerts for your address">
+    <button type="button" class="cta-button" onclick="openSubscribe()" aria-label="Get emergency alerts for your address">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
         <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
@@ -31,7 +31,7 @@
   </div>
 </header>
 
-<main id="main-content">
+<main id="main-content" tabindex="-1">
   <section class="hero">
     <div class="hero-eyebrow">
       <span class="live-dot" aria-hidden="true"></span>
@@ -53,9 +53,9 @@
 
     <div class="demo-pills">
       <span>Try:</span>
-      <button class="demo-pill" onclick="demoSearch('lorson')">4720 Lorson Ranch Pkwy</button>
-      <button class="demo-pill" onclick="demoSearch('blackforest')">8901 Black Forest Rd</button>
-      <button class="demo-pill" onclick="demoSearch('downtown')">123 N Tejon St</button>
+      <button type="button" class="demo-pill" onclick="demoSearch('lorson')" aria-label="Use demo address: 4720 Lorson Ranch Parkway">4720 Lorson Ranch Pkwy</button>
+      <button type="button" class="demo-pill" onclick="demoSearch('blackforest')" aria-label="Use demo address: 8901 Black Forest Road">8901 Black Forest Rd</button>
+      <button type="button" class="demo-pill" onclick="demoSearch('downtown')" aria-label="Use demo address: 123 North Tejon Street">123 N Tejon St</button>
     </div>
   </section>
 
@@ -96,15 +96,24 @@
     </div>
 
     <aside class="side-panel" aria-label="Active alerts list">
-      <div class="tabs" role="tablist">
-        <button class="tab active" role="tab" aria-selected="true" onclick="switchTab(event, 'active')">
-          Active Alerts <span class="tab-count">3</span>
+      <div class="tabs" role="tablist" aria-label="Filter zones">
+        <button type="button" class="tab active" role="tab" id="tab-active"
+                aria-selected="true" aria-controls="zone-list" tabindex="0"
+                onclick="switchTab(event, 'active')"
+                onkeydown="onTabKeydown(event)">
+          Active Alerts <span class="tab-count" aria-hidden="true">3</span>
+          <span class="sr-only">3 zones</span>
         </button>
-        <button class="tab" role="tab" aria-selected="false" onclick="switchTab(event, 'all')">
-          All Zones <span class="tab-count">42</span>
+        <button type="button" class="tab" role="tab" id="tab-all"
+                aria-selected="false" aria-controls="zone-list" tabindex="-1"
+                onclick="switchTab(event, 'all')"
+                onkeydown="onTabKeydown(event)">
+          All Zones <span class="tab-count" aria-hidden="true">42</span>
+          <span class="sr-only">42 zones</span>
         </button>
       </div>
-      <div class="tab-content" id="zone-list">
+      <div class="tab-content" id="zone-list" role="tabpanel"
+           aria-labelledby="tab-active" tabindex="0">
         <!-- Populated by JS -->
       </div>
     </aside>
@@ -128,10 +137,10 @@
 </footer>
 
 <!-- Subscribe Modal -->
-<div class="modal-backdrop" id="subscribe-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closeSubscribe()">
+<div class="modal-backdrop" id="subscribe-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true" onclick="if(event.target===this)closeSubscribe()">
   <div class="modal">
     <div class="modal-header">
-      <button class="modal-close" onclick="closeSubscribe()" aria-label="Close subscribe form">
+      <button type="button" class="modal-close" onclick="closeSubscribe()" aria-label="Close subscribe form">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
       <h2 id="modal-title">Get alerts for this address</h2>
@@ -189,7 +198,7 @@
       <div class="modal-footer-note">
         We never share your contact info. <a href="#" style="color: var(--brand);">Privacy policy</a>.
       </div>
-      <button class="btn-primary btn-large" onclick="handleSubscribe()">Subscribe</button>
+      <button type="button" class="btn-primary btn-large" onclick="handleSubscribe()">Subscribe</button>
     </div>
   </div>
 </div>
