@@ -58,11 +58,13 @@ headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link re
     border:0 !important;
   }
 
-  /* Back-to-top button. Appears after scrolling 600 px. Fixed at the
-     bottom-right; clicking returns focus to the page top (the skip-link
-     target / page header) so keyboard users land somewhere navigable.
-     Respects prefers-reduced-motion. WCAG 2.4.1 Bypass Blocks support
-     for long pages; WCAG 2.5.5 Target Size — 48×48 css px. */
+  /* Back-to-top button — sticky / always visible at the bottom-right.
+     No scroll threshold; the button is pinned the whole time so users
+     can always click to return to the menu. Click returns focus to
+     the page top (the skip-link target) so keyboard users land at
+     the menu, not at the button. Respects prefers-reduced-motion for
+     the smooth scroll itself.
+     WCAG 2.4.1 Bypass Blocks · WCAG 2.5.5 Target Size (48×48 css px). */
   .back-to-top{
     position:fixed;
     bottom:1.25rem;
@@ -78,28 +80,17 @@ headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link re
     display:flex;
     align-items:center;
     justify-content:center;
-    opacity:0;
-    transform:translateY(8px);
-    pointer-events:none;
-    transition:opacity 200ms ease, transform 200ms ease, background 150ms ease;
+    transition:background 150ms ease, transform 150ms ease;
     z-index:100;
     font-size:1.4rem;
     line-height:1;
   }
-  .back-to-top.is-visible{
-    opacity:1;
-    transform:translateY(0);
-    pointer-events:auto;
-  }
-  .back-to-top:hover{ background:var(--forest-2); }
+  .back-to-top:hover{ background:var(--forest-2); transform:translateY(-1px); }
   .back-to-top:focus-visible{
     outline:3px solid var(--gold);
     outline-offset:3px;
   }
   @media print { .back-to-top{ display:none; } }
-  @media (prefers-reduced-motion: reduce) {
-    .back-to-top{ transition:opacity 50ms; }
-  }
 
   /* Skip link */
   .skip-link{
@@ -1426,25 +1417,23 @@ try {
 applyFilters();
 
 // Back-to-top button — WCAG 2.4.1 Bypass Blocks support for long pages.
-// Visible after scrolling 600 px. Click smooth-scrolls to top (or jumps
-// instantly when prefers-reduced-motion is set) and moves focus to the
-// page top so keyboard users land at the menu, not at the button.
+// Sticky / always visible (no scroll threshold). Click smooth-scrolls to
+// top (or jumps instantly when prefers-reduced-motion is set) and moves
+// focus to the page top so keyboard users land at the menu, not at the
+// button itself.
 (function initBackToTop(){
   const btn = document.getElementById('backToTop');
   if (!btn) return;
   const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function toggle(){
-    if (window.scrollY > 600) btn.classList.add('is-visible');
-    else btn.classList.remove('is-visible');
-  }
-  window.addEventListener('scroll', toggle, { passive: true });
-  toggle();
   btn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: prefersReduce ? 'auto' : 'smooth' });
     // Move focus to the skip-link target so keyboard users land at the
-    // top of the page; the body fallback handles cases where #main was
-    // renamed or stripped (e.g. dversion under a host CMS).
-    const target = document.getElementById('main') || document.querySelector('main, [role="main"]') || document.body;
+    // top of the page; fallback chain handles dversion (where #main may
+    // be renamed or stripped) and any host CMS that wraps the partial.
+    const target = document.getElementById('main')
+      || document.getElementById('hh-main')
+      || document.querySelector('main, [role="main"]')
+      || document.body;
     if (target) {
       if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
       target.focus({ preventScroll: true });
