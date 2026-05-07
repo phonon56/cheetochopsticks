@@ -13,8 +13,12 @@ assistance, mental health, addiction, employment, immigration, and more.</p>
 </thead>
 <tbody>
 <tr>
-<td><a href="index.html"><code>index.html</code></a></td>
-<td>Standalone — open in a browser, share offline, also served as-is on cheetochopsticks.com at <code>/microsites/city/community-resources-list/</code>. Self-contained: all CSS, JS, and resource data inline.</td>
+<td><a href="helping-hands.html"><code>helping-hands.html</code></a></td>
+<td>Standalone — open in a browser, share offline. Self-contained: all CSS, JS, and resource data inline. Includes its own brand-bar header and page footer.</td>
+</tr>
+<tr>
+<td><a href="helping-hands.njk"><code>helping-hands.njk</code></a></td>
+<td>Eleventy template — rendered through <code>site.njk</code> so cheetochopsticks.com shows the page wrapped in the dark cc nav + cc footer + subscribe block. <strong>This is what serves at <code>/microsites/city/community-resources-list/</code>.</strong> Page topbar and bottom footer stripped (site.njk owns them); crisis banner and back-to-top stay.</td>
 </tr>
 <tr>
 <td><a href="Helping-Hands-Directory.pdf"><code>Helping-Hands-Directory.pdf</code></a></td>
@@ -72,4 +76,5 @@ folder). Highlights:</p>
 <li>WCAG 2.2 SC 2.4.13 (Focus Appearance) — focus states use 3px outline contrasts ≥ 3:1 against adjacent colors</li>
 <li>Empty-state has a Clear-filters button instead of stranding the user</li>
 <li>1.36 MB PDF iframe uses <code>loading=&quot;lazy&quot;</code> and provides a download-link fallback inside <code>&lt;iframe&gt;</code> for browsers that can't render PDFs inline</li>
+<li><strong>Back-to-top button</strong> (WCAG 2.4.1 Bypass Blocks support for long pages): appears after scrolling 600 px, smooth-scrolls to top (instant when <code>prefers-reduced-motion</code> is set), moves focus to the page top so keyboard users land at the menu, 48×48 px target (WCAG 2.5.5)</li>
 </ul>

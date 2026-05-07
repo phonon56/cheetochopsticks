@@ -644,6 +644,33 @@ try {
 // Initial render
 applyFilters();
 
+// Back-to-top button — WCAG 2.4.1 Bypass Blocks support for long pages.
+// Visible after scrolling 600 px. Click smooth-scrolls to top (or jumps
+// instantly when prefers-reduced-motion is set) and moves focus to the
+// page top so keyboard users land at the menu, not at the button.
+(function initBackToTop(){
+  const btn = document.getElementById('backToTop');
+  if (!btn) return;
+  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function toggle(){
+    if (window.scrollY > 600) btn.classList.add('is-visible');
+    else btn.classList.remove('is-visible');
+  }
+  window.addEventListener('scroll', toggle, { passive: true });
+  toggle();
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: prefersReduce ? 'auto' : 'smooth' });
+    // Move focus to the skip-link target so keyboard users land at the
+    // top of the page; the body fallback handles cases where #main was
+    // renamed or stripped (e.g. dversion under a host CMS).
+    const target = document.getElementById('main') || document.querySelector('main, [role="main"]') || document.body;
+    if (target) {
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+    }
+  });
+})();
+
 // Expose for inline on* attributes that chain multiple calls — the
 // dversion build's auto-detect regex only catches the first identifier
 // per attribute (it picked up `preventDefault` from `onsubmit` and

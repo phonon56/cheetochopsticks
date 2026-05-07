@@ -1,13 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Helping Hands — El Paso County Community Resources</title>
-<meta name="description" content="A searchable index of community resources in El Paso County, Colorado. Adapted from the Pikes Peak Library District Helping Hands guide.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+---
+layout: site.njk
+permalink: "/microsites/city/community-resources-list/index.html"
+title: "Helping Hands — El Paso County Community Resources"
+description: "A searchable index of community resources in El Paso County, Colorado. Adapted from the Pikes Peak Library District Helping Hands guide."
+activeNav: "you"
+subscribeTopic: "gov.shared.cos-resources"
+subscribeHeading: "Get community-resource updates"
+subscribeDeck: "When the city publishes a new resource directory or a major change to an existing one, we'll email you a plain-language summary."
+headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">'
+---
+
 <style>
   :root{
     --cream:#f6f1e7;
@@ -54,6 +56,49 @@
     clip:rect(0,0,0,0) !important;
     white-space:nowrap !important;
     border:0 !important;
+  }
+
+  /* Back-to-top button. Appears after scrolling 600 px. Fixed at the
+     bottom-right; clicking returns focus to the page top (the skip-link
+     target / page header) so keyboard users land somewhere navigable.
+     Respects prefers-reduced-motion. WCAG 2.4.1 Bypass Blocks support
+     for long pages; WCAG 2.5.5 Target Size — 48×48 css px. */
+  .back-to-top{
+    position:fixed;
+    bottom:1.25rem;
+    right:1.25rem;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:var(--forest);
+    color:#fff;
+    border:2px solid var(--cream);
+    box-shadow:var(--shadow-md);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transform:translateY(8px);
+    pointer-events:none;
+    transition:opacity 200ms ease, transform 200ms ease, background 150ms ease;
+    z-index:100;
+    font-size:1.4rem;
+    line-height:1;
+  }
+  .back-to-top.is-visible{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .back-to-top:hover{ background:var(--forest-2); }
+  .back-to-top:focus-visible{
+    outline:3px solid var(--gold);
+    outline-offset:3px;
+  }
+  @media print { .back-to-top{ display:none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top{ transition:opacity 50ms; }
   }
 
   /* Skip link */
@@ -604,8 +649,7 @@
     html{scroll-behavior:auto}
   }
 </style>
-</head>
-<body>
+
 <div class="hh-page">
 <a class="skip-link" href="#main">Skip to main content</a>
 
@@ -616,22 +660,6 @@
   <a href="tel:211">211</a> to find help ·
   <a href="tel:7196333819">719-633-3819</a> for TESSA (24-hr domestic violence)
 </aside>
-
-<header class="site-header">
-  <div class="hh-container brand">
-    <div>
-      <div class="brand-mark">
-        <span class="glyph" aria-hidden="true">✦</span>
-        <h1>Helping Hands</h1>
-      </div>
-      <p class="kicker">El Paso County Community Resources</p>
-    </div>
-    <div class="meta">
-      <p><strong>Adapted from</strong> the Pikes Peak Library District guide<br>
-      <strong>Source:</strong> <a href="https://research.ppld.org/HelpingHands">research.ppld.org/HelpingHands</a></p>
-    </div>
-  </div>
-</header>
 
 <section class="need-finder" aria-labelledby="need-h">
   <div class="hh-container">
@@ -733,27 +761,6 @@
     </iframe>
   </div>
 </section>
-
-<footer>
-  <div class="hh-container">
-    <div>
-      <h3>Helping Hands</h3>
-      <p>An indexed, searchable adaptation of the El Paso County Community Resources directory maintained by the <a href="https://ppld.org">Pikes Peak Library District</a>.</p>
-      <p>For corrections or additions, contact PPLD or call <a href="tel:211">211</a>.</p>
-    </div>
-    <div>
-      <h3>Crisis Lines</h3>
-      <p><a href="tel:911">911</a> · Emergency</p>
-      <p><a href="tel:988">988</a> · Mental Health / Suicide</p>
-      <p><a href="tel:211">211</a> · Find a service</p>
-      <p><a href="tel:7196333819">719-633-3819</a> · TESSA (24h)</p>
-    </div>
-    <div>
-      <h3>About this site</h3>
-      <p>Built as a Drupal-ready prototype. Each resource is a structured record (parcel-style) with text fields extracted from the source PDF, which remains preserved and viewable.</p>
-    </div>
-  </div>
-</footer>
 
 <script>
 // =============================================================================
@@ -1381,6 +1388,33 @@ try {
 // Initial render
 applyFilters();
 
+// Back-to-top button — WCAG 2.4.1 Bypass Blocks support for long pages.
+// Visible after scrolling 600 px. Click smooth-scrolls to top (or jumps
+// instantly when prefers-reduced-motion is set) and moves focus to the
+// page top so keyboard users land at the menu, not at the button.
+(function initBackToTop(){
+  const btn = document.getElementById('backToTop');
+  if (!btn) return;
+  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function toggle(){
+    if (window.scrollY > 600) btn.classList.add('is-visible');
+    else btn.classList.remove('is-visible');
+  }
+  window.addEventListener('scroll', toggle, { passive: true });
+  toggle();
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: prefersReduce ? 'auto' : 'smooth' });
+    // Move focus to the skip-link target so keyboard users land at the
+    // top of the page; the body fallback handles cases where #main was
+    // renamed or stripped (e.g. dversion under a host CMS).
+    const target = document.getElementById('main') || document.querySelector('main, [role="main"]') || document.body;
+    if (target) {
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+    }
+  });
+})();
+
 // Expose for inline on* attributes that chain multiple calls — the
 // dversion build's auto-detect regex only catches the first identifier
 // per attribute (it picked up `preventDefault` from `onsubmit` and
@@ -1393,6 +1427,8 @@ if (typeof window !== 'undefined') {
 }
 </script>
 
+<button type="button" class="back-to-top" id="backToTop" aria-label="Back to top of page">
+  <span aria-hidden="true">↑</span>
+</button>
+
 </div><!-- /.hh-page -->
-</body>
-</html>

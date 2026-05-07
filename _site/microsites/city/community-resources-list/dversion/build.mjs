@@ -17,7 +17,7 @@ import { buildDversion } from '../../../_dversion-build.mjs';
 const HERE = dirname(fileURLToPath(import.meta.url));
 
 buildDversion({
-  src: resolve(HERE, '..', 'index.html'),
+  src: resolve(HERE, '..', 'helping-hands.html'),
   outDir: resolve(HERE, 'dist'),
   previewDir: resolve(HERE, 'preview'),
   ns: 'cc-helping-hands',
