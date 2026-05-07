@@ -40,11 +40,24 @@ headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link re
     --radius-lg: 10px;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* CSS scoping for cheetochopsticks integration: site.njk wraps this
+     content in its own dark <header class="nav"> + <footer class="cc-footer">.
+     The standalone version of this page resets every element with
+     `* { margin:0; padding:0 }` and styles <body> directly — both bleed
+     into site.njk's chrome (zeroing nav-link padding, swapping the nav's
+     IBM Plex font and dark bg for this page's IBM Plex + cream). Scope
+     those rules to .alerts-main and .modal-backdrop (the modal sits
+     outside .alerts-main but is still page content). */
+  .alerts-main, .alerts-main *, .alerts-main *::before, .alerts-main *::after,
+  .modal-backdrop, .modal-backdrop *, .modal-backdrop *::before, .modal-backdrop *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
   html { scroll-behavior: smooth; }
 
-  body {
+  .alerts-main {
     font-family: 'IBM Plex Sans', system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -55,6 +68,7 @@ headExtras: '<link rel="preconnect" href="https://fonts.googleapis.com"><link re
     background-image:
       radial-gradient(circle at 20% 10%, rgba(30,58,95,0.025), transparent 50%),
       radial-gradient(circle at 80% 80%, rgba(184,65,12,0.02), transparent 50%);
+    min-height: 100vh;
   }
 
   /* Skip link */
