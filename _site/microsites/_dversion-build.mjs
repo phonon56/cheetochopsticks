@@ -262,7 +262,7 @@ function buildPartial({ ns, fileBase, prettyName, body }) {
   ].join('\n');
 }
 
-function buildPreview({ ns, fileBase, prettyName, hostNav, hostHeadline, scopedCss, scopedJs, partial, previewFontHrefs = [] }) {
+function buildPreview({ ns, fileBase, prettyName, hostNav, hostHeadline, scopedCss, scopedJs, partial, previewFontHrefs = [], previewExtraScripts = [] }) {
   const fontLinks = previewFontHrefs.length
     ? [
         `<link rel="preconnect" href="https://fonts.googleapis.com">`,
@@ -270,6 +270,17 @@ function buildPreview({ ns, fileBase, prettyName, hostNav, hostHeadline, scopedC
         ...previewFontHrefs.map((href) => `<link href="${href}" rel="stylesheet">`),
       ]
     : [];
+  // External libraries the partial JS depends on (e.g. Leaflet for the
+  // alerts page). Emitted as plain <script src> in the head with no defer
+  // / async attributes so they're available synchronously by the time the
+  // inline <script id="…-js"> block runs further down the document.
+  const extraScriptTags = previewExtraScripts.map((s) => {
+    if (typeof s === 'string') return `<script src="${s}"></script>`;
+    const attrs = Object.entries(s.attrs ?? {})
+      .map(([k, v]) => v === true ? ` ${k}` : ` ${k}="${v}"`)
+      .join('');
+    return `<script src="${s.src}"${attrs}></script>`;
+  });
   return [
     `<!doctype html>`,
     `<html lang="en">`,
@@ -278,6 +289,7 @@ function buildPreview({ ns, fileBase, prettyName, hostNav, hostHeadline, scopedC
     `<title>${prettyName} DVersion — preview harness</title>`,
     `<meta name="viewport" content="width=device-width, initial-scale=1">`,
     ...fontLinks,
+    ...extraScriptTags,
     `<style>`,
     `  :root {`,
     `    --host-bg: #f4f1ec;`,
@@ -359,6 +371,15 @@ function buildPreview({ ns, fileBase, prettyName, hostNav, hostHeadline, scopedC
  *                                          with real fonts. Sources that load fonts
  *                                          via @import don't need this — those are
  *                                          already hoisted into the scoped CSS.
+ * @param {Array<string|{src:string,attrs?:object}>} [cfg.previewExtraScripts]
+ *                                          External JS dependencies the partial
+ *                                          needs at runtime (e.g. Leaflet for
+ *                                          a map page). Emitted as <script src>
+ *                                          tags in the preview's <head> so they
+ *                                          load before the partial's IIFE runs.
+ *                                          The production Drupal/WordPress host
+ *                                          must enqueue these separately — the
+ *                                          dist files don't include them.
  * @param {string}   [cfg.previewName]      preview filename within previewDir
  *                                          (default: "index.html"). Set per-page
  *                                          when a parent folder hosts multiple
@@ -368,6 +389,7 @@ export function buildDversion(cfg) {
   const { src, outDir, previewDir, ns, fileBase, prettyName, hostNav, hostHeadline } = cfg;
   const stripPatterns = cfg.stripPatterns ?? [];
   const previewFontHrefs = cfg.previewFontHrefs ?? [];
+  const previewExtraScripts = cfg.previewExtraScripts ?? [];
   const previewName = cfg.previewName ?? 'index.html';
 
   const raw = readFileSync(src, 'utf8');
@@ -391,7 +413,7 @@ export function buildDversion(cfg) {
   const partial = buildPartial({ ns, fileBase, prettyName, body });
   const previewHtml = buildPreview({
     ns, fileBase, prettyName, hostNav, hostHeadline,
-    scopedCss, scopedJs, partial, previewFontHrefs,
+    scopedCss, scopedJs, partial, previewFontHrefs, previewExtraScripts,
   });
 
   mkdirSync(outDir, { recursive: true });

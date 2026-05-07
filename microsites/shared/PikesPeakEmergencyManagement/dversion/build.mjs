@@ -67,9 +67,22 @@ const pages = [
     // The preview harness loads Leaflet inline below — see preview note.
     previewFontHrefs: [
       'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap',
-      // Leaflet's stylesheet is loaded as a webfont-style external link
-      // so the preview harness gets the map controls/markers styled.
+      // Leaflet's stylesheet — needed for map controls and marker icons
+      // to render. The CSS is hoisted alongside fonts; the JS goes via
+      // previewExtraScripts below.
       'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+    ],
+    previewExtraScripts: [
+      // Leaflet's JS must load before the partial's IIFE so `L.map(…)`
+      // resolves. SRI hash + crossorigin match the production Drupal /
+      // WordPress library configuration documented in dversion/README.md.
+      {
+        src: 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+        attrs: {
+          integrity: 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=',
+          crossorigin: '',
+        },
+      },
     ],
   },
 ];
