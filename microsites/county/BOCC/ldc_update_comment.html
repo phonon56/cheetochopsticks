@@ -107,6 +107,14 @@ footer.foot{
   color:var(--quiet);text-align:center;line-height:1.6;
 }
 
+/* WCAG 2.1 AA — focus visibility, reduced motion, screen-reader-only utility */
+.toolbar button:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+a:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none !important;animation:none !important;}
+}
+
 @media print{
   body{background:#fff;padding:0;}
   .toolbar{display:none;}
@@ -117,11 +125,12 @@ footer.foot{
 </head>
 <body>
 
-<div class="toolbar" role="toolbar">
-  <button onclick="copyComment()" aria-label="Copy the comment text">Copy comment</button>
-  <button onclick="window.print()">Print / PDF</button>
+<div class="toolbar">
+  <button type="button" onclick="copyComment()" aria-label="Copy the comment text">Copy comment</button>
+  <button type="button" onclick="window.print()">Print / PDF</button>
   <span class="note">Paste into the Konveio comment box.</span>
 </div>
+<div id="copy-status" class="sr-only" role="status" aria-live="polite"></div>
 
 <article class="page">
 
@@ -199,6 +208,11 @@ function copyComment(){
     const btn=document.querySelector('.toolbar button');
     const o=btn.textContent;btn.textContent='Copied';
     setTimeout(()=>{btn.textContent=o;},1400);
+    const s=document.getElementById('copy-status');
+    if(s){s.textContent='Comment copied to clipboard.';setTimeout(()=>{s.textContent='';},2000);}
+  }).catch(()=>{
+    const s=document.getElementById('copy-status');
+    if(s){s.textContent='Copy failed — select and copy the comment manually.';}
   });
 }
 </script>

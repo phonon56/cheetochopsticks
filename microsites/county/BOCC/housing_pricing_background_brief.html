@@ -158,6 +158,18 @@ footer.foot{
   color:var(--quiet);text-align:center;line-height:1.6;
 }
 
+/* WCAG 2.1 AA — focus visibility, reduced motion, screen-reader-only utility */
+.toolbar button:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+a:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+sup a{color:var(--gold);text-decoration:none;font-weight:600;padding:0 1px;}
+sup a:hover{text-decoration:underline;}
+.sources li:target{background:#fdf6dc;outline:2px solid var(--gold);outline-offset:2px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none !important;animation:none !important;}
+  html{scroll-behavior:auto !important;}
+}
+
 @media print{
   body{background:#fff;padding:0;}
   .toolbar{display:none;}
@@ -173,8 +185,8 @@ footer.foot{
 </head>
 <body>
 
-<div class="toolbar" role="toolbar">
-  <button onclick="window.print()">Print / PDF</button>
+<div class="toolbar">
+  <button type="button" onclick="window.print()" aria-label="Print or save the brief as PDF">Print / PDF</button>
   <span class="note">Background brief — share freely with journalists or distribute.</span>
 </div>
 
@@ -198,13 +210,13 @@ footer.foot{
       sixteen months litigating an antitrust case alleging that RealPage, Inc. and six of
       the nation's largest property managers used algorithmic software to coordinate
       apartment rents. Both the company and one major defendant have now settled — with
-      no financial restitution to renters.<sup>1, 2</sup>
+      no financial restitution to renters.<sup><a href="#src-1" aria-label="See source 1">1</a>, <a href="#src-2" aria-label="See source 2">2</a></sup>
     </p>
     <p>
       The Colorado Springs Chamber &amp; EDC publicly markets the region as a place to
       recruit highly-educated, security-cleared workers at a $65,000 average wage —
       below most major aerospace and defense markets and explicitly above the El Paso
-      County average.<sup>3</sup> Local rents have nonetheless climbed
+      County average.<sup><a href="#src-3" aria-label="See source 3">3</a></sup> Local rents have nonetheless climbed
       to track BAH levels set by national market surveys captured by the same software
       ecosystem now under federal restraint.
     </p>
@@ -212,7 +224,7 @@ footer.foot{
       <strong>El Paso County's Board of County Commissioners has four narrow actions
       available within existing authority</strong> — none of which require state legislative
       change, none of which constitute rent control, and all of which align with the
-      Chamber's own published housing-policy advocacy.<sup>4</sup>
+      Chamber's own published housing-policy advocacy.<sup><a href="#src-4" aria-label="See source 4">4</a></sup>
     </p>
   </div>
 
@@ -224,14 +236,14 @@ footer.foot{
     that RealPage's revenue management software — historically marketed as YieldStar —
     enabled "competing landlords to share competitively sensitive data" and use the
     resulting aggregated information to coordinate apartment pricing in violation of
-    Section 1 of the Sherman Act.<sup>1</sup>
+    Section 1 of the Sherman Act.<sup><a href="#src-1" aria-label="See source 1">1</a></sup>
   </p>
 
   <p>
     Colorado Attorney General Phil Weiser joined the suit at filing. North Carolina,
     California, Connecticut, Minnesota, Oregon, Tennessee, and Washington joined
     as co-plaintiffs. By January 7, 2025, at least 10 state attorneys general were
-    party to an amended complaint that named six landlords as co-defendants:<sup>5</sup>
+    party to an amended complaint that named six landlords as co-defendants:<sup><a href="#src-5" aria-label="See source 5">5</a></sup>
   </p>
 
   <table class="facts-table" aria-label="Named landlord defendants">
@@ -251,13 +263,13 @@ footer.foot{
   <p>
     On November 19, 2025, Greystar settled with a nine-state attorney general coalition
     including Colorado for $7 million and agreed to stop using software that aligns rent
-    prices using competitively sensitive information.<sup>6</sup> Five days later,
+    prices using competitively sensitive information.<sup><a href="#src-6" aria-label="See source 6">6</a></sup> Five days later,
     on November 24, 2025, RealPage itself settled with the DOJ — accepting a 3-year
     court-appointed monitor, agreeing to stop using competitors' non-public data in
     real-time pricing, requiring training data to be aged at least 12 months, and
-    limiting geographic analysis to state-level only.<sup>2</sup> The settlement
+    limiting geographic analysis to state-level only.<sup><a href="#src-2" aria-label="See source 2">2</a></sup> The settlement
     includes no financial penalty, no admission of liability, and no restitution
-    mechanism for renters.<sup>2</sup>
+    mechanism for renters.<sup><a href="#src-2" aria-label="See source 2">2</a></sup>
   </p>
 
   <div class="callout">
@@ -275,7 +287,7 @@ footer.foot{
     individually mapped. Greystar manages thousands of multifamily units in Colorado
     and is among the largest apartment managers in the El Paso County market.
     Camden, LivCor, Cushman &amp; Wakefield/Pinnacle, Willow Bridge, and Cortland
-    all maintain Colorado portfolios with publicly listed properties.<sup>7</sup>
+    all maintain Colorado portfolios with publicly listed properties.<sup><a href="#src-7" aria-label="See source 7">7</a></sup>
     Property-by-property reconciliation between the defendant list and the El Paso
     County multifamily inventory is the kind of work that requires Assessor data,
     rental property registration records, and ownership-entity tracing — and that
@@ -288,7 +300,7 @@ footer.foot{
     The Colorado Springs Chamber &amp; EDC has stated, in materials promoting its
     "Hello Colorado Springs" talent program, that since 2022 it has announced over
     5,000 high-paying jobs in aerospace, defense, manufacturing, and cybersecurity at
-    "an average annual wage of $65,000, more than El Paso County's average."<sup>3</sup>
+    "an average annual wage of $65,000, more than El Paso County's average."<sup><a href="#src-3" aria-label="See source 3">3</a></sup>
     These positions typically require degrees and frequently require active security
     clearances. Comparable Denver–Boulder roles pay $100,000–$150,000; comparable
     Bay Area, Northern Virginia, and Maryland roles pay substantially more.
@@ -303,28 +315,28 @@ footer.foot{
     practice the DOJ has now placed under restraint. The Department of Defense
     is not a named party in the case, but the feedback loop between
     algorithmically-set market rents and BAH-driven housing affordability for
-    junior enlisted Fort Carson personnel is real and well-documented.<sup>8</sup>
+    junior enlisted Fort Carson personnel is real and well-documented.<sup><a href="#src-8" aria-label="See source 8">8</a></sup>
   </p>
 
   <h2 class="s">4. What the Board can do — and why it aligns with Chamber policy</h2>
 
   <p>
-    Colorado preempts municipal and county rent control under CRS 38-12-301.<sup>9</sup>
+    Colorado preempts municipal and county rent control under CRS 38-12-301.<sup><a href="#src-9" aria-label="See source 9">9</a></sup>
     Attempts to repeal that preemption have failed in 2023, 2024, and 2025.
     However, CRS 38-12-301(2)–(4) explicitly authorizes voluntary rent-limit
     agreements between local governments and permit applicants. El Paso County's
     Land Development Code Chapter 9 grants the Board approval authority over all
-    metropolitan and special district service plans in unincorporated territory.<sup>10</sup>
+    metropolitan and special district service plans in unincorporated territory.<sup><a href="#src-10" aria-label="See source 10">10</a></sup>
     The LDC is currently being rewritten by Clarion Associates under a Department
     of Local Affairs Strong Communities Planning Grant — meaning service plan
-    provisions are in the active revision window with public comment open.<sup>11</sup>
+    provisions are in the active revision window with public comment open.<sup><a href="#src-11" aria-label="See source 11">11</a></sup>
   </p>
 
   <p>
     Critically, the Chamber &amp; EDC's <em>own published advocacy platform</em>
     supports policies that "encourage cooperation and partnership between all
     levels of government, the private sector, and nonprofit entities to bring
-    more units to market for all income levels."<sup>4</sup> Each of the four
+    more units to market for all income levels."<sup><a href="#src-4" aria-label="See source 4">4</a></sup> Each of the four
     actions below maps directly to the Chamber's stated position:
   </p>
 
@@ -374,17 +386,17 @@ footer.foot{
   <div class="sources">
     <h3>Sources</h3>
     <ol>
-      <li>United States Department of Justice, "Justice Department Sues RealPage for Algorithmic Pricing Scheme That Harms Millions of American Renters," August 23, 2024 — <a href="https://www.justice.gov/" target="_blank" rel="noopener">justice.gov</a></li>
-      <li>Wilson Sonsini Goodrich &amp; Rosati, "DOJ Settles Its Algorithmic Price-Fixing Case Against RealPage," December 1, 2025 — proposed final judgment filed November 24, 2025 in M.D.N.C., subject to court approval, 3-year monitor, 7-year final judgment term</li>
-      <li>Colorado Springs Chamber &amp; EDC, "Colorado Springs Chamber &amp; EDC launches program to attract and keep young, talented workers in Colorado Springs," November 5, 2024 — <a href="https://coloradospringschamberedc.com/" target="_blank" rel="noopener">coloradospringschamberedc.com</a> ("5,000 high-paying jobs… average annual wage of $65,000, more than El Paso County's average")</li>
-      <li>Colorado Springs Chamber &amp; EDC, "Advocacy" platform — <a href="https://coloradospringschamberedc.com/government-affairs/advocacy/" target="_blank" rel="noopener">advocacy page</a> ("Support Proactive Housing Policy… cooperation and partnership between all levels of government, the private sector, and nonprofit entities")</li>
-      <li>Colorado Attorney General, "Colorado joins Justice Department in suing six large landlords for algorithmic pricing scheme that harms millions of renters," January 7, 2025 — <a href="https://coag.gov/press-releases/1-7-25/" target="_blank" rel="noopener">coag.gov</a></li>
-      <li>California Attorney General Rob Bonta, "Attorney General Bonta Announces $7 Million Settlement with Greystar," November 19, 2025 — nine-state AG coalition including Colorado</li>
-      <li>SEC filings, public property listings, and Colorado Secretary of State business entity records for each named defendant (verification recommended on a property-by-property basis)</li>
-      <li>RAND Corporation, "Food Insecurity in the U.S. Military," 2023; Military Family Advisory Network survey data on housing-cost-burden among PCS-relocated families</li>
-      <li>Colorado Revised Statutes 38-12-301 (current as of 2024 Colorado Revised Statutes; HB23-1115 repeal attempt failed)</li>
-      <li>El Paso County Land Development Code, Chapter 9 — Special Districts — <a href="https://library.municode.com/co/el_paso_county/codes/land_development_code" target="_blank" rel="noopener">Municode</a></li>
-      <li>El Paso County Planning &amp; Community Development, LDC Update with Clarion Associates funded by Colorado Department of Local Affairs Strong Communities Planning Grant — <a href="https://elpasocountyldc.konveio.com/" target="_blank" rel="noopener">elpasocountyldc.konveio.com</a></li>
+      <li id="src-1">United States Department of Justice, "Justice Department Sues RealPage for Algorithmic Pricing Scheme That Harms Millions of American Renters," August 23, 2024 — <a href="https://www.justice.gov/" target="_blank" rel="noopener">justice.gov</a></li>
+      <li id="src-2">Wilson Sonsini Goodrich &amp; Rosati, "DOJ Settles Its Algorithmic Price-Fixing Case Against RealPage," December 1, 2025 — proposed final judgment filed November 24, 2025 in M.D.N.C., subject to court approval, 3-year monitor, 7-year final judgment term</li>
+      <li id="src-3">Colorado Springs Chamber &amp; EDC, "Colorado Springs Chamber &amp; EDC launches program to attract and keep young, talented workers in Colorado Springs," November 5, 2024 — <a href="https://coloradospringschamberedc.com/" target="_blank" rel="noopener">coloradospringschamberedc.com</a> ("5,000 high-paying jobs… average annual wage of $65,000, more than El Paso County's average")</li>
+      <li id="src-4">Colorado Springs Chamber &amp; EDC, "Advocacy" platform — <a href="https://coloradospringschamberedc.com/government-affairs/advocacy/" target="_blank" rel="noopener">advocacy page</a> ("Support Proactive Housing Policy… cooperation and partnership between all levels of government, the private sector, and nonprofit entities")</li>
+      <li id="src-5">Colorado Attorney General, "Colorado joins Justice Department in suing six large landlords for algorithmic pricing scheme that harms millions of renters," January 7, 2025 — <a href="https://coag.gov/press-releases/1-7-25/" target="_blank" rel="noopener">coag.gov</a></li>
+      <li id="src-6">California Attorney General Rob Bonta, "Attorney General Bonta Announces $7 Million Settlement with Greystar," November 19, 2025 — nine-state AG coalition including Colorado</li>
+      <li id="src-7">SEC filings, public property listings, and Colorado Secretary of State business entity records for each named defendant (verification recommended on a property-by-property basis)</li>
+      <li id="src-8">RAND Corporation, "Food Insecurity in the U.S. Military," 2023; Military Family Advisory Network survey data on housing-cost-burden among PCS-relocated families</li>
+      <li id="src-9">Colorado Revised Statutes 38-12-301 (current as of 2024 Colorado Revised Statutes; HB23-1115 repeal attempt failed)</li>
+      <li id="src-10">El Paso County Land Development Code, Chapter 9 — Special Districts — <a href="https://library.municode.com/co/el_paso_county/codes/land_development_code" target="_blank" rel="noopener">Municode</a></li>
+      <li id="src-11">El Paso County Planning &amp; Community Development, LDC Update with Clarion Associates funded by Colorado Department of Local Affairs Strong Communities Planning Grant — <a href="https://elpasocountyldc.konveio.com/" target="_blank" rel="noopener">elpasocountyldc.konveio.com</a></li>
     </ol>
   </div>
 

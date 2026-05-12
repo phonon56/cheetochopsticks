@@ -171,6 +171,14 @@ footer.foot{
   color:var(--quiet);text-align:center;line-height:1.7;
 }
 
+/* WCAG 2.1 AA — focus visibility, reduced motion, screen-reader-only utility */
+.toolbar button:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+a:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none !important;animation:none !important;}
+}
+
 @media print{
   body{background:#fff;padding:0;}
   .toolbar{display:none;}
@@ -187,11 +195,12 @@ footer.foot{
 </head>
 <body>
 
-<div class="toolbar" role="toolbar" aria-label="Document tools">
-  <button onclick="window.print()" aria-label="Print or save as PDF">Print / save PDF</button>
-  <button onclick="copyText()" aria-label="Copy the letter to clipboard">Copy text</button>
+<div class="toolbar">
+  <button type="button" onclick="window.print()" aria-label="Print or save as PDF">Print / save PDF</button>
+  <button type="button" onclick="copyText()" aria-label="Copy the letter to clipboard">Copy text</button>
   <span class="note">Personalize the fields, sign, send by mail or email.</span>
 </div>
+<div id="copy-status" class="sr-only" role="status" aria-live="polite"></div>
 
 <article class="page" id="letter">
 
@@ -448,6 +457,11 @@ function copyText(){
   navigator.clipboard.writeText(text).then(()=>{
     const btns=document.querySelectorAll('.toolbar button');
     if(btns[1]){const o=btns[1].textContent;btns[1].textContent='Copied';setTimeout(()=>{btns[1].textContent=o;},1400);}
+    const s=document.getElementById('copy-status');
+    if(s){s.textContent='Letter copied to clipboard.';setTimeout(()=>{s.textContent='';},2000);}
+  }).catch(()=>{
+    const s=document.getElementById('copy-status');
+    if(s){s.textContent='Copy failed — select and copy the letter manually.';}
   });
 }
 </script>
