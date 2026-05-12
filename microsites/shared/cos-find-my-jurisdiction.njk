@@ -235,6 +235,96 @@ body::before{
 .map-card-desc{font-size:.8rem;color:var(--muted);line-height:1.5;margin-top:5px;}
 .map-card-ext{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;color:var(--green);margin-top:6px;}
 
+/* ── Emergency alerts panel (in-coverage + out-of-coverage) ──
+   Naming convention: .alerts-region wraps the entire panel.
+   .alerts-head matches the maps-head treatment for visual rhythm.
+   .alerts-body__lede is the welcome paragraph; .alerts-body__intro
+   is the explanatory paragraph; .alerts-body__list is the bulleted
+   default-alerts list; .alerts-actions is the row of CTA buttons;
+   .alerts-source is the small attribution line at the bottom.    */
+.alerts-region{margin-bottom:32px;}
+.alerts-head{
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.alerts-head::after{content:'';flex:1;height:1px;background:var(--border);}
+.alerts-body{
+  background:var(--surface);border:1px solid var(--border);border-radius:5px;
+  padding:22px 26px 18px;border-left:3px solid var(--amber, #fbbf24);
+}
+.alerts-body__lede{
+  font-size:1rem;line-height:1.55;color:var(--text);
+  margin-bottom:10px;font-weight:500;
+}
+.alerts-body__intro{
+  font-size:.92rem;line-height:1.6;color:var(--muted);
+  margin-bottom:14px;
+}
+.alerts-body__intro strong{color:var(--text);}
+.alerts-body__list-label{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin:8px 0 6px;
+}
+.alerts-body__list{
+  list-style:none;margin:0 0 14px;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px 18px;
+}
+.alerts-body__list li{
+  position:relative;padding:4px 0 4px 18px;font-size:.88rem;color:var(--text);line-height:1.4;
+}
+.alerts-body__list li::before{
+  content:'✓';position:absolute;left:0;color:var(--green);font-weight:600;
+}
+.alerts-actions{
+  display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 14px;
+}
+.alerts-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 18px;border-radius:4px;
+  font-family:var(--mono);font-size:.78rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;border:1px solid;line-height:1;
+}
+.alerts-btn--primary{
+  background:var(--gold, #c8a84b);color:#0c1220;
+  border-color:var(--gold, #c8a84b);
+}
+.alerts-btn--primary:hover,
+.alerts-btn--primary:focus-visible{
+  background:var(--gold-lt, #fde68a);
+  border-color:var(--gold-lt, #fde68a);
+}
+.alerts-btn--secondary{
+  background:transparent;color:#ffffff;
+  border-color:var(--border-hi);
+}
+.alerts-btn--secondary:hover,
+.alerts-btn--secondary:focus-visible{
+  background:var(--surface2);
+  border-color:var(--gold, #c8a84b);
+  color:var(--gold-lt, #fde68a);
+}
+.alerts-btn:focus-visible{
+  outline:3px solid var(--gold, #c8a84b);
+  outline-offset:2px;
+}
+.alerts-source{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;
+  color:var(--quiet);line-height:1.55;margin-top:10px;
+  padding-top:10px;border-top:1px dashed var(--border);
+}
+.alerts-source strong{color:var(--muted);}
+
+/* Out-of-coverage variant — blue accent rather than amber. */
+.alerts-body.alerts-body--outside{border-left-color:var(--blue, #60a5fa);}
+
+@media (max-width:600px){
+  .alerts-body{padding:18px 18px 16px;}
+  .alerts-body__list{grid-template-columns:1fr;}
+  .alerts-btn{width:100%;justify-content:center;}
+}
+
 /* ── Protest / assessor strip ────────────────────────────── */
 .assessor-strip{
   background:var(--surface);border:1px solid var(--border);border-radius:5px;
@@ -424,6 +514,19 @@ dl.glos dd{padding:10px 14px;font-size:.82rem;color:var(--muted);line-height:1.6
       <div role="region" aria-labelledby="maps-heading">
         <div class="maps-head" id="maps-heading" aria-label="Free map tools for this area">Free map tools for this area</div>
         <div class="map-grid" id="map-grid" role="list" aria-label="Mapping tools"></div>
+      </div>
+
+      <!-- ─── Emergency alerts panel ──────────────────────────
+           Populated by renderEmergencyPanel(j) in doSearch().
+           Two states: in-coverage (EPC or Teller) shows PPROEM
+           welcome + default alert bundle + subscribe/view CTAs;
+           out-of-coverage shows the state DHSEM link with kind
+           welcome copy. Source citation under each.            -->
+      <div role="region" aria-labelledby="alerts-heading" class="alerts-region">
+        <div class="alerts-head" id="alerts-heading">Emergency alerts here</div>
+        <div class="alerts-body" id="alerts-body">
+          <!-- rendered by JS -->
+        </div>
       </div>
 
       <!-- Assessor -->
@@ -791,6 +894,53 @@ function renderJurGrid(j) {
   }
 }
 
+/* ─── Emergency alerts panel ───────────────────────────────
+   Decides in-coverage vs out-of-coverage off the jurisdiction
+   meta string (everything in JUR is currently EPC, but Teller
+   is detected too so the panel is ready for it). No live
+   ArcGIS query — info-only, kind copy, links out to PPROEM
+   for the actual subscribe modal and current alerts feed.
+─────────────────────────────────────────────────────────── */
+var PPROEM_URL    = '/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts/';
+var STATE_DHSEM   = 'https://dhsem.colorado.gov/';
+
+function renderEmergencyPanel(j) {
+  var body = document.getElementById('alerts-body');
+  if (!body) return;
+  var meta = (j && j.meta) ? j.meta : '';
+  var inCoverage = /El Paso County|Teller County/i.test(meta);
+
+  if (inCoverage) {
+    body.classList.remove('alerts-body--outside');
+    body.innerHTML =
+      '<p class="alerts-body__lede">Welcome — if you\'re new here, this part matters.</p>' +
+      '<p class="alerts-body__intro"><strong>PPROEM</strong> (Pikes Peak Regional Emergency Operations &amp; Management) is the joint El Paso County + Colorado Springs body that runs regional emergency alerts. When something serious happens — wildfire, evacuation order, hazardous-materials incident, major road closure — PPROEM is who sends the notification.</p>' +
+      '<p class="alerts-body__intro">We recommend new residents start with the <strong>default alert bundle</strong>. You can customize at any time, and unsubscribe is one tap.</p>' +
+      '<p class="alerts-body__list-label">Defaults for new residents</p>' +
+      '<ul class="alerts-body__list">' +
+        '<li>Severe weather warnings</li>' +
+        '<li>Evacuation orders</li>' +
+        '<li>Hazardous-materials incidents</li>' +
+        '<li>Active road closures</li>' +
+      '</ul>' +
+      '<div class="alerts-actions">' +
+        '<a class="alerts-btn alerts-btn--primary" href="' + PPROEM_URL + '#subscribe-modal">Subscribe to PPROEM alerts <span aria-hidden="true">→</span></a>' +
+        '<a class="alerts-btn alerts-btn--secondary" href="' + PPROEM_URL + '">See current regional alerts <span aria-hidden="true">→</span></a>' +
+      '</div>' +
+      '<p class="alerts-source"><strong>Source:</strong> PPROEM (joint El Paso County + Colorado Springs · authoritative regional alerts feed at services3.arcgis.com — Hazard_Boundary and Road_Closure layers). Subscription is operated by PPROEM directly; cheetochopsticks links out and does not store contact information.</p>';
+  } else {
+    body.classList.add('alerts-body--outside');
+    body.innerHTML =
+      '<p class="alerts-body__lede">Welcome — here\'s how to stay informed where you live.</p>' +
+      '<p class="alerts-body__intro">This address is outside the <strong>Pikes Peak Regional Emergency Operations &amp; Management</strong> (PPROEM) coverage area, which serves El Paso and Teller counties in Colorado.</p>' +
+      '<p class="alerts-body__intro">For the rest of Colorado, the <strong>Division of Homeland Security &amp; Emergency Management</strong> (DHSEM) coordinates statewide alerts and emergency response. Most counties also operate their own local notification systems — your county sheriff\'s office or office of emergency management is usually the right place to enroll.</p>' +
+      '<div class="alerts-actions">' +
+        '<a class="alerts-btn alerts-btn--primary" href="' + STATE_DHSEM + '" target="_blank" rel="noopener">Colorado DHSEM <span aria-hidden="true">→</span></a>' +
+      '</div>' +
+      '<p class="alerts-source"><strong>Source:</strong> PPROEM coverage check (jurisdictional intersect with El Paso and Teller counties). State link: Colorado Division of Homeland Security &amp; Emergency Management, dhsem.colorado.gov.</p>';
+  }
+}
+
 function renderMapGrid(keys) {
   var grid = document.getElementById('map-grid');
   if (!grid) return;
@@ -832,6 +982,7 @@ function doSearch(query) {
 
   renderJurGrid(j);
   renderMapGrid(j.maps);
+  renderEmergencyPanel(j);
 
   var fn = document.getElementById('jur-footnote');
   if (fn) fn.textContent = j.note;
