@@ -1158,10 +1158,71 @@ body::before{
 /* Out-of-coverage variant — blue accent rather than amber. */
 .alerts-body.alerts-body--outside{border-left-color:var(--blue, #60a5fa);}
 
+/* ── Inline subscribe form, in-coverage only ──────────────
+   Lives inside .alerts-body and POSTs to /api/subscribe with
+   topic = gov.shared.pproem (same topic the PPROEM page uses),
+   so a resident finishes the enrollment without leaving the
+   jurisdiction finder. Naming continues the .alerts-* block. */
+.alerts-subscribe{
+  background:var(--bg);border:1px solid var(--border);border-radius:4px;
+  padding:14px 16px;margin:6px 0 14px;
+}
+.alerts-subscribe__title{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--gold,#c8a84b);
+  margin-bottom:8px;font-weight:600;
+}
+.alerts-subscribe__row{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:stretch;
+}
+.alerts-subscribe__row label{
+  flex:1 1 220px;display:flex;flex-direction:column;gap:4px;
+  font-size:.82rem;color:var(--muted);
+}
+.alerts-subscribe__input{
+  background:var(--surface);color:var(--text);
+  border:1px solid var(--border-hi);border-radius:3px;
+  padding:9px 12px;font-family:var(--sans);font-size:.94rem;line-height:1.4;
+  min-height:38px;
+}
+.alerts-subscribe__input:focus-visible{
+  outline:3px solid var(--gold,#c8a84b);outline-offset:1px;
+  border-color:var(--gold,#c8a84b);
+}
+.alerts-subscribe__input[aria-invalid="true"]{
+  border-color:#fca5a5;background:rgba(252,165,165,.08);
+}
+.alerts-subscribe__btn{
+  align-self:flex-end;
+  background:var(--gold,#c8a84b);color:#0c1220;
+  border:1px solid var(--gold,#c8a84b);border-radius:3px;
+  padding:9px 18px;font-family:var(--mono);font-size:.78rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;cursor:pointer;min-height:38px;
+}
+.alerts-subscribe__btn:hover,
+.alerts-subscribe__btn:focus-visible{
+  background:var(--gold-lt,#fde68a);border-color:var(--gold-lt,#fde68a);
+}
+.alerts-subscribe__btn:focus-visible{
+  outline:3px solid var(--gold,#c8a84b);outline-offset:2px;
+}
+.alerts-subscribe__btn:disabled{opacity:.65;cursor:wait;}
+.alerts-subscribe__consent{
+  font-size:.78rem;color:var(--quiet);line-height:1.5;margin-top:8px;
+}
+.alerts-subscribe__consent em{font-style:italic;}
+.alerts-subscribe__status{
+  display:block;font-size:.84rem;line-height:1.5;margin-top:8px;
+  color:var(--muted);min-height:1.2em;
+}
+.alerts-subscribe__status[data-state="ok"]{color:var(--green,#4ade80);}
+.alerts-subscribe__status[data-state="err"]{color:#fca5a5;}
+
 @media (max-width:600px){
   .alerts-body{padding:18px 18px 16px;}
   .alerts-body__list{grid-template-columns:1fr;}
   .alerts-btn{width:100%;justify-content:center;}
+  .alerts-subscribe__btn{width:100%;align-self:stretch;}
 }
 
 /* ── Protest / assessor strip ────────────────────────────── */
@@ -1740,8 +1801,10 @@ function renderJurGrid(j) {
    ArcGIS query — info-only, kind copy, links out to PPROEM
    for the actual subscribe modal and current alerts feed.
 ─────────────────────────────────────────────────────────── */
-var PPROEM_URL    = '/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts/';
-var STATE_DHSEM   = 'https://dhsem.colorado.gov/';
+var PPROEM_URL          = '/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts/';
+var STATE_DHSEM         = 'https://dhsem.colorado.gov/';
+var PPROEM_TOPIC        = 'gov.shared.pproem';
+var CONSENT_VERSION     = '2026-04-30-v1';
 
 function renderEmergencyPanel(j) {
   var body = document.getElementById('alerts-body');
@@ -1762,11 +1825,27 @@ function renderEmergencyPanel(j) {
         '<li>Hazardous-materials incidents</li>' +
         '<li>Active road closures</li>' +
       '</ul>' +
+
+      '<form class="alerts-subscribe" id="alerts-subscribe-form" novalidate aria-labelledby="alerts-subscribe-title">' +
+        '<p class="alerts-subscribe__title" id="alerts-subscribe-title">Subscribe to PPROEM alerts</p>' +
+        '<div class="alerts-subscribe__row">' +
+          '<label>Email address' +
+            '<input class="alerts-subscribe__input" id="alerts-subscribe-email" type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-describedby="alerts-subscribe-consent">' +
+          '</label>' +
+          '<button type="submit" class="alerts-subscribe__btn" id="alerts-subscribe-submit">Subscribe</button>' +
+        '</div>' +
+        '<p class="alerts-subscribe__consent" id="alerts-subscribe-consent">By subscribing you agree to receive emails about PPROEM regional emergency alerts. We\'ll send a confirmation link first. Unsubscribe any time. <em>(consent v' + CONSENT_VERSION + ')</em></p>' +
+        '<output class="alerts-subscribe__status" id="alerts-subscribe-status" role="status" aria-live="polite"></output>' +
+      '</form>' +
+
       '<div class="alerts-actions">' +
-        '<a class="alerts-btn alerts-btn--primary" href="' + PPROEM_URL + '#subscribe-modal">Subscribe to PPROEM alerts <span aria-hidden="true">→</span></a>' +
         '<a class="alerts-btn alerts-btn--secondary" href="' + PPROEM_URL + '">See current regional alerts <span aria-hidden="true">→</span></a>' +
+        '<a class="alerts-btn alerts-btn--secondary" href="' + PPROEM_URL + '#subscribe-modal">Customize alert topics <span aria-hidden="true">→</span></a>' +
       '</div>' +
-      '<p class="alerts-source"><strong>Source:</strong> PPROEM (joint El Paso County + Colorado Springs · authoritative regional alerts feed at services3.arcgis.com — Hazard_Boundary and Road_Closure layers). Subscription is operated by PPROEM directly; cheetochopsticks links out and does not store contact information.</p>';
+
+      '<p class="alerts-source"><strong>Source:</strong> PPROEM (joint El Paso County + Colorado Springs · authoritative regional alerts feed at services3.arcgis.com — Hazard_Boundary and Road_Closure layers). Subscription posts directly to the cheetochopsticks /api/subscribe endpoint with topic <code>gov.shared.pproem</code>; PPROEM operates the downstream alert system.</p>';
+
+    bindEmergencySubmit();
   } else {
     body.classList.add('alerts-body--outside');
     body.innerHTML =
@@ -1778,6 +1857,63 @@ function renderEmergencyPanel(j) {
       '</div>' +
       '<p class="alerts-source"><strong>Source:</strong> PPROEM coverage check (jurisdictional intersect with El Paso and Teller counties). State link: Colorado Division of Homeland Security &amp; Emergency Management, dhsem.colorado.gov.</p>';
   }
+}
+
+/* Bind submit handler for the inline subscribe form. Mirrors the shared
+   subscribe.njk POST shape so the backend doesn't need to know this came
+   from the jurisdiction finder. Source carries the path + queried address
+   so PPROEM can route confirmation and the analytics tail makes sense. */
+function bindEmergencySubmit() {
+  var form    = document.getElementById('alerts-subscribe-form');
+  var input   = document.getElementById('alerts-subscribe-email');
+  var btn     = document.getElementById('alerts-subscribe-submit');
+  var status  = document.getElementById('alerts-subscribe-status');
+  if (!form || form.dataset.bound === '1') return;
+  form.dataset.bound = '1';
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = (input.value || '').trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      input.setAttribute('aria-invalid', 'true');
+      status.textContent = 'Please enter a valid email address.';
+      status.setAttribute('data-state', 'err');
+      input.focus();
+      return;
+    }
+    input.removeAttribute('aria-invalid');
+    btn.disabled = true;
+    status.removeAttribute('data-state');
+    status.textContent = 'Submitting…';
+
+    var addr = (document.getElementById('r-addr') || {}).textContent || '';
+    var tz   = '';
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) {}
+
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        topic: PPROEM_TOPIC,
+        source: location.pathname.replace(/^\/+/, '') + (addr ? ' (' + addr + ')' : ''),
+        timezone: tz,
+        consent_version: CONSENT_VERSION
+      })
+    })
+      .then(function(r){ return r.json().then(function(d){ return { ok: r.ok, d: d }; }); })
+      .then(function(res){
+        if (!res.ok) throw new Error((res.d && res.d.error) || 'subscribe failed');
+        status.setAttribute('data-state', 'ok');
+        status.textContent = (res.d && res.d.message) || 'Check your email to confirm.';
+        form.reset();
+      })
+      .catch(function(err){
+        status.setAttribute('data-state', 'err');
+        status.textContent = 'Something went wrong: ' + err.message + '. You can subscribe directly at the PPROEM page instead.';
+      })
+      .finally(function(){ btn.disabled = false; });
+  });
 }
 
 function renderMapGrid(keys) {
