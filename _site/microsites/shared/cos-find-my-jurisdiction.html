@@ -1410,23 +1410,25 @@ dl.glos dd{padding:10px 14px;font-size:.82rem;color:var(--muted);line-height:1.6
         <p class="jur-footnote" id="jur-footnote"></p>
       </div>
 
-      <!-- Map links -->
-      <div role="region" aria-labelledby="maps-heading">
-        <div class="maps-head" id="maps-heading" aria-label="Free map tools for this area">Free map tools for this area</div>
-        <div class="map-grid" id="map-grid" role="list" aria-label="Mapping tools"></div>
-      </div>
-
       <!-- ─── Emergency alerts panel ──────────────────────────
            Populated by renderEmergencyPanel(j) in doSearch().
            Two states: in-coverage (EPC or Teller) shows PPROEM
            welcome + default alert bundle + subscribe/view CTAs;
            out-of-coverage shows the state DHSEM link with kind
-           welcome copy. Source citation under each.            -->
+           welcome copy. Source citation under each. Surfaces
+           above the map tools because emergency enrollment is
+           the higher-priority action for new residents.        -->
       <div role="region" aria-labelledby="alerts-heading" class="alerts-region">
         <div class="alerts-head" id="alerts-heading">Emergency alerts here</div>
         <div class="alerts-body" id="alerts-body">
           <!-- rendered by JS -->
         </div>
+      </div>
+
+      <!-- Map links — reference utilities, below the alerts on purpose -->
+      <div role="region" aria-labelledby="maps-heading">
+        <div class="maps-head" id="maps-heading" aria-label="Free map tools for this area">Free map tools for this area</div>
+        <div class="map-grid" id="map-grid" role="list" aria-label="Mapping tools"></div>
       </div>
 
       <!-- Assessor -->
