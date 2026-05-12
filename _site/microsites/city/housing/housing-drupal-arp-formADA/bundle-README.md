@@ -8,6 +8,12 @@ activeNav: "you"
 
 Replacement for the ArcGIS Survey123 form currently used to collect public comments on the City of Colorado Springs HOME-ARP Allocation Plan amendment (April 24 – May 26, 2026 comment window). Built on the Drupal Webform module — accessible to WCAG 2.1 Level AA out of the box, bilingual (English + Spanish), and outputting submissions to three destinations in parallel: a JSON webhook, a staff notification email, and Drupal's native submission storage.
 
+## See it before you import
+
+A standalone accessible HTML preview of the form lives alongside this bundle — no Drupal needed, no submission stored, just the form as residents will see it:
+
+> **[home-arp-form-preview.html](home-arp-form-preview.html)** — full field-for-field render of the Drupal Webform with EN/ES toggle, conditional fields, character counter, accessible error summary, and submit interception. Use it for design review, screen-reader walkthroughs, and stakeholder demos before the YAML is imported into Drupal.
+
 ## Why replace Survey123
 
 Esri's own April 2024 Accessibility Conformance Report for ArcGIS Survey123 web acknowledges the product as "Partially Supports" on multiple WCAG 2.1 Level A and AA criteria affecting form completion: keyboard operability (2.1.1), accessible names (2.5.3, 4.1.2), focus order (2.4.3), and form labels (3.3.2). For an active 30-day federally regulated public participation process under 24 CFR 91.105, those are not acceptable gaps.
