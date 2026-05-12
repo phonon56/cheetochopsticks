@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KPI detail — El Paso County</title>
+<meta name="description" content="Detailed view of a strategic plan key performance indicator, including methodology, current value, sub-metrics, and related actions.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --epc-blue: #0074b7;
+    --epc-blue-dark: #005a8e;
+    --epc-blue-pale: #eaf3fa;
+    --epc-blue-line: #b8d7e8;
+    --ink: #0e1726;
+    --ink-2: #1f2a3d;
+    --slate: #475569;
+    --slate-2: #64748b;
+    --mute: #94a3b8;
+    --line: #e6e8eb;
+    --line-2: #d4d8de;
+    --paper: #fbfaf6;
+    --paper-2: #f5f3ec;
+    --white: #ffffff;
+    --amber: #92400e;
+    --amber-bg: #fef3c7;
+    --amber-line: #fbbf24;
+    --green: #14532d;
+    --green-bg: #d1fae5;
+    --green-dot: #16a34a;
+    --rust: #7f1d1d;
+    --rust-bg: #fee2e2;
+    --focus: 0 0 0 3px rgba(0,116,183,0.4);
+    --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-body: 'Public Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.55;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  *:focus-visible { outline: none; box-shadow: var(--focus); border-radius: 4px; }
+  .skip {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--ink); color: var(--white);
+    padding: 12px 18px; z-index: 100;
+    text-decoration: none; font-weight: 600;
+    border-radius: 0 0 6px 0;
+  }
+  .skip:focus { left: 0; }
+
+  /* Top bar */
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--slate);
+  }
+  .topbar-inner {
+    max-width: 1180px; margin: 0 auto; padding: 0 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .seal {
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 600; color: var(--ink); text-decoration: none;
+  }
+  .seal-mark {
+    width: 28px; height: 28px;
+    background: var(--epc-blue);
+    border-radius: 50%;
+    color: var(--white);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  }
+  .topbar nav { display: flex; gap: 22px; }
+  .topbar nav a { color: var(--slate); text-decoration: none; font-weight: 500; }
+  .topbar nav a:hover { color: var(--epc-blue); }
+  .topbar nav a[aria-current="page"] { color: var(--ink); }
+  @media (max-width: 720px) { .topbar nav { display: none; } }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 28px 0;
+    font-size: 0.875rem;
+    color: var(--slate-2);
+  }
+  .breadcrumb a {
+    color: var(--slate);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .breadcrumb a:hover {
+    color: var(--epc-blue);
+    border-bottom-color: var(--epc-blue);
+  }
+  .breadcrumb-sep { margin: 0 8px; color: var(--mute); }
+  .breadcrumb .current { color: var(--ink); font-weight: 500; }
+
+  /* Hero */
+  .kpi-hero {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 32px 28px 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  .kpi-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--epc-blue);
+    margin-bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .kpi-eyebrow::before {
+    content: "";
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--epc-blue);
+  }
+  .kpi-hero h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.018em;
+    margin: 0 0 16px;
+    max-width: 22ch;
+    color: var(--ink);
+  }
+  .kpi-hero-deck {
+    font-size: 1.125rem;
+    color: var(--slate);
+    max-width: 64ch;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* Main */
+  main { max-width: 1180px; margin: 0 auto; padding: 48px 28px 80px; }
+
+  /* Stat row */
+  .stat-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+  .stat-cell {
+    background: var(--white);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stat-cell-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate-2);
+  }
+  .stat-cell-value {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.025em;
+  }
+  .stat-cell-value .unit {
+    font-size: 1.5rem;
+    color: var(--slate-2);
+    font-weight: 500;
+    margin-left: 6px;
+  }
+  .stat-cell-value.unknown {
+    color: var(--amber);
+    font-size: 1.25rem;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+  .stat-cell-meta {
+    font-size: 0.875rem;
+    color: var(--slate-2);
+    margin-top: auto;
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 6px 14px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    align-self: flex-start;
+  }
+  .status-pill::before {
+    content: "";
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .status-pill.on-track { color: var(--green); background: var(--green-bg); }
+  .status-pill.on-track::before { background: var(--green-dot); }
+  .status-pill.measuring { color: var(--amber); background: var(--amber-bg); }
+  .status-pill.measuring::before { background: var(--amber-line); }
+  .status-pill.missing { color: var(--rust); background: var(--rust-bg); }
+  .status-pill.missing::before { background: var(--rust); }
+  @media (max-width: 760px) {
+    .stat-row { grid-template-columns: 1fr; }
+  }
+
+  /* Goal range bar */
+  .goal-bar {
+    margin: 8px 0 0;
+    padding: 0;
+  }
+  .goal-bar-track {
+    position: relative;
+    height: 8px;
+    background: var(--line);
+    border-radius: 4px;
+    overflow: visible;
+  }
+  .goal-bar-range {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: var(--epc-blue-pale);
+    border-radius: 4px;
+    border-left: 2px solid var(--epc-blue);
+    border-right: 2px solid var(--epc-blue);
+  }
+  .goal-bar-marker {
+    position: absolute;
+    top: -4px;
+    width: 16px;
+    height: 16px;
+    background: var(--ink);
+    border: 3px solid var(--white);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .goal-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--slate-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Content sections */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 48px;
+  }
+  @media (max-width: 880px) {
+    .content-grid { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+  .section { margin-bottom: 48px; }
+  .section h2 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+    margin: 0 0 16px;
+    color: var(--ink);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 24px 0 12px;
+    color: var(--ink);
+  }
+  .section p {
+    margin: 0 0 16px;
+    color: var(--slate);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  .section p strong { color: var(--ink); font-weight: 600; }
+  .section ul { padding-left: 0; list-style: none; margin: 0 0 16px; }
+  .section ul li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 10px;
+    color: var(--slate);
+    line-height: 1.6;
+  }
+  .section ul li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 10px;
+    height: 1px;
+    background: var(--epc-blue);
+  }
+
+  /* Sub-metrics */
+  .submetric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0 24px;
+  }
+  .submetric-cell {
+    background: var(--white);
+    padding: 18px 20px;
+  }
+  .submetric-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate-2);
+    margin-bottom: 6px;
+  }
+  .submetric-value {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .submetric-value.unknown {
+    color: var(--amber);
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  /* Sidebar / aside */
+  .sidebar {
+    position: sticky;
+    top: 32px;
+    align-self: start;
+  }
+  .sidebar-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .sidebar-card.featured {
+    background: var(--epc-blue-pale);
+    border-color: var(--epc-blue-line);
+  }
+  .sidebar-card.featured h3 { color: var(--epc-blue-dark); }
+  .sidebar-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+  .sidebar-card p {
+    font-size: 0.9375rem;
+    color: var(--slate);
+    margin: 0 0 16px;
+    line-height: 1.55;
+  }
+  .sidebar-card a.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--ink);
+    color: var(--white);
+    border: 1px solid var(--ink);
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .sidebar-card a.btn:hover { background: var(--epc-blue); border-color: var(--epc-blue); }
+  .sidebar-card a.btn::after { content: "→"; }
+  .sidebar-card.featured a.btn {
+    background: var(--epc-blue);
+    border-color: var(--epc-blue);
+  }
+  .sidebar-card.featured a.btn:hover {
+    background: var(--epc-blue-dark);
+    border-color: var(--epc-blue-dark);
+  }
+  .sidebar-link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .sidebar-link-list li { margin-bottom: 10px; }
+  .sidebar-link-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    padding: 10px 12px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    border: 1px solid transparent;
+  }
+  .sidebar-link-list a:hover {
+    background: var(--paper-2);
+    border-color: var(--line);
+  }
+  .sidebar-link-list a::after {
+    content: "→";
+    color: var(--slate-2);
+    font-size: 0.875rem;
+  }
+  .sidebar-link-list a.external::after { content: "↗"; }
+
+  /* Related KPIs */
+  .related-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .related-kpi {
+    display: block;
+    padding: 16px 18px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .related-kpi:hover {
+    border-color: var(--line-2);
+    box-shadow: 0 4px 12px -8px rgba(14,23,38,0.12);
+  }
+  .related-kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate-2);
+    margin-bottom: 4px;
+  }
+  .related-kpi-title {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .related-kpi-value {
+    font-size: 0.875rem;
+    color: var(--slate);
+    margin-top: 6px;
+  }
+
+  /* Sources */
+  .sources {
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+    margin-top: 48px;
+    color: var(--slate);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  .sources h3 {
+    font-family: var(--font-display);
+    color: var(--ink);
+    font-size: 1.0625rem;
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+  .sources ul { margin: 0; padding-left: 18px; list-style: none; }
+  .sources li { position: relative; margin-bottom: 8px; padding-left: 14px; }
+  .sources li::before {
+    content: ""; position: absolute; left: 0; top: 10px;
+    width: 6px; height: 1px; background: var(--slate-2);
+  }
+  .sources a { color: var(--epc-blue); text-decoration: none; border-bottom: 1px solid var(--epc-blue-line); }
+  .sources a:hover { color: var(--epc-blue-dark); border-bottom-color: var(--epc-blue); }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  /* 404 state */
+  .not-found {
+    text-align: center;
+    padding: 64px 24px;
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--line);
+  }
+  .not-found h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+  .not-found p { color: var(--slate); margin: 0 0 20px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip">Skip to main content</a>
+
+<div class="topbar" role="banner">
+  <div class="topbar-inner">
+    <a href="epc_strategic_dashboard.html" class="seal">
+      <span class="seal-mark" aria-hidden="true">E</span>
+      <span>El Paso County, Colorado</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="epc_strategic_dashboard.html">Dashboard</a>
+      <a href="epc_parcel_lookup.html">Property lookup</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+</div>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="epc_strategic_dashboard.html">Dashboard</a>
+  <span class="breadcrumb-sep" aria-hidden="true">›</span>
+  <a href="epc_strategic_dashboard.html#" id="bc-pillar">Pillar</a>
+  <span class="breadcrumb-sep" aria-hidden="true">›</span>
+  <span class="current" id="bc-current">KPI</span>
+</nav>
+
+<main id="main-content">
+
+  <div id="kpi-content">
+    <!-- Populated by JS -->
+  </div>
+
+  <aside class="sources" id="sources" aria-labelledby="sources-h">
+    <h3 id="sources-h">Sources &amp; disclosures</h3>
+    <ul>
+      <li>KPI content recreated from the <a href="https://www.elpasoco.com/strategic-plan/strategic-plan-dashboard/" target="_blank" rel="noopener">official El Paso County Strategic Plan Dashboard</a>.</li>
+      <li>Budget figures from the El Paso County 2026 Adopted Budget.</li>
+      <li>Methodology descriptions paraphrased from published Department of Public Works material and Strategic Plan Success documentation.</li>
+      <li>Proposed metrics (Road Service Operations) and unpublished pillars (Health &amp; Safety) are labeled clearly; the County does not currently publish these.</li>
+      <li>This page is a citizen-built design demonstration. Not affiliated with El Paso County or its Department of Public Works.</li>
+    </ul>
+  </aside>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  // KPI DATA — all eleven KPIs in a single object.
+  // To edit a metric: find its key, update fields, save. No HTML changes required.
+  var KPIS = {
+    bridge: {
+      title: 'Bridge Sufficiency Rating',
+      pillar: 'Infrastructure', pillarId: 'infrastructure', pillarNum: '01',
+      status: 'on-track', statusLabel: 'On Track',
+      value: '91', unit: '', goalMin: 80, goalMax: 100, goalLabel: 'Goal range 80–100',
+      context: '285 bridges inspected',
+      deck: 'A 0–100 sufficiency rating combining structural integrity, functional adequacy, and safety across the County\'s 285 bridge assets.',
+      summary: [
+        'El Paso County regularly inspects its 285 bridges to ensure safety and prevent costly damage. Bridges are rated on a sufficiency scale from 0 to 100, assessing structural integrity, geometric adequacy (lane width, vertical clearance), and essentiality.',
+        'Regular inspections and maintenance extend the lifespan of these vital structures, reducing the risk of failure and ensuring smooth transportation through the County.'
+      ],
+      methodology: {
+        title: 'How it\'s measured',
+        text: 'The Federal Highway Administration\'s Sufficiency Rating formula is applied to inspection data collected per the National Bridge Inspection Standards (NBIS).',
+        items: [
+          'Structural Adequacy and Safety (55% weight)',
+          'Serviceability and Functional Obsolescence (30% weight)',
+          'Essentiality for Public Use (15% weight)',
+          'Each bridge inspected at least every 24 months (more often if rated poor)'
+        ]
+      },
+      subMetrics: [
+        { label: 'Bridges inspected', value: '285' },
+        { label: 'Inspection cycle', value: '24 mo' },
+        { label: 'Goal range', value: '80–100' },
+        { label: 'Standard', value: 'FHWA NBIS' }
+      ],
+      sidebarTitle: 'Bridge resources',
+      sidebarLinks: [
+        { label: 'FHWA National Bridge Inventory', href: 'https://www.fhwa.dot.gov/bridge/nbi.cfm', external: true },
+        { label: 'Colorado bridge data (CDOT)', href: 'https://www.codot.gov/business/bridge', external: true },
+        { label: 'Report a bridge concern', href: 'https://citizenconnect.elpasoco.com', external: true }
+      ],
+      relatedIds: ['pci', 'stormwater', 'facilities']
+    },
+    pci: {
+      title: 'Pavement Condition Index',
+      pillar: 'Infrastructure', pillarId: 'infrastructure', pillarNum: '01',
+      status: 'on-track', statusLabel: 'On Track',
+      value: '71', unit: '/ 100', goalMin: 55, goalMax: 85, goalLabel: 'Goal range 55–85',
+      context: '2,429 lane miles · $3B asset value',
+      deck: 'A 0–100 condition rating for the County\'s paved roadway network, measured every three years using 3D laser scanning, GPS, and roughness sensors.',
+      summary: [
+        'The Department of Public Works monitors and maintains the County\'s vast paved roadway network — representing a $3 billion asset across 2,429 lane miles. Conditions are measured every three years using advanced 3D laser scanning, longitudinal profiling, GPS positioning, and highway reflectometer systems.',
+        'This data prioritizes maintenance, rehabilitation, and reconstruction. The County\'s preservation philosophy targets roadways with PCI 56+ for preservation treatments and PCI 55 or lower for critical-needs intervention.',
+        'The goal is to increase aggregate PCI by one point each year. 72 would move the network into "good" territory.'
+      ],
+      methodology: {
+        title: 'How it\'s measured',
+        text: 'PCI is industry-standard (ASTM D6433). A specialized vehicle scans every paved segment, identifying and classifying defects by type and severity.',
+        items: [
+          'Serious: PCI 0–25 (reconstruction required)',
+          'Very Poor: PCI 26–40',
+          'Poor: PCI 41–55',
+          'Fair: PCI 56–70',
+          'Satisfactory: PCI 71–85',
+          'Good: PCI 86–100',
+          'Scan cycle: every 36 months per segment'
+        ]
+      },
+      subMetrics: [
+        { label: 'Lane miles', value: '2,429' },
+        { label: 'Asset value', value: '$3B' },
+        { label: 'Scan cycle', value: '36 mo' },
+        { label: 'Annual goal', value: '+1 PCI' }
+      ],
+      sidebarFeatured: true,
+      sidebarTitle: 'See it at your property',
+      sidebarText: 'The aggregate PCI is 71. But what about the road in front of your house? Look up any parcel for budget share, service requests, and the published-vs-unpublished gap.',
+      sidebarBtnLabel: 'Look up a property',
+      sidebarBtnHref: 'epc_parcel_lookup.html',
+      sidebarLinks: [
+        { label: 'County Public Works · Pavement Quality', href: 'https://publicworks.elpasoco.com/pavement-quality/', external: true },
+        { label: '2026 Asphalt Paving Program', href: 'https://publicworks.elpasoco.com/road-bridge/construction-maintenance-projects/', external: true },
+        { label: 'Cone Zone construction map', href: 'https://epcdpw.maps.arcgis.com/apps/dashboards/972b351cd72f4343892e0f3944556117', external: true },
+        { label: 'Report a pothole', href: 'https://citizenconnect.elpasoco.com', external: true }
+      ],
+      relatedIds: ['bridge', 'rso', 'fleet']
+    },
+    stormwater: {
+      title: 'Stormwater Control Measures',
+      pillar: 'Infrastructure', pillarId: 'infrastructure', pillarNum: '01',
+      status: 'on-track', statusLabel: 'On Track',
+      value: '79', unit: '', goalMin: 70, goalMax: 90, goalLabel: 'Goal range 70–90',
+      context: '30 permanent control measures',
+      deck: 'Inspection score across the County\'s 30 Permanent Control Measures designed to reduce pollutant discharge and protect local waterways.',
+      summary: [
+        'As El Paso County grows, stormwater management becomes increasingly important. New roads and buildings contribute to runoff that can carry trash, fertilizers, and sediment into local streams and rivers.',
+        'The County operates 30 Permanent Control Measures (PCMs) designed to reduce pollutant discharge and improve water quality. Public Works inspects each PCM annually, evaluating condition and verifying function against the MS4 permit requirements.',
+        'Proper maintenance reduces flooding risk, protects waterways, and avoids costly non-compliance fines from the Colorado Department of Public Health and Environment.'
+      ],
+      methodology: {
+        title: 'How it\'s measured',
+        text: 'Annual inspections per the MS4 (Municipal Separate Storm Sewer System) permit. Each PCM is scored on structural integrity, sediment load, vegetation, and function.',
+        items: [
+          'Annual inspection of all 30 PCMs',
+          'Compliance with state MS4 permit',
+          'Sediment and debris removal as needed',
+          'Vegetation management for water quality features'
+        ]
+      },
+      subMetrics: [
+        { label: 'PCMs inspected', value: '30' },
+        { label: 'Inspection cycle', value: 'Annual' },
+        { label: 'Permit', value: 'MS4' },
+        { label: 'Authority', value: 'CDPHE' }
+      ],
+      sidebarTitle: 'Stormwater resources',
+      sidebarLinks: [
+        { label: 'CDPHE stormwater program', href: 'https://cdphe.colorado.gov/stormwater', external: true },
+        { label: 'Report illicit discharge', href: 'https://citizenconnect.elpasoco.com', external: true },
+        { label: 'Stormwater permitting', href: 'https://www.epc-dpwpermit.com/', external: true }
+      ],
+      relatedIds: ['bridge', 'pci', 'facilities']
+    },
+    fleet: {
+      title: 'Fleet Readiness',
+      pillar: 'Infrastructure', pillarId: 'infrastructure', pillarNum: '01',
+      status: 'on-track', statusLabel: 'On Track',
+      value: '95', unit: '%', goalMin: 80, goalMax: 100, goalLabel: 'Goal range 80–100%',
+      context: '21 organizations supported',
+      deck: 'Percentage of time County vehicles and construction equipment are available for service versus down for maintenance.',
+      summary: [
+        'Fleet Management provides transportation and construction equipment to 21 organizations across the County, ensuring assets are available to support citizen services.',
+        '"Readiness" measures the percentage of time vehicles and equipment are available versus unavailable due to scheduled maintenance, repairs, or mechanical issues. The target is 95%.',
+        'Performance is maintained consistently above the 95% target through proactive maintenance schedules and a structured vehicle/equipment replacement program.'
+      ],
+      methodology: {
+        title: 'How it\'s measured',
+        text: 'Fleet Management System tracks every asset\'s availability hours versus down hours, computed monthly and rolled up to a quarterly readiness percentage by asset category.',
+        items: [
+          'Asset categories: light vehicles, heavy trucks, construction equipment, specialty',
+          'Target: 95% across the consolidated fleet',
+          'Data source: Fleet Management System',
+          'Reporting cycle: monthly internal, quarterly public'
+        ]
+      },
+      subMetrics: [
+        { label: 'Departments served', value: '21' },
+        { label: 'Target readiness', value: '95%' },
+        { label: 'Reporting cycle', value: 'Monthly' },
+        { label: 'Categories', value: '4' }
+      ],
+      sidebarTitle: 'Fleet resources',
+      sidebarLinks: [
+        { label: 'County Public Works · Fleet', href: 'https://publicworks.elpasoco.com/', external: true },
+        { label: 'Fleet replacement schedule', href: '#fleet-replacement' },
+        { label: 'Vehicle inventory', href: '#fleet-inventory' }
+      ],
+      relatedIds: ['facilities', 'pci', 'bridge']
+    },
+    facilities: {
+      title: 'Facilities Condition Index',
+      pillar: 'Infrastructure', pillarId: 'infrastructure', pillarNum: '01',
+      status: 'on-track', statusLabel: 'On Track',
+      value: '90', unit: '%', goalMin: 87, goalMax: 95, goalLabel: 'Goal range 87–95%',
+      context: 'Life Remaining Scale',
+      deck: 'Percentage of useful life remaining across County-owned facilities, computed from deferred maintenance costs versus replacement value.',
+      summary: [
+        'The Facilities Condition Index (FCI) is a critical metric used to assess the condition of County facilities by comparing total deferred maintenance costs to each building\'s replacement value.',
+        'Rather than using the traditional FCI scoring method, the County applies the Life Remaining Scale, which presents facility conditions based on the percentage of useful life remaining. A 90% rating signifies that a facility is "On Track."',
+        'The County tracks FCI using the MyFacilityInformer tool, helping to prioritize and plan maintenance needs based on available resources.'
+      ],
+      methodology: {
+        title: 'How it\'s measured',
+        text: 'For each facility, the County calculates deferred maintenance cost as a fraction of total replacement value, then inverts to a "useful life remaining" percentage.',
+        items: [
+          'Tool: MyFacilityInformer (asset management system)',
+          'Scale: Life Remaining (0–100%)',
+          'On Track threshold: 87–95%',
+          'Below 87% triggers prioritized renovation planning'
+        ]
+      },
+      subMetrics: [
+        { label: 'Goal min', value: '87%' },
+        { label: 'Goal max', value: '95%' },
+        { label: 'Current', value: '90%' },
+        { label: 'Tool', value: 'MyFacilityInformer' }
+      ],
+      sidebarTitle: 'Facility resources',
+      sidebarLinks: [
+        { label: 'County facilities map', href: 'https://www.arcgis.com/apps/webappviewer/index.html?id=c4640a6e53a542648762a301e93fbcb0', external: true },
+        { label: 'Public meeting schedule', href: 'https://www.agendasuite.org/iip/elpaso', external: true }
+      ],
+      relatedIds: ['fleet', 'parks', 'stormwater']
+    },
+    parks: {
+      title: 'Park Assets Condition',
+      pillar: 'Infrastructure', pillarId: 'infrastructure', pillarNum: '01',
+      status: 'measuring', statusLabel: 'Measuring',
+      value: 'In development', unit: '', goalMin: null, goalMax: null, goalLabel: 'Goal range to be determined',
+      context: 'Baseline assessment underway',
+      deck: 'Parks Condition Index in development. Baseline assessment of trails, sport fields, playgrounds, and recreational assets currently underway.',
+      summary: [
+        'The El Paso County Parks &amp; Community Services Department is updating its park maintenance strategy to better manage its assets and meet growing recreational needs.',
+        'By implementing a Parks\' Condition Index, the County will systematically assess the state of trails, sport fields and sport courts, playgrounds, and other assets. This data will guide budgeting, maintenance, and strategic planning.',
+        'A new Computerized Maintenance Management System (CMMS) will streamline maintenance tasks once the baseline assessment is complete. The 2025 Budget added an Asset Management Specialist position to perform the condition assessment for Parks.'
+      ],
+      methodology: {
+        title: 'How it will be measured',
+        text: 'Parks Condition Index methodology under development. The framework will combine asset inventory, condition scoring, and usage data.',
+        items: [
+          'Asset categories: trails, fields, courts, playgrounds, restrooms, parking',
+          'Score range: to be determined',
+          'Inspection cycle: to be determined',
+          'System: new CMMS being deployed'
+        ]
+      },
+      subMetrics: [
+        { label: 'Status', value: 'Baseline' },
+        { label: 'New role', value: 'Asset mgmt' },
+        { label: 'System', value: 'CMMS' },
+        { label: 'Goal', value: 'TBD' }
+      ],
+      sidebarTitle: 'Parks resources',
+      sidebarLinks: [
+        { label: 'El Paso County Parks', href: 'https://parks.elpasoco.com/', external: true },
+        { label: 'Report a park concern', href: 'https://citizenconnect.elpasoco.com', external: true },
+        { label: 'Trails &amp; open space', href: 'https://parks.elpasoco.com/', external: true }
+      ],
+      relatedIds: ['facilities', 'fleet', 'stormwater']
+    },
+    rso: {
+      title: 'Road Service Operations',
+      pillar: 'Infrastructure', pillarId: 'infrastructure', pillarNum: '01',
+      status: 'missing', statusLabel: 'Not Published',
+      value: 'Proposed addition', unit: '', goalMin: null, goalMax: null,
+      goalLabel: 'Operational KPIs not currently published',
+      context: 'Five proposed metrics',
+      deck: 'A proposed set of operational metrics that would measure how the $59.1M roads budget is actually executed in the field — not currently published by the County.',
+      summary: [
+        'The published Infrastructure KPIs measure asset <em>condition</em>. They report the state of the assets. They do not measure operational <em>execution</em> — the dispatch decisions, response times, and bundling rates that determine how the $59.1M roads budget gets converted into truck rolls and repairs.',
+        'A resident cannot determine, from any publicly available source, whether a given pothole dispatch represents normal operational performance or an anomaly. This proposal closes that gap.',
+        'Adding these five metrics to the dashboard would require no new staff, no new asphalt, no new vehicles. The data already exists in the County\'s internal work-order system. The proposal is to publish what is already measured.'
+      ],
+      methodology: {
+        title: 'How these would be measured',
+        text: 'All five metrics are derivable from data the Citizen Connect / work-order system already captures internally. Implementation is a publication and dashboard-update effort, not a measurement effort.',
+        items: [
+          'Avg. response time — ticket created to first crew dispatch',
+          'Avg. resolution time — ticket created to ticket closed',
+          'Bundling rate — % of dispatches that addressed adjacent open tickets',
+          'Repairs per dispatch — average defects fixed per truck roll',
+          'Reopen rate — % of locations re-reported within 12 months'
+        ]
+      },
+      subMetrics: [
+        { label: 'Avg. response time', value: 'Not published', unknown: true },
+        { label: 'Avg. resolution time', value: 'Not published', unknown: true },
+        { label: 'Bundling rate', value: 'Not published', unknown: true },
+        { label: 'Repairs per dispatch', value: 'Not published', unknown: true },
+        { label: 'Reopen rate', value: 'Not published', unknown: true }
+      ],
+      sidebarFeatured: true,
+      sidebarTitle: 'See the accountability gap',
+      sidebarText: 'The proposal exists because the workflow gap is real. Look up any parcel to see what data IS published vs. what isn\'t — the per-property view makes the gap concrete.',
+      sidebarBtnLabel: 'Look up a property',
+      sidebarBtnHref: 'epc_parcel_lookup.html',
+      sidebarLinks: [
+        { label: 'Citizen Connect (current intake)', href: 'https://citizenconnect.elpasoco.com', external: true },
+        { label: 'County pothole repair policy', href: 'https://publicworks.elpasoco.com/road-bridge/', external: true },
+        { label: 'File a CORA request for work-order data', href: 'https://www.elpasoco.com/colorado-open-records-act/', external: true }
+      ],
+      relatedIds: ['pci', 'bridge', 'fleet']
+    },
+    cei: {
+      title: 'Customer Experience Index',
+      pillar: 'Service Quality', pillarId: 'service-quality', pillarNum: '02',
+      status: 'measuring', statusLabel: 'Measuring',
+      value: 'Baseline in development', unit: '', goalMin: null, goalMax: null, goalLabel: 'Goal range to be determined',
+      context: 'Three measurement dimensions',
+      deck: 'Composite index measuring resident experience across three dimensions: satisfaction, effort, and advocacy. Baseline measurement in development.',
+      summary: [
+        'El Paso County values citizen and employee input to improve services and foster community engagement. Customer experience initiatives focus on Customer Satisfaction, Effort, and Advocacy as the three measurement dimensions.',
+        'This feedback helps identify improvement areas and align services with community expectations. The methodology and baseline measurement are currently being developed; a public-facing score has not yet been published.'
+      ],
+      methodology: {
+        title: 'How it will be measured',
+        text: 'Three-dimensional CX framework, with each dimension measured separately and combined into a composite.',
+        items: [
+          'Customer Satisfaction (CSAT) — how well the County met expectations',
+          'Customer Effort (CES) — how easy or hard the interaction was',
+          'Customer Advocacy (NPS-style) — likelihood to recommend or speak positively',
+          'Data collection: survey-based, multi-channel'
+        ]
+      },
+      subMetrics: [
+        { label: 'Dimensions', value: '3' },
+        { label: 'CSAT', value: 'TBD', unknown: true },
+        { label: 'Effort', value: 'TBD', unknown: true },
+        { label: 'Advocacy', value: 'TBD', unknown: true }
+      ],
+      sidebarTitle: 'Service feedback',
+      sidebarLinks: [
+        { label: 'Contact the County', href: 'https://www.elpasoco.com/contact-us/', external: true },
+        { label: 'Citizen Connect requests', href: 'https://citizenconnect.elpasoco.com', external: true },
+        { label: 'Strategic Plan Success page', href: 'https://www.elpasoco.com/strategic-plan-success/', external: true }
+      ],
+      relatedIds: ['engagement', 'trust', 'rso']
+    },
+    engagement: {
+      title: 'Employee Engagement Index',
+      pillar: 'Service Quality', pillarId: 'service-quality', pillarNum: '02',
+      status: 'on-track', statusLabel: 'On Track',
+      value: '78', unit: '%', goalMin: 60, goalMax: 70, goalLabel: 'Goal range 60–70%',
+      context: 'Biannual survey',
+      deck: 'Composite engagement score from biannual employee survey. Currently exceeding the upper goal range, indicating strong workforce engagement.',
+      summary: [
+        'El Paso County prioritizes employee engagement, recognizing its impact on service quality. Through a biannual Employee Engagement Index, the County assesses how valued, connected, and supported employees feel.',
+        'Current data shows strong purpose alignment (90%) and role satisfaction (78%), with improvement opportunities identified in career growth and development pathways.',
+        'By enhancing employee support, the County strengthens its commitment to delivering exceptional services to the community.'
+      ],
+      methodology: {
+        title: 'How it\'s measured',
+        text: 'Biannual all-employee engagement survey scored across multiple dimensions, with the composite Index reported as the public KPI.',
+        items: [
+          'Dimensions: purpose alignment, role satisfaction, growth, support, communication',
+          'Cadence: every 6 months',
+          'Population: all County employees',
+          'Composite: weighted average of dimension scores'
+        ]
+      },
+      subMetrics: [
+        { label: 'Current score', value: '78%' },
+        { label: 'Purpose alignment', value: '90%' },
+        { label: 'Role satisfaction', value: '78%' },
+        { label: 'Survey cadence', value: '6 mo' }
+      ],
+      sidebarTitle: 'Workforce resources',
+      sidebarLinks: [
+        { label: 'County careers', href: 'https://www.governmentjobs.com/careers/ElPasoCountyCo', external: true },
+        { label: 'Human Resources', href: 'https://admin.elpasoco.com/human-resources/', external: true }
+      ],
+      relatedIds: ['cei', 'trust', 'facilities']
+    },
+    trust: {
+      title: 'Community Trust Index',
+      pillar: 'Community Trust', pillarId: 'community-trust', pillarNum: '03',
+      status: 'measuring', statusLabel: 'Measuring',
+      value: 'Composite in development', unit: '', goalMin: null, goalMax: null, goalLabel: 'Four factors',
+      context: 'Based on Edelman Trust research',
+      deck: 'A composite index built from four factors — civility, transparency, capability, reliability — that together measure the strength of the relationship between residents and County government.',
+      summary: [
+        'Community Trust serves as the cornerstone of a successful relationship between El Paso County and its stakeholders. It is fostered through consistent actions that reflect both intent and competence.',
+        'Leading research (Edelman Trust framework) identifies four critical factors essential to building and maintaining community trust. Each is measured independently and combined into the composite index.',
+        'These four factors serve as the foundation of the County\'s strategic communication and transparency objectives.'
+      ],
+      methodology: {
+        title: 'The four factors',
+        text: 'Each factor is measured independently through community surveys and operational signals.',
+        items: [
+          'Civility — respectful interaction across all touchpoints',
+          'Transparency — openness about decisions, methods, and data',
+          'Capability — demonstrated competence in service delivery',
+          'Reliability — consistency between commitments and outcomes'
+        ]
+      },
+      subMetrics: [
+        { label: 'Civility', value: 'In development', unknown: true },
+        { label: 'Transparency', value: 'In development', unknown: true },
+        { label: 'Capability', value: 'In development', unknown: true },
+        { label: 'Reliability', value: 'In development', unknown: true }
+      ],
+      sidebarTitle: 'Trust &amp; transparency',
+      sidebarLinks: [
+        { label: 'CORA — open records', href: 'https://www.elpasoco.com/colorado-open-records-act/', external: true },
+        { label: 'Public meetings &amp; agendas', href: 'https://www.agendasuite.org/iip/elpaso', external: true },
+        { label: 'Board of County Commissioners', href: 'https://bocc.elpasoco.com/', external: true }
+      ],
+      relatedIds: ['cei', 'engagement', 'rso']
+    },
+    hs: {
+      title: 'Health &amp; Safety Pillar',
+      pillar: 'Health &amp; Safety', pillarId: 'health-safety', pillarNum: '04',
+      status: 'missing', statusLabel: 'Not Published',
+      value: 'Framework under development', unit: '', goalMin: null, goalMax: null, goalLabel: 'No metrics published',
+      context: 'No published KPIs',
+      deck: 'The Health and Safety pillar is a declared strategic priority with no published metrics, baselines, or goal ranges. This is the only pillar without a single tracked KPI.',
+      summary: [
+        'The Health and Safety pillar has been declared as a strategic priority but no public KPIs have been published yet. The framework, baseline measurements, and goal ranges are still under development.',
+        'The stated objective is to "develop partnerships to support community efforts to improve the health and safety of residents," but the specific metrics that will measure progress against that objective have not been disclosed.',
+        'A roadmap and timeline for publishing the first Health &amp; Safety KPIs has not been made publicly available.'
+      ],
+      methodology: {
+        title: 'What\'s missing',
+        text: 'Until the framework is published, residents have no way to evaluate progress on this pillar.',
+        items: [
+          'No published KPIs',
+          'No published baseline measurements',
+          'No published goal ranges',
+          'No published methodology',
+          'No published timeline for first KPI publication'
+        ]
+      },
+      subMetrics: [
+        { label: 'KPIs published', value: '0' },
+        { label: 'Baseline', value: 'None', unknown: true },
+        { label: 'Goal range', value: 'None', unknown: true },
+        { label: 'Timeline', value: 'TBD', unknown: true }
+      ],
+      sidebarTitle: 'Health &amp; safety resources',
+      sidebarLinks: [
+        { label: 'El Paso County Public Health', href: 'https://www.elpasocountyhealth.org/', external: true },
+        { label: 'Emergency Management', href: 'https://pproem.com/', external: true },
+        { label: 'Sheriff\'s Office', href: 'https://www.epcsheriffsoffice.com', external: true }
+      ],
+      relatedIds: ['trust', 'cei', 'rso']
+    }
+  };
+
+  // Render
+  function getKpiId() {
+    var params = new URLSearchParams(window.location.search);
+    return params.get('id') || 'pci';
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function renderGoalBar(value, min, max) {
+    if (min === null || max === null) return '';
+    var numericValue = parseFloat(String(value).replace(/[^0-9.-]/g, ''));
+    if (isNaN(numericValue)) return '';
+    var scaleMin = 0;
+    var scaleMax = Math.max(100, max + 10, numericValue + 10);
+    var rangeLeft = ((min - scaleMin) / (scaleMax - scaleMin)) * 100;
+    var rangeWidth = ((max - min) / (scaleMax - scaleMin)) * 100;
+    var markerLeft = ((numericValue - scaleMin) / (scaleMax - scaleMin)) * 100;
+    return '<div class="goal-bar">' +
+      '<div class="goal-bar-track" role="img" aria-label="Current value ' + numericValue + ', goal range ' + min + ' to ' + max + '">' +
+        '<div class="goal-bar-range" style="left:' + rangeLeft + '%;width:' + rangeWidth + '%"></div>' +
+        '<div class="goal-bar-marker" style="left:' + markerLeft + '%" aria-hidden="true"></div>' +
+      '</div>' +
+      '<div class="goal-bar-labels">' +
+        '<span>' + scaleMin + '</span>' +
+        '<span>Goal ' + min + '–' + max + '</span>' +
+        '<span>' + scaleMax + '</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderRelated(ids) {
+    if (!ids || !ids.length) return '';
+    var cards = ids.map(function (id) {
+      var k = KPIS[id];
+      if (!k) return '';
+      var v = k.value;
+      var valDisplay = k.status === 'on-track' ? (k.value + (k.unit || '')) : k.value;
+      return '<a class="related-kpi" href="kpi.html?id=' + id + '" aria-label="View ' + escapeHtml(k.title.replace(/<[^>]*>/g, '')) + ' detail">' +
+        '<div class="related-kpi-label">' + escapeHtml(k.pillar) + ' · ' + escapeHtml(k.statusLabel) + '</div>' +
+        '<div class="related-kpi-title">' + k.title + '</div>' +
+        '<div class="related-kpi-value">' + escapeHtml(valDisplay) + '</div>' +
+      '</a>';
+    }).join('');
+    return '<section class="section" aria-labelledby="related-h">' +
+      '<h2 id="related-h">Related KPIs</h2>' +
+      '<div class="related-kpis">' + cards + '</div>' +
+    '</section>';
+  }
+
+  function renderSidebarLinks(links) {
+    if (!links || !links.length) return '';
+    return '<ul class="sidebar-link-list">' + links.map(function (l) {
+      var cls = l.external ? 'external' : '';
+      var target = l.external ? ' target="_blank" rel="noopener"' : '';
+      return '<li><a class="' + cls + '" href="' + escapeHtml(l.href) + '"' + target + '>' + l.label + '</a></li>';
+    }).join('') + '</ul>';
+  }
+
+  function renderKpi(id) {
+    var k = KPIS[id];
+    if (!k) {
+      document.getElementById('kpi-content').innerHTML =
+        '<div class="not-found"><h2>KPI not found</h2>' +
+        '<p>The KPI ID "' + escapeHtml(id) + '" is not recognized. Return to the dashboard to browse all KPIs.</p>' +
+        '<p><a href="epc_strategic_dashboard.html" class="btn" style="display:inline-block;padding:10px 18px;background:var(--ink);color:var(--white);border-radius:8px;text-decoration:none;font-weight:600">Back to dashboard →</a></p>' +
+        '</div>';
+      return;
+    }
+
+    // Update title & breadcrumb & meta
+    document.title = k.title.replace(/<[^>]*>/g, '') + ' — El Paso County';
+    document.getElementById('bc-pillar').textContent = k.pillar.replace(/<[^>]*>/g, '');
+    document.getElementById('bc-pillar').href = 'epc_strategic_dashboard.html#' + k.pillarId;
+    document.getElementById('bc-current').innerHTML = k.title;
+
+    var hasNumericValue = k.goalMin !== null && k.goalMax !== null;
+    var valueHtml = hasNumericValue
+      ? '<span>' + escapeHtml(k.value) + (k.unit ? '<span class="unit">' + escapeHtml(k.unit) + '</span>' : '') + '</span>'
+      : '<span class="unknown" style="font-size:1.25rem">' + k.value + '</span>';
+
+    var subMetricsHtml = k.subMetrics && k.subMetrics.length
+      ? '<div class="submetric-grid" role="list" aria-label="Sub-metrics">' +
+        k.subMetrics.map(function (m) {
+          return '<div class="submetric-cell" role="listitem">' +
+            '<div class="submetric-label">' + m.label + '</div>' +
+            '<div class="submetric-value' + (m.unknown ? ' unknown' : '') + '">' + escapeHtml(m.value) + '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>'
+      : '';
+
+    var methodologyHtml = k.methodology ? (
+      '<section class="section" aria-labelledby="method-h">' +
+        '<h2 id="method-h">' + escapeHtml(k.methodology.title) + '</h2>' +
+        '<p>' + k.methodology.text + '</p>' +
+        (k.methodology.items && k.methodology.items.length
+          ? '<ul>' + k.methodology.items.map(function (i) { return '<li>' + i + '</li>'; }).join('') + '</ul>'
+          : '') +
+      '</section>'
+    ) : '';
+
+    var sidebarFeaturedHtml = k.sidebarFeatured ? (
+      '<div class="sidebar-card featured">' +
+        '<h3>' + escapeHtml(k.sidebarTitle) + '</h3>' +
+        '<p>' + k.sidebarText + '</p>' +
+        '<a class="btn" href="' + escapeHtml(k.sidebarBtnHref) + '">' + escapeHtml(k.sidebarBtnLabel) + '</a>' +
+      '</div>'
+    ) : '';
+
+    var sidebarLinksHtml = k.sidebarLinks && k.sidebarLinks.length ? (
+      '<div class="sidebar-card">' +
+        '<h3>' + (k.sidebarFeatured ? 'More resources' : (k.sidebarTitle || 'Resources')) + '</h3>' +
+        renderSidebarLinks(k.sidebarLinks) +
+      '</div>'
+    ) : '';
+
+    var html =
+      '<section class="kpi-hero" aria-labelledby="kpi-h">' +
+        '<div class="kpi-eyebrow">' + escapeHtml(k.pillar) + ' · Pillar ' + escapeHtml(k.pillarNum) + '</div>' +
+        '<h1 id="kpi-h">' + k.title + '</h1>' +
+        '<p class="kpi-hero-deck">' + k.deck + '</p>' +
+      '</section>' +
+
+      '<main id="main-content" style="padding-top:48px">' +
+        '<section class="stat-row" aria-label="Current performance">' +
+          '<div class="stat-cell">' +
+            '<div class="stat-cell-label">Current value</div>' +
+            '<div class="stat-cell-value' + (hasNumericValue ? '' : ' unknown') + '">' + valueHtml + '</div>' +
+            '<div class="stat-cell-meta">' + escapeHtml(k.context) + '</div>' +
+            (hasNumericValue ? renderGoalBar(k.value, k.goalMin, k.goalMax) : '') +
+          '</div>' +
+          '<div class="stat-cell">' +
+            '<div class="stat-cell-label">Status</div>' +
+            '<span class="status-pill ' + k.status + '">' + escapeHtml(k.statusLabel) + '</span>' +
+            '<div class="stat-cell-meta">' + escapeHtml(k.goalLabel) + '</div>' +
+          '</div>' +
+          '<div class="stat-cell">' +
+            '<div class="stat-cell-label">Pillar</div>' +
+            '<div class="stat-cell-value" style="font-size:1.5rem">' + k.pillar + '</div>' +
+            '<div class="stat-cell-meta"><a href="epc_strategic_dashboard.html#' + k.pillarId + '" style="color:var(--epc-blue);text-decoration:none">View all KPIs in this pillar →</a></div>' +
+          '</div>' +
+        '</section>' +
+
+        '<div class="content-grid">' +
+          '<div class="content-main">' +
+            '<section class="section" aria-labelledby="summary-h">' +
+              '<h2 id="summary-h">Summary</h2>' +
+              k.summary.map(function (p) { return '<p>' + p + '</p>'; }).join('') +
+              subMetricsHtml +
+            '</section>' +
+
+            methodologyHtml +
+          '</div>' +
+
+          '<aside class="sidebar" aria-label="Related resources">' +
+            sidebarFeaturedHtml +
+            sidebarLinksHtml +
+          '</aside>' +
+        '</div>' +
+
+        renderRelated(k.relatedIds) +
+      '</main>';
+
+    document.getElementById('kpi-content').innerHTML = html;
+  }
+
+  // Initial render
+  renderKpi(getKpiId());
+
+  // Re-render if URL changes (back/forward navigation)
+  window.addEventListener('popstate', function () { renderKpi(getKpiId()); });
+})();
+</script>
+
+</body>
+</html>

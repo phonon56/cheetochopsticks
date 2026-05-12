@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategic Performance Dashboard — El Paso County</title>
+<meta name="description" content="Strategic plan objectives, key performance indicators, and accountability across infrastructure, service quality, community trust, and health & safety.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+
+<!--
+  EL PASO COUNTY STRATEGIC PERFORMANCE DASHBOARD
+  Template usage: every KPI tile uses the same structure.
+  To add or update a KPI, copy a <article class="kpi-card"> block and replace:
+    - kpi-label      → metric name
+    - kpi-status-pill → status (on-track | measuring | missing)
+    - kpi-value      → current value (or "Not published" / "In development")
+    - kpi-value-unit → optional unit suffix
+    - kpi-goal       → goal range / context line
+    - kpi-body <p>   → 1–2 paragraph description
+    - kpi-action <a> → href and label for the drill-down link
+-->
+
+<style>
+  :root {
+    --epc-blue: #0074b7;
+    --epc-blue-dark: #005a8e;
+    --epc-blue-pale: #eaf3fa;
+    --epc-blue-line: #b8d7e8;
+    --ink: #0e1726;
+    --ink-2: #1f2a3d;
+    --slate: #475569;
+    --slate-2: #64748b;
+    --mute: #94a3b8;
+    --line: #e6e8eb;
+    --line-2: #d4d8de;
+    --paper: #fbfaf6;
+    --paper-2: #f5f3ec;
+    --white: #ffffff;
+    --amber: #92400e;
+    --amber-bg: #fef3c7;
+    --amber-line: #fbbf24;
+    --green: #14532d;
+    --green-bg: #d1fae5;
+    --green-dot: #16a34a;
+    --rust: #7f1d1d;
+    --rust-bg: #fee2e2;
+    --focus: 0 0 0 3px rgba(0,116,183,0.4);
+    --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-body: 'Public Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.55;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  *:focus-visible { outline: none; box-shadow: var(--focus); border-radius: 4px; }
+  .skip {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--ink); color: var(--white);
+    padding: 12px 18px; z-index: 100;
+    text-decoration: none; font-weight: 600;
+    border-radius: 0 0 6px 0;
+  }
+  .skip:focus { left: 0; }
+
+  /* Top bar */
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--slate);
+  }
+  .topbar-inner {
+    max-width: 1180px; margin: 0 auto; padding: 0 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .seal {
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 600; color: var(--ink); text-decoration: none;
+  }
+  .seal-mark {
+    width: 28px; height: 28px;
+    background: var(--epc-blue);
+    border-radius: 50%;
+    color: var(--white);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  }
+  .topbar nav { display: flex; gap: 22px; }
+  .topbar nav a { color: var(--slate); text-decoration: none; font-weight: 500; }
+  .topbar nav a:hover { color: var(--epc-blue); }
+  .topbar nav a[aria-current="page"] { color: var(--ink); }
+  .topbar nav .topbar-current {
+    color: var(--ink);
+    font-weight: 500;
+    /* visually matches the link siblings without being interactive — the
+       resident is already on this page so it's a label, not a link. */
+  }
+  @media (max-width: 720px) { .topbar nav { display: none; } }
+
+  /* Hero */
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--line);
+    background:
+      radial-gradient(ellipse at 90% -10%, var(--epc-blue-pale) 0%, transparent 55%),
+      var(--paper);
+  }
+  .hero-inner { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+  .hero-kicker {
+    font-size: 12px; font-weight: 600;
+    color: var(--epc-blue);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 18px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .hero-kicker::before {
+    content: ""; display: inline-block;
+    width: 24px; height: 1px; background: var(--epc-blue);
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.25rem, 4.8vw, 3.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.018em;
+    margin: 0 0 22px;
+    max-width: 22ch;
+    color: var(--ink);
+  }
+  .hero h1 em { font-style: italic; color: var(--epc-blue); font-weight: 500; }
+  .hero-deck { font-size: 1.125rem; color: var(--slate); max-width: 60ch; line-height: 1.55; margin: 0; }
+
+  /* Pillar quicknav */
+  .quicknav {
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(8px);
+  }
+  .quicknav-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 28px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .quicknav-inner::-webkit-scrollbar { display: none; }
+  .quicknav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 16px;
+    color: var(--slate);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .quicknav a:hover { color: var(--ink); }
+  .quicknav a.active { color: var(--epc-blue); border-bottom-color: var(--epc-blue); }
+  .quicknav-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green-dot);
+  }
+  .quicknav-dot.measuring { background: var(--amber-line); }
+  .quicknav-dot.missing { background: var(--rust); }
+
+  /* Main */
+  main { max-width: 1180px; margin: 0 auto; padding: 56px 28px 80px; }
+
+  /* Pillar section */
+  .pillar { margin-bottom: 80px; scroll-margin-top: 80px; }
+  .pillar:last-of-type { margin-bottom: 32px; }
+  .pillar-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .pillar-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--epc-blue);
+    margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .pillar-eyebrow::before {
+    content: "";
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--epc-blue);
+  }
+  .pillar h2 {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.018em;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+  .pillar-objective {
+    font-size: 1.0625rem;
+    color: var(--slate);
+    max-width: 60ch;
+    line-height: 1.55;
+    margin: 0;
+  }
+  .pillar-meta {
+    text-align: right;
+    font-size: 0.8125rem;
+    color: var(--slate-2);
+    line-height: 1.6;
+  }
+  .pillar-meta strong {
+    display: block;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 640px) {
+    .pillar-header { grid-template-columns: 1fr; }
+    .pillar-meta { text-align: left; }
+  }
+
+  /* KPI grid */
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .kpi-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .kpi-card:hover {
+    border-color: var(--line-2);
+    box-shadow: 0 4px 16px -8px rgba(14,23,38,0.1);
+  }
+  .kpi-card.featured {
+    border: 1.5px solid var(--epc-blue);
+    box-shadow: 0 4px 24px -12px rgba(0,116,183,0.25);
+  }
+  .kpi-card.proposed {
+    background: var(--paper-2);
+    border-style: dashed;
+    border-color: var(--amber-line);
+  }
+
+  .kpi-top {
+    padding: 24px 24px 20px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .kpi-card.proposed .kpi-top { border-bottom-color: var(--amber-line); }
+  .kpi-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate-2);
+    line-height: 1.4;
+  }
+  .kpi-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .kpi-status-pill::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+  .kpi-status-pill.on-track { color: var(--green); background: var(--green-bg); }
+  .kpi-status-pill.on-track::before { background: var(--green-dot); }
+  .kpi-status-pill.measuring { color: var(--amber); background: var(--amber-bg); }
+  .kpi-status-pill.measuring::before { background: var(--amber-line); }
+  .kpi-status-pill.missing { color: var(--rust); background: var(--rust-bg); }
+  .kpi-status-pill.missing::before { background: var(--rust); }
+  .kpi-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .kpi-value {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.025em;
+  }
+  .kpi-value-unit {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--slate-2);
+    font-weight: 500;
+  }
+  .kpi-value.unknown {
+    color: var(--amber);
+    font-size: 1.25rem;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+  .kpi-goal {
+    font-size: 0.8125rem;
+    color: var(--slate-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi-body {
+    padding: 20px 24px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .kpi-body p {
+    margin: 0 0 12px;
+    color: var(--slate);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+  .kpi-body p:last-child { margin-bottom: 0; }
+
+  /* Sub-metrics grid (used inside kpi-body for tiles like Road Service Ops) */
+  .submetrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 12px;
+  }
+  .submetric { background: var(--white); padding: 12px 14px; }
+  .submetric-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate-2);
+  }
+  .submetric-val {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .submetric-val.unknown {
+    color: var(--amber);
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  /* Action footer — every KPI tile has one */
+  .kpi-action {
+    padding: 16px 24px;
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .kpi-card.proposed .kpi-action {
+    background: rgba(255,255,255,0.4);
+    border-top-color: var(--amber-line);
+  }
+  .kpi-card.featured .kpi-action {
+    background: var(--epc-blue-pale);
+    border-top-color: var(--epc-blue-line);
+  }
+  .kpi-action-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate-2);
+  }
+  .kpi-card.featured .kpi-action-label { color: var(--epc-blue-dark); }
+  .kpi-card.proposed .kpi-action-label { color: var(--amber); }
+  .kpi-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    background: var(--white);
+    color: var(--ink);
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .kpi-btn:hover {
+    background: var(--ink);
+    color: var(--white);
+    border-color: var(--ink);
+  }
+  .kpi-btn::after { content: "→"; transition: transform 0.15s; }
+  .kpi-btn:hover::after { transform: translateX(2px); }
+  .kpi-card.featured .kpi-btn {
+    background: var(--epc-blue);
+    color: var(--white);
+    border-color: var(--epc-blue);
+  }
+  .kpi-card.featured .kpi-btn:hover {
+    background: var(--epc-blue-dark);
+    border-color: var(--epc-blue-dark);
+  }
+
+  /* Coming soon block */
+  .coming-soon {
+    background: var(--white);
+    border: 1px dashed var(--line-2);
+    border-radius: 12px;
+    padding: 56px 32px;
+    text-align: center;
+  }
+  .coming-soon-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--slate-2); margin-bottom: 16px;
+  }
+  .coming-soon h3 {
+    font-family: var(--font-display);
+    font-size: 1.75rem; font-weight: 600;
+    margin: 0 0 12px; color: var(--ink);
+    letter-spacing: -0.012em;
+  }
+  .coming-soon p {
+    color: var(--slate); max-width: 52ch;
+    margin: 0 auto 20px;
+  }
+
+  /* Community Trust factors */
+  .trust-factors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .trust-factor {
+    padding: 16px;
+    background: var(--paper);
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid var(--line);
+  }
+  .trust-factor-name {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+    text-transform: capitalize;
+  }
+  .trust-factor-status {
+    font-size: 0.75rem;
+    color: var(--amber);
+    font-style: italic;
+  }
+
+  /* Sources */
+  .sources {
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+    margin-top: 48px;
+    color: var(--slate);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  .sources h3 {
+    font-family: var(--font-display);
+    color: var(--ink);
+    font-size: 1.0625rem;
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+  .sources ul { margin: 0; padding-left: 18px; list-style: none; }
+  .sources li { position: relative; margin-bottom: 8px; padding-left: 14px; }
+  .sources li::before {
+    content: ""; position: absolute; left: 0; top: 10px;
+    width: 6px; height: 1px; background: var(--slate-2);
+  }
+  .sources a { color: var(--epc-blue); text-decoration: none; border-bottom: 1px solid var(--epc-blue-line); }
+  .sources a:hover { color: var(--epc-blue-dark); border-bottom-color: var(--epc-blue); }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip">Skip to main content</a>
+
+<div class="topbar" role="banner">
+  <div class="topbar-inner">
+    <a href="/" class="seal" aria-label="cheetochopsticks home">
+      <span class="seal-mark" aria-hidden="true">E</span>
+      <span>El Paso County, Colorado</span>
+    </a>
+    <nav aria-label="Primary">
+      <span class="topbar-current" aria-current="page">Dashboard</span>
+      <a href="epc_parcel_lookup.html">Property lookup</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+</div>
+
+<section class="hero" aria-labelledby="hero-h">
+  <div class="hero-inner">
+    <div class="hero-kicker">Strategic Performance Dashboard</div>
+    <h1 id="hero-h">A dynamic display of <em>strategic plan</em> objectives and performance.</h1>
+    <p class="hero-deck">In a quick snapshot, it visualizes and simplifies the complexity of County efforts in an easy-to-understand, transparent way. It shows progress, trends, and how we arrive at data-driven decision-making.</p>
+  </div>
+</section>
+
+<nav class="quicknav" aria-label="Pillars">
+  <div class="quicknav-inner" id="quicknav">
+    <a href="#infrastructure" class="active"><span class="quicknav-dot" aria-hidden="true"></span>Infrastructure</a>
+    <a href="#service-quality"><span class="quicknav-dot measuring" aria-hidden="true"></span>Service Quality</a>
+    <a href="#community-trust"><span class="quicknav-dot measuring" aria-hidden="true"></span>Community Trust</a>
+    <a href="#health-safety"><span class="quicknav-dot missing" aria-hidden="true"></span>Health &amp; Safety</a>
+  </div>
+</nav>
+
+<main id="main-content">
+
+  <!-- INFRASTRUCTURE -->
+  <section class="pillar" id="infrastructure" aria-labelledby="pillar-infra-h">
+    <header class="pillar-header">
+      <div>
+        <div class="pillar-eyebrow">Pillar 01 · Infrastructure</div>
+        <h2 id="pillar-infra-h">Build, maintain, and improve what we already own.</h2>
+        <p class="pillar-objective">Sustainably fund, manage, and improve public-owned infrastructure. Six asset classes tracked; one operational layer proposed.</p>
+      </div>
+      <div class="pillar-meta">
+        <strong>$59.1M</strong>
+        2026 Roads &amp; Infrastructure budget
+      </div>
+    </header>
+
+    <div class="kpis" role="list" aria-label="Infrastructure KPIs">
+
+      <!-- TEMPLATE: KPI card structure
+           Status pill: on-track | measuring | missing
+           Featured: add class="kpi-card featured" for the wired drill-down
+           Proposed: add class="kpi-card proposed" for non-published KPIs
+      -->
+
+      <article class="kpi-card" role="listitem">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Bridge Sufficiency Rating</span>
+            <span class="kpi-status-pill on-track">On Track</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value">91</span>
+          </div>
+          <span class="kpi-goal">Goal range 80–100 · 285 bridges inspected</span>
+        </div>
+        <div class="kpi-body">
+          <p>El Paso County regularly inspects its 285 bridges to ensure safety and prevent costly damage. Bridges are rated on a sufficiency scale from 0 to 100, assessing structural integrity and functionality.</p>
+          <p>Regular inspections and maintenance extend the lifespan of these vital structures, reducing the risk of failure.</p>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Drill down</span>
+          <a href="kpi.html?id=bridge" class="kpi-btn" aria-label="View bridge sufficiency detail and inventory">View detail</a>
+        </footer>
+      </article>
+
+      <!-- FEATURED: Pavement Condition Index — wired to working parcel lookup -->
+      <article class="kpi-card featured" role="listitem">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Pavement Condition Index</span>
+            <span class="kpi-status-pill on-track">On Track</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value">71</span>
+            <span class="kpi-value-unit">/ 100 PCI</span>
+          </div>
+          <span class="kpi-goal">Goal range 55–85 · 2,429 lane miles · $3B asset value</span>
+        </div>
+        <div class="kpi-body">
+          <p>The Department of Public Works monitors and maintains the County's vast paved roadway network — representing a $3 billion asset. Conditions are measured every three years using advanced 3D laser scanning, GPS, and roughness sensors.</p>
+          <p>This data prioritizes maintenance, rehabilitation, and reconstruction. The goal is to increase PCI by one point each year — 72 would move the network into "good" territory.</p>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Drill down</span>
+          <a href="epc_parcel_lookup.html" class="kpi-btn" aria-label="Look up a property for parcel-level road accountability">Look up a property</a>
+        </footer>
+      </article>
+
+      <article class="kpi-card" role="listitem">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Stormwater Control Measures</span>
+            <span class="kpi-status-pill on-track">On Track</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value">79</span>
+          </div>
+          <span class="kpi-goal">Goal range 70–90 · 30 permanent control measures</span>
+        </div>
+        <div class="kpi-body">
+          <p>The County operates 30 Permanent Control Measures designed to reduce pollutant discharge into local streams and rivers. Public Works inspects them annually for MS4 permit compliance.</p>
+          <p>Proper maintenance reduces flooding risk, protects waterways, and avoids costly non-compliance fines.</p>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Drill down</span>
+          <a href="kpi.html?id=stormwater" class="kpi-btn" aria-label="View stormwater PCM detail, locations, and inspection history">View detail</a>
+        </footer>
+      </article>
+
+      <article class="kpi-card" role="listitem">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Fleet Readiness</span>
+            <span class="kpi-status-pill on-track">On Track</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value">95</span>
+            <span class="kpi-value-unit">%</span>
+          </div>
+          <span class="kpi-goal">Goal range 80–100 · 21 organizations supported</span>
+        </div>
+        <div class="kpi-body">
+          <p>Fleet Management provides transportation and construction equipment to 21 organizations across the County. "Readiness" measures the percentage of time vehicles are available versus unavailable for maintenance.</p>
+          <p>Maintained consistently above the 95% target through proactive maintenance and replacement programs.</p>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Drill down</span>
+          <a href="kpi.html?id=fleet" class="kpi-btn" aria-label="View fleet readiness detail and methodology">View detail</a>
+        </footer>
+      </article>
+
+      <article class="kpi-card" role="listitem">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Facilities Condition</span>
+            <span class="kpi-status-pill on-track">On Track</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value">90</span>
+            <span class="kpi-value-unit">%</span>
+          </div>
+          <span class="kpi-goal">Goal range 87–95% · Life Remaining Scale</span>
+        </div>
+        <div class="kpi-body">
+          <p>The Facilities Condition Index assesses building condition by comparing deferred maintenance costs to each building's replacement value. The County uses the Life Remaining Scale — 90% means "On Track."</p>
+          <p>Tracked via the MyFacilityInformer tool to prioritize maintenance based on available resources.</p>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Drill down</span>
+          <a href="kpi.html?id=facilities" class="kpi-btn" aria-label="View facilities condition detail and methodology">View detail</a>
+        </footer>
+      </article>
+
+      <article class="kpi-card" role="listitem">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Park Assets Condition</span>
+            <span class="kpi-status-pill measuring">Measuring</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value unknown">In development</span>
+          </div>
+          <span class="kpi-goal">Goal range to be determined</span>
+        </div>
+        <div class="kpi-body">
+          <p>Parks &amp; Community Services is implementing a Parks Condition Index to systematically assess trails, sport fields and courts, playgrounds, and other assets.</p>
+          <p>A new Computerized Maintenance Management System will streamline maintenance tasks once the baseline assessment is complete.</p>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Drill down</span>
+          <a href="kpi.html?id=parks" class="kpi-btn" aria-label="View parks condition detail and assessment progress">View detail</a>
+        </footer>
+      </article>
+
+      <!-- PROPOSED: Road Service Operations -->
+      <article class="kpi-card proposed" role="listitem">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Road Service Operations</span>
+            <span class="kpi-status-pill missing">Not Published</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value unknown">Proposed addition</span>
+          </div>
+          <span class="kpi-goal">Operational KPIs not currently published</span>
+        </div>
+        <div class="kpi-body">
+          <p>The published Infrastructure KPIs measure asset <em>condition</em>. They don't measure operational <em>execution</em> — how the $59.1M actually gets converted into truck rolls and repairs in the field.</p>
+          <p>Adding these four metrics would require no new staff, no new asphalt, no new vehicles. The data already exists in the County's internal work-order system.</p>
+          <div class="submetrics" role="list" aria-label="Proposed operational sub-metrics">
+            <div class="submetric" role="listitem">
+              <div class="submetric-label">Avg. response time</div>
+              <div class="submetric-val unknown">Not published</div>
+            </div>
+            <div class="submetric" role="listitem">
+              <div class="submetric-label">Avg. resolution time</div>
+              <div class="submetric-val unknown">Not published</div>
+            </div>
+            <div class="submetric" role="listitem">
+              <div class="submetric-label">Bundling rate</div>
+              <div class="submetric-val unknown">Not published</div>
+            </div>
+            <div class="submetric" role="listitem">
+              <div class="submetric-label">Repairs per dispatch</div>
+              <div class="submetric-val unknown">Not published</div>
+            </div>
+          </div>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Proposal</span>
+          <a href="kpi.html?id=rso" class="kpi-btn" aria-label="Read the road service operations accountability proposal">Read the proposal</a>
+        </footer>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- SERVICE QUALITY -->
+  <section class="pillar" id="service-quality" aria-labelledby="pillar-sq-h">
+    <header class="pillar-header">
+      <div>
+        <div class="pillar-eyebrow">Pillar 02 · Service Quality</div>
+        <h2 id="pillar-sq-h">Improve service quality with an engaged workforce.</h2>
+        <p class="pillar-objective">Two KPIs: how the public experiences County services, and how employees experience their work.</p>
+      </div>
+      <div class="pillar-meta">
+        <strong>2 of 2</strong>
+        KPIs tracked
+      </div>
+    </header>
+
+    <div class="kpis" role="list" aria-label="Service Quality KPIs">
+
+      <article class="kpi-card" role="listitem">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Customer Experience Index</span>
+            <span class="kpi-status-pill measuring">Measuring</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value unknown">Baseline in development</span>
+          </div>
+          <span class="kpi-goal">Goal range to be determined</span>
+        </div>
+        <div class="kpi-body">
+          <p>El Paso County values citizen and employee input to improve services. Current customer experience initiatives focus on Customer Satisfaction, Effort, and Advocacy as the three measurement dimensions.</p>
+          <p>This feedback is intended to align services with community expectations, though a public-facing score has not yet been published.</p>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Drill down</span>
+          <a href="kpi.html?id=cei" class="kpi-btn" aria-label="View customer experience index detail and methodology">View detail</a>
+        </footer>
+      </article>
+
+      <article class="kpi-card" role="listitem">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Employee Engagement Index</span>
+            <span class="kpi-status-pill on-track">On Track</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value">78</span>
+            <span class="kpi-value-unit">%</span>
+          </div>
+          <span class="kpi-goal">Goal range 60–70% · Biannual survey</span>
+        </div>
+        <div class="kpi-body">
+          <p>The County assesses how valued, connected, and supported employees feel through a biannual Engagement Index. Current data shows strong purpose alignment (90%) and role satisfaction (78%).</p>
+          <p>Improvement opportunities identified in career growth and development pathways.</p>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Drill down</span>
+          <a href="kpi.html?id=engagement" class="kpi-btn" aria-label="View employee engagement detail and survey methodology">View detail</a>
+        </footer>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- COMMUNITY TRUST -->
+  <section class="pillar" id="community-trust" aria-labelledby="pillar-ct-h">
+    <header class="pillar-header">
+      <div>
+        <div class="pillar-eyebrow">Pillar 03 · Community Trust</div>
+        <h2 id="pillar-ct-h">Strengthen trust through communication and transparency.</h2>
+        <p class="pillar-objective">A single composite index built from four factors: civility, transparency, capability, and reliability.</p>
+      </div>
+      <div class="pillar-meta">
+        <strong>4 factors</strong>
+        Index in development
+      </div>
+    </header>
+
+    <div class="kpis" role="list" aria-label="Community Trust KPIs">
+
+      <article class="kpi-card" role="listitem" style="grid-column: 1 / -1;">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Community Trust Index</span>
+            <span class="kpi-status-pill measuring">Measuring</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value unknown">Composite in development</span>
+          </div>
+          <span class="kpi-goal">Four factors based on Edelman Trust research</span>
+        </div>
+        <div class="kpi-body">
+          <p>Community Trust serves as the cornerstone of a successful relationship between the County and its stakeholders. It is fostered through consistent actions that reflect both intent and competence.</p>
+          <p>Leading research identifies four critical factors essential to building and maintaining community trust. Each will be measured independently and combined into the composite index.</p>
+          <div class="trust-factors" role="list" aria-label="Trust factor components">
+            <div class="trust-factor" role="listitem">
+              <div class="trust-factor-name">Civility</div>
+              <div class="trust-factor-status">In development</div>
+            </div>
+            <div class="trust-factor" role="listitem">
+              <div class="trust-factor-name">Transparency</div>
+              <div class="trust-factor-status">In development</div>
+            </div>
+            <div class="trust-factor" role="listitem">
+              <div class="trust-factor-name">Capability</div>
+              <div class="trust-factor-status">In development</div>
+            </div>
+            <div class="trust-factor" role="listitem">
+              <div class="trust-factor-name">Reliability</div>
+              <div class="trust-factor-status">In development</div>
+            </div>
+          </div>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Drill down</span>
+          <a href="kpi.html?id=trust" class="kpi-btn" aria-label="View community trust index detail and the four trust factors">View detail</a>
+        </footer>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- HEALTH & SAFETY -->
+  <section class="pillar" id="health-safety" aria-labelledby="pillar-hs-h">
+    <header class="pillar-header">
+      <div>
+        <div class="pillar-eyebrow">Pillar 04 · Health &amp; Safety</div>
+        <h2 id="pillar-hs-h">Partner to improve resident health and safety.</h2>
+        <p class="pillar-objective">Develop partnerships to support community efforts to improve the health and safety of residents.</p>
+      </div>
+      <div class="pillar-meta">
+        <strong>0 of TBD</strong>
+        KPIs published
+      </div>
+    </header>
+
+    <div class="kpis" role="list" aria-label="Health and Safety KPIs">
+
+      <article class="kpi-card proposed" role="listitem" style="grid-column: 1 / -1;">
+        <div class="kpi-top">
+          <div class="kpi-status-row">
+            <span class="kpi-label">Health &amp; Safety Pillar</span>
+            <span class="kpi-status-pill missing">Not Published</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value unknown">Framework under development</span>
+          </div>
+          <span class="kpi-goal">No metrics, baselines, or goal ranges published yet</span>
+        </div>
+        <div class="kpi-body">
+          <p>The Health and Safety pillar has been declared as a strategic priority but no public KPIs have been published yet. The framework, baseline measurements, and goal ranges are still under development.</p>
+          <p>This is the only pillar without a single published metric.</p>
+        </div>
+        <footer class="kpi-action">
+          <span class="kpi-action-label">Status</span>
+          <a href="kpi.html?id=hs" class="kpi-btn" aria-label="View health and safety pillar detail and current status">View detail</a>
+        </footer>
+      </article>
+
+    </div>
+  </section>
+
+  <aside class="sources" id="sources" aria-labelledby="sources-h">
+    <h3 id="sources-h">Sources &amp; disclosures</h3>
+    <ul>
+      <li>KPI values, goal ranges, and narrative content are recreated from the <a href="https://www.elpasoco.com/strategic-plan/strategic-plan-dashboard/" target="_blank" rel="noopener">official El Paso County Strategic Plan Dashboard</a>.</li>
+      <li>Budget figures from the El Paso County 2026 Adopted Budget.</li>
+      <li>This page uses a single KPI tile template — every card follows the same structure. To update a metric, edit the corresponding <code>&lt;article class="kpi-card"&gt;</code> block and replace the label, value, goal, description, and drill-down link.</li>
+      <li>Status pill classes: <code>on-track</code> (green), <code>measuring</code> (amber), <code>missing</code> (red). Card variants: <code>featured</code> (active live drill-down), <code>proposed</code> (not currently published).</li>
+      <li>Drill-down links go to detail pages with methodology, sub-metrics, and related actions. The Pavement Condition Index card additionally links to a live parcel accountability lookup that queries the State of Colorado parcel API in real time.</li>
+      <li>This page is a citizen-built design demonstration. Not affiliated with El Paso County or its Department of Public Works.</li>
+    </ul>
+  </aside>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var sections = document.querySelectorAll('.pillar');
+  var navLinks = document.querySelectorAll('#quicknav a');
+
+  function setActive(id) {
+    navLinks.forEach(function (a) {
+      if (a.getAttribute('href') === '#' + id) a.classList.add('active');
+      else a.classList.remove('active');
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+    sections.forEach(function (s) { observer.observe(s); });
+  }
+
+  navLinks.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var href = a.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        var target = document.getElementById(href.slice(1));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setActive(href.slice(1));
+          history.replaceState(null, '', href);
+        }
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,273 @@
+<style>
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.epc-header{padding:1.25rem 1.25rem;border-radius:var(--border-radius-lg);background:var(--color-background-secondary);border-left:4px solid #0074b7;margin-bottom:1.5rem}
+.epc-header h1{margin:0 0 4px;font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.epc-header p{margin:0;font-size:13px;color:var(--color-text-secondary);line-height:1.5}
+.kpi{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:1rem;display:flex;flex-direction:column;min-height:170px}
+.kpi.proposed{border-style:dashed;border-color:#0074b7;background:var(--color-background-secondary)}
+.kpi-icon{font-size:20px;color:#0074b7;margin-bottom:8px}
+.kpi-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:6px;line-height:1.3;min-height:32px;font-weight:500}
+.kpi-value{font-size:26px;font-weight:500;line-height:1.1;color:var(--color-text-primary)}
+.kpi-goal{font-size:12px;color:var(--color-text-secondary);margin-top:4px;line-height:1.4}
+.kpi-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 8px;border-radius:var(--border-radius-md);margin-top:10px;align-self:flex-start;font-weight:500}
+.b-track{background:var(--color-background-success);color:var(--color-text-success)}
+.b-measuring{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-soon{background:var(--color-background-tertiary);color:var(--color-text-secondary)}
+.b-missing{background:var(--color-background-danger);color:var(--color-text-danger)}
+.pillar{margin:1.75rem 0}
+.pillar-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.pillar-head h2{margin:0;font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.pillar-head i{font-size:22px;color:#0074b7}
+.pillar-desc{font-size:13px;color:var(--color-text-secondary);margin:0 0 12px;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.banner{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;padding:10px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border-left:3px solid #0074b7;line-height:1.5}
+.banner strong{color:var(--color-text-primary);font-weight:500}
+.lookup{margin-top:2.5rem;padding-top:1.5rem;border-top:0.5px solid var(--color-border-tertiary)}
+.search-row{display:flex;gap:8px;margin:0.75rem 0 1rem;align-items:center;flex-wrap:wrap}
+.search-row label{font-size:13px;color:var(--color-text-secondary);font-weight:500}
+.search-row input{flex:1;min-width:220px}
+.parcel-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-top:1rem}
+.parcel-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:0.5px solid var(--color-border-tertiary);gap:12px;flex-wrap:wrap}
+.parcel-id{font-size:12px;color:var(--color-text-secondary);font-family:var(--font-mono)}
+.parcel-addr{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-top:2px}
+.parcel-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1rem}
+.stat{background:var(--color-background-secondary);padding:10px 12px;border-radius:var(--border-radius-md)}
+.stat-label{font-size:11px;color:var(--color-text-secondary);font-weight:500}
+.stat-value{font-size:18px;font-weight:500;margin-top:2px;color:var(--color-text-primary)}
+.section-h{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:1rem 0 8px;display:flex;align-items:center;gap:6px}
+.section-h i{color:#0074b7;font-size:16px}
+.ticket{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:6px}
+.ticket-icon{font-size:18px;color:#0074b7;flex-shrink:0;margin-top:2px}
+.ticket-body{flex:1;min-width:0}
+.ticket-title{font-size:13px;color:var(--color-text-primary);font-weight:500}
+.ticket-meta{font-size:11px;color:var(--color-text-secondary);margin-top:2px;line-height:1.4}
+.ticket-status{font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500;flex-shrink:0;align-self:flex-start}
+.s-open{background:var(--color-background-warning);color:var(--color-text-warning)}
+.s-resolved{background:var(--color-background-success);color:var(--color-text-success)}
+.s-new{background:var(--color-background-info);color:var(--color-text-info)}
+.action-row{display:flex;gap:8px;margin-top:1.25rem;flex-wrap:wrap}
+</style>
+
+<header class="epc-header">
+  <h1>El Paso County Strategic Performance Dashboard</h1>
+  <p>A dynamic display of strategic plan objectives, performance, and per-parcel accountability.</p>
+</header>
+
+<section class="pillar" aria-labelledby="infra-head">
+  <div class="pillar-head"><i class="ti ti-building-bridge" aria-hidden="true"></i><h2 id="infra-head">Infrastructure</h2></div>
+  <p class="pillar-desc">Sustainably fund, manage, and improve public-owned infrastructure.</p>
+  <div class="grid" role="list">
+    <div class="kpi" role="listitem">
+      <i class="ti ti-bridge kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Bridge Sufficiency Rating</div>
+      <div class="kpi-value">91</div>
+      <div class="kpi-goal">Goal range: 80–100</div>
+      <span class="kpi-badge b-track"><i class="ti ti-check" aria-hidden="true"></i>On Track</span>
+    </div>
+    <div class="kpi" role="listitem">
+      <i class="ti ti-road kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Pavement Condition Index</div>
+      <div class="kpi-value">71</div>
+      <div class="kpi-goal">Goal range: 55–85</div>
+      <span class="kpi-badge b-track"><i class="ti ti-check" aria-hidden="true"></i>On Track</span>
+    </div>
+    <div class="kpi" role="listitem">
+      <i class="ti ti-droplet kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Stormwater Control Measures</div>
+      <div class="kpi-value">79</div>
+      <div class="kpi-goal">Goal range: 70–90</div>
+      <span class="kpi-badge b-track"><i class="ti ti-check" aria-hidden="true"></i>On Track</span>
+    </div>
+    <div class="kpi" role="listitem">
+      <i class="ti ti-truck kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Fleet Assets Condition</div>
+      <div class="kpi-value">95%</div>
+      <div class="kpi-goal">Goal range: 80–100</div>
+      <span class="kpi-badge b-track"><i class="ti ti-check" aria-hidden="true"></i>On Track</span>
+    </div>
+    <div class="kpi" role="listitem">
+      <i class="ti ti-building kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Facilities Condition Index</div>
+      <div class="kpi-value">90%</div>
+      <div class="kpi-goal">Goal range: 87–95%</div>
+      <span class="kpi-badge b-track"><i class="ti ti-check" aria-hidden="true"></i>On Track</span>
+    </div>
+    <div class="kpi" role="listitem">
+      <i class="ti ti-trees kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Park Assets Condition</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-goal">Goal range: TBD</div>
+      <span class="kpi-badge b-measuring"><i class="ti ti-loader" aria-hidden="true"></i>Measuring</span>
+    </div>
+  </div>
+</section>
+
+<section class="pillar" aria-labelledby="rso-head">
+  <div class="banner" role="note">
+    <i class="ti ti-bulb" aria-hidden="true" style="color:#0074b7;font-size:18px;flex-shrink:0;margin-top:1px"></i>
+    <span><strong>Proposed addition.</strong> Operational KPIs that would measure how the $59.1M roads budget is executed in the field. None are currently published by the County.</span>
+  </div>
+  <div class="pillar-head"><i class="ti ti-route" aria-hidden="true"></i><h2 id="rso-head">Road Service Operations</h2></div>
+  <p class="pillar-desc">Track execution of the published clustering and prioritization policy. (Proposed; not implemented.)</p>
+  <div class="grid" role="list">
+    <div class="kpi proposed" role="listitem">
+      <i class="ti ti-clock-bolt kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Avg. Response Time</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-goal">Stated SLA: within 7 days</div>
+      <span class="kpi-badge b-missing"><i class="ti ti-x" aria-hidden="true"></i>Not Published</span>
+    </div>
+    <div class="kpi proposed" role="listitem">
+      <i class="ti ti-checks kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Avg. Resolution Time</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-goal">Ticket open → closed</div>
+      <span class="kpi-badge b-missing"><i class="ti ti-x" aria-hidden="true"></i>Not Published</span>
+    </div>
+    <div class="kpi proposed" role="listitem">
+      <i class="ti ti-stack-2 kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Bundling Rate</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-goal">% dispatches handling adjacent work</div>
+      <span class="kpi-badge b-missing"><i class="ti ti-x" aria-hidden="true"></i>Not Published</span>
+    </div>
+    <div class="kpi proposed" role="listitem">
+      <i class="ti ti-truck-delivery kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Repairs Per Dispatch</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-goal">Avg. defects fixed per truck roll</div>
+      <span class="kpi-badge b-missing"><i class="ti ti-x" aria-hidden="true"></i>Not Published</span>
+    </div>
+    <div class="kpi proposed" role="listitem">
+      <i class="ti ti-rotate-clockwise kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Reopen Rate</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-goal">% locations re-reported within 12mo</div>
+      <span class="kpi-badge b-missing"><i class="ti ti-x" aria-hidden="true"></i>Not Published</span>
+    </div>
+  </div>
+</section>
+
+<section class="pillar" aria-labelledby="sq-head">
+  <div class="pillar-head"><i class="ti ti-medal" aria-hidden="true"></i><h2 id="sq-head">Service Quality</h2></div>
+  <p class="pillar-desc">Improve service quality with an engaged workforce.</p>
+  <div class="grid" role="list">
+    <div class="kpi" role="listitem">
+      <i class="ti ti-mood-smile kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Customer Experience Index</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-goal">Goal range: TBD</div>
+      <span class="kpi-badge b-measuring"><i class="ti ti-loader" aria-hidden="true"></i>Measuring</span>
+    </div>
+    <div class="kpi" role="listitem">
+      <i class="ti ti-users kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Employee Engagement Index</div>
+      <div class="kpi-value">78%</div>
+      <div class="kpi-goal">Goal range: 60–70%</div>
+      <span class="kpi-badge b-track"><i class="ti ti-check" aria-hidden="true"></i>On Track</span>
+    </div>
+  </div>
+</section>
+
+<section class="pillar" aria-labelledby="ct-head">
+  <div class="pillar-head"><i class="ti ti-handshake" aria-hidden="true"></i><h2 id="ct-head">Community Trust</h2></div>
+  <p class="pillar-desc">Strengthen community trust through improved communications and transparency.</p>
+  <div class="grid" role="list">
+    <div class="kpi" role="listitem">
+      <i class="ti ti-shield-check kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">Community Trust Index</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-goal">Civility, transparency, capability, reliability</div>
+      <span class="kpi-badge b-measuring"><i class="ti ti-loader" aria-hidden="true"></i>Measuring</span>
+    </div>
+  </div>
+</section>
+
+<section class="pillar" aria-labelledby="hs-head">
+  <div class="pillar-head"><i class="ti ti-heart-handshake" aria-hidden="true"></i><h2 id="hs-head">Health and Safety</h2></div>
+  <p class="pillar-desc">Develop partnerships to support community efforts to improve resident health and safety.</p>
+  <div class="grid" role="list">
+    <div class="kpi" role="listitem">
+      <i class="ti ti-clock-hour-4 kpi-icon" aria-hidden="true"></i>
+      <div class="kpi-label">KPIs in development</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-goal">No metrics published yet</div>
+      <span class="kpi-badge b-soon"><i class="ti ti-dots" aria-hidden="true"></i>Coming Soon</span>
+    </div>
+  </div>
+</section>
+
+<section class="lookup" aria-labelledby="lookup-head">
+  <div class="pillar-head"><i class="ti ti-map-pin-search" aria-hidden="true"></i><h2 id="lookup-head">Look up your property</h2></div>
+  <p class="pillar-desc">Proposed: enter a parcel number or address to see road condition, open tickets, treatment history, and budget for the segment in front of your property.</p>
+
+  <div class="search-row">
+    <label for="parcel-input">Parcel ID or address</label>
+    <input id="parcel-input" type="text" value="6401303008" aria-describedby="parcel-help" />
+    <button id="lookup-btn" aria-label="Look up parcel">Look up</button>
+  </div>
+  <div id="parcel-help" class="sr-only">Enter a 10-digit El Paso County parcel schedule number or street address.</div>
+
+  <div class="parcel-card" id="parcel-result" aria-live="polite">
+    <div class="parcel-header">
+      <div>
+        <div class="parcel-id">Schedule #6401303008</div>
+        <div class="parcel-addr">Republic Drive (sample parcel)</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:11px;color:var(--color-text-secondary);font-weight:500">2026 assessed value</div>
+        <div style="font-size:14px;font-weight:500;color:var(--color-text-primary)">$487,200</div>
+      </div>
+    </div>
+
+    <div class="parcel-stats">
+      <div class="stat"><div class="stat-label">Segment PCI</div><div class="stat-value">47</div></div>
+      <div class="stat"><div class="stat-label">Last Scanned</div><div class="stat-value">Aug 2023</div></div>
+      <div class="stat"><div class="stat-label">Next Treatment</div><div class="stat-value">TBD</div></div>
+      <div class="stat"><div class="stat-label">2026 Allocated</div><div class="stat-value">$0</div></div>
+    </div>
+
+    <h3 class="section-h"><i class="ti ti-tickets" aria-hidden="true"></i>Open service requests on this segment</h3>
+
+    <div class="ticket">
+      <i class="ti ti-alert-circle ticket-icon" aria-hidden="true"></i>
+      <div class="ticket-body">
+        <div class="ticket-title">Multiple potholes along Republic Dr segment</div>
+        <div class="ticket-meta">Reported May 12, 2026 · No assigned crew yet</div>
+      </div>
+      <span class="ticket-status s-new">New</span>
+    </div>
+
+    <h3 class="section-h"><i class="ti ti-history" aria-hidden="true"></i>Recent maintenance on this segment</h3>
+
+    <div class="ticket">
+      <i class="ti ti-tool ticket-icon" aria-hidden="true"></i>
+      <div class="ticket-body">
+        <div class="ticket-title">Pothole repair (single defect)</div>
+        <div class="ticket-meta">May 12, 2026 · 3 personnel · 2 vehicles · 1 of 7 visible defects addressed</div>
+      </div>
+      <span class="ticket-status s-resolved">Closed</span>
+    </div>
+
+    <div class="action-row">
+      <button id="btn-nearby">Show nearby tickets ↗</button>
+      <button id="btn-ops">View operational KPIs ↗</button>
+    </div>
+  </div>
+</section>
+
+<script>
+document.getElementById('lookup-btn').addEventListener('click',function(){
+  var v=document.getElementById('parcel-input').value.trim();
+  var card=document.getElementById('parcel-result');
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+  card.style.outline='2px solid #0074b7';
+  setTimeout(function(){card.style.outline='none'},1200);
+});
+document.getElementById('btn-nearby').addEventListener('click',function(){
+  sendPrompt('Show me all open service requests within 500 feet of parcel 6401303008 on Republic Drive');
+});
+document.getElementById('btn-ops').addEventListener('click',function(){
+  sendPrompt('What would the operational KPIs (response time, bundling rate, repairs per dispatch) look like if El Paso County published them like other dashboards?');
+});
+</script>
