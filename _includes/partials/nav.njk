@@ -1,7 +1,9 @@
 <!-- ═══════════════════════════════════════════════════════════════════
      NAV — sourced from a single partial; pages mark their active section
-     by setting `activeNav` in front-matter (one of: you, dashboards,
-     people, events).
+     by setting `activeNav` in front-matter (one of: orgchart, local,
+     state, national). Legacy values (you, dashboards, people, events)
+     are still accepted by pages that haven't been retagged yet — they
+     simply won't highlight any nav item.
 ════════════════════════════════════════════════════════════════════ -->
 <header class="nav" role="banner">
   <div class="container">
@@ -10,10 +12,10 @@
         <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
       </a>
       <nav class="nav-links" id="nav-links" aria-label="Site sections">
-        <a class="nav-link you-link{% if activeNav == 'you' %} active{% endif %}" href="/#you">You</a>
-        <a class="nav-link{% if activeNav == 'dashboards' %} active{% endif %}" href="/#dashboards">Dashboards</a>
-        <a class="nav-link{% if activeNav == 'people' %} active{% endif %}" href="/#people">People</a>
-        <a class="nav-link{% if activeNav == 'events' %} active{% endif %}" href="/#events">Events</a>
+        <a class="nav-link{% if activeNav == 'orgchart' %} active{% endif %}" href="/microsites/shared/government-org-chart.html">Org Chart</a>
+        <a class="nav-link{% if activeNav == 'local' %} active{% endif %}" href="/#tier-local">Local</a>
+        <a class="nav-link{% if activeNav == 'state' %} active{% endif %}" href="/#tier-state">State</a>
+        <a class="nav-link{% if activeNav == 'national' %} active{% endif %}" href="/#tier-national">National</a>
       </nav>
       <div class="nav-right">
         <a class="subscribe-btn" href="/preferences/" aria-label="Subscribe to email updates">

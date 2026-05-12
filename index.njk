@@ -1537,7 +1537,7 @@ eleventyExcludeFromCollections: true
       <div class="tier__band">
         <p class="tier__eyebrow">Tier 1 · Where you live</p>
         <h3 class="tier__heading" id="tier-local-heading">Local — El Paso County &amp; Colorado Springs</h3>
-        <p class="tier__intro">Everything that touches your address day to day — city services, county offices, downtown business records, the metro and special districts billed to your property, and the cross-jurisdictional tools that pull from all of them. <strong>Start here</strong> if you're not sure where to look.</p>
+        <p class="tier__intro">Everything that touches your address day to day — city services, county offices, downtown business records, the metro and special districts billed to your property, and the cross-jurisdictional tools that pull from all of them. <strong>Start here</strong> if you're not sure where to look. <a href="/microsites/shared/government-org-chart.html#orgchart-local">See the full org chart →</a></p>
       </div>
 
       <!-- ── Start here — jurisdiction finder + active initiatives ─ -->
@@ -2201,7 +2201,7 @@ eleventyExcludeFromCollections: true
       <div class="tier__band">
         <p class="tier__eyebrow">Tier 2 · Colorado</p>
         <h3 class="tier__heading" id="tier-state-heading">State — Colorado</h3>
-        <p class="tier__intro">Statewide agencies whose decisions reach into El Paso County: CDPHE health data, CBI missing-persons records, CCRD complaint paths for ADA and discrimination, DOLA's special-district registry, and the Colorado Attorney General's enforcement surface.</p>
+        <p class="tier__intro">Statewide agencies whose decisions reach into El Paso County: CDPHE health data, CBI missing-persons records, CCRD complaint paths for ADA and discrimination, DOLA's special-district registry, and the Colorado Attorney General's enforcement surface. <a href="/microsites/shared/government-org-chart.html#orgchart-state">See the full org chart →</a></p>
       </div>
 
     <!-- ── State ───────────────────────────────────────────────── -->
@@ -2405,7 +2405,7 @@ eleventyExcludeFromCollections: true
       <div class="tier__band">
         <p class="tier__eyebrow">Tier 3 · Federal &amp; private sector</p>
         <h3 class="tier__heading" id="tier-national-heading">National</h3>
-        <p class="tier__intro">Federal agencies and private-sector platforms whose decisions set the floor that state and local governments work above. The federal layer is where antitrust action, civil-rights enforcement, and national reporting infrastructure live.</p>
+        <p class="tier__intro">Federal agencies and private-sector platforms whose decisions set the floor that state and local governments work above. The federal layer is where antitrust action, civil-rights enforcement, and national reporting infrastructure live. <a href="/microsites/shared/government-org-chart.html#orgchart-federal">See the full org chart →</a></p>
       </div>
 
     <!-- ── Private Sector ──────────────────────────────────────── -->
@@ -2743,25 +2743,41 @@ eleventyExcludeFromCollections: true
 <script>
 (function(){
   if(!('IntersectionObserver' in window)) return;
-  var links = document.querySelectorAll('.tier-nav__link[data-tier-link]');
-  if(!links.length) return;
-  var byId = {};
-  links.forEach(function(a){ byId[a.dataset.tierLink] = a; });
-  var ids = Object.keys(byId);
+
+  /* Gather every link that points to a tier anchor — covers both the
+     in-page sticky tier-nav (.tier-nav__link[data-tier-link]) and the
+     top nav (.nav-link href="/#tier-X"). Group by target id so we can
+     toggle all matching links together as the observer fires. */
+  var ids = ['tier-local','tier-state','tier-national'];
+  var linksById = {};
+  ids.forEach(function(id){ linksById[id] = []; });
+
+  document.querySelectorAll('.tier-nav__link[data-tier-link]').forEach(function(a){
+    var id = a.dataset.tierLink;
+    if(linksById[id]) linksById[id].push(a);
+  });
+  document.querySelectorAll('.nav-link[href]').forEach(function(a){
+    var href = a.getAttribute('href') || '';
+    var m = href.match(/#(tier-(?:local|state|national))$/);
+    if(m && linksById[m[1]]) linksById[m[1]].push(a);
+  });
+
   var observed = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
   if(!observed.length) return;
 
   function setCurrent(id){
     ids.forEach(function(k){
-      var link = byId[k];
-      if(!link) return;
-      if(k === id){
-        link.setAttribute('aria-current', 'location');
-        link.classList.add('tier-nav__link--current');
-      } else {
-        link.removeAttribute('aria-current');
-        link.classList.remove('tier-nav__link--current');
-      }
+      linksById[k].forEach(function(link){
+        if(k === id){
+          link.setAttribute('aria-current', 'location');
+          link.classList.add('tier-nav__link--current');
+          if(link.classList.contains('nav-link')) link.classList.add('active');
+        } else {
+          link.removeAttribute('aria-current');
+          link.classList.remove('tier-nav__link--current');
+          if(link.classList.contains('nav-link')) link.classList.remove('active');
+        }
+      });
     });
   }
 

@@ -1,0 +1,820 @@
+---
+layout: site.njk
+permalink: /microsites/shared/government-org-chart.html
+title: "Government Org Chart — Federal · State · Local · cheetochopsticks"
+description: "How power flows from federal to state to local government in El Paso County, Colorado, and where to find each agency's records, audits, and accountability work on this site."
+activeNav: "orgchart"
+---
+
+<style>
+  /* ─── Government org chart styles ─────────────────────────────────────
+     Naming convention (block__element--modifier):
+       .orgchart                            outermost wrapper
+       .orgchart__intro                     headline + lead paragraph
+       .orgchart__tier                      one of the three vertical tiers
+       .orgchart__tier--federal/--state/--local   per-tier modifier
+       .orgchart__tier-band                 the colored band that opens each tier
+       .orgchart__tier-eyebrow / __tier-title / __tier-intro
+       .orgchart__connector                 down-arrow between tiers
+       .orgchart__group                     sub-group inside Local (county/city/...)
+       .orgchart__group-label               label above a sub-group
+       .orgchart__grid                      grid of agency cards
+       .orgchart__card                      one agency card
+       .orgchart__card-tag                  optional tag in the card (e.g. "Reference only")
+       .orgchart__card-name                 agency name (h3 or h4)
+       .orgchart__card-role                 agency role / one-line description
+       .orgchart__works                     ul of work links
+       .orgchart__work                      one work link
+       .orgchart__work-arrow                small arrow glyph on work links
+     Change a class here and it cascades across all three tiers.        */
+
+  .orgchart { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  .orgchart__intro {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--cc-border, rgba(255,255,255,.14));
+  }
+  .orgchart__intro-eyebrow {
+    font-family: var(--cc-mono, 'IBM Plex Mono', monospace);
+    font-size: .76rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--cc-gold, #c8a84b);
+    margin-bottom: 10px;
+  }
+  .orgchart__intro h1 {
+    font-family: var(--cc-serif, 'Playfair Display', Georgia, serif);
+    font-size: 2.2rem;
+    line-height: 1.15;
+    color: var(--cc-text, #ede8dc);
+    margin-bottom: 14px;
+  }
+  .orgchart__intro p {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--cc-muted, #96adc4);
+    max-width: 760px;
+  }
+  .orgchart__intro p + p { margin-top: 12px; }
+  .orgchart__intro strong { color: var(--cc-text, #ede8dc); }
+
+  .orgchart__tier { margin: 0 0 8px; }
+
+  .orgchart__tier-band {
+    border-left: 4px solid var(--cc-gold, #c8a84b);
+    padding: 22px 26px 20px;
+    margin-bottom: 22px;
+    border-radius: 0 4px 4px 0;
+  }
+  .orgchart__tier--federal .orgchart__tier-band { background: rgba(74,222,128,.07); border-left-color: #4ade80; }
+  .orgchart__tier--state   .orgchart__tier-band { background: rgba(96,165,250,.07); border-left-color: #60a5fa; }
+  .orgchart__tier--local   .orgchart__tier-band { background: rgba(200,168,75,.07); border-left-color: var(--cc-gold, #c8a84b); }
+
+  .orgchart__tier-eyebrow {
+    font-family: var(--cc-mono, 'IBM Plex Mono', monospace);
+    font-size: .74rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--cc-muted, #96adc4);
+    margin-bottom: 4px;
+  }
+  .orgchart__tier-title {
+    font-family: var(--cc-serif, 'Playfair Display', Georgia, serif);
+    font-size: 1.7rem;
+    line-height: 1.2;
+    color: var(--cc-text, #ede8dc);
+    margin-bottom: 8px;
+  }
+  .orgchart__tier-intro {
+    font-size: .94rem;
+    line-height: 1.6;
+    color: var(--cc-muted, #96adc4);
+    max-width: 720px;
+  }
+  .orgchart__tier-intro strong { color: var(--cc-text, #ede8dc); }
+
+  .orgchart__connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    color: var(--cc-quiet, #8ca3b8);
+    font-family: var(--cc-mono, 'IBM Plex Mono', monospace);
+    font-size: .8rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin: 18px 0;
+  }
+  .orgchart__connector::before,
+  .orgchart__connector::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cc-border, rgba(255,255,255,.14)));
+    margin: 0 14px;
+  }
+  .orgchart__connector::after { background: linear-gradient(90deg, var(--cc-border, rgba(255,255,255,.14)), transparent); }
+  .orgchart__connector-arrow { font-size: 1.1rem; }
+
+  .orgchart__group { margin: 24px 0 12px; }
+  .orgchart__group:first-of-type { margin-top: 6px; }
+  .orgchart__group-label {
+    font-family: var(--cc-mono, 'IBM Plex Mono', monospace);
+    font-size: .76rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--cc-gold, #c8a84b);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .orgchart__group-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--cc-border, rgba(255,255,255,.14));
+  }
+
+  .orgchart__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .orgchart__card {
+    background: var(--cc-surface, #141e2e);
+    border: 1px solid var(--cc-border, rgba(255,255,255,.14));
+    border-radius: 5px;
+    padding: 18px 20px 18px;
+    transition: border-color .15s;
+  }
+  .orgchart__card:hover { border-color: var(--cc-border-hi, rgba(255,255,255,.28)); }
+  .orgchart__card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .orgchart__card-name {
+    font-family: var(--cc-sans, 'IBM Plex Sans', sans-serif);
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--cc-text, #ede8dc);
+    line-height: 1.3;
+  }
+  .orgchart__card-tag {
+    font-family: var(--cc-mono, 'IBM Plex Mono', monospace);
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--cc-quiet, #8ca3b8);
+    background: rgba(140,163,184,.12);
+    border: 1px solid rgba(140,163,184,.3);
+    border-radius: 3px;
+    padding: 3px 7px;
+    white-space: nowrap;
+  }
+  .orgchart__card-tag--ref { color: var(--cc-quiet, #8ca3b8); }
+  .orgchart__card-tag--active { color: #c8a84b; border-color: rgba(200,168,75,.5); background: rgba(200,168,75,.12); }
+  .orgchart__card-role {
+    font-size: .84rem;
+    color: var(--cc-muted, #96adc4);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .orgchart__works {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .orgchart__works-label {
+    font-family: var(--cc-mono, 'IBM Plex Mono', monospace);
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--cc-quiet, #8ca3b8);
+    margin: 4px 0 6px;
+  }
+  .orgchart__work {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: .88rem;
+    color: var(--cc-text, #ede8dc);
+    text-decoration: none;
+    padding: 7px 10px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: var(--cc-bg, #0c1220);
+    line-height: 1.4;
+  }
+  .orgchart__work:hover {
+    border-color: var(--cc-gold, #c8a84b);
+    color: var(--cc-gold-lt, #fde68a);
+  }
+  .orgchart__work:focus-visible {
+    outline: 3px solid var(--cc-gold, #c8a84b);
+    outline-offset: 2px;
+  }
+  .orgchart__work-arrow {
+    font-family: var(--cc-mono, 'IBM Plex Mono', monospace);
+    font-size: .82rem;
+    color: var(--cc-quiet, #8ca3b8);
+    flex-shrink: 0;
+  }
+  .orgchart__work:hover .orgchart__work-arrow { color: var(--cc-gold, #c8a84b); }
+  .orgchart__work--none {
+    color: var(--cc-quiet, #8ca3b8);
+    background: transparent;
+    border: 1px dashed rgba(140,163,184,.3);
+    font-style: italic;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* Skip-up link at the bottom */
+  .orgchart__skip-up {
+    display: inline-block;
+    margin: 36px 0 0;
+    font-family: var(--cc-mono, 'IBM Plex Mono', monospace);
+    font-size: .8rem;
+    letter-spacing: .08em;
+    color: var(--cc-muted, #96adc4);
+    text-decoration: none;
+    padding: 8px 14px;
+    border: 1px solid var(--cc-border, rgba(255,255,255,.14));
+    border-radius: 4px;
+  }
+  .orgchart__skip-up:hover { color: var(--cc-text, #ede8dc); border-color: var(--cc-border-hi, rgba(255,255,255,.28)); }
+  .orgchart__skip-up:focus-visible { outline: 3px solid var(--cc-gold, #c8a84b); outline-offset: 3px; }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .orgchart { padding: 24px 16px 60px; }
+    .orgchart__intro h1 { font-size: 1.6rem; }
+    .orgchart__tier-band { padding: 18px 18px 16px; }
+    .orgchart__tier-title { font-size: 1.35rem; }
+    .orgchart__grid { gap: 10px; }
+    .orgchart__card { padding: 16px 16px 16px; }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .orgchart__card,
+    .orgchart__work { transition: none; }
+    html { scroll-behavior: auto !important; }
+  }
+
+  /* Print */
+  @media print {
+    .orgchart { padding: 0; }
+    .orgchart__card { break-inside: avoid; border-color: #999; }
+    .orgchart__work { background: #f7f7f5; color: #1a1f2e; }
+    .orgchart__skip-up { display: none; }
+  }
+</style>
+
+<main class="orgchart" id="orgchart-top">
+
+  <header class="orgchart__intro">
+    <p class="orgchart__intro-eyebrow">Government structure · El Paso County, Colorado</p>
+    <h1>How government is organized here — and where to find the work</h1>
+    <p>Federal sets the floor. State writes the rules. Local makes the day-to-day decisions about your address. Every box below is a real agency with real decision-making authority; every link inside a box opens a record, audit, dashboard, or form that lives on this site.</p>
+    <p>If you're looking for something specific, the <a href="/#tier-local">Start Here</a> block on the homepage will route by ZIP. This page is for understanding the structure.</p>
+  </header>
+
+  <!-- ═══ FEDERAL TIER ════════════════════════════════════════════════ -->
+  <section class="orgchart__tier orgchart__tier--federal" id="orgchart-federal" aria-labelledby="orgchart-federal-title">
+    <div class="orgchart__tier-band">
+      <p class="orgchart__tier-eyebrow">Tier 3 · Federal &amp; private sector</p>
+      <h2 class="orgchart__tier-title" id="orgchart-federal-title">Federal government &amp; private-sector accountability</h2>
+      <p class="orgchart__tier-intro">The federal layer sets minimum standards (ADA Title II, antitrust, HUD funding) and operates national reporting infrastructure. Private-sector platforms appear here when their products are operated at federal scale and their accessibility or competition behavior affects residents nationwide.</p>
+    </div>
+
+    <div class="orgchart__grid" role="list">
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">U.S. Department of Justice — Civil Rights</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+        </div>
+        <p class="orgchart__card-role">Enforces ADA Title II across local government websites and services. Filing path for accessibility complaints; co-plaintiff with state AGs on antitrust matters (RealPage).</p>
+        <p class="orgchart__works-label">Work on this site</p>
+        <ul class="orgchart__works">
+          <li><a class="orgchart__work" href="/microsites/national/DOJ/doj-complaint-redesign.html">DOJ Civil Rights complaint — accessible redesign <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
+      </article>
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">Federal Trade Commission (FTC)</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+        </div>
+        <p class="orgchart__card-role">Consumer protection and fraud reporting; ReportFraud.ftc.gov is the national consumer-fraud complaint portal.</p>
+        <p class="orgchart__works-label">Work on this site</p>
+        <ul class="orgchart__works">
+          <li><a class="orgchart__work" href="/microsites/national/FTC/ftc-reportfraud-ada-audit.html">ReportFraud.ftc.gov — WCAG 2.1 AA audit <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
+      </article>
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">Federal Bureau of Investigation (FBI)</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+        </div>
+        <p class="orgchart__card-role">Federal law-enforcement intake — tip submission, IC3 cybercrime, public-records requests.</p>
+        <p class="orgchart__works-label">Work on this site</p>
+        <ul class="orgchart__works">
+          <li><a class="orgchart__work" href="/microsites/FBI/tips-fbi-redesign.html">FBI tip-submission — redesign proposal <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
+      </article>
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">U.S. Dept of Housing &amp; Urban Development (HUD)</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+        </div>
+        <p class="orgchart__card-role">Funds local housing programs (HOME-ARP, CDBG). Requires public-comment processes under 24 CFR 91.105 — which is what drove the accessible HOME-ARP form rebuild.</p>
+        <p class="orgchart__works-label">Work on this site</p>
+        <ul class="orgchart__works">
+          <li><a class="orgchart__work" href="/microsites/city/housing/housing-drupal-arp-formADA/home-arp-form-preview.html">HOME-ARP form — accessible HTML preview <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          <li><a class="orgchart__work" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">HOME-ARP bundle — Drupal Webform replacement <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
+      </article>
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">LexisNexis Risk Solutions — ADAM Program</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--ref">Private sector</span>
+        </div>
+        <p class="orgchart__card-role">Private-sector missing-children dashboard, used by law enforcement agencies nationally. Listed here because the tool is public-facing and accessibility matters for grieving families and tip-submitters.</p>
+        <p class="orgchart__works-label">Work on this site</p>
+        <ul class="orgchart__works">
+          <li><a class="orgchart__work" href="/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">ADAM Program — accessible rebuild &amp; audit <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── Connector — Federal flows into State ─────────────────────── -->
+  <div class="orgchart__connector" aria-hidden="true">
+    <span>Federal sets the floor</span>
+    <span class="orgchart__connector-arrow">↓</span>
+    <span>State writes Colorado rules</span>
+  </div>
+
+  <!-- ═══ STATE TIER ══════════════════════════════════════════════════ -->
+  <section class="orgchart__tier orgchart__tier--state" id="orgchart-state" aria-labelledby="orgchart-state-title">
+    <div class="orgchart__tier-band">
+      <p class="orgchart__tier-eyebrow">Tier 2 · State of Colorado</p>
+      <h2 class="orgchart__tier-title" id="orgchart-state-title">State of Colorado</h2>
+      <p class="orgchart__tier-intro">Statewide agencies whose authority reaches into El Paso County: the Attorney General's enforcement surface, the Civil Rights Division's parallel ADA filing path, the Bureau of Investigation's missing-persons system, the Department of Local Affairs (which holds the special-district registry under <strong>CRS Title 32</strong>), and the Department of Public Health &amp; Environment.</p>
+    </div>
+
+    <div class="orgchart__grid" role="list">
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">Colorado Attorney General (COAG)</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+        </div>
+        <p class="orgchart__card-role">State enforcement for consumer protection, antitrust, civil rights. Filed alongside DOJ in the RealPage algorithmic-pricing antitrust case.</p>
+        <p class="orgchart__works-label">Work on this site</p>
+        <ul class="orgchart__works">
+          <li><a class="orgchart__work" href="/microsites/state/colorado-attorney-general/coag-complaint-form.html">COAG complaint form — accessible <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          <li><a class="orgchart__work" href="/microsites/state/colorado-attorney-general/coag-file-complaint-redesign.html">File a complaint — redesign <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          <li><a class="orgchart__work" href="/microsites/state/colorado-attorney-general/coag-compliance-brief.html">Compliance brief <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          <li><a class="orgchart__work" href="/microsites/state/colorado-attorney-general/accessibility_tool_comparison.html">Accessibility tool comparison <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
+      </article>
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">Colorado Civil Rights Division (CCRD)</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+        </div>
+        <p class="orgchart__card-role">State-level civil-rights and ADA enforcement. Parallel filing path to DOJ Civil Rights — file with one, both, or escalate from one to the other.</p>
+        <p class="orgchart__works-label">Work on this site</p>
+        <ul class="orgchart__works">
+          <li><a class="orgchart__work" href="/microsites/state/ccrd/ccrd-complaint-form.html">CCRD complaint form — accessible <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
+      </article>
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">Colorado Bureau of Investigation (CBI)</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+        </div>
+        <p class="orgchart__card-role">State law-enforcement intelligence and missing-persons system. Public-facing intake forms must be accessible to families in crisis.</p>
+        <p class="orgchart__works-label">Work on this site</p>
+        <ul class="orgchart__works">
+          <li><a class="orgchart__work" href="/microsites/state/CBI/cbi-missing-persons-redesign.html">CBI Missing Persons form — accessible rebuild <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
+      </article>
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">Dept of Local Affairs (DOLA)</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+        </div>
+        <p class="orgchart__card-role">Holds the statewide special-district registry under CRS Title 32. When a local metro district hides its records, DOLA is a parallel filing surface.</p>
+        <p class="orgchart__works-label">Work on this site</p>
+        <ul class="orgchart__works">
+          <li><a class="orgchart__work" href="/microsites/state/cdola/cdola-cora-audit-and-redesign.html">DOLA CORA — audit &amp; redesign <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
+      </article>
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">Colorado Dept of Public Health &amp; Environment (CDPHE)</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+        </div>
+        <p class="orgchart__card-role">State public-health and environmental data. Holds mortality, environmental-health, and vital-statistics records for El Paso County.</p>
+        <p class="orgchart__works-label">Work on this site</p>
+        <ul class="orgchart__works">
+          <li><a class="orgchart__work" href="/microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html">El Paso County Mortality Dashboard <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          <li><a class="orgchart__work" href="/microsites/state/CDPHE/CDPHE_CoHID_ADA_Audit.html">CDPHE CoHID — ADA audit <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+        </ul>
+      </article>
+
+      <article class="orgchart__card" role="listitem">
+        <div class="orgchart__card-head">
+          <h3 class="orgchart__card-name">Office of the Governor</h3>
+          <span class="orgchart__card-tag orgchart__card-tag--ref">Reference</span>
+        </div>
+        <p class="orgchart__card-role">Executive branch. Sets statewide policy priorities; signs the bills that DOLA, CCRD, CDPHE, and others implement. No accountability work hosted here yet.</p>
+        <ul class="orgchart__works">
+          <li class="orgchart__work orgchart__work--none">No site work yet — reference only</li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── Connector — State flows into Local ──────────────────────── -->
+  <div class="orgchart__connector" aria-hidden="true">
+    <span>State writes Colorado rules</span>
+    <span class="orgchart__connector-arrow">↓</span>
+    <span>Local touches your address</span>
+  </div>
+
+  <!-- ═══ LOCAL TIER ══════════════════════════════════════════════════ -->
+  <section class="orgchart__tier orgchart__tier--local" id="orgchart-local" aria-labelledby="orgchart-local-title">
+    <div class="orgchart__tier-band">
+      <p class="orgchart__tier-eyebrow">Tier 1 · Where you live</p>
+      <h2 class="orgchart__tier-title" id="orgchart-local-title">Local — El Paso County &amp; Colorado Springs</h2>
+      <p class="orgchart__tier-intro">Five sub-groups: the County itself, the City of Colorado Springs, downtown taxing districts (BID/DDA/TIF), the 284 special districts billed to your property tax, and the regional bodies (PPROEM emergency operations) that span jurisdiction lines.</p>
+    </div>
+
+    <!-- ─── Sub-group: El Paso County ─────────────────────────── -->
+    <div class="orgchart__group">
+      <p class="orgchart__group-label">El Paso County</p>
+      <div class="orgchart__grid" role="list">
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Board of County Commissioners (BOCC)</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">5-member elected board. Approves special-district service plans, sets the property-tax mill levy, drives the Land Development Code update process. The actionable lever for special-district transparency.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/county/BOCC/housing-rent-bocc_petition_letter.html">Resident petition — service plan transparency <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/county/BOCC/bocc_petition_veteran.html">Veterans' petition to the BOCC <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/county/BOCC/ldc_update_comment.html">LDC update — public comment <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/county/BOCC/housing_pricing_background_brief.html">Algorithmic rent pricing — background brief <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">El Paso County Sheriff</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">County law enforcement: unincorporated areas, courts, jail. Crime data, public-safety records.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/county/sheriff/public_safety_dashboard.html">El Paso County Public Safety Dashboard <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">County Assessor</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Real-property valuation and the ownership record. The first place to look when a metro district has no website but is taxing you anyway.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/county/land/Assessor_Property%20Conveyances.html">Assessor — property conveyances <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Planning &amp; Community Development</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Land Development Code (LDC), zoning, subdivisions, population data. Where service plans for new special districts are reviewed and approved.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">LDC — contact &amp; navigation <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/county/land/LandDevelopmentCode/ldc-page-04-accessibility-statement.html">LDC — accessibility statement <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/county/land/dashboard/el_paso_population_components.html">Population components dashboard <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/county/land/compared-to-what-dashboard.html">Compared to what — dashboard <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Public Works — Road &amp; Bridge</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">County roads, bridges, infrastructure. Their public website triggered a manual ADA audit and a deployable WordPress mu-plugin patch.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/county/publicworks/ADA_Remediation_Checklist_EPC_PublicWorks/">Road &amp; Bridge — ADA audit &amp; remediation bundle <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">El Paso County Citizen Connect</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">County's resident portal — submit issues, request services. Audited for WCAG 2.1 AA with a redesign proposal.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/county/CitizenConnect/ada_audit_citizenconnect.html">Citizen Connect — ADA audit <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Colorado Springs Utilities (CSU)</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Municipal enterprise — water, electric, gas, wastewater for Colorado Springs and surrounding areas. CORA-responsive on residential account data.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/county/utilities/CSU_Water_Accounts_Dashboard.html">CSU Residential Water Accounts Dashboard <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ─── Sub-group: City of Colorado Springs ───────────────── -->
+    <div class="orgchart__group">
+      <p class="orgchart__group-label">City of Colorado Springs</p>
+      <div class="orgchart__grid" role="list">
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Mayor &amp; City Council</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--ref">Reference</span>
+          </div>
+          <p class="orgchart__card-role">Elected city government. Approves budget, sets ordinances, oversees departments. No accountability work hosted on this site yet.</p>
+          <ul class="orgchart__works">
+            <li class="orgchart__work orgchart__work--none">No site work yet — reference only</li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Housing &amp; Community Vitality</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Administers HUD HOME-ARP funds, runs the public-comment process under 24 CFR 91.105. The HOME-ARP form replacement and the DATP reading room originate here.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/city/housing/housing-drupal-arp-formADA/home-arp-form-preview.html">HOME-ARP — accessible HTML form preview <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">HOME-ARP — Drupal Webform bundle README <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Office of Accessibility (DATP)</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Implements the city's Digital Accessibility Transition Plan. Active public-comment window with a structured reading-room view of the plan.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/city/ada/datp-comment.html">DATP — open reading room &amp; comments <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Colorado Springs Police Dept (CSPD)</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">City law enforcement. Public-records, blotter feed, field-entry forms, and neighborhood-level data infrastructure.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">CSPD blotter — weekly history dashboard <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/police/neighborhood/audit-bjpt-tkzq.html">CSPD audit — BJPT-TKZQ <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/police/neighborhood/cspd_five_questions.html">CSPD five questions <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/police/neighborhood/fatality_register_bjpt-tkzq.html">Fatality register — BJPT-TKZQ <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/police/neighborhood/audit-memo-12C-consolidated.html">Audit memo — 12C consolidated <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/police/requests/cospd_records_page_redesign.html">CSPD records page — redesign <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/police/requests/cspd-field-entry.html">CSPD field-entry form <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/police/requests/cspd-field-entry-prototype.html">CSPD field-entry prototype <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/police/requests/cos-portal-redesign.html">COS records portal — redesign <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">City Clerk / Public Records (CORA)</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Colorado Open Records Act (CORA) intake. The accessible CORA form and implementation guide live here.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/city/coraform/cos-cora-form.html">COS CORA — accessible request form <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/coraform/cos-cora-implementation-guide.html">COS CORA — implementation guide <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Traffic Engineering &amp; Safety</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Signal timing, crash data, FHWA funding, red-light camera program, Safety Action Plan.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/city/traffic/SafetyPlan/cos-traffic-hub.html">COS Traffic Safety hub <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/traffic/SafetyPlan/cos-signal-timing-action.html">Signal-timing action tool <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/traffic/SafetyPlan/red-light-data.html">Red-light camera data <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/traffic/SafetyPlan/sap-comments.html">SAP — public comments <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/city/traffic/SafetyPlan/sap-context.html">SAP — context &amp; analysis <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">goGov / City Permits, Licenses &amp; Records</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Plain-language contact portal — 119 topics across 13 groups, scenario journeys ("building a home," "opening a restaurant"), jurisdiction badges. WCAG 2.1 AA.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/city/CitizenConnect/city-permits-licenses-records.html">City permits, licenses &amp; records — portal <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Forestry</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">City tree inventory and urban-forest data.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/city/forestry/trees-of-colorado-springs.html">Trees of Colorado Springs <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Community Resources</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Helping Hands — El Paso County resource finder, food/housing/health/legal aid directory.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/city/community-resources-list/">Helping Hands — resource finder <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ─── Sub-group: Downtown Districts ─────────────────────── -->
+    <div class="orgchart__group">
+      <p class="orgchart__group-label">Downtown taxing &amp; business districts</p>
+      <div class="orgchart__grid" role="list">
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Downtown Funding &amp; Records</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Business Improvement District (BID), Downtown Development Authority (DDA), Tax-Increment Financing (TIF) zones. Aggregated assessments, grants, reimbursements, board meetings, and financial records.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/downtown/downtown_cs_search_portal_v2_ada.html">Downtown funding &amp; records — search portal <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/downtown/downtown_cs_business_directory.html">Downtown business directory <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ─── Sub-group: Special Districts ──────────────────────── -->
+    <div class="orgchart__group">
+      <p class="orgchart__group-label">Special districts — 284 in El Paso County</p>
+      <div class="orgchart__grid" role="list">
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Metro districts — audit &amp; toolkit</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Cross-cutting analysis: 249 of 284 districts have no website. 0 of 8 audited post their service plan. CORA is the only path to records. Governance gap by §32-1-202 and §32-1-106.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/shared/epc_district_audit_dashboard.html">EPC metro-district audit dashboard <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/shared/metro_district_citizen_toolkit.html">Metro-district citizen toolkit <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Wolfersberger compliance · Bellamese analysis <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Lorson Ranch Metropolitan Districts 1–7</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Seven cross-pledged metro districts financing one community. $94.2M aggregate audited deficit, IGA money flows, per-home tax calculator.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Lorson Ranch — financial dashboard <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Teller 911</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">911 emergency-services special district straddling Teller and El Paso counties. CORA project documenting dispatcher staffing and call-volume realities.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/specialdistricts/teller911/unsung-heroes-cora-project.html">Teller 911 — Unsung Heroes CORA project <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ─── Sub-group: Regional / Shared ──────────────────────── -->
+    <div class="orgchart__group">
+      <p class="orgchart__group-label">Regional &amp; cross-jurisdictional</p>
+      <div class="orgchart__grid" role="list">
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Pikes Peak Regional Emergency Operations (PPROEM)</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Joint EPC + COS all-hazards emergency-management body. Adopted regional EOP covers 14 sections, all 28 ESFs, hazard risk by jurisdiction. Operates the live regional alerts feed.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/shared/PikesPeakEmergencyManagement/">Pikes Peak Regional EOP — full document <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+            <li><a class="orgchart__work" href="/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts/">PPROEM live regional alerts <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">Find My Jurisdiction</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Cross-jurisdiction address resolver. Enter a ZIP or address; get the city, county, school district, metro districts, and utilities that touch it.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/shared/cos-find-my-jurisdiction.html">Find my jurisdiction <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+        <article class="orgchart__card" role="listitem">
+          <div class="orgchart__card-head">
+            <h3 class="orgchart__card-name">CORA Requests Tracker</h3>
+            <span class="orgchart__card-tag orgchart__card-tag--active">Active</span>
+          </div>
+          <p class="orgchart__card-role">Open CORA filings, response windows, and Fort Carson military-housing numbers. Cross-agency.</p>
+          <p class="orgchart__works-label">Work on this site</p>
+          <ul class="orgchart__works">
+            <li><a class="orgchart__work" href="/microsites/shared/requests_tracker_and_military_numbers.html">CORA tracker · military numbers <span class="orgchart__work-arrow" aria-hidden="true">→</span></a></li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+
+  </section>
+
+  <a class="orgchart__skip-up" href="#orgchart-top">↑ Back to top</a>
+
+</main>
