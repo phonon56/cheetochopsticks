@@ -537,6 +537,65 @@
       transition: background .18s;
     }
     .you-cta:hover { background: var(--gold-lt); }
+    .you-cta:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    /* Address finder inside the homepage's "You" banner.
+       Submits via GET to the jurisdiction finder with ?q=<address>;
+       the finder reads that param and runs the lookup automatically. */
+    .you-finder { margin-top: 4px; }
+    .you-finder__label {
+      display: block;
+      font-family: var(--mono);
+      font-size: .74rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .you-finder__row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+    .you-finder__input {
+      flex: 1 1 280px;
+      min-width: 0;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border-hi);
+      border-radius: 3px;
+      padding: 11px 14px;
+      font-family: var(--sans);
+      font-size: 1rem;
+      line-height: 1.4;
+      min-height: 44px;
+    }
+    .you-finder__input::placeholder { color: var(--quiet); }
+    .you-finder__input:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 1px;
+      border-color: var(--gold);
+    }
+    .you-finder__btn {
+      flex: 0 0 auto;
+      min-height: 44px;
+      cursor: pointer;
+      border: 1px solid var(--gold);
+    }
+    .you-finder__hint {
+      font-size: .82rem;
+      color: var(--quiet);
+      line-height: 1.5;
+      margin: 8px 0 0;
+    }
+    @media (max-width: 600px) {
+      .you-finder__btn { width: 100%; }
+    }
+
     .you-stat-row {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));

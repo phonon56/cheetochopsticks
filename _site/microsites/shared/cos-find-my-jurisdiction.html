@@ -2012,6 +2012,24 @@ if (form) {
   });
 }
 
+/* ── Carry-in: auto-search when arriving with ?q= in the URL ──────
+   The Start Here block on /local/ (and the homepage tier-preview
+   cards) submit address lookups here via GET ?q=ADDRESS. When the
+   user lands here from one of those entry points, populate the
+   search input and run the lookup immediately so they don't have
+   to retype. Falls back gracefully if the param is empty/missing. */
+(function carryInFromQuery(){
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var q = (params.get('q') || '').trim();
+    if (!q) return;
+    if (inp) inp.value = q;
+    /* Defer one tick so the rest of the page (results region, status
+       badge, focus targets) is fully wired before doSearch fires. */
+    setTimeout(function(){ doSearch(q); }, 0);
+  } catch (err) { /* URL APIs unavailable — silently skip */ }
+})();
+
 /* ── Chips: populate AND auto-search ───────────────────── */
 document.querySelectorAll('.chip[data-q]').forEach(function(chip) {
   chip.addEventListener('click', function() {
