@@ -82,8 +82,11 @@ function parsePlainHtml(content, absolutePath) {
   const titleM = content.match(/<title>([^<]+)<\/title>/i);
   if (!titleM) return null;
   const title = decodeEntities(titleM[1].trim());
-  const descM = content.match(/<meta\s+name=["']description["']\s+content=["']([^"']+)["']/i);
-  const desc = descM ? decodeEntities(descM[1].trim()) : '';
+  /* Use a backreference so the regex closes on the same quote it opened
+     on — without that, apostrophes inside the description (doesn't, etc.)
+     truncate the captured text prematurely. */
+  const descM = content.match(/<meta\s+name=["']description["']\s+content=(["'])([\s\S]*?)\1/i);
+  const desc = descM ? decodeEntities(descM[2].trim()) : '';
   const rel = '/' + relative(ROOT, absolutePath).split(sep).join('/');
   return { title, description: desc, permalink: rel };
 }
@@ -153,8 +156,24 @@ for (const file of walk(ROOT)) {
   // Skip the search index file itself + duplicates (a .njk that builds to
   // the same .html may be picked up twice if both exist on disk).
   if (record.permalink.includes('search-index')) continue;
+  // Skip developer preview/build artifacts — dversion/preview/ pages and
+  // any /dist/ output that mirror real microsites for tooling reasons.
+  if (/\/dversion\/preview\//.test(record.permalink)) continue;
+  if (/\/dversion\/dist\//.test(record.permalink)) continue;
   if (seenUrls.has(record.permalink)) continue;
   seenUrls.add(record.permalink);
+
+  /* Add path tokens (file/folder names) to the searchable corpus so a
+     query like "roads" matches /Roads/ and "parcel" matches the
+     parcel_lookup.html filename, even when the title/description don't
+     happen to contain those words. Strips file extensions and breaks
+     names on slashes/underscores/dashes/camelCase. */
+  const pathTokens = record.permalink
+    .replace(/\.(html|njk|md)$/, '')
+    .split(/[\/_\-]+/)
+    .map(s => s.replace(/([a-z])([A-Z])/g, '$1 $2'))
+    .filter(s => s && !/^microsites$/i.test(s))
+    .join(' ');
 
   items.push({
     title: decodeEntities(record.title),
@@ -162,6 +181,7 @@ for (const file of walk(ROOT)) {
     url: record.permalink,
     tier: meta.tier,
     scope: meta.scope,
+    path: pathTokens, /* searchable, not displayed */
   });
 }
 

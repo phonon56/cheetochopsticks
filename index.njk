@@ -653,13 +653,19 @@ eleventyExcludeFromCollections: true
     return safe.replace(re, '<mark>$1</mark>');
   }
   function score(item, terms){
-    var hay = (item.title + ' ' + item.desc + ' ' + item.scope).toLowerCase();
+    /* Searchable corpus: title (weighted highest), scope, description,
+       and the URL path tokens (so "roads" matches /Roads/, "parcel"
+       matches parcel_lookup, etc., even when those words aren't in
+       the title or description). */
+    var pathStr = (item.path || '').toLowerCase();
+    var hay = (item.title + ' ' + item.desc + ' ' + item.scope + ' ' + pathStr).toLowerCase();
     var s = 0;
     for (var i=0;i<terms.length;i++){
       var t = terms[i];
       if (item.title.toLowerCase().indexOf(t) !== -1) s += 5;
       if (item.scope.toLowerCase().indexOf(t) !== -1) s += 3;
-      if (item.desc.toLowerCase().indexOf(t) !== -1)  s += 1;
+      if (item.desc.toLowerCase().indexOf(t) !== -1)  s += 2;
+      if (pathStr.indexOf(t) !== -1)                   s += 1;
       if (hay.indexOf(t) === -1) return -1; /* must hit every term */
     }
     return s;
