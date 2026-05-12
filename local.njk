@@ -1,0 +1,677 @@
+---
+layout: site.njk
+permalink: /local/
+title: "Local — El Paso County & Colorado Springs · cheetochopsticks"
+description: "El Paso County and Colorado Springs records, audits, and accountability tools — Shared cross-jurisdictional, City, County, Downtown, and Special Districts."
+activeNav: "local"
+---
+
+{% include "partials/dashboard-styles.njk" %}
+
+<section class="section" id="tier-page">
+  <div class="container">
+
+    <section class="tier tier--local" id="tier-local" aria-labelledby="tier-local-heading">
+      <div class="tier__band">
+        <p class="tier__eyebrow">Tier 1 · Where you live</p>
+        <h3 class="tier__heading" id="tier-local-heading">Local — El Paso County &amp; Colorado Springs</h3>
+        <p class="tier__intro">Everything that touches your address day to day — city services, county offices, downtown business records, the metro and special districts billed to your property, and the cross-jurisdictional tools that pull from all of them. <strong>Start here</strong> if you're not sure where to look. <a href="/microsites/shared/government-org-chart.html#orgchart-local">See the full org chart →</a></p>
+      </div>
+
+      <!-- ── Start here — jurisdiction finder + active initiatives ─ -->
+      <aside class="start-here" aria-labelledby="start-here-title">
+        <p class="start-here__eyebrow">Start here</p>
+        <h4 class="start-here__title" id="start-here-title">Find what governs your address</h4>
+        <form class="start-here__finder" action="/microsites/shared/cos-find-my-jurisdiction.html" method="get" role="search">
+          <label class="start-here__finder-label" for="start-here-input">Enter a ZIP code or street address</label>
+          <input
+            class="start-here__input"
+            id="start-here-input"
+            name="q"
+            type="text"
+            inputmode="text"
+            autocomplete="postal-code"
+            placeholder="80903, or 200 S. Cascade Ave, Colorado Springs"
+            aria-describedby="start-here-hint">
+          <button type="submit" class="start-here__btn">Find&nbsp;→</button>
+          <p class="start-here__hint" id="start-here-hint">Routes to the jurisdiction finder with your input. Returns city, county, school district, metro districts, and utilities for that address.</p>
+        </form>
+        <p class="start-here__rail-label" id="start-here-rail-label">Active right now — front-and-center initiatives</p>
+        <div class="start-here__initiatives" role="list" aria-labelledby="start-here-rail-label">
+          <a class="start-here__tile" role="listitem" href="/microsites/county/BOCC/housing-rent-bocc_petition_letter.html">
+            <p class="start-here__tile-scope">County · BOCC petition</p>
+            <p class="start-here__tile-title">Service plan transparency &amp; algorithmic pricing disclosure</p>
+            <p class="start-here__tile-meta">Open window · sign and send</p>
+          </a>
+          <a class="start-here__tile" role="listitem" href="/microsites/city/ada/datp-comment.html">
+            <p class="start-here__tile-scope">City · DATP comment</p>
+            <p class="start-here__tile-title">Digital Accessibility Transition Plan — public comment reading room</p>
+            <p class="start-here__tile-meta">Open window · 12 structured comments</p>
+          </a>
+          <a class="start-here__tile" role="listitem" href="/microsites/city/housing/housing-drupal-arp-formADA/home-arp-form-preview.html">
+            <p class="start-here__tile-scope">City · HOME-ARP</p>
+            <p class="start-here__tile-title">HOME-ARP Allocation Plan — accessible comment form</p>
+            <p class="start-here__tile-meta">Closes May 26, 2026 · EN/ES</p>
+          </a>
+        </div>
+      </aside>
+
+    <!-- ── Shared ──────────────────────────────────────────────── -->
+    <h4 class="scope-heading" id="scope-shared">Shared — start here</h4>
+    <div class="page-grid" role="list" aria-labelledby="scope-shared">
+
+      <a class="page-card" role="listitem" href="/microsites/shared/cos-find-my-jurisdiction.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · You</p>
+          <p class="card-title">Find my jurisdiction</p>
+          <p class="card-desc">Type your address. Know immediately which governments touch it — city, county, school district, metro districts, utilities. <em>The entry point for everything else.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts/">
+        <div class="card-left">
+          <p class="card-scope">Shared · PPROEM · Emergency</p>
+          <p class="card-title">Pikes Peak Regional Alerts</p>
+          <p class="card-desc">Live regional alerts for El Paso County. Type an address — see whether it's inside an active evacuation, warning, or advisory zone. <em>Reads PPROEM's hazard feed directly; subscribe routes to Peak Alerts.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/shared/PikesPeakEmergencyManagement/">
+        <div class="card-left">
+          <p class="card-scope">Shared · PPROEM · Policy</p>
+          <p class="card-title">Pikes Peak Regional Emergency Operations Plan</p>
+          <p class="card-desc">The 2026 all-hazards plan adopted by El Paso County and the City of Colorado Springs. 14 sections, hazard risk by jurisdiction, all 28 ESFs, ECC activation levels. <em>The full document, readable in a browser.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/city/community-resources-list/">
+        <div class="card-left">
+          <p class="card-scope">City · Community Resources</p>
+          <p class="card-title">Helping Hands — El Paso County resource finder</p>
+          <p class="card-desc">A searchable, ranked index of ~200 community resources — food, shelter, crisis lines, medical, legal, jobs, immigration, addiction. Type plain English ("kids are hungry") and the page surfaces the fastest help first. <em>Adapted from the PPLD Helping Hands directory.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/city/forestry/trees-of-colorado-springs.html">
+        <div class="card-left">
+          <p class="card-scope">City · Forestry</p>
+          <p class="card-title">Trees for Colorado Springs</p>
+          <p class="card-desc">A merged, filterable reference for trees that thrive at 6,000–7,500 ft. Combines the city's Approved Street Tree List with curated fruit and native options. <em>Search by name, fruit, size, or what they feed.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · State · CDPHE</p>
+          <p class="card-title">El Paso County Mortality Dashboard</p>
+          <p class="card-desc">EPC death data compared to Colorado and US averages, with dedicated Fort Carson and military installation analysis. Data: CDPHE CoHID + CDC NCHS + DoD. <em>An accessible redesign of the state tool.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/shared/epc_district_audit_dashboard.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · 284 metro districts</p>
+          <p class="card-title">EPC Metro District Audit Dashboard</p>
+          <p class="card-desc">Governance gaps, ADA compliance, and platform analysis across all 284 El Paso County metro districts. 88% have zero public web presence. <em>The data, laid bare.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-critical">9 alerts</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/shared/metro_district_citizen_toolkit.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · Citizen action</p>
+          <p class="card-title">Metro District Citizen Toolkit</p>
+          <p class="card-desc">Sample CORA request letters, BOCC templates, DOJ complaint drafts, every contact you need. <em>Somewhere to send the knowledge once you have it.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/shared/requests_tracker_and_military_numbers.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · CORA · Open records</p>
+          <p class="card-title">CORA Requests Tracker &amp; Military Housing</p>
+          <p class="card-desc">Live tracker for all open records requests — who was asked, what came back. Military housing figures cross-referenced with public and survey data. <em>Two requests pending. Clock is running.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">2 Pending</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">
+        <div class="card-left">
+          <p class="card-scope">Shared · Developer compliance</p>
+          <p class="card-title">Wolfersberger Compliance &amp; Bellamese Analysis</p>
+          <p class="card-desc">Developer agreement compliance history, parcel-level records, and findings from the Bellamese analysis. <em>Months of records requests, assembled.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ── City ────────────────────────────────────────────────── -->
+    <h4 class="scope-heading" id="scope-city">City of Colorado Springs</h4>
+    <div class="page-grid" role="list" aria-labelledby="scope-city">
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">City · ADA / Accessibility</p>
+          <p class="card-title">Digital Accessibility Transition Plan — open reading room</p>
+          <p class="card-desc">The City of Colorado Springs Digital Accessibility Transition Plan (Draft 2026), as an accessible reading room — full plan embedded as PDF, with twelve structured public comments residents can adapt and submit. <em>Active public-comment window.</em></p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/city/ada/datp-comment.html">
+            <div>
+              <div class="group-link-title">DATP — open reading room &amp; public comments</div>
+              <span class="group-link-sub">Plan PDF · 12 structured comments · submit links</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/ada/Accessibility_Audit_Colorado_Springs.docx">
+            <div>
+              <div class="group-link-title">Accessibility audit — Colorado Springs</div>
+              <span class="group-link-sub">Source audit · DOCX download</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/ada/Public_Comment_DATP_2026.docx">
+            <div>
+              <div class="group-link-title">Public Comment — DATP 2026</div>
+              <span class="group-link-sub">Comment package · DOCX download</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">City · Public Records</p>
+          <p class="card-title">COS CORA — Form &amp; Implementation</p>
+          <p class="card-desc">Colorado's open-records law is legally binding. The city's request form, paired with a plain-language guide on how the city is supposed to follow it — and what to do when they <em>creatively interpret</em> that obligation.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/city/coraform/cos-cora-form.html">
+            <div>
+              <div class="group-link-title">Colorado Springs CORA Form</div>
+              <span class="group-link-sub">Submit a request</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/coraform/cos-cora-implementation-guide.html">
+            <div>
+              <div class="group-link-title">CORA Implementation Guide</div>
+              <span class="group-link-sub">How the city should follow the law</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">City · Traffic &amp; Safety</p>
+          <p class="card-title">Traffic Safety, Signal Timing &amp; Red Light Data</p>
+          <p class="card-desc">Crash records, FHWA funding analysis, intersection signal-timing action tools, and red-light camera citation data across 20 Colorado Springs intersections.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/city/traffic/SafetyPlan/cos-traffic-hub.html">
+            <div>
+              <div class="group-link-title">COS Traffic Safety Plan</div>
+              <span class="group-link-sub">64,434 crash records · 12 charts · FHWA funding</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/traffic/SafetyPlan/cos-signal-timing-action.html">
+            <div>
+              <div class="group-link-title">Signal Timing Action Dashboard</div>
+              <span class="group-link-sub">Your intersection, your voice</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/traffic/SafetyPlan/red-light-data.html">
+            <div>
+              <div class="group-link-title">Red Light Camera Data</div>
+              <span class="group-link-sub">20 intersections · 2022–Q1 2026</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">City · Police</p>
+          <p class="card-title">Colorado Springs Police Department</p>
+          <p class="card-desc">Records request redesign and a resident-first reorganization of CSPD data — answering the questions people actually ask about their neighborhoods.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/city/police/requests/cospd_records_page_redesign.html">
+            <div>
+              <div class="group-link-title">CSPD Records Request — Redesign</div>
+              <span class="group-link-sub">Police reports · 911 audio · body-cam · background checks</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/police/neighborhood/cspd_five_questions.html">
+            <div>
+              <div class="group-link-title">What Residents Actually Ask</div>
+              <span class="group-link-sub">CSPD data, reorganized around five real questions</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">
+            <div>
+              <div class="group-link-title">CSPD Blotter — Weekly History &amp; Trend</div>
+              <span class="group-link-sub">271 incidents scraped live · week detail + Poisson anomaly band</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/police/neighborhood/CCJRA_Records_Request_Packet.docx">
+            <div>
+              <div class="group-link-title">CCJRA Records Request Packet (.docx)</div>
+              <span class="group-link-sub">Drop-in template for Colorado Criminal Justice Records Act</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/police/neighborhood/fatality_register_bjpt-tkzq.html">
+            <div>
+              <div class="group-link-title">CSPD Fatality Register</div>
+              <span class="group-link-sub">Crash fatality data · dataset bjpt-tkzq</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/police/neighborhood/audit-bjpt-tkzq.html">
+            <div>
+              <div class="group-link-title">Crash Data Audit — Accessibility &amp; Quality</div>
+              <span class="group-link-sub">ADA + data quality audit of CSPD dataset bjpt-tkzq</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/police/neighborhood/audit-memo-12C-consolidated.html">
+            <div>
+              <div class="group-link-title">Consolidated Audit Memo — Chart Portfolio</div>
+              <span class="group-link-sub">CSPD crash data chart portfolio audit</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/police/requests/cspd-field-entry.html">
+            <div>
+              <div class="group-link-title">CSPD Field Entry — Crash Report</div>
+              <span class="group-link-sub">Drag-drop &amp; lightbox crash report entry</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/police/requests/cspd-field-entry-prototype.html">
+            <div>
+              <div class="group-link-title">CSPD Field Entry — Prototype</div>
+              <span class="group-link-sub">Earlier prototype of the crash report form</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/police/requests/cos-portal-redesign.html">
+            <div>
+              <div class="group-link-title">COS Portal Redesign — "Tell Us What You Need"</div>
+              <span class="group-link-sub">Accessible service request portal</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <a class="page-card" role="listitem" href="/microsites/city/goGov/GOGovAccessibilityAudit.pdf">
+        <div class="card-left">
+          <p class="card-scope">City · goGov · ADA Audit</p>
+          <p class="card-title">goGov Platform — Accessibility Audit</p>
+          <p class="card-desc">Accessibility audit of the goGov platform used by the City of Colorado Springs. <em>Full findings in PDF.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/city/goGov/cos-portal-prototype/build/index.html">
+        <div class="card-left">
+          <p class="card-scope">City &amp; County · Contact Portal · Prototype</p>
+          <p class="card-title">Contact the City — Rebuild Prototype</p>
+          <p class="card-desc">A working rebuild of the GovOutreach contact portal, plus permits, CORA, and El Paso County Environmental Health — <strong>119 topics across 13 groups and 3 jurisdictions.</strong> Four ways to find what you need: plain-language search, by intent, by office, and scenario journeys ("building a home," "opening a restaurant"). Dynamic per-topic forms, real map picker, accessible image upload, ADA footer, jurisdiction badges. <em>0 WCAG 2.1 AA violations under axe.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">Prototype</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">City · Housing · HOME-ARP · LIVE comment window</p>
+          <p class="card-title">HOME-ARP Comment Form — Drupal Webform Replacement</p>
+          <p class="card-desc">Replacement for the ArcGIS Survey123 form the City uses to collect public comments on the HOME-ARP Allocation Plan amendment. Esri's own ACR rates Survey123 as <em>"Partially Supports"</em> on multiple WCAG 2.1 Level A and AA criteria — not acceptable for a 30-day federally-regulated participation window under 24 CFR 91.105. This bundle ships the form WCAG 2.1 AA accessible by default, bilingual EN/ES, with three parallel output channels (JSON webhook, staff email, native Drupal storage) and an inline accommodation request that routes to the Office of Accessibility. <strong>Comment window: April 24 – May 26, 2026.</strong></p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">
+            <div>
+              <div class="group-link-title">Bundle README</div>
+              <span class="group-link-sub">What this delivers · compliance posture · platform integration</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/housing/housing-drupal-arp-formADA/install.html">
+            <div>
+              <div class="group-link-title">Install Guide</div>
+              <span class="group-link-sub">30–45 minute Drupal admin walkthrough</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/housing/housing-drupal-arp-formADA/language-pattern.html">
+            <div>
+              <div class="group-link-title">Bilingual Pattern (EN/ES)</div>
+              <span class="group-link-sub">Reusable language switcher for any city form</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/housing/housing-drupal-arp-formADA/COS_Digital_Accessibility_Audit_2026-05-04.docx">
+            <div>
+              <div class="group-link-title">COS Digital Accessibility Audit (.docx)</div>
+              <span class="group-link-sub">Findings the rebuild resolves</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/housing/housing-drupal-arp-formADA/home_arp_form.zip">
+            <div>
+              <div class="group-link-title">home_arp_form.zip</div>
+              <span class="group-link-sub">Packaged Drupal Webform bundle, ready to import</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── County ──────────────────────────────────────────────── -->
+    <h4 class="scope-heading" id="scope-county">El Paso County</h4>
+    <div class="page-grid" role="list" aria-labelledby="scope-county">
+
+      <a class="page-card" role="listitem" href="/microsites/county/land/Assessor_Property%20Conveyances.html">
+        <div class="card-left">
+          <p class="card-scope">County · Assessor</p>
+          <p class="card-title">Assessor — Property Conveyances</p>
+          <p class="card-desc">Who owns what, and when did that change? Property transfer records, decoded for humans. <em>Know your neighborhood before your realtor does.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">County · Land Development Code</p>
+          <p class="card-title">Land Development Code</p>
+          <p class="card-desc">A readable entry point into the county's development code. Because someone has to be reachable <em>when the code does something confusing (so, constantly).</em></p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html">
+            <div>
+              <div class="group-link-title">LDC — Contact &amp; Navigation</div>
+              <span class="group-link-sub">Who to reach at the county</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/county/land/LandDevelopmentCode/ldc-page-04-accessibility-statement.html">
+            <div>
+              <div class="group-link-title">LDC — Accessibility Statement</div>
+              <span class="group-link-sub">WCAG posture &amp; remediation</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <a class="page-card" role="listitem" href="/microsites/county/land/dashboard/el_paso_population_components.html">
+        <div class="card-left">
+          <p class="card-scope">County · Population Dashboard</p>
+          <p class="card-title">El Paso Population Components</p>
+          <p class="card-desc">Births, deaths, and migration — the components that actually move a county's population numbers, broken down for residents rather than demographers.</p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/county/utilities/CSU_Water_Accounts_Dashboard.html">
+        <div class="card-left">
+          <p class="card-scope">County · Utilities</p>
+          <p class="card-title">CSU Residential Water Accounts Dashboard</p>
+          <p class="card-desc">Colorado Springs Utilities residential water account data, 2005 to 2026 year-to-date — produced in response to CORA request W001936-041726.</p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="page-card" role="listitem" href="/microsites/county/sheriff/public_safety_dashboard.html">
+        <div class="card-left">
+          <p class="card-scope">County · Sheriff</p>
+          <p class="card-title">El Paso County Public Safety Dashboard</p>
+          <p class="card-desc">Sheriff's office data, crime mapping, and public safety trends across El Paso County — compiled from public records and agency sources.</p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">Live</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">County · CitizenConnect</p>
+          <p class="card-title">Citizen Connect — El Paso County</p>
+          <p class="card-desc">ADA audit of the county's citizen portal plus a full redesign proposal — because telling the county what you need shouldn't require a manual.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/county/CitizenConnect/ada_audit_citizenconnect.html">
+            <div>
+              <div class="group-link-title">Citizen Connect — ADA Audit</div>
+              <span class="group-link-sub">1 serious · 3 moderate · 5 minor · 44 passing</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/city/CitizenConnect/city-permits-licenses-records.html">
+            <div>
+              <div class="group-link-title">City Permits, Licenses &amp; Records</div>
+              <span class="group-link-sub">Accessible redesign with local keyword routing</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">County · BOCC</p>
+          <p class="card-title">Board of County Commissioners — petitions &amp; comments</p>
+          <p class="card-desc">Ready-to-send petitions, a public comment for the LDC update, and a sourced background brief on algorithmic rent pricing. <em>Four narrow asks within existing BOCC authority.</em></p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/county/BOCC/housing-rent-bocc_petition_letter.html">
+            <div>
+              <div class="group-link-title">Resident petition — service plan transparency</div>
+              <span class="group-link-sub">General petition · algorithmic pricing disclosure</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/county/BOCC/bocc_petition_veteran.html">
+            <div>
+              <div class="group-link-title">Veterans' petition to the BOCC</div>
+              <span class="group-link-sub">Any branch · military housing harms framing</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/county/BOCC/ldc_update_comment.html">
+            <div>
+              <div class="group-link-title">LDC update — public comment</div>
+              <span class="group-link-sub">300 words · ready to submit</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/county/BOCC/housing_pricing_background_brief.html">
+            <div>
+              <div class="group-link-title">Algorithmic rent pricing — background brief</div>
+              <span class="group-link-sub">Sourced reference for press &amp; policy analysts</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">County · Public Works</p>
+          <p class="card-title">Road &amp; Bridge — ADA Audit &amp; Remediation Bundle</p>
+          <p class="card-desc">Manual WCAG 2.1 AA audit of publicworks.elpasoco.com/road-bridge/ paired with a deployable WordPress mu-plugin that patches the runtime-fixable findings — built for the county's actual stack (The7 + WPBakery + Slider Revolution + Gravity Forms). Live overlay-tested in Chrome; no console errors, no visual regressions.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/county/publicworks/ADA_Remediation_Checklist_EPC_PublicWorks/">
+            <div>
+              <div class="group-link-title">Remediation Checklist</div>
+              <span class="group-link-sub">Owner-keyed · 20 findings · printable</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/county/publicworks/ADA_Audit_EPC_PublicWorks_RoadBridge.docx">
+            <div>
+              <div class="group-link-title">Original Audit Document</div>
+              <span class="group-link-sub">May 6, 2026 · 8 critical · 6 serious · 5 moderate</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/county/publicworks/EPC_PublicWorks_ADA_Remediation_Bundle.zip">
+            <div>
+              <div class="group-link-title">Delivery Bundle</div>
+              <span class="group-link-sub">WordPress plugin zip + PDF checklist + audit · 44 KB</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Downtown ────────────────────────────────────────────── -->
+    <h4 class="scope-heading" id="scope-downtown">Downtown Colorado Springs</h4>
+    <div class="page-grid" role="list" aria-labelledby="scope-downtown">
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">Downtown · Full Disclosure</p>
+          <p class="card-title">Downtown Colorado Springs — Records &amp; Businesses</p>
+          <p class="card-desc">The first searchable index for downtown money and the businesses that receive it. Paired with a directory of every business inside the BID footprint.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/downtown/downtown_cs_search_portal_v2_ada.html">
+            <div>
+              <div class="group-link-title">Downtown Funding &amp; Records Search</div>
+              <span class="group-link-sub">BID · DDA · TIF · board meetings</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/downtown/downtown_cs_business_directory.html">
+            <div>
+              <div class="group-link-title">Downtown Business Directory</div>
+              <span class="group-link-sub">Every business in the BID footprint</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Special Districts ───────────────────────────────────── -->
+    <h4 class="scope-heading" id="scope-specialdistricts">Special Districts</h4>
+    <div class="page-grid" role="list" aria-labelledby="scope-specialdistricts">
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">Special Districts · Lorson Ranch MDs 1–7</p>
+          <p class="card-title">Lorson Ranch Metropolitan Districts</p>
+          <p class="card-desc">Seven cross-pledged metro districts financing one community. Mill levies, bond debt, IGA money flows, audited net position, and a tax calculator — sourced from 2026 budgets and 2024 audits. <em>$94.2M aggregate deficit, in plain language.</em></p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">
+            <div>
+              <div class="group-link-title">Financial Dashboard</div>
+              <span class="group-link-sub">Interactive · mill levies, bonds, IGAs, calculator</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_briefing.docx">
+            <div>
+              <div class="group-link-title">Briefing (.docx)</div>
+              <span class="group-link-sub">Companion narrative · full plain-language walk-through</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+
+      <a class="page-card" role="listitem" href="/microsites/specialdistricts/teller911/unsung-heroes-cora-project.html">
+        <div class="card-left">
+          <p class="card-scope">Special Districts · Teller 911 · CORA starter</p>
+          <p class="card-title">The Unsung Heroes — A CORA Project Anyone Can Do</p>
+          <p class="card-desc">A semester-length public records project that produces real findings about how El Paso County supports its 911 dispatchers. Three records requests. Three agencies. One ratio that tells you whether the support matches the load. <em>Whatever the answer, it belongs in the public record.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+    </div>
+
+    </section><!-- /tier-local -->
+
+      <aside class="connection-callout" aria-label="What comes next">
+        <p class="connection-callout__label">What comes next</p>
+        <p class="connection-callout__body">Next, see <a href="/state/">how Colorado state agencies</a> connect into this work — CCRD and DOJ Civil Rights as parallel ADA paths, DOLA's special-district registry under CRS Title 32, CDPHE's mortality and environmental data on El Paso County.</p>
+      </aside>
+
+  </div>
+</section>
