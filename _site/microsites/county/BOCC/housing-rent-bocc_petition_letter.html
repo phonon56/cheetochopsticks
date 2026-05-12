@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petition to El Paso County BOCC — Service Plan Transparency &amp; Algorithmic Pricing Disclosure</title>
+<meta name="description" content="A general petition letter any El Paso County resident can sign and send to the Board of County Commissioners. Four narrow, legally-defensible asks within existing BOCC authority.">
+<meta name="theme-color" content="#0a0f1a">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:100%;}
+:root{
+  --bg:#fafaf7; --paper:#ffffff; --ink:#1a1f2e; --ink-soft:#3d4759;
+  --gold:#8b6f1a; --gold-soft:#b8941f; --rule:#d4cfc0;
+  --quiet:#6b7280;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --serif:'Playfair Display',Georgia,serif;
+}
+body{
+  font-family:var(--sans);font-size:1rem;line-height:1.7;
+  color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  padding:20px 0 60px;
+}
+.toolbar{
+  max-width:780px;margin:0 auto 20px;padding:0 24px;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;
+  color:var(--quiet);
+}
+.toolbar button{
+  background:var(--ink);color:#fff;border:none;
+  font-family:var(--mono);font-size:.78rem;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:9px 16px;border-radius:3px;cursor:pointer;
+  transition:background .15s;
+}
+.toolbar button:hover{background:var(--gold);}
+.toolbar .note{margin-left:auto;font-style:italic;}
+
+.page{
+  max-width:780px;margin:0 auto;background:var(--paper);
+  padding:60px 64px;
+  border:1px solid var(--rule);
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+
+.letterhead{
+  border-bottom:2px solid var(--ink);
+  padding-bottom:24px;margin-bottom:32px;
+}
+.letterhead-eyebrow{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:8px;
+}
+.letterhead h1{
+  font-family:var(--serif);font-size:1.85rem;font-weight:700;
+  line-height:1.2;color:var(--ink);
+}
+.letterhead-sub{
+  font-family:var(--mono);font-size:.82rem;letter-spacing:.04em;
+  color:var(--quiet);margin-top:8px;
+}
+
+.meta-block{
+  display:grid;grid-template-columns:120px 1fr;gap:6px 20px;
+  font-family:var(--mono);font-size:.84rem;color:var(--ink-soft);
+  margin-bottom:32px;
+}
+.meta-label{color:var(--quiet);font-weight:500;}
+.meta-fill{border-bottom:1px dotted var(--rule);min-height:1.2em;}
+
+.recipient{
+  margin-bottom:32px;line-height:1.5;
+}
+.recipient strong{display:block;color:var(--ink);font-weight:600;}
+
+p{margin-bottom:16px;}
+p strong{font-weight:600;}
+
+.lead{
+  font-size:1.05rem;line-height:1.65;
+  margin-bottom:24px;color:var(--ink);
+}
+.lead em{font-style:italic;color:var(--gold);}
+
+h2.section{
+  font-family:var(--serif);font-size:1.25rem;font-weight:700;
+  color:var(--ink);margin:32px 0 14px;
+  padding-bottom:6px;border-bottom:1px solid var(--rule);
+}
+
+.facts{
+  background:#f3efe1;border-left:3px solid var(--gold);
+  padding:18px 22px;margin:20px 0;
+}
+.facts-title{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:600;
+}
+.facts ul{list-style:none;padding:0;}
+.facts li{padding:6px 0;border-bottom:1px dotted rgba(139,111,26,.25);font-size:.94rem;}
+.facts li:last-child{border-bottom:none;}
+.facts strong{color:var(--ink);}
+
+.asks{
+  background:#fff;border:1px solid var(--ink);
+  padding:24px 28px;margin:24px 0;
+}
+.asks-title{
+  font-family:var(--serif);font-size:1.15rem;font-weight:700;
+  margin-bottom:14px;color:var(--ink);
+}
+.ask{
+  display:flex;gap:16px;padding:14px 0;
+  border-bottom:1px solid var(--rule);
+}
+.ask:last-child{border-bottom:none;}
+.ask-num{
+  font-family:var(--serif);font-size:1.6rem;font-weight:700;
+  color:var(--gold);line-height:1;min-width:34px;
+}
+.ask-body{flex:1;}
+.ask-body strong{display:block;font-size:1rem;color:var(--ink);margin-bottom:4px;}
+.ask-body span{font-size:.92rem;color:var(--ink-soft);line-height:1.55;}
+.ask-cite{
+  display:inline-block;margin-top:6px;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;
+  color:var(--gold);
+}
+
+.signature{
+  margin-top:40px;padding-top:24px;
+  border-top:1px solid var(--rule);
+}
+.sig-fill{
+  display:grid;grid-template-columns:1fr 1fr;gap:18px 32px;
+  font-family:var(--mono);font-size:.84rem;color:var(--ink-soft);
+}
+.sig-field{}
+.sig-line{
+  border-bottom:1px solid var(--ink-soft);height:1.6em;margin-top:24px;
+}
+.sig-cap{
+  font-size:.74rem;letter-spacing:.08em;color:var(--quiet);
+  text-transform:uppercase;margin-top:4px;
+}
+
+.send-to{
+  margin-top:36px;background:#f5f3eb;padding:20px 24px;
+  font-size:.9rem;color:var(--ink-soft);line-height:1.7;
+}
+.send-to-title{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink);margin-bottom:10px;font-weight:600;
+}
+.send-to a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(139,111,26,.4);}
+.send-to a:hover{color:var(--ink);border-bottom-color:var(--ink);}
+.send-to ul{margin:8px 0 4px 18px;}
+.send-to li{padding:3px 0;}
+
+footer.foot{
+  margin-top:36px;padding-top:18px;border-top:1px dashed var(--rule);
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;
+  color:var(--quiet);text-align:center;line-height:1.7;
+}
+
+@media print{
+  body{background:#fff;padding:0;}
+  .toolbar{display:none;}
+  .page{box-shadow:none;border:none;max-width:none;padding:0.5in 0.65in;}
+  a{color:var(--ink);}
+}
+@media(max-width:680px){
+  .page{padding:32px 24px;}
+  .meta-block{grid-template-columns:1fr;gap:2px;}
+  .meta-label{margin-top:8px;}
+  .sig-fill{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar" role="toolbar" aria-label="Document tools">
+  <button onclick="window.print()" aria-label="Print or save as PDF">Print / save PDF</button>
+  <button onclick="copyText()" aria-label="Copy the letter to clipboard">Copy text</button>
+  <span class="note">Personalize the fields, sign, send by mail or email.</span>
+</div>
+
+<article class="page" id="letter">
+
+  <header class="letterhead">
+    <p class="letterhead-eyebrow">Public petition · El Paso County resident</p>
+    <h1>Service plan transparency and algorithmic pricing disclosure</h1>
+    <p class="letterhead-sub">A petition to the Board of County Commissioners regarding housing affordability for working families, military households, and children in El Paso County.</p>
+  </header>
+
+  <div class="meta-block">
+    <span class="meta-label">Date</span><span class="meta-fill">_______________________</span>
+    <span class="meta-label">From</span><span class="meta-fill">_______________________</span>
+    <span class="meta-label">Address</span><span class="meta-fill">_______________________</span>
+    <span class="meta-label">ZIP</span><span class="meta-fill">_______________________</span>
+    <span class="meta-label">Email</span><span class="meta-fill">_______________________</span>
+  </div>
+
+  <div class="recipient">
+    <strong>El Paso County Board of County Commissioners</strong>
+    Commissioner Holly Williams (District 1)<br>
+    Commissioner Carrie Geitner (District 2)<br>
+    Commissioner Stan VanderWerf (District 3)<br>
+    Commissioner Longinos Gonzalez Jr. (District 4)<br>
+    Commissioner Cami Bremer (District 5)<br>
+    Centennial Hall, 200 S. Cascade Avenue<br>
+    Colorado Springs, CO 80903
+  </div>
+
+  <p class="lead">
+    I am writing as an El Paso County resident with concerns about how rents are being set
+    in our county, the structural effect on the working families, military households,
+    and children who live here, and four specific actions the Board can take
+    <em>within existing legal authority</em> — without enacting rent control,
+    without state preemption issues, and without new legislation.
+  </p>
+
+  <h2 class="section">The structural problem in plain language</h2>
+
+  <p>
+    El Paso County is marketed nationally as a place where employers can recruit highly-educated,
+    security-cleared workers at well below coastal salaries. The Colorado Springs Chamber &amp;
+    Economic Development Corporation has publicly stated that the 5,000 "high-paying" aerospace,
+    defense, manufacturing, and cybersecurity jobs it has announced since 2022 pay an
+    average of <strong>$65,000 per year</strong> — and that this number is
+    <strong>above</strong> the El Paso County average wage. Similar positions in Denver or Boulder
+    pay $100K–$150K. Similar positions in California or Virginia pay double that.
+    The same companies that benefit from this wage discount also draw deeply
+    on Fort Carson, Peterson Space Force Base, Schriever, the Air Force Academy,
+    and NORAD/USNORTHCOM for cleared talent.
+  </p>
+
+  <p>
+    Meanwhile, rents in El Paso County have been set, for at least a decade, in a way that the
+    federal government has now formally identified as anticompetitive. RealPage, Inc., a Texas
+    software company, sells a product (formerly YieldStar, now Revenue Management) that aggregates
+    nonpublic rent, occupancy, lease-term, and concession data from competing landlords and
+    returns daily algorithmic price recommendations. The U.S. Department of Justice sued RealPage
+    in August 2024. Colorado Attorney General Phil Weiser joined the lawsuit. An amended complaint
+    in January 2025 named six of the largest property managers in the country —
+    Greystar, LivCor (Blackstone), Camden Property Trust, Cushman &amp; Wakefield/Pinnacle,
+    Willow Bridge, and Cortland — as co-defendants. Several of these operate properties
+    in El Paso County. Greystar settled with a nine-state attorney general coalition,
+    including Colorado, for $7 million in November 2025. RealPage itself settled with the
+    DOJ on November 24, 2025, accepting a three-year court-appointed monitor.
+  </p>
+
+  <p>
+    The federal settlement stops the practice going forward.
+    <strong>It does not refund a dollar of inflated rent already extracted.</strong>
+    It does not identify which specific properties in El Paso County used the software.
+    It does not tell a working family or a military household whether the apartment
+    they are currently signing a lease on is owned by a named defendant.
+    That information exists in public court records. It is not assembled,
+    not searchable, and not joined to addresses anywhere in El Paso County.
+  </p>
+
+  <p>
+    The combined effect is straightforward: <strong>the region is sold to employers as
+    cheap-but-qualified labor, and then those same workers are charged Denver-level rents
+    by software designed to suppress competition.</strong> For a junior enlisted soldier at
+    Fort Carson, a single parent working a clearance job at $65K, or a teacher in
+    School District 11, the math does not arithmetic. Children in El Paso County are
+    food-insecure not because their parents do not work hard, but because the rent
+    took the grocery money before the grocery money existed.
+  </p>
+
+  <h2 class="section">What the Board can do — within existing authority</h2>
+
+  <div class="facts">
+    <div class="facts-title">Verified facts grounding this petition</div>
+    <ul>
+      <li><strong>CRS 38-12-301</strong> preempts local rent control but explicitly authorizes voluntary rent-limit agreements between counties and permit applicants under subsections (2)–(4).</li>
+      <li><strong>EPC Land Development Code, Chapter 9</strong> grants the Board approval authority over all metropolitan and special district service plans in unincorporated El Paso County.</li>
+      <li><strong>The Board is currently rewriting the LDC</strong> with Clarion Associates and DOLA grant funding. Service plan provisions are in the active revision window.</li>
+      <li><strong>The Board hears multiple new service plans every month</strong> — recent dockets include Stonebridge, Haven Valley, Monument Ridge, Antler Creek, Triple H Ranch, and Wilshire metropolitan districts.</li>
+      <li><strong>Federal court records identify named defendants</strong> in the DOJ antitrust action. The information is fully public.</li>
+    </ul>
+  </div>
+
+  <div class="asks">
+    <h3 class="asks-title">I respectfully request that the Board adopt the following four actions:</h3>
+
+    <div class="ask">
+      <span class="ask-num">1</span>
+      <div class="ask-body">
+        <strong>Amend the model service plan to require algorithmic pricing disclosure.</strong>
+        <span>
+          As a condition of approval for any new or amended service plan in unincorporated
+          El Paso County, the applicant should disclose whether the property owner,
+          property manager, or any affiliated entity uses algorithmic rental pricing
+          software, identify the software, and certify whether the entity is a named
+          defendant in <em>United States v. RealPage Inc., et al.</em>
+        </span>
+        <span class="ask-cite">Authority: EPC LDC Ch. 9 · CRS 32-1-204</span>
+      </div>
+    </div>
+
+    <div class="ask">
+      <span class="ask-num">2</span>
+      <div class="ask-body">
+        <strong>Authorize voluntary rent-limit agreements at the permit stage.</strong>
+        <span>
+          Under CRS 38-12-301(2)–(4), the Board may enter voluntary rent-limit
+          agreements with developers seeking county approvals — including service plan
+          amendments, density bonuses, expedited permitting, or bond authorizations.
+          Direct staff to develop a model agreement template pegging designated units
+          to local Basic Allowance for Housing rates, with terms specifying duration,
+          transferability, and remedies.
+        </span>
+        <span class="ask-cite">Authority: CRS 38-12-301(2)–(4)</span>
+      </div>
+    </div>
+
+    <div class="ask">
+      <span class="ask-num">3</span>
+      <div class="ask-body">
+        <strong>Publish a public transparency registry.</strong>
+        <span>
+          Direct staff to maintain and publish a county registry that, for each
+          multifamily property in unincorporated El Paso County, lists: ownership entity,
+          whether that entity is named in <em>U.S. v. RealPage</em>, whether the property
+          self-certifies non-use of algorithmic pricing software, and whether the property
+          participates in voluntary BAH-conformance pricing. The information is public.
+          The Board's role is to assemble and publish, not to regulate prices.
+        </span>
+        <span class="ask-cite">Authority: County information-management powers · CRS 24-72</span>
+      </div>
+    </div>
+
+    <div class="ask">
+      <span class="ask-num">4</span>
+      <div class="ask-body">
+        <strong>Initiate an intergovernmental data-sharing agreement with Fort Carson.</strong>
+        <span>
+          Direct staff to formally request an intergovernmental agreement with the
+          Fort Carson Garrison Public Affairs Office and the Plans, Analysis, &amp;
+          Integration Office (PAIO) for a community housing impact assessment.
+          The County receives verified military household data; the installation
+          receives the Board's commitment to plan land use around real demand
+          rather than census estimates. This is information sharing,
+          not advocacy on either side.
+        </span>
+        <span class="ask-cite">Precedent: Joint Land Use Studies · Compatible Use Plans</span>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section">Why these four, and why now</h2>
+
+  <p>
+    None of these asks ask the Board to do anything beyond its existing authority.
+    None of them are rent control. None of them require new state legislation. All four are
+    grounded in either a federal antitrust action that has already been litigated and settled,
+    or in an authority the Board exercises every month when it approves service plans.
+  </p>
+
+  <p>
+    The timing matters. The Board is rewriting the Land Development Code now.
+    The cost of doing this work as part of the regular LDC update process is approximately
+    zero — service plan provisions are already on the table, and Clarion Associates is
+    already under contract. The cost of <em>not</em> doing this work is paid by
+    the families who sign the next lease on the next property whose owner is named in a
+    federal price-fixing case, and who will have no way to know it because nobody is
+    assembling the public record.
+  </p>
+
+  <p>
+    The Colorado Springs Chamber &amp; Economic Development Corporation's own
+    advocacy platform supports "cooperation and partnership between all levels of
+    government, the private sector, and nonprofit entities to bring more units to
+    market for all income levels." These four actions are exactly that.
+    They are voluntary on the developer side and transparency-based on the
+    Board's side. They protect the working families,
+    military households, and children whose hard work and service are being
+    quietly priced out of the place they were recruited to live.
+  </p>
+
+  <p>
+    I respectfully ask the Board to docket these four items for consideration as part of
+    the active Land Development Code update, to schedule public hearings on each,
+    and to direct staff to begin work on the model service plan amendment and the
+    public registry. I am happy to provide additional documentation, including the
+    full text of the DOJ amended complaint and the list of named defendants by property,
+    on request.
+  </p>
+
+  <p>
+    Thank you for your time, your service, and your serious consideration.
+  </p>
+
+  <div class="signature">
+    <div class="sig-fill">
+      <div class="sig-field">
+        <div class="sig-line"></div>
+        <div class="sig-cap">Signature</div>
+      </div>
+      <div class="sig-field">
+        <div class="sig-line"></div>
+        <div class="sig-cap">Printed name</div>
+      </div>
+      <div class="sig-field">
+        <div class="sig-line"></div>
+        <div class="sig-cap">Address (or "El Paso County resident")</div>
+      </div>
+      <div class="sig-field">
+        <div class="sig-line"></div>
+        <div class="sig-cap">Email or phone (optional, for follow-up)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="send-to">
+    <div class="send-to-title">How to send this</div>
+    <p>
+      Three options. Use whichever you prefer — written submissions and public comment all enter the public record on equal footing.
+    </p>
+    <ul>
+      <li><strong>Email</strong> to the Board through the BOCC contact form at <a href="https://bocc.elpasoco.com/" target="_blank" rel="noopener">bocc.elpasoco.com</a></li>
+      <li><strong>Public comment</strong> at any BOCC meeting (sign up to speak — usually 3 minutes per person)</li>
+      <li><strong>Mail</strong> a printed copy to Centennial Hall, 200 S. Cascade Avenue, Colorado Springs, CO 80903</li>
+      <li><strong>LDC Update comment</strong>: submit the same text as a public comment to the Land Development Code update at <a href="https://elpasocountyldc.konveio.com/" target="_blank" rel="noopener">elpasocountyldc.konveio.com</a> — this puts the request directly into the active revision process</li>
+    </ul>
+  </div>
+
+  <footer class="foot">
+    Drafted as a general-purpose civic petition. Any El Paso County resident may sign and send. Not legal advice. Not affiliated with El Paso County, the City of Colorado Springs, the State of Colorado, the Department of Defense, or any military installation.
+  </footer>
+
+</article>
+
+<script>
+function copyText(){
+  const text = document.getElementById('letter').innerText;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btns=document.querySelectorAll('.toolbar button');
+    if(btns[1]){const o=btns[1].textContent;btns[1].textContent='Copied';setTimeout(()=>{btns[1].textContent=o;},1400);}
+  });
+}
+</script>
+
+</body>
+</html>

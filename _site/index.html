@@ -644,10 +644,10 @@
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
   </div>
   <div class="notif-filters" role="group" aria-label="Filter notifications">
-    <button class="nf-btn active" onclick="filterNotif('all', this)">All (11)</button>
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (19)</button>
     <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (5)</button>
-    <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
-    <button class="nf-btn" onclick="filterNotif('info', this)">Info (3)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (6)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (8)</button>
   </div>
   <div class="notif-scroll">
 
@@ -727,6 +727,33 @@
       </div>
     </div>
 
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>BOCC petition — service plan transparency &amp; algorithmic pricing disclosure.</strong> A general resident petition with four narrow asks within existing BOCC authority. Sign and send.</div>
+        <div class="notif-meta">Civic action · El Paso County BOCC</div>
+        <a class="notif-action" href="/microsites/county/BOCC/housing-rent-bocc_petition_letter.html">Open petition letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Veterans' petition to the EPC BOCC.</strong> Companion petition for veterans of any branch — service plan transparency and algorithmic pricing protections, framed around military housing harms.</div>
+        <div class="notif-meta">Civic action · Veterans · El Paso County BOCC</div>
+        <a class="notif-action" href="/microsites/county/BOCC/bocc_petition_veteran.html">Open veterans' petition <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LDC update — public comment on service plan transparency.</strong> A 300-word comment ready to submit through the El Paso County Land Development Code update process.</div>
+        <div class="notif-meta">Public comment · LDC update · El Paso County</div>
+        <a class="notif-action" href="/microsites/county/BOCC/ldc_update_comment.html">Open LDC comment <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
     <div class="notif-group-label">Informational</div>
 
     <div class="notif-item" data-tier="info">
@@ -744,6 +771,15 @@
         <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
         <div class="notif-meta">Compliance analysis · April 2026</div>
         <a class="notif-action" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Background brief — algorithmic rent pricing in El Paso County.</strong> Sourced reference for journalists, policy analysts, and the COS Chamber housing committee: federal antitrust action, local policy options, and the case for BOCC-level service plan transparency.</div>
+        <div class="notif-meta">Reference · Housing &amp; pricing</div>
+        <a class="notif-action" href="/microsites/county/BOCC/housing_pricing_background_brief.html">Read background brief <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -2454,6 +2490,44 @@
             <div>
               <div class="group-link-title">City Permits, Licenses &amp; Records</div>
               <span class="group-link-sub">Accessible redesign with local keyword routing</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">County · BOCC</p>
+          <p class="card-title">Board of County Commissioners — petitions &amp; comments</p>
+          <p class="card-desc">Ready-to-send petitions, a public comment for the LDC update, and a sourced background brief on algorithmic rent pricing. <em>Four narrow asks within existing BOCC authority.</em></p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/county/BOCC/housing-rent-bocc_petition_letter.html">
+            <div>
+              <div class="group-link-title">Resident petition — service plan transparency</div>
+              <span class="group-link-sub">General petition · algorithmic pricing disclosure</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="microsites/county/BOCC/bocc_petition_veteran.html">
+            <div>
+              <div class="group-link-title">Veterans' petition to the BOCC</div>
+              <span class="group-link-sub">Any branch · military housing harms framing</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="microsites/county/BOCC/ldc_update_comment.html">
+            <div>
+              <div class="group-link-title">LDC update — public comment</div>
+              <span class="group-link-sub">300 words · ready to submit</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="microsites/county/BOCC/housing_pricing_background_brief.html">
+            <div>
+              <div class="group-link-title">Algorithmic rent pricing — background brief</div>
+              <span class="group-link-sub">Sourced reference for press &amp; policy analysts</span>
             </div>
             <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Background Brief — Algorithmic Rent Pricing in El Paso County</title>
+<meta name="description" content="A sourced background brief for journalists, policy analysts, and the Colorado Springs Chamber housing committee on algorithmic rent pricing, federal antitrust action, and local policy options.">
+<meta name="theme-color" content="#0a0f1a">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#fafaf7; --paper:#ffffff; --ink:#1a1f2e; --ink-soft:#3d4759;
+  --gold:#8b6f1a; --gold-soft:#b8941f; --rule:#d4cfc0;
+  --quiet:#6b7280;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --serif:'Playfair Display',Georgia,serif;
+}
+body{
+  font-family:var(--sans);font-size:1rem;line-height:1.7;
+  color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  padding:20px 0 60px;
+}
+.toolbar{
+  max-width:840px;margin:0 auto 20px;padding:0 24px;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:.78rem;color:var(--quiet);
+}
+.toolbar button{
+  background:var(--ink);color:#fff;border:none;
+  font-family:var(--mono);font-size:.78rem;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:9px 16px;border-radius:3px;cursor:pointer;
+}
+.toolbar button:hover{background:var(--gold);}
+.toolbar .note{margin-left:auto;font-style:italic;}
+
+.page{
+  max-width:840px;margin:0 auto;background:var(--paper);
+  padding:56px 64px;
+  border:1px solid var(--rule);
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+
+.head{
+  border-bottom:2px solid var(--ink);
+  padding-bottom:20px;margin-bottom:32px;
+}
+.brief-eyebrow{
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:10px;
+}
+.brief-eyebrow::after{
+  content:'';flex:1;height:1px;background:var(--gold);opacity:.3;
+}
+.head h1{
+  font-family:var(--serif);font-size:2rem;font-weight:700;
+  line-height:1.18;color:var(--ink);margin-bottom:8px;
+}
+.head-sub{
+  font-family:var(--sans);font-size:.94rem;color:var(--ink-soft);
+  line-height:1.6;max-width:640px;
+}
+
+.tldr{
+  background:#f3efe1;border-left:4px solid var(--gold);
+  padding:20px 24px;margin:0 0 32px;
+}
+.tldr-label{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);font-weight:600;
+  margin-bottom:10px;
+}
+.tldr p{font-size:.95rem;line-height:1.65;color:var(--ink);margin-bottom:10px;}
+.tldr p:last-child{margin-bottom:0;}
+.tldr strong{font-weight:600;color:var(--ink);}
+
+h2.s{
+  font-family:var(--serif);font-size:1.3rem;font-weight:700;
+  color:var(--ink);margin:32px 0 14px;
+  padding-bottom:6px;border-bottom:1px solid var(--rule);
+}
+h3.ss{
+  font-family:var(--sans);font-size:1.02rem;font-weight:600;
+  color:var(--ink);margin:18px 0 8px;
+}
+
+p{margin-bottom:14px;}
+p sup{font-size:.7em;vertical-align:super;color:var(--gold);}
+
+.facts-table{
+  width:100%;border-collapse:collapse;margin:14px 0 18px;
+  font-size:.92rem;
+}
+.facts-table th{
+  text-align:left;padding:10px 12px;
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--quiet);font-weight:500;
+  border-bottom:2px solid var(--ink);
+  background:#fdfcf6;
+}
+.facts-table td{
+  padding:10px 12px;border-bottom:1px solid var(--rule);
+  vertical-align:top;color:var(--ink-soft);
+}
+.facts-table td.lbl{color:var(--ink);font-weight:500;width:38%;}
+
+.crosswalk{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  border:1px solid var(--ink);margin:14px 0 18px;
+}
+.cw-head{
+  background:var(--ink);color:#fff;
+  padding:10px 14px;
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:500;
+}
+.cw-cell{padding:12px 14px;border-top:1px solid var(--rule);font-size:.9rem;}
+.cw-cell.left{border-right:1px solid var(--rule);color:var(--ink-soft);font-style:italic;}
+.cw-cell.right{color:var(--ink);font-weight:500;}
+
+.callout{
+  border:1px solid var(--gold);background:#fdfcf6;
+  padding:16px 20px;margin:18px 0;
+  font-size:.92rem;line-height:1.6;
+}
+.callout-label{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);font-weight:600;
+  margin-bottom:6px;
+}
+.callout strong{color:var(--ink);}
+
+.sources{
+  margin-top:36px;padding-top:18px;border-top:1px solid var(--rule);
+  font-size:.84rem;color:var(--ink-soft);line-height:1.65;
+}
+.sources h3{
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink);font-weight:600;
+  margin-bottom:10px;
+}
+.sources ol{padding-left:24px;}
+.sources li{padding:4px 0;}
+.sources a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(139,111,26,.4);}
+.sources a:hover{color:var(--ink);border-bottom-color:var(--ink);}
+
+footer.foot{
+  margin-top:32px;padding-top:14px;border-top:1px dashed var(--rule);
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;
+  color:var(--quiet);text-align:center;line-height:1.6;
+}
+
+@media print{
+  body{background:#fff;padding:0;}
+  .toolbar{display:none;}
+  .page{box-shadow:none;border:none;max-width:none;padding:0.5in 0.6in;}
+  a{color:var(--ink);}
+}
+@media(max-width:680px){
+  .page{padding:32px 24px;}
+  .crosswalk{grid-template-columns:1fr;}
+  .cw-cell.left{border-right:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar" role="toolbar">
+  <button onclick="window.print()">Print / PDF</button>
+  <span class="note">Background brief — share freely with journalists or distribute.</span>
+</div>
+
+<article class="page">
+
+  <header class="head">
+    <p class="brief-eyebrow">Background brief · El Paso County, Colorado</p>
+    <h1>Algorithmic rent pricing, federal antitrust action, and local policy options</h1>
+    <p class="head-sub">
+      A sourced overview prepared for journalists, policy analysts, and the
+      Colorado Springs Chamber &amp; EDC housing committee — laying out the federal
+      case, the local exposure, and the four narrow actions within the El Paso County
+      Board of County Commissioners' existing authority.
+    </p>
+  </header>
+
+  <div class="tldr">
+    <div class="tldr-label">The short version</div>
+    <p>
+      The U.S. Department of Justice and the Colorado Attorney General have spent
+      sixteen months litigating an antitrust case alleging that RealPage, Inc. and six of
+      the nation's largest property managers used algorithmic software to coordinate
+      apartment rents. Both the company and one major defendant have now settled — with
+      no financial restitution to renters.<sup>1, 2</sup>
+    </p>
+    <p>
+      The Colorado Springs Chamber &amp; EDC publicly markets the region as a place to
+      recruit highly-educated, security-cleared workers at a $65,000 average wage —
+      below most major aerospace and defense markets and explicitly above the El Paso
+      County average.<sup>3</sup> Local rents have nonetheless climbed
+      to track BAH levels set by national market surveys captured by the same software
+      ecosystem now under federal restraint.
+    </p>
+    <p>
+      <strong>El Paso County's Board of County Commissioners has four narrow actions
+      available within existing authority</strong> — none of which require state legislative
+      change, none of which constitute rent control, and all of which align with the
+      Chamber's own published housing-policy advocacy.<sup>4</sup>
+    </p>
+  </div>
+
+  <h2 class="s">1. The federal case in 60 seconds</h2>
+
+  <p>
+    On August 23, 2024, the U.S. Department of Justice filed a civil antitrust complaint
+    against RealPage, Inc. in the Middle District of North Carolina. The complaint alleged
+    that RealPage's revenue management software — historically marketed as YieldStar —
+    enabled "competing landlords to share competitively sensitive data" and use the
+    resulting aggregated information to coordinate apartment pricing in violation of
+    Section 1 of the Sherman Act.<sup>1</sup>
+  </p>
+
+  <p>
+    Colorado Attorney General Phil Weiser joined the suit at filing. North Carolina,
+    California, Connecticut, Minnesota, Oregon, Tennessee, and Washington joined
+    as co-plaintiffs. By January 7, 2025, at least 10 state attorneys general were
+    party to an amended complaint that named six landlords as co-defendants:<sup>5</sup>
+  </p>
+
+  <table class="facts-table" aria-label="Named landlord defendants">
+    <thead>
+      <tr><th>Defendant</th><th>Headquarters</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="lbl">Greystar Real Estate Partners</td><td>Charleston, SC — largest apartment manager in the U.S.</td></tr>
+      <tr><td class="lbl">LivCor</td><td>Chicago, IL — Blackstone subsidiary</td></tr>
+      <tr><td class="lbl">Camden Property Trust</td><td>Houston, TX — publicly traded REIT</td></tr>
+      <tr><td class="lbl">Cushman &amp; Wakefield / Pinnacle</td><td>Chicago, IL</td></tr>
+      <tr><td class="lbl">Willow Bridge Property Co.</td><td>Dallas, TX</td></tr>
+      <tr><td class="lbl">Cortland Management</td><td>Atlanta, GA</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    On November 19, 2025, Greystar settled with a nine-state attorney general coalition
+    including Colorado for $7 million and agreed to stop using software that aligns rent
+    prices using competitively sensitive information.<sup>6</sup> Five days later,
+    on November 24, 2025, RealPage itself settled with the DOJ — accepting a 3-year
+    court-appointed monitor, agreeing to stop using competitors' non-public data in
+    real-time pricing, requiring training data to be aged at least 12 months, and
+    limiting geographic analysis to state-level only.<sup>2</sup> The settlement
+    includes no financial penalty, no admission of liability, and no restitution
+    mechanism for renters.<sup>2</sup>
+  </p>
+
+  <div class="callout">
+    <div class="callout-label">What the settlement does and does not do</div>
+    <strong>Does:</strong> Stop the practice going forward, install a federal monitor,
+    cooperate with DOJ cases against remaining landlord defendants.
+    <strong>Does not:</strong> Return one dollar of rent already extracted, identify
+    which properties used the software, or compensate the specific tenants affected.
+  </div>
+
+  <h2 class="s">2. The El Paso County exposure</h2>
+
+  <p>
+    The federal complaint is national in scope; the local exposure has not been
+    individually mapped. Greystar manages thousands of multifamily units in Colorado
+    and is among the largest apartment managers in the El Paso County market.
+    Camden, LivCor, Cushman &amp; Wakefield/Pinnacle, Willow Bridge, and Cortland
+    all maintain Colorado portfolios with publicly listed properties.<sup>7</sup>
+    Property-by-property reconciliation between the defendant list and the El Paso
+    County multifamily inventory is the kind of work that requires Assessor data,
+    rental property registration records, and ownership-entity tracing — and that
+    nobody has yet done locally.
+  </p>
+
+  <h2 class="s">3. The local wage-and-rent geometry</h2>
+
+  <p>
+    The Colorado Springs Chamber &amp; EDC has stated, in materials promoting its
+    "Hello Colorado Springs" talent program, that since 2022 it has announced over
+    5,000 high-paying jobs in aerospace, defense, manufacturing, and cybersecurity at
+    "an average annual wage of $65,000, more than El Paso County's average."<sup>3</sup>
+    These positions typically require degrees and frequently require active security
+    clearances. Comparable Denver–Boulder roles pay $100,000–$150,000; comparable
+    Bay Area, Northern Virginia, and Maryland roles pay substantially more.
+  </p>
+
+  <p>
+    El Paso County is therefore being marketed simultaneously as
+    <em>high-talent</em> and <em>low-wage</em> — a value proposition for employers
+    and a vulnerability for workers. The local Basic Allowance for Housing
+    is calculated from a national rental market survey using industry data
+    providers; algorithmic price coordination in those underlying markets is the
+    practice the DOJ has now placed under restraint. The Department of Defense
+    is not a named party in the case, but the feedback loop between
+    algorithmically-set market rents and BAH-driven housing affordability for
+    junior enlisted Fort Carson personnel is real and well-documented.<sup>8</sup>
+  </p>
+
+  <h2 class="s">4. What the Board can do — and why it aligns with Chamber policy</h2>
+
+  <p>
+    Colorado preempts municipal and county rent control under CRS 38-12-301.<sup>9</sup>
+    Attempts to repeal that preemption have failed in 2023, 2024, and 2025.
+    However, CRS 38-12-301(2)–(4) explicitly authorizes voluntary rent-limit
+    agreements between local governments and permit applicants. El Paso County's
+    Land Development Code Chapter 9 grants the Board approval authority over all
+    metropolitan and special district service plans in unincorporated territory.<sup>10</sup>
+    The LDC is currently being rewritten by Clarion Associates under a Department
+    of Local Affairs Strong Communities Planning Grant — meaning service plan
+    provisions are in the active revision window with public comment open.<sup>11</sup>
+  </p>
+
+  <p>
+    Critically, the Chamber &amp; EDC's <em>own published advocacy platform</em>
+    supports policies that "encourage cooperation and partnership between all
+    levels of government, the private sector, and nonprofit entities to bring
+    more units to market for all income levels."<sup>4</sup> Each of the four
+    actions below maps directly to the Chamber's stated position:
+  </p>
+
+  <div class="crosswalk">
+    <div class="cw-head">Chamber's published housing policy</div>
+    <div class="cw-head">Proposed BOCC action</div>
+
+    <div class="cw-cell left">"Help the market meet our community's talent needs"</div>
+    <div class="cw-cell right">1. Amend model service plan to require algorithmic pricing disclosure</div>
+
+    <div class="cw-cell left">"Cooperation and partnership between all levels of government, the private sector, and nonprofit entities"</div>
+    <div class="cw-cell right">2. Authorize voluntary rent-limit agreements under CRS 38-12-301(2)–(4)</div>
+
+    <div class="cw-cell left">"Bring more units to market for all income levels"</div>
+    <div class="cw-cell right">3. Publish a public transparency registry of properties, ownership, and defendant status</div>
+
+    <div class="cw-cell left">"Support workforce development and strengthen the region's economic competitiveness"</div>
+    <div class="cw-cell right">4. IGA with Fort Carson Garrison Public Affairs for community housing impact data</div>
+  </div>
+
+  <p>
+    None of these proposals add cost to developers who are not already named in
+    the federal case or already using the software in question. None of them
+    constitute rent control. All four are timed to the active LDC revision —
+    making the marginal staff and consultant cost approximately zero.
+  </p>
+
+  <h2 class="s">5. Why this brief, and what to verify</h2>
+
+  <p>
+    This brief is intended to give journalists, the Chamber housing committee,
+    Fort Carson community-relations staff, and other policy-watchers a single
+    sourced document to triangulate against the BOCC petition currently circulating
+    in El Paso County. Every factual claim above can be independently verified
+    from the sources listed below.
+  </p>
+
+  <p>
+    Two pieces are worth checking firsthand: (a) the El Paso County multifamily
+    inventory's overlap with the named defendant list — best done via Assessor
+    ownership records cross-referenced against the DOJ amended complaint, and
+    (b) whether the Chamber &amp; EDC's housing committee is willing to publicly
+    endorse the four asks given that they map cleanly to the Chamber's own
+    published advocacy. Both are doable in an afternoon.
+  </p>
+
+  <div class="sources">
+    <h3>Sources</h3>
+    <ol>
+      <li>United States Department of Justice, "Justice Department Sues RealPage for Algorithmic Pricing Scheme That Harms Millions of American Renters," August 23, 2024 — <a href="https://www.justice.gov/" target="_blank" rel="noopener">justice.gov</a></li>
+      <li>Wilson Sonsini Goodrich &amp; Rosati, "DOJ Settles Its Algorithmic Price-Fixing Case Against RealPage," December 1, 2025 — proposed final judgment filed November 24, 2025 in M.D.N.C., subject to court approval, 3-year monitor, 7-year final judgment term</li>
+      <li>Colorado Springs Chamber &amp; EDC, "Colorado Springs Chamber &amp; EDC launches program to attract and keep young, talented workers in Colorado Springs," November 5, 2024 — <a href="https://coloradospringschamberedc.com/" target="_blank" rel="noopener">coloradospringschamberedc.com</a> ("5,000 high-paying jobs… average annual wage of $65,000, more than El Paso County's average")</li>
+      <li>Colorado Springs Chamber &amp; EDC, "Advocacy" platform — <a href="https://coloradospringschamberedc.com/government-affairs/advocacy/" target="_blank" rel="noopener">advocacy page</a> ("Support Proactive Housing Policy… cooperation and partnership between all levels of government, the private sector, and nonprofit entities")</li>
+      <li>Colorado Attorney General, "Colorado joins Justice Department in suing six large landlords for algorithmic pricing scheme that harms millions of renters," January 7, 2025 — <a href="https://coag.gov/press-releases/1-7-25/" target="_blank" rel="noopener">coag.gov</a></li>
+      <li>California Attorney General Rob Bonta, "Attorney General Bonta Announces $7 Million Settlement with Greystar," November 19, 2025 — nine-state AG coalition including Colorado</li>
+      <li>SEC filings, public property listings, and Colorado Secretary of State business entity records for each named defendant (verification recommended on a property-by-property basis)</li>
+      <li>RAND Corporation, "Food Insecurity in the U.S. Military," 2023; Military Family Advisory Network survey data on housing-cost-burden among PCS-relocated families</li>
+      <li>Colorado Revised Statutes 38-12-301 (current as of 2024 Colorado Revised Statutes; HB23-1115 repeal attempt failed)</li>
+      <li>El Paso County Land Development Code, Chapter 9 — Special Districts — <a href="https://library.municode.com/co/el_paso_county/codes/land_development_code" target="_blank" rel="noopener">Municode</a></li>
+      <li>El Paso County Planning &amp; Community Development, LDC Update with Clarion Associates funded by Colorado Department of Local Affairs Strong Communities Planning Grant — <a href="https://elpasocountyldc.konveio.com/" target="_blank" rel="noopener">elpasocountyldc.konveio.com</a></li>
+    </ol>
+  </div>
+
+  <footer class="foot">
+    Background brief · Companion to BOCC petition letter, LDC Update public comment, and veterans' petition. All four documents are designed to be used together or independently. Not legal advice.
+  </footer>
+
+</article>
+
+</body>
+</html>

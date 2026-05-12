@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veterans' Petition to EPC BOCC — Service Plan Transparency &amp; Algorithmic Pricing</title>
+<meta name="description" content="A petition letter for veterans of any branch to send to the El Paso County Board of County Commissioners.">
+<meta name="theme-color" content="#0a0f1a">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#fafaf7; --paper:#ffffff; --ink:#1a1f2e; --ink-soft:#3d4759;
+  --gold:#8b6f1a; --gold-soft:#b8941f; --rule:#d4cfc0;
+  --quiet:#6b7280;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --serif:'Playfair Display',Georgia,serif;
+}
+body{
+  font-family:var(--sans);font-size:1rem;line-height:1.7;
+  color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  padding:20px 0 60px;
+}
+.toolbar{
+  max-width:780px;margin:0 auto 20px;padding:0 24px;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:.78rem;color:var(--quiet);
+}
+.toolbar button{
+  background:var(--ink);color:#fff;border:none;
+  font-family:var(--mono);font-size:.78rem;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:9px 16px;border-radius:3px;cursor:pointer;
+}
+.toolbar button:hover{background:var(--gold);}
+.toolbar .note{margin-left:auto;font-style:italic;}
+
+.page{
+  max-width:780px;margin:0 auto;background:var(--paper);
+  padding:60px 64px;
+  border:1px solid var(--rule);
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+
+.letterhead{
+  border-bottom:2px solid var(--ink);
+  padding-bottom:24px;margin-bottom:28px;
+}
+.letterhead-eyebrow{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:8px;
+}
+.letterhead h1{
+  font-family:var(--serif);font-size:1.85rem;font-weight:700;
+  line-height:1.2;color:var(--ink);
+}
+.letterhead-sub{
+  font-family:var(--mono);font-size:.82rem;color:var(--quiet);
+  margin-top:8px;
+}
+
+.meta-block{
+  display:grid;grid-template-columns:140px 1fr;gap:6px 20px;
+  font-family:var(--mono);font-size:.84rem;color:var(--ink-soft);
+  margin-bottom:28px;
+}
+.meta-label{color:var(--quiet);font-weight:500;}
+.meta-fill{border-bottom:1px dotted var(--rule);min-height:1.2em;}
+
+.recipient{margin-bottom:28px;line-height:1.55;}
+.recipient strong{display:block;color:var(--ink);font-weight:600;}
+
+p{margin-bottom:14px;}
+
+.salutation{font-weight:500;margin-bottom:18px;}
+
+.lead{
+  font-size:1.02rem;line-height:1.65;
+  margin-bottom:18px;color:var(--ink);
+}
+
+.personal-block{
+  background:#fdfcf6;border-left:3px solid var(--gold);
+  padding:18px 22px;margin:22px 0;
+  font-style:italic;color:var(--ink-soft);
+}
+.personal-block::before{
+  content:'PERSONALIZE THIS';display:block;
+  font-style:normal;font-family:var(--mono);font-size:.7rem;
+  letter-spacing:.14em;color:var(--gold);
+  margin-bottom:10px;font-weight:600;
+}
+
+h2.section{
+  font-family:var(--serif);font-size:1.2rem;font-weight:700;
+  color:var(--ink);margin:28px 0 14px;
+  padding-bottom:6px;border-bottom:1px solid var(--rule);
+}
+
+.asks-compact{
+  background:#fff;border:1px solid var(--ink);
+  padding:20px 24px;margin:20px 0;
+}
+.asks-compact h3{
+  font-family:var(--serif);font-size:1.05rem;font-weight:700;
+  margin-bottom:10px;color:var(--ink);
+}
+.asks-compact ol{padding-left:24px;}
+.asks-compact li{
+  padding:7px 0;font-size:.95rem;
+  color:var(--ink-soft);line-height:1.55;
+}
+.asks-compact li strong{color:var(--ink);font-weight:600;}
+
+.closing{margin-top:20px;font-size:.98rem;}
+
+.signature{
+  margin-top:36px;padding-top:24px;
+  border-top:1px solid var(--rule);
+}
+.sig-fill{
+  display:grid;grid-template-columns:1fr 1fr;gap:18px 32px;
+  font-family:var(--mono);font-size:.84rem;color:var(--ink-soft);
+}
+.sig-line{
+  border-bottom:1px solid var(--ink-soft);height:1.6em;margin-top:24px;
+}
+.sig-cap{
+  font-size:.74rem;letter-spacing:.08em;color:var(--quiet);
+  text-transform:uppercase;margin-top:4px;
+}
+
+.disclosure{
+  margin-top:28px;background:#f5f3eb;padding:18px 22px;
+  font-size:.84rem;color:var(--ink-soft);line-height:1.65;
+  border-radius:3px;
+}
+.disclosure strong{color:var(--ink);}
+
+footer.foot{
+  margin-top:32px;padding-top:14px;border-top:1px dashed var(--rule);
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;
+  color:var(--quiet);text-align:center;line-height:1.6;
+}
+
+@media print{
+  body{background:#fff;padding:0;}
+  .toolbar{display:none;}
+  .page{box-shadow:none;border:none;max-width:none;padding:0.5in 0.65in;}
+}
+@media(max-width:680px){
+  .page{padding:32px 24px;}
+  .meta-block{grid-template-columns:1fr;}
+  .sig-fill{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar" role="toolbar">
+  <button onclick="window.print()">Print / PDF</button>
+  <button onclick="copyText()">Copy text</button>
+  <span class="note">For veterans of any branch. Personalize the italic block.</span>
+</div>
+
+<article class="page" id="letter">
+
+  <header class="letterhead">
+    <p class="letterhead-eyebrow">Veterans' petition · El Paso County resident</p>
+    <h1>Honor the families who stay</h1>
+    <p class="letterhead-sub">A petition to the Board of County Commissioners on housing affordability for active-duty military, veterans, and their children in El Paso County.</p>
+  </header>
+
+  <div class="meta-block">
+    <span class="meta-label">Date</span><span class="meta-fill"></span>
+    <span class="meta-label">From</span><span class="meta-fill"></span>
+    <span class="meta-label">Service / rank</span><span class="meta-fill"></span>
+    <span class="meta-label">Years served</span><span class="meta-fill"></span>
+    <span class="meta-label">Address</span><span class="meta-fill"></span>
+    <span class="meta-label">Email</span><span class="meta-fill"></span>
+  </div>
+
+  <div class="recipient">
+    <strong>El Paso County Board of County Commissioners</strong>
+    Centennial Hall, 200 S. Cascade Avenue<br>
+    Colorado Springs, CO 80903
+  </div>
+
+  <p class="salutation">Dear Commissioners,</p>
+
+  <p class="lead">
+    I am a veteran and an El Paso County resident. I served honorably, and I chose to make
+    this community my home after my service ended. I am writing about a structural problem
+    that is hurting the active-duty service members coming up behind me, the veterans
+    who have already settled here, and most especially the children of both.
+  </p>
+
+  <div class="personal-block">
+    [One or two sentences in your own voice. Examples:
+    "I served at Fort Carson from 2008 to 2014 and stayed because the community supported us."
+    "My spouse retired from the Air Force; we raised three kids in District 11."
+    "I deployed three times. My family lived in three different rental homes in
+    Colorado Springs while I was gone." Write what's true for you. The
+    Commissioners will read this paragraph more carefully than any other.]
+  </div>
+
+  <h2 class="section">What I have watched happen here</h2>
+
+  <p>
+    Colorado Springs is sold to employers and to the Department of Defense as a place
+    where you can get highly-educated, security-cleared talent at well below coastal salaries.
+    The Chamber &amp; Economic Development Corporation's own published number is
+    that the 5,000 aerospace, defense, manufacturing, and cybersecurity jobs it has
+    announced since 2022 pay an average of <strong>$65,000 per year</strong> — and that
+    this is above the county's overall average. A junior enlisted soldier with a family at
+    Fort Carson lives on substantially less.
+  </p>
+
+  <p>
+    At the same time, the federal Department of Justice and the Colorado Attorney General
+    have established in open litigation that rents in markets like ours have been set,
+    for at least a decade, by an algorithm — RealPage's pricing software — that aggregated
+    confidential data from competing landlords and recommended coordinated rent levels.
+    Greystar, the largest apartment manager in the country, settled with a nine-state
+    attorney general coalition including Colorado for $7 million in November 2025.
+    RealPage itself settled with DOJ on November 24, 2025. Several named defendants
+    operate properties in El Paso County. <strong>The settlements stop the practice
+    going forward but do not refund a single dollar</strong> of inflated rent already
+    extracted from the soldier, the veteran, the schoolteacher, or the cleared
+    aerospace engineer who signed those leases.
+  </p>
+
+  <p>
+    The Basic Allowance for Housing my younger comrades receive is calculated annually
+    from local market rents. When the algorithm raises market rents, BAH rises to chase
+    them. When BAH rises, every landlord in the area treats the new BAH as the floor.
+    The cycle has been running for years. The arithmetic does not work for a family
+    of four on E-5 pay, and it has not worked for a long time. Children in this county
+    are food-insecure not because their parents do not work hard but because the rent
+    took the grocery money before the grocery money existed.
+  </p>
+
+  <h2 class="section">What the Board can do — within existing authority</h2>
+
+  <p>
+    I am not asking the Board to enact rent control. State law preempts that.
+    I am asking the Board to do four things that are already within its authority,
+    that align with the Chamber's own published housing policy supporting
+    "cooperation and partnership… to bring more units to market for all income levels,"
+    and that cost approximately zero because the Land Development Code is already
+    being rewritten by Clarion Associates under a DOLA Strong Communities grant.
+  </p>
+
+  <div class="asks-compact">
+    <h3>Four narrow asks</h3>
+    <ol>
+      <li><strong>Amend the model service plan</strong> to require disclosure of algorithmic pricing software use and any named-defendant status in <em>U.S. v. RealPage</em>.</li>
+      <li><strong>Authorize voluntary rent-limit agreements</strong> under CRS 38-12-301(2)–(4), pegged to local BAH for designated units.</li>
+      <li><strong>Publish a transparency registry</strong> mapping properties to ownership, defendant status, and pricing-software certification. The information is already public; nobody assembles it.</li>
+      <li><strong>Initiate an intergovernmental data-sharing agreement</strong> with Fort Carson's Garrison Public Affairs Office for a community housing impact assessment.</li>
+    </ol>
+  </div>
+
+  <h2 class="section">Why I am writing</h2>
+
+  <p class="closing">
+    I took an oath. So did my friends. So did my battle buddies. So did
+    every soldier, sailor, airman, marine, guardian, and coast guardsman currently
+    stationed in this county. The country owes them — and their children — at least
+    the dignity of knowing whether the apartment they are signing a lease on is
+    owned by a defendant in an antitrust case. That is not a partisan ask.
+    It is a transparency ask. The Board has the authority. The timing is now.
+    I respectfully ask the Board to act.
+  </p>
+
+  <p class="closing">
+    Thank you for your service to our community, and for your time.
+  </p>
+
+  <div class="signature">
+    <div class="sig-fill">
+      <div>
+        <div class="sig-line"></div>
+        <div class="sig-cap">Signature</div>
+      </div>
+      <div>
+        <div class="sig-line"></div>
+        <div class="sig-cap">Printed name &amp; rank (if you wish)</div>
+      </div>
+      <div>
+        <div class="sig-line"></div>
+        <div class="sig-cap">Service branch &amp; years (if you wish)</div>
+      </div>
+      <div>
+        <div class="sig-line"></div>
+        <div class="sig-cap">Address &amp; ZIP</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclosure">
+    <strong>For active-duty service members who want to support this letter:</strong>
+    DoD Directive 1344.10 governs your political activity. You may sign personal letters
+    as a private citizen, but you may not appear in uniform, identify by official rank/unit
+    at a partisan event, or use your official position to influence local policy.
+    The safest way to add your voice is to sign as "Fort Carson resident" with no rank,
+    or to ask a spouse or family member (who have no such restrictions) to sign on
+    your household's behalf. Veterans are not subject to these restrictions.
+  </div>
+
+  <footer class="foot">
+    Companion to the general BOCC petition. Personalize the italic block, sign, send by mail or email. Not legal advice.
+  </footer>
+
+</article>
+
+<script>
+function copyText(){
+  const text = document.getElementById('letter').innerText;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btns=document.querySelectorAll('.toolbar button');
+    if(btns[1]){const o=btns[1].textContent;btns[1].textContent='Copied';setTimeout(()=>{btns[1].textContent=o;},1400);}
+  });
+}
+</script>
+
+</body>
+</html>

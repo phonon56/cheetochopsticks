@@ -1,0 +1,1153 @@
+<h1>Civic Records Pipeline — Technical Specification</h1>
+<p>A specification for the first deployable version of the civic-records
+project's pipeline layer. Designed to be implementable from this
+document alone, by Claude Code or any sufficiently competent engineer.</p>
+<p><strong>Status:</strong> Specification v1.0.0 — ready for implementation.
+<strong>License:</strong> CC0 1.0 Universal (public domain dedication).
+<strong>Companion documents:</strong> SCHEMA.md (v0.3.0+), IGA_TEMPLATE.md, sources.yml.</p>
+<hr>
+<h2>Section 1 — Goals and non-goals</h2>
+<h3>Goals</h3>
+<p>Build the smallest pipeline that satisfies the following requirements:</p>
+<ol>
+<li>Persist records that conform to the v0.3.0 schema in a queryable
+datastore.</li>
+<li>Maintain an append-only, cryptographically-chained audit log of
+every modification.</li>
+<li>Ingest candidate records from external fetchers (the existing
+<code>legistar.py</code> tool and future siblings) via a documented HTTP API.</li>
+<li>Serve records and the audit log through a read API consumable by
+browsers, CLI tools, or other backend services.</li>
+<li>Deploy to Cloudflare's free tier without modification.</li>
+<li>Be portable to any Linux host running Python and SQLite without
+modification.</li>
+<li>Operate fully open-source under CC0 with no vendor-specific code
+paths in the core logic.</li>
+</ol>
+<h3>Non-goals</h3>
+<p>The following are deliberately out of scope for v1 and should not
+shape design decisions:</p>
+<ol>
+<li>Web UI beyond a minimal read view for verification purposes.</li>
+<li>Authentication and authorization beyond a single shared API key for
+ingestion. Multi-tenant access control is a future feature.</li>
+<li>Automatic cross-referencing using NLP, entity resolution, or fuzzy
+matching. Cross-references are created manually or by exact
+external-ID match.</li>
+<li>CORA workflow automation. The schema supports <code>CORARequest</code> records
+but the pipeline doesn't drive the CORA process.</li>
+<li>Real-time streaming, websockets, push notifications. The pipeline
+is request-response only.</li>
+<li>Performance optimization beyond what's necessary for the expected
+scale (~10,000 records, ~100,000 audit log entries, ~10 ingestions
+per day).</li>
+</ol>
+<h3>Explicit design principles</h3>
+<p>These are not implementation details; they are commitments that shape
+every other decision.</p>
+<ol>
+<li>
+<p><strong>Portability over cleverness.</strong> Every feature must work locally on
+a developer laptop with Python and SQLite, <em>and</em> on Cloudflare with
+Workers and D1. Where these conflict, dual implementations are
+acceptable; vendor-specific cleverness in the core logic is not.</p>
+</li>
+<li>
+<p><strong>Schema fidelity.</strong> The pipeline is an implementation of the v0.3.0
+schema. When the spec and the schema document diverge, the schema
+document wins, and the pipeline is updated.</p>
+</li>
+<li>
+<p><strong>Provenance everywhere.</strong> Every record, every document, every
+field originating outside the system carries provenance. This is a
+non-negotiable invariant enforced at the application layer (and,
+where possible, at the database layer).</p>
+</li>
+<li>
+<p><strong>Append-only audit log.</strong> The <code>signed_actions</code> table is
+append-only. The system MUST NOT support deletion or modification
+of audit log entries. Compaction (per schema Article 6.4) is a
+future feature requiring unanimous consent and is not implemented
+in v1.</p>
+</li>
+<li>
+<p><strong>Automation proposes, humans dispose.</strong> Records ingested from
+automated fetchers are marked <code>verified_by_human: false</code>. Promotion
+to verified status requires an explicit signed action by an
+authorized human actor.</p>
+</li>
+</ol>
+<hr>
+<h2>Section 2 — Architecture</h2>
+<h3>2.1 High-level structure</h3>
+<p>The system is composed of four loosely-coupled components:</p>
+<pre><code>   ┌─────────────────────┐
+   │   Fetchers (Py)     │   Run anywhere (laptop, server, Worker)
+   │   - legistar.py     │   Output: JSON candidate records
+   │   - socrata.py      │
+   │   - pprbd.py        │
+   └──────────┬──────────┘
+              │ HTTP POST (candidate records)
+              ▼
+   ┌─────────────────────┐
+   │   Ingestion API     │   Validates, persists, signs
+   │   (Worker / WSGI)   │
+   └──────────┬──────────┘
+              │
+              ▼
+   ┌─────────────────────┐
+   │  Datastore (D1 or   │   Records, documents, audit log
+   │  SQLite file)       │
+   └──────────┬──────────┘
+              │
+              ▼
+   ┌─────────────────────┐
+   │   Read API          │   GET records, search, audit log
+   │   (Worker / WSGI)   │
+   └──────────┬──────────┘
+              │
+              ▼
+   ┌─────────────────────┐
+   │  Public Read View   │   Static HTML + fetch()
+   │  (Pages / file://)  │
+   └─────────────────────┘
+</code></pre>
+<h3>2.2 Dual deployment targets</h3>
+<p>The pipeline MUST support two deployment modes, sharing code where
+possible.</p>
+<p><strong>Mode A — Local Python.</strong> The pipeline runs as a Python application
+on any system with Python 3.10+ and SQLite. The datastore is a
+single SQLite file. The ingestion and read APIs are served by a WSGI
+or ASGI server (the spec recommends <code>flask</code> or <code>starlette</code>, but
+<code>http.server</code> from the standard library is acceptable for v1).</p>
+<p><strong>Mode B — Cloudflare.</strong> The pipeline runs on Cloudflare's developer
+platform. The datastore is D1 (SQLite-compatible). The APIs are
+Workers. The static read view is hosted on Pages. Deployment is via
+<code>wrangler</code>.</p>
+<p>The codebase is organized so that 80%+ of code is shared between the
+two modes. The differences are isolated in adapter modules:</p>
+<pre><code>pipeline/
+  core/                  # 100% shared logic
+    schemas.py           # Pydantic models matching v0.3.0
+    validation.py        # Schema validation
+    audit.py             # Signed action construction and chain hashing
+    ingestion.py         # The actual ingestion logic
+    queries.py           # Read query construction
+  adapters/
+    db_sqlite.py         # SQLite (local mode)
+    db_d1.py             # D1 (Cloudflare mode)
+    http_local.py        # Local HTTP serving (Flask or stdlib)
+    http_worker.py       # Cloudflare Worker entrypoint
+  fetchers/              # Adapters for source-specific tools
+    legistar_adapter.py  # Maps legistar.py output to ingestion API
+  cli/                   # Local CLI tools
+    ingest.py            # Manual ingestion from JSON files
+    export.py            # Dump records to JSON
+    link.py              # Manually create cross-references
+    log.py               # Query the audit log
+</code></pre>
+<p>The core module never imports adapter modules. Adapter modules import
+core. This is the dependency rule.</p>
+<h3>2.3 Why this works for both targets</h3>
+<p>Cloudflare's D1 is SQLite-compatible. The same <code>CREATE TABLE</code>
+statements work in both. The same SQL queries work in both, with
+caveats:</p>
+<ul>
+<li>D1 doesn't support <code>PRAGMA</code> statements that affect connection state
+(foreign keys are always on, journal mode is fixed).</li>
+<li>D1 doesn't support <code>ATTACH DATABASE</code>.</li>
+<li>D1's free tier has size limits (5 GB total, 100k writes/day) that
+local SQLite doesn't.</li>
+</ul>
+<p>The adapter modules abstract these differences. The core code uses a
+narrow database interface (<code>execute</code>, <code>executemany</code>, <code>fetchone</code>,
+<code>fetchall</code>, transaction support) that both adapters implement.</p>
+<p>For HTTP, both Flask/Starlette and Cloudflare Workers accept HTTP
+requests and return HTTP responses. The core handler logic takes a
+parsed request object and returns a response object; the adapters
+translate between framework-specific objects and the shared types.</p>
+<hr>
+<h2>Section 3 — Data model</h2>
+<h3>3.1 Tables</h3>
+<p>The schema's v0.3.0 entities map to the following D1/SQLite tables.
+Field types are chosen for portability — no D1-specific or
+SQLite-specific types are used beyond <code>TEXT</code>, <code>INTEGER</code>, <code>REAL</code>, and
+<code>BLOB</code>.</p>
+<pre><code class="language-sql">-- Jurisdictions: governments participating in the platform.
+-- Maps to schema's JurisdictionalAuthority entity.
+CREATE TABLE jurisdictions (
+    id TEXT PRIMARY KEY,                 -- e.g., &quot;juris_us_co_colorado_springs&quot;
+    human_id TEXT NOT NULL UNIQUE,       -- e.g., &quot;us-co-colorado-springs&quot;
+    display_name TEXT NOT NULL,
+    type TEXT NOT NULL,                  -- enum from schema § JurisdictionalAuthority.type
+    parent_jurisdiction_ids TEXT,        -- JSON array of jurisdiction IDs
+    participation_status TEXT NOT NULL,  -- 'active_publisher' | 'signed_consumer' | 'referenced_only' | 'withdrawn'
+    iga_references TEXT,                 -- JSON array of IGA record IDs
+    primary_record_types TEXT,           -- JSON array
+    records_custodian TEXT,              -- JSON object
+    publishing_endpoints TEXT,           -- JSON array
+    external_data_sources TEXT,          -- JSON array
+    joined_at TEXT,                      -- ISO 8601 date
+    withdrew_at TEXT,                    -- ISO 8601 date
+    created_at TEXT NOT NULL,            -- ISO 8601 datetime UTC
+    updated_at TEXT NOT NULL,
+    raw_json TEXT NOT NULL               -- Full JSON representation
+);
+
+CREATE INDEX idx_jurisdictions_status ON jurisdictions(participation_status);
+CREATE INDEX idx_jurisdictions_type ON jurisdictions(type);
+
+-- Records: the primary entity.
+CREATE TABLE records (
+    id TEXT PRIMARY KEY,
+    schema_version TEXT NOT NULL,
+    type TEXT NOT NULL,
+    title TEXT NOT NULL,
+    summary TEXT,
+    status TEXT NOT NULL,
+    governing_jurisdiction_id TEXT NOT NULL,
+    referenced_jurisdiction_ids TEXT,    -- JSON array
+    external_ids TEXT,                   -- JSON array of {system, value, verified, source}
+    parties TEXT,                        -- JSON array
+    financial TEXT,                      -- JSON object
+    timeline TEXT,                       -- JSON object
+    geography TEXT,                      -- JSON object
+    tags TEXT,                           -- JSON array of strings
+    manifest_completeness TEXT,          -- JSON object computed from documents
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    raw_json TEXT NOT NULL,              -- Canonical JSON
+    FOREIGN KEY (governing_jurisdiction_id) REFERENCES jurisdictions(id)
+);
+
+CREATE INDEX idx_records_jurisdiction ON records(governing_jurisdiction_id);
+CREATE INDEX idx_records_type ON records(type);
+CREATE INDEX idx_records_status ON records(status);
+CREATE INDEX idx_records_updated ON records(updated_at);
+
+-- Documents: manifest entries on records.
+CREATE TABLE documents (
+    id TEXT PRIMARY KEY,
+    record_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    document_type TEXT NOT NULL,
+    status TEXT NOT NULL,                -- 'available' | 'pending' | 'inferred' | 'denied' | 'action_needed'
+    expected_to_exist INTEGER NOT NULL DEFAULT 1,  -- boolean
+    expectation_basis TEXT,
+    file_url TEXT,                       -- For 'available' status
+    file_sha256 TEXT,
+    file_size_bytes INTEGER,
+    file_mime_type TEXT,
+    expected_release_path TEXT,          -- e.g., 'cora_to_procurement_services'
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    raw_json TEXT NOT NULL,
+    FOREIGN KEY (record_id) REFERENCES records(id)
+);
+
+CREATE INDEX idx_documents_record ON documents(record_id);
+CREATE INDEX idx_documents_status ON documents(status);
+
+-- External IDs: extracted for fast lookup. Duplicated from records.external_ids.
+-- This is a denormalization for performance; raw_json is canonical.
+CREATE TABLE record_external_ids (
+    record_id TEXT NOT NULL,
+    system TEXT NOT NULL,
+    value TEXT NOT NULL,
+    verified INTEGER NOT NULL DEFAULT 0,  -- boolean
+    PRIMARY KEY (record_id, system, value),
+    FOREIGN KEY (record_id) REFERENCES records(id)
+);
+
+CREATE INDEX idx_external_ids_lookup ON record_external_ids(system, value);
+
+-- Provenance: per-record provenance entries.
+CREATE TABLE provenance (
+    id TEXT PRIMARY KEY,
+    record_id TEXT,
+    document_id TEXT,
+    source_type TEXT NOT NULL,           -- 'api' | 'scrape' | 'cora_response' | 'human_authored' | etc.
+    source TEXT,
+    fetched_at TEXT,
+    verified_by_human INTEGER NOT NULL DEFAULT 0,
+    notes TEXT,
+    raw_json TEXT NOT NULL,
+    FOREIGN KEY (record_id) REFERENCES records(id),
+    FOREIGN KEY (document_id) REFERENCES documents(id)
+);
+
+CREATE INDEX idx_provenance_record ON provenance(record_id);
+CREATE INDEX idx_provenance_document ON provenance(document_id);
+
+-- Cross-references: typed relationships between records.
+CREATE TABLE cross_references (
+    id TEXT PRIMARY KEY,
+    source_record_id TEXT NOT NULL,
+    target_record_id TEXT NOT NULL,
+    relation TEXT NOT NULL,
+    note TEXT,
+    asserted_by TEXT NOT NULL,           -- 'human' | 'automated_rule' | 'external_api'
+    promotion_status TEXT,               -- For mention-promoted refs
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (source_record_id) REFERENCES records(id),
+    FOREIGN KEY (target_record_id) REFERENCES records(id)
+);
+
+CREATE INDEX idx_xref_source ON cross_references(source_record_id);
+CREATE INDEX idx_xref_target ON cross_references(target_record_id);
+
+-- Mentions: textual references not yet promoted to cross-references.
+CREATE TABLE mentions (
+    id TEXT PRIMARY KEY,
+    source_record_id TEXT NOT NULL,
+    target_record_id TEXT,
+    target_external_reference TEXT,
+    relation TEXT NOT NULL,
+    context TEXT,
+    promotion_status TEXT NOT NULL,      -- 'not_promoted' | 'candidate_for_promotion' | 'promoted'
+    asserted_by TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (source_record_id) REFERENCES records(id),
+    FOREIGN KEY (target_record_id) REFERENCES records(id)
+);
+
+CREATE INDEX idx_mentions_source ON mentions(source_record_id);
+
+-- Signed actions: the audit log. APPEND-ONLY.
+CREATE TABLE signed_actions (
+    id TEXT PRIMARY KEY,
+    timestamp TEXT NOT NULL,
+    actor_type TEXT NOT NULL,            -- 'human' | 'system' | 'fetcher' | 'automation'
+    actor_id TEXT NOT NULL,
+    actor_display_name TEXT,
+    actor_role TEXT,
+    actor_jurisdiction_authorities TEXT, -- JSON array
+    action_type TEXT NOT NULL,
+    target_type TEXT NOT NULL,           -- 'record' | 'document' | 'cora_request' | etc.
+    target_id TEXT NOT NULL,
+    before_state TEXT,                   -- JSON; null for creates
+    after_state TEXT,                    -- JSON; null for deletes (which we don't do, but reserved)
+    reason TEXT,
+    chain_prev_hash TEXT,                -- SHA-256 of previous action (chained)
+    chain_self_hash TEXT NOT NULL,       -- SHA-256 of this action's content + prev_hash
+    raw_json TEXT NOT NULL
+);
+
+CREATE INDEX idx_actions_target ON signed_actions(target_type, target_id);
+CREATE INDEX idx_actions_actor ON signed_actions(actor_id);
+CREATE INDEX idx_actions_timestamp ON signed_actions(timestamp);
+CREATE INDEX idx_actions_type ON signed_actions(action_type);
+
+-- CORA requests: open public records requests.
+CREATE TABLE cora_requests (
+    id TEXT PRIMARY KEY,
+    record_id TEXT,                      -- The record this request is about
+    agency TEXT NOT NULL,
+    department_id TEXT,
+    submitted_via TEXT,
+    external_request_id TEXT,
+    submitted_at TEXT,
+    submitted_by TEXT,                   -- JSON object
+    request_text TEXT,
+    fee_estimate INTEGER,                -- USD cents
+    fee_paid INTEGER,
+    status TEXT NOT NULL,
+    raw_json TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (record_id) REFERENCES records(id)
+);
+
+CREATE INDEX idx_cora_record ON cora_requests(record_id);
+CREATE INDEX idx_cora_status ON cora_requests(status);
+
+-- Schema migrations: track applied DDL changes.
+CREATE TABLE schema_migrations (
+    version TEXT PRIMARY KEY,
+    applied_at TEXT NOT NULL,
+    description TEXT
+);
+</code></pre>
+<h3>3.2 Data integrity rules</h3>
+<p>Enforced at the application layer (not all enforceable in SQL alone):</p>
+<ol>
+<li>
+<p><strong>Append-only audit log.</strong> The application MUST NOT issue
+<code>UPDATE</code> or <code>DELETE</code> against <code>signed_actions</code>. The deployment
+MAY further enforce this with database permissions, but this is
+not required in v1.</p>
+</li>
+<li>
+<p><strong>Chain integrity.</strong> Every <code>signed_action</code>'s <code>chain_self_hash</code>
+MUST equal <code>SHA-256(canonical_json(action_payload) || chain_prev_hash)</code>.
+On ingestion, the previous action's <code>chain_self_hash</code> becomes the
+new action's <code>chain_prev_hash</code>. The first action ever has
+<code>chain_prev_hash = NULL</code>.</p>
+</li>
+<li>
+<p><strong>Provenance required.</strong> Every <code>record</code> and every <code>document</code> MUST
+have at least one <code>provenance</code> row.</p>
+</li>
+<li>
+<p><strong>Foreign key integrity.</strong> All foreign keys are enforced. D1 has
+foreign keys on by default; SQLite needs <code>PRAGMA foreign_keys = ON</code>
+on every connection.</p>
+</li>
+<li>
+<p><strong>JSON canonicalization.</strong> When computing hashes for the audit
+log, JSON MUST be canonicalized: keys sorted alphabetically, no
+extraneous whitespace, UTF-8 encoded. The implementation should
+use a single canonicalization function imported throughout.</p>
+</li>
+</ol>
+<h3>3.3 Schema migrations</h3>
+<p>Migrations are SQL files in <code>migrations/</code>, numbered sequentially
+(<code>001_initial_schema.sql</code>, <code>002_add_xyz.sql</code>). The application checks
+the <code>schema_migrations</code> table on startup and applies any pending
+migrations in order. Each migration is idempotent: it either succeeds
+fully or fails without partial application (wrap in a transaction).</p>
+<p>For v1, only <code>001_initial_schema.sql</code> exists, containing the DDL
+above.</p>
+<hr>
+<h2>Section 4 — APIs</h2>
+<h3>4.1 Ingestion API</h3>
+<p><strong>Endpoint:</strong> <code>POST /v1/ingest</code></p>
+<p><strong>Authentication:</strong> Bearer token in <code>Authorization</code> header. The token
+is a single shared secret stored in environment variable
+<code>INGEST_API_KEY</code>. Multi-tenant authentication is out of scope for v1.</p>
+<p><strong>Request body:</strong> JSON, one of:</p>
+<pre><code class="language-json">{
+  &quot;operation&quot;: &quot;create_record&quot;,
+  &quot;actor&quot;: { ... },
+  &quot;record&quot;: { ... }
+}
+</code></pre>
+<pre><code class="language-json">{
+  &quot;operation&quot;: &quot;update_record&quot;,
+  &quot;actor&quot;: { ... },
+  &quot;record_id&quot;: &quot;rec_...&quot;,
+  &quot;patch&quot;: { ... },
+  &quot;reason&quot;: &quot;...&quot;
+}
+</code></pre>
+<pre><code class="language-json">{
+  &quot;operation&quot;: &quot;ingest_candidate&quot;,
+  &quot;actor&quot;: { ... },
+  &quot;candidate&quot;: { ... }
+}
+</code></pre>
+<p>For <code>ingest_candidate</code>, the system attempts to match the candidate to
+an existing record by external IDs. If a match is found, this becomes
+an <code>update_record</code> with a computed patch. If no match is found, this
+becomes a <code>create_record</code>.</p>
+<p><strong>Response 200:</strong></p>
+<pre><code class="language-json">{
+  &quot;operation&quot;: &quot;create_record&quot;,
+  &quot;record_id&quot;: &quot;rec_...&quot;,
+  &quot;matched_existing&quot;: false,
+  &quot;signed_action_id&quot;: &quot;act_...&quot;,
+  &quot;manifest_completeness&quot;: { ... }
+}
+</code></pre>
+<p><strong>Response 400:</strong> Validation error. Body contains <code>errors</code> array with
+field-level details.</p>
+<p><strong>Response 401:</strong> Missing or invalid auth token.</p>
+<p><strong>Response 409:</strong> Conflict (e.g., create with duplicate id).</p>
+<p><strong>Response 422:</strong> Schema validation error.</p>
+<p><strong>Response 500:</strong> Internal error. The audit log is unaffected; no
+partial writes.</p>
+<h3>4.2 Read API</h3>
+<p><strong>Endpoint:</strong> <code>GET /v1/records/:id</code></p>
+<p>Returns the record, its documents, its cross-references, and a summary
+of its signed actions. Public — no auth required for v1.</p>
+<pre><code class="language-json">{
+  &quot;record&quot;: { ... },
+  &quot;documents&quot;: [ ... ],
+  &quot;cross_references&quot;: [ ... ],
+  &quot;mentions&quot;: [ ... ],
+  &quot;signed_actions_summary&quot;: {
+    &quot;count&quot;: 12,
+    &quot;first&quot;: &quot;2026-05-09T...&quot;,
+    &quot;last&quot;: &quot;2026-05-15T...&quot;,
+    &quot;actors&quot;: [&quot;fetcher_legistar&quot;, &quot;human_emma&quot;]
+  }
+}
+</code></pre>
+<p><strong>Endpoint:</strong> <code>GET /v1/records/:id/signed-actions</code></p>
+<p>Returns the full audit log for a record. Paginated with <code>?limit=N&amp;before=ID</code>.</p>
+<p><strong>Endpoint:</strong> <code>GET /v1/records?type=contract&amp;jurisdiction=us-co-colorado-springs</code></p>
+<p>Search records by type, jurisdiction, status, date range, or tag.
+Query params:</p>
+<ul>
+<li><code>type</code> — record type</li>
+<li><code>jurisdiction</code> — jurisdiction human_id</li>
+<li><code>status</code> — record status</li>
+<li><code>tag</code> — tag (multiple <code>tag</code> params allowed; OR semantics)</li>
+<li><code>updated_since</code> — ISO 8601 datetime</li>
+<li><code>limit</code> — max 100, default 20</li>
+<li><code>cursor</code> — opaque pagination cursor</li>
+</ul>
+<p><strong>Endpoint:</strong> <code>GET /v1/jurisdictions</code></p>
+<p>List jurisdictions with their participation status.</p>
+<p><strong>Endpoint:</strong> <code>GET /v1/audit-log</code></p>
+<p>System-wide audit log. Same pagination as record-level log. Public.</p>
+<p><strong>Endpoint:</strong> <code>GET /healthz</code></p>
+<p>Liveness check. Returns <code>{&quot;status&quot;: &quot;ok&quot;, &quot;schema_version&quot;: &quot;0.3.0&quot;}</code>.</p>
+<h3>4.3 Public read view</h3>
+<p>A static HTML site under <code>/public/</code> (or <code>pages/</code> for Cloudflare Pages).
+About 6 pages:</p>
+<ol>
+<li><code>index.html</code> — Project overview, link to record search, link to
+audit log.</li>
+<li><code>record.html</code> — Renders one record, fetched by ID from query param.</li>
+<li><code>search.html</code> — Search form, fetches from <code>/v1/records?</code> with
+filters.</li>
+<li><code>audit-log.html</code> — Renders the system-wide audit log.</li>
+<li><code>jurisdictions.html</code> — Lists jurisdictions.</li>
+<li><code>about.html</code> — Links to schema, IGA template, source code.</li>
+</ol>
+<p>No JavaScript framework. Vanilla <code>fetch()</code>. About 800 lines of HTML,
+CSS, and JS total. CSS is functional (readable typography, sane
+spacing) but not designed; this is a verification surface, not a
+public-facing product.</p>
+<hr>
+<h2>Section 5 — Component specifications</h2>
+<h3>5.1 <code>core/schemas.py</code></h3>
+<p>Pydantic v2 models for every schema entity. One model per entity:
+<code>Record</code>, <code>Document</code>, <code>Provenance</code>, <code>CrossReference</code>, <code>Mention</code>,
+<code>SignedAction</code>, <code>Jurisdiction</code>, <code>CORARequest</code>, <code>Actor</code>.</p>
+<p>Each model:</p>
+<ul>
+<li>Has all fields from the schema with correct types and required-ness.</li>
+<li>Includes a <code>model_config</code> with <code>extra = &quot;forbid&quot;</code> to catch typos in
+candidate records.</li>
+<li>Has a <code>to_canonical_dict()</code> method that returns the model as a dict
+with sorted keys, suitable for hashing.</li>
+<li>Has a <code>to_db_row()</code> method that returns a dict matching the table
+schema.</li>
+</ul>
+<h3>5.2 <code>core/audit.py</code></h3>
+<p>Functions for constructing and verifying signed actions.</p>
+<pre><code class="language-python">def construct_signed_action(
+    actor: Actor,
+    action_type: str,
+    target_type: str,
+    target_id: str,
+    before_state: dict | None,
+    after_state: dict | None,
+    reason: str,
+    chain_prev_hash: str | None,
+) -&gt; SignedAction:
+    &quot;&quot;&quot;Build a SignedAction with proper chain hash.&quot;&quot;&quot;
+
+def verify_chain(actions: list[SignedAction]) -&gt; bool:
+    &quot;&quot;&quot;Verify the chain hash sequence over a list of actions in order.&quot;&quot;&quot;
+
+def canonical_json(obj: dict) -&gt; str:
+    &quot;&quot;&quot;Canonical JSON: sorted keys, no extraneous whitespace, UTF-8.&quot;&quot;&quot;
+
+def hash_action(payload: dict, prev_hash: str | None) -&gt; str:
+    &quot;&quot;&quot;SHA-256 hash of canonical_json(payload) || (prev_hash or &quot;&quot;)&quot;&quot;&quot;
+</code></pre>
+<h3>5.3 <code>core/validation.py</code></h3>
+<p>Schema validation logic. Validates candidate records before ingestion.</p>
+<pre><code class="language-python">def validate_candidate(candidate: dict) -&gt; ValidationResult:
+    &quot;&quot;&quot;
+    Validate a candidate record against schema rules.
+
+    Checks:
+    - Required fields present
+    - Field types correct
+    - governing_jurisdiction_id refers to a known jurisdiction (or
+      auto-creates a referenced_only jurisdiction)
+    - At least one provenance entry
+    - external_ids well-formed
+    - status in allowed enum
+    - type in allowed enum
+    &quot;&quot;&quot;
+
+@dataclass
+class ValidationResult:
+    valid: bool
+    errors: list[ValidationError]
+    warnings: list[str]
+</code></pre>
+<h3>5.4 <code>core/ingestion.py</code></h3>
+<p>The primary ingestion logic. Pure functions; takes a database
+interface as a parameter rather than importing one directly.</p>
+<pre><code class="language-python">def ingest_candidate(
+    db: DatabaseInterface,
+    candidate: dict,
+    actor: Actor,
+) -&gt; IngestionResult:
+    &quot;&quot;&quot;
+    Ingest a candidate record.
+
+    1. Validate against schema.
+    2. Look up existing record by external IDs.
+    3. If found: compute patch, apply update, log signed action.
+    4. If not found: create new record, log signed action.
+    5. Recompute manifest_completeness if documents changed.
+    6. Return result with action ID and matched-existing flag.
+
+    All operations within a single transaction.
+    &quot;&quot;&quot;
+
+def manual_create_record(
+    db: DatabaseInterface,
+    record: dict,
+    actor: Actor,
+) -&gt; IngestionResult: ...
+
+def manual_update_record(
+    db: DatabaseInterface,
+    record_id: str,
+    patch: dict,
+    actor: Actor,
+    reason: str,
+) -&gt; IngestionResult: ...
+
+def create_cross_reference(
+    db: DatabaseInterface,
+    source_id: str,
+    target_id: str,
+    relation: str,
+    actor: Actor,
+    note: str | None = None,
+) -&gt; IngestionResult: ...
+</code></pre>
+<h3>5.5 <code>core/queries.py</code></h3>
+<p>Read-side query construction. Returns query specifications, not
+actually executes them. Adapter modules execute against the
+appropriate database.</p>
+<pre><code class="language-python">@dataclass
+class RecordQuery:
+    type: str | None = None
+    jurisdiction_human_id: str | None = None
+    status: str | None = None
+    tags: list[str] = field(default_factory=list)
+    updated_since: datetime | None = None
+    limit: int = 20
+    cursor: str | None = None
+
+def get_record_with_relations(
+    db: DatabaseInterface,
+    record_id: str,
+) -&gt; dict:
+    &quot;&quot;&quot;Fetch a record plus its documents, cross-references, mentions.&quot;&quot;&quot;
+
+def search_records(
+    db: DatabaseInterface,
+    query: RecordQuery,
+) -&gt; SearchResult: ...
+
+def get_audit_log(
+    db: DatabaseInterface,
+    record_id: str | None = None,
+    limit: int = 100,
+    cursor: str | None = None,
+) -&gt; AuditLogResult: ...
+</code></pre>
+<h3>5.6 <code>adapters/db_sqlite.py</code></h3>
+<p>SQLite implementation of <code>DatabaseInterface</code>. Uses <code>sqlite3</code> from the
+standard library. Opens the database file from a configurable path
+(default <code>civic-records.db</code>). Enables foreign keys on every
+connection.</p>
+<h3>5.7 <code>adapters/db_d1.py</code></h3>
+<p>D1 implementation of <code>DatabaseInterface</code>. Uses Cloudflare's D1
+binding from within a Worker. Translates the same <code>execute</code>,
+<code>fetchone</code>, <code>fetchall</code> interface to D1's <code>prepare/bind/run/all</code> API.</p>
+<h3>5.8 <code>adapters/http_local.py</code></h3>
+<p>Local HTTP server. Recommended: Flask. Routes for the ingestion API
+endpoints and the read API endpoints. Reads the API key from
+environment variable <code>INGEST_API_KEY</code>. Serves static files from
+<code>pages/</code> for the public read view.</p>
+<h3>5.9 <code>adapters/http_worker.py</code></h3>
+<p>Cloudflare Worker entrypoint. Same routes, implemented as a Worker
+fetch handler. Uses <code>env.DB</code> for D1 binding, <code>env.INGEST_API_KEY</code> for
+auth.</p>
+<h3>5.10 <code>fetchers/legistar_adapter.py</code></h3>
+<p>Adapter that takes the existing <code>legistar.py</code> tool's output and posts
+it to the ingestion API. Two modes:</p>
+<ul>
+<li>File mode: reads a JSON file produced by <code>legistar.py</code>, posts
+candidates one at a time.</li>
+<li>Live mode: invokes <code>legistar.py</code> programmatically, captures its
+output, posts candidates.</li>
+</ul>
+<h3>5.11 CLI tools</h3>
+<p>Standalone Python scripts in <code>cli/</code>:</p>
+<ul>
+<li><code>cli/ingest.py [file.json]</code> — Read a JSON file of candidates and
+send them to the ingestion API.</li>
+<li><code>cli/export.py --record-id ID</code> — Fetch a record and write to stdout
+or file.</li>
+<li><code>cli/link.py --from ID --to ID --relation REL</code> — Manually create
+a cross-reference.</li>
+<li><code>cli/log.py [--record-id ID] [--since DATE]</code> — Print audit log
+entries.</li>
+<li><code>cli/migrate.py</code> — Apply pending schema migrations.</li>
+<li><code>cli/seed.py</code> — Insert canonical jurisdictions for first-time
+setup.</li>
+</ul>
+<p>All CLI tools read configuration from environment variables:</p>
+<ul>
+<li><code>CIVIC_RECORDS_API_URL</code> — base URL of the ingestion API</li>
+<li><code>CIVIC_RECORDS_API_KEY</code> — auth token</li>
+<li><code>CIVIC_RECORDS_DB_PATH</code> — path to SQLite file (local mode only)</li>
+</ul>
+<hr>
+<h2>Section 6 — Testing</h2>
+<h3>6.1 Test categories</h3>
+<p>Three layers, in order of increasing scope:</p>
+<p><strong>Unit tests.</strong> Test pure functions in <code>core/</code>. No database, no
+network. Use <code>pytest</code>. Target ~200 tests covering:</p>
+<ul>
+<li>Schema validation edge cases</li>
+<li>Audit chain construction and verification</li>
+<li>Canonical JSON behavior across edge cases (Unicode, nested arrays,
+null values, etc.)</li>
+<li>Patch computation</li>
+<li>Query construction</li>
+</ul>
+<p><strong>Integration tests.</strong> Test against an in-memory SQLite database.
+Exercise the full ingestion pipeline with synthetic candidates.
+Target ~50 tests covering:</p>
+<ul>
+<li>Create then read a record</li>
+<li>Update via candidate matching</li>
+<li>Cross-reference creation</li>
+<li>Audit log retrieval</li>
+<li>Foreign key integrity</li>
+<li>Append-only enforcement</li>
+</ul>
+<p><strong>Smoke tests.</strong> Test against a real running instance. Run before
+deployment and on a schedule against the deployed instance. About 10
+tests covering:</p>
+<ul>
+<li>Health check responds</li>
+<li>Ingestion API accepts a known-good candidate</li>
+<li>Read API returns the ingested record</li>
+<li>Audit log shows the ingestion event</li>
+<li>Error paths return correct status codes</li>
+</ul>
+<h3>6.2 Test data</h3>
+<p><code>tests/fixtures/</code> contains JSON files with realistic candidate
+records. Reuse the worked examples from the project (Axon contract,
+Lorson Ranch permit, IGA record) as the seed set. These fixtures
+also serve as documentation of what good candidates look like.</p>
+<h3>6.3 Fixtures for both deployment modes</h3>
+<p>The integration test suite runs twice in CI: once against in-memory
+SQLite, once against a local D1 emulator (Wrangler's <code>--local</code> mode).
+Same tests, different adapter. Failures in only one suite indicate
+adapter bugs.</p>
+<hr>
+<h2>Section 7 — Configuration</h2>
+<h3>7.1 Environment variables</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INGEST_API_KEY</code></td>
+<td>Yes</td>
+<td>none</td>
+<td>Bearer token for ingestion endpoints</td>
+</tr>
+<tr>
+<td><code>CIVIC_RECORDS_DB_PATH</code></td>
+<td>Local only</td>
+<td><code>civic-records.db</code></td>
+<td>Path to SQLite file</td>
+</tr>
+<tr>
+<td><code>CIVIC_RECORDS_LOG_LEVEL</code></td>
+<td>No</td>
+<td><code>INFO</code></td>
+<td>Python logging level</td>
+</tr>
+<tr>
+<td><code>CIVIC_RECORDS_PORT</code></td>
+<td>Local only</td>
+<td><code>8080</code></td>
+<td>HTTP server port</td>
+</tr>
+<tr>
+<td><code>CIVIC_RECORDS_HOST</code></td>
+<td>Local only</td>
+<td><code>127.0.0.1</code></td>
+<td>HTTP server host</td>
+</tr>
+</tbody>
+</table>
+<p>For Cloudflare deployment, the same variables are set through
+<code>wrangler.toml</code> or the Cloudflare dashboard. The DB path is
+unnecessary because D1 is bound by name.</p>
+<h3>7.2 <code>wrangler.toml</code></h3>
+<pre><code class="language-toml">name = &quot;civic-records&quot;
+main = &quot;adapters/http_worker.py&quot;
+compatibility_date = &quot;2026-01-01&quot;
+
+[[d1_databases]]
+binding = &quot;DB&quot;
+database_name = &quot;civic-records&quot;
+database_id = &quot;set-after-creation&quot;
+
+[[r2_buckets]]
+binding = &quot;DOCUMENTS&quot;
+bucket_name = &quot;civic-records-documents&quot;
+
+[vars]
+CIVIC_RECORDS_LOG_LEVEL = &quot;INFO&quot;
+
+# INGEST_API_KEY is set as a secret via `wrangler secret put`
+</code></pre>
+<h3>7.3 Local development</h3>
+<pre><code class="language-bash"># First-time setup
+python -m venv .venv &amp;&amp; source .venv/bin/activate
+pip install -r requirements.txt
+python -m cli.migrate
+python -m cli.seed
+
+# Run the local HTTP server
+export INGEST_API_KEY=$(openssl rand -hex 32)
+python -m adapters.http_local
+
+# Test ingestion
+python -m cli.ingest tests/fixtures/axon-candidate.json
+
+# Read a record
+python -m cli.export --record-id rec_axon_c12102
+
+# View audit log
+python -m cli.log --record-id rec_axon_c12102
+</code></pre>
+<h3>7.4 Cloudflare deployment</h3>
+<pre><code class="language-bash"># First-time setup
+wrangler login
+wrangler d1 create civic-records  # capture database_id, paste into wrangler.toml
+wrangler r2 bucket create civic-records-documents
+wrangler d1 execute civic-records --file=migrations/001_initial_schema.sql
+wrangler secret put INGEST_API_KEY  # paste a generated secret
+
+# Deploy
+wrangler deploy
+
+# Verify
+curl https://civic-records.your-account.workers.dev/healthz
+</code></pre>
+<hr>
+<h2>Section 8 — Security</h2>
+<h3>8.1 Threat model</h3>
+<p>The system handles public records, so confidentiality of record
+contents is generally not a concern. The threats that matter:</p>
+<ol>
+<li><strong>Unauthorized writes.</strong> An attacker submits false records or
+modifies existing ones. Mitigated by the <code>INGEST_API_KEY</code> shared
+secret.</li>
+<li><strong>Audit log tampering.</strong> An attacker modifies historical signed
+actions. Mitigated by the chain hash. Detection is possible via
+<code>verify_chain</code>.</li>
+<li><strong>Denial of service.</strong> An attacker floods the ingestion endpoint.
+Cloudflare provides rate limiting; local mode is vulnerable but
+exposed only on localhost by default.</li>
+<li><strong>PII leakage.</strong> Records may include personal information from
+public sources. Out of scope for v1; the project's policy on PII
+handling is a separate document.</li>
+</ol>
+<h3>8.2 Required practices</h3>
+<ul>
+<li>The <code>INGEST_API_KEY</code> MUST be at least 32 random bytes, base64 or
+hex encoded.</li>
+<li>Logs MUST NOT include the full request body of ingestion calls (to
+avoid logging the auth header).</li>
+<li>The read API MUST NOT expose any field marked as PII in the schema
+(none in v1, but the convention is established now).</li>
+<li>HTTPS is required in production. Cloudflare provides this by
+default. Local development on <code>localhost</code> is exempt.</li>
+</ul>
+<h3>8.3 Out of scope for v1</h3>
+<ul>
+<li>Per-jurisdiction access control (Phase 3, requires IGA).</li>
+<li>Per-actor authentication beyond the shared secret.</li>
+<li>Encryption at rest beyond what the storage provider offers
+(D1 encrypts at rest; SQLite files do not).</li>
+<li>Audit log signing with cryptographic signatures from individual
+actors (chain hash is sufficient for v1).</li>
+</ul>
+<hr>
+<h2>Section 9 — Observability</h2>
+<h3>9.1 Logging</h3>
+<p>Structured logging using Python's <code>logging</code> module with JSON output.
+Every log entry includes:</p>
+<ul>
+<li><code>timestamp</code> (ISO 8601 UTC)</li>
+<li><code>level</code> (INFO, WARNING, ERROR)</li>
+<li><code>event</code> (short snake_case identifier)</li>
+<li><code>record_id</code> (when relevant)</li>
+<li><code>actor_id</code> (when relevant)</li>
+<li><code>request_id</code> (per-HTTP-request UUID)</li>
+</ul>
+<p>Log events that MUST be emitted:</p>
+<ul>
+<li><code>request_received</code> — every HTTP request</li>
+<li><code>request_completed</code> — every HTTP response</li>
+<li><code>ingestion_started</code></li>
+<li><code>ingestion_completed</code></li>
+<li><code>validation_failed</code></li>
+<li><code>chain_verification_failed</code> (CRITICAL)</li>
+<li><code>migration_applied</code></li>
+</ul>
+<h3>9.2 Metrics</h3>
+<p>Metrics are nice-to-have for v1 but not required. If implemented,
+expose at <code>/metrics</code> in Prometheus exposition format:</p>
+<ul>
+<li>Ingestion rate (requests/second)</li>
+<li>Ingestion error rate</li>
+<li>Records by jurisdiction</li>
+<li>Audit log size</li>
+<li>Read API latency</li>
+</ul>
+<h3>9.3 Health checks</h3>
+<p><code>GET /healthz</code> responds 200 with <code>{&quot;status&quot;: &quot;ok&quot;}</code> when:</p>
+<ul>
+<li>Database connection succeeds</li>
+<li>Latest migration is applied</li>
+<li>A trivial query runs in under 100ms</li>
+</ul>
+<p>Otherwise, 503 with details.</p>
+<hr>
+<h2>Section 10 — Documentation deliverables</h2>
+<p>The implementer MUST produce, alongside the code:</p>
+<ol>
+<li><strong><code>README.md</code></strong> — Project overview, install, deploy, contribute.</li>
+<li><strong><code>docs/architecture.md</code></strong> — Diagrams and explanation of the
+adapter pattern.</li>
+<li><strong><code>docs/api.md</code></strong> — Full API reference with request/response
+examples.</li>
+<li><strong><code>docs/operations.md</code></strong> — Runbook for common operational tasks
+(apply migration, view logs, debug a stuck ingestion).</li>
+<li><strong><code>docs/contributing.md</code></strong> — How to add a new fetcher, how to
+add a schema field, how to run tests.</li>
+<li><strong><code>CHANGELOG.md</code></strong> — Versioning and change history.</li>
+<li><strong>Inline docstrings</strong> on every public function in <code>core/</code> and
+<code>adapters/</code>.</li>
+</ol>
+<hr>
+<h2>Section 11 — Acceptance criteria</h2>
+<p>The pipeline is complete when ALL of the following hold:</p>
+<ol>
+<li>The codebase builds without errors on Python 3.10, 3.11, and 3.12.</li>
+<li>All unit tests pass.</li>
+<li>All integration tests pass against in-memory SQLite.</li>
+<li>All integration tests pass against Wrangler local D1.</li>
+<li>Smoke tests pass against a deployed Cloudflare instance.</li>
+<li>Smoke tests pass against a local Python deployment.</li>
+<li>The Axon C-12102 worked example record can be ingested as a
+candidate and read back through the read API, identical in
+content to the schema-mocked version.</li>
+<li>A multi-step verification scenario can be exercised end-to-end:
+ingest the Axon record, ingest a hypothetical Council resolution
+from a Legistar fetch, manually create a cross-reference between
+them, view the cross-reference through the read API, and see
+four signed actions in the audit log (one per ingestion, one
+for the cross-reference, one for the manifest_completeness
+recomputation).</li>
+<li>The audit chain can be verified end-to-end across all signed
+actions in a fresh database.</li>
+<li>README.md gives a complete onboarding path from &quot;git clone&quot; to
+&quot;I have a running instance&quot; in under 30 minutes for a competent
+developer.</li>
+</ol>
+<hr>
+<h2>Section 12 — Open questions for the implementer</h2>
+<p>These are decisions the spec deliberately leaves to the implementer's
+judgment. The implementer SHOULD record their choice in the codebase
+README or architecture doc.</p>
+<ol>
+<li>
+<p><strong>HTTP framework choice for local mode.</strong> Flask, Starlette, FastAPI,
+or stdlib? Recommendation: Flask for simplicity. FastAPI if
+automatic OpenAPI generation is wanted.</p>
+</li>
+<li>
+<p><strong>Pydantic version.</strong> v1 or v2? Recommendation: v2. v1 is
+deprecated.</p>
+</li>
+<li>
+<p><strong>JSON schema generation for the API.</strong> Use Pydantic's built-in
+schema export, or hand-write OpenAPI? Recommendation: Pydantic
+export, served at <code>/openapi.json</code>.</p>
+</li>
+<li>
+<p><strong>Test runner.</strong> pytest, unittest? Recommendation: pytest.</p>
+</li>
+<li>
+<p><strong>Code formatter.</strong> Black, ruff format, autopep8? Recommendation:
+ruff format with the project's <code>pyproject.toml</code> settings.</p>
+</li>
+<li>
+<p><strong>Linter.</strong> ruff, flake8, pylint? Recommendation: ruff.</p>
+</li>
+<li>
+<p><strong>Type checker.</strong> mypy, pyright? Recommendation: mypy in strict
+mode for <code>core/</code>, lenient elsewhere.</p>
+</li>
+<li>
+<p><strong>Worker runtime version.</strong> Cloudflare Workers Python is in beta;
+pin to a specific compatibility date for stability.</p>
+</li>
+<li>
+<p><strong>D1 vs SQLite differences.</strong> Document any cases where the same
+query behaves differently across the two adapters. Add notes to
+<code>docs/architecture.md</code>.</p>
+</li>
+<li>
+<p><strong>Document storage.</strong> v1 uses R2 on Cloudflare and the local
+filesystem (<code>./documents/</code>) on local mode. Both are abstracted
+behind <code>adapters/blob_storage.py</code>. Implementation is permitted but
+deferred to v2.</p>
+</li>
+</ol>
+<hr>
+<h2>Section 13 — Future work (informational, not part of v1)</h2>
+<p>The following are explicitly out of scope but worth knowing the
+implementer is designing toward:</p>
+<ul>
+<li>Per-jurisdiction access control via the <code>Actor.jurisdiction_authorities</code>
+mechanism in the schema.</li>
+<li>Automated cross-referencing using entity resolution.</li>
+<li>CORA workflow tooling (drafting, submission, response tracking).</li>
+<li>Citizen contribution review queue.</li>
+<li>Watch mode for fetchers (notify on new matters).</li>
+<li>Cross-jurisdictional federation queries spanning multiple platform
+instances.</li>
+<li>Document storage and retrieval (PDFs, attachments) via R2.</li>
+<li>Full-text search over record content and document text.</li>
+<li>Public-facing UI suitable for non-technical users.</li>
+</ul>
+<hr>
+<h2>Section 14 — Implementation hints</h2>
+<p>A few non-binding suggestions that may save time:</p>
+<p><strong>Start with the unit tests.</strong> Write the schema validation tests
+before any code. The tests double as a specification of behavior and
+catch many design problems before they're embedded.</p>
+<p><strong>Build local mode first, then add the Cloudflare adapter.</strong> Local
+mode is faster to iterate on. Once it's working end-to-end, port to
+Cloudflare. The shared <code>core/</code> should require no changes.</p>
+<p><strong>Use the existing worked examples as fixtures.</strong> The Axon contract,
+the Lorson Ranch permit, and the IGA record are all hand-assembled
+JSON in the project's existing artifacts. Drop them into
+<code>tests/fixtures/</code> and use them throughout the test suite. They're
+also useful sanity checks: if your code can ingest them, the schema
+implementation is probably correct.</p>
+<p><strong>Resist scope creep.</strong> Every feature on the &quot;future work&quot; list is
+tempting. Resist. v1 is small, and small is the point. A working,
+deployed, minimal v1 is more valuable than a comprehensive v2 that
+isn't done yet.</p>
+<p><strong>Don't optimize prematurely.</strong> SQLite handles tens of millions of
+rows on laptop hardware. D1 has its own limits but they're far above
+v1 needs. Write straightforward code; profile only if a real
+performance problem surfaces.</p>
+<hr>
+<h2>Section 15 — Repository structure</h2>
+<p>The expected repository layout after implementation:</p>
+<pre><code>civic-records-pipeline/
+├── README.md
+├── LICENSE                          # CC0
+├── CHANGELOG.md
+├── pyproject.toml
+├── requirements.txt
+├── requirements-dev.txt
+├── .gitignore
+├── .github/
+│   └── workflows/
+│       ├── test.yml                # Run unit + integration tests
+│       └── deploy.yml              # Deploy to Cloudflare on tag
+├── wrangler.toml
+├── migrations/
+│   └── 001_initial_schema.sql
+├── pipeline/
+│   ├── __init__.py
+│   ├── core/
+│   │   ├── schemas.py
+│   │   ├── validation.py
+│   │   ├── audit.py
+│   │   ├── ingestion.py
+│   │   └── queries.py
+│   ├── adapters/
+│   │   ├── db_sqlite.py
+│   │   ├── db_d1.py
+│   │   ├── http_local.py
+│   │   └── http_worker.py
+│   ├── fetchers/
+│   │   └── legistar_adapter.py
+│   └── cli/
+│       ├── ingest.py
+│       ├── export.py
+│       ├── link.py
+│       ├── log.py
+│       ├── migrate.py
+│       └── seed.py
+├── pages/                          # Static read view
+│   ├── index.html
+│   ├── record.html
+│   ├── search.html
+│   ├── audit-log.html
+│   ├── jurisdictions.html
+│   └── about.html
+├── tests/
+│   ├── fixtures/
+│   │   ├── axon-candidate.json
+│   │   ├── lorson-ranch-permit.json
+│   │   └── iga-record.json
+│   ├── unit/
+│   ├── integration/
+│   └── smoke/
+└── docs/
+    ├── architecture.md
+    ├── api.md
+    ├── operations.md
+    └── contributing.md
+</code></pre>
+<hr>
+<h2>Appendix A — Glossary</h2>
+<ul>
+<li><strong>Candidate record:</strong> A record submitted to the ingestion API
+whose existence and content have not yet been verified by a human.</li>
+<li><strong>Authoritative record:</strong> A record that has been verified by a
+human actor with appropriate jurisdictional authority.</li>
+<li><strong>Signed action:</strong> An entry in the audit log capturing one
+modification, with actor identity, before/after state, and a chain
+hash.</li>
+<li><strong>Manifest:</strong> The set of documents associated with a record.</li>
+<li><strong>Manifest completeness:</strong> A counter capturing how many of the
+expected documents on a record are actually available.</li>
+<li><strong>Provenance:</strong> The chain of sources establishing where a record
+or field came from.</li>
+<li><strong>Cross-reference:</strong> A typed relationship between two records.</li>
+<li><strong>Mention:</strong> A textual reference from one record to another that
+has not yet been promoted to a cross-reference.</li>
+<li><strong>Promotion:</strong> The act of upgrading a mention to a cross-reference,
+or a candidate record to an authoritative record.</li>
+</ul>
+<h2>Appendix B — References</h2>
+<ul>
+<li><code>SCHEMA.md</code> v0.3.0 — the data model this pipeline implements.</li>
+<li><code>IGA_TEMPLATE.md</code> — the legal framework for multi-jurisdictional
+participation.</li>
+<li><code>sources.yml</code> — the catalog of public surfaces this pipeline
+ingests from.</li>
+<li><code>legistar.py</code> — the existing fetcher tool, the first integration.</li>
+<li>The Cloudflare Workers documentation at developers.cloudflare.com.</li>
+<li>The D1 documentation at developers.cloudflare.com/d1.</li>
+<li>SQLite documentation at sqlite.org/docs.html.</li>
+</ul>
+<hr>
+<p><em>End of specification.</em></p>
