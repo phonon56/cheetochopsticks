@@ -1864,6 +1864,294 @@
       margin-left: 8px;
     }
     .nav-menu-btn:hover { color: var(--text); border-color: var(--border-hi); }
+
+    /* ─── Tier organization — Local / State / National ────────────────────
+       Three-tier grouping for the dashboards section. Each tier has an
+       intro band, an h3 heading, the existing scope sub-sections nested
+       inside (their h3 → h4 demotion preserves heading hierarchy under
+       the section's h2), and a "How this connects" callout between tiers.
+
+       Naming convention (block__element--modifier):
+         .tier                              outermost wrapper
+         .tier--local / --state / --national   per-tier modifier
+         .tier__band                        colored intro band
+         .tier__eyebrow / __heading / __intro   band contents
+         .connection-callout                between-tier callout
+         .connection-callout__label / __body
+         .start-here                        local-tier hero block
+         .start-here__finder / __initiatives / __tile
+         .tier-nav                          sticky in-page tier nav
+         .tier-nav__list / __label / __link
+         .tier-nav__link--current           active link modifier
+       Edit one of these classes to change the look across all tiers.   */
+
+    .tier { margin: 56px 0; }
+    .tier:first-of-type { margin-top: 24px; }
+    .tier__band {
+      border-left: 4px solid var(--gold);
+      padding: 22px 26px 20px;
+      margin-bottom: 26px;
+      border-radius: 0 4px 4px 0;
+    }
+    .tier--local    .tier__band { background: rgba(200,168,75,.07); }
+    .tier--state    .tier__band { background: rgba(96,165,250,.07);  border-left-color: var(--blue); }
+    .tier--national .tier__band { background: rgba(74,222,128,.07);  border-left-color: var(--green); }
+    .tier__eyebrow {
+      font-family: var(--mono);
+      font-size: .74rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .tier__heading {
+      font-family: var(--serif);
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .tier__intro {
+      font-size: .95rem;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 720px;
+    }
+    .tier__intro strong { color: var(--text); }
+
+    /* Between-tier "how these connect" callout */
+    .connection-callout {
+      margin: 30px 0 6px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .9rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .connection-callout__label {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .connection-callout__body strong { color: var(--text); }
+    .connection-callout__body a {
+      color: var(--gold-lt);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(253,230,138,.4);
+    }
+    .connection-callout__body a:hover { color: var(--text); border-bottom-color: var(--text); }
+    .connection-callout__body a:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+      color: var(--text);
+    }
+
+    /* "Start here" block at the top of Local */
+    .start-here {
+      margin: 0 0 30px;
+      padding: 22px 24px 22px;
+      background: var(--surface2);
+      border: 1px solid var(--border-hi);
+      border-radius: 5px;
+    }
+    .start-here__eyebrow {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .start-here__title {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .start-here__finder {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .start-here__finder-label {
+      width: 100%;
+      font-family: var(--mono);
+      font-size: .74rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+      margin-bottom: 4px;
+    }
+    .start-here__input {
+      flex: 1 1 240px;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border-hi);
+      border-radius: 4px;
+      padding: 11px 14px;
+      font-family: var(--sans);
+      font-size: .94rem;
+    }
+    .start-here__input::placeholder { color: var(--quiet); }
+    .start-here__input:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 1px;
+      border-color: var(--gold);
+    }
+    .start-here__btn {
+      background: var(--gold);
+      color: var(--bg);
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      padding: 11px 22px;
+      font-family: var(--mono);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .start-here__btn:hover { background: var(--gold-lt); border-color: var(--gold-lt); }
+    .start-here__btn:focus-visible {
+      outline: 3px solid var(--gold-lt);
+      outline-offset: 3px;
+    }
+    .start-here__hint {
+      width: 100%;
+      font-size: .82rem;
+      color: var(--quiet);
+      line-height: 1.5;
+      margin: 4px 0 18px;
+    }
+    .start-here__rail-label {
+      font-family: var(--mono);
+      font-size: .74rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 4px 0 12px;
+    }
+    .start-here__initiatives {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .start-here__tile {
+      display: block;
+      padding: 14px 16px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      text-decoration: none;
+      transition: border-color .15s;
+    }
+    .start-here__tile:hover { border-color: var(--gold); }
+    .start-here__tile:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+    .start-here__tile-scope {
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .start-here__tile-title {
+      font-weight: 600;
+      font-size: .94rem;
+      line-height: 1.35;
+      color: var(--text);
+    }
+    .start-here__tile-meta {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Sticky in-page tier nav */
+    .tier-nav {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(12,18,32,.92);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      margin: 0 0 18px;
+    }
+    .tier-nav__list {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      align-items: center;
+      list-style: none;
+      margin: 0 auto;
+      padding: 0 24px;
+      max-width: 1200px;
+    }
+    .tier-nav__label {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--quiet);
+      margin-right: 10px;
+    }
+    .tier-nav__link {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .8rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 14px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .tier-nav__link:hover { color: var(--text); border-color: var(--border-hi); }
+    .tier-nav__link:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+    .tier-nav__link--current,
+    .tier-nav__link[aria-current="location"] {
+      color: var(--bg);
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    @media (max-width: 640px) {
+      .tier-nav__list {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        padding: 0 16px;
+      }
+      .tier-nav__label,
+      .tier-nav__link { flex-shrink: 0; }
+      .tier__band { padding: 18px 18px 16px; }
+      .tier__heading { font-size: 1.35rem; }
+      .start-here { padding: 18px 18px 20px; }
+      .start-here__btn { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .start-here__tile,
+      .tier-nav__link { transition: none; }
+      html { scroll-behavior: auto !important; }
+    }
   </style>
 
 
@@ -2070,8 +2358,65 @@
     </div>
     <p class="section-sub">Each dashboard lives under the jurisdiction whose records it covers. Cards with multiple links mean that scope has a small family of pages that belong together.</p>
 
+    <!-- ─── Sticky in-page tier nav ────────────────────────────── -->
+    <nav class="tier-nav" aria-label="Jurisdiction tiers">
+      <ul class="tier-nav__list">
+        <li class="tier-nav__label" aria-hidden="true">Jump to</li>
+        <li><a class="tier-nav__link" href="#tier-local"    data-tier-link="tier-local">Local</a></li>
+        <li><a class="tier-nav__link" href="#tier-state"    data-tier-link="tier-state">State</a></li>
+        <li><a class="tier-nav__link" href="#tier-national" data-tier-link="tier-national">National</a></li>
+        <li><a class="tier-nav__link" href="#alerts" onclick="openNotif();return false;">Alerts</a></li>
+      </ul>
+    </nav>
+
+    <!-- ═══ LOCAL TIER ══════════════════════════════════════════ -->
+    <section class="tier tier--local" id="tier-local" aria-labelledby="tier-local-heading">
+      <div class="tier__band">
+        <p class="tier__eyebrow">Tier 1 · Where you live</p>
+        <h3 class="tier__heading" id="tier-local-heading">Local — El Paso County &amp; Colorado Springs</h3>
+        <p class="tier__intro">Everything that touches your address day to day — city services, county offices, downtown business records, the metro and special districts billed to your property, and the cross-jurisdictional tools that pull from all of them. <strong>Start here</strong> if you're not sure where to look.</p>
+      </div>
+
+      <!-- ── Start here — jurisdiction finder + active initiatives ─ -->
+      <aside class="start-here" aria-labelledby="start-here-title">
+        <p class="start-here__eyebrow">Start here</p>
+        <h4 class="start-here__title" id="start-here-title">Find what governs your address</h4>
+        <form class="start-here__finder" action="microsites/shared/cos-find-my-jurisdiction.html" method="get" role="search">
+          <label class="start-here__finder-label" for="start-here-input">Enter a ZIP code or street address</label>
+          <input
+            class="start-here__input"
+            id="start-here-input"
+            name="q"
+            type="text"
+            inputmode="text"
+            autocomplete="postal-code"
+            placeholder="80903, or 200 S. Cascade Ave, Colorado Springs"
+            aria-describedby="start-here-hint">
+          <button type="submit" class="start-here__btn">Find&nbsp;→</button>
+          <p class="start-here__hint" id="start-here-hint">Routes to the jurisdiction finder with your input. Returns city, county, school district, metro districts, and utilities for that address.</p>
+        </form>
+        <p class="start-here__rail-label" id="start-here-rail-label">Active right now — front-and-center initiatives</p>
+        <div class="start-here__initiatives" role="list" aria-labelledby="start-here-rail-label">
+          <a class="start-here__tile" role="listitem" href="microsites/county/BOCC/housing-rent-bocc_petition_letter.html">
+            <p class="start-here__tile-scope">County · BOCC petition</p>
+            <p class="start-here__tile-title">Service plan transparency &amp; algorithmic pricing disclosure</p>
+            <p class="start-here__tile-meta">Open window · sign and send</p>
+          </a>
+          <a class="start-here__tile" role="listitem" href="microsites/city/ada/datp-comment.html">
+            <p class="start-here__tile-scope">City · DATP comment</p>
+            <p class="start-here__tile-title">Digital Accessibility Transition Plan — public comment reading room</p>
+            <p class="start-here__tile-meta">Open window · 12 structured comments</p>
+          </a>
+          <a class="start-here__tile" role="listitem" href="microsites/city/housing/housing-drupal-arp-formADA/home-arp-form-preview.html">
+            <p class="start-here__tile-scope">City · HOME-ARP</p>
+            <p class="start-here__tile-title">HOME-ARP Allocation Plan — accessible comment form</p>
+            <p class="start-here__tile-meta">Closes May 26, 2026 · EN/ES</p>
+          </a>
+        </div>
+      </aside>
+
     <!-- ── Shared ──────────────────────────────────────────────── -->
-    <h3 class="scope-heading" id="scope-shared">Shared — for everyone</h3>
+    <h4 class="scope-heading" id="scope-shared">Shared — start here</h4>
     <div class="page-grid" role="list" aria-labelledby="scope-shared">
 
       <a class="page-card" role="listitem" href="microsites/shared/cos-find-my-jurisdiction.html">
@@ -2197,7 +2542,7 @@
     </div>
 
     <!-- ── City ────────────────────────────────────────────────── -->
-    <h3 class="scope-heading" id="scope-city">City of Colorado Springs</h3>
+    <h4 class="scope-heading" id="scope-city">City of Colorado Springs</h4>
     <div class="page-grid" role="list" aria-labelledby="scope-city">
 
       <div class="group-card" role="listitem">
@@ -2438,7 +2783,7 @@
     </div>
 
     <!-- ── County ──────────────────────────────────────────────── -->
-    <h3 class="scope-heading" id="scope-county">El Paso County</h3>
+    <h4 class="scope-heading" id="scope-county">El Paso County</h4>
     <div class="page-grid" role="list" aria-labelledby="scope-county">
 
       <a class="page-card" role="listitem" href="microsites/county/land/Assessor_Property%20Conveyances.html">
@@ -2609,7 +2954,7 @@
     </div>
 
     <!-- ── Downtown ────────────────────────────────────────────── -->
-    <h3 class="scope-heading" id="scope-downtown">Downtown Colorado Springs</h3>
+    <h4 class="scope-heading" id="scope-downtown">Downtown Colorado Springs</h4>
     <div class="page-grid" role="list" aria-labelledby="scope-downtown">
 
       <div class="group-card" role="listitem">
@@ -2639,7 +2984,7 @@
     </div>
 
     <!-- ── Special Districts ───────────────────────────────────── -->
-    <h3 class="scope-heading" id="scope-specialdistricts">Special Districts</h3>
+    <h4 class="scope-heading" id="scope-specialdistricts">Special Districts</h4>
     <div class="page-grid" role="list" aria-labelledby="scope-specialdistricts">
 
       <div class="group-card" role="listitem">
@@ -2680,8 +3025,24 @@
 
     </div>
 
+    </section><!-- /tier-local -->
+
+    <!-- ── How Local connects to State ─────────────────────────── -->
+    <aside class="connection-callout" aria-label="How Local connects to State">
+      <p class="connection-callout__label">How this connects</p>
+      <p class="connection-callout__body">El Paso County's <strong>284 metro districts</strong> are chartered under Colorado law (<strong>CRS Title 32</strong>). The state's <a href="#scope-state">DOLA registry</a> holds parallel governance data; CDPHE holds mortality and environmental-health records on the same geography. When a district hides its own records, both the County Assessor (Local) and DOLA (State) are filing paths that work in parallel.</p>
+    </aside>
+
+    <!-- ═══ STATE TIER ══════════════════════════════════════════ -->
+    <section class="tier tier--state" id="tier-state" aria-labelledby="tier-state-heading">
+      <div class="tier__band">
+        <p class="tier__eyebrow">Tier 2 · Colorado</p>
+        <h3 class="tier__heading" id="tier-state-heading">State — Colorado</h3>
+        <p class="tier__intro">Statewide agencies whose decisions reach into El Paso County: CDPHE health data, CBI missing-persons records, CCRD complaint paths for ADA and discrimination, DOLA's special-district registry, and the Colorado Attorney General's enforcement surface.</p>
+      </div>
+
     <!-- ── State ───────────────────────────────────────────────── -->
-    <h3 class="scope-heading" id="scope-state">State of Colorado</h3>
+    <h4 class="scope-heading" id="scope-state">State of Colorado</h4>
     <div class="page-grid" role="list" aria-labelledby="scope-state">
 
       <div class="group-card" role="listitem">
@@ -2868,8 +3229,24 @@
 
     </div>
 
+    </section><!-- /tier-state -->
+
+    <!-- ── How State connects to National ──────────────────────── -->
+    <aside class="connection-callout" aria-label="How State connects to National">
+      <p class="connection-callout__label">How this connects</p>
+      <p class="connection-callout__body"><a href="microsites/state/ccrd/ccrd-complaint-form.html">CCRD</a> (Colorado) and <a href="microsites/national/DOJ/doj-complaint-redesign.html">DOJ Civil Rights</a> (federal) are parallel filing paths for ADA Title II complaints — file with one, both, or escalate from one to the other. The DOJ's <strong>RealPage antitrust action</strong> is also what's driving local algorithmic-pricing concerns (see the <a href="microsites/county/BOCC/housing_pricing_background_brief.html">BOCC background brief</a> under Local).</p>
+    </aside>
+
+    <!-- ═══ NATIONAL TIER ═══════════════════════════════════════ -->
+    <section class="tier tier--national" id="tier-national" aria-labelledby="tier-national-heading">
+      <div class="tier__band">
+        <p class="tier__eyebrow">Tier 3 · Federal &amp; private sector</p>
+        <h3 class="tier__heading" id="tier-national-heading">National</h3>
+        <p class="tier__intro">Federal agencies and private-sector platforms whose decisions set the floor that state and local governments work above. The federal layer is where antitrust action, civil-rights enforcement, and national reporting infrastructure live.</p>
+      </div>
+
     <!-- ── Private Sector ──────────────────────────────────────── -->
-    <h3 class="scope-heading" id="scope-privatesector">Private Sector</h3>
+    <h4 class="scope-heading" id="scope-privatesector">Private Sector</h4>
     <div class="page-grid" role="list" aria-labelledby="scope-privatesector">
 
       <div class="group-card" role="listitem">
@@ -2899,7 +3276,7 @@
     </div>
 
     <!-- ── Federal ─────────────────────────────────────────────── -->
-    <h3 class="scope-heading" id="scope-federal">Federal</h3>
+    <h4 class="scope-heading" id="scope-federal">Federal</h4>
     <div class="page-grid" role="list" aria-labelledby="scope-federal">
 
       <a class="page-card" role="listitem" href="microsites/FBI/tips-fbi-redesign.html">
@@ -2958,6 +3335,8 @@
       </div>
 
     </div>
+
+    </section><!-- /tier-national -->
 
   </div>
 </section>
@@ -3192,6 +3571,49 @@
 </section>
 
 </div>
+
+<!-- ─── Tier-nav active-state observer ────────────────────────────────
+     Watches the three tier sections (#tier-local / #tier-state /
+     #tier-national) and toggles aria-current="location" on the matching
+     .tier-nav__link as the user scrolls through them. Falls back to no
+     active state if IntersectionObserver is unavailable. -->
+<script>
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var links = document.querySelectorAll('.tier-nav__link[data-tier-link]');
+  if(!links.length) return;
+  var byId = {};
+  links.forEach(function(a){ byId[a.dataset.tierLink] = a; });
+  var ids = Object.keys(byId);
+  var observed = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if(!observed.length) return;
+
+  function setCurrent(id){
+    ids.forEach(function(k){
+      var link = byId[k];
+      if(!link) return;
+      if(k === id){
+        link.setAttribute('aria-current', 'location');
+        link.classList.add('tier-nav__link--current');
+      } else {
+        link.removeAttribute('aria-current');
+        link.classList.remove('tier-nav__link--current');
+      }
+    });
+  }
+
+  var observer = new IntersectionObserver(function(entries){
+    /* Pick the most-visible section among entries that are intersecting. */
+    var best = null;
+    entries.forEach(function(e){
+      if(e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) best = e;
+    });
+    if(best) setCurrent(best.target.id);
+  }, { rootMargin: '-30% 0px -55% 0px', threshold: [0, 0.1, 0.3, 0.6] });
+
+  observed.forEach(function(el){ observer.observe(el); });
+})();
+</script>
 
 <!-- FOOTER lives in _includes/partials/footer.njk and is rendered by site.njk on every page. -->
 
