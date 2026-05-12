@@ -78,6 +78,51 @@ eleventyExcludeFromCollections: true
   </div>
 </section>
 
+<!-- ═══ UNIVERSAL SEARCH & DISCOVERY ═════════════════════════════════
+     One input handles three jobs:
+       • address or ZIP → routes to the jurisdiction finder
+       • topic / subject ("housing", "metro district", "ada") → results
+       • agency name ("CSPD", "BOCC", "DOLA")              → results
+     Filter chips above the input scope the search to a tier.
+     Search index is generated at build time in _data/searchIndex.js
+     and inlined below so client-side filtering is instant.            -->
+<section class="search-discovery" aria-labelledby="search-discovery-h">
+  <div class="container">
+    <h2 id="search-discovery-h" class="search-discovery__heading">Search the site</h2>
+    <p class="search-discovery__deck">Type a topic, an agency, a record, or an address. Filter by jurisdiction tier. Address lookups route to the finder.</p>
+
+    <div class="search-discovery__chips" role="group" aria-label="Filter results by jurisdiction tier">
+      <button type="button" class="search-discovery__chip" data-tier="all"      aria-pressed="true">All</button>
+      <button type="button" class="search-discovery__chip" data-tier="local"    aria-pressed="false">Local</button>
+      <button type="button" class="search-discovery__chip" data-tier="state"    aria-pressed="false">State</button>
+      <button type="button" class="search-discovery__chip" data-tier="national" aria-pressed="false">National</button>
+    </div>
+
+    <form class="search-discovery__form" id="search-discovery-form" role="search" aria-label="Site search">
+      <label class="sr-only" for="search-discovery-input">Search topics, agencies, records, or address</label>
+      <input
+        type="search"
+        id="search-discovery-input"
+        class="search-discovery__input"
+        name="q"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Try &quot;housing&quot;, &quot;CSPD&quot;, &quot;metro district audit&quot;, or 80903"
+        aria-describedby="search-discovery-hint">
+      <button type="submit" class="search-discovery__btn">Search&nbsp;→</button>
+    </form>
+    <p class="search-discovery__hint" id="search-discovery-hint">Filtering happens as you type. Press Enter to deep-link the search.</p>
+
+    <div class="search-discovery__results" id="search-discovery-results" role="region" aria-live="polite" aria-label="Search results" hidden>
+      <p class="search-discovery__count" id="search-discovery-count"></p>
+      <ul class="search-discovery__list" id="search-discovery-list" role="list"></ul>
+      <p class="search-discovery__empty" id="search-discovery-empty" hidden>No matches in this tier. Try a different filter or a shorter query.</p>
+    </div>
+  </div>
+
+  <script id="search-discovery-index" type="application/json">{{ searchIndex | dump | safe }}</script>
+</section>
+
 <!-- ═══ Subscribe CTA ══════════════════════════════════════════════ -->
 <section class="subscribe-cta" aria-labelledby="subscribe-cta-heading">
   <div class="container">
@@ -555,6 +600,161 @@ eleventyExcludeFromCollections: true
   }, { rootMargin: '-30% 0px -55% 0px', threshold: [0, 0.1, 0.3, 0.6] });
 
   observed.forEach(function(el){ observer.observe(el); });
+})();
+</script>
+
+<!-- ─── Universal search & discovery wiring ───────────────────────────
+     Reads the inlined search index, runs client-side filtering as the
+     user types, lets four tier chips scope results to All / Local /
+     State / National, and detects address-shaped queries (ZIP, street
+     number + street word) so they route to the jurisdiction finder
+     instead of returning topic results. Submitting the form deep-links
+     to itself with ?q= and &tier= so the result state is shareable. -->
+<script>
+(function(){
+  var idxEl = document.getElementById('search-discovery-index');
+  var form  = document.getElementById('search-discovery-form');
+  var input = document.getElementById('search-discovery-input');
+  var chips = document.querySelectorAll('.search-discovery__chip');
+  var resultsBox = document.getElementById('search-discovery-results');
+  var listEl    = document.getElementById('search-discovery-list');
+  var countEl   = document.getElementById('search-discovery-count');
+  var emptyEl   = document.getElementById('search-discovery-empty');
+  if (!idxEl || !form || !input || !listEl) return;
+
+  var INDEX = [];
+  try { INDEX = JSON.parse(idxEl.textContent); } catch (e) { INDEX = []; }
+  if (!Array.isArray(INDEX) || INDEX.length === 0) return;
+
+  var tier = 'all';
+
+  /* Address shape: a 5-digit ZIP, OR digits + a street-type word.
+     If it matches, route the query to the jurisdiction finder rather
+     than returning topic-search results. */
+  var ZIP_RE   = /^\s*\d{5}(-\d{4})?\s*$/;
+  var STREET_RE = /\b\d+\s+\w+.*\b(st|street|ave|avenue|blvd|boulevard|rd|road|dr|drive|ln|lane|way|ct|court|pl|place|hwy|highway|pkwy|parkway)\b/i;
+  function looksLikeAddress(q) {
+    if (!q) return false;
+    return ZIP_RE.test(q) || STREET_RE.test(q);
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+  function highlight(text, terms){
+    if (!terms.length) return escapeHtml(text);
+    var safe = escapeHtml(text);
+    /* Build a single regex from the terms, longest-first, case-insensitive. */
+    var sorted = terms.slice().sort(function(a,b){ return b.length - a.length; });
+    var pattern = sorted.map(function(t){ return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|');
+    var re = new RegExp('(' + pattern + ')', 'gi');
+    return safe.replace(re, '<mark>$1</mark>');
+  }
+  function score(item, terms){
+    var hay = (item.title + ' ' + item.desc + ' ' + item.scope).toLowerCase();
+    var s = 0;
+    for (var i=0;i<terms.length;i++){
+      var t = terms[i];
+      if (item.title.toLowerCase().indexOf(t) !== -1) s += 5;
+      if (item.scope.toLowerCase().indexOf(t) !== -1) s += 3;
+      if (item.desc.toLowerCase().indexOf(t) !== -1)  s += 1;
+      if (hay.indexOf(t) === -1) return -1; /* must hit every term */
+    }
+    return s;
+  }
+  function render(items, terms){
+    listEl.innerHTML = '';
+    if (!items.length) {
+      countEl.textContent = '';
+      emptyEl.hidden = false;
+      return;
+    }
+    emptyEl.hidden = true;
+    countEl.textContent = items.length + ' result' + (items.length === 1 ? '' : 's');
+    var frag = document.createDocumentFragment();
+    items.forEach(function(it){
+      var li = document.createElement('li');
+      var a  = document.createElement('a');
+      a.className = 'search-discovery__item search-discovery__item--' + it.tier;
+      a.href = it.url;
+      a.innerHTML =
+        '<div class="search-discovery__item-body">' +
+          '<p class="search-discovery__item-scope">' + escapeHtml(it.scope) + '</p>' +
+          '<p class="search-discovery__item-title">' + highlight(it.title, terms) + '</p>' +
+          (it.desc ? '<p class="search-discovery__item-desc">' + highlight(it.desc, terms) + '</p>' : '') +
+        '</div>';
+      li.appendChild(a);
+      frag.appendChild(li);
+    });
+    listEl.appendChild(frag);
+  }
+  function runSearch(q){
+    q = (q || '').trim();
+    if (!q) {
+      resultsBox.hidden = true;
+      return;
+    }
+    /* Address shortcut — redirect, don't render. */
+    if (looksLikeAddress(q)) {
+      window.location.href = '/microsites/shared/cos-find-my-jurisdiction.html?q=' + encodeURIComponent(q);
+      return;
+    }
+    var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+    var pool = (tier === 'all') ? INDEX : INDEX.filter(function(it){ return it.tier === tier; });
+    var scored = [];
+    for (var i=0;i<pool.length;i++){
+      var s = score(pool[i], terms);
+      if (s >= 0) scored.push({ s:s, it:pool[i] });
+    }
+    scored.sort(function(a,b){ return b.s - a.s; });
+    resultsBox.hidden = false;
+    render(scored.slice(0, 30).map(function(x){ return x.it; }), terms);
+  }
+
+  /* Input — debounce light filtering as you type. */
+  var debounceTimer = null;
+  input.addEventListener('input', function(){
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function(){ runSearch(input.value); }, 100);
+  });
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    runSearch(input.value);
+    /* Update URL for deep-linking without reloading. */
+    try {
+      var u = new URL(window.location.href);
+      var q = input.value.trim();
+      if (q) { u.searchParams.set('q', q); } else { u.searchParams.delete('q'); }
+      u.searchParams.set('tier', tier);
+      window.history.replaceState({}, '', u);
+    } catch (err) {}
+  });
+
+  /* Tier chips. */
+  chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      tier = chip.dataset.tier;
+      chips.forEach(function(c){ c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+      runSearch(input.value);
+    });
+  });
+
+  /* Deep link on load: ?q=foo&tier=local */
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var pq = params.get('q');
+    var pt = params.get('tier');
+    if (pt && ['all','local','state','national'].indexOf(pt) !== -1) {
+      tier = pt;
+      chips.forEach(function(c){ c.setAttribute('aria-pressed', c.dataset.tier === pt ? 'true' : 'false'); });
+    }
+    if (pq) {
+      input.value = pq;
+      runSearch(pq);
+    }
+  } catch (err) {}
 })();
 </script>
 
