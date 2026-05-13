@@ -28,10 +28,16 @@ import { fileURLToPath } from 'node:url';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..');
 
-const SKIP_DIRS = new Set([
-  '.git', '_site', '_includes', '_data', 'node_modules',
-  '.claude', '.github', 'shared', 'worker', 'pages',
-  'federated', 'IGA_agreement'
+/* SKIP_PATHS are matched against the path relative to ROOT, not the
+   bare directory name. That distinction matters: top-level "shared/"
+   is the static-assets folder (logo, etc.) and we want to skip it,
+   but "microsites/shared/" is the cross-jurisdictional microsite
+   namespace and we very much want to index it. Path-based matching
+   keeps the two cases separate. */
+const SKIP_PATHS = new Set([
+  '_site', '_includes', '_data', 'node_modules', 'worker', 'pages',
+  'federated', 'IGA_agreement',
+  'shared',              // top-level static assets (logo.svg, etc.)
 ]);
 
 function walk(dir, out = []) {
@@ -39,13 +45,21 @@ function walk(dir, out = []) {
   try { entries = readdirSync(dir); } catch { return out; }
   for (const name of entries) {
     if (name.startsWith('.')) continue;
-    if (SKIP_DIRS.has(name)) continue;
     const path = join(dir, name);
+    const rel  = relative(ROOT, path);
+    if (SKIP_PATHS.has(rel)) continue;
     let stat;
     try { stat = statSync(path); } catch { continue; }
     if (stat.isDirectory()) {
       walk(path, out);
-    } else if (name.endsWith('.njk') || name.endsWith('.md') || name.endsWith('.html')) {
+    } else if (
+      name.endsWith('.njk') ||
+      name.endsWith('.md') ||
+      name.endsWith('.html') ||
+      name.endsWith('.pdf') ||
+      name.endsWith('.docx') ||
+      name.endsWith('.xlsx')
+    ) {
       out.push(path);
     }
   }
@@ -89,6 +103,33 @@ function parsePlainHtml(content, absolutePath) {
   const desc = descM ? decodeEntities(descM[2].trim()) : '';
   const rel = '/' + relative(ROOT, absolutePath).split(sep).join('/');
   return { title, description: desc, permalink: rel };
+}
+
+/* Synthesize a record for binary documents (.pdf/.docx/.xlsx) using
+   the filename and folder context. We can't read inside the binary,
+   so the title comes from "Filename_With_Underscores.pdf" →
+   "Filename With Underscores" and the description names the folder
+   path + the file type so a query like "schools food" still matches
+   via the path-tokens corpus on the search side. */
+function parseBinary(absolutePath) {
+  const rel = relative(ROOT, absolutePath).split(sep);
+  const filename = rel[rel.length - 1];
+  const stem = filename.replace(/\.(pdf|docx|xlsx)$/i, '');
+  const ext = filename.toLowerCase().split('.').pop().toUpperCase();
+  /* Replace underscores/dashes with spaces and split camelCase. */
+  const title = stem
+    .replace(/[_\-]+/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/\s+/g, ' ')
+    .trim();
+  /* Surface the folder path (without the leading "microsites") in the
+     description so it shows useful context in the result card. */
+  const folder = rel.slice(1, -1).join(' / ');
+  return {
+    title: title + ' (' + ext + ')',
+    description: ext + ' document · ' + folder,
+    permalink: '/' + rel.join('/'),
+  };
 }
 
 function decodeEntities(s) {
@@ -135,17 +176,22 @@ function tierFor(absolutePath) {
 const items = [];
 const seenUrls = new Set();
 for (const file of walk(ROOT)) {
-  let content;
-  try { content = readFileSync(file, 'utf-8'); } catch { continue; }
+  const isBinary = /\.(pdf|docx|xlsx)$/i.test(file);
 
-  /* Prefer front-matter (njk/md). Fall back to <title>/<meta description>
-     for plain .html files that ship as-is (BOCC, infrastructure, DATP, etc.). */
-  let record = parseFrontmatter(content);
-  if (!record || !record.title || !record.permalink) {
-    if (file.endsWith('.html')) {
-      record = parsePlainHtml(content, file);
-    } else {
-      continue;
+  /* Skip the UTF-8 read for binaries — we only need the filename. */
+  let record;
+  if (isBinary) {
+    record = parseBinary(file);
+  } else {
+    let content;
+    try { content = readFileSync(file, 'utf-8'); } catch { continue; }
+    record = parseFrontmatter(content);
+    if (!record || !record.title || !record.permalink) {
+      if (file.endsWith('.html')) {
+        record = parsePlainHtml(content, file);
+      } else {
+        continue;
+      }
     }
   }
   if (!record || !record.title || !record.permalink) continue;
