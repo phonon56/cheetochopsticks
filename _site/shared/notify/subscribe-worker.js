@@ -1206,35 +1206,41 @@ async function callWorkersAI(query, env) {
     },
   });
 
-  // Workers AI returns { response: "<string>" } for chat completions. With
-  // response_format set, the string is the JSON object's serialization.
-  const raw = typeof aiResponse === 'string'
-    ? aiResponse
-    : (aiResponse?.response ?? aiResponse?.result?.response ?? '');
-
-  if (!raw) {
-    throw new Error('Workers AI returned no response text');
-  }
-
-  // Defensive parse: strip code fences and any leading "Here is the JSON"
-  // prose that some models add despite instructions.
-  const cleaned = raw
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/\s*```$/i, '')
-    .trim();
-
-  // Find the first { and the last } in case there's preamble.
-  const firstBrace = cleaned.indexOf('{');
-  const lastBrace = cleaned.lastIndexOf('}');
-  const jsonText = firstBrace >= 0 && lastBrace > firstBrace
-    ? cleaned.slice(firstBrace, lastBrace + 1)
-    : cleaned;
+  // Workers AI returns different shapes depending on whether response_format
+  // is set and which model is chosen:
+  //   - Plain chat:           { response: "<text>" }
+  //   - JSON-schema response: { response: {<already-parsed object>} } on
+  //                           Llama 3.x; { response: "<json string>" } on
+  //                           some other models. Both observed in practice.
+  // Handle both: if .response is already an object, use it directly; if it's
+  // a string, parse defensively.
+  const inner = (aiResponse && typeof aiResponse === 'object')
+    ? (aiResponse.response ?? aiResponse.result?.response ?? aiResponse)
+    : aiResponse;
 
   let parsed;
-  try {
-    parsed = JSON.parse(jsonText);
-  } catch (err) {
-    throw new Error(`Llama returned invalid JSON: ${String(err).slice(0, 100)}`);
+  if (inner && typeof inner === 'object') {
+    parsed = inner;
+  } else if (typeof inner === 'string' && inner.length > 0) {
+    // Strip code fences and any leading "Here is the JSON" prose that some
+    // models add despite instructions.
+    const cleaned = inner
+      .replace(/^```(?:json)?\s*/i, '')
+      .replace(/\s*```$/i, '')
+      .trim();
+    // Find the first { and the last } in case there's preamble.
+    const firstBrace = cleaned.indexOf('{');
+    const lastBrace = cleaned.lastIndexOf('}');
+    const jsonText = firstBrace >= 0 && lastBrace > firstBrace
+      ? cleaned.slice(firstBrace, lastBrace + 1)
+      : cleaned;
+    try {
+      parsed = JSON.parse(jsonText);
+    } catch (err) {
+      throw new Error(`Llama returned invalid JSON: ${String(err).slice(0, 100)}`);
+    }
+  } else {
+    throw new Error(`Workers AI returned unexpected shape: ${JSON.stringify(aiResponse).slice(0, 200)}`);
   }
 
   // Shape-check + defaults. Llama sometimes drops keys; the client expects
