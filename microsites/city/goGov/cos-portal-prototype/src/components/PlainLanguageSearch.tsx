@@ -1,9 +1,33 @@
-import { useMemo, useState } from 'react';
-import { routeRequest, type RouteMatch } from '../data/keywords';
+import { useEffect, useRef, useState } from 'react';
+import { routeWithFallback, type RouterMatch, type RouterResult } from '../data/router-client';
 import { topicsById } from '../data';
 import { resolveJurisdictionsForZip } from '../data/notifications';
 import { JURISDICTION_LABELS } from '../data/facets';
 import type { Destination, Topic } from '../types';
+
+// Minimal type for Cloudflare Turnstile's globally-injected object.
+// The full API is documented at https://developers.cloudflare.com/turnstile/.
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: HTMLElement | string,
+        options: {
+          sitekey: string;
+          callback?: (token: string) => void;
+          'expired-callback'?: () => void;
+          'error-callback'?: () => void;
+          theme?: 'light' | 'dark' | 'auto';
+          size?: 'normal' | 'flexible' | 'compact';
+          appearance?: 'always' | 'execute' | 'interaction-only';
+          'refresh-expired'?: 'auto' | 'manual' | 'never';
+        },
+      ) => string;
+      reset: (widgetId: string) => void;
+      remove: (widgetId: string) => void;
+    };
+  }
+}
 
 interface Props {
   onPickTopic: (topicId: string) => void;
@@ -19,10 +43,164 @@ const EXAMPLES = [
 ];
 
 const MAX = 500;
+const DEBOUNCE_MS = 450;
+// Poll for window.turnstile up to 5 seconds before giving up. The script tag
+// in index.html loads async; usually it's ready by the time React mounts.
+const TURNSTILE_POLL_MS = 100;
+const TURNSTILE_POLL_TRIES = 50;
 
 export function PlainLanguageSearch({ onPickTopic }: Props) {
   const [text, setText] = useState('');
-  const result = useMemo(() => routeRequest(text), [text]);
+  const [result, setResult] = useState<RouterResult>({
+    primary: null,
+    alternates: [],
+    engine: 'keyword-only',
+  });
+  const [loading, setLoading] = useState(false);
+  const requestIdRef = useRef(0);
+
+  // Turnstile widget state. siteKey is fetched from /api/turnstile-config so
+  // wrangler.jsonc is the single source of truth. The widget renders only
+  // after we have a real key — otherwise the LLM endpoint would 403 every
+  // request and the page would do extra round-trips for nothing.
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetIdRef = useRef<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | undefined>(undefined);
+  const [turnstileReady, setTurnstileReady] = useState(false);
+  const [turnstileError, setTurnstileError] = useState<string | null>(null);
+
+  // One-time: fetch the site key, wait for the Turnstile script, render the
+  // widget. The script tag in index.html sets window.turnstile asynchronously.
+  useEffect(() => {
+    let cancelled = false;
+    let pollHandle: number | undefined;
+
+    (async () => {
+      // 1. Get the site key from the worker.
+      let siteKey = '';
+      let devMode = false;
+      try {
+        const res = await fetch('/api/turnstile-config');
+        if (res.ok) {
+          const data = await res.json();
+          siteKey = typeof data?.siteKey === 'string' ? data.siteKey : '';
+          devMode = data?.devMode === true;
+        }
+      } catch {
+        // Fall through — siteKey stays empty, we'll degrade to keyword-only.
+      }
+      if (cancelled) return;
+
+      if (devMode) {
+        // Local wrangler dev — the worker accepts requests without a Turnstile
+        // token. Skip the widget entirely so the dev UX doesn't gate on a
+        // network round-trip to siteverify.
+        setTurnstileToken('dev-mode-no-token');
+        setTurnstileReady(true);
+        return;
+      }
+
+      if (!siteKey || siteKey.startsWith('0x4AAAAAAAREPLACE_ME')) {
+        // Worker hasn't been configured with a real Turnstile site key yet —
+        // graceful degradation, the LLM endpoint won't be called and the
+        // keyword matcher takes over.
+        setTurnstileError('Turnstile not configured on the worker');
+        return;
+      }
+
+      // 2. Wait for the Turnstile script to load.
+      let tries = 0;
+      const poll = () => {
+        if (cancelled) return;
+        if (window.turnstile && turnstileContainerRef.current) {
+          // 3. Render the widget.
+          const id = window.turnstile.render(turnstileContainerRef.current, {
+            sitekey: siteKey,
+            theme: 'auto',
+            appearance: 'interaction-only',
+            'refresh-expired': 'auto',
+            callback: (token: string) => {
+              if (cancelled) return;
+              setTurnstileToken(token);
+              setTurnstileReady(true);
+              setTurnstileError(null);
+            },
+            'expired-callback': () => {
+              if (cancelled) return;
+              setTurnstileToken(undefined);
+            },
+            'error-callback': () => {
+              if (cancelled) return;
+              setTurnstileError('Turnstile widget error');
+            },
+          });
+          turnstileWidgetIdRef.current = id;
+          return;
+        }
+        tries += 1;
+        if (tries >= TURNSTILE_POLL_TRIES) {
+          setTurnstileError('Turnstile script failed to load');
+          return;
+        }
+        pollHandle = window.setTimeout(poll, TURNSTILE_POLL_MS);
+      };
+      poll();
+    })();
+
+    return () => {
+      cancelled = true;
+      if (pollHandle !== undefined) clearTimeout(pollHandle);
+      if (turnstileWidgetIdRef.current && window.turnstile) {
+        try { window.turnstile.remove(turnstileWidgetIdRef.current); } catch { /* ignore */ }
+        turnstileWidgetIdRef.current = null;
+      }
+    };
+  }, []);
+
+  // Debounced router call. Fires DEBOUNCE_MS after the latest keystroke. The
+  // requestIdRef guards against stale responses landing after a newer query
+  // started. When turnstileToken is undefined, routeWithFallback skips the
+  // network call entirely and returns local keyword results immediately.
+  useEffect(() => {
+    const trimmed = text.trim();
+    if (trimmed.length === 0) {
+      setResult({ primary: null, alternates: [], engine: 'keyword-only' });
+      setLoading(false);
+      return;
+    }
+
+    const id = ++requestIdRef.current;
+    const controller = new AbortController();
+    setLoading(true);
+
+    const handle = window.setTimeout(() => {
+      routeWithFallback(trimmed, { turnstileToken, signal: controller.signal })
+        .then((r) => {
+          if (requestIdRef.current !== id) return; // stale
+          setResult(r);
+          setLoading(false);
+          // Turnstile tokens are single-use. Once we've spent one on a real
+          // worker call, reset the widget for a fresh token so the NEXT query
+          // isn't gated on the LLM falling back to keyword.
+          const usedToken = r.engine === 'workers-ai'
+            || r.engine === 'rate-limited'
+            || r.engine === 'turnstile-failed';
+          if (usedToken && turnstileWidgetIdRef.current && window.turnstile) {
+            setTurnstileToken(undefined);
+            try { window.turnstile.reset(turnstileWidgetIdRef.current); } catch { /* ignore */ }
+          }
+        })
+        .catch(() => {
+          if (requestIdRef.current !== id) return;
+          setLoading(false);
+        });
+    }, DEBOUNCE_MS);
+
+    return () => {
+      clearTimeout(handle);
+      controller.abort();
+    };
+  }, [text, turnstileToken]);
 
   return (
     <section aria-labelledby="plain-language-heading" className="max-w-2xl space-y-4">
@@ -77,6 +255,20 @@ export function PlainLanguageSearch({ onPickTopic }: Props) {
           ))}
         </ul>
       </div>
+
+      {/* Turnstile widget. appearance="interaction-only" keeps it hidden until
+          Cloudflare wants a challenge, so most users never see it. */}
+      <div
+        ref={turnstileContainerRef}
+        aria-hidden={!turnstileReady}
+        className="my-2"
+      />
+
+      <EngineStatus
+        engine={result.engine}
+        loading={loading}
+        turnstileError={turnstileError}
+      />
 
       {result.extractedZip && (
         <ZipContext zip={result.extractedZip} />
@@ -137,8 +329,8 @@ function RouteResultCard({
   alternates,
   onPickTopic,
 }: {
-  primary: RouteMatch;
-  alternates: RouteMatch[];
+  primary: RouterMatch;
+  alternates: RouterMatch[];
   onPickTopic: (id: string) => void;
 }) {
   const topic = topicsById.get(primary.topicId);
@@ -235,8 +427,57 @@ function DestinationCta({
   );
 }
 
-function confidenceLabel(c: RouteMatch['confidence']) {
+function confidenceLabel(c: RouterMatch['confidence']) {
   if (c === 'high') return 'strong match';
   if (c === 'medium') return 'likely match';
   return 'possible match';
+}
+
+// Small badge under the textarea telling the user which routing engine
+// produced the result. Useful during prototype rollout for spotting when the
+// LLM is failing back to keyword. Mostly informational; the keyword fallback
+// is good enough to ship alone, so degraded states aren't a UI emergency.
+function EngineStatus({
+  engine,
+  loading,
+  turnstileError,
+}: {
+  engine: RouterResult['engine'];
+  loading: boolean;
+  turnstileError: string | null;
+}) {
+  if (loading) {
+    return (
+      <p className="text-xs text-slate-600" aria-live="polite">
+        Routing…
+      </p>
+    );
+  }
+  if (turnstileError) {
+    return (
+      <p className="text-xs text-amber-800" role="status">
+        Using local matcher only — {turnstileError}.
+      </p>
+    );
+  }
+  if (engine === 'keyword-only') return null;
+
+  const label =
+    engine === 'workers-ai' ? 'Routed by Workers AI (Llama 3.3)' :
+    engine === 'keyword-fallback' ? 'Routed by the local keyword matcher (LLM unavailable)' :
+    engine === 'rate-limited' ? 'You\'re going a bit fast — falling back to keyword routing' :
+    engine === 'turnstile-failed' ? 'Couldn\'t verify the page — falling back to keyword routing' :
+    null;
+
+  if (!label) return null;
+  const tone =
+    engine === 'workers-ai' ? 'text-emerald-800' :
+    engine === 'keyword-fallback' ? 'text-slate-600' :
+    'text-amber-800';
+
+  return (
+    <p className={`text-xs ${tone}`} role="status" aria-live="polite">
+      {label}
+    </p>
+  );
 }

@@ -86,6 +86,7 @@ export default {
       case '/api/admin/send':          return handleAdminSend(request, env);
       case '/api/resend-webhook':      return handleResendWebhook(request, env);
       case '/api/route':               return handleRoute(request, env);
+      case '/api/turnstile-config':    return handleTurnstileConfig(request, env);
       default:
         return env.ASSETS.fetch(request);
     }
@@ -987,6 +988,26 @@ function timingSafeEqual(a, b) {
 //   403 turnstile_failed  → client falls back, requests a fresh token
 //   503 ai_unavailable    → client falls back, retries on next keystroke
 //   200 engine=workers-ai → happy path
+
+// Public Turnstile site key exposed to the browser. Safe to ship — the secret
+// key stays Worker-side as the TURNSTILE_SECRET secret. A runtime endpoint
+// rather than a build-time constant so the key can rotate without rebuilding
+// the React portal.
+async function handleTurnstileConfig(request, env) {
+  const cors = corsFor(request);
+  if (request.method === 'OPTIONS') return preflight(cors, 'GET');
+  if (request.method !== 'GET') {
+    return json({ error: 'method not allowed' }, 405, cors);
+  }
+  return json(
+    {
+      siteKey: env.TURNSTILE_SITE_KEY || '',
+      devMode: env.DEV_MODE === '1',
+    },
+    200,
+    cors,
+  );
+}
 
 async function handleRoute(request, env) {
   const cors = corsFor(request);
