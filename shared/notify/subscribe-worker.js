@@ -1,8 +1,8 @@
 // subscribe-worker.js — Cloudflare Worker.
 //
 // All-in-Cloudflare deployment. Email transit is Resend (SaaS); everything
-// else (subscriber identity, consent log, preference center, admin send) is
-// served from this Worker against D1.
+// else (subscriber identity, consent log, preference center, admin send,
+// plain-language router) is served from this Worker against D1 + Workers AI.
 //
 // Routes:
 //   POST  /api/subscribe                — citizen-facing subscribe form
@@ -13,17 +13,24 @@
 //   POST  /api/preferences?t=<token>    — save changes
 //   POST  /api/admin/send               — blast a topic (Bearer ADMIN_TOKEN)
 //   POST  /api/resend-webhook           — Resend → us, for bounces/complaints
+//   POST  /api/route                    — plain-language → topic router
+//                                         (Workers AI Llama 3.3, Turnstile + IP rate-limit)
 //
 // Required wrangler.jsonc bindings:
 //   "main": "shared/notify/subscribe-worker.js"
 //   "assets": { "directory": "_site", "binding": "ASSETS" }
 //   "d1_databases": [{ "binding": "DB", "database_name": "notify",
 //                      "database_id": "<from `wrangler d1 create notify`>" }]
+//   "ai": { "binding": "AI" }
+//   "unsafe": { "bindings": [{ "name": "ROUTE_LIMIT", "type": "ratelimit",
+//                              "namespace_id": "1001",
+//                              "simple": { "limit": 30, "period": 60 } }] }
 //   "vars": {
 //     "PUBLIC_ORIGIN": "https://cheetochopsticks.com",
 //     "FROM_ADDRESS":  "notifications@cheetochopsticks.com",
 //     "FROM_NAME":     "CheetoChopsticks Notifications",
-//     "DEV_MODE":      "0"
+//     "DEV_MODE":      "0",
+//     "TURNSTILE_SITE_KEY": "<public site key from dash.cloudflare.com/?to=/:account/turnstile>"
 //   }
 //
 // Required secrets (wrangler secret put):
@@ -31,9 +38,12 @@
 //   RESEND_WEBHOOK_SECRET   — from Resend webhook config (Svix)
 //   PREFS_TOKEN_SECRET      — any long random string
 //   ADMIN_TOKEN             — any long random string
+//   TURNSTILE_SECRET        — paired secret key for TURNSTILE_SITE_KEY
 //
 // Optional secrets:
 //   none
+
+import { SYSTEM_PROMPT, OUTPUT_SCHEMA } from '../router/prompt.js';
 
 const ALLOWED_ORIGINS = new Set([
   'https://cheetochopsticks.com',
@@ -41,6 +51,12 @@ const ALLOWED_ORIGINS = new Set([
   'http://localhost:8080',  // eleventy --serve
   'http://localhost:8787',  // wrangler dev
 ]);
+
+// Workers AI model. Llama 3.3 70B fp8 fast is the strongest Cloudflare-native
+// option for instruction-following + JSON output as of 2026.
+const ROUTE_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
+const ROUTE_MAX_QUERY = 600;
+const ROUTE_MAX_OUTPUT_TOKENS = 600;
 
 const CONSENT_VERSION       = '2026-04-30-v1';
 const PREFS_TOKEN_TTL       = 7 * 24 * 60 * 60;   // 7 days
@@ -59,6 +75,7 @@ export default {
       case '/api/preferences':         return handlePrefs(request, env, url);
       case '/api/admin/send':          return handleAdminSend(request, env);
       case '/api/resend-webhook':      return handleResendWebhook(request, env);
+      case '/api/route':               return handleRoute(request, env);
       default:
         return env.ASSETS.fetch(request);
     }
@@ -942,4 +959,205 @@ function timingSafeEqual(a, b) {
   let diff = 0;
   for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return diff === 0;
+}
+
+// ─── /api/route ─────────────────────────────────────────────────────────────
+//
+// Plain-language → topic routing via Workers AI Llama 3.3 70B.
+//
+// Two protections in front of the model call:
+//   1. Per-IP rate limit (env.ROUTE_LIMIT binding) — 30 calls / 60 s default.
+//   2. Cloudflare Turnstile token verification — the browser must include a
+//      valid token from the widget on the same page. Blocks bots before the
+//      LLM is touched.
+//
+// Behavior on failure: always returns a structured JSON response so the
+// client can fall back to the local keyword matcher with zero UX cost.
+//   429 over_budget       → client falls back, optionally surfaces "slow down"
+//   403 turnstile_failed  → client falls back, requests a fresh token
+//   503 ai_unavailable    → client falls back, retries on next keystroke
+//   200 engine=workers-ai → happy path
+
+async function handleRoute(request, env) {
+  const cors = corsFor(request);
+  if (request.method === 'OPTIONS') return preflight(cors, 'POST');
+  if (request.method !== 'POST') {
+    return json({ error: 'method not allowed' }, 405, cors);
+  }
+
+  // Rate-limit by IP. Cloudflare exposes the client IP in CF-Connecting-IP.
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  if (env.ROUTE_LIMIT) {
+    try {
+      const { success } = await env.ROUTE_LIMIT.limit({ key: ip });
+      if (!success) {
+        return json(
+          { error: 'over_budget', engine: 'rate-limited', primary: null, alternates: [], extractedZip: null, reasoning: '' },
+          429,
+          cors,
+        );
+      }
+    } catch (err) {
+      // Rate-limiter binding missing or misconfigured. Log and proceed —
+      // failing closed here would break the endpoint, and Turnstile is
+      // still in the chain below.
+      console.error('ROUTE_LIMIT binding error', err);
+    }
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'bad_json' }, 400, cors);
+  }
+
+  const query = typeof body?.query === 'string' ? body.query.trim() : '';
+  const turnstileToken = typeof body?.turnstileToken === 'string' ? body.turnstileToken : '';
+
+  if (!query) {
+    return json({ error: 'missing_query' }, 400, cors);
+  }
+  if (query.length > ROUTE_MAX_QUERY) {
+    return json({ error: 'query_too_long', max: ROUTE_MAX_QUERY }, 413, cors);
+  }
+
+  // Turnstile verify. Required in production; skipped in DEV_MODE so wrangler
+  // dev still works without a token. The site key + secret are both Cloudflare-
+  // owned — no third-party billing surface.
+  if (env.DEV_MODE !== '1') {
+    if (!turnstileToken) {
+      return json(
+        { error: 'turnstile_missing', engine: 'turnstile-failed', primary: null, alternates: [], extractedZip: null, reasoning: '' },
+        403,
+        cors,
+      );
+    }
+    if (!env.TURNSTILE_SECRET) {
+      console.error('TURNSTILE_SECRET not configured');
+      return json({ error: 'server_misconfigured' }, 503, cors);
+    }
+    const verified = await verifyTurnstile(turnstileToken, ip, env.TURNSTILE_SECRET);
+    if (!verified) {
+      return json(
+        { error: 'turnstile_failed', engine: 'turnstile-failed', primary: null, alternates: [], extractedZip: null, reasoning: '' },
+        403,
+        cors,
+      );
+    }
+  }
+
+  if (!env.AI) {
+    return json({ error: 'ai_binding_missing' }, 503, cors);
+  }
+
+  try {
+    const result = await callWorkersAI(query, env);
+    return json(result, 200, cors);
+  } catch (err) {
+    console.error('Workers AI call failed', err);
+    return json(
+      {
+        error: 'ai_unavailable',
+        engine: 'error',
+        primary: null,
+        alternates: [],
+        extractedZip: null,
+        reasoning: '',
+      },
+      503,
+      cors,
+    );
+  }
+}
+
+async function verifyTurnstile(token, ip, secret) {
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ secret, response: token, remoteip: ip }),
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    return data?.success === true;
+  } catch {
+    return false;
+  }
+}
+
+async function callWorkersAI(query, env) {
+  // Workers AI structured-output mode. Llama 3.3 70B supports response_format
+  // with a JSON schema. If the model returns invalid JSON anyway, we parse
+  // defensively below.
+  const aiResponse = await env.AI.run(ROUTE_MODEL, {
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: query },
+    ],
+    max_tokens: ROUTE_MAX_OUTPUT_TOKENS,
+    response_format: {
+      type: 'json_schema',
+      json_schema: OUTPUT_SCHEMA,
+    },
+  });
+
+  // Workers AI returns { response: "<string>" } for chat completions. With
+  // response_format set, the string is the JSON object's serialization.
+  const raw = typeof aiResponse === 'string'
+    ? aiResponse
+    : (aiResponse?.response ?? aiResponse?.result?.response ?? '');
+
+  if (!raw) {
+    throw new Error('Workers AI returned no response text');
+  }
+
+  // Defensive parse: strip code fences and any leading "Here is the JSON"
+  // prose that some models add despite instructions.
+  const cleaned = raw
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/i, '')
+    .trim();
+
+  // Find the first { and the last } in case there's preamble.
+  const firstBrace = cleaned.indexOf('{');
+  const lastBrace = cleaned.lastIndexOf('}');
+  const jsonText = firstBrace >= 0 && lastBrace > firstBrace
+    ? cleaned.slice(firstBrace, lastBrace + 1)
+    : cleaned;
+
+  let parsed;
+  try {
+    parsed = JSON.parse(jsonText);
+  } catch (err) {
+    throw new Error(`Llama returned invalid JSON: ${String(err).slice(0, 100)}`);
+  }
+
+  // Shape-check + defaults. Llama sometimes drops keys; the client expects
+  // the full envelope.
+  return {
+    primary: parsed.primary && typeof parsed.primary === 'object'
+      ? {
+          topicId: String(parsed.primary.topicId ?? ''),
+          reason: String(parsed.primary.reason ?? ''),
+          confidence: ['high', 'medium', 'low'].includes(parsed.primary.confidence)
+            ? parsed.primary.confidence
+            : 'low',
+        }
+      : null,
+    alternates: Array.isArray(parsed.alternates)
+      ? parsed.alternates.slice(0, 2).map((a) => ({
+          topicId: String(a?.topicId ?? ''),
+          reason: String(a?.reason ?? ''),
+          confidence: ['high', 'medium', 'low'].includes(a?.confidence)
+            ? a.confidence
+            : 'low',
+        })).filter((a) => a.topicId)
+      : [],
+    extractedZip: typeof parsed.extractedZip === 'string' && /^\d{5}$/.test(parsed.extractedZip)
+      ? parsed.extractedZip
+      : null,
+    reasoning: typeof parsed.reasoning === 'string' ? parsed.reasoning : '',
+    engine: 'workers-ai',
+  };
 }

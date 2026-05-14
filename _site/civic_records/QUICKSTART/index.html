@@ -1,0 +1,131 @@
+<h1>Quickstart</h1>
+<p>Ten-minute path from clone to working demo.</p>
+<h2>1. Prereqs</h2>
+<ul>
+<li>Docker Desktop installed and running</li>
+<li>Port 8000 (web) and 5432 (Postgres) free</li>
+</ul>
+<h2>2. First-time setup</h2>
+<p>When you download and unzip this folder, you should see these visible
+files at the top level:</p>
+<ul>
+<li><code>Dockerfile</code></li>
+<li><code>QUICKSTART.md</code> (this file)</li>
+<li><code>README.md</code></li>
+<li><code>docker-compose.yml</code></li>
+<li><code>env.example.txt</code></li>
+<li><code>gitignore.txt</code></li>
+<li><code>manage.py</code></li>
+<li><code>requirements.txt</code></li>
+<li>folders: <code>config</code>, <code>documents</code>, <code>fixtures</code>, <code>frontend</code>, <code>parcels</code>,
+<code>records</code>, <code>scripts</code></li>
+</ul>
+<p>If you don't see <code>env.example.txt</code>, you're missing files. Re-download
+the zip and unzip it again, making sure to extract the whole folder.</p>
+<h2>3. Create your environment file</h2>
+<p>Open Terminal. Navigate into the folder. On Mac that's usually:</p>
+<pre><code>cd ~/Documents/civic_records
+</code></pre>
+<p>(Adjust the path to wherever you put it.)</p>
+<p>Then copy the example file to a real environment file:</p>
+<pre><code>cp env.example.txt .env
+</code></pre>
+<p>This creates a hidden <code>.env</code> file with the database password and other
+configuration. The hidden file is intentional — it keeps your local
+credentials separate from the source code. You won't see it in Finder
+unless you press Cmd+Shift+. (period) to toggle hidden files.</p>
+<h2>4. Start everything</h2>
+<pre><code>docker compose up --build
+</code></pre>
+<p>The first run takes 5–10 minutes because Docker downloads PostgreSQL,
+Python, and the GeoDjango libraries. Subsequent runs take 10–20 seconds.</p>
+<p>Wait until you see this line in the terminal:</p>
+<pre><code>web-1  | Starting development server at http://0.0.0.0:8000/
+</code></pre>
+<p>If the web container crashes the first time because the database wasn't
+ready yet, that's a normal race condition. Run <code>docker compose up</code> again
+(without <code>--build</code>) and it will succeed.</p>
+<h2>5. Create the database tables</h2>
+<p>Open a <strong>second</strong> terminal window. Navigate to the same folder again:</p>
+<pre><code>cd ~/Documents/civic_records
+</code></pre>
+<p>Then run migrations:</p>
+<pre><code>docker compose exec web python manage.py migrate
+</code></pre>
+<p>You'll see lines like <code>Applying parcels.0001_initial... OK</code>. This builds
+the database tables. Takes about 30 seconds.</p>
+<h2>6. Create an admin login</h2>
+<p>Still in the second terminal:</p>
+<pre><code>docker compose exec web python manage.py createsuperuser
+</code></pre>
+<p>It prompts for username, email, and password. Use anything you'll
+remember. The password won't show as you type — that's normal.</p>
+<h2>7. Load the demo data</h2>
+<pre><code>docker compose exec web python scripts/seed_demo_data.py
+</code></pre>
+<p>You should see &quot;Done. Visit /parcel/6207103015/ for the Federal Drive
+example.&quot;</p>
+<h2>8. See it work</h2>
+<p>Open these in your browser:</p>
+<ul>
+<li><code>http://localhost:8000/</code> — the search interface</li>
+<li><code>http://localhost:8000/parcel/6207103015/</code> — 9805 Federal Drive</li>
+<li><code>http://localhost:8000/parcel/5421203009/</code> — 1826 Wooten Road</li>
+<li><code>http://localhost:8000/parcel/6401303008/</code> — Lorson Ranch sample</li>
+<li><code>http://localhost:8000/admin/</code> — Django admin (use the superuser
+credentials from step 6)</li>
+<li><code>http://localhost:8000/api/parcels/</code> — REST API</li>
+<li><code>http://localhost:8000/api/records/</code> — records API</li>
+</ul>
+<h2>9. Try a search</h2>
+<p>From the home page, search for:</p>
+<ul>
+<li><code>Federal</code> — finds 9805 Federal Drive and its records</li>
+<li><code>9805</code> — same parcel</li>
+<li><code>pothole</code> — finds pothole-related records across parcels</li>
+<li><code>80921</code> — finds Federal Drive by zip</li>
+<li><code>6401303008</code> — the Lorson Ranch parcel ID</li>
+</ul>
+<h2>10. Add a record via admin</h2>
+<ol>
+<li>Go to <code>http://localhost:8000/admin/</code></li>
+<li>Click <strong>Records</strong> → <strong>Add record</strong></li>
+<li>Pick a parcel (start typing the parcel ID)</li>
+<li>Fill in title, type, status, owner</li>
+<li>Save — it appears immediately on the parcel detail page</li>
+</ol>
+<h2>11. Stopping</h2>
+<pre><code>docker compose down            # stop containers, keep data
+docker compose down -v         # stop and wipe the database volume
+</code></pre>
+<h2>About gitignore.txt</h2>
+<p>The file <code>gitignore.txt</code> is here for reference. If and when you push
+this project to GitHub, rename it to <code>.gitignore</code> (with the leading
+dot). That tells git which files to skip when tracking changes. You
+don't need to rename it for Docker to work.</p>
+<h2>Common issues</h2>
+<p><strong><code>db: connection refused</code>.</strong> Postgres takes 5–10 seconds to initialize
+on first run. If <code>docker compose up</code> crashes the web container during
+that window, run <code>docker compose up</code> again. It will work the second
+time because the database is already initialized.</p>
+<p><strong><code>relation &quot;parcels_parcel&quot; does not exist</code>.</strong> You haven't run
+migrations yet. Run step 5 (<code>docker compose exec web python manage.py migrate</code>) and then refresh the browser.</p>
+<p><strong><code>createsuperuser</code> fails with <code>relation &quot;auth_user&quot; does not exist</code>.</strong>
+Migrations didn't run yet. Run step 5 first.</p>
+<p><strong>Docker says &quot;compose file not found&quot;.</strong> You're in the wrong folder.
+<code>cd</code> into the civic_records folder before running any <code>docker compose</code>
+command. Test with <code>pwd</code> to see where you are.</p>
+<p><strong>Build hangs forever during step 4.</strong> Slow internet. First-time builds
+download about 500 MB of base images. Let it run.</p>
+<h2>What to do next</h2>
+<p>Once you can see records on a parcel detail page in your browser, the
+foundation is working. Tell me which of these to build next and I'll
+send a single drop-in script:</p>
+<ul>
+<li><strong>Parcel loader</strong> — imports real El Paso County parcel polygons
+(~250,000 parcels) from the County GIS shapefile.</li>
+<li><strong>2026 2C paving list parser</strong> — reads the City's published PDF,
+extracts street segments, and creates Records.</li>
+<li><strong>BoardDocs scraper</strong> — pulls meeting agenda items and links them to
+parcels by extracted addresses.</li>
+</ul>

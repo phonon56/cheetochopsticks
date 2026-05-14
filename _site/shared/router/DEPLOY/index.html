@@ -1,0 +1,188 @@
+<h1>LLM Router — deploy guide</h1>
+<p>Plain-language <code>/api/route</code> endpoint on the existing Cloudflare Worker.
+Calls Workers AI (Llama 3.3 70B Instruct) against the 119-topic catalog,
+gated by Cloudflare Turnstile and a per-IP rate limit.</p>
+<h2>Why these specific protections</h2>
+<table>
+<thead>
+<tr>
+<th>Threat</th>
+<th>Protection</th>
+<th>Bound</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bot scraping the endpoint</td>
+<td>Cloudflare Turnstile</td>
+<td>403 on missing/invalid token</td>
+</tr>
+<tr>
+<td>Single IP hammering the LLM</td>
+<td>Workers Rate Limiting</td>
+<td>429 after 30 req / 60 s per IP</td>
+</tr>
+<tr>
+<td>Workers AI exhausting daily free quota</td>
+<td>Free tier cap</td>
+<td>10,000 Neurons/day; ~2-5 Neurons/call</td>
+</tr>
+<tr>
+<td>Misconfigured deploy</td>
+<td>Worker fails closed</td>
+<td>503 if <code>AI</code> or <code>TURNSTILE_SECRET</code> missing</td>
+</tr>
+</tbody>
+</table>
+<p>Worst-case spend even if all protections fail: capped by Cloudflare's
+Workers AI pricing at $0.011 per 1,000 Neurons after the free quota.
+~3 Neurons/call × 1,000,000 calls = ~$33. The per-IP limit means an
+attacker would need ~50,000 unique IPs to drive that volume in a day.</p>
+<h2>One-time setup</h2>
+<h3>1. Create the Turnstile site/secret key pair (free)</h3>
+<ol>
+<li>Cloudflare dashboard → <strong>Turnstile</strong> → <strong>Add site</strong>.</li>
+<li><strong>Domain</strong>: <code>cheetochopsticks.com</code> (add <code>localhost</code> too for dev).</li>
+<li><strong>Widget mode</strong>: Managed (recommended) or Non-interactive.</li>
+<li>Save. You'll get a <strong>Site Key</strong> (public) and a <strong>Secret Key</strong> (private).</li>
+</ol>
+<h3>2. Wire the keys into the Worker</h3>
+<pre><code class="language-bash"># Public site key — edit wrangler.jsonc and replace the placeholder.
+# It's safe to commit; the secret is the only sensitive half.
+$EDITOR wrangler.jsonc
+# Find &quot;TURNSTILE_SITE_KEY&quot; → paste your real site key
+
+# Secret — never goes into source control.
+wrangler secret put TURNSTILE_SECRET
+# Paste the secret key when prompted
+</code></pre>
+<h3>3. Confirm the Workers AI binding is on the account</h3>
+<p>Workers AI is free up to 10,000 Neurons/day on every Cloudflare account
+created after Oct 2024. Older accounts may need to opt in once:</p>
+<pre><code class="language-bash"># Should show &quot;AI: ...&quot; in the bindings list after first deploy.
+wrangler ai models list
+</code></pre>
+<p>If the command errors with &quot;Workers AI not enabled,&quot; visit
+<strong>dashboard → AI → Workers AI</strong> and click <strong>Enable</strong>.</p>
+<h3>4. Confirm the rate-limit binding is supported</h3>
+<p>Workers Rate Limiting is an <code>unsafe.bindings</code> entry in <code>wrangler.jsonc</code>
+during the preview period (no separate enrollment needed as of 2026).
+Just deploy — Wrangler will create the namespace on first push.</p>
+<h2>Deploy</h2>
+<pre><code class="language-bash">wrangler deploy
+</code></pre>
+<p>That's it. The new <code>/api/route</code> endpoint goes live. Existing routes
+(<code>/api/subscribe</code>, <code>/api/confirm</code>, etc.) are unchanged.</p>
+<h2>Testing the deploy</h2>
+<pre><code class="language-bash"># Should 403 (missing Turnstile token in production):
+curl -sX POST https://cheetochopsticks.com/api/route \
+  -H 'content-type: application/json' \
+  -d '{&quot;query&quot;:&quot;my neighbor has tall grass&quot;}'
+# → {&quot;error&quot;:&quot;turnstile_missing&quot;, &quot;engine&quot;:&quot;turnstile-failed&quot;, ...}
+
+# With DEV_MODE=1 in wrangler dev, Turnstile is bypassed:
+wrangler dev
+# In another shell:
+curl -sX POST http://localhost:8787/api/route \
+  -H 'content-type: application/json' \
+  -d '{&quot;query&quot;:&quot;my neighbor has tall grass&quot;}' | jq
+# → { &quot;primary&quot;: { &quot;topicId&quot;: &quot;61750&quot;, ... }, &quot;engine&quot;: &quot;workers-ai&quot; }
+</code></pre>
+<h2>Wiring the UI (follow-up work, not included)</h2>
+<p>The current <code>PlainLanguageSearch.tsx</code> (in
+<code>microsites/city/goGov/cos-portal-prototype</code>) still uses synchronous
+keyword routing. To wire the LLM endpoint into the UI:</p>
+<ol>
+<li>
+<p><strong>Load Turnstile in <code>index.html</code></strong>:</p>
+<pre><code class="language-html">&lt;script src=&quot;https://challenges.cloudflare.com/turnstile/v0/api.js&quot;
+        async defer&gt;&lt;/script&gt;
+</code></pre>
+</li>
+<li>
+<p><strong>Render the widget</strong> in <code>PlainLanguageSearch.tsx</code>:</p>
+<pre><code class="language-tsx">const containerRef = useRef&lt;HTMLDivElement&gt;(null);
+const [turnstileToken, setTurnstileToken] = useState&lt;string&gt;();
+
+useEffect(() =&gt; {
+  if (!window.turnstile || !containerRef.current) return;
+  const id = window.turnstile.render(containerRef.current, {
+    sitekey: TURNSTILE_SITE_KEY, // from wrangler.jsonc vars
+    callback: (token: string) =&gt; setTurnstileToken(token),
+    'refresh-expired': 'auto',
+  });
+  return () =&gt; window.turnstile.remove(id);
+}, []);
+
+// Render somewhere in the form:
+&lt;div ref={containerRef} /&gt;
+</code></pre>
+</li>
+<li>
+<p><strong>Replace the synchronous <code>useMemo(routeRequest)</code></strong> with a debounced
+<code>useEffect</code> that calls <code>routeWithFallback</code> (already exists at
+<code>src/data/router-client.ts</code>):</p>
+<pre><code class="language-tsx">import { routeWithFallback, type RouterResult } from '../data/router-client';
+
+useEffect(() =&gt; {
+  if (!text.trim()) return;
+  const handle = setTimeout(() =&gt; {
+    routeWithFallback(text, { turnstileToken }).then(setResult);
+  }, 450);
+  return () =&gt; clearTimeout(handle);
+}, [text, turnstileToken]);
+</code></pre>
+</li>
+<li>
+<p><strong>Badge the result</strong> so users see which engine produced it
+(<code>result.engine === 'workers-ai'</code> vs <code>'keyword-fallback'</code>).</p>
+</li>
+<li>
+<p><strong>Rebuild</strong>:</p>
+<pre><code class="language-bash">cd microsites/city/goGov/cos-portal-prototype
+npm run build
+</code></pre>
+<p>The built bundle in <code>build/</code> is what Cloudflare serves; the <code>src/</code>
+tree is excluded via <code>.assetsignore</code>.</p>
+</li>
+</ol>
+<h2>Why Workers AI and not Claude</h2>
+<p>The previous implementation (deleted in commit <code>cb3388e</code> and now
+rebuilt) used Anthropic Claude Haiku 4.5. Two reasons for the switch:</p>
+<ol>
+<li><strong>Cost containment.</strong> Anthropic billing is a separate account with its
+own surface for runaway spend. Workers AI billing is on the same
+Cloudflare account as everything else; the free tier covers
+~2,000-5,000 router calls/day at zero marginal cost.</li>
+<li><strong>No third-party API key.</strong> Anthropic required <code>ANTHROPIC_API_KEY</code> as
+a Worker secret. With Workers AI, the binding <code>env.AI</code> provides
+authenticated access — no key to rotate, no secret to leak.</li>
+</ol>
+<p>The trade-off is quality: Claude Haiku is a stronger instruction-follower
+than Llama 3.3 70B for structured-output tasks. The Worker compensates
+with:</p>
+<ul>
+<li>A more directive system prompt (see <code>shared/router/prompt.js</code>).</li>
+<li>Defensive JSON parsing that strips code fences and finds the first
+valid <code>{...}</code> block in the response.</li>
+<li>Schema validation + default-filling so the client always receives the
+full envelope, even when Llama drops keys.</li>
+</ul>
+<p>If Llama proves too inconsistent for the routing task in production,
+swap <code>ROUTE_MODEL</code> in <code>subscribe-worker.js</code> to a stronger Workers AI
+model (<code>@cf/meta/llama-3.3-70b-instruct-fp8</code> non-fast, or
+<code>@hf/nousresearch/hermes-2-pro-mistral-7b</code> which is JSON-tuned).</p>
+<h2>File map</h2>
+<pre><code>shared/router/
+├── catalog.js          # 119 topics, sorted by id, byte-stable
+├── prompt.js           # SYSTEM_PROMPT + OUTPUT_SCHEMA
+└── DEPLOY.md           # this file
+
+shared/notify/
+└── subscribe-worker.js # adds /api/route case + handleRoute() + verifyTurnstile() + callWorkersAI()
+
+microsites/city/goGov/cos-portal-prototype/src/data/
+└── router-client.ts    # client contract (not yet wired into the UI)
+
+wrangler.jsonc          # adds ai binding, ROUTE_LIMIT binding, TURNSTILE_SITE_KEY var
+</code></pre>
