@@ -57,6 +57,16 @@ const ALLOWED_ORIGINS = new Set([
 const ROUTE_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
 const ROUTE_MAX_QUERY = 600;
 const ROUTE_MAX_OUTPUT_TOKENS = 600;
+// Hard daily cap on successful Workers AI calls across ALL IPs combined.
+// Defends against distributed attacks where the per-IP rate limit can't help
+// (1,000 IPs × 30/min ≫ free quota). Once the day's count hits this number,
+// every additional /api/route call gets a 429 with engine='daily-cap-reached'
+// and the client falls back to local keyword routing.
+//
+// Default 1,500/day keeps us safely under the Workers AI free tier of
+// 10,000 Neurons/day even at the worst-case ~6 Neurons per call. Override
+// via env var ROUTE_DAILY_CAP in wrangler.jsonc if you want more headroom.
+const ROUTE_DAILY_CAP_DEFAULT = 1500;
 
 const CONSENT_VERSION       = '2026-04-30-v1';
 const PREFS_TOKEN_TTL       = 7 * 24 * 60 * 60;   // 7 days
@@ -1051,8 +1061,68 @@ async function handleRoute(request, env) {
     return json({ error: 'ai_binding_missing' }, 503, cors);
   }
 
+  // Hard daily cap — independent of per-IP rate limiting. Stops distributed
+  // attacks (many IPs each within the per-IP limit) and bounds the worst-case
+  // Workers AI bill even if a paid plan is enabled. D1 read is ~1ms; fail-
+  // closed if D1 is unavailable, since the whole point is spend control.
+  const dailyCap = parseInt(env.ROUTE_DAILY_CAP, 10) || ROUTE_DAILY_CAP_DEFAULT;
+  if (env.DB) {
+    try {
+      const today = utcDateString();
+      const row = await env.DB.prepare(
+        'SELECT call_count FROM route_daily_usage WHERE date = ?'
+      ).bind(today).first();
+      const currentCount = row?.call_count ?? 0;
+      if (currentCount >= dailyCap) {
+        return json(
+          {
+            error: 'daily_cap_reached',
+            engine: 'daily-cap-reached',
+            primary: null,
+            alternates: [],
+            extractedZip: null,
+            reasoning: '',
+            // Help the client decide when to re-enable. UTC seconds until midnight.
+            retryAfterSeconds: secondsUntilUtcMidnight(),
+          },
+          429,
+          cors,
+        );
+      }
+    } catch (err) {
+      // Fail closed on the cap check — the alternative is unbounded spend
+      // during a D1 outage. The client falls back to keyword routing.
+      console.error('Daily cap check failed', err);
+      return json(
+        { error: 'cap_check_unavailable', engine: 'error', primary: null, alternates: [], extractedZip: null, reasoning: '' },
+        503,
+        cors,
+      );
+    }
+  } else {
+    console.error('DB binding missing — daily cap not enforced. Refusing to call AI.');
+    return json({ error: 'db_binding_missing' }, 503, cors);
+  }
+
   try {
     const result = await callWorkersAI(query, env);
+    // Increment the daily counter AFTER a successful call. Failed calls don't
+    // count (they didn't cost Neurons). Race condition: simultaneous requests
+    // at count=cap-1 may both pass and produce a 1-2 call overrun. Acceptable.
+    try {
+      const today = utcDateString();
+      await env.DB.prepare(
+        `INSERT INTO route_daily_usage (date, call_count, first_call_at, last_call_at)
+         VALUES (?, 1, strftime('%s','now'), strftime('%s','now'))
+         ON CONFLICT(date) DO UPDATE SET
+           call_count = call_count + 1,
+           last_call_at = strftime('%s','now')`
+      ).bind(today).run();
+    } catch (err) {
+      // Counter write failure isn't worth failing the response — we already
+      // got the AI answer. Log and move on; the next call will retry.
+      console.error('Daily counter increment failed', err);
+    }
     return json(result, 200, cors);
   } catch (err) {
     console.error('Workers AI call failed', err);
@@ -1069,6 +1139,19 @@ async function handleRoute(request, env) {
       cors,
     );
   }
+}
+
+function utcDateString() {
+  const d = new Date();
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+}
+
+function secondsUntilUtcMidnight() {
+  const now = new Date();
+  const midnight = new Date(Date.UTC(
+    now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0
+  ));
+  return Math.max(1, Math.floor((midnight.getTime() - now.getTime()) / 1000));
 }
 
 async function verifyTurnstile(token, ip, secret) {

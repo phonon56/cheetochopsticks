@@ -6,17 +6,35 @@ gated by Cloudflare Turnstile and a per-IP rate limit.
 
 ## Why these specific protections
 
-| Threat                                  | Protection                | Bound                                   |
-| --------------------------------------- | ------------------------- | --------------------------------------- |
-| Bot scraping the endpoint               | Cloudflare Turnstile      | 403 on missing/invalid token            |
-| Single IP hammering the LLM             | Workers Rate Limiting     | 429 after 30 req / 60 s per IP          |
-| Workers AI exhausting daily free quota  | Free tier cap             | 10,000 Neurons/day; ~2-5 Neurons/call   |
-| Misconfigured deploy                    | Worker fails closed       | 503 if `AI` or `TURNSTILE_SECRET` missing |
+Four layers, narrowest to widest. A request has to pass all four to actually
+hit Workers AI:
 
-Worst-case spend even if all protections fail: capped by Cloudflare's
-Workers AI pricing at $0.011 per 1,000 Neurons after the free quota.
-~3 Neurons/call × 1,000,000 calls = ~$33. The per-IP limit means an
-attacker would need ~50,000 unique IPs to drive that volume in a day.
+| Threat                                       | Protection                | Bound                                      |
+| -------------------------------------------- | ------------------------- | ------------------------------------------ |
+| Single IP hammering the LLM                  | Per-IP rate limit         | 429 after 30 req / 60 s per IP             |
+| Bot scraping the endpoint                    | Cloudflare Turnstile      | 403 on missing/invalid token               |
+| **Distributed attack (many IPs at once)**    | **D1-backed daily cap**   | **429 after 1,500 successful calls/day**   |
+| Workers AI exhausting paid quota             | Cloudflare free tier      | Auto-rejects beyond 10,000 Neurons/day     |
+| Misconfigured deploy                         | Worker fails closed       | 503 if `AI`, `DB`, or `TURNSTILE_SECRET` missing |
+
+The daily cap is the hard kill switch. Even if 10,000 IPs each pass the per-IP
+limit AND solve Turnstile (which they won't), the 1,501st successful call
+that day gets a 429 and never touches Workers AI. The counter is keyed on the
+UTC date in D1 and resets at midnight UTC.
+
+**Worst-case spend** with all four protections holding: zero. The default
+daily cap of 1,500 × ~6 Neurons per call = ~9,000 Neurons/day, comfortably
+under the 10k free tier. Even if Cloudflare changed the Neuron pricing or
+the model got more expensive, the cap is the dollar-level ceiling — set
+`ROUTE_DAILY_CAP` to whatever number of calls you can afford to lose in
+a single day.
+
+**To tighten further:**
+- Drop `ROUTE_DAILY_CAP` to e.g. `500` in `wrangler.jsonc` and redeploy. No
+  migration needed; the var is read on every request.
+- Drop the per-IP limit from 30/min to 10/min by editing `ROUTE_LIMIT.simple.limit`.
+- Add Cloudflare WAF managed rules to block known abusive ASNs (free, one custom rule).
+- Set a Cloudflare billing alert to email at $1 (dashboard → Billing → Notifications).
 
 ## One-time setup
 
@@ -40,7 +58,24 @@ wrangler secret put TURNSTILE_SECRET
 # Paste the secret key when prompted
 ```
 
-### 3. Confirm the Workers AI binding is on the account
+### 3. Apply the D1 migration for the daily-cap counter
+
+```bash
+wrangler d1 execute notify --remote --file shared/notify/migration-002-route-daily-cap.sql
+```
+
+This creates the `route_daily_usage` table. Without it, the worker returns
+503 `cap_check_unavailable` on every `/api/route` call — the cap check is
+deliberately fail-closed because the alternative is unbounded spend if D1
+is unavailable.
+
+To inspect usage at any time:
+```bash
+wrangler d1 execute notify --remote \
+  --command "SELECT date, call_count FROM route_daily_usage ORDER BY date DESC LIMIT 7"
+```
+
+### 4. Confirm the Workers AI binding is on the account
 
 Workers AI is free up to 10,000 Neurons/day on every Cloudflare account
 created after Oct 2024. Older accounts may need to opt in once:
@@ -53,7 +88,7 @@ wrangler ai models list
 If the command errors with "Workers AI not enabled," visit
 **dashboard → AI → Workers AI** and click **Enable**.
 
-### 4. Confirm the rate-limit binding is supported
+### 5. Confirm the rate-limit binding is supported
 
 Workers Rate Limiting is an `unsafe.bindings` entry in `wrangler.jsonc`
 during the preview period (no separate enrollment needed as of 2026).
@@ -170,6 +205,24 @@ swap `ROUTE_MODEL` in `subscribe-worker.js` to a stronger Workers AI
 model (`@cf/meta/llama-3.3-70b-instruct-fp8` non-fast, or
 `@hf/nousresearch/hermes-2-pro-mistral-7b` which is JSON-tuned).
 
+## Monitoring the cap
+
+The simplest check is the D1 query in section 3. If `call_count` is climbing
+suspiciously fast for the day, options:
+
+1. **Lower `ROUTE_DAILY_CAP` immediately.** Edit `wrangler.jsonc`, run
+   `wrangler deploy`. No state to reset; the existing counter just hits the
+   new ceiling sooner.
+2. **Zero the day's counter** to slam the gate shut for the rest of the day
+   without redeploying:
+   ```bash
+   wrangler d1 execute notify --remote \
+     --command "UPDATE route_daily_usage SET call_count = 999999 WHERE date = strftime('%Y-%m-%d','now')"
+   ```
+3. **Disable the endpoint entirely** by removing the `case '/api/route':` line
+   from `subscribe-worker.js` and redeploying. Two minutes of work; the
+   client falls back to keyword routing seamlessly.
+
 ## File map
 
 ```
@@ -179,10 +232,12 @@ shared/router/
 └── DEPLOY.md           # this file
 
 shared/notify/
-└── subscribe-worker.js # adds /api/route case + handleRoute() + verifyTurnstile() + callWorkersAI()
+├── subscribe-worker.js                     # adds /api/route case + cap check + verifyTurnstile + callWorkersAI
+└── migration-002-route-daily-cap.sql       # creates route_daily_usage table
 
 microsites/city/goGov/cos-portal-prototype/src/data/
 └── router-client.ts    # client contract (not yet wired into the UI)
 
-wrangler.jsonc          # adds ai binding, ROUTE_LIMIT binding, TURNSTILE_SITE_KEY var
+wrangler.jsonc          # adds ai binding, ROUTE_LIMIT binding,
+                        # TURNSTILE_SITE_KEY var, ROUTE_DAILY_CAP var
 ```

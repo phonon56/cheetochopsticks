@@ -3,6 +3,8 @@
 Calls Workers AI (Llama 3.3 70B Instruct) against the 119-topic catalog,
 gated by Cloudflare Turnstile and a per-IP rate limit.</p>
 <h2>Why these specific protections</h2>
+<p>Four layers, narrowest to widest. A request has to pass all four to actually
+hit Workers AI:</p>
 <table>
 <thead>
 <tr>
@@ -13,31 +15,50 @@ gated by Cloudflare Turnstile and a per-IP rate limit.</p>
 </thead>
 <tbody>
 <tr>
+<td>Single IP hammering the LLM</td>
+<td>Per-IP rate limit</td>
+<td>429 after 30 req / 60 s per IP</td>
+</tr>
+<tr>
 <td>Bot scraping the endpoint</td>
 <td>Cloudflare Turnstile</td>
 <td>403 on missing/invalid token</td>
 </tr>
 <tr>
-<td>Single IP hammering the LLM</td>
-<td>Workers Rate Limiting</td>
-<td>429 after 30 req / 60 s per IP</td>
+<td><strong>Distributed attack (many IPs at once)</strong></td>
+<td><strong>D1-backed daily cap</strong></td>
+<td><strong>429 after 1,500 successful calls/day</strong></td>
 </tr>
 <tr>
-<td>Workers AI exhausting daily free quota</td>
-<td>Free tier cap</td>
-<td>10,000 Neurons/day; ~2-5 Neurons/call</td>
+<td>Workers AI exhausting paid quota</td>
+<td>Cloudflare free tier</td>
+<td>Auto-rejects beyond 10,000 Neurons/day</td>
 </tr>
 <tr>
 <td>Misconfigured deploy</td>
 <td>Worker fails closed</td>
-<td>503 if <code>AI</code> or <code>TURNSTILE_SECRET</code> missing</td>
+<td>503 if <code>AI</code>, <code>DB</code>, or <code>TURNSTILE_SECRET</code> missing</td>
 </tr>
 </tbody>
 </table>
-<p>Worst-case spend even if all protections fail: capped by Cloudflare's
-Workers AI pricing at $0.011 per 1,000 Neurons after the free quota.
-~3 Neurons/call × 1,000,000 calls = ~$33. The per-IP limit means an
-attacker would need ~50,000 unique IPs to drive that volume in a day.</p>
+<p>The daily cap is the hard kill switch. Even if 10,000 IPs each pass the per-IP
+limit AND solve Turnstile (which they won't), the 1,501st successful call
+that day gets a 429 and never touches Workers AI. The counter is keyed on the
+UTC date in D1 and resets at midnight UTC.</p>
+<p><strong>Worst-case spend</strong> with all four protections holding: zero. The default
+daily cap of 1,500 × ~6 Neurons per call = ~9,000 Neurons/day, comfortably
+under the 10k free tier. Even if Cloudflare changed the Neuron pricing or
+the model got more expensive, the cap is the dollar-level ceiling — set
+<code>ROUTE_DAILY_CAP</code> to whatever number of calls you can afford to lose in
+a single day.</p>
+<p><strong>To tighten further:</strong></p>
+<ul>
+<li>Drop <code>ROUTE_DAILY_CAP</code> to e.g. <code>500</code> in <code>wrangler.jsonc</code> and redeploy. No
+migration needed; the var is read on every request.</li>
+<li>Drop the per-IP limit from 30/min to 10/min by editing <code>ROUTE_LIMIT.simple.limit</code>.</li>
+<li>Add Cloudflare WAF managed rules to block known abusive ASNs (free, one custom rule).</li>
+<li>Set a Cloudflare billing alert to email at $1 (dashboard → Billing → Notifications).</li>
+</ul>
 <h2>One-time setup</h2>
 <h3>1. Create the Turnstile site/secret key pair (free)</h3>
 <ol>
@@ -56,7 +77,18 @@ $EDITOR wrangler.jsonc
 wrangler secret put TURNSTILE_SECRET
 # Paste the secret key when prompted
 </code></pre>
-<h3>3. Confirm the Workers AI binding is on the account</h3>
+<h3>3. Apply the D1 migration for the daily-cap counter</h3>
+<pre><code class="language-bash">wrangler d1 execute notify --remote --file shared/notify/migration-002-route-daily-cap.sql
+</code></pre>
+<p>This creates the <code>route_daily_usage</code> table. Without it, the worker returns
+503 <code>cap_check_unavailable</code> on every <code>/api/route</code> call — the cap check is
+deliberately fail-closed because the alternative is unbounded spend if D1
+is unavailable.</p>
+<p>To inspect usage at any time:</p>
+<pre><code class="language-bash">wrangler d1 execute notify --remote \
+  --command &quot;SELECT date, call_count FROM route_daily_usage ORDER BY date DESC LIMIT 7&quot;
+</code></pre>
+<h3>4. Confirm the Workers AI binding is on the account</h3>
 <p>Workers AI is free up to 10,000 Neurons/day on every Cloudflare account
 created after Oct 2024. Older accounts may need to opt in once:</p>
 <pre><code class="language-bash"># Should show &quot;AI: ...&quot; in the bindings list after first deploy.
@@ -64,7 +96,7 @@ wrangler ai models list
 </code></pre>
 <p>If the command errors with &quot;Workers AI not enabled,&quot; visit
 <strong>dashboard → AI → Workers AI</strong> and click <strong>Enable</strong>.</p>
-<h3>4. Confirm the rate-limit binding is supported</h3>
+<h3>5. Confirm the rate-limit binding is supported</h3>
 <p>Workers Rate Limiting is an <code>unsafe.bindings</code> entry in <code>wrangler.jsonc</code>
 during the preview period (no separate enrollment needed as of 2026).
 Just deploy — Wrangler will create the namespace on first push.</p>
@@ -172,6 +204,22 @@ full envelope, even when Llama drops keys.</li>
 swap <code>ROUTE_MODEL</code> in <code>subscribe-worker.js</code> to a stronger Workers AI
 model (<code>@cf/meta/llama-3.3-70b-instruct-fp8</code> non-fast, or
 <code>@hf/nousresearch/hermes-2-pro-mistral-7b</code> which is JSON-tuned).</p>
+<h2>Monitoring the cap</h2>
+<p>The simplest check is the D1 query in section 3. If <code>call_count</code> is climbing
+suspiciously fast for the day, options:</p>
+<ol>
+<li><strong>Lower <code>ROUTE_DAILY_CAP</code> immediately.</strong> Edit <code>wrangler.jsonc</code>, run
+<code>wrangler deploy</code>. No state to reset; the existing counter just hits the
+new ceiling sooner.</li>
+<li><strong>Zero the day's counter</strong> to slam the gate shut for the rest of the day
+without redeploying:<pre><code class="language-bash">wrangler d1 execute notify --remote \
+  --command &quot;UPDATE route_daily_usage SET call_count = 999999 WHERE date = strftime('%Y-%m-%d','now')&quot;
+</code></pre>
+</li>
+<li><strong>Disable the endpoint entirely</strong> by removing the <code>case '/api/route':</code> line
+from <code>subscribe-worker.js</code> and redeploying. Two minutes of work; the
+client falls back to keyword routing seamlessly.</li>
+</ol>
 <h2>File map</h2>
 <pre><code>shared/router/
 ├── catalog.js          # 119 topics, sorted by id, byte-stable
@@ -179,10 +227,12 @@ model (<code>@cf/meta/llama-3.3-70b-instruct-fp8</code> non-fast, or
 └── DEPLOY.md           # this file
 
 shared/notify/
-└── subscribe-worker.js # adds /api/route case + handleRoute() + verifyTurnstile() + callWorkersAI()
+├── subscribe-worker.js                     # adds /api/route case + cap check + verifyTurnstile + callWorkersAI
+└── migration-002-route-daily-cap.sql       # creates route_daily_usage table
 
 microsites/city/goGov/cos-portal-prototype/src/data/
 └── router-client.ts    # client contract (not yet wired into the UI)
 
-wrangler.jsonc          # adds ai binding, ROUTE_LIMIT binding, TURNSTILE_SITE_KEY var
+wrangler.jsonc          # adds ai binding, ROUTE_LIMIT binding,
+                        # TURNSTILE_SITE_KEY var, ROUTE_DAILY_CAP var
 </code></pre>

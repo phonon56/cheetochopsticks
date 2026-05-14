@@ -22,7 +22,15 @@
     // Create the key pair at dash.cloudflare.com → Turnstile (free).
     // Replace this placeholder before deploy. The site key is safe to ship to
     // the browser; only the secret stays Worker-side.
-    "TURNSTILE_SITE_KEY": "0x4AAAAAAAREPLACE_ME_WITH_REAL_SITE_KEY"
+    "TURNSTILE_SITE_KEY": "0x4AAAAAAAREPLACE_ME_WITH_REAL_SITE_KEY",
+    // Hard daily cap on /api/route Workers AI calls across ALL IPs combined.
+    // Defends against distributed attacks (1,000 IPs × 30/min ≫ per-IP limit
+    // is irrelevant; this cap stops the spend at the source). Counter is
+    // backed by D1 (table route_daily_usage); see migration-002-route-daily-cap.sql.
+    // Default 1500/day stays safely under the Workers AI 10,000 Neurons/day
+    // free tier even at ~6 Neurons per call. Raise carefully — every increment
+    // beyond ~1666 risks paid-tier billing at $0.011 per 1k Neurons.
+    "ROUTE_DAILY_CAP": "1500"
   },
   "d1_databases": [
     {
