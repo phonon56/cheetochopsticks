@@ -179,13 +179,14 @@ export function PlainLanguageSearch({ onPickTopic }: Props) {
           if (requestIdRef.current !== id) return; // stale
           setResult(r);
           setLoading(false);
-          // Turnstile tokens are single-use. Once we've spent one on a real
-          // worker call, reset the widget for a fresh token so the NEXT query
-          // isn't gated on the LLM falling back to keyword.
-          const usedToken = r.engine === 'workers-ai'
-            || r.engine === 'rate-limited'
-            || r.engine === 'turnstile-failed';
-          if (usedToken && turnstileWidgetIdRef.current && window.turnstile) {
+          // Turnstile tokens are single-use. Reset the widget after ANY response
+          // that means we sent a token to the worker — including 503 (AI down)
+          // and other keyword-fallback paths where siteverify already consumed
+          // the token. The only no-token case is engine='keyword-only', which
+          // fires when turnstileToken was undefined and routeWithFallback short-
+          // circuited locally without a fetch.
+          const sentToken = r.engine !== 'keyword-only';
+          if (sentToken && turnstileWidgetIdRef.current && window.turnstile) {
             setTurnstileToken(undefined);
             try { window.turnstile.reset(turnstileWidgetIdRef.current); } catch { /* ignore */ }
           }
