@@ -1,0 +1,265 @@
+<h1>Civic Records</h1>
+<p>A parcel-keyed civic record system. Search a parcel ID, address, or street name
+and see every public record attached to that location — permits, projects,
+service requests, meeting items, financial allocations — in one place, in
+chronological order, in plain language.</p>
+<p>Built as a system of presentation on top of existing public data sources,
+not a system of record. The data stays where it lives; this is the layer
+that reveals what's already there.</p>
+<h2>What this is</h2>
+<p>The starter for a working prototype of the civic-Jira concept. The current
+build is intentionally minimal: parcels, records, documents, and a
+parcel-centric search and detail view. Everything else (meetings, financials,
+notifications, public-facing plain-language layer) is downstream of getting
+the foundation right.</p>
+<h2>Why this lives in a different stack from the parent repo</h2>
+<p>The parent repository (<code>cheetochopsticks/</code>) is an Eleventy static site —
+Markdown + Nunjucks + a small JS sprinkle, built to flat HTML and served
+by Cloudflare Pages. It's a presentation layer: microsites, dashboards,
+ADA-compliant document mirrors, jurisdiction finder. No database, no
+server-side rendering, no background jobs.</p>
+<p>This subdirectory is the opposite shape on purpose:</p>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Parent (<code>cheetochopsticks/</code>)</th>
+<th><code>civic_records/</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Render model</td>
+<td>Static HTML, built ahead of time</td>
+<td>Server-rendered Django views + REST API</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>Hand-curated content in the repo</td>
+<td>Parcels + records ingested from live APIs</td>
+</tr>
+<tr>
+<td>Spatial queries</td>
+<td>Not needed</td>
+<td>PostGIS — point/polygon/intersection</td>
+</tr>
+<tr>
+<td>Background work</td>
+<td>None</td>
+<td>Periodic ingest jobs against public APIs</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>None (the repo <em>is</em> the data)</td>
+<td>PostgreSQL 16 + GIS extensions</td>
+</tr>
+<tr>
+<td>Admin</td>
+<td>Hand-edit Markdown</td>
+<td>Django admin for record entry</td>
+</tr>
+<tr>
+<td>Deploy target</td>
+<td>Cloudflare Pages</td>
+<td>A real host (Fly/Railway/Render/VPS)</td>
+</tr>
+</tbody>
+</table>
+<p>Neither stack would do the other's job well — Eleventy can't run spatial
+queries against a quarter-million parcels, and Django would be overkill
+for a static microsite. They live in the same repo because they're parts
+of the same civic-tech effort: the static site is the public-facing
+exploration and accountability layer, and <code>civic_records/</code> is the data
+backbone that will eventually power a parcel-centric public view at a
+separate URL or subdomain.</p>
+<p>If/when this grows beyond prototype, it will move to either its own
+repository or a git submodule; for now, one repo, one push, one place
+to look.</p>
+<h2>What's in the box</h2>
+<ul>
+<li><strong>Django 5 + GeoDjango</strong> application</li>
+<li><strong>PostgreSQL 16 + PostGIS 3</strong> database</li>
+<li><strong>Leaflet</strong> map frontend, served from Django templates</li>
+<li><strong>Docker Compose</strong> for one-command local development</li>
+<li>Sample data loader for a small set of El Paso County parcels</li>
+<li>Sample records seeded from public sources (BoardDocs, 2C paving list,
+GoCOS export format)</li>
+<li>Django admin interface for entering and editing records without
+building forms</li>
+</ul>
+<h2>Quick start</h2>
+<p>Prereqs: Docker Desktop installed and running.</p>
+<pre><code class="language-bash">git clone &lt;this-repo&gt;
+cd civic_records
+cp .env.example .env
+docker compose up --build
+</code></pre>
+<p>In a separate terminal once the containers are up:</p>
+<pre><code class="language-bash">docker compose exec web python manage.py migrate
+docker compose exec web python manage.py createsuperuser
+docker compose exec web python manage.py loaddata fixtures/sample_data.json
+</code></pre>
+<p>Then open:</p>
+<ul>
+<li><code>http://localhost:8000/</code> — the parcel search interface</li>
+<li><code>http://localhost:8000/admin/</code> — the Django admin for record entry</li>
+<li><code>http://localhost:8000/parcel/6401303008/</code> — a sample parcel detail view</li>
+</ul>
+<h2>Architecture, briefly</h2>
+<ul>
+<li><code>parcels/</code> — Parcel model and views. Parcels are polygons with a stable
+parcel ID. Everything else joins on parcel ID.</li>
+<li><code>records/</code> — Record model and views. A Record is anything that happens
+on a parcel — permit, project ticket, service request, meeting item.
+Records have type, status, owner, history, documents, and can link to
+other records.</li>
+<li><code>documents/</code> — Document model. PDFs and other files attached to records,
+preserved as originals with extracted text indexed for search.</li>
+<li><code>config/</code> — Django settings, URL routing, WSGI/ASGI entry points.</li>
+<li><code>frontend/</code> — Templates and static assets (CSS, JS, Leaflet integration).</li>
+<li><code>fixtures/</code> — Sample data for development.</li>
+<li><code>scripts/</code> — Data import scripts for real public sources.</li>
+</ul>
+<h2>The data model</h2>
+<pre><code>Parcel
+├── parcel_id          (TextField, unique, primary lookup key)
+├── address            (TextField, optional human-readable)
+├── geometry           (PolygonField, PostGIS)
+├── jurisdiction       (city / county / shared)
+└── council_district   (FK, optional)
+
+Record
+├── record_id          (TextField, unique)
+├── parcel             (FK → Parcel)
+├── record_type        (permit / project / request / meeting_item / financial)
+├── title              (TextField)
+├── status             (TextField, with history)
+├── owner_department   (TextField)
+├── created_at         (DateTimeField)
+├── updated_at         (DateTimeField)
+├── plain_summary      (TextField, AI-generated or human-edited)
+├── connected_records  (M2M → Record, self-referential)
+└── documents          (FK reverse from Document)
+
+RecordHistory
+├── record              (FK → Record)
+├── from_status         (TextField)
+├── to_status           (TextField)
+├── changed_at          (DateTimeField)
+├── changed_by          (TextField)
+└── note                (TextField)
+
+Document
+├── record              (FK → Record)
+├── file                (FileField)
+├── filename            (TextField)
+├── extracted_text      (TextField, indexed for full-text search)
+├── document_type       (pdf / image / other)
+└── uploaded_at         (DateTimeField)
+</code></pre>
+<p>Every search — by parcel ID, by address, by free text — resolves to a
+Parcel, and the Parcel detail view shows all Records attached to that
+Parcel in chronological order.</p>
+<h2>Data sources</h2>
+<p>Every record in the system originates from a public source. Nothing
+proprietary, nothing scraped from authenticated pages, nothing behind
+a paywall. The list below is what the management commands under
+<code>*/management/commands/ingest_*.py</code> and <code>enrich_*.py</code> actually pull from:</p>
+<h3>Spatial / parcel data</h3>
+<ul>
+<li><strong>El Paso County parcel polygons</strong> — ArcGIS FeatureServer published
+on the County's open-data hub.
+https://opendata-elpasoco.hub.arcgis.com/datasets/0e616418d0824212a90fcc2b9ac7fbf2_0
+Loader: <code>parcels/management/commands/ingest_epc_parcels.py</code></li>
+<li><strong>El Paso County Assessor</strong> — per-parcel detail (owner, valuation,
+improvements, land use code) for enrichment.
+https://property.spatialest.com/co/elpaso/
+Enricher: <code>parcels/management/commands/enrich_epc_assessor.py</code></li>
+</ul>
+<h3>City of Colorado Springs</h3>
+<ul>
+<li><strong>City Council Legistar API</strong> — agendas, minutes, ordinances, votes.
+https://webapi.legistar.com/v1/coloradosprings/
+Loader: <code>records/management/commands/ingest_cos_legistar.py</code></li>
+<li><strong>Procurement solicitations</strong> — open RFPs / bids / sole-source notices.
+https://coloradosprings.gov/solicitations
+Loader: <code>records/management/commands/ingest_cos_solicitations.py</code></li>
+<li><strong>Contract awards</strong> — awarded procurement contracts.
+https://coloradosprings.gov/procurement-services/page/contract-award-information
+Loader: <code>records/management/commands/ingest_cos_awards.py</code></li>
+<li><strong>Capital projects (EngageCOS)</strong> — active capital projects published
+by the City.
+https://coloradosprings.gov/projects
+Loader: <code>projects/management/commands/ingest_cos_projects.py</code></li>
+</ul>
+<h3>Police</h3>
+<ul>
+<li><strong>CSPD open data (Socrata)</strong> — incident data, calls for service,
+arrests, use of force.
+https://policedata.coloradosprings.gov
+Loader: <code>records/management/commands/ingest_cspd_socrata.py</code></li>
+</ul>
+<h3>Meetings / agendas (multi-jurisdiction)</h3>
+<ul>
+<li><strong>AgendaSuite</strong> — multi-tenant agenda system used by the El Paso
+County BOCC, several special districts, and a number of Colorado
+cities and counties.
+https://www.agendasuite.org/iip/{tenant}/
+Loader: <code>records/management/commands/ingest_agendasuite.py</code></li>
+<li><strong>BoardDocs</strong> — meeting documents for school boards and a number of
+Colorado public agencies. Pull pattern documented in
+<code>records/ingest_base.py</code>; integrated via the seed data and the
+agenda-item parcel matcher in <code>records/parcel_match.py</code>.</li>
+<li><strong>2C paving list</strong> — the City's published annual paving program PDF,
+funded by the 2C sales tax. Street segments parse to linestring
+records and join to parcels along the segment.</li>
+<li><strong>GoCOS</strong> — Colorado Springs service-request system. Sample records
+use the GoCOS export format; live ingest is on the roadmap once the
+export endpoint stabilizes.</li>
+</ul>
+<h3>LLM providers (for enrichment, not data)</h3>
+<p>The <code>records/llm_client.py</code> shim is provider-agnostic and selects at
+load time via <code>LLM_PROVIDER</code>. Used for plain-language summaries and
+topic tagging, never as a system of record.</p>
+<ul>
+<li><strong>Cloudflare Workers AI</strong> (default) — REST API, cheap, deploys
+alongside the existing Cloudflare footprint for the parent site.</li>
+<li><strong>Anthropic Claude</strong> (optional) — selected when stronger reasoning
+is worth the per-call cost. Default model <code>claude-haiku-4-5</code>.</li>
+</ul>
+<p>Every LLM call is logged to <code>LLMCallLog</code> with token counts + USD cost
+so the spend is auditable.</p>
+<h2>Why this stack</h2>
+<p>PostgreSQL + PostGIS because everything in civic records is spatial.
+Parcels are polygons, tickets are points, streets are linestrings, and
+every query you'll ever write is &quot;what's near what&quot; or &quot;what intersects
+what.&quot; PostGIS does this natively in standard SQL.</p>
+<p>Django + GeoDjango because the work is integration-heavy (pulling from
+BoardDocs PDFs, GoCOS exports, the County GIS, the 2C paving list),
+Python's ETL libraries are unmatched, GeoDjango is purpose-built for
+parcel-keyed applications, and the admin interface gives you a free
+internal tool for entering test data.</p>
+<p>Leaflet because it's free, well-documented, accessible-friendly, and
+doesn't require an API key or a build step.</p>
+<p>Docker Compose because one command should get you a working environment.</p>
+<p>No Next.js, no Redux, no GraphQL, no microservices. The complexity in
+civic records is in the data, not the framework.</p>
+<h2>Status</h2>
+<p>Day-zero scaffold. The data model is real and the parcel-centric pattern
+works end to end with sample data. Next milestones, in order:</p>
+<ol>
+<li>Real El Paso County parcel data import (PostGIS shapefile loader)</li>
+<li>BoardDocs scraper for meeting items, joined on parcel via address</li>
+<li>2C paving list parser (PDF → linestring records joined to parcels along
+the segment)</li>
+<li>GoCOS export importer</li>
+<li>Plain-language summary layer (AI-assisted, human-reviewable)</li>
+<li>Public-facing read-only view at a separate URL with WCAG 2.1 AA
+compliance audited from day one</li>
+</ol>
+<h2>License</h2>
+<p>Public benefit. Use it, adapt it, fork it.</p>
+<h2>Author</h2>
+<p>Emma Moore
+emma@pivottruenorth.com | 310-913-8931
+pivottruenorth.com | cheetochopsticks.com</p>
