@@ -7,6 +7,11 @@ import { SYSTEM_PROMPT, OUTPUT_SCHEMA } from './prompt';
  *   System prompt (catalog + instructions) is cached on Anthropic's side
  *   via `cache_control: ephemeral`. Client-side fallback to the local
  *   keyword matcher runs on error.
+ * - `/api/crime-monthly` — GET → CSPD open-data crime counts grouped by
+ *   month and category, for the public safety dashboard's trend chart.
+ *   One upstream request to the Socrata SODA API is shared across all
+ *   visitors via the Cloudflare cache (12h TTL). Clients fall back to a
+ *   baked-in static snapshot on any error.
  * - Everything else — delegated to the static-asset binding (the rest of
  *   cheetochopsticks.com).
  *
@@ -19,6 +24,23 @@ import { SYSTEM_PROMPT, OUTPUT_SCHEMA } from './prompt';
 const MODEL = 'claude-haiku-4-5';
 const MAX_OUTPUT_TOKENS = 600;
 const MAX_QUERY_LENGTH = 600;
+
+/** CSPD open data — RMS incident dataset (Tyler/Socrata SODA API). */
+const CSPD_DATASET_URL =
+  'https://policedata.coloradosprings.gov/resource/bc88-hemr.json';
+/**
+ * How long an upstream crime pull is reused. The source refreshes roughly
+ * daily, so 12h keeps the dashboard current while collapsing every
+ * visitor's load into one shared upstream request.
+ */
+const CRIME_CACHE_TTL_SECONDS = 60 * 60 * 12;
+
+/** Maps the dataset's `index_crime_category` to the chart's bucket keys. */
+const CRIME_CATEGORY_KEY: Record<string, 'P' | 'PR' | 'S'> = {
+  'Crimes Against Persons': 'P',
+  'Crimes Against Property': 'PR',
+  'Crimes Against Society': 'S',
+};
 
 interface Env {
   ASSETS: Fetcher;
@@ -52,6 +74,9 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === '/api/route') {
       return handleRoute(request, env);
+    }
+    if (url.pathname === '/api/crime-monthly') {
+      return handleCrimeMonthly(request);
     }
     return env.ASSETS.fetch(request);
   },
@@ -105,6 +130,84 @@ async function handleRoute(request: Request, env: Env): Promise<Response> {
       },
       502,
     );
+  }
+}
+
+interface MonthBucket {
+  P: number;
+  PR: number;
+  S: number;
+}
+
+/**
+ * Crime counts grouped by calendar month and category, 2024-01 onward.
+ * Served from the Cloudflare cache when warm; otherwise one SODA query to
+ * CSPD open data, normalized and cached for {@link CRIME_CACHE_TTL_SECONDS}.
+ * The client treats any non-200 (or a network failure) as "use the static
+ * snapshot" — this endpoint never needs to be perfectly available.
+ */
+async function handleCrimeMonthly(request: Request): Promise<Response> {
+  if (request.method !== 'GET') {
+    return json({ error: 'Method not allowed' }, 405);
+  }
+
+  const cache = caches.default;
+  // Fixed key — the response is identical for every visitor.
+  const cacheKey = new Request(
+    new URL('/api/crime-monthly', request.url).toString(),
+  );
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
+  try {
+    const params = new URLSearchParams({
+      $select:
+        'date_trunc_ym(occurredfromdate) as mo, index_crime_category as cat, count(*) as n',
+      $where:
+        "occurredfromdate >= '2024-01-01' AND " +
+        "index_crime_category in(" +
+        "'Crimes Against Persons','Crimes Against Property','Crimes Against Society')",
+      $group: 'mo, cat',
+      $order: 'mo',
+      $limit: '5000',
+    });
+
+    const upstream = await fetch(`${CSPD_DATASET_URL}?${params}`, {
+      headers: { Accept: 'application/json' },
+    });
+    if (!upstream.ok) {
+      throw new Error(`CSPD open data responded ${upstream.status}`);
+    }
+
+    const rows = (await upstream.json()) as Array<{
+      mo?: string;
+      cat?: string;
+      n?: string;
+    }>;
+
+    // ym ("2024-01") → { P, PR, S } incident counts.
+    const months: Record<string, MonthBucket> = {};
+    for (const row of rows) {
+      const key = CRIME_CATEGORY_KEY[row.cat ?? ''];
+      const ym = (row.mo ?? '').slice(0, 7);
+      if (!key || ym.length !== 7) continue;
+      const bucket = (months[ym] ??= { P: 0, PR: 0, S: 0 });
+      bucket[key] += Number(row.n) || 0;
+    }
+
+    const response = json(
+      { source: 'bc88-hemr', fetched: new Date().toISOString(), months },
+      200,
+      `public, max-age=${CRIME_CACHE_TTL_SECONDS}`,
+    );
+    await cache.put(cacheKey, response.clone());
+    return response;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    // 502 + empty months → client falls back to its static snapshot.
+    return json({ error: message, source: 'bc88-hemr', months: {} }, 502);
   }
 }
 
@@ -192,14 +295,16 @@ async function callClaude(query: string, apiKey: string): Promise<RouteResponse>
   };
 }
 
-function json(body: unknown, status: number): Response {
+function json(
+  body: unknown,
+  status: number,
+  cacheControl = 'no-store',
+): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       'content-type': 'application/json; charset=utf-8',
-      // Public JSON, no secrets; fine to cache the *not-configured* 503
-      // briefly so dev doesn't hammer it.
-      'cache-control': 'no-store',
+      'cache-control': cacheControl,
     },
   });
 }

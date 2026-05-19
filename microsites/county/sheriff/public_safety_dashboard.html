@@ -76,6 +76,10 @@ body.aaa [style*="font-size:9px"],[style*="font-size:10px"]{font-size:14px}
 body.aaa .ch canvas{display:none !important}
 body.aaa .aaa-tbl{display:block !important}
 .aaa-tbl{display:none}
+/* AA mode: data tables reachable on demand via a disclosure button.
+   AAA mode shows them unconditionally (above) and hides the now-redundant toggle. */
+.aaa-tbl.open{display:block}
+body.aaa .tbl-disc{display:none}
 
 /* AAA table styles */
 .aaa-tbl{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
@@ -97,7 +101,7 @@ body.aaa .aaa-tbl td{font-size:15px;padding:8px 10px}
 
 /* ── AA/AAA toggle ── */
 .ada-toggle{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.ada-toggle-label{font-size:11px;color:rgba(255,255,255,.65);font-weight:500;white-space:nowrap}
+.ada-toggle-label{font-size:11px;color:rgba(255,255,255,.82);font-weight:500;white-space:nowrap}
 .ada-btn{
   font-family:var(--sans);font-size:12px;font-weight:700;
   padding:5px 11px;border-radius:20px;border:2px solid rgba(255,255,255,.4);
@@ -113,12 +117,12 @@ a{color:var(--blue)}
 .hdr{background:var(--navy);padding:18px 0 0;position:sticky;top:0;z-index:50;box-shadow:0 2px 16px rgba(0,0,0,.2)}
 .hdr-inner{max-width:1100px;margin:0 auto;padding:0 24px 16px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px}
 .site-title{font-family:var(--serif);font-size:22px;color:#fff;letter-spacing:-.02em}
-.site-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:3px}
+.site-sub{font-size:12px;color:rgba(255,255,255,.8);margin-top:3px}
 .hdr-badge{font-size:11px;font-weight:500;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:4px 10px;border-radius:20px;white-space:nowrap}
 /* ── tabs ── */
 .tab-nav{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;overflow-x:auto;scrollbar-width:none}
 .tab-nav::-webkit-scrollbar{display:none}
-[role=tab]{font-family:var(--sans);font-size:13px;font-weight:500;padding:10px 20px;border:none;background:transparent;color:rgba(255,255,255,.55);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:0;white-space:nowrap;transition:color .15s}
+[role=tab]{font-family:var(--sans);font-size:13px;font-weight:500;padding:10px 20px;border:none;background:transparent;color:rgba(255,255,255,.78);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:0;white-space:nowrap;transition:color .15s}
 [role=tab]:hover{color:rgba(255,255,255,.85)}
 [role=tab][aria-selected=true]{color:#fff;border-bottom-color:var(--orange)}
 /* ── panels ── */
@@ -251,7 +255,7 @@ a{color:var(--blue)}
 .ban-title{font-family:var(--serif);font-size:18px;margin-bottom:6px}
 .ban-txt{font-size:13px;color:rgba(255,255,255,.75);line-height:1.5}
 .ban-num{font-family:var(--serif);font-size:48px;color:var(--orange2);line-height:1;text-align:center}
-.ban-lbl{font-size:11px;color:rgba(255,255,255,.6);text-align:center;margin-top:3px}
+.ban-lbl{font-size:11px;color:rgba(255,255,255,.82);text-align:center;margin-top:3px}
 /* ── completeness ── */
 .comp-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--brd)}
 .comp-row:last-child{border-bottom:none}
@@ -305,14 +309,14 @@ a{color:var(--blue)}
           aria-pressed="false" aria-describedby="ada-lbl"
           title="Enhanced AAA mode: 7:1 contrast, larger text, charts replaced with data tables">AAA</button>
       </div>
-      <span class="hdr-badge" aria-label="Last updated April 12, 2026">Updated Apr 12, 2026</span>
+      <span class="hdr-badge">Updated Apr 12, 2026</span>
     </div>
   </div>
   <nav aria-label="Dashboard sections">
     <div role="tablist" class="tab-nav">
-      <button role="tab" id="tab-nb" aria-selected="true" aria-controls="panel-nb">📍 My Neighborhood</button>
-      <button role="tab" id="tab-city" aria-selected="false" aria-controls="panel-city" tabindex="-1">🏙 Citywide Overview</button>
-      <button role="tab" id="tab-gaps" aria-selected="false" aria-controls="panel-gaps" tabindex="-1">⚠️ Data Gaps &amp; Insights</button>
+      <button role="tab" id="tab-nb" aria-selected="true" aria-controls="panel-nb"><span aria-hidden="true">📍</span> My Neighborhood</button>
+      <button role="tab" id="tab-city" aria-selected="false" aria-controls="panel-city" tabindex="-1"><span aria-hidden="true">🏙</span> Citywide Overview</button>
+      <button role="tab" id="tab-gaps" aria-selected="false" aria-controls="panel-gaps" tabindex="-1"><span aria-hidden="true">⚠️</span> Data Gaps &amp; Insights</button>
     </div>
   </nav>
 </header>
@@ -360,7 +364,7 @@ a{color:var(--blue)}
 
   <!-- empty state -->
   <div id="nb-empty" class="empty">
-    <div class="empty-icon">🔍</div>
+    <div class="empty-icon" aria-hidden="true">🔍</div>
     <div class="empty-title">Search your neighborhood above</div>
     <div class="empty-desc">Enter a ZIP code, address, or neighborhood name to see crime data and safety context for your area.</div>
   </div>
@@ -374,7 +378,7 @@ a{color:var(--blue)}
         <div class="nb-loc" id="nb-loc">—</div>
         <div class="nb-meta" id="nb-meta">—</div>
       </div>
-      <a href="#" id="nb-map" class="map-btn" target="_blank" rel="noopener">🗺 Open in Google Maps</a>
+      <a href="#" id="nb-map" class="map-btn" target="_blank" rel="noopener"><span aria-hidden="true">🗺</span> Open in Google Maps</a>
     </div>
 
     <!-- metrics -->
@@ -403,20 +407,20 @@ a{color:var(--blue)}
 
     <!-- CRIME CATEGORY DEFINITIONS -->
     <div class="card">
-      <div class="card-title">What do these crime categories mean?</div>
+      <h3 class="card-title">What do these crime categories mean?</h3>
       <div class="def-grid">
         <div class="def-card soc">
-          <div class="def-head soc">⚠️ Against society</div>
+          <div class="def-head soc"><span aria-hidden="true">⚠️</span> Against society</div>
           <div class="def-body">Offenses where society itself is the "victim" — no single individual is directly harmed.</div>
           <div class="def-ex">Examples: drug possession/trafficking, weapons violations, prostitution, disorderly conduct, trespassing, liquor law violations, gambling offenses.</div>
         </div>
         <div class="def-card prop">
-          <div class="def-head prop">🏠 Against property</div>
+          <div class="def-head prop"><span aria-hidden="true">🏠</span> Against property</div>
           <div class="def-body">Offenses involving taking, damaging, or destroying someone's property. The victim is property, not a person directly.</div>
           <div class="def-ex">Examples: burglary, larceny/theft, motor vehicle theft, arson, fraud, embezzlement, shoplifting, vandalism.</div>
         </div>
         <div class="def-card pers">
-          <div class="def-head pers">🚨 Against persons</div>
+          <div class="def-head pers"><span aria-hidden="true">🚨</span> Against persons</div>
           <div class="def-body">Offenses directly targeting a person's safety, body, or freedom. A real individual is the victim in every case.</div>
           <div class="def-ex">Examples: murder, assault (simple and aggravated), robbery, rape and sex offenses, kidnapping, human trafficking, intimidation.</div>
         </div>
@@ -427,11 +431,12 @@ a{color:var(--blue)}
     <!-- two-col: bars + trend -->
     <div class="two">
       <div class="card">
-        <div class="card-title">Crime breakdown in area</div>
+        <h3 class="card-title">Crime breakdown in area</h3>
         <div id="nb-bars" aria-label="Crime type breakdown" role="list"></div>
         <div class="div" style="margin:14px 0 10px"></div>
-        <div class="card-title">Year-over-year comparison</div>
-        <div class="ch" style="height:130px"><canvas id="nb-yr-chart" aria-label="2024 vs 2025 crime comparison — see data table below in AAA mode"></canvas></div>
+        <h3 class="card-title">Year-over-year comparison</h3>
+        <div class="ch" style="height:130px"><canvas id="nb-yr-chart" role="img" aria-label="Chart: 2024 vs 2025 crime comparison by month. Exact values are in the data table below."></canvas></div>
+        <button class="disc-btn tbl-disc" id="nb-yr-tbl-btn" onclick="disc('nb-yr-tbl-btn','nb-yr-tbl')" aria-expanded="false" style="margin-top:8px">Data table</button>
         <table class="aaa-tbl" id="nb-yr-tbl" aria-label="Year comparison: 2024 vs 2025">
           <caption>2024 vs 2025 comparison by month</caption>
           <thead><tr><th scope="col">Month</th><th scope="col">2024</th><th scope="col">2025</th><th scope="col">Change</th></tr></thead>
@@ -440,8 +445,9 @@ a{color:var(--blue)}
         <p style="font-size:11px;color:var(--txt3);margin-top:10px">Source: CSPD open data (bc88-hemr). City limits only. Does not include EPSO, Fountain PD, or CSP incidents.</p>
       </div>
       <div class="card">
-        <div class="card-title">Monthly trend — last 12 months</div>
-        <div class="ch" style="height:190px"><canvas id="nb-trend-chart" aria-label="Monthly incident trend — see data table below in AAA mode"></canvas></div>
+        <h3 class="card-title">Monthly trend — last 12 months</h3>
+        <div class="ch" style="height:190px"><canvas id="nb-trend-chart" role="img" aria-label="Chart: monthly incident trend over the last 12 months. Exact values are in the data table below."></canvas></div>
+        <button class="disc-btn tbl-disc" id="nb-trend-tbl-btn" onclick="disc('nb-trend-tbl-btn','nb-trend-tbl')" aria-expanded="false" style="margin-top:8px">Data table</button>
         <table class="aaa-tbl" id="nb-trend-tbl" aria-label="Monthly incident trend data">
           <caption>Monthly incidents — last 12 months</caption>
           <thead><tr><th scope="col">Month</th><th scope="col">Incidents</th></tr></thead>
@@ -458,10 +464,10 @@ a{color:var(--blue)}
     <div class="card" id="nb-outcomes-card" aria-labelledby="nb-outcomes-title">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:10px">
         <div>
-          <div class="card-title" id="nb-outcomes-title" style="margin-bottom:2px">Case outcomes &amp; context</div>
+          <h3 class="card-title" id="nb-outcomes-title" style="margin-bottom:2px">Case outcomes &amp; context</h3>
           <div style="font-size:12px;color:var(--txt3)">What happened after the report was filed &middot; Domestic-violence share &middot; Live from CSPD open data</div>
         </div>
-        <div id="nb-outcomes-status" style="font-size:11px;color:var(--txt3);padding:4px 8px;border-radius:4px;background:var(--surf2)">Loading&hellip;</div>
+        <div id="nb-outcomes-status" role="status" style="font-size:11px;color:var(--txt3);padding:4px 8px;border-radius:4px;background:var(--surf2)">Loading&hellip;</div>
       </div>
 
       <div style="display:grid;grid-template-columns:1fr;gap:16px" class="nb-out-grid">
@@ -507,7 +513,7 @@ a{color:var(--blue)}
 
     <!-- data coverage gauge -->
     <div class="card">
-      <div class="card-title">How complete is this picture?</div>
+      <h3 class="card-title">How complete is this picture?</h3>
       <p style="font-size:13px;color:var(--txt2);margin-bottom:14px">This dashboard shows only data that is publicly available. Most of El Paso County's safety picture is not visible to residents.</p>
       <div role="list" aria-label="Data coverage by source">
         <div class="gap-row" role="listitem"><span class="gap-agency">CSPD (this neighborhood)</span><div class="gap-track"><div class="gap-fill" style="width:85%;background:var(--green)"></div></div><span class="gap-pct" style="color:var(--green)">85%</span><span class="gap-note">Real-time API, daily update</span></div>
@@ -519,7 +525,7 @@ a{color:var(--blue)}
 
     <!-- coroner context -->
     <div class="card">
-      <div class="card-title">County-wide coroner context — 2024 (all El Paso County)</div>
+      <h3 class="card-title">County-wide coroner context — 2024 (all El Paso County)</h3>
       <p style="font-size:13px;color:var(--txt2);margin-bottom:12px">The coroner covers the entire county — city and unincorporated. This is not neighborhood-specific but gives context for the county you live in. 2025 data expected Q3 2026.</p>
       <div class="cor-grid" role="list" aria-label="Coroner 2024 data">
         <div class="cor-chip" role="listitem"><span class="cor-n">154</span><div class="cor-l">Drug deaths</div><div class="cor-p">▼ 27% from 2023</div></div>
@@ -534,7 +540,7 @@ a{color:var(--blue)}
 
     <!-- nearby features -->
     <div class="card">
-      <div class="card-title">Nearby features &amp; context</div>
+      <h3 class="card-title">Nearby features &amp; context</h3>
       <ul class="feat-list" id="nb-features" aria-label="Nearby features"></ul>
       <p style="font-size:11px;color:var(--txt3);margin-top:12px">Distances approximate. Feature data is for context only and does not imply safety ratings. <a href="#" id="nb-map2" target="_blank" rel="noopener" style="color:var(--orange)">Open neighborhood on Google Maps ↗</a></p>
     </div>
@@ -547,7 +553,7 @@ a{color:var(--blue)}
 
   <div class="src">
     <strong>Data notes:</strong> Neighborhood figures estimated from CSPD open data portal
-    (<a href="https://policedata.coloradosprings.gov" target="_blank">policedata.coloradosprings.gov</a>, dataset bc88-hemr, Jan 2025–Mar 2026).
+    (<a href="https://policedata.coloradosprings.gov" target="_blank" rel="noopener">policedata.coloradosprings.gov</a>, dataset bc88-hemr, Jan 2025–Mar 2026).
     Population from U.S. Census Bureau ACS 2024 5-year estimates (2020–2024) via CensusReporter.
     CSPD data uses different counting rules than official CBI/FBI statistics — not directly comparable.
   </div>
@@ -576,8 +582,9 @@ a{color:var(--blue)}
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px">
       <div>
-        <div class="card-title" style="margin-bottom:3px">Monthly incidents — CSPD (Colorado Springs city only)</div>
-        <div style="font-size:12px;color:var(--txt3)">Toggle years on/off to compare · same Jan–Dec axis · 2024–25 from CSPD open data · 2022–23 estimated from CBI annual</div>
+        <h3 class="card-title" style="margin-bottom:3px">Monthly incidents — CSPD (Colorado Springs city only)</h3>
+        <div style="font-size:12px;color:var(--txt3)">Toggle years on/off to compare · same Jan–Dec axis · 2024–26 from CSPD open data · 2022–23 estimated from CBI annual</div>
+        <div id="chart-fresh" style="font-size:11px;color:var(--txt3);margin-top:3px" role="status">Static snapshot · checking CSPD open data for live figures…</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
         <div role="group" aria-label="Crime type filter" style="display:flex;gap:6px;flex-wrap:wrap">
@@ -588,32 +595,42 @@ a{color:var(--blue)}
         </div>
         <div role="group" aria-label="Year comparison" style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
           <span style="font-size:11px;color:var(--txt3)">Years:</span>
+          <select id="city-yr" class="rsel" style="font-size:11px;min-height:28px;padding:3px 8px" onchange="cityYearJump(this.value)" aria-label="Show a single year on the trend chart">
+            <option value="">Years…</option>
+            <option value="2022">2022 only</option>
+            <option value="2023">2023 only</option>
+            <option value="2024">2024 only</option>
+            <option value="2025">2025 only</option>
+            <option value="2026">2026 only</option>
+          </select>
           <button class="ql" id="ty-2022" onclick="toggleYr('2022')" aria-pressed="false">2022 <span style="font-size:9px;opacity:.7">CBI</span></button>
           <button class="ql" id="ty-2023" onclick="toggleYr('2023')" aria-pressed="false">2023 <span style="font-size:9px;opacity:.7">CBI</span></button>
           <button class="ql on" id="ty-2024" onclick="toggleYr('2024')" aria-pressed="true">2024</button>
           <button class="ql on" id="ty-2025" onclick="toggleYr('2025')" aria-pressed="true">2025</button>
+          <button class="ql" id="ty-2026" onclick="toggleYr('2026')" aria-pressed="false">2026 <span style="font-size:9px;opacity:.7">YTD</span></button>
         </div>
       </div>
     </div>
-    <div class="ch" style="height:260px"><canvas id="city-chart" aria-label="Monthly CSPD crime trend by year — see data table below in AAA mode"></canvas></div>
+    <div class="ch" style="height:260px"><canvas id="city-chart" role="img" aria-label="Chart: monthly CSPD crime trend by year. Exact values are in the data table below."></canvas></div>
     <div class="yr-note" id="yr-note" role="note"></div>
+    <button class="disc-btn tbl-disc" id="city-tbl-btn" onclick="disc('city-tbl-btn','city-tbl')" aria-expanded="false" style="margin-top:8px">Data table</button>
     <table class="aaa-tbl" id="city-tbl" aria-label="Monthly CSPD incidents by year">
       <caption>Monthly CSPD incidents — selected years (Jan–Dec)</caption>
-      <thead><tr><th scope="col">Month</th><th scope="col">2022 (est.)</th><th scope="col">2023 (est.)</th><th scope="col">2024</th><th scope="col">2025</th></tr></thead>
+      <thead><tr><th scope="col">Month</th><th scope="col">2022 (est.)</th><th scope="col">2023 (est.)</th><th scope="col">2024</th><th scope="col">2025</th><th scope="col">2026 (YTD)</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Jan</th><td>3,820</td><td>3,920</td><td>4,068</td><td>4,105</td></tr>
-        <tr><th scope="row">Feb</th><td>3,650</td><td>3,740</td><td>3,906</td><td>3,555</td></tr>
-        <tr><th scope="row">Mar</th><td>3,890</td><td>3,980</td><td>3,700</td><td>3,998</td></tr>
-        <tr><th scope="row">Apr</th><td>3,940</td><td>4,020</td><td>3,846</td><td>4,178</td></tr>
-        <tr><th scope="row">May</th><td>4,280</td><td>4,350</td><td>4,458</td><td>4,262</td></tr>
-        <tr><th scope="row">Jun</th><td>4,450</td><td>4,480</td><td>4,502</td><td>3,879</td></tr>
-        <tr><th scope="row">Jul</th><td>4,720</td><td>4,780</td><td>5,002</td><td>3,933</td></tr>
-        <tr><th scope="row">Aug</th><td>4,610</td><td>4,650</td><td>4,515</td><td>4,101</td></tr>
-        <tr><th scope="row">Sep</th><td>4,390</td><td>4,420</td><td>4,325</td><td>4,107</td></tr>
-        <tr><th scope="row">Oct</th><td>4,310</td><td>4,350</td><td>4,407</td><td>3,993</td></tr>
-        <tr><th scope="row">Nov</th><td>3,880</td><td>3,920</td><td>3,678</td><td>3,638</td></tr>
-        <tr><th scope="row">Dec</th><td>4,080</td><td>4,130</td><td>4,154</td><td>3,479</td></tr>
-        <tr style="font-weight:700;background:var(--surf2)"><th scope="row">Annual total</th><td>49,020</td><td>50,740</td><td>50,561</td><td>47,228</td></tr>
+        <tr><th scope="row">Jan</th><td>3,820</td><td>3,920</td><td>4,068</td><td>4,105</td><td>3,648</td></tr>
+        <tr><th scope="row">Feb</th><td>3,650</td><td>3,740</td><td>3,906</td><td>3,555</td><td>3,539</td></tr>
+        <tr><th scope="row">Mar</th><td>3,890</td><td>3,980</td><td>3,700</td><td>3,998</td><td>3,802</td></tr>
+        <tr><th scope="row">Apr</th><td>3,940</td><td>4,020</td><td>3,846</td><td>4,178</td><td>—</td></tr>
+        <tr><th scope="row">May</th><td>4,280</td><td>4,350</td><td>4,458</td><td>4,262</td><td>—</td></tr>
+        <tr><th scope="row">Jun</th><td>4,450</td><td>4,480</td><td>4,502</td><td>3,879</td><td>—</td></tr>
+        <tr><th scope="row">Jul</th><td>4,720</td><td>4,780</td><td>5,002</td><td>3,933</td><td>—</td></tr>
+        <tr><th scope="row">Aug</th><td>4,610</td><td>4,650</td><td>4,515</td><td>4,101</td><td>—</td></tr>
+        <tr><th scope="row">Sep</th><td>4,390</td><td>4,420</td><td>4,325</td><td>4,107</td><td>—</td></tr>
+        <tr><th scope="row">Oct</th><td>4,310</td><td>4,350</td><td>4,407</td><td>3,993</td><td>—</td></tr>
+        <tr><th scope="row">Nov</th><td>3,880</td><td>3,920</td><td>3,678</td><td>3,638</td><td>—</td></tr>
+        <tr><th scope="row">Dec</th><td>4,080</td><td>4,130</td><td>4,154</td><td>3,479</td><td>—</td></tr>
+        <tr style="font-weight:700;background:var(--surf2)"><th scope="row">Annual total</th><td>49,020</td><td>50,740</td><td>50,561</td><td>47,228</td><td>10,989 (Q1)</td></tr>
       </tbody>
     </table>
   </div>
@@ -621,27 +638,28 @@ a{color:var(--blue)}
   <!-- two-col: donut + zip -->
   <div class="two">
     <div class="card">
-      <div class="card-title">Crime type breakdown — CSPD 2025 full year</div>
-      <div class="ch" style="height:190px"><canvas id="donut-chart" aria-label="Crime type donut chart — see data table below in AAA mode"></canvas></div>
-      <table class="aaa-tbl" aria-label="Crime type breakdown CSPD 2025">
-        <caption>CSPD 2025 — crime type breakdown</caption>
-        <thead><tr><th scope="col">Category</th><th scope="col">Incidents</th><th scope="col">Percent</th></tr></thead>
-        <tbody>
-          <tr><td>Against society</td><td>21,626</td><td>51%</td></tr>
-          <tr><td>Against property</td><td>18,785</td><td>39%</td></tr>
-          <tr><td>Against persons</td><td>6,476</td><td>14%</td></tr>
-          <tr style="font-weight:700;background:var(--surf2)"><td>Total</td><td>46,887</td><td>100%</td></tr>
-        </tbody>
-      </table>
-      <div style="margin-top:14px">
-        <div class="cbar-row"><span class="cbar-lbl">Against society</span><div class="cbar-track"><div class="cbar-fill" style="width:51%;background:var(--navy)">51%</div></div><span class="cbar-n">21,626</span></div>
-        <div class="cbar-row"><span class="cbar-lbl">Against property</span><div class="cbar-track"><div class="cbar-fill" style="width:39%;background:#2A6E9E">39%</div></div><span class="cbar-n">18,785</span></div>
-        <div class="cbar-row"><span class="cbar-lbl">Against persons</span><div class="cbar-track"><div class="cbar-fill" style="width:14%;background:var(--orange)">14%</div></div><span class="cbar-n">6,476</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+        <h3 class="card-title" style="margin:0">Crime type breakdown — CSPD</h3>
+        <select id="donut-yr" class="rsel" style="font-size:11px;min-height:28px;padding:3px 8px" onchange="initDonut()" aria-label="Year for crime type breakdown">
+          <option value="2026">2026 (YTD)</option>
+          <option value="2025" selected>2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023 (est.)</option>
+          <option value="2022">2022 (est.)</option>
+        </select>
       </div>
+      <div class="ch" style="height:190px"><canvas id="donut-chart" role="img" aria-label="Chart: CSPD crime type breakdown. Exact values are in the data table below."></canvas></div>
+      <button class="disc-btn tbl-disc" id="donut-tbl-btn" onclick="disc('donut-tbl-btn','donut-tbl')" aria-expanded="false" style="margin-top:8px">Data table</button>
+      <table class="aaa-tbl" id="donut-tbl" aria-label="Crime type breakdown by category">
+        <caption id="donut-tbl-cap">CSPD — crime type breakdown</caption>
+        <thead><tr><th scope="col">Category</th><th scope="col">Incidents</th><th scope="col">Percent</th></tr></thead>
+        <tbody id="donut-tbl-body"></tbody>
+      </table>
+      <div style="margin-top:14px" id="donut-bars" aria-hidden="true"></div>
     </div>
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-        <div class="card-title" style="margin:0">Incidents by ZIP — top 10</div>
+        <h3 class="card-title" style="margin:0">Incidents by ZIP — top 10</h3>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <select id="zip-yr" class="rsel" style="font-size:11px;min-height:28px;padding:3px 8px" onchange="renderZips()" aria-label="Year">
             <option value="25_26">2025–26</option>
@@ -661,7 +679,7 @@ a{color:var(--blue)}
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px">
       <div>
-        <div class="card-title">El Paso County Sheriff (EPSO) — 2025 annual summary</div>
+        <h3 class="card-title">El Paso County Sheriff (EPSO) — 2025 annual summary</h3>
         <div style="font-size:12px;color:var(--txt3)">Unincorporated county · 2,130 sq mi · No real-time API · Annual report is the only public data</div>
       </div>
       <a href="https://epcsheriffsoffice.com" target="_blank" rel="noopener" class="map-btn">EPSO site ↗</a>
@@ -689,7 +707,7 @@ a{color:var(--blue)}
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px">
       <div>
-        <div class="card-title">El Paso County Coroner — 2024 annual data</div>
+        <h3 class="card-title">El Paso County Coroner — 2024 annual data</h3>
         <div style="font-size:12px;color:var(--txt3)">All of El Paso County (city + unincorporated) · 6,310 cases · 2025 data expected Q3 2026</div>
       </div>
       <a href="https://coroner.elpasoco.com/annual-coroners-report/" target="_blank" rel="noopener" class="map-btn">Full report ↗</a>
@@ -725,9 +743,9 @@ a{color:var(--blue)}
 
   <div class="src">
     <strong>Sources:</strong>
-    <a href="https://policedata.coloradosprings.gov/resource/bc88-hemr.json" target="_blank">CSPD Open Data (bc88-hemr)</a> ·
-    <a href="https://epcsheriffsoffice.com" target="_blank">EPSO 2025 Annual Report</a> ·
-    <a href="https://coroner.elpasoco.com/annual-coroners-report/" target="_blank">EPCCO 2024 Annual Report</a> ·
+    <a href="https://policedata.coloradosprings.gov/resource/bc88-hemr.json" target="_blank" rel="noopener">CSPD Open Data (bc88-hemr)</a> ·
+    <a href="https://epcsheriffsoffice.com" target="_blank" rel="noopener">EPSO 2025 Annual Report</a> ·
+    <a href="https://coroner.elpasoco.com/annual-coroners-report/" target="_blank" rel="noopener">EPCCO 2024 Annual Report</a> ·
     Population: ACS 2024 5-yr, Census Bureau ·
     CSPD open data counts differ from official CBI/FBI statistics — not directly comparable.
   </div>
@@ -752,7 +770,7 @@ a{color:var(--blue)}
 
   <!-- completeness -->
   <div class="card">
-    <div class="card-title">Data completeness by agency — how much is publicly visible?</div>
+    <h3 class="card-title">Data completeness by agency — how much is publicly visible?</h3>
     <div role="list">
       <div class="comp-row" role="listitem"><span class="comp-ag">CSPD (Colorado Springs)</span><div class="comp-track"><div class="comp-fill" style="width:88%;background:var(--green)"></div></div><span class="comp-pct" style="color:var(--green)">88%</span><span class="comp-note">Real-time API, 511k+ records</span></div>
       <div class="comp-row" role="listitem"><span class="comp-ag">Coroner (EPCCO)</span><div class="comp-track"><div class="comp-fill" style="width:45%;background:var(--amber)"></div></div><span class="comp-pct" style="color:var(--amber)">45%</span><span class="comp-note">Annual PDF, 9-month lag</span></div>
@@ -768,7 +786,7 @@ a{color:var(--blue)}
 
   <!-- ── Visible vs Actual — CAD vs RMS ── -->
   <div class="card" aria-labelledby="visactual-title">
-    <div class="card-title" id="visactual-title">What this dashboard shows vs. what CSPD actually responds to</div>
+    <h3 class="card-title" id="visactual-title">What this dashboard shows vs. what CSPD actually responds to</h3>
     <p style="font-size:13px;color:var(--txt2);margin-bottom:16px;max-width:720px">Every chart above counts <strong>incident reports</strong> — the records that exist after an officer investigates and writes it up. But CSPD is dispatched to far more calls than become reports. Most close on scene without a report. Those calls exist in CAD (Computer-Aided Dispatch) but are not published as a public dataset.</p>
 
     <!-- headline ratio -->
@@ -957,7 +975,9 @@ const YR = {
     S:[1750,1667,1765,1778,1927,1977,2105,2042,1937,1907,1714,1807]
   },
   2024: { T:D_T.slice(0,12), P:D_P.slice(0,12), PR:D_PR.slice(0,12), S:D_S.slice(0,12) },
-  2025: { T:D_T.slice(12,24), P:D_P.slice(12,24), PR:D_PR.slice(12,24), S:D_S.slice(12,24) }
+  2025: { T:D_T.slice(12,24), P:D_P.slice(12,24), PR:D_PR.slice(12,24), S:D_S.slice(12,24) },
+  // 2026: Jan–Mar only — Apr is partial (see Apr 26* in MO_LBLS), excluded from the year line
+  2026: { T:D_T.slice(24,27), P:D_P.slice(24,27), PR:D_PR.slice(24,27), S:D_S.slice(24,27) }
 };
 const MO_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -1563,7 +1583,8 @@ const YR_COLORS = {
   '2022':{ T:'#888780', P:'#B0A898', PR:'#A0B0C0', S:'#C0A880' },
   '2023':{ T:'#5A6E8A', P:'#8A6A4A', PR:'#4A7A9A', S:'#8A6A2A' },
   '2024':{ T:'#1B2A4A', P:'#C45C26', PR:'#2A6E9E', S:'#6B4A1E' },
-  '2025':{ T:'#2A7A5A', P:'#8A2A5A', PR:'#2A5A9A', S:'#8A5A1A' }
+  '2025':{ T:'#2A7A5A', P:'#8A2A5A', PR:'#2A5A9A', S:'#8A5A1A' },
+  '2026':{ T:'#6A3A8A', P:'#A8442A', PR:'#2A7A8A', S:'#8A6A2A' }
 };
 const TYPE_LABELS = { T:'Total', P:'Against persons', PR:'Against property', S:'Against society' };
 const TYPE_DASH = { T:[], P:[], PR:[5,3], S:[2,3] };
@@ -1571,7 +1592,8 @@ const TYPE_DASH = { T:[], P:[], PR:[5,3], S:[2,3] };
 function buildCityDatasets() {
   const types = currentType === 'all' ? ['T','P','PR','S'] : [currentType];
   const ds = [];
-  for (const yr of activeYears) {
+  // Render years ascending regardless of the order buttons were toggled.
+  for (const yr of [...activeYears].sort()) {
     const c = YR_COLORS[yr];
     for (const tp of types) {
       const data = YR[yr]?.[tp];
@@ -1620,6 +1642,29 @@ function initCityChart() {
   } else {
     note.style.display = 'none';
   }
+  syncCityYearSelect();
+}
+
+// Keep the year dropdown in sync: shows the single active year, or the
+// "Years…" placeholder when several years are toggled on for comparison.
+function syncCityYearSelect() {
+  const sel = document.getElementById('city-yr');
+  if (sel) sel.value = activeYears.length === 1 ? activeYears[0] : '';
+}
+
+// Dropdown action: collapse the view to one year (toggles stay available
+// to add years back for comparison).
+function cityYearJump(yr) {
+  if (!yr) return;
+  activeYears = [yr];
+  ['2022','2023','2024','2025','2026'].forEach(y => {
+    const b = document.getElementById('ty-' + y);
+    if (!b) return;
+    const on = (y === yr);
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-pressed', String(on));
+  });
+  initCityChart();
 }
 
 function setType(t) {
@@ -1648,16 +1693,111 @@ function toggleYr(yr) {
 }
 
 /* ══════════════════════════════════════════
+   LIVE CRIME DATA  (CSPD open data via Worker)
+══════════════════════════════════════════ */
+// On load, replace the baked-in 2024–26 arrays with current figures from
+// /api/crime-monthly (a cached proxy to CSPD open data). Any failure leaves
+// the static snapshot untouched — the chart renders immediately either way.
+function setChartFreshness(text) {
+  const el = document.getElementById('chart-fresh');
+  if (el) el.textContent = text;
+}
+
+function updateCityTableLive() {
+  const body = document.querySelector('#city-tbl tbody');
+  if (!body) return;
+  const rows = body.querySelectorAll('tr');
+  const cols = { 3: '2024', 4: '2025', 5: '2026' }; // cell index → year column
+  for (let m = 0; m < 12; m++) {
+    if (!rows[m]) continue;
+    for (const idx of [3, 4, 5]) {
+      const t = YR[cols[idx]] && YR[cols[idx]].T;
+      const cell = rows[m].cells[idx];
+      if (cell) cell.textContent = (t && t[m] != null) ? t[m].toLocaleString() : '—';
+    }
+  }
+  const totalRow = rows[12]; // "Annual total" row
+  if (totalRow) {
+    for (const idx of [3, 4, 5]) {
+      const t = YR[cols[idx]] && YR[cols[idx]].T;
+      if (t && t.length && totalRow.cells[idx]) {
+        const sum = t.reduce((a, b) => a + b, 0);
+        totalRow.cells[idx].textContent =
+          sum.toLocaleString() + (t.length < 12 ? ' (YTD)' : '');
+      }
+    }
+  }
+}
+
+async function loadLiveCrimeData() {
+  try {
+    const res = await fetch('/api/crime-monthly', { headers: { Accept: 'application/json' } });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const months = (data && data.months) || {};
+    if (!Object.keys(months).length) throw new Error('no monthly data returned');
+
+    const now = new Date();
+    const curYM = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+
+    let updated = 0;
+    for (const yr of ['2024', '2025', '2026']) {
+      const P = [], PR = [], S = [], T = [];
+      for (let m = 1; m <= 12; m++) {
+        const ym = yr + '-' + String(m).padStart(2, '0');
+        if (ym >= curYM) break;        // current month is still in progress
+        const r = months[ym];
+        if (!r) break;                 // not published yet — stop the year here
+        const p = r.P || 0, pr = r.PR || 0, s = r.S || 0;
+        P.push(p); PR.push(pr); S.push(s); T.push(p + pr + s);
+      }
+      if (T.length) { YR[yr] = { T: T, P: P, PR: PR, S: S }; updated++; }
+    }
+    if (!updated) throw new Error('no complete months parsed');
+
+    updateCityTableLive();
+    if (cityChart) initCityChart();
+    if (donutChart) initDonut();
+
+    const ytd = (YR['2026'] && YR['2026'].T) ? YR['2026'].T.length : 0;
+    const range = ytd ? ' · 2026 YTD Jan–' + MO_SHORT[ytd - 1] : '';
+    const when = new Date(data.fetched || Date.now())
+      .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    setChartFreshness('Live · CSPD open data (bc88-hemr)' + range + ' · refreshed ' + when);
+  } catch (err) {
+    console.warn('Live crime data unavailable — using static snapshot:', err);
+    setChartFreshness('Static snapshot (pulled Apr 12, 2026) · live CSPD feed unavailable');
+  }
+}
+loadLiveCrimeData();
+
+/* ══════════════════════════════════════════
    DONUT CHART
 ══════════════════════════════════════════ */
 function initDonut() {
+  const sel = document.getElementById('donut-yr');
+  const yr = sel ? sel.value : '2025';
+  const d = YR[yr];
+  const sum = a => (a || []).reduce((x, y) => x + y, 0);
+  const S = d ? sum(d.S) : 0, PR = d ? sum(d.PR) : 0, P = d ? sum(d.P) : 0;
+  const total = S + PR + P;
+  const pct = n => total ? Math.round(n / total * 100) : 0;
+  // color = donut slice; bar = bar fill (darker where white label text sits on it, for 4.5:1 contrast)
+  const cats = [
+    { lbl: 'Against society',  n: S,  pct: pct(S),  color: '#1B2A4A', bar: '#1B2A4A' },
+    { lbl: 'Against property', n: PR, pct: pct(PR), color: '#2A6E9E', bar: '#2A6E9E' },
+    { lbl: 'Against persons',  n: P,  pct: pct(P),  color: '#C45C26', bar: '#A84A18' }
+  ];
+  // 2026 is partial; 2022–23 are CBI-derived estimates.
+  const suffix = yr === '2026' ? ' YTD' : (yr <= '2023' ? ' (est.)' : '');
+
   if (donutChart) donutChart.destroy();
   const ctx = document.getElementById('donut-chart').getContext('2d');
   donutChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Against society (51%)', 'Against property (39%)', 'Against persons (14%)'],
-      datasets: [{ data: [21626, 18785, 6476], backgroundColor: ['#1B2A4A','#2A6E9E','#C45C26'], borderWidth: 3, borderColor: '#fff', hoverOffset: 4 }]
+      labels: cats.map(c => `${c.lbl} (${c.pct}%)`),
+      datasets: [{ data: cats.map(c => c.n), backgroundColor: cats.map(c => c.color), borderWidth: 3, borderColor: '#fff', hoverOffset: 4 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false, cutout: '58%',
@@ -1667,6 +1807,27 @@ function initDonut() {
       }
     }
   });
+
+  const canvas = document.getElementById('donut-chart');
+  if (canvas) canvas.setAttribute('aria-label',
+    `Chart: CSPD ${yr}${suffix} crime type breakdown. Exact values are in the data table below.`);
+
+  const cap = document.getElementById('donut-tbl-cap');
+  if (cap) cap.textContent = `CSPD ${yr}${suffix} — crime type breakdown`;
+
+  const tb = document.getElementById('donut-tbl-body');
+  if (tb) {
+    tb.innerHTML = cats.map(c =>
+      `<tr><td>${c.lbl}</td><td>${c.n.toLocaleString()}</td><td>${c.pct}%</td></tr>`).join('') +
+      `<tr style="font-weight:700;background:var(--surf2)"><td>Total</td><td>${total.toLocaleString()}</td><td>100%</td></tr>`;
+  }
+
+  const bars = document.getElementById('donut-bars');
+  if (bars) {
+    bars.innerHTML = cats.map(c =>
+      `<div class="cbar-row"><span class="cbar-lbl">${c.lbl}</span><div class="cbar-track"><div class="cbar-fill" style="width:${c.pct}%;background:${c.bar}">${c.pct}%</div></div><span class="cbar-n">${c.n.toLocaleString()}</span></div>`
+    ).join('');
+  }
 }
 
 /* ══════════════════════════════════════════
