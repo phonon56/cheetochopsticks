@@ -17,3 +17,15 @@ wrangler.jsonc
 package.json
 package-lock.json
 tsconfig.json
+# Local dev, VCS pointers, and wrangler build artifacts — never serve as assets.
+.git
+.git/**
+.gitignore
+.assetsignore
+.githooks/**
+.claude/**
+.wrangler/**
+.dev.vars*
+.env*
+.DS_Store
+**/.DS_Store
