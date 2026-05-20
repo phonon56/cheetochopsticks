@@ -589,10 +589,16 @@ function cmp(a,b){
 }
 function current(){
   var q=search.value.trim().toLowerCase();
+  /* Singular→plural variants so "battery" matches "batteries", "tire" matches "tires", etc. */
+  var qs=q?[q]:[];
+  if(q.length>=4){
+    if(q.charAt(q.length-1)==='y')qs.push(q.slice(0,-1)+'ies');
+    if(q.charAt(q.length-1)!=='s')qs.push(q+'s');
+  }
   return PLACES.filter(function(r){
     var mc=active.length===0||active.some(function(c){return c==='free'?r.free:r.cats.indexOf(c)>-1;});
     var hay=(r.n+' '+r.d+' '+r.cats.join(' ')+' '+(r.free?'free':'')).toLowerCase();
-    return mc&&(q===''||hay.indexOf(q)>-1);
+    return mc&&(qs.length===0||qs.some(function(qv){return hay.indexOf(qv)>-1;}));
   }).sort(cmp);
 }
 function webLink(r){
