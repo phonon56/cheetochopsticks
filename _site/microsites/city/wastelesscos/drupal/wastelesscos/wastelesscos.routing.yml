@@ -1,0 +1,9 @@
+wastelesscos.page:
+  path: '/WastelessCOS'
+  defaults:
+    _controller: '\Drupal\wastelesscos\Controller\WastelessCosController::page'
+    _title: 'WastelessCOS: Waste Diversion, Resource Directory & Sorting Guide'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: false

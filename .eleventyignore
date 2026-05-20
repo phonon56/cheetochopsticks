@@ -35,3 +35,8 @@ shared/optimizingScripts/Wage_Data/methodology.md
 # build library at microsites/_dversion-build.mjs is internal infrastructure.
 microsites/**/dversion/**
 microsites/_dversion-build.mjs
+
+# WastelessCOS Drupal module — Twig syntax ({{ '…'|t }}) collides with
+# Nunjucks; the standalone HTML at microsites/city/wastelesscos/wastelesscos.html
+# is the version that ships to cheetochopsticks.com.
+microsites/city/wastelesscos/drupal/**

@@ -1,0 +1,6 @@
+name: WastelessCOS
+type: module
+description: 'WastelessCOS landing page — waste diversion plan, resource directory, and how-to-sort guide for City of Colorado Springs.'
+package: City of Colorado Springs
+core_version_requirement: ^9.4 || ^10 || ^11
+configure: wastelesscos.page
