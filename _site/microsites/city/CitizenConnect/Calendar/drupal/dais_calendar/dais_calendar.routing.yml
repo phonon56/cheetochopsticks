@@ -1,0 +1,9 @@
+dais_calendar.page:
+  path: '/calendar'
+  defaults:
+    _controller: '\Drupal\dais_calendar\Controller\DaisCalendarController::page'
+    _title: 'The Dais — Civic Calendar'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: false

@@ -40,3 +40,7 @@ microsites/_dversion-build.mjs
 # Nunjucks; the standalone HTML at microsites/city/wastelesscos/wastelesscos.html
 # is the version that ships to cheetochopsticks.com.
 microsites/city/wastelesscos/drupal/**
+
+# The Dais Civic Calendar Drupal module — same reason. The standalone HTML
+# at microsites/city/CitizenConnect/Calendar/dais-calendar.html is what ships.
+microsites/city/CitizenConnect/Calendar/drupal/**

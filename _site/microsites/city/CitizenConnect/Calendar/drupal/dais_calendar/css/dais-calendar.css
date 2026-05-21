@@ -1,0 +1,240 @@
+/**
+ * The Dais — Civic Calendar (Drupal port)
+ * Scoped to .dais-cal so styles cannot bleed into the active site theme.
+ * Palette tuned to WCAG 2.1 AAA on the dark theme (text ≥7:1; non-text UI ≥3:1).
+ */
+
+.dais-cal { --ink:#0a0f1a; --ink-mid:#111827; --ink-card:#161e2e;
+  --ink-border:#3a4f78;            
+  --ink-border-soft:#1e2d4a;       
+  --paper:#f0ece0;                 
+  --paper-mid:#d8d2c0;             
+  --paper-dim:#bdb39d;             
+  --gold:#c8a84b;                  
+  --gold-light:#e8c870;            
+  --gold-dark:#b08c3c;             
+  --gold-border:#9a7e30;           
+  --navy:#001a4d; --blue:#0049b1; --sky:#4a9eff;
+  --red:#b91c1c; --red-light:#ef4444; --teal:#0b7a75; --green:#065f46;
+  --focus:#ffd866;                 
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-sans:'IBM Plex Sans',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono','Courier New',monospace;
+  --radius-sm:4px; --radius-md:8px; --radius-lg:14px;
+  --shadow-md:0 4px 16px rgba(0,0,0,.5); --shadow-lg:0 12px 40px rgba(0,0,0,.6);
+  --ease:cubic-bezier(.4,0,.2,1);
+  --c-alert:#ef4444; --c-book:#0b7a75; --c-recurring:#c8a84b;
+  --c-news:#4a9eff; --c-project:#7c5cff; --c-notice:#e0832a; }
+.dais-cal .visually-hidden { position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0 }
+.dais-cal .skip-link { position:absolute;left:12px;top:-60px;z-index:1000;background:var(--gold);color:var(--ink);padding:.7rem 1.1rem;border-radius:var(--radius-md);font-family:var(--font-mono);font-size:.8rem;text-decoration:none;font-weight:600;transition:top .15s ease }
+.dais-cal .skip-link:focus { top:12px;outline:3px solid var(--focus);outline-offset:2px }
+.dais-cal :focus { outline:none }
+.dais-cal a:focus-visible, .dais-cal button:focus-visible, .dais-cal input:focus-visible, .dais-cal select:focus-visible, .dais-cal [role="button"]:focus-visible, .dais-cal [role="checkbox"]:focus-visible, .dais-cal [role="tab"]:focus-visible, .dais-cal [tabindex]:focus-visible, .dais-cal .day-num-btn:focus-visible { outline:3px solid var(--focus);outline-offset:2px;border-radius:var(--radius-sm) }
+@media (prefers-reduced-motion: reduce) {
+  .dais-cal *, .dais-cal *::before, .dais-cal *::after { animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important }
+}
+.dais-cal * { box-sizing:border-box;margin:0;padding:0 }
+.dais-cal, .dais-cal { height:100% }
+.dais-cal { font-family:var(--font-sans);background:var(--ink);color:var(--paper);font-weight:300;line-height:1.5;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1200px 600px at 80% -10%,rgba(0,73,177,.10),transparent 60%); }
+.dais-cal a { color:inherit }
+.dais-cal button { font-family:inherit;cursor:pointer;border:none;background:none;color:inherit }
+.dais-cal ::selection { background:var(--gold);color:var(--ink) }
+.dais-cal .app { display:flex;flex-direction:column;min-height:100vh }
+.dais-cal header.top { border-bottom:1px solid var(--ink-border);padding:14px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  background:linear-gradient(180deg,rgba(22,30,46,.9),rgba(10,15,26,.6));position:sticky;top:0;z-index:100;backdrop-filter:blur(8px); }
+.dais-cal .brand { display:flex;flex-direction:column;line-height:1.05 }
+.dais-cal .brand .mark { font-family:var(--font-display);font-weight:900;font-size:1.45rem;letter-spacing:-.5px }
+.dais-cal .brand .mark span { color:var(--gold) }
+.dais-cal .brand .sub { font-family:var(--font-mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--paper-dim);margin-top:3px }
+.dais-cal .top .spacer { flex:1 }
+.dais-cal .search-wrap { position:relative;min-width:240px;flex:0 1 380px }
+.dais-cal .search-wrap input { width:100%;background:var(--ink);border:1px solid var(--ink-border);color:var(--paper);font-family:var(--font-mono);
+  font-size:.82rem;padding:9px 12px 9px 34px;border-radius:var(--radius-md);outline:none;transition:border-color .2s var(--ease); }
+.dais-cal .search-wrap input:focus { border-color:var(--gold) }
+.dais-cal .search-wrap input::placeholder { color:var(--paper-dim) }
+.dais-cal .search-wrap .ic { position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--paper-dim);font-size:.9rem }
+.dais-cal .main { display:flex;flex:1;min-height:0 }
+.dais-cal aside { width:280px;flex:0 0 280px;border-right:1px solid var(--ink-border);padding:20px 18px;overflow-y:auto;background:rgba(17,24,39,.35) }
+.dais-cal aside .rail-h { font-family:var(--font-mono);font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--paper-mid);margin:22px 0 10px;display:flex;align-items:center;gap:8px }
+.dais-cal aside .rail-h:first-of-type { margin-top:0 }
+.dais-cal aside .rail-h .ln { flex:1;height:1px;background:var(--ink-border-soft) }
+.dais-cal .filter { display:flex;align-items:center;gap:10px;padding:7px 9px;border-radius:var(--radius-sm);cursor:pointer;transition:background .15s var(--ease);user-select:none;font-size:.86rem;width:100%;text-align:left;background:transparent;border:none;color:inherit;font-family:inherit }
+.dais-cal .filter:hover { background:rgba(255,255,255,.06) }
+.dais-cal .filter .dot { width:11px;height:11px;border-radius:3px;flex:0 0 11px;box-shadow:0 0 0 1px rgba(255,255,255,.25) inset }
+.dais-cal .filter .label { flex:1 }
+.dais-cal .filter .count { font-family:var(--font-mono);font-size:.7rem;color:var(--paper-mid);background:var(--ink);padding:1px 6px;border-radius:20px;border:1px solid var(--ink-border) }
+.dais-cal .only-btn { font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--ink-border);border-radius:20px;padding:2px 8px;transition:border-color .12s;flex:0 0 auto;background:transparent;cursor:pointer }
+.dais-cal .only-btn:hover, .dais-cal .only-btn:focus-visible { border-color:var(--gold);background:rgba(200,168,75,.18);color:var(--gold-light) }
+.dais-cal .filter[aria-checked="false"] { opacity:.55 }
+.dais-cal .filter[aria-checked="false"] .label { color:var(--paper-mid) }
+.dais-cal .filter.zero .count { opacity:.6 }
+.dais-cal .filter[aria-checked="false"] .dot { background:transparent !important;box-shadow:0 0 0 1px var(--paper-mid) inset }
+.dais-cal .src-group { font-family:var(--font-mono);font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);margin:12px 0 4px 9px }
+.dais-cal .src-filter { font-size:.8rem }
+.dais-cal .src-filter .dot { background:var(--paper-mid) !important;box-shadow:none }
+.dais-cal .src-filter[aria-checked="false"] .dot { background:transparent !important;box-shadow:0 0 0 1px var(--paper-mid) inset }
+.dais-cal .rail-actions { display:flex;gap:8px;margin-top:14px }
+.dais-cal .rail-actions button { flex:1;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;padding:8px;border:1px solid var(--ink-border);border-radius:var(--radius-sm);color:var(--paper-mid);transition:all .15s }
+.dais-cal .rail-actions button:hover { border-color:var(--gold);color:var(--gold) }
+.dais-cal .legend-note { margin-top:18px;font-size:.72rem;color:var(--paper-dim);line-height:1.55;border-top:1px solid var(--ink-border);padding-top:14px }
+.dais-cal .legend-note code { font-family:var(--font-mono);color:var(--gold-light) }
+.dais-cal .cal { flex:1;display:flex;flex-direction:column;min-width:0 }
+.dais-cal .cal-toolbar { display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--ink-border);flex-wrap:wrap }
+.dais-cal .nav-group { display:flex;align-items:center;gap:6px }
+.dais-cal .nav-group button { width:34px;height:34px;border:1px solid var(--ink-border);border-radius:var(--radius-sm);font-size:1rem;color:var(--paper-mid);transition:all .15s;display:grid;place-items:center }
+.dais-cal .nav-group button:hover { border-color:var(--gold);color:var(--gold) }
+.dais-cal .today-btn { width:auto !important;padding:0 14px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase }
+.dais-cal .period-title { font-family:var(--font-display);font-weight:700;font-size:1.5rem;letter-spacing:-.5px;min-width:240px }
+.dais-cal .cal-toolbar .spacer { flex:1 }
+.dais-cal .view-switch { display:flex;border:1px solid var(--ink-border);border-radius:var(--radius-md);overflow:hidden }
+.dais-cal .view-switch button { padding:8px 16px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim);transition:all .15s }
+.dais-cal .view-switch button.active { background:var(--gold);color:var(--ink);font-weight:500 }
+.dais-cal .view-switch button:not(.active):hover { color:var(--paper) }
+.dais-cal .cal-body { flex:1;overflow:auto }
+.dais-cal .month { display:flex;flex-direction:column;height:100% }
+.dais-cal .weekdays { display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--ink-border) }
+.dais-cal .weekdays div { padding:10px 12px;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-dim) }
+.dais-cal .grid-month { display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:1fr;flex:1 }
+.dais-cal .day-cell { border-right:1px solid var(--ink-border);border-bottom:1px solid var(--ink-border);padding:6px 7px;min-height:112px;overflow:hidden;position:relative;transition:background .15s;display:flex;flex-direction:column }
+.dais-cal .day-cell:nth-child(7n) { border-right:none }
+.dais-cal .day-cell.dim { background:rgba(0,0,0,.22) }
+.dais-cal .day-cell.dim .day-num-btn { color:var(--paper-mid);opacity:.7 }
+.dais-cal .day-num-btn { font-family:var(--font-mono);font-size:.82rem;color:var(--paper-mid);display:inline-block;margin-bottom:4px;background:transparent;border:none;padding:0;cursor:pointer;text-align:left;font-weight:600;align-self:flex-start;border-radius:3px;line-height:1.2 }
+.dais-cal .day-num-btn:hover { color:var(--gold-light);background:rgba(255,255,255,.06) }
+.dais-cal .day-cell.today .day-num-btn { background:var(--gold);color:var(--ink);font-weight:700;min-width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;padding:0 4px }
+.dais-cal .day-cell.today .day-num-btn:hover { background:var(--gold-light) }
+.dais-cal .evt { display:flex;align-items:center;gap:5px;font-size:.78rem;padding:3px 6px;border-radius:3px;margin-bottom:2px;background:rgba(255,255,255,.07);border-left:3px solid var(--cat);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .12s;width:100%;text-align:left;color:inherit;font-family:inherit;cursor:pointer;border-top:none;border-right:none;border-bottom:none }
+.dais-cal .evt:hover, .dais-cal .evt:focus-visible { background:rgba(255,255,255,.18) }
+.dais-cal .evt .etime { font-family:var(--font-mono);font-size:.7rem;color:var(--paper-mid);flex:0 0 auto;font-weight:500 }
+.dais-cal .evt .etitle { overflow:hidden;text-overflow:ellipsis }
+.dais-cal .more-link { font-family:var(--font-mono);font-size:.7rem;color:var(--gold-light);padding:2px 5px;display:inline-block;cursor:pointer;background:transparent;border:none;text-align:left;text-decoration:underline;text-underline-offset:2px }
+.dais-cal .more-link:hover { color:var(--gold) }
+.dais-cal .timegrid { display:grid;grid-template-columns:64px 1fr;min-height:100% }
+.dais-cal .time-col .ts { height:56px;border-bottom:1px solid rgba(30,45,74,.5);font-family:var(--font-mono);font-size:.62rem;color:var(--paper-dim);padding:3px 8px;text-align:right }
+.dais-cal .tg-right { display:flex;flex-direction:column }
+.dais-cal .week-head { display:grid;border-bottom:1px solid var(--ink-border);position:sticky;top:0;background:var(--ink);z-index:6 }
+.dais-cal .wh-cell { padding:9px 8px;text-align:center;border-right:1px solid var(--ink-border);background:transparent;border-top:none;border-bottom:none;color:inherit;font-family:inherit;cursor:pointer;width:100% }
+.dais-cal .wh-cell:last-child { border-right:none }
+.dais-cal .wh-cell:hover { background:rgba(255,255,255,.05) }
+.dais-cal .wh-cell .wd { font-family:var(--font-mono);font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-mid);display:block }
+.dais-cal .wh-cell .wn { font-family:var(--font-display);font-size:1.35rem;font-weight:700;margin-top:2px;display:block }
+.dais-cal .wh-cell.today .wn { color:var(--gold-light) }
+.dais-cal .allday-row { display:grid;border-bottom:1px solid var(--ink-border);background:rgba(0,0,0,.22) }
+.dais-cal .ad-cell { border-right:1px solid var(--ink-border);padding:4px;min-height:30px }
+.dais-cal .ad-cell:last-child { border-right:none }
+.dais-cal .ad-evt { font-size:.74rem;padding:3px 6px;border-radius:3px;margin-bottom:2px;background:color-mix(in srgb,var(--cat) 32%,var(--ink-card));border-left:3px solid var(--cat);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;text-align:left;border-top:none;border-right:none;border-bottom:none;color:inherit;font-family:inherit }
+.dais-cal .ad-evt:hover, .dais-cal .ad-evt:focus-visible { background:color-mix(in srgb,var(--cat) 48%,var(--ink-card)) }
+.dais-cal .week-body { display:grid;position:relative;flex:1 }
+.dais-cal .wb-col { border-right:1px solid var(--ink-border);position:relative }
+.dais-cal .wb-col:last-child { border-right:none }
+.dais-cal .hour-line { height:56px;border-bottom:1px solid rgba(30,45,74,.5) }
+.dais-cal .tevt { position:absolute;left:3px;right:3px;border-radius:var(--radius-sm);padding:5px 7px;font-size:.78rem;overflow:hidden;background:color-mix(in srgb,var(--cat) 36%,var(--ink-card));border-left:3px solid var(--cat);border-top:none;border-right:none;border-bottom:none;cursor:pointer;z-index:2;box-shadow:var(--shadow-md);transition:transform .12s;text-align:left;color:inherit;font-family:inherit;width:calc(100% - 6px) }
+.dais-cal .tevt:hover, .dais-cal .tevt:focus-visible { transform:translateY(-1px);z-index:3;background:color-mix(in srgb,var(--cat) 52%,var(--ink-card)) }
+.dais-cal .tevt .tt { font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis }
+.dais-cal .tevt .tm { font-family:var(--font-mono);font-size:.7rem;color:var(--paper-mid) }
+.dais-cal .empty { padding:60px;text-align:center;color:var(--paper-dim) }
+.dais-cal .empty .big { font-family:var(--font-display);font-size:1.4rem;color:var(--paper-mid);margin-bottom:8px }
+.dais-cal .drawer-scrim { position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .25s;z-index:300 }
+.dais-cal .drawer-scrim.open { opacity:1;pointer-events:auto }
+.dais-cal .drawer { position:fixed;top:0;right:0;height:100%;width:430px;max-width:92vw;background:var(--ink-mid);border-left:1px solid var(--ink-border);box-shadow:var(--shadow-lg);transform:translateX(100%);transition:transform .3s var(--ease);z-index:310;overflow-y:auto }
+.dais-cal .drawer.open { transform:translateX(0) }
+.dais-cal .drawer-head { padding:22px 24px 18px;border-bottom:1px solid var(--ink-border);position:relative }
+.dais-cal .cat-tag { display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:color-mix(in srgb,var(--cat) 22%,transparent);color:var(--cat-text);border:1px solid color-mix(in srgb,var(--cat) 50%,transparent) }
+.dais-cal .drawer-head h2 { font-family:var(--font-display);font-weight:700;font-size:1.4rem;line-height:1.2;margin:14px 0 6px }
+.dais-cal .drawer-close { position:absolute;top:18px;right:18px;width:30px;height:30px;border:1px solid var(--ink-border);border-radius:var(--radius-sm);font-size:1.1rem;color:var(--paper-mid);display:grid;place-items:center }
+.dais-cal .drawer-close:hover { border-color:var(--gold);color:var(--gold) }
+.dais-cal .drawer-body { padding:20px 24px }
+.dais-cal .meta-row { display:flex;gap:12px;padding:9px 0;border-bottom:1px solid rgba(30,45,74,.5);font-size:.86rem }
+.dais-cal .meta-row .mk { font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim);flex:0 0 92px;padding-top:2px }
+.dais-cal .meta-row .mv { flex:1 }
+.dais-cal .parcel-chip { font-family:var(--font-mono);font-size:.84rem;color:var(--gold-light);background:var(--ink);border:1px solid var(--ink-border);padding:3px 9px;border-radius:var(--radius-sm);display:inline-block;cursor:pointer;font-weight:500 }
+.dais-cal .parcel-chip:hover, .dais-cal .parcel-chip:focus-visible { border-color:var(--gold);color:var(--gold-light) }
+.dais-cal .plain { margin:18px 0;padding:14px 16px;background:rgba(200,168,75,.07);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:.9rem;line-height:1.6 }
+.dais-cal .plain .pl-label { font-family:var(--font-mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px }
+.dais-cal .drawer-actions { display:flex;flex-direction:column;gap:9px;margin-top:18px }
+.dais-cal .btn { display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:var(--radius-md);font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;transition:all .15s;text-decoration:none }
+.dais-cal .btn.primary { background:var(--gold);color:var(--ink);font-weight:500 }
+.dais-cal .btn.primary:hover { background:var(--gold-light) }
+.dais-cal .btn.ghost { border:1px solid var(--ink-border);color:var(--paper-mid) }
+.dais-cal .btn.ghost:hover { border-color:var(--gold);color:var(--gold) }
+.dais-cal .connected { margin-top:22px }
+.dais-cal .connected h4 { font-family:var(--font-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-dim);margin-bottom:10px }
+.dais-cal .conn-item { display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--ink-border);border-radius:var(--radius-sm);margin-bottom:6px;font-size:.84rem;cursor:pointer;transition:border-color .15s;background:transparent;color:inherit;font-family:inherit;width:100%;text-align:left }
+.dais-cal .conn-item:hover, .dais-cal .conn-item:focus-visible { border-color:var(--gold);color:var(--gold-light) }
+.dais-cal .conn-item .dot { width:8px;height:8px;border-radius:2px;flex:0 0 8px }
+.dais-cal footer.bottom { border-top:1px solid var(--ink-border);padding:12px 22px;font-family:var(--font-mono);font-size:.64rem;color:var(--paper-dim);display:flex;gap:16px;flex-wrap:wrap;align-items:center }
+.dais-cal footer.bottom a { color:var(--paper-dim);text-decoration:underline;text-underline-offset:2px }
+.dais-cal footer.bottom a:hover { color:var(--gold) }
+.dais-cal footer .spacer { flex:1 }
+.dais-cal .menu-btn { display:none }
+.dais-cal .subscribe-btn { font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-dark);border-radius:var(--radius-md);padding:9px 16px;transition:all .15s;white-space:nowrap }
+.dais-cal .subscribe-btn:hover { background:var(--gold);color:var(--ink) }
+.dais-cal .modal-scrim { position:fixed;inset:0;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .25s;z-index:330 }
+.dais-cal .modal-scrim.open { opacity:1;pointer-events:auto }
+.dais-cal .modal { position:fixed;top:50%;left:50%;transform:translate(-50%,-48%) scale(.98);width:580px;max-width:94vw;max-height:88vh;overflow-y:auto;background:var(--ink-mid);border:1px solid var(--ink-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);z-index:340;opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease) }
+.dais-cal .modal.open { opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1) }
+.dais-cal .modal-head { padding:22px 26px 16px;border-bottom:1px solid var(--ink-border);position:relative }
+.dais-cal .modal-head h2 { font-family:var(--font-display);font-weight:700;font-size:1.45rem }
+.dais-cal .modal-head p { font-size:.86rem;color:var(--paper-dim);margin-top:5px }
+.dais-cal .modal-body { padding:20px 26px 26px }
+.dais-cal .modal-section { margin-bottom:20px }
+.dais-cal .modal-section .lab { font-family:var(--font-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-dim);margin-bottom:10px;display:block }
+.dais-cal .topic-chips { display:flex;flex-wrap:wrap;gap:7px }
+.dais-cal .topic-chip { font-size:.78rem;padding:5px 11px;border-radius:20px;background:rgba(200,168,75,.1);border:1px solid var(--gold-dark);color:var(--gold-light);cursor:pointer;transition:all .12s;font-family:var(--font-sans) }
+.dais-cal .topic-chip:hover { border-color:var(--gold) }
+.dais-cal .topic-chip.muted { background:transparent;border-color:var(--ink-border);color:var(--paper-dim) }
+.dais-cal .topic-chip.muted:hover { border-color:var(--paper-dim);color:var(--paper-mid) }
+.dais-cal .reset-link { float:right;text-transform:none;letter-spacing:0;font-family:var(--font-sans);font-size:.74rem;color:var(--gold);text-decoration:underline;text-underline-offset:2px }
+.dais-cal .reset-link:hover { color:var(--gold-light) }
+.dais-cal .ctl-row { display:flex;gap:18px;align-items:center;flex-wrap:wrap }
+.dais-cal .seg { display:flex;border:1px solid var(--ink-border);border-radius:var(--radius-md);overflow:hidden }
+.dais-cal .seg button { padding:7px 14px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-dim) }
+.dais-cal .seg button.on { background:var(--gold);color:var(--ink) }
+.dais-cal .check { display:flex;align-items:center;gap:9px;cursor:pointer;font-size:.86rem;user-select:none }
+.dais-cal .check input { appearance:none;width:18px;height:18px;border:1px solid var(--ink-border);border-radius:4px;background:var(--ink);position:relative;cursor:pointer;transition:all .15s }
+.dais-cal .check input:checked { background:var(--gold);border-color:var(--gold) }
+.dais-cal .check input:checked::after { content:'✓';position:absolute;inset:0;display:grid;place-items:center;color:var(--ink);font-size:.8rem;font-weight:700 }
+.dais-cal .modal input[type=email] { width:100%;background:var(--ink);border:1px solid var(--ink-border);color:var(--paper);font-family:var(--font-mono);font-size:.84rem;padding:10px 12px;border-radius:var(--radius-md);outline:none }
+.dais-cal .modal input[type=email]:focus { border-color:var(--gold) }
+.dais-cal .digest { border:1px solid var(--ink-border);border-radius:var(--radius-md);background:rgba(10,15,26,.5);padding:16px 18px }
+.dais-cal .digest .dhead { font-family:var(--font-display);font-size:1.05rem;margin-bottom:4px }
+.dais-cal .digest .dsub { font-family:var(--font-mono);font-size:.66rem;color:var(--paper-dim);letter-spacing:.06em;margin-bottom:14px }
+.dais-cal .dtopic { margin-bottom:14px }
+.dais-cal .dtopic .tname { font-family:var(--font-mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light);margin-bottom:6px }
+.dais-cal .dtopic .ditem { font-size:.84rem;padding:3px 0 3px 12px;border-left:2px solid var(--ink-border);margin-bottom:3px }
+.dais-cal .related { margin-top:6px;padding-top:14px;border-top:1px dashed var(--ink-border) }
+.dais-cal .related .rhead { font-family:var(--font-mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--c-project);margin-bottom:10px }
+.dais-cal .ritem { margin-bottom:11px }
+.dais-cal .ritem-top { display:flex;align-items:center;gap:10px }
+.dais-cal .ritem .rt { font-size:.84rem;color:var(--paper);flex:1 }
+.dais-cal .ritem .rr { font-size:.74rem;color:var(--paper-dim);padding-left:12px;border-left:2px solid color-mix(in srgb,var(--c-project) 50%,transparent);margin-top:3px }
+.dais-cal .follow-btn { font-family:var(--font-mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--c-project);border:1px solid color-mix(in srgb,var(--c-project) 55%,transparent);border-radius:20px;padding:3px 10px;flex:0 0 auto;transition:all .12s;white-space:nowrap }
+.dais-cal .follow-btn:hover { background:color-mix(in srgb,var(--c-project) 18%,transparent) }
+.dais-cal .follow-btn.on { color:var(--ink);background:var(--c-project);border-color:var(--c-project) }
+.dais-cal .dtopic.added .tname { color:var(--c-project) }
+.dais-cal .ditem-row { display:flex;align-items:center;gap:10px;justify-content:space-between }
+.dais-cal .ditem-row span { flex:1 }
+.dais-cal .modal-note { font-size:.74rem;color:var(--paper-dim);line-height:1.55;margin-top:16px;padding:11px 13px;background:rgba(74,158,255,.06);border-left:3px solid var(--sky);border-radius:0 var(--radius-sm) var(--radius-sm) 0 }
+.dais-cal .modal-actions { display:flex;gap:10px;margin-top:18px }
+.dais-cal .modal-actions .btn { flex:1 }
+.dais-cal .active-subs { border:1px solid var(--gold-dark);border-radius:var(--radius-md);background:rgba(200,168,75,.06);padding:14px 16px }
+.dais-cal .active-sub { display:flex;align-items:center;gap:12px;padding:6px 0 }
+.dais-cal .active-sub .as-main { flex:1;min-width:0 }
+.dais-cal .as-email { font-family:var(--font-mono);font-size:.82rem;color:var(--gold-light) }
+.dais-cal .as-meta { font-size:.74rem;color:var(--paper-dim);margin-top:2px }
+.dais-cal .as-remove { width:26px;height:26px;border:1px solid var(--ink-border);border-radius:var(--radius-sm);color:var(--paper-mid);font-size:1rem;flex:0 0 auto }
+.dais-cal .as-remove:hover { border-color:var(--red-light);color:var(--red-light) }
+.dais-cal .as-flag { font-size:.73rem;color:var(--gold);padding:4px 0 2px 4px;line-height:1.45 }
+.dais-cal .as-flag.ok { color:var(--paper-dim) }
+.dais-cal .email-hint { font-size:.72rem;color:var(--paper-dim);margin-top:6px }
+.dais-cal .json-peek { margin-top:14px }
+.dais-cal .json-peek summary { font-family:var(--font-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);cursor:pointer }
+.dais-cal .json-peek pre { margin-top:8px;background:var(--ink);border:1px solid var(--ink-border);border-radius:var(--radius-sm);padding:12px;font-family:var(--font-mono);font-size:.72rem;color:var(--paper-mid);overflow-x:auto;white-space:pre-wrap }
+@media(max-width:880px) {
+  .dais-cal aside { position:fixed;left:0;top:0;height:100%;z-index:320;transform:translateX(-100%);transition:transform .25s var(--ease) }
+  .dais-cal aside.open { transform:translateX(0) }
+  .dais-cal .menu-btn { display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--ink-border);border-radius:var(--radius-sm) }
+  .dais-cal .period-title { font-size:1.2rem;min-width:auto }
+  .dais-cal .day-cell { min-height:80px }
+}
