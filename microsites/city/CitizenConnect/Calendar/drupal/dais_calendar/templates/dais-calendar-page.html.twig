@@ -1,0 +1,68 @@
+{#
+/**
+ * @file
+ * Default theme implementation for The Dais — Civic Calendar.
+ *
+ * The page chrome (skip link, breadcrumb, footer, h1) is provided by the
+ * active Drupal theme. This template only renders the content region.
+ */
+#}
+<div class="dais-cal" data-dais-root>
+<div class="app">
+  <header class="top" role="banner">
+    <button class="menu-btn" id="menuBtn" aria-label="Show filter rail" aria-expanded="false" aria-controls="rail">☰</button>
+    <div class="brand"><div class="mark" aria-hidden="true">The <span>Dais</span></div><div class="sub" aria-hidden="true">Civic Calendar · El Paso County</div></div>
+    <div class="spacer"></div>
+    <div class="search-wrap" role="search">
+      <label for="search" class="visually-hidden">Search calendar records</label>
+      <span class="ic" aria-hidden="true">⌕</span>
+      <input id="search" type="search" placeholder="Search title, parcel, file #, dept…" autocomplete="off" aria-describedby="search-hint">
+      <span id="search-hint" class="visually-hidden">Search across event title, department, parcel number, file number, and source.</span>
+    </div>
+    <button class="subscribe-btn" id="subBtn"><span aria-hidden="true">✉&nbsp;</span> Subscribe</button>
+  </header>
+  <div class="main">
+    <aside id="rail" aria-label="Filters">
+      <h2 class="rail-h">Content types <span class="ln" aria-hidden="true"></span></h2>
+      <div id="catFilters" role="group" aria-label="Filter by content type"></div>
+      <h2 class="rail-h">Source <span class="ln" aria-hidden="true"></span></h2>
+      <div id="srcFilters" role="group" aria-label="Filter by source"></div>
+      <div class="rail-actions"><button id="selAll">All on</button><button id="selNone">All off</button></div>
+      <p class="legend-note">Every record carries a <code>parcel</code> key where one exists, so searching <code>6401303008</code> returns everything attached to that address — across meetings, permits, projects and notices — in plain language.</p>
+    </aside>
+    <main class="cal" id="main-content">
+      <div class="cal-toolbar" role="toolbar" aria-label="Calendar navigation">
+        <div class="nav-group">
+          <button id="prev" aria-label="Previous period"><span aria-hidden="true">‹</span></button>
+          <button id="next" aria-label="Next period"><span aria-hidden="true">›</span></button>
+          <button class="today-btn" id="todayBtn" aria-label="Go to today">Today</button>
+        </div>
+        <h2 class="period-title" id="periodTitle" aria-live="polite"></h2>
+        <div class="spacer"></div>
+        <div class="view-switch" role="group" aria-label="Calendar view">
+          <button data-view="month" class="active" aria-pressed="true">Month</button>
+          <button data-view="week" aria-pressed="false">Week</button>
+          <button data-view="day" aria-pressed="false">Day</button>
+        </div>
+      </div>
+      <div class="cal-body" id="calBody" tabindex="-1"></div>
+      <div class="visually-hidden" id="cal-announce" role="status" aria-live="polite"></div>
+    </main>
+  </div>
+  <footer class="bottom" role="contentinfo">
+    <span>Live sources:</span>
+    <a href="https://coloradosprings.legistar.com/Calendar.aspx" target="_blank" rel="noopener noreferrer">Legistar<span class="visually-hidden"> (opens in new tab)</span></a>
+    <a href="https://bocc.elpasoco.com" target="_blank" rel="noopener noreferrer">BoCC<span class="visually-hidden"> (opens in new tab)</span></a>
+    <a href="https://epcdevplanreview.com/Public/ActiveList/" target="_blank" rel="noopener noreferrer">EPC dev review<span class="visually-hidden"> (opens in new tab)</span></a>
+    <a href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Building" target="_blank" rel="noopener noreferrer">Accela permits<span class="visually-hidden"> (opens in new tab)</span></a>
+    <a href="https://www.pprbd.org" target="_blank" rel="noopener noreferrer">PPRBD<span class="visually-hidden"> (opens in new tab)</span></a>
+    <a href="https://coloradosprings.gov/procurement-services/page/list-open-solicitations" target="_blank" rel="noopener noreferrer">Solicitations<span class="visually-hidden"> (opens in new tab)</span></a>
+    <a href="https://pproem.com" target="_blank" rel="noopener noreferrer">PPOEM<span class="visually-hidden"> (opens in new tab)</span></a>
+    <span class="spacer"></span><span id="evtCount" aria-live="polite"></span>
+  </footer>
+</div>
+<div class="drawer-scrim" id="scrim"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden></div>
+<div class="modal-scrim" id="subScrim"></div>
+<div class="modal" id="subModal" role="dialog" aria-modal="true" aria-labelledby="sub-title" hidden></div>
+</div>

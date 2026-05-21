@@ -1,0 +1,6 @@
+name: 'The Dais — Civic Calendar'
+type: module
+description: 'Unified civic calendar that aggregates City meetings (Legistar), County BoCC, EPC dev-plan review, Accela permits/licenses, procurement bids, PPRBD building permits, regional planning, emergency alerts, news, and reference guides into one filterable month/week/day view with a per-event drawer and topic-based digest subscription.'
+package: 'City of Colorado Springs'
+core_version_requirement: ^9.4 || ^10 || ^11
+configure: dais_calendar.page
