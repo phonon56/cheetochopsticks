@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report an Internet Crime — Plain-Language Intake</title>
+<meta name="description" content="Describe what happened in your own words. This open-source intake organizes your story into the official complaint fields and hands off to the official form. It does not submit on your behalf.">
+<!--
+  ============================================================================
+  PLAIN-LANGUAGE COMPLAINT INTAKE  ·  Open-source reference implementation
+  ----------------------------------------------------------------------------
+  One natural-language box -> client-side extraction -> a pre-filled, reviewable
+  copy of a multi-step complaint form -> hand-off to the official form.
+
+  • No backend. No build step. No third-party runtime. One file.
+  • Nothing is transmitted; all processing happens in the browser.
+  • Target conformance: WCAG 2.1 Level AAA (contrast, focus, spacing, ARIA).
+
+  TO ADAPT THIS FOR YOUR AGENCY, edit ONLY the CONFIG object near the top of
+  the <script> block (branding, theme colors, links, emergency numbers, the
+  step/field SCHEMA, the EXTRACTORS, and the MAP). The engine below CONFIG does
+  not need to change. Search for "EDIT HERE".
+
+  License: MIT (see accompanying LICENSE). U.S. government works may instead be
+  released into the public domain (CC0); replace the header as appropriate.
+  ============================================================================
+-->
+<!-- Content Security Policy: ships with NO third-party requests by default.
+     Inline script/style are unavoidable for a single-file artifact; production
+     deployments should swap 'unsafe-inline' for a sha256 hash of each block. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none';">
+
+<!-- Fonts: default ships with SYSTEM FALLBACKS ONLY — no third-party requests,
+     no IP leakage to font CDNs. The CSS below lists Libre Baskerville / Inter /
+     IBM Plex Mono first; if absent, robust system fonts render identically.
+     To opt back into Google Fonts, also extend the CSP above to allow
+     style-src/font-src for fonts.googleapis.com / fonts.gstatic.com, then add:
+       <link rel="preconnect" href="https://fonts.googleapis.com">
+       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+       <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+     For zero third-party dependencies, self-host the .woff2 files via @font-face. -->
+<style>
+  :root{
+    /* AAA palette — every text pair >=7:1, control borders/focus >=3:1.
+       Overridden at runtime from CONFIG.theme so agencies can recolor. */
+    --navy:#14233f; --navy-2:#1d3357; --ink:#16181d;
+    --paper:#f6f3ec; --paper-2:#fbf9f4; --white:#ffffff;
+    --muted:#434a55;                 /* secondary text, >=8:1 on light       */
+    --gold:#c79a3b;                  /* DECORATIVE only (borders/fills)       */
+    --gold-cta:#dbb04e;              /* CTA fill (dark text on top)           */
+    --gold-text:#5a4510;             /* gold-toned TEXT on light, >=8:1       */
+    --cta-ink:#2a2105;               /* dark text on gold CTA, 7.8:1          */
+    --red:#b6242c;                   /* DECORATIVE accent (icons/borders)     */
+    --red-bg:#8f1a21;                /* emergency bar bg, white text 9:1      */
+    --ok:#184f27; --ok-bg:#edf3ed; --ok-bd:#cfe3cf;
+    --amber:#574008; --amber-bg:#f7efd6; --amber-bd:#e6d4a3;
+    --line:#d8d1c2;                  /* subtle dividers (decorative)          */
+    --field-bd:#80796a;              /* CONTROL borders, >=4:1 (non-text)     */
+    --focus:#14233f;                 /* focus ring on light surfaces          */
+    --focus-on-dark:#dbb04e;         /* focus ring on dark surfaces           */
+    --measure:70ch;                  /* max line length for prose (AAA 1.4.8) */
+    --shadow:0 18px 48px -22px rgba(20,35,63,.45);
+    --display:"Libre Baskerville",Georgia,"Times New Roman",serif;
+    --body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono","Courier New",monospace;
+  }
+  *{box-sizing:border-box;}
+  html{font-size:100%; -webkit-text-size-adjust:100%;}           /* rem honors user zoom */
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--body); font-size:1.0625rem; line-height:1.65;
+  }
+  /* ---- Global enhanced focus (AAA 2.4.13 / 1.4.11): thick, offset, high-contrast ---- */
+  a,button,input,select,textarea,[tabindex]{}
+  :focus{outline:none;}
+  :focus-visible{
+    outline:3px solid var(--focus); outline-offset:3px; border-radius:3px;
+  }
+  .on-dark :focus-visible, .on-dark:focus-visible{ outline-color:var(--focus-on-dark); }
+
+  .skip{position:absolute; left:-999px; top:0; background:var(--navy); color:#fff; padding:.7rem 1rem; z-index:100; border-radius:0 0 6px 0; font-weight:600;}
+  .skip:focus{left:0;}
+
+  /* emergency bar */
+  .alert{background:var(--red-bg); color:#fff; font-size:.95rem; font-weight:600;}
+  .alert .wrap{max-width:1060px; margin:0 auto; padding:.7rem 1.4rem; display:flex; gap:.75rem; align-items:flex-start;}
+  .alert svg{flex:0 0 auto; margin-top:3px;}
+  .alert a{color:#fff; text-underline-offset:3px;}
+
+  /* gov strip */
+  .gov{background:#0c172b; color:#ccd6e6; font-size:.8rem;}
+  .gov .wrap{max-width:1060px; margin:0 auto; padding:.45rem 1.4rem; display:flex; gap:.5rem; align-items:center;}
+  .gov svg{opacity:.85; flex:0 0 auto;}
+
+  header.site{background:var(--navy); color:#fff;}
+  header.site .wrap{max-width:1060px; margin:0 auto; padding:1.25rem 1.4rem; display:flex; align-items:center; gap:1rem;}
+  .mark{display:flex; align-items:center; gap:.85rem; text-decoration:none; color:#fff;}
+  .seal{width:48px; height:48px; border:2px solid var(--gold-cta); border-radius:50%; display:grid; place-items:center; font-family:var(--display); font-weight:700; color:var(--gold-cta); font-size:.95rem; letter-spacing:.5px; flex:0 0 auto;}
+  .mark b{font-family:var(--display); font-weight:700; font-size:1.2rem; line-height:1.15; display:block;}
+  .mark span{font-size:.8rem; color:#cdd9ec;}
+
+  main{max-width:1060px; margin:0 auto; padding:0 1.4rem 5rem;}
+
+  .hero{padding:3.2rem 0 1.6rem; border-bottom:1px solid var(--line);}
+  .eyebrow{font-family:var(--mono); font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-text); margin:0 0 .85rem; font-weight:600;}
+  h1{font-family:var(--display); font-weight:700; font-size:clamp(1.9rem,5vw,2.85rem); line-height:1.12; margin:0 0 1rem; color:var(--navy); max-width:18ch;}
+  .hero p.sub{font-size:1.18rem; color:var(--ink); max-width:var(--measure); margin:0 0 2.2rem;}
+
+  /* composer */
+  .composer{margin:0; background:var(--paper-2); border:1px solid var(--field-bd); border-radius:14px; box-shadow:var(--shadow); overflow:hidden;}
+  .composer .ctop{padding:1rem 1.25rem 0; display:flex; justify-content:space-between; align-items:baseline; gap:.75rem; flex-wrap:wrap;}
+  .composer label.big{font-weight:600; font-size:.98rem; color:var(--navy);}
+  .composer .count{font-family:var(--mono); font-size:.8rem; color:var(--muted);}
+  .composer textarea{width:100%; border:0; resize:vertical; min-height:11rem; padding:.85rem 1.25rem .4rem; font-family:var(--body); font-size:1.12rem; line-height:1.65; color:var(--ink); background:transparent;}
+  .composer textarea::placeholder{color:#555c69;}
+  .chips{display:flex; gap:.5rem; flex-wrap:wrap; padding:.3rem 1.25rem 1rem;}
+  .chip{font-family:var(--mono); font-size:.8rem; border:1px solid var(--field-bd); background:#fff; color:var(--muted); padding:.35rem .65rem; border-radius:20px; cursor:pointer;}
+  .chip:hover{border-color:var(--navy); color:var(--navy);}
+  .cbar{display:flex; gap:.9rem; align-items:center; flex-wrap:wrap; padding:.9rem 1.25rem; border-top:1px solid var(--line); background:#fff;}
+  .btn{font-family:var(--body); font-weight:600; font-size:1rem; border-radius:9px; padding:.75rem 1.4rem; cursor:pointer; border:1px solid transparent; text-decoration:none; display:inline-flex; align-items:center; gap:.55rem;}
+  .btn-primary{background:var(--navy); color:#fff;}
+  .btn-primary:hover{background:var(--navy-2);}
+  .btn-ghost{background:transparent; color:var(--navy); border-color:var(--field-bd);}
+  .btn-ghost:hover{border-color:var(--navy); background:#fff;}
+  .btn-gold{background:var(--gold-cta); color:var(--cta-ink); border-color:var(--cta-ink);}
+  .btn-gold:hover{background:#caa13f;}
+  .cbar .hint{font-size:.85rem; color:var(--muted); margin-left:auto;}
+
+  .status{font-size:.95rem; margin:1rem .2rem 0; color:var(--navy); min-height:1.2em;}
+  .status.show{padding:.75rem 1rem; background:#eaeff7; border-left:4px solid var(--navy); border-radius:0 8px 8px 0;}
+
+  .picked{margin:1.8rem 0 0; display:none;}
+  .picked.show{display:block;}
+  h2{font-family:var(--display); font-size:1.4rem; color:var(--navy); margin:0 0 .35rem; font-weight:700; line-height:1.2;}
+  .picked .lede{font-size:.95rem; color:var(--muted); margin:0 0 1rem; max-width:var(--measure);}
+  .tokens{display:flex; gap:.6rem; flex-wrap:wrap;}
+  .token{font-family:var(--mono); font-size:.82rem; background:#fff; border:1px solid var(--field-bd); padding:.4rem .7rem; border-radius:7px; display:inline-flex; gap:.5rem; align-items:center; color:var(--ink);}
+  button.token{cursor:pointer;}
+  .token .k{color:var(--gold-text); text-transform:uppercase; letter-spacing:.05em; font-size:.7rem; font-weight:600;}
+  .token .v{color:var(--navy); font-weight:500;}
+
+  .stepnav{margin:2.1rem 0 0;}
+  .stepnav ol{list-style:none; display:flex; flex-wrap:wrap; gap:.5rem; margin:0; padding:0;}
+  .stepnav li{font-size:.8rem; font-family:var(--mono); color:var(--muted); border:1px solid var(--field-bd); background:#fff; border-radius:20px; padding:.3rem .75rem .3rem .5rem; display:flex; align-items:center; gap:.45rem;}
+  .stepnav li .dot{width:20px; height:20px; border-radius:50%; background:var(--paper); border:1px solid var(--field-bd); display:grid; place-items:center; font-size:.7rem; color:var(--muted);}
+  .stepnav li[data-filled="1"]{border-color:var(--gold-text); color:var(--navy);}
+  .stepnav li[data-filled="1"] .dot{background:var(--gold-cta); border-color:var(--cta-ink); color:var(--cta-ink); font-weight:700;}
+
+  .review{margin:1.1rem 0 0; display:none;}
+  .review.show{display:block;}
+  .review > h2{margin:1.6rem 0 0; font-size:1.4rem;}
+  .fillsum{color:var(--muted); font-size:.95rem; margin:.4rem 0 0; max-width:var(--measure);}
+  .stepcard{background:var(--paper-2); border:1px solid var(--field-bd); border-radius:12px; margin:.9rem 0; overflow:hidden;}
+  .stepcard > .sh{display:flex; align-items:center; gap:.75rem; padding:.85rem 1.1rem; background:#fff; border-bottom:1px solid var(--line);}
+  .stepcard .sn{font-family:var(--mono); font-weight:600; font-size:.78rem; color:#fff; background:var(--navy); border-radius:6px; padding:.2rem .5rem;}
+  .stepcard h3{font-family:var(--display); font-size:1.08rem; color:var(--navy); margin:0; font-weight:700;}
+  .sbody{padding:.5rem 1.1rem 1.1rem;}
+  .field{padding:.8rem 0; border-bottom:1px dashed var(--line);}
+  .field:last-child{border-bottom:0;}
+  .field label,.field .glabel{display:block; font-weight:600; font-size:.92rem; color:var(--navy); margin:0 0 .4rem;}
+  .req{color:var(--red); font-weight:700;}
+  .field input[type=text],.field input[type=email],.field input[type=tel],.field select,.field textarea{
+    width:100%; font-family:var(--body); font-size:1rem; padding:.6rem .7rem; border:1px solid var(--field-bd); border-radius:8px; background:#fff; color:var(--ink);
+  }
+  .field textarea{min-height:7.5rem; resize:vertical; line-height:1.6;}
+  .radios{display:flex; gap:1.1rem; flex-wrap:wrap;}
+  .radios label{font-weight:500; font-size:.98rem; color:var(--ink); display:inline-flex; align-items:center; gap:.45rem; cursor:pointer; margin:0;}
+  input[type=radio],input[type=checkbox]{width:1.15rem; height:1.15rem; accent-color:var(--navy);}
+  .meta{display:flex; gap:.5rem; align-items:center; margin-top:.45rem; flex-wrap:wrap;}
+  .badge{font-family:var(--mono); font-size:.74rem; letter-spacing:.03em; text-transform:uppercase; padding:.2rem .55rem; border-radius:20px;}
+  .badge.auto{background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-bd);}
+  .badge.from{background:var(--ok-bg); color:var(--ok); border:1px solid var(--ok-bd);}
+  .badge.need{background:#fff; color:var(--muted); border:1px dashed var(--field-bd);}
+  .sr-only{position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
+
+  .alts{margin:3rem 0 0;}
+  .alts p.k{color:var(--muted); font-size:.95rem; margin:0 0 1.1rem; max-width:var(--measure);}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr)); gap:.9rem;}
+  .alt{background:#fff; border:1px solid var(--field-bd); border-radius:11px; padding:1.1rem; border-top:3px solid var(--navy);}
+  .alt.em{border-top-color:var(--red);}
+  .alt h3{font-size:1rem; margin:0 0 .35rem; color:var(--navy);}
+  .alt p{font-size:.9rem; color:var(--ink); margin:0 0 .65rem;}
+  .alt a,.alt .num{font-family:var(--mono); font-weight:600; color:var(--navy); font-size:.98rem; text-decoration:underline; text-underline-offset:3px;}
+  .alt a:hover{color:var(--gold-text);}
+
+  .handoff{margin:2.6rem 0 0; background:var(--navy); color:#fff; border-radius:14px; padding:1.9rem 1.8rem; display:flex; gap:1.4rem; align-items:center; flex-wrap:wrap;}
+  .handoff .tx{flex:1 1 18rem;}
+  .handoff h2{color:#fff; font-size:1.45rem; margin:0 0 .5rem;}
+  .handoff p{font-size:.98rem; color:#d3deef; margin:0; max-width:var(--measure);}
+  .handoff .acts{display:flex; gap:.75rem; flex-wrap:wrap;}
+
+  .disc{margin:3.2rem 0 0; border-top:1px solid var(--line); padding-top:1.4rem;}
+  .disc .tag{font-family:var(--mono); font-size:.72rem; color:var(--gold-text); letter-spacing:.1em; text-transform:uppercase; margin:0 0 .3rem;}
+  .disc p{font-size:.88rem; color:var(--muted); max-width:var(--measure); margin:0 0 .8rem;}
+  .disc code{font-family:var(--mono); font-size:.85em; background:#eef1f5; padding:.05rem .3rem; border-radius:4px; color:var(--navy);}
+
+  dialog{border:0; border-radius:14px; padding:0; max-width:560px; width:92%; box-shadow:0 30px 80px -20px rgba(0,0,0,.5); color:var(--ink);}
+  dialog::backdrop{background:rgba(12,23,43,.6);}
+  .dlg-h{display:flex; justify-content:space-between; align-items:center; padding:1rem 1.1rem; background:var(--navy); color:#fff; border-radius:14px 14px 0 0;}
+  .dlg-h h2{color:#fff; font-size:1.1rem; margin:0;}
+  .dlg-close{background:transparent; border:1px solid #3a4a68; color:#fff; border-radius:7px; width:2.2rem; height:2.2rem; cursor:pointer; font-size:1.2rem; line-height:1;}
+  .dlg-close:hover{background:#24365a;}
+  .dlg-b{padding:1.1rem 1.25rem;}
+  .dlg-b dt{font-weight:700; color:var(--navy); margin-top:.75rem;}
+  .dlg-b dt:first-child{margin-top:0;}
+  .dlg-b dd{margin:.1rem 0 0; font-size:.95rem; color:var(--ink);}
+
+  @media (max-width:620px){
+    body{font-size:1rem;}
+    .hero{padding:2.2rem 0 1.2rem;}
+    .handoff{padding:1.4rem 1.2rem;}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .stepcard,.token,.picked{animation:rise .45s ease both;}
+    @keyframes rise{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+  }
+  @media print{ .composer,.chips,.cbar,.handoff,.alts{display:none;} }
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+
+<div class="alert" role="region" aria-label="Emergency notice" id="alertBar"></div>
+<div class="gov"><div class="wrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="#ccd6e6" aria-hidden="true"><path d="M12 2 3 6v6c0 5 3.8 8.6 9 10 5.2-1.4 9-5 9-10V6l-9-4Z"/></svg> <span id="govNote"></span></div></div>
+
+<header class="site on-dark">
+  <div class="wrap">
+    <a class="mark" href="#main">
+      <span class="seal" aria-hidden="true" id="seal"></span>
+      <span><b id="brandName"></b><span id="brandTag"></span></span>
+    </a>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <section class="hero" aria-labelledby="h1">
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 id="h1"></h1>
+    <p class="sub" id="heroSub"></p>
+
+    <div class="composer">
+      <div class="ctop">
+        <label class="big" for="story" id="storyLabel"></label>
+        <span class="count" id="storyCount" aria-live="polite">0 characters</span>
+      </div>
+      <textarea id="story" aria-describedby="storyCount storyHelp"></textarea>
+      <div class="chips" id="chips" role="group" aria-label="Prompts to add detail"></div>
+      <div class="cbar">
+        <button type="button" class="btn btn-primary" id="analyzeBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span id="analyzeLabel">Organize my report</span>
+        </button>
+        <button type="button" class="btn btn-ghost" id="clearBtn">Clear</button>
+        <span class="hint" id="storyHelp">Nothing is sent anywhere. Everything stays in your browser.</span>
+      </div>
+    </div>
+
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="picked" id="picked" aria-labelledby="pickedH">
+    <h2 id="pickedH">What we picked up</h2>
+    <p class="lede">Detected from your description. Select an item to jump to the matching field. Always double-check &mdash; this is best-effort, not legal advice.</p>
+    <div class="tokens" id="tokens"></div>
+  </section>
+
+  <div class="stepnav" id="stepnav" role="group" aria-label="Complaint progress" hidden>
+    <ol id="stepList"></ol>
+  </div>
+
+  <section class="review" id="review" aria-labelledby="reviewH">
+    <h2 id="reviewH">Your pre-filled complaint</h2>
+    <p class="fillsum" id="fillSummary"></p>
+    <div id="steps"></div>
+  </section>
+
+  <section class="handoff on-dark" id="handoff" aria-labelledby="handH" hidden>
+    <div class="tx">
+      <h2 id="handH">Ready to file</h2>
+      <p id="handText"></p>
+    </div>
+    <div class="acts" id="handActs"></div>
+  </section>
+
+  <section class="alts" aria-labelledby="altH">
+    <h2 id="altH">Other ways to get help</h2>
+    <p class="k">You never have to use this tool. Pick whatever is easiest for you.</p>
+    <div class="grid" id="altGrid"></div>
+  </section>
+
+  <section class="disc" aria-labelledby="discH">
+    <h2 id="discH">About this tool</h2>
+    <p class="tag">Open source &middot; Plain language &middot; Accessibility</p>
+    <p>This page is an open-source reference implementation, not an official government service, and it does not transmit your report. Extraction runs entirely in your browser using pattern matching; it will miss things and occasionally guess wrong, so every field is editable and nothing is auto-submitted.</p>
+    <p>The interface targets WCAG&nbsp;2.1 <strong>Level&nbsp;AAA</strong>: a single page heading and ordered outline, all text at a 7:1 contrast ratio or better, enhanced keyboard focus indicators, status and error messages in live regions, a true modal dialog with focus management, explicit labels with <code>autocomplete</code> on contact fields, a labeled step navigation, and a maximum line length for readability. To adapt it, edit the <code>CONFIG</code> block at the top of the source &mdash; branding, colors, links, the step schema, and the extraction patterns are all data.</p>
+  </section>
+</main>
+
+<dialog id="defDialog" aria-labelledby="defTitle">
+  <div class="dlg-h on-dark">
+    <h2 id="defTitle">Transaction types</h2>
+    <button type="button" class="dlg-close" id="defClose" aria-label="Close this window">&times;</button>
+  </div>
+  <div class="dlg-b" id="defBody"></div>
+</dialog>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ==========================================================================
+     CONFIG  —  EDIT HERE to adapt the tool. Nothing below CONFIG needs changes.
+     ========================================================================== */
+  var CONFIG = {
+    brand: {
+      name: "Internet Crime Complaint Center",
+      tagline: "Plain-language reporting (open-source concept)",
+      seal: "IC3"
+    },
+    govNote: "Open-source concept — not an official U.S. government site. Demonstrates a plain-language intake pattern for the IC3 complaint form.",
+    copy: {
+      eyebrow: "One story · No forms to decode",
+      h1: "Tell us what happened, in your own words.",
+      sub: "Don’t worry about choosing the right category or filling seven pages of fields. Write it the way you’d tell a person. We’ll organize it into the official complaint structure and show you exactly what we picked up before anything is filed.",
+      storyLabel: "Describe the incident",
+      analyze: "Organize my report",
+      placeholder: 'Example: On March 14, 2026 a man named "David Carter" messaged me on a dating app. Over six weeks he convinced me to invest in crypto through a site called fastcoin-trade.com. I sent $4,500 by Zelle and 0.06 bitcoin to a wallet. His email was scammer99@gmail.com and his number was 720-555-0148. I live in Colorado Springs, CO.',
+      handText: "This concept does not submit to the FBI. When your details look right, continue to the official IC3 form to review and submit — including the CAPTCHA step. Keep this tab open and copy across, field by field."
+    },
+    officialForm: { url: "https://complaint.ic3.gov/", label: "Continue to official IC3 form (opens new tab)" },
+
+    /* Prompt chips appended to the textarea */
+    prompts: [
+      ["+ when", "When did it happen? "],
+      ["+ money & method", "How much money was involved and how did you send it? "],
+      ["+ who", "What do you know about the person or company? "],
+      ["+ first contact", "How did they first contact you? "],
+      ["+ contact details", "Any website, email, or phone number they used? "]
+    ],
+
+    /* Alert bar + alternative-path cards. kind:"em" marks emergency styling. */
+    altPaths: [
+      { kind:"em", title:"Immediate danger", desc:"A threat to someone’s safety right now.", display:"Call 911", tel:"911", bar:true,
+        barText:'If you or someone else is in immediate danger, call' },
+      { title:"File directly with IC3", desc:"The official complaint form, any time.", display:"ic3.gov", href:"https://www.ic3.gov/", aria:"File directly with IC3 at ic3.gov (opens new tab)" },
+      { title:"Talk to the FBI", desc:"Reach your local FBI field office by phone.", display:"1-800-CALL-FBI", tel:"18002255324", aria:"Call the FBI at 1-800-CALL-FBI" },
+      { kind:"em", title:"Child exploitation", desc:"NCMEC CyberTipline, staffed 24/7.", display:"1-800-843-5678", tel:"18008435678", bar:true,
+        barText:'If a child is being exploited, report to the NCMEC CyberTipline at', barSuffix:'— do not investigate yourself.', aria:"Call the NCMEC CyberTipline at 1-800-843-5678" }
+    ],
+
+    /* Definition dialog content (the "What are these?" help on the transactions step) */
+    definitions: {
+      title:"Transaction types",
+      items:[
+        ["Wire transfer","Bank-to-bank electronic transfer (e.g., via your bank, Western Union, MoneyGram)."],
+        ["ACH / bank transfer","Electronic transfer between U.S. bank accounts."],
+        ["Peer-to-peer app","Zelle, Venmo, Cash App, PayPal, Apple Pay, Google Pay."],
+        ["Cryptocurrency","Bitcoin, Ethereum, USDT and similar, usually sent to a wallet address."],
+        ["Gift card","Prepaid cards where you shared the code (Apple, Google Play, Amazon, etc.)."],
+        ["Card","Credit or debit card charge."]
+      ]
+    },
+
+    /* ---- EXTRACTORS: how free text becomes structured data. Add/remove freely. ----
+       type "regex": first/all matches of `re`. type "keywordMap": label of first matching group. */
+    extractors: {
+      amount:  { type:"regex", re:/\$\s?\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?|\b\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?\s?(?:dollars|usd)\b/i },
+      emails:  { type:"regex", re:/[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}/gi, all:true },
+      phones:  { type:"regex", re:/(?<!\d)(?:\+?1[\s.\-]?)?\(?\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4}(?!\d)/g, all:true, min:10 },
+      urls:    { type:"regex", re:/\b(?:https?:\/\/)?(?:www\.)?[a-z0-9][a-z0-9\-]{1,}\.(?:com|net|org|io|co|info|biz|us|app|xyz|online|site|finance|trade|exchange)(?:\/[^\s]*)?/gi, all:true },
+      zip:     { type:"regex", re:/\b\d{5}(?:-\d{4})?\b/ },
+      method:  { type:"keywordMap", map:[
+        ["Cryptocurrency", /\b(bitcoin|btc|ethereum|eth|usdt|tether|crypto|wallet|blockchain|coinbase|binance|0x[a-f0-9]{6,}|bc1[a-z0-9]{6,})\b/i],
+        ["Peer-to-peer app", /\b(zelle|venmo|cash app|cashapp|paypal|apple pay|google pay)\b/i],
+        ["Wire transfer", /\b(wire transfer|wired|western union|moneygram|wire)\b/i],
+        ["Gift card", /\b(gift card|gift cards|apple gift|google play card|steam card)\b/i],
+        ["ACH / bank transfer", /\b(ach|bank transfer|direct deposit|routing number)\b/i],
+        ["Card", /\b(credit card|debit card|card was charged)\b/i],
+        ["Check", /\b(check|cheque|money order)\b/i],
+        ["Cash", /\bcash\b/i]
+      ], multi:true },
+      crime:   { type:"keywordMap", multi:true, rank:true, map:[
+        ["Romance scam", /\b(dating app|romance|tinder|hinge|bumble|relationship|girlfriend|boyfriend)\b/i],
+        ["Investment / crypto scam", /\b(invest|investment|trading|returns|pig butcher)\b/i],
+        ["Tech support scam", /\b(tech support|microsoft|apple support|pop-?up|refund.{0,10}(call|number))\b/i],
+        ["Phishing / spoofing", /\b(phish|spoof|fake (email|website|login)|clicked a link)\b/i],
+        ["Business email compromise", /\b(invoice|wire instructions|vendor|payroll change)\b/i],
+        ["Extortion / sextortion", /\b(extort|blackmail|sextortion|threaten(ed)? to (post|release))\b/i],
+        ["Government impersonation", /\b(irs|social security|ssa|medicare|warrant|customs)\b/i],
+        ["Employment scam", /\b(job offer|work from home|reshipping|mystery shopper)\b/i],
+        ["Prize / lottery scam", /\b(lottery|sweepstakes|you ?(have|’ve) won|prize)\b/i]
+      ]},
+      date:    { type:"date" },
+      state:   { type:"regex", re:/\b(alabama|alaska|arizona|arkansas|california|colorado|connecticut|delaware|florida|georgia|hawaii|idaho|illinois|indiana|iowa|kansas|kentucky|louisiana|maine|maryland|massachusetts|michigan|minnesota|mississippi|missouri|montana|nebraska|nevada|new hampshire|new jersey|new mexico|new york|north carolina|north dakota|ohio|oklahoma|oregon|pennsylvania|rhode island|south carolina|south dakota|tennessee|texas|utah|vermont|virginia|washington|west virginia|wisconsin|wyoming)\b/i },
+      city:    { type:"regex", re:/\b(colorado springs|denver|aurora|pueblo|fort collins|boulder|castle rock|monument)\b/i },
+      subjectName: { type:"capture", re:/\b(?:name (?:was|is)|named|called|guy named|man named|woman named|person named)\s+["']?([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})/ },
+      subjectBusiness: { type:"capture", re:/\b(?:company|site|website|platform|business)\s+(?:called|named)\s+["']?([A-Za-z0-9][\w.\- ]{1,40})/i, clean:true },
+      myName:  { type:"capture", re:/\bmy name is\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})/i }
+    },
+
+    /* ---- SCHEMA: the steps and fields of the destination form. ----
+       fillFrom maps a field to extracted data (see MAP below). */
+    steps: [
+      { n:1, title:"Who is filing this complaint?", fields:[
+        { id:"f_isVictim", label:"Are you the person this happened to?", type:"radio", opts:["Yes","No"], req:true },
+        { id:"f_minor", label:"Is the affected person 17 or younger?", type:"radio", opts:["Yes","No"], req:true },
+        { id:"f_filerType", label:"You are filing as", type:"select", opts:["","An individual","A business","On behalf of someone else"], req:true }
+      ]},
+      { n:2, title:"Your contact information", fields:[
+        { id:"f_name", label:"Full name", type:"text", auto:"name", req:true },
+        { id:"f_business", label:"Business name (if applicable)", type:"text", auto:"organization" },
+        { id:"f_phone", label:"Phone number", type:"tel", auto:"tel" },
+        { id:"f_email", label:"Email address", type:"email", auto:"email" },
+        { id:"f_city", label:"City", type:"text", auto:"address-level2" },
+        { id:"f_state", label:"State", type:"text", auto:"address-level1" },
+        { id:"f_zip", label:"ZIP code", type:"text", auto:"postal-code" }
+      ]},
+      { n:3, title:"Financial transaction(s)", help:true, fields:[
+        { id:"f_loss", label:"Was there a financial loss?", type:"radio", opts:["Yes","No"] },
+        { id:"f_amount", label:"Amount", type:"text" },
+        { id:"f_txnType", label:"How did you send money / how were you paid?", type:"select", opts:["","Wire transfer","ACH / bank transfer","Peer-to-peer app","Cryptocurrency","Gift card","Card","Check","Cash"] },
+        { id:"f_txnDate", label:"Date of transaction or incident", type:"text" },
+        { id:"f_sentTo", label:"Where did the money go? (recipient, account, wallet)", type:"text" }
+      ]},
+      { n:4, title:"Subject (the person or business responsible)", fields:[
+        { id:"f_subjName", label:"Name or alias used", type:"text" },
+        { id:"f_subjBiz", label:"Business / website name", type:"text" },
+        { id:"f_subjWeb", label:"Website or URL", type:"text" },
+        { id:"f_subjEmail", label:"Subject email", type:"email", auto:"off" },
+        { id:"f_subjPhone", label:"Subject phone", type:"tel", auto:"off" },
+        { id:"f_subjCountry", label:"Subject country", type:"text" }
+      ]},
+      { n:5, title:"What happened", fields:[
+        { id:"f_desc", label:"Description of the incident", type:"textarea", req:true },
+        { id:"f_contactMethod", label:"How did they first contact you?", type:"text" }
+      ]},
+      { n:6, title:"Reporting & affected party", fields:[
+        { id:"f_reported", label:"Have you reported this to anyone else? (bank, police, platform)", type:"text" },
+        { id:"f_affected", label:"Were you the one directly affected?", type:"radio", opts:["Yes","No"] }
+      ]},
+      { n:7, title:"Review & submit (on the official form)", fields:[
+        { id:"f_certify", label:"I certify the information is true to the best of my knowledge", type:"checkbox", req:true },
+        { id:"f_captcha", label:"The official IC3 form will ask you to complete a CAPTCHA here", type:"note" }
+      ]}
+    ],
+    stepPills: ["Who’s filing","Contact","Transactions","Subject","What happened","Reporting","Review"]
+  };
+
+  /* MAP: fieldId -> function(extractionResult) returning {value, source}.
+     source: "from" (quoted from text), "auto" (inferred, check), "need" (guess, confirm).
+     EDIT HERE to change how detected data lands in fields. */
+  var MAP = {
+    f_name:    function(r){ return r.myName ? {v:r.myName, s:"from"} : null; },
+    f_phone:   function(r){ return r.phonesBy && r.phonesBy.user[0] ? {v:r.phonesBy.user[0], s:"from"} : null; },
+    f_email:   function(r){ return r.emailsBy && r.emailsBy.user[0] ? {v:r.emailsBy.user[0], s:"from"} : null; },
+    f_city:    function(r){ return r.city ? {v:r.city, s:"from"} : null; },
+    f_state:   function(r){ return r.state ? {v:r.state, s:"from"} : null; },
+    f_zip:     function(r){ return r.zip ? {v:r.zip, s:"from"} : null; },
+    f_loss:    function(r){ return r.amount ? {v:"Yes", s:"auto"} : null; },
+    f_amount:  function(r){ return r.amount ? {v:r.amount, s:"from"} : null; },
+    f_txnType: function(r){ return r.method && r.method[0] ? {v:r.method[0], s:"auto"} : null; },
+    f_txnDate: function(r){ return r.date ? {v:r.date.value, s:(r.date.conf==="low"?"need":"from")} : null; },
+    f_subjName:function(r){ return r.subjectName ? {v:r.subjectName, s:"from"} : null; },
+    f_subjBiz: function(r){ return r.subjectBusiness ? {v:r.subjectBusiness, s:"from"} : null; },
+    f_subjWeb: function(r){ return r.urls && r.urls[0] ? {v:r.urls[0], s:"from"} : null; },
+    /* Subject contact prefers a context-classified match ("his email", "from <addr>");
+       falls back to any unattributed match as an "auto · check" suggestion. */
+    f_subjEmail:function(r){
+      if(!r.emailsBy) return null;
+      if(r.emailsBy.subject[0]) return {v:r.emailsBy.subject[0], s:"from"};
+      if(r.emailsBy.unknown[0]) return {v:r.emailsBy.unknown[0], s:"auto"};
+      return null;
+    },
+    f_subjPhone:function(r){
+      if(!r.phonesBy) return null;
+      if(r.phonesBy.subject[0]) return {v:r.phonesBy.subject[0], s:"from"};
+      if(r.phonesBy.unknown[0]) return {v:r.phonesBy.unknown[0], s:"auto"};
+      return null;
+    },
+    f_desc:    function(r){ return {v:r._raw, s:"from"}; }
+  };
+
+  /* Tokens shown in the "What we picked up" strip: [key, getter, jumpTargetId] */
+  var TOKENS = [
+    ["amount", function(r){return r.amount;}, "f_amount"],
+    ["paid via", function(r){return r.method && r.method.join(", ");}, "f_txnType"],
+    ["date", function(r){return r.date && r.date.value;}, "f_txnDate"],
+    ["likely type", function(r){return r.crime && r.crime.join(" / ");}, "f_desc"],
+    ["your email", function(r){return r.emailsBy && r.emailsBy.user[0];}, "f_email"],
+    ["subject email", function(r){return r.emailsBy && (r.emailsBy.subject[0] || r.emailsBy.unknown[0]);}, "f_subjEmail"],
+    ["your phone", function(r){return r.phonesBy && r.phonesBy.user[0];}, "f_phone"],
+    ["subject phone", function(r){return r.phonesBy && (r.phonesBy.subject[0] || r.phonesBy.unknown[0]);}, "f_subjPhone"],
+    ["website", function(r){return r.urls && r.urls[0];}, "f_subjWeb"],
+    ["subject", function(r){return r.subjectName;}, "f_subjName"],
+    ["business", function(r){return r.subjectBusiness;}, "f_subjBiz"],
+    ["location", function(r){return [r.city,r.state].filter(Boolean).join(", ");}, "f_city"]
+  ];
+
+  /* ==========================================================================
+     ENGINE  —  no edits needed below this line to adapt the tool.
+     ========================================================================== */
+  var $ = function(s){ return document.querySelector(s); };
+  var esc = function(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+
+  /* ---- paint config-driven text/branding ---- */
+  function paintBranding(){
+    $("#brandName").textContent = CONFIG.brand.name;
+    $("#brandTag").textContent = CONFIG.brand.tagline;
+    $("#seal").textContent = CONFIG.brand.seal;
+    $("#govNote").textContent = CONFIG.govNote;
+    $("#eyebrow").textContent = CONFIG.copy.eyebrow;
+    $("#h1").textContent = CONFIG.copy.h1;
+    $("#heroSub").textContent = CONFIG.copy.sub;
+    $("#storyLabel").textContent = CONFIG.copy.storyLabel;
+    $("#analyzeLabel").textContent = CONFIG.copy.analyze;
+    $("#story").setAttribute("placeholder", CONFIG.copy.placeholder);
+    $("#handText").textContent = CONFIG.copy.handText;
+
+    // emergency bar (from altPaths flagged bar:true)
+    var bars = CONFIG.altPaths.filter(function(a){return a.bar;});
+    var barWrap = document.createElement("div"); barWrap.className="wrap";
+    barWrap.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2 1 21h22L12 2Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v5" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.4" r="1.2" fill="#fff"/></svg>';
+    var txt = document.createElement("div");
+    // Each bar entry is a full statement. Strip trailing punctuation, join with
+    // ". " between statements, append a final period — so two messages don't
+    // run together as one sentence.
+    txt.innerHTML = bars.map(function(b){
+      var html = esc(b.barText)+' <a href="tel:'+esc(b.tel)+'"><b>'+esc(b.display)+'</b></a>'+(b.barSuffix?(" "+esc(b.barSuffix)):"");
+      return html.replace(/[.!?]\s*$/, "");
+    }).join(". ") + ".";
+    barWrap.appendChild(txt);
+    $("#alertBar").appendChild(barWrap);
+
+    // chips
+    var chips = $("#chips");
+    CONFIG.prompts.forEach(function(p){
+      var b=document.createElement("button"); b.type="button"; b.className="chip";
+      b.textContent=p[0]; b.setAttribute("data-add",p[1]);
+      b.addEventListener("click", function(){ addPrompt(p[1]); });
+      chips.appendChild(b);
+    });
+
+    // step pills
+    var ol=$("#stepList");
+    CONFIG.stepPills.forEach(function(t,i){
+      var li=document.createElement("li");
+      li.setAttribute("data-n", i+1); li.setAttribute("data-filled","0");
+      li.innerHTML='<span class="dot" aria-hidden="true">'+(i+1)+'</span>'+esc(t);
+      ol.appendChild(li);
+    });
+
+    // handoff actions
+    var acts=$("#handActs");
+    var a=document.createElement("a"); a.className="btn btn-gold";
+    a.href=CONFIG.officialForm.url; a.target="_blank"; a.rel="noopener noreferrer";
+    a.textContent=CONFIG.officialForm.label; acts.appendChild(a);
+    var cp=document.createElement("button"); cp.type="button"; cp.className="btn btn-ghost"; cp.id="copyBtn";
+    cp.style.color="#fff"; cp.style.borderColor="#3a4a68"; cp.textContent="Copy a plain-text summary";
+    acts.appendChild(cp);
+
+    // alt cards
+    var grid=$("#altGrid");
+    CONFIG.altPaths.forEach(function(p){
+      var d=document.createElement("div"); d.className="alt"+(p.kind==="em"?" em":"");
+      var action = p.href
+        ? '<a href="'+esc(p.href)+'" target="_blank" rel="noopener noreferrer" aria-label="'+esc(p.aria||p.display)+'">'+esc(p.display)+'</a>'
+        : (p.tel ? '<a href="tel:'+esc(p.tel)+'" aria-label="'+esc(p.aria||p.display)+'">'+esc(p.display)+'</a>'
+                 : '<span class="num">'+esc(p.display)+'</span>');
+      d.innerHTML='<h3>'+esc(p.title)+'</h3><p>'+esc(p.desc)+'</p>'+action;
+      grid.appendChild(d);
+    });
+
+    // definitions dialog
+    $("#defTitle").textContent = CONFIG.definitions.title;
+    var dl=document.createElement("dl");
+    CONFIG.definitions.items.forEach(function(it){
+      var dt=document.createElement("dt"); dt.textContent=it[0];
+      var dd=document.createElement("dd"); dd.textContent=it[1];
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+    $("#defBody").appendChild(dl);
+  }
+
+  /* ---- composer behavior ---- */
+  var story=$("#story"), countEl=$("#storyCount"), status=$("#status");
+  function updCount(){ var n=story.value.length; countEl.textContent=n.toLocaleString()+" character"+(n===1?"":"s"); }
+  function addPrompt(add){ if(story.value && !/\s$/.test(story.value)) story.value+=" "; story.value+=add; story.focus(); updCount(); }
+  function setStatus(msg, show){ status.textContent=msg; status.classList.toggle("show", !!show && !!msg); }
+  story.addEventListener("input", updCount);
+
+  $("#clearBtn").addEventListener("click", function(){
+    // Nothing is saved anywhere — confirm before discarding a substantive draft.
+    if(story.value.length > 200 && !confirm("Clear your description? Nothing is saved, so this can't be undone.")) return;
+    story.value=""; updCount(); story.focus();
+    $("#picked").classList.remove("show"); $("#review").classList.remove("show");
+    $("#stepnav").hidden=true; $("#handoff").hidden=true; setStatus("");
+  });
+
+  /* ---- extraction engine (config-driven) ---- */
+  function runExtractors(text){
+    var r={ _raw:text }, lower=text.toLowerCase();
+    Object.keys(CONFIG.extractors).forEach(function(key){
+      var x=CONFIG.extractors[key];
+      if(x.type==="regex"){
+        if(x.all){
+          var m=text.match(x.re);
+          if(m){ if(x.min){ m=m.filter(function(s){return s.replace(/\D/g,"").length>=x.min;}); } if(m.length) r[key]=Array.from(new Set(m)); }
+        } else {
+          var one=text.match(x.re); if(one) r[key]=one[0].replace(/\s+/g," ").trim();
+        }
+      } else if(x.type==="capture"){
+        var c=text.match(x.re);
+        if(c){ var v=c[1]; if(x.clean){ v=v.replace(/\.\s.*$/,"").replace(/[,;].*$/,"").replace(/["']/g,""); } r[key]=v.trim(); }
+      } else if(x.type==="keywordMap"){
+        var hits=[];
+        x.map.forEach(function(pair){
+          if(x.rank){
+            // Count occurrences to rank labels by how strongly the text matches them.
+            var re=pair[1], g=lower.match(new RegExp(re.source, (re.flags||"").replace("g","")+"g"));
+            if(g && g.length) hits.push({label:pair[0], n:g.length});
+          } else if(pair[1].test(lower)){
+            hits.push(pair[0]);
+          }
+        });
+        if(hits.length){
+          if(x.rank){ hits.sort(function(a,b){return b.n-a.n;}); r[key]=hits.map(function(h){return h.label;}); }
+          else r[key]= x.multi ? hits : hits[0];
+        }
+      } else if(x.type==="date"){
+        var dre=/\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+\d{1,2}(?:,?\s+\d{4})?\b|\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/i;
+        var d=text.match(dre);
+        if(d){ r.date={value:d[0], conf:(/\d{4}/.test(d[0])?"high":"med")}; }
+        else { var rel=text.match(/\b(yesterday|last week|last month|a few days ago|this morning|last night)\b/i); if(rel) r.date={value:rel[0], conf:"low"}; }
+      }
+    });
+    // normalize method/crime keys to match MAP/TOKENS expectations
+    if(r.method && !Array.isArray(r.method)) r.method=[r.method];
+    if(r.crime && !Array.isArray(r.crime)) r.crime=[r.crime];
+    // drop URLs that are really the domain of a detected email address
+    if(r.urls && r.emails){
+      var domains=r.emails.map(function(e){return e.split("@")[1];});
+      r.urls=r.urls.filter(function(u){ return domains.indexOf(u.replace(/^https?:\/\/(?:www\.)?/,""))===-1; });
+      if(!r.urls.length) delete r.urls;
+    }
+    // Classify each detected email/phone as belonging to the USER or the SUBJECT
+    // based on the words that appear in the same sentence just before the match.
+    // Unattributed matches stay in "unknown" and are surfaced as auto-suggestions.
+    if(r.emails) r.emailsBy = binContacts(text, r.emails);
+    if(r.phones) r.phonesBy = binContacts(text, r.phones);
+    return r;
+  }
+
+  /* Look up to 80 chars before a contact match (within the same sentence) and
+     decide whether it reads as the reporter's own or the subject's. Subject
+     signals win ties — fraud reports overwhelmingly describe the other party. */
+  var SUBJ_PAT = /\b(his|her|hers|their|theirs|they|he|she|him|from|sent\s+(?:from|by)|the\s+(?:scammer|suspect|person|guy|man|woman|company|business|website|site|fraudster|caller|sender|seller|buyer))\b/;
+  var USER_PAT = /\b(my|mine|me|i'?m|i\s+(?:am|was|gave|sent|wrote|use|used|got|received|can\s+be\s+reached)|reach\s+me|contact\s+me|email\s+me|call\s+me)\b/;
+  function classifyContact(text, match){
+    var idx = text.indexOf(match); if(idx<0) return "unknown";
+    var before = text.slice(Math.max(0, idx-80), idx);
+    var br = Math.max(before.lastIndexOf("."), before.lastIndexOf("!"), before.lastIndexOf("?"));
+    var ctx = before.slice(br+1).toLowerCase();
+    if(SUBJ_PAT.test(ctx)) return "subject";
+    if(USER_PAT.test(ctx)) return "user";
+    return "unknown";
+  }
+  function binContacts(text, arr){
+    var out={user:[], subject:[], unknown:[]};
+    arr.forEach(function(v){ out[classifyContact(text, v)].push(v); });
+    return out;
+  }
+
+  /* ---- token strip ---- */
+  function renderTokens(r){
+    var tk=$("#tokens"); tk.innerHTML=""; var added=0;
+    TOKENS.forEach(function(t){
+      var val=t[1](r); if(!val) return;
+      var b=document.createElement("button"); b.type="button"; b.className="token";
+      b.setAttribute("aria-label","Go to "+t[0].replace(/\?$/,"")+" field");
+      b.innerHTML='<span class="k">'+esc(t[0])+'</span><span class="v"></span>';
+      b.querySelector(".v").textContent=val;
+      b.addEventListener("click", function(){ var el=document.getElementById(t[2]); if(el){ el.focus(); el.scrollIntoView({block:"center",behavior:"smooth"});} });
+      tk.appendChild(b); added++;
+    });
+    if(!added){ var s=document.createElement("span"); s.className="token"; s.textContent="No specific details detected yet — try the prompts above."; tk.appendChild(s); }
+    $("#picked").classList.add("show");
+  }
+
+  /* ---- field rendering ---- */
+  function fieldNode(f, fill){
+    var wrap=document.createElement("div"); wrap.className="field";
+    var reqMark = f.req ? ' <span class="req" aria-hidden="true">*</span><span class="sr-only"> (required)</span>' : '';
+    var val = fill ? fill.v : "";
+    if(f.type==="note"){
+      wrap.innerHTML='<span class="glabel">'+esc(f.label)+'</span><div class="meta"><span class="badge need">official site</span></div>';
+      return wrap;
+    }
+    var reqAttr = f.req ? ' required aria-required="true"' : '';
+    if(f.type==="radio"){
+      var set="";
+      f.opts.forEach(function(o,i){
+        var ck=(val===o)?" checked":"";
+        // Only the first radio in a group carries `required` so the constraint
+        // applies to the group without nagging on each option.
+        var rq=(f.req && i===0)?" required":"";
+        set+='<label><input type="radio" name="'+f.id+'" value="'+esc(o)+'"'+ck+rq+'> '+esc(o)+'</label>';
+      });
+      wrap.innerHTML='<span class="glabel" id="'+f.id+'_l">'+esc(f.label)+reqMark+'</span><div class="radios" role="radiogroup" aria-labelledby="'+f.id+'_l"'+(f.req?' aria-required="true"':'')+' id="'+f.id+'">'+set+'</div>';
+    } else if(f.type==="checkbox"){
+      wrap.innerHTML='<label style="font-weight:500;display:flex;gap:.6rem;align-items:flex-start;"><input type="checkbox" id="'+f.id+'"'+reqAttr+' style="margin-top:.35rem;"> <span>'+esc(f.label)+reqMark+'</span></label>';
+    } else if(f.type==="select"){
+      var opts=f.opts.map(function(o){ var sel=(val===o)?" selected":""; return '<option value="'+esc(o)+'"'+sel+'>'+(o===""?"Select…":esc(o))+'</option>'; }).join("");
+      wrap.innerHTML='<label for="'+f.id+'">'+esc(f.label)+reqMark+'</label><select id="'+f.id+'"'+reqAttr+'>'+opts+'</select>';
+    } else if(f.type==="textarea"){
+      wrap.innerHTML='<label for="'+f.id+'">'+esc(f.label)+reqMark+'</label><textarea id="'+f.id+'"'+reqAttr+'></textarea>';
+      wrap.querySelector("textarea").value=val||"";
+    } else {
+      var ac=f.auto?' autocomplete="'+f.auto+'"':"";
+      wrap.innerHTML='<label for="'+f.id+'">'+esc(f.label)+reqMark+'</label><input type="'+f.type+'" id="'+f.id+'"'+ac+reqAttr+'>';
+      wrap.querySelector("input").value=val||"";
+    }
+    var meta=document.createElement("div"); meta.className="meta";
+    var src = fill ? fill.s : "";
+    if(src==="from") meta.innerHTML='<span class="badge from">&#10003; from your description</span>';
+    else if(src==="auto") meta.innerHTML='<span class="badge auto">auto-suggested · check</span>';
+    else if(src==="need") meta.innerHTML='<span class="badge auto">guessed · please confirm</span>';
+    else meta.innerHTML='<span class="badge need">you fill this in</span>';
+    wrap.appendChild(meta);
+    return wrap;
+  }
+
+  function renderSteps(r){
+    var host=$("#steps"); host.innerHTML=""; var filled=0;
+    CONFIG.steps.forEach(function(s){
+      var card=document.createElement("section"); card.className="stepcard"; card.setAttribute("aria-labelledby","step"+s.n+"h");
+      var sh=document.createElement("div"); sh.className="sh";
+      sh.innerHTML='<span class="sn">Step '+s.n+'</span><h3 id="step'+s.n+'h">'+esc(s.title)+'</h3>';
+      if(s.help){
+        var hb=document.createElement("button"); hb.type="button"; hb.className="btn btn-ghost";
+        hb.style.cssText="margin-left:auto;padding:.35rem .7rem;font-size:.85rem;"; hb.textContent="What are these?";
+        hb.setAttribute("aria-haspopup","dialog"); hb.addEventListener("click", openDialog);
+        sh.appendChild(hb);
+      }
+      card.appendChild(sh);
+      var body=document.createElement("div"); body.className="sbody"; var any=false;
+      s.fields.forEach(function(f){
+        var fill = MAP[f.id] ? MAP[f.id](r) : null;
+        if(fill && (fill.v || fill.s==="from" || fill.s==="auto")){ any=true; if(f.type!=="note") filled++; }
+        body.appendChild(fieldNode(f, fill));
+      });
+      card.appendChild(body); host.appendChild(card);
+      var li=document.querySelector('#stepList li[data-n="'+s.n+'"]');
+      if(li) li.setAttribute("data-filled", any?"1":"0");
+    });
+    $("#fillSummary").textContent="We pre-filled "+filled+" field"+(filled===1?"":"s")+" from your description. The rest are ready for you to complete or correct.";
+    $("#review").classList.add("show"); $("#stepnav").hidden=false; $("#handoff").hidden=false;
+  }
+
+  $("#analyzeBtn").addEventListener("click", function(){
+    var txt=story.value.trim();
+    if(txt.length<15){ setStatus("Add a little more detail first — even one or two sentences about what happened helps.", true); story.focus(); return; }
+    setStatus("Organized your report into "+CONFIG.steps.length+" steps. Review what we picked up below.", true);
+    var r=runExtractors(txt);
+    renderTokens(r); renderSteps(r);
+    setTimeout(function(){ $("#picked").scrollIntoView({behavior:"smooth", block:"start"}); }, 60);
+  });
+
+  /* ---- copy summary ---- */
+  document.addEventListener("click", function(e){
+    if(e.target && e.target.id==="copyBtn"){
+      var lines=[];
+      CONFIG.steps.forEach(function(s){
+        s.fields.forEach(function(f){
+          if(f.type==="note") return;
+          var el=document.getElementById(f.id); if(!el) return;
+          var v="";
+          if(el.getAttribute && el.getAttribute("role")==="radiogroup"){ var c=el.querySelector("input:checked"); v=c?c.value:""; }
+          else if(el.type==="checkbox"){ v=el.checked?"Yes":""; }
+          else v=el.value||"";
+          if(v) lines.push(f.label+": "+v);
+        });
+      });
+      var out=CONFIG.brand.name.toUpperCase()+" — DRAFT SUMMARY (not submitted)\n\n"+lines.join("\n");
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(out).then(function(){ setStatus("Copied a plain-text summary to your clipboard.", true); }, function(){ fallbackCopy(out); });
+      } else fallbackCopy(out);
+    }
+  });
+  function fallbackCopy(txt){
+    var ta=document.createElement("textarea"); ta.value=txt; ta.setAttribute("aria-hidden","true"); ta.style.position="fixed"; ta.style.left="-9999px";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); setStatus("Copied a plain-text summary to your clipboard.", true); }
+    catch(e){ setStatus("Couldn’t copy automatically — select the text manually.", true); }
+    document.body.removeChild(ta);
+  }
+
+  /* ---- accessible modal dialog ---- */
+  var dlg=$("#defDialog"), lastFocus=null;
+  function openDialog(){ lastFocus=document.activeElement; if(dlg.showModal) dlg.showModal(); else dlg.setAttribute("open",""); $("#defClose").focus(); document.addEventListener("keydown", trap); }
+  function closeDialog(){ if(dlg.close) dlg.close(); else dlg.removeAttribute("open"); document.removeEventListener("keydown", trap); if(lastFocus) lastFocus.focus(); }
+  $("#defClose").addEventListener("click", closeDialog);
+  dlg.addEventListener("click", function(e){ if(e.target===dlg) closeDialog(); });
+  dlg.addEventListener("cancel", function(e){ e.preventDefault(); closeDialog(); });
+  function trap(e){
+    if(e.key==="Escape"){ e.preventDefault(); closeDialog(); return; }
+    if(e.key!=="Tab") return;
+    var f=dlg.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])'); if(!f.length) return;
+    var first=f[0], last=f[f.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+
+  /* ---- optional: apply CONFIG.theme overrides to CSS variables ---- */
+  if(CONFIG.theme){ var root=document.documentElement; Object.keys(CONFIG.theme).forEach(function(k){ root.style.setProperty("--"+k, CONFIG.theme[k]); }); }
+
+  paintBranding(); updCount();
+})();
+</script>
+</body>
+</html>

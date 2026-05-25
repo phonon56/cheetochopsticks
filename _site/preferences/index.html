@@ -934,9 +934,9 @@
     <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
   </div>
   <div class="notif-filters" role="group" aria-label="Filter notifications">
-    <button class="nf-btn active" onclick="filterNotif('all', this)">All (20)</button>
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (21)</button>
     <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (10)</button>
-    <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (4)</button>
     <button class="nf-btn" onclick="filterNotif('info', this)">Info (7)</button>
   </div>
   <div class="notif-scroll">
@@ -1035,6 +1035,15 @@
     </div>
 
     <div class="notif-group-label">High priority</div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Plain-language IC3 intake — open-source reference.</strong> Single-file concept for the FBI IC3 complaint form: one free-text box, client-side extraction into the official complaint structure, honest provenance badges on every pre-filled field, hand-off to the real form. WCAG 2.1 AAA, restrictive CSP, no backend, no third-party requests. CONFIG-driven so any agency can re-point it at a different form.</div>
+        <div class="notif-meta">Open source · National · FBI IC3 · May 2026 · WCAG 2.1 AAA</div>
+        <a class="notif-action" href="/microsites/national/IC3/ic3_intake_opensource.html">Open the plain-language intake <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
 
     <div class="notif-item" data-tier="high">
       <div class="notif-dot nd-amber"></div>
@@ -1679,6 +1688,11 @@
                     <label data-agency="ftc" data-topic="gov.national.ftc">
                       <input type="checkbox" name="topic" value="gov.national.FTC">
                       <span>FTC</span>
+                    </label>
+                  
+                    <label data-agency="ic3" data-topic="gov.national.ic3">
+                      <input type="checkbox" name="topic" value="gov.national.IC3">
+                      <span>IC3</span>
                     </label>
                   
                 </div>
