@@ -541,14 +541,14 @@
       transition: all .15s;
     }
     .nf-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
-    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold); border-color: rgba(200,168,75,.3); }
+    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold-lt); border-color: rgba(200,168,75,.3); }
     .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
     .notif-group-label {
       font-family: var(--cc-mono);
       font-size: .78rem;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--cc-quiet);
+      color: var(--cc-muted);
       padding: 10px 20px 4px;
     }
     .notif-item {
@@ -586,7 +586,7 @@
       font-family: var(--cc-mono);
       font-size: .78rem;
       letter-spacing: .08em;
-      color: var(--cc-quiet);
+      color: var(--cc-muted);
       margin-bottom: 4px;
     }
     .notif-action {
@@ -1544,7 +1544,9 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
   color:var(--ink);background:#fff;font-family:inherit;min-width:200px;}
 .zip-select:focus{outline:3px solid #1d4ed8;outline-offset:1px;border-color:transparent;}
 .zip-hint{font-size:13px;color:#00528f;}
-.filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:16px;}
+.filter-block{border:none;margin:0 0 18px;padding:0;}
+.filter-block-label{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:0 0 8px;}
+.filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
 .filter-group{display:flex;flex-direction:column;gap:5px;}
 .filter-group label{font-size:13px;font-weight:600;color:var(--muted);}
 .filter-group select,.filter-group input[type=text],.search-input-field{
@@ -1584,6 +1586,8 @@ td.loc{max-width:200px;}
 td.num{text-align:right;font-family:var(--mono);}
 
 .pagination{display:flex;align-items:center;gap:8px;padding:16px 20px;border-top:1px solid var(--rule);flex-wrap:wrap;}
+#page-numbers{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;}
+#page-numbers [role=listitem]{display:inline-flex;}
 .page-btn{min-width:36px;height:36px;padding:0 10px;border:1px solid var(--rule);border-radius:3px;
   background:#fff;color:var(--ink);cursor:pointer;font-size:13px;font-family:var(--mono);
   display:flex;align-items:center;justify-content:center;}
@@ -1642,7 +1646,7 @@ td.num{text-align:right;font-family:var(--mono);}
 <div id="live-announce" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
 <!-- ===== HEADER ===== -->
-<header class="dashboard-header" role="region" aria-label="Page header">
+<header class="dashboard-header" aria-label="Page header">
   <div class="header-inner">
     <p class="eyebrow">StorySeed Studios · The Dais · Civic Intelligence Platform</p>
     <h1>Colorado Springs — Traffic Safety &amp; Funding</h1>
@@ -1834,65 +1838,73 @@ td.num{text-align:right;font-family:var(--mono);}
         <button class="btn btn-secondary" id="clear-btn" type="button">Clear</button>
       </div>
 
-      <div class="filter-grid" role="group" aria-label="Additional filters">
-        <div class="filter-group">
-          <label for="filter-year">Year</label>
-          <select id="filter-year">
-            <option value="">All years</option>
-            <option>2025</option><option>2024</option><option>2023</option>
-            <option>2022</option><option>2021</option><option>2020</option>
-            <option>2019</option><option>2018</option><option>2017</option>
-          </select>
+      <fieldset class="filter-block">
+        <legend class="filter-block-label">Time period</legend>
+        <div class="filter-grid">
+          <div class="filter-group">
+            <label for="filter-year">Year</label>
+            <select id="filter-year">
+              <option value="">All years</option>
+              <option>2025</option><option>2024</option><option>2023</option>
+              <option>2022</option><option>2021</option><option>2020</option>
+              <option>2019</option><option>2018</option><option>2017</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-month">Month</label>
+            <select id="filter-month">
+              <option value="">All months</option>
+              <option value="01-January">January</option><option value="02-February">February</option>
+              <option value="03-March">March</option><option value="04-April">April</option>
+              <option value="05-May">May</option><option value="06-June">June</option>
+              <option value="07-July">July</option><option value="08-August">August</option>
+              <option value="09-September">September</option><option value="10-October">October</option>
+              <option value="11-November">November</option><option value="12-December">December</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-day">Day of week</label>
+            <select id="filter-day">
+              <option value="">All days</option>
+              <option value="1-Sunday">Sunday</option><option value="2-Monday">Monday</option>
+              <option value="3-Tuesday">Tuesday</option><option value="4-Wednesday">Wednesday</option>
+              <option value="5-Thursday">Thursday</option><option value="6-Friday">Friday</option>
+              <option value="7-Saturday">Saturday</option>
+            </select>
+          </div>
         </div>
-        <div class="filter-group">
-          <label for="filter-severity">Severity</label>
-          <select id="filter-severity">
-            <option value="">All severities</option>
-            <option value="K">Fatal</option>
-            <option value="A">Serious Injury</option>
-            <option value="B">Minor Injury</option>
-            <option value="C">Possible Injury</option>
-            <option value="O">Property Damage Only</option>
-          </select>
+      </fieldset>
+      <fieldset class="filter-block">
+        <legend class="filter-block-label">Crash details</legend>
+        <div class="filter-grid">
+          <div class="filter-group">
+            <label for="filter-severity">Severity</label>
+            <select id="filter-severity">
+              <option value="">All severities</option>
+              <option value="K">Fatal</option>
+              <option value="A">Serious Injury</option>
+              <option value="B">Minor Injury</option>
+              <option value="C">Possible Injury</option>
+              <option value="O">Property Damage Only</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-impaired">Impaired driver</label>
+            <select id="filter-impaired">
+              <option value="">All</option>
+              <option value="Y">Impaired involved</option>
+              <option value="N">Not impaired</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-vru">Vulnerable road users</label>
+            <select id="filter-vru">
+              <option value="">All crashes</option>
+              <option value="Y">Pedestrian / bike / motorcycle</option>
+            </select>
+          </div>
         </div>
-        <div class="filter-group">
-          <label for="filter-impaired">Impaired driver</label>
-          <select id="filter-impaired">
-            <option value="">All</option>
-            <option value="Y">Impaired involved</option>
-            <option value="N">Not impaired</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="filter-vru">Vulnerable road users</label>
-          <select id="filter-vru">
-            <option value="">All crashes</option>
-            <option value="Y">Pedestrian / bike / motorcycle</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="filter-month">Month</label>
-          <select id="filter-month">
-            <option value="">All months</option>
-            <option value="01-January">January</option><option value="02-February">February</option>
-            <option value="03-March">March</option><option value="04-April">April</option>
-            <option value="05-May">May</option><option value="06-June">June</option>
-            <option value="07-July">July</option><option value="08-August">August</option>
-            <option value="09-September">September</option><option value="10-October">October</option>
-            <option value="11-November">November</option><option value="12-December">December</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="filter-day">Day of week</label>
-          <select id="filter-day">
-            <option value="">All days</option>
-            <option value="1-Sunday">Sunday</option><option value="2-Monday">Monday</option>
-            <option value="3-Tuesday">Tuesday</option><option value="4-Wednesday">Wednesday</option>
-            <option value="5-Thursday">Thursday</option><option value="6-Friday">Friday</option>
-            <option value="7-Saturday">Saturday</option>
-          </select>
-        </div>
-      </div>
+      </fieldset>
 
       <div class="filter-actions">
         <button class="btn btn-primary" id="apply-btn" type="button">Apply Filters</button>
@@ -2943,6 +2955,8 @@ function renderPagination(){
   const pn=document.getElementById('page-numbers');
   pn.innerHTML='';
   for(let i=s;i<=e;i++){
+    const li=document.createElement('span');
+    li.setAttribute('role','listitem');
     const btn=document.createElement('button');
     btn.type='button';
     btn.className='page-btn'+(i===currentPage?' active':'');
@@ -2950,7 +2964,8 @@ function renderPagination(){
     btn.setAttribute('aria-label',`Page ${i}${i===currentPage?', current page':''}`);
     btn.setAttribute('aria-current',i===currentPage?'page':'false');
     btn.addEventListener('click',()=>{currentPage=i;renderTable();window.scrollTo(0,0);});
-    pn.appendChild(btn);
+    li.appendChild(btn);
+    pn.appendChild(li);
   }
 }
 
