@@ -1150,12 +1150,12 @@
    muted      #3d5166 →  7.82 AAA · blue #0049b1 → 7.76 AAA
    green      #065f46 →  7.34 AAA · purple #5b21b6 → 8.59 AAA
    red        #b91c1c →  6.18 AA
-   gold-ink   #735504 →  6.62 AA   (text-safe; --gold #c8a84b kept for borders only, 2.19 FAIL as text)
-   amber-ink  #92400e →  6.78 AA   (text-safe; --amber #d97706 kept for borders only, 3.04 FAIL as text) */
+   gold-ink   #5e4400 →  8.82 AAA  (text-safe; --gold #c8a84b kept for borders only, 2.19 FAIL as text)
+   amber-ink  #7c3508 →  8.57 AAA  (text-safe; --amber #d97706 kept for borders only, 3.04 FAIL as text) */
 :root {
   --navy:#001a4d; --blue:#0049b1; --sky:#1d6fa4; --teal:#0b7a75;
   --red:#991b1b; --amber:#d97706; --gold:#c8a84b; --green:#065f46;
-  --amber-ink:#92400e; --gold-ink:#735504;
+  --amber-ink:#7c3508; --gold-ink:#5e4400;
   --purple:#5b21b6; --ink:#0f172a; --muted:#3d5166; --rule:#e2e8f0;
   --off:#f8fafc; --white:#ffffff;
   --mono:'Courier New',monospace; --sans:system-ui,-apple-system,sans-serif;
@@ -1163,15 +1163,12 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{font-size:15px;scroll-behavior:smooth;}
 body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
-.skip{position:absolute;left:-9999px;top:4px;background:var(--navy);color:#fff;
-  padding:8px 16px;border-radius:3px;font-family:var(--mono);font-size:13px;text-decoration:none;z-index:999;}
-.skip:focus{left:8px;}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:2px;box-shadow:0 0 0 5px rgba(0,0,0,0.55);}
 
 /* ===== HEADER ===== */
 .dashboard-header{
-  background:linear-gradient(135deg,#001030 0%,#00205c 60%,#0d3d6e 100%);
+  background:linear-gradient(135deg,#000b26 0%,#001233 55%,#001a4d 100%);
   border-bottom:2px solid var(--gold);padding:22px 28px 18px;
 }
 .header-inner{max-width:1400px;margin:0 auto;}
@@ -1216,7 +1213,7 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
   color:#8fa8c8;font-weight:600;transition:color .2s;
 }
 .brand-pill .bp-sub{
-  font-size:13px;color:#7a8fa8;text-align:center;
+  font-size:13px;color:#9ab0c8;text-align:center;
   white-space:nowrap;font-family:var(--mono);letter-spacing:.04em;
 }
 
@@ -1248,7 +1245,7 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 .scope-type-badge.city{background:rgba(74,158,255,.2);color:#7dc8ff;border:1px solid rgba(74,158,255,.3);}
 .scope-type-badge.county{background:rgba(45,212,191,.15);color:#5eead4;border:1px solid rgba(45,212,191,.25);}
 .scope-type-badge.state{background:rgba(167,139,250,.15);color:#c4b5fd;border:1px solid rgba(167,139,250,.25);}
-.scope-type-badge.plus{background:rgba(200,168,75,.15);color:#c8a84b;border:1px solid rgba(200,168,75,.25);}
+.scope-type-badge.plus{background:rgba(200,168,75,.15);color:#d9bd6b;border:1px solid rgba(200,168,75,.25);}
 
 .scope-divider{width:1px;height:14px;background:rgba(255,255,255,.2);flex-shrink:0;}
 .scope-def-text{font-size:13px;color:#9ab0c8;line-height:1.5;font-family:var(--mono);}
@@ -1344,7 +1341,7 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 .coming-soon-wrap .cs-badge{
   margin-top:20px;font-family:var(--mono);font-size:13px;letter-spacing:.15em;
   text-transform:uppercase;padding:5px 14px;border-radius:10px;
-  background:rgba(200,168,75,.15);color:#c8a84b;border:1px solid rgba(200,168,75,.35);
+  background:rgba(200,168,75,.15);color:#d9bd6b;border:1px solid rgba(200,168,75,.35);
 }
 .coming-soon-items{
   display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
@@ -1355,7 +1352,7 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
   border-radius:6px;padding:14px 18px;text-align:left;flex:1;min-width:160px;
 }
 .cs-feature .csf-icon{font-size:18px;margin-bottom:6px;}
-.cs-feature .csf-label{font-family:var(--mono);font-size:13px;letter-spacing:.1em;color:#7a8fa8;
+.cs-feature .csf-label{font-family:var(--mono);font-size:13px;letter-spacing:.1em;color:#9ab0c8;
   text-transform:uppercase;margin-bottom:4px;}
 .cs-feature .csf-text{font-size:13px;color:#9ab0c8;line-height:1.6;}
 
@@ -1403,8 +1400,8 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 .narrative strong{color:#fff;}
 .insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px;}
 @media(max-width:700px){.insight-grid{grid-template-columns:1fr;}}
-.insight-item{background:rgba(255,255,255,.09);border-radius:4px;padding:14px;border-top:2px solid var(--gold);}
-.ins-num{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--gold-ink);line-height:1;}
+.insight-item{background:rgba(0,0,0,.25);border-radius:4px;padding:14px;border-top:2px solid var(--gold);}
+.ins-num{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--gold);line-height:1;}
 .ins-label{font-size:13px;color:#a8bbd4;margin-top:4px;}
 
 /* FUNDING */
@@ -1615,7 +1612,7 @@ td.num{text-align:right;font-family:var(--mono);}
 
 /* ===== FOOTER ===== */
 .dash-footer{background:#0d1117;border-top:1px solid #1e293b;padding:16px 24px;text-align:center;}
-.dash-footer p{font-family:var(--mono);font-size:13px;color:#475569;letter-spacing:.04em;}
+.dash-footer p{font-family:var(--mono);font-size:13px;color:#9ab0c8;letter-spacing:.04em;}
 
 @media(max-width:640px){
   .filter-grid{grid-template-columns:1fr 1fr;}
@@ -1623,6 +1620,15 @@ td.num{text-align:right;font-family:var(--mono);}
   .summary-grid{grid-template-columns:1fr 1fr;}
   .brand-pill{min-width:80px;padding:12px 14px 10px;}
   .brand-pill .bp-name{font-size:13px;}
+}
+
+/* ===== REDUCED MOTION (WCAG 2.3.3) ===== */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{
+    animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important;
+  }
 }
 </style>
 <div id="live-region" role="status" aria-live="polite" class="sr-only"></div>
@@ -1653,30 +1659,30 @@ td.num{text-align:right;font-family:var(--mono);}
   <div class="brand-inner">
     <div class="brand-pills" role="tablist" aria-label="Data scope level">
       <button class="brand-pill active" data-brand="city"
-        onclick="switchBrand('city')" role="tab" aria-selected="true"
+        onclick="switchBrand('city',true)" role="tab" aria-selected="true" tabindex="0"
         aria-controls="brand-panel-city" id="brand-btn-city">
-        <span class="bp-icon">🏙️</span>
+        <span class="bp-icon" aria-hidden="true">🏙️</span>
         <span class="bp-name">City</span>
         <span class="bp-sub">Colorado Springs</span>
       </button>
       <button class="brand-pill" data-brand="county"
-        onclick="switchBrand('county')" role="tab" aria-selected="false"
+        onclick="switchBrand('county',true)" role="tab" aria-selected="false" tabindex="-1"
         aria-controls="brand-panel-county" id="brand-btn-county">
-        <span class="bp-icon">🗺️</span>
+        <span class="bp-icon" aria-hidden="true">🗺️</span>
         <span class="bp-name">County</span>
         <span class="bp-sub">El Paso County</span>
       </button>
       <button class="brand-pill" data-brand="state"
-        onclick="switchBrand('state')" role="tab" aria-selected="false"
+        onclick="switchBrand('state',true)" role="tab" aria-selected="false" tabindex="-1"
         aria-controls="brand-panel-state" id="brand-btn-state">
-        <span class="bp-icon">🏔️</span>
+        <span class="bp-icon" aria-hidden="true">🏔️</span>
         <span class="bp-name">State</span>
         <span class="bp-sub">Colorado</span>
       </button>
       <button class="brand-pill" data-brand="plus"
-        onclick="switchBrand('plus')" role="tab" aria-selected="false"
+        onclick="switchBrand('plus',true)" role="tab" aria-selected="false" tabindex="-1"
         aria-controls="brand-panel-plus" id="brand-btn-plus">
-        <span class="bp-icon">✦</span>
+        <span class="bp-icon" aria-hidden="true">✦</span>
         <span class="bp-name">Plan</span>
         <span class="bp-sub">Policy &amp; Context</span>
       </button>
@@ -1696,25 +1702,25 @@ td.num{text-align:right;font-family:var(--mono);}
 </div>
 
 <!-- ===== CITY PANEL ===== -->
-<div id="brand-panel-city">
+<div id="brand-panel-city" role="tabpanel" aria-labelledby="brand-btn-city" tabindex="0">
 
   <!-- Tab bar (City only) -->
   <div class="tab-bar" role="navigation" aria-label="Dashboard navigation">
     <div class="tab-nav" role="tablist" aria-label="Dashboard sections">
       <button class="tab-btn active" id="tab-btn-search"
-        onclick="switchTab('search')" aria-selected="true" role="tab"
+        onclick="switchTab('search')" aria-selected="true" role="tab" tabindex="0"
         aria-controls="tab-panel-search">
-        🔍 Search Records
+        <span aria-hidden="true">🔍</span> Search Records
       </button>
       <button class="tab-btn" id="tab-btn-data"
-        onclick="switchTab('data')" aria-selected="false" role="tab"
+        onclick="switchTab('data')" aria-selected="false" role="tab" tabindex="-1"
         aria-controls="tab-panel-data">
-        📊 Local Dashboard
+        <span aria-hidden="true">📊</span> Local Dashboard
       </button>
       <button class="tab-btn" id="tab-btn-national"
-        onclick="switchTab('national')" aria-selected="false" role="tab"
+        onclick="switchTab('national')" aria-selected="false" role="tab" tabindex="-1"
         aria-controls="tab-panel-national">
-        🇺🇸 National Averages
+        <span aria-hidden="true">🇺🇸</span> National Averages
       </button>
     </div>
   </div>
@@ -1921,7 +1927,7 @@ td.num{text-align:right;font-family:var(--mono);}
       </div>
     </div>
 
-    <div class="tool-footer" role="contentinfo">
+    <div class="tool-footer">
       <strong>Data source:</strong> City of Colorado Springs public ArcGIS crash feature service · CDOT crash records 2017–2025.<br>
       <strong>Zip code boundaries:</strong> Approximate — based on lat/lng coordinate ranges. A small number of crashes near zip boundaries may appear in adjacent zip results.<br>
       <strong>Road danger ratings (LOSS):</strong> Pending public records request filed April 2026. Will be added when data is received.<br>
@@ -1983,7 +1989,8 @@ td.num{text-align:right;font-family:var(--mono);}
         <h3>Annual crash counts with fatality &amp; serious injury overlay</h3>
         <div class="csub">COVID visible in 2020. Note the divergence: total crashes declining but serious injuries rising sharply — crashes are becoming more severe per incident.</div>
         <div class="chart-wrap tall">
-          <canvas id="yearChart" aria-label="Bar and line chart: crash counts, fatalities and serious injuries by year 2017-2025"><p class="sr-only">Bar and line chart showing annual crash counts, fatalities, and serious injuries from 2017 to 2025. Total crashes peaked in 2018 at 8,978 and declined to 5,567 in 2025. Fatalities ranged from 36 to 53. Serious injuries rose from 180 in 2017 to 315 in 2024. JavaScript required to view this chart.</p></canvas>
+          <canvas id="yearChart" role="img" aria-label="Bar and line chart: crash counts, fatalities and serious injuries by year 2017-2025" aria-describedby="yearChart-desc"></canvas>
+          <p class="sr-only" id="yearChart-desc">Bar and line chart showing annual crash counts, fatalities, and serious injuries from 2017 to 2025. Total crashes peaked in 2018 at 8,978 and declined to 5,567 in 2025. Fatalities ranged from 36 to 53. Serious injuries rose from 180 in 2017 to 315 in 2024. JavaScript required to view this chart.</p>
         </div>
       </div>
     </div>
@@ -1997,14 +2004,16 @@ td.num{text-align:right;font-family:var(--mono);}
         <h3>Severity breakdown</h3>
         <div class="csub">All 64,434 crashes</div>
         <div class="chart-wrap">
-          <canvas id="sevChart" aria-label="Donut chart of crash severity distribution"><p class="sr-only">Donut chart: 43,335 Property Damage Only (67%), 13,558 Possible Injury (21%), 5,282 Minor Injury (8%), 1,884 Serious Injury (3%), 375 Fatal (less than 1%). JavaScript required.</p></canvas>
+          <canvas id="sevChart" role="img" aria-label="Donut chart of crash severity distribution" aria-describedby="sevChart-desc"></canvas>
+          <p class="sr-only" id="sevChart-desc">Donut chart: 43,335 Property Damage Only (67%), 13,558 Possible Injury (21%), 5,282 Minor Injury (8%), 1,884 Serious Injury (3%), 375 Fatal (less than 1%). JavaScript required.</p>
         </div>
       </div>
       <div class="chart-card span2">
         <h3>Top crash types</h3>
         <div class="csub">Rear-end collisions at 31% — signature of high-speed arterials with frequent stops. Exactly the corridors being widened.</div>
         <div class="chart-wrap">
-          <canvas id="typeChart" aria-label="Horizontal bar chart of top 10 crash types"><p class="sr-only">Horizontal bar chart: top crash types are Rear-End 20,259, Broadside 10,978, Run Off Road 8,045, Approach Turn 7,275, Sideswipe Same Direction 7,265, Parked Vehicle 4,050, Pedestrian 1,182, Overtaking Turn 1,074, Other 857, Overturning 850. JavaScript required.</p></canvas>
+          <canvas id="typeChart" role="img" aria-label="Horizontal bar chart of top 10 crash types" aria-describedby="typeChart-desc"></canvas>
+          <p class="sr-only" id="typeChart-desc">Horizontal bar chart: top crash types are Rear-End 20,259, Broadside 10,978, Run Off Road 8,045, Approach Turn 7,275, Sideswipe Same Direction 7,265, Parked Vehicle 4,050, Pedestrian 1,182, Overtaking Turn 1,074, Other 857, Overturning 850. JavaScript required.</p>
         </div>
       </div>
     </div>
@@ -2018,14 +2027,16 @@ td.num{text-align:right;font-family:var(--mono);}
         <h3>Crashes by month</h3>
         <div class="csub">September–October peak: back-to-school traffic + pre-winter transitions</div>
         <div class="chart-wrap">
-          <canvas id="monthChart" aria-label="Bar chart of crashes by month"><p class="sr-only">Bar chart: crashes by month. Highest months are September (5,755), October (5,713), and August (5,623). Lowest is February (5,156). JavaScript required.</p></canvas>
+          <canvas id="monthChart" role="img" aria-label="Bar chart of crashes by month" aria-describedby="monthChart-desc"></canvas>
+          <p class="sr-only" id="monthChart-desc">Bar chart: crashes by month. Highest months are September (5,755), October (5,713), and August (5,623). Lowest is February (5,156). JavaScript required.</p>
         </div>
       </div>
       <div class="chart-card">
         <h3>Crashes by day of week</h3>
         <div class="csub">Friday highest — commuter fatigue + Friday-evening impaired driving. Weekends drop sharply.</div>
         <div class="chart-wrap">
-          <canvas id="dayChart" aria-label="Bar chart of crashes by day of week"><p class="sr-only">Bar chart: crashes by day. Friday highest at 10,759. Wednesday 10,268, Thursday 10,009, Tuesday 10,000, Monday 8,980, Saturday 8,026, Sunday lowest at 6,392. JavaScript required.</p></canvas>
+          <canvas id="dayChart" role="img" aria-label="Bar chart of crashes by day of week" aria-describedby="dayChart-desc"></canvas>
+          <p class="sr-only" id="dayChart-desc">Bar chart: crashes by day. Friday highest at 10,759. Wednesday 10,268, Thursday 10,009, Tuesday 10,000, Monday 8,980, Saturday 8,026, Sunday lowest at 6,392. JavaScript required.</p>
         </div>
       </div>
     </div>
@@ -2039,21 +2050,24 @@ td.num{text-align:right;font-family:var(--mono);}
         <h3>Impaired driving by year</h3>
         <div class="csub">Peaked 2020 — reduced enforcement during COVID. Declining since but still 391 in 2025.</div>
         <div class="chart-wrap short">
-          <canvas id="impairedChart" aria-label="Line chart of impaired driving crashes by year"><p class="sr-only">Line chart: impaired driving crashes peaked in 2020 at 827, declining to 391 in 2025. Values: 2017=719, 2018=749, 2019=756, 2020=827, 2021=799, 2022=618, 2023=587, 2024=463, 2025=391. JavaScript required.</p></canvas>
+          <canvas id="impairedChart" role="img" aria-label="Line chart of impaired driving crashes by year" aria-describedby="impairedChart-desc"></canvas>
+          <p class="sr-only" id="impairedChart-desc">Line chart: impaired driving crashes peaked in 2020 at 827, declining to 391 in 2025. Values: 2017=719, 2018=749, 2019=756, 2020=827, 2021=799, 2022=618, 2023=587, 2024=463, 2025=391. JavaScript required.</p>
         </div>
       </div>
       <div class="chart-card">
         <h3>Vulnerable road user crashes</h3>
         <div class="csub">Pedestrians, cyclists, motorcyclists — 1,924 crashes, 101 fatalities over 9 years</div>
         <div class="chart-wrap short">
-          <canvas id="vruChart" aria-label="Bar chart of VRU crashes by year"><p class="sr-only">Bar chart: vulnerable road user crashes (pedestrian, cyclist, motorcycle) by year. Values range from 184 (2020) to 249 (2019). 2025: 190. Total 1,924 over 9 years. JavaScript required.</p></canvas>
+          <canvas id="vruChart" role="img" aria-label="Bar chart of VRU crashes by year" aria-describedby="vruChart-desc"></canvas>
+          <p class="sr-only" id="vruChart-desc">Bar chart: vulnerable road user crashes (pedestrian, cyclist, motorcycle) by year. Values range from 184 (2020) to 249 (2019). 2025: 190. Total 1,924 over 9 years. JavaScript required.</p>
         </div>
       </div>
       <div class="chart-card">
         <h3>Lighting conditions</h3>
         <div class="csub">70% in daylight — but dark crashes carry higher fatality rates per incident</div>
         <div class="chart-wrap short">
-          <canvas id="lightChart" aria-label="Donut chart of lighting conditions at crash time"><p class="sr-only">Donut chart: lighting conditions at crash time. Daylight 45,206 (70%), Dark-Lighted 14,245 (22%), Dawn/Dusk 2,604 (4%), Dark-Unlighted 2,357 (4%). JavaScript required.</p></canvas>
+          <canvas id="lightChart" role="img" aria-label="Donut chart of lighting conditions at crash time" aria-describedby="lightChart-desc"></canvas>
+          <p class="sr-only" id="lightChart-desc">Donut chart: lighting conditions at crash time. Daylight 45,206 (70%), Dark-Lighted 14,245 (22%), Dawn/Dusk 2,604 (4%), Dark-Unlighted 2,357 (4%). JavaScript required.</p>
         </div>
       </div>
     </div>
@@ -2079,14 +2093,16 @@ td.num{text-align:right;font-family:var(--mono);}
         <h3>Fatalities per 1,000 crashes</h3>
         <div class="csub">Rising even as total crashes fall — each crash is more likely to be fatal</div>
         <div class="chart-wrap">
-          <canvas id="fatalRateChart" aria-label="Line chart of fatality rate per 1000 crashes by year"><p class="sr-only">Line chart: fatalities per 1,000 crashes. Rising trend from 4.0 in 2017 to 7.7 in 2022, with recent values around 7.1-7.7. Each crash is increasingly more likely to be fatal despite total crashes declining. JavaScript required.</p></canvas>
+          <canvas id="fatalRateChart" role="img" aria-label="Line chart of fatality rate per 1000 crashes by year" aria-describedby="fatalRateChart-desc"></canvas>
+          <p class="sr-only" id="fatalRateChart-desc">Line chart: fatalities per 1,000 crashes. Rising trend from 4.0 in 2017 to 7.7 in 2022, with recent values around 7.1-7.7. Each crash is increasingly more likely to be fatal despite total crashes declining. JavaScript required.</p>
         </div>
       </div>
       <div class="chart-card">
         <h3>Serious injuries per 1,000 crashes</h3>
         <div class="csub">2024: 53.4 per 1,000 — nearly 2.6× the 2017 rate of 20.2. The roads are getting more dangerous per crash.</div>
         <div class="chart-wrap">
-          <canvas id="seriousRateChart" aria-label="Line chart of serious injury rate per 1000 crashes by year"><p class="sr-only">Line chart: serious injuries per 1,000 crashes. Rose from 20.2 in 2017 to 53.4 in 2024 — a 164% increase. The rate of serious harm per crash is climbing sharply even as total crashes decline. JavaScript required.</p></canvas>
+          <canvas id="seriousRateChart" role="img" aria-label="Line chart of serious injury rate per 1000 crashes by year" aria-describedby="seriousRateChart-desc"></canvas>
+          <p class="sr-only" id="seriousRateChart-desc">Line chart: serious injuries per 1,000 crashes. Rose from 20.2 in 2017 to 53.4 in 2024 — a 164% increase. The rate of serious harm per crash is climbing sharply even as total crashes decline. JavaScript required.</p>
         </div>
       </div>
     </div>
@@ -2110,12 +2126,12 @@ td.num{text-align:right;font-family:var(--mono);}
       <div class="chart-card">
         <h3>Expenditures by category</h3>
         <div class="csub">Capacity expansion outpaces maintenance 5.6 to 1</div>
-        <div class="chart-wrap"><canvas id="spendChart" aria-label="Bar chart of highway expenditure categories"><p class="sr-only">Bar chart: highway expenditures. Capacity Expansion $7.45M, System Preservation $1.33M, Engineering $920K, New Facilities $1,217. Expansion outpaces preservation 5.6 to 1. JavaScript required.</p></canvas></div>
+        <div class="chart-wrap"><canvas id="spendChart" role="img" aria-label="Bar chart of highway expenditure categories" aria-describedby="spendChart-desc"></canvas><p class="sr-only" id="spendChart-desc">Bar chart: highway expenditures. Capacity Expansion $7.45M, System Preservation $1.33M, Engineering $920K, New Facilities $1,217. Expansion outpaces preservation 5.6 to 1. JavaScript required.</p></div>
       </div>
       <div class="chart-card">
         <h3>Revenue mix</h3>
         <div class="csub">Federal Transit present but not dominant — $7.34M of $42.3M total</div>
-        <div class="chart-wrap"><canvas id="revenueChart" aria-label="Donut chart of revenue sources"><p class="sr-only">Donut chart: revenue sources. Sales Tax $17.45M (41%), Highway-User Tax $13.8M (33%), Federal Transit $7.34M (17%), Property Tax $3.1M (7%), CDOT Grant $570K (1%). Total $42.3M. JavaScript required.</p></canvas></div>
+        <div class="chart-wrap"><canvas id="revenueChart" role="img" aria-label="Donut chart of revenue sources" aria-describedby="revenueChart-desc"></canvas><p class="sr-only" id="revenueChart-desc">Donut chart: revenue sources. Sales Tax $17.45M (41%), Highway-User Tax $13.8M (33%), Federal Transit $7.34M (17%), Property Tax $3.1M (7%), CDOT Grant $570K (1%). Total $42.3M. JavaScript required.</p></div>
       </div>
     </div>
 
@@ -2135,12 +2151,12 @@ td.num{text-align:right;font-family:var(--mono);}
       <div class="chart-card">
         <h3>Crashes by road condition</h3>
         <div class="csub">88.2% of all crashes happen on dry roads — when conditions are perfect</div>
-        <div class="chart-wrap"><canvas id="roadCondChart" aria-label="Bar chart of crashes by road surface condition"><p class="sr-only">Bar chart: crashes by road condition. Dry 56,847 (88.2%), Wet 4,186 (6.5%), Icy 1,564 (2.4%), Snowy 1,239 (1.9%), Slushy 258 (0.4%). Most crashes occur in perfect conditions. JavaScript required.</p></canvas></div>
+        <div class="chart-wrap"><canvas id="roadCondChart" role="img" aria-label="Bar chart of crashes by road surface condition" aria-describedby="roadCondChart-desc"></canvas><p class="sr-only" id="roadCondChart-desc">Bar chart: crashes by road condition. Dry 56,847 (88.2%), Wet 4,186 (6.5%), Icy 1,564 (2.4%), Snowy 1,239 (1.9%), Slushy 258 (0.4%). Most crashes occur in perfect conditions. JavaScript required.</p></div>
       </div>
       <div class="chart-card">
         <h3>Serious injury rate by road condition</h3>
         <div class="csub">Dry roads produce more serious injuries per crash than wet, icy, or snowy — drivers go faster when conditions look safe</div>
-        <div class="chart-wrap"><canvas id="roadSevChart" aria-label="Bar chart of serious injury rate per 1000 crashes by road condition"><p class="sr-only">Bar chart: serious injuries per 1,000 crashes by road condition. Dry roads produce the highest rate at 35.5, followed by Wet 29.6, Slushy 15.5, Icy 17.3, Snowy 10.5. Drivers go faster on dry roads, making crashes more violent. JavaScript required.</p></canvas></div>
+        <div class="chart-wrap"><canvas id="roadSevChart" role="img" aria-label="Bar chart of serious injury rate per 1000 crashes by road condition" aria-describedby="roadSevChart-desc"></canvas><p class="sr-only" id="roadSevChart-desc">Bar chart: serious injuries per 1,000 crashes by road condition. Dry roads produce the highest rate at 35.5, followed by Wet 29.6, Slushy 15.5, Icy 17.3, Snowy 10.5. Drivers go faster on dry roads, making crashes more violent. JavaScript required.</p></div>
       </div>
     </div>
 
@@ -2150,17 +2166,17 @@ td.num{text-align:right;font-family:var(--mono);}
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
       <div class="chart-card" style="border-top:3px solid var(--red);">
-        <div style="font-size:22px;margin-bottom:8px;">📱</div>
+        <div style="font-size:22px;margin-bottom:8px;" aria-hidden="true">📱</div>
         <h3 style="margin-bottom:8px;">Cell phones are likely the core issue</h3>
         <p style="font-size:13px;color:var(--muted);line-height:1.7;">88% of crashes on dry roads. 70% in daylight. Low impairment. Rear-end dominant. Serious injuries rising as total crashes fall — meaning crashes are hitting harder, not more often. That pattern doesn't fit road design. It fits distracted driving at speed on clear roads in good light.</p>
       </div>
       <div class="chart-card" style="border-top:3px solid var(--amber);">
-        <div style="font-size:22px;margin-bottom:8px;">🚦</div>
+        <div style="font-size:22px;margin-bottom:8px;" aria-hidden="true">🚦</div>
         <h3 style="margin-bottom:8px;">Small fixes matter — signs, signals, potholes</h3>
         <p style="font-size:13px;color:var(--muted);line-height:1.7;">Signal timing that catches drivers off guard. Potholes that cause sudden swerves. Faded lane markings. Poorly lit intersections. These aren't headline projects — they're $500 fixes buried in a preservation budget that gets 15 cents of every road dollar.</p>
       </div>
       <div class="chart-card" style="border-top:3px solid var(--green);">
-        <div style="font-size:22px;margin-bottom:8px;">🏪</div>
+        <div style="font-size:22px;margin-bottom:8px;" aria-hidden="true">🏪</div>
         <h3 style="margin-bottom:8px;">Safe, maintained corridors grow small businesses</h3>
         <p style="font-size:13px;color:var(--muted);line-height:1.7;">Road funding here runs 41% on local sales tax. Corridors where people feel safe stopping support the kind of foot traffic that small businesses need. More small businesses mean more local sales tax. The loop closes.</p>
       </div>
@@ -2312,17 +2328,17 @@ td.num{text-align:right;font-family:var(--mono);}
     </div>
     <div class="takeaway-row">
       <div class="takeaway-card good">
-        <div class="tk-icon">✅</div>
+        <div class="tk-icon" aria-hidden="true">✅</div>
         <div class="tk-head">The roads aren't killing people at an above-average rate</div>
         <div class="tk-body">Colorado Springs' fatality rate per 100,000 residents (~8.6) is about 30% below the national average of 12.21. By the most important measure — how many people die — the city is doing better than most of America.</div>
       </div>
       <div class="takeaway-card warn">
-        <div class="tk-icon">⚠️</div>
+        <div class="tk-icon" aria-hidden="true">⚠️</div>
         <div class="tk-head">But crashes are getting more violent, not less</div>
         <div class="tk-body">The serious injury rate per 1,000 crashes went from 20.2 in 2017 to 53.4 in 2024 — a 164% increase while the national rate stayed flat. Fewer total crashes, but each one is more likely to seriously hurt someone.</div>
       </div>
       <div class="takeaway-card warn" style="border-top-color:var(--red);">
-        <div class="tk-icon">🏗️</div>
+        <div class="tk-icon" aria-hidden="true">🏗️</div>
         <div class="tk-head">The spending pattern is building a future problem</div>
         <div class="tk-body">The 5.6:1 expansion-to-preservation ratio is the inverse of the national norm. Every road that gets widened today will need maintenance in 10–15 years. With road funding 41% dependent on sales tax, a recession could create a serious maintenance funding gap.</div>
       </div>
@@ -2334,30 +2350,30 @@ td.num{text-align:right;font-family:var(--mono);}
 </div><!-- /brand-panel-city -->
 
 <!-- ===== COUNTY PANEL ===== -->
-<div id="brand-panel-county" style="display:none;">
+<div id="brand-panel-county" role="tabpanel" aria-labelledby="brand-btn-county" tabindex="0" style="display:none;">
   <div class="coming-soon-wrap">
-    <div class="coming-soon-icon">🗺️</div>
+    <div class="coming-soon-icon" aria-hidden="true">🗺️</div>
     <h2>El Paso County — Coming Soon</h2>
     <p>The County view will expand coverage beyond Colorado Springs city limits to include all jurisdictions within El Paso County — Fountain, Manitou Springs, Palmer Lake, Monument, and unincorporated areas. This requires pulling from multiple agency data feeds and harmonizing them into a single view.</p>
     <div class="cs-badge">In Development</div>
     <div class="coming-soon-items">
       <div class="cs-feature">
-        <div class="csf-icon">🏘️</div>
+        <div class="csf-icon" aria-hidden="true">🏘️</div>
         <div class="csf-label">Jurisdictions</div>
         <div class="csf-text">All incorporated cities and unincorporated El Paso County</div>
       </div>
       <div class="cs-feature">
-        <div class="csf-icon">📍</div>
+        <div class="csf-icon" aria-hidden="true">📍</div>
         <div class="csf-label">Coverage</div>
         <div class="csf-text">~2,130 sq miles · ~730,000 residents</div>
       </div>
       <div class="cs-feature">
-        <div class="csf-icon">🔗</div>
+        <div class="csf-icon" aria-hidden="true">🔗</div>
         <div class="csf-label">Data Sources</div>
         <div class="csf-text">CDOT, El Paso County Sheriff, CSPD, multiple municipal feeds</div>
       </div>
       <div class="cs-feature">
-        <div class="csf-icon">📊</div>
+        <div class="csf-icon" aria-hidden="true">📊</div>
         <div class="csf-label">New Metrics</div>
         <div class="csf-text">Rural vs. urban crash rate comparison, unincorporated road funding analysis</div>
       </div>
@@ -2366,30 +2382,30 @@ td.num{text-align:right;font-family:var(--mono);}
 </div>
 
 <!-- ===== STATE PANEL ===== -->
-<div id="brand-panel-state" style="display:none;">
+<div id="brand-panel-state" role="tabpanel" aria-labelledby="brand-btn-state" tabindex="0" style="display:none;">
   <div class="coming-soon-wrap">
-    <div class="coming-soon-icon">🏔️</div>
+    <div class="coming-soon-icon" aria-hidden="true">🏔️</div>
     <h2>State of Colorado — Coming Soon</h2>
     <p>The State view will draw from CDOT's statewide crash database across all 64 counties, enabling Colorado Springs to be compared against similarly-sized Front Range cities, rural counties, and resort corridors. It will also pull CDOT's full project spending database — not just the local FHWA Form 536 data.</p>
     <div class="cs-badge">In Development</div>
     <div class="coming-soon-items">
       <div class="cs-feature">
-        <div class="csf-icon">🛣️</div>
+        <div class="csf-icon" aria-hidden="true">🛣️</div>
         <div class="csf-label">Road Network</div>
         <div class="csf-text">94,000+ miles of state and local roads · all 64 counties</div>
       </div>
       <div class="cs-feature">
-        <div class="csf-icon">🏙️</div>
+        <div class="csf-icon" aria-hidden="true">🏙️</div>
         <div class="csf-label">City Comparison</div>
         <div class="csf-text">Denver, Aurora, Fort Collins, Pueblo — apples-to-apples peer benchmarks</div>
       </div>
       <div class="cs-feature">
-        <div class="csf-icon">💰</div>
+        <div class="csf-icon" aria-hidden="true">💰</div>
         <div class="csf-label">CDOT Spending</div>
         <div class="csf-text">Full STIP project database — where state dollars actually flow</div>
       </div>
       <div class="cs-feature">
-        <div class="csf-icon">🎿</div>
+        <div class="csf-icon" aria-hidden="true">🎿</div>
         <div class="csf-label">Special Context</div>
         <div class="csf-text">Mountain corridor crash patterns, resort traffic, I-25 & I-70 corridors</div>
       </div>
@@ -2398,7 +2414,7 @@ td.num{text-align:right;font-family:var(--mono);}
 </div>
 
 <!-- ===== PLAN PANEL (Safety Action Plan) ===== -->
-<div id="brand-panel-plus" style="display:none;">
+<div id="brand-panel-plus" role="tabpanel" aria-labelledby="brand-btn-plus" tabindex="0" style="display:none;">
   <div class="plus-wrap">
     <header class="plus-head">
       <p class="eyebrow">Policy &amp; Context</p>
@@ -2537,12 +2553,13 @@ const BRAND_DEFS = {
   }
 };
 
-function switchBrand(brand) {
-  // Update brand pills
+function switchBrand(brand, moveFocus) {
+  // Update brand pills (roving tabindex: only the selected tab is in the Tab order)
   document.querySelectorAll('.brand-pill').forEach(btn => {
     const active = btn.dataset.brand === brand;
     btn.classList.toggle('active', active);
-    btn.setAttribute('aria-selected', active);
+    btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    btn.tabIndex = active ? 0 : -1;
   });
 
   // Update scope bar
@@ -2565,15 +2582,13 @@ function switchBrand(brand) {
     liveRegion.textContent = def.badgeText + ' view loaded.';
   });
 
-  // Move focus to the panel heading so screen reader users land somewhere meaningful
-  requestAnimationFrame(() => {
-    const panel = document.getElementById('brand-panel-' + brand);
-    const heading = panel.querySelector('h2, [tabindex="-1"]');
-    if (heading) {
-      if (!heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1');
-      heading.focus({ preventScroll: false });
-    }
-  });
+  // On explicit activation (click/Enter) land focus in the panel so SR users
+  // start inside the new content. On arrow-key roving, leave focus on the tab.
+  if (moveFocus) {
+    requestAnimationFrame(() => {
+      document.getElementById('brand-panel-' + brand).focus({ preventScroll: true });
+    });
+  }
 }
 
 // ====== BRAND PILL ARROW-KEY NAVIGATION ======
@@ -2603,10 +2618,13 @@ function switchTab(id) {
   document.querySelectorAll('.tab-btn').forEach(b => {
     b.classList.remove('active');
     b.setAttribute('aria-selected','false');
+    b.tabIndex = -1;
   });
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-btn-'+id).classList.add('active');
-  document.getElementById('tab-btn-'+id).setAttribute('aria-selected','true');
+  const activeBtn = document.getElementById('tab-btn-'+id);
+  activeBtn.classList.add('active');
+  activeBtn.setAttribute('aria-selected','true');
+  activeBtn.tabIndex = 0;
   document.getElementById('tab-panel-'+id).classList.add('active');
   const labels = {search:'Search Records tab loaded.',data:'Local Dashboard tab loaded.',national:'National Averages tab loaded.'};
   document.getElementById('live-region').textContent = labels[id] || id+' tab loaded.';
@@ -2630,10 +2648,13 @@ const counts=[8914,8978,8379,5570,7594,6973,6563,5896,5567];
 const fatals=[36,44,36,48,44,53,44,42,43];
 const serious=[180,217,172,164,292,309,291,315,269];
 Chart.defaults.font.family="system-ui,-apple-system,sans-serif";
-Chart.defaults.color="#5e7087";
+Chart.defaults.color="#3d5166";
 Chart.defaults.plugins.legend.labels.boxWidth=11;
+if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  Chart.defaults.animation = false;
+}
 const GRID={color:"rgba(0,0,0,.08)"};
-const TICK={color:"#5e7087",font:{size:11}};
+const TICK={color:"#3d5166",font:{size:11}};
 
 new Chart(document.getElementById("yearChart"),{
   data:{labels:YEARS,datasets:[
@@ -2642,8 +2663,8 @@ new Chart(document.getElementById("yearChart"),{
     {type:"line",label:"Serious Injuries",data:serious,borderColor:"#d97706",backgroundColor:"rgba(217,119,6,0.08)",pointBackgroundColor:"#d97706",pointRadius:4,tension:0.3,fill:false,yAxisID:"y2"}
   ]},
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"},tooltip:{mode:"index"}},
-    scales:{y:{grid:GRID,ticks:TICK,title:{display:true,text:"Total Crashes",font:{size:11},color:"#94a3b8"}},
-      y2:{position:"right",grid:{display:false},ticks:TICK,title:{display:true,text:"Fatalities / Serious",font:{size:11},color:"#94a3b8"}},
+    scales:{y:{grid:GRID,ticks:TICK,title:{display:true,text:"Total Crashes",font:{size:11},color:"#3d5166"}},
+      y2:{position:"right",grid:{display:false},ticks:TICK,title:{display:true,text:"Fatalities / Serious",font:{size:11},color:"#3d5166"}},
       x:{grid:{display:false},ticks:TICK}}}
 });
 new Chart(document.getElementById("sevChart"),{
@@ -2689,7 +2710,7 @@ new Chart(document.getElementById("lightChart"),{
 new Chart(document.getElementById("spendChart"),{
   type:"bar",
   data:{labels:["Capacity\nExpansion","System\nPreservation","Engineering","New\nFacilities"],
-    datasets:[{data:[7450000,1330000,920000,1217],backgroundColor:["#d97706","#065f46","#0049b1","#94a3b8"],borderRadius:4}]},
+    datasets:[{data:[7450000,1330000,920000,1217],backgroundColor:["#d97706","#065f46","#0049b1","#64748b"],borderRadius:4}]},
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
     scales:{y:{grid:GRID,ticks:{...TICK,callback:v=>"$"+(v>=1000000?(v/1000000).toFixed(1)+"M":(v/1000).toFixed(0)+"K")}},x:{grid:{display:false},ticks:{...TICK,font:{size:10}}}}}
 });
@@ -2716,7 +2737,7 @@ new Chart(document.getElementById('roadCondChart'),{
   data:{labels:['Dry','Wet','Icy','Snowy','Slushy'],
     datasets:[{data:[56847,4186,1564,1239,258],backgroundColor:['#d97706','rgba(0,73,177,0.5)','rgba(0,73,177,0.35)','rgba(0,73,177,0.25)','rgba(0,73,177,0.15)'],borderRadius:3}]},
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString()+' crashes ('+(c.raw/64434*100).toFixed(1)+'%)'}}},
-    scales:{y:{grid:{color:'rgba(0,0,0,.08)'},ticks:{color:'#5e7087',font:{size:11}},title:{display:true,text:'Crashes',font:{size:11},color:'#5e7087'}},x:{grid:{display:false},ticks:{color:'#5e7087',font:{size:11}}}}}
+    scales:{y:{grid:{color:'rgba(0,0,0,.08)'},ticks:{color:'#3d5166',font:{size:11}},title:{display:true,text:'Crashes',font:{size:11},color:'#3d5166'}},x:{grid:{display:false},ticks:{color:'#3d5166',font:{size:11}}}}}
 });
 new Chart(document.getElementById('roadSevChart'),{
   type:'bar',
@@ -2724,7 +2745,7 @@ new Chart(document.getElementById('roadSevChart'),{
     datasets:[{label:'Serious injuries per 1,000 crashes',data:[35.5,29.6,17.3,10.5,15.5],
       backgroundColor:c=>{const vals=[35.5,29.6,17.3,10.5,15.5];return vals[c.dataIndex]===35.5?'#d97706':'rgba(0,73,177,0.4)';},borderRadius:3}]},
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+' serious injuries per 1,000 crashes'}}},
-    scales:{y:{grid:{color:'rgba(0,0,0,.08)'},ticks:{color:'#5e7087',font:{size:11}},title:{display:true,text:'Serious injuries per 1,000 crashes',font:{size:11},color:'#5e7087'}},x:{grid:{display:false},ticks:{color:'#5e7087',font:{size:11}}}}}
+    scales:{y:{grid:{color:'rgba(0,0,0,.08)'},ticks:{color:'#3d5166',font:{size:11}},title:{display:true,text:'Serious injuries per 1,000 crashes',font:{size:11},color:'#3d5166'}},x:{grid:{display:false},ticks:{color:'#3d5166',font:{size:11}}}}}
 });
 
 document.getElementById("live-region").textContent="Dashboard loaded: 12 charts covering 64,434 crash records and FHWA Form 536 funding data.";
