@@ -41,11 +41,11 @@ export function HomeTabs({ onPickTopic }: Props) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div
         role="tablist"
         aria-label="How to find what you need"
-        className="flex flex-wrap gap-1 border-b border-slate-300"
+        className="flex flex-wrap gap-1 border-b border-line"
       >
         {TABS.map((t) => {
           const selected = t.id === active;
@@ -63,14 +63,14 @@ export function HomeTabs({ onPickTopic }: Props) {
               onClick={() => setActive(t.id)}
               onKeyDown={onKeyDown}
               className={[
-                'inline-flex flex-col items-start gap-0 px-4 py-2 text-sm border-b-2 -mb-px min-h-11',
+                'inline-flex flex-col items-start gap-0 px-4 py-3 text-sm border-b-2 -mb-px min-h-11',
                 selected
-                  ? 'border-blue-700 text-blue-900 font-semibold'
-                  : 'border-transparent text-slate-700 hover:text-slate-900 hover:border-slate-400',
+                  ? 'border-brand-ink text-brand-ink font-semibold'
+                  : 'border-transparent text-ink-strong hover:text-brand-ink hover:border-line-stronger',
               ].join(' ')}
             >
               <span>{t.label}</span>
-              <span className="text-xs font-normal text-slate-600">{t.hint}</span>
+              <span className="text-xs font-normal text-ink-meta">{t.hint}</span>
             </button>
           );
         })}

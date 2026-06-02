@@ -1,0 +1,3120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Describe what you need in plain language. We&#39;ll point you to the right City department — no guessing required.">
+  <title>Tell us what you need | City of Colorado Springs</title>
+
+  
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
+         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
+           text    #ede8dc → 15.3  AAA
+           muted   #96adc4 →  8.1  AAA
+           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
+           gold    #c8a84b →  8.2  AAA
+           gold-lt #fde68a → 15.0  AAA
+           red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
+           green   #4ade80 → 10.7  AAA
+           blue    #60a5fa →  7.4  AAA
+           amber   #fbbf24 → 11.2  AAA                                  */
+      --cc-bg:         #0c1220;
+      --cc-surface:    #141e2e;
+      --cc-surface2:   #1c2a3e;
+      --cc-surface3:   #233045;
+      --cc-border:     rgba(255,255,255,.14);
+      --cc-border-hi:  rgba(255,255,255,.28);
+      --cc-gold:       #c8a84b;
+      --cc-gold-dim:   rgba(200,168,75,.22);
+      --cc-gold-faint: rgba(200,168,75,.09);
+      --cc-gold-lt:    #fde68a;
+      --cc-text:       #ede8dc;
+      --cc-muted:      #96adc4;
+      --cc-quiet:      #8ca3b8;
+      --cc-mono:       'IBM Plex Mono', monospace;
+      --cc-sans:       'IBM Plex Sans', sans-serif;
+      --cc-serif:      'Playfair Display', Georgia, serif;
+      --cc-red:        #fca5a5;
+      --cc-red-dim:    rgba(252,165,165,.16);
+      --cc-green:      #4ade80;
+      --cc-green-dim:  rgba(74,222,128,.14);
+      --cc-blue:       #60a5fa;
+      --cc-blue-dim:   rgba(96,165,250,.14);
+      --cc-amber:      #fbbf24;
+      --cc-amber-dim:  rgba(251,191,36,.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* ── Skip link (ADA) ────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--cc-gold);
+      color: #0c1220;
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 10px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ── Focus visible — universal gold ring ─────────────────────── */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Serif subheadline ───────────────────────────────────────── */
+    .section-sub {
+      font-family: var(--cc-sans);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--cc-muted);
+      line-height: 1.6;
+      margin-top: 4px;
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+
+    body {
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    .nav {
+      border-bottom: 1px solid var(--cc-border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,26,.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 200;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nav-logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      margin-right: 32px;
+      flex-shrink: 0;
+    }
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+    .nav-logo:focus-visible {
+      outline: 2px solid var(--cc-gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    /* Legacy text-logo styles kept for any other surfaces that reference them */
+    .nav-logo-word {
+      font-family: var(--cc-sans);
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: -.01em;
+      color: var(--cc-text);
+    }
+    .nav-logo-dot { color: var(--cc-gold); font-size: .95rem; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+    .nav-link {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--cc-text); background: rgba(255,255,255,.04); }
+    .nav-link.you-link {
+      color: var(--cc-gold);
+      border-color: var(--cc-gold-dim);
+      background: var(--cc-gold-faint);
+    }
+    .nav-link.you-link:hover { background: var(--cc-gold-dim); }
+    .nav-link.active {
+      color: var(--cc-text);
+      border-color: var(--cc-border-hi);
+      background: rgba(255,255,255,.06);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold);
+      text-underline-offset: 3px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: all .18s;
+    }
+    .notif-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+
+    /* ── NAV SEARCH (top-nav disclosure pattern) ───────────────────
+       Toggle button sits next to Subscribe / Alerts; the dropdown
+       panel is positioned absolutely below the nav and animates in
+       only when expanded. JS in nav-scripts.njk handles open/close,
+       focus management, Escape, click-outside, and lazy fetch. */
+    .nav-search-toggle {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 12px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: color .18s, border-color .18s;
+      margin-right: 8px;
+      min-height: 32px;
+    }
+    .nav-search-toggle:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nav-search-toggle:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-toggle[aria-expanded="true"] {
+      color: var(--cc-bg);
+      background: var(--cc-gold);
+      border-color: var(--cc-gold);
+    }
+    .nav-search-toggle__icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .nav-search-toggle__label {
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    @media (max-width: 600px) {
+      .nav-search-toggle { padding: 6px 8px; }
+      .nav-search-toggle__label { display: none; }
+    }
+
+    /* Dropdown panel — full-width below nav, dark surface that matches
+       the notification panel treatment for visual consistency. */
+    .nav-search-panel {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 35;
+      background: var(--cc-surface);
+      border-bottom: 1px solid var(--cc-border-hi);
+      box-shadow: 0 6px 20px rgba(0,0,0,.35);
+    }
+    .nav-search-panel[hidden] { display: none; }
+    .nav-search-panel__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 24px 24px;
+    }
+    .nav-search-panel__chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .nav-search-panel__chip {
+      background: transparent;
+      color: var(--cc-muted);
+      border: 1px solid var(--cc-border-hi);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-family: var(--cc-mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .nav-search-panel__chip:hover { color: var(--cc-text); border-color: var(--cc-gold); }
+    .nav-search-panel__chip:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__chip[aria-pressed="true"] {
+      color: var(--cc-bg);
+      background: var(--cc-gold);
+      border-color: var(--cc-gold);
+    }
+    .nav-search-panel__form {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .nav-search-panel__input {
+      flex: 1;
+      min-width: 0;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      border: 1px solid var(--cc-border-hi);
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.4;
+      min-height: 44px;
+    }
+    .nav-search-panel__input::placeholder { color: var(--cc-quiet); }
+    .nav-search-panel__input:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 1px;
+      border-color: var(--cc-gold);
+    }
+    .nav-search-panel__submit,
+    .nav-search-panel__close {
+      background: var(--cc-gold);
+      color: var(--cc-bg);
+      border: 1px solid var(--cc-gold);
+      border-radius: 4px;
+      padding: 0 16px;
+      font-family: var(--cc-mono);
+      font-size: 1rem;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-search-panel__close {
+      background: transparent;
+      color: var(--cc-muted);
+      border-color: var(--cc-border-hi);
+    }
+    .nav-search-panel__submit:hover,
+    .nav-search-panel__close:hover { background: var(--cc-gold-lt); border-color: var(--cc-gold-lt); color: var(--cc-bg); }
+    .nav-search-panel__submit:focus-visible,
+    .nav-search-panel__close:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__status {
+      font-family: var(--cc-mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 12px 0 8px;
+      min-height: 1.4em;
+    }
+    .nav-search-panel__results {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 60vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .nav-search-panel__item {
+      display: block;
+      padding: 12px 16px;
+      background: var(--cc-bg);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--cc-text);
+      border-left-width: 4px;
+      transition: border-color .15s, background .15s;
+    }
+    .nav-search-panel__item:hover { border-color: var(--cc-border-hi); background: var(--cc-surface); }
+    .nav-search-panel__item:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__item--local    { border-left-color: var(--cc-gold); }
+    .nav-search-panel__item--state    { border-left-color: var(--cc-blue); }
+    .nav-search-panel__item--national { border-left-color: var(--cc-green); }
+    .nav-search-panel__item-scope {
+      font-family: var(--cc-mono);
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 0 0 3px;
+    }
+    .nav-search-panel__item--local .nav-search-panel__item-scope    { color: var(--cc-gold); }
+    .nav-search-panel__item--state .nav-search-panel__item-scope    { color: var(--cc-blue); }
+    .nav-search-panel__item--national .nav-search-panel__item-scope { color: var(--cc-green); }
+    .nav-search-panel__item-title {
+      font-weight: 600;
+      font-size: .95rem;
+      color: var(--cc-text);
+      line-height: 1.35;
+      margin: 0 0 3px;
+    }
+    .nav-search-panel__item-desc {
+      font-size: .82rem;
+      color: var(--cc-muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .nav-search-panel__item mark {
+      background: rgba(200,168,75,.28);
+      color: var(--cc-text);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+    .nav-search-panel__empty {
+      font-size: .9rem;
+      color: var(--cc-muted);
+      padding: 12px 0;
+      margin: 0;
+    }
+    @media (max-width: 700px) {
+      .nav-search-panel__inner { padding: 16px 16px 18px; }
+      .nav-search-panel__chips { gap: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .nav-search-toggle,
+      .nav-search-panel__chip,
+      .nav-search-panel__item { transition: none; }
+    }
+    .notif-count {
+      background: var(--cc-red);
+      color: #0a0f1a;
+      font-size: .78rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 1px 5px;
+      font-family: var(--cc-mono);
+      line-height: 1.4;
+    }
+
+    /* ── NOTIFICATIONS PANEL ─────────────────────────────────────── */
+    .notif-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .notif-overlay.open { opacity: 1; pointer-events: all; }
+    .notif-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--cc-surface);
+      border-left: 1px solid var(--cc-border-hi);
+      z-index: 301;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.32,.72,0,1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .notif-panel.open { transform: translateX(0); }
+    .notif-panel-head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--cc-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .notif-panel-title {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-text);
+    }
+    .notif-close {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 3px;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: var(--cc-mono);
+      transition: all .15s;
+    }
+    .notif-close:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .notif-filters {
+      display: flex;
+      gap: 6px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--cc-border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .nf-btn {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--cc-border);
+      border-radius: 2px;
+      background: none;
+      color: var(--cc-muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .nf-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold); border-color: rgba(200,168,75,.3); }
+    .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .notif-group-label {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-quiet);
+      padding: 10px 20px 4px;
+    }
+    .notif-item {
+      padding: 12px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--cc-border);
+      transition: background .15s;
+      cursor: default;
+    }
+    .notif-item:hover { background: rgba(255,255,255,.02); }
+    .notif-item.hidden { display: none; }
+    .notif-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .nd-red    { background: var(--cc-red); }
+    .nd-amber  { background: var(--cc-amber); }
+    .nd-blue   { background: var(--cc-blue); }
+    .nd-green  { background: var(--cc-green); }
+    .nd-gold   { background: var(--cc-gold); }
+    .nd-quiet  { background: var(--cc-quiet); }
+    .notif-body { flex: 1; }
+    .notif-text {
+      font-size: .85rem;
+      color: var(--cc-text);
+      line-height: 1.55;
+      margin-bottom: 3px;
+    }
+    .notif-text strong { color: var(--cc-gold-lt); font-weight: 500; }
+    .notif-meta {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--cc-quiet);
+      margin-bottom: 4px;
+    }
+    .notif-action {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--cc-gold-dim);
+      padding-bottom: 1px;
+      transition: border-color .15s;
+    }
+    .notif-action:hover { border-color: var(--cc-gold); }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
+      border-top: 1px solid var(--cc-border);
+      padding: 32px 0 36px;
+      margin-top: 56px;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      position: relative;
+      z-index: 1;
+    }
+    .cc-footer .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .cc-footer-line {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .04em;
+      line-height: 1.9;
+      color: var(--cc-muted);
+      text-align: center;
+    }
+    .cc-footer-line a {
+      color: var(--cc-muted);
+      text-decoration: underline;
+      text-decoration-color: rgba(150, 173, 196, .35);
+      text-underline-offset: 3px;
+      transition: color .15s, text-decoration-color .15s;
+    }
+    .cc-footer-line a:hover,
+    .cc-footer-line a:focus-visible {
+      color: var(--cc-gold);
+      text-decoration-color: var(--cc-gold);
+    }
+    .cc-footer-ext {
+      display: inline-block;
+      font-size: .7em;
+      transform: translateY(-1px);
+      margin-left: 2px;
+      opacity: .7;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
+    }
+
+    /* ── MARKDOWN CONTENT (rendered .md docs) ───────────────────── */
+    .markdown-content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .markdown-header {
+      border-bottom: 1px solid var(--cc-border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .markdown-content > .markdown-header h1,
+    .markdown-content h1 {
+      font-family: var(--cc-serif);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--cc-text);
+      margin: 0 0 8px;
+    }
+    .markdown-subtitle {
+      font-style: italic;
+      color: var(--cc-muted);
+      font-size: 1.05rem;
+      margin: 0;
+    }
+    .markdown-content h2 {
+      font-family: var(--cc-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cc-text);
+      margin: 48px 0 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--cc-border);
+    }
+    .markdown-content h3 {
+      font-family: var(--cc-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cc-gold-lt);
+      margin: 32px 0 8px;
+    }
+    .markdown-content h4 {
+      font-family: var(--cc-mono);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 24px 0 6px;
+    }
+    .markdown-content p { margin: 0 0 16px; color: var(--cc-text); }
+    .markdown-content strong { color: var(--cc-gold-lt); font-weight: 600; }
+    .markdown-content em { color: var(--cc-muted); }
+    .markdown-content a {
+      color: var(--cc-gold);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold-dim);
+      text-underline-offset: 3px;
+    }
+    .markdown-content a:hover,
+    .markdown-content a:focus-visible {
+      color: var(--cc-gold-lt);
+      text-decoration-color: var(--cc-gold-lt);
+    }
+    .markdown-content ul, .markdown-content ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+    }
+    .markdown-content li { margin-bottom: 6px; color: var(--cc-text); }
+    .markdown-content li::marker { color: var(--cc-gold); }
+    .markdown-content blockquote {
+      border-left: 3px solid var(--cc-gold);
+      padding: 8px 16px;
+      margin: 16px 0;
+      color: var(--cc-muted);
+      font-style: italic;
+      background: var(--cc-surface);
+    }
+    .markdown-content code {
+      font-family: var(--cc-mono);
+      font-size: .92em;
+      color: var(--cc-gold-lt);
+      background: var(--cc-surface);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+    .markdown-content pre {
+      background: var(--cc-surface);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-size: .85rem;
+      line-height: 1.55;
+    }
+    .markdown-content pre code {
+      background: none;
+      padding: 0;
+      color: var(--cc-text);
+      font-size: inherit;
+    }
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: .92rem;
+    }
+    .markdown-content th, .markdown-content td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--cc-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .markdown-content th {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      border-bottom: 2px solid var(--cc-border);
+    }
+    .markdown-content hr {
+      border: none;
+      border-top: 1px solid var(--cc-border);
+      margin: 32px 0;
+    }
+    .markdown-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+</style>
+
+
+  
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NAV — sourced from a single partial; pages mark their active section
+     by setting `activeNav` in front-matter (one of: orgchart, local,
+     state, national). Legacy values (you, dashboards, people, events)
+     are still accepted by pages that haven't been retagged yet — they
+     simply won't highlight any nav item.
+════════════════════════════════════════════════════════════════════ -->
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
+        <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Site sections">
+        <a class="nav-link" href="/microsites/shared/government-org-chart.html">Org Chart</a>
+        <a class="nav-link" href="/local/">Local</a>
+        <a class="nav-link" href="/state/">State</a>
+        <a class="nav-link" href="/national/">National</a>
+      </nav>
+      <div class="nav-right">
+        <button
+          type="button"
+          class="nav-search-toggle"
+          id="nav-search-toggle"
+          aria-expanded="false"
+          aria-controls="nav-search-panel"
+          aria-label="Open site search">
+          <svg class="nav-search-toggle__icon" aria-hidden="true" viewBox="0 0 20 20" focusable="false">
+            <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+            <line x1="13.5" y1="13.5" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-search-toggle__label">Search</span>
+        </button>
+        <a class="subscribe-btn" href="/preferences/" aria-label="Subscribe to email updates">
+          <span>Subscribe</span>
+        </a>
+        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+          <span>Alerts</span>
+          <span class="notif-count" aria-live="polite">11</span>
+        </button>
+      </div>
+
+      <!-- ─── Nav search dropdown (disclosure pattern) ────────────────
+           Toggled by #nav-search-toggle. Lazy-fetches /search-index.json
+           on first open, then runs the same client-side filtering as
+           the homepage block. role="region" + aria-label gives screen
+           readers a recognizable landmark; hidden attribute is the
+           authoritative open/close state. -->
+      <div
+        id="nav-search-panel"
+        class="nav-search-panel"
+        role="region"
+        aria-label="Site search"
+        hidden>
+        <div class="nav-search-panel__inner">
+          <div class="nav-search-panel__chips" role="group" aria-label="Filter results by jurisdiction tier">
+            <button type="button" class="nav-search-panel__chip" data-tier="all"      aria-pressed="true">All</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="local"    aria-pressed="false">Local</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="state"    aria-pressed="false">State</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="national" aria-pressed="false">National</button>
+          </div>
+          <form class="nav-search-panel__form" id="nav-search-form" role="search" aria-label="Site search">
+            <label class="sr-only" for="nav-search-input">Search topics, agencies, records, or address</label>
+            <input
+              type="search"
+              id="nav-search-input"
+              class="nav-search-panel__input"
+              name="q"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Search anything — or type a ZIP / address"
+              aria-describedby="nav-search-status">
+            <button type="submit" class="nav-search-panel__submit">
+              <span class="sr-only">Run search</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-search-panel__close" id="nav-search-close" aria-label="Close search">
+              <span aria-hidden="true">✕</span>
+            </button>
+          </form>
+          <p class="nav-search-panel__status" id="nav-search-status" role="status" aria-live="polite"></p>
+          <ul class="nav-search-panel__results" id="nav-search-results" role="list"></ul>
+          <p class="nav-search-panel__empty" id="nav-search-empty" hidden>No matches in this tier. Try a different filter or a shorter query.</p>
+        </div>
+      </div>
+
+<style>
+  /* Subscribe button in the dark nav. Gold border + gold label on dark bg.
+     Contrast: cc-gold (#c8a84b) on cc-bg (#0c1220) = 8.2:1 (AAA). */
+  .subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--cc-gold);
+    border-radius: 4px;
+    padding: 7px 14px;
+    margin-right: 8px;
+    color: var(--cc-gold);
+    font-family: var(--cc-mono);
+    font-size: .75rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .18s, color .18s;
+    min-height: 32px;
+  }
+  .subscribe-btn:hover,
+  .subscribe-btn:focus-visible {
+    background: var(--cc-gold);
+    color: #0c1220;
+  }
+  @media (max-width: 600px) {
+    .subscribe-btn { padding: 7px 10px; }
+    .subscribe-btn span { display: none; }
+    .subscribe-btn::before {
+      content: "✉";
+      font-size: 1rem;
+      line-height: 1;
+    }
+  }
+</style>
+    </div>
+  </div>
+</header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NOTIFICATIONS PANEL
+════════════════════════════════════════════════════════════════════ -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">Alerts &amp; notifications</span>
+    <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
+  </div>
+  <div class="notif-filters" role="group" aria-label="Filter notifications">
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (21)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (10)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (4)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (7)</button>
+  </div>
+  <div class="notif-scroll">
+
+    <div class="notif-group-label">Critical — act now</div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>DATP Public Comment reading room is live.</strong> The City of Colorado Springs Digital Accessibility Transition Plan (Draft 2026), with the full plan embedded as a PDF and twelve structured public comments residents can adapt and submit. Comment portal links live in the reading room.</div>
+        <div class="notif-meta">Public comment · COS Digital Accessibility Transition Plan · May 2026</div>
+        <a class="notif-action" href="/microsites/city/ada/datp-comment.html">Open the DATP reading room <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>BOCC petition — service plan transparency &amp; algorithmic pricing disclosure.</strong> A general resident petition with four narrow asks within existing BOCC authority. Sign and send.</div>
+        <div class="notif-meta">Civic action · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/housing-rent-bocc_petition_letter.html">Open petition letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Veterans' petition to the EPC BOCC.</strong> Companion petition for veterans of any branch — service plan transparency and algorithmic pricing protections, framed around military housing harms.</div>
+        <div class="notif-meta">Civic action · Veterans · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/bocc_petition_veteran.html">Open veterans' petition <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LDC update — public comment on service plan transparency.</strong> A 300-word comment ready to submit through the El Paso County Land Development Code update process.</div>
+        <div class="notif-meta">Public comment · LDC update · El Paso County · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/ldc_update_comment.html">Open LDC comment <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Background brief — algorithmic rent pricing in El Paso County.</strong> Sourced reference for journalists, policy analysts, and the COS Chamber housing committee: federal antitrust action, local policy options, and the case for BOCC-level service plan transparency.</div>
+        <div class="notif-meta">Reference · Housing &amp; pricing · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/housing_pricing_background_brief.html">Read background brief <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
+        <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/home-arp-form-preview.html">Open the accessible HTML form preview <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle README <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Downtown Funding and Records Search</strong> Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</div>
+        <div class="notif-meta">Annual adopted budget — C.R.S. 29-1-101 et seq · April 10, 2026</div>
+        <a class="notif-action" href="/microsites/downtown/downtown_cs_search_portal_v2_ada.html">Open the search portal <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+	  
+	      <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
+        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35 · April 8, 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">Open district audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access their own district's records.</div>
+        <div class="notif-meta">EPC Assessor audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See district audit <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021. No governance docs. No financials. One compliance letter fixes all 30+ simultaneously.</div>
+        <div class="notif-meta">Platform audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">High priority</div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Plain-language IC3 intake — open-source reference.</strong> Single-file concept for the FBI IC3 complaint form: one free-text box, client-side extraction into the official complaint structure, honest provenance badges on every pre-filled field, hand-off to the real form. WCAG 2.1 AAA, restrictive CSP, no backend, no third-party requests. CONFIG-driven so any agency can re-point it at a different form.</div>
+        <div class="notif-meta">Open source · National · FBI IC3 · May 2026 · WCAG 2.1 AAA</div>
+        <a class="notif-action" href="/microsites/national/IC3/ic3_intake_opensource.html">Open the plain-language intake <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes, budgets, and audit docs are almost certainly untagged. This is the real HB21-1110 failure — not the homepage.</div>
+        <div class="notif-meta">ADA document audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">View ADA analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it. This is the foundational legal document. Not one district links it publicly.</div>
+        <div class="notif-meta">Governance gap · §32-1-202</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106. Due to State Auditor by July 31. The clock is running.</div>
+        <div class="notif-meta">Governance gap · §32-1-106 · due July 31</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">Informational</div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records both awaiting reply. Response window is still open.</div>
+        <div class="notif-meta">CORA tracker · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/requests_tracker_and_military_numbers.html">View tracker <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
+        <div class="notif-meta">Compliance analysis · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
+        <div class="notif-meta">New · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CSPD Blotter — Weekly History is live.</strong> 271 incidents pulled directly from the live blotter feed, paired with a Poisson 95% confidence band to flag statistical anomalies week to week. Tabs are full APG-pattern keyboard accessible; every chart has an aria-label.</div>
+        <div class="notif-meta">New · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Lorson Ranch financial dashboard is live.</strong> Seven cross-pledged metro districts, $94.2M aggregate audited deficit, IGA money flows, and a per-home tax calculator — sourced from 2026 budgets and 2024 audits. Companion plain-language briefing available as a download.</div>
+        <div class="notif-meta">New · Special Districts · April 2026</div>
+        <a class="notif-action" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CBI Missing Persons form — accessible rebuild is live.</strong> Resolves all seven critical/serious findings from the ADA audit: skip link, live regions, focus management, EN/ES localization, real-time validation messaging. Drops into the existing Drupal Webform infrastructure with optional Claude API routing.</div>
+        <div class="notif-meta">New · State · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LexisNexis ADAM Program dashboard — accessible rebuild is live.</strong> Audit and reference rebuild of the missing-children dashboard: APG-pattern tabs with roving tabindex and full keyboard nav, solid amber focus rings (3:1 against any surface), darker success-green for AA contrast, and "View Poster" placeholders converted from dead anchors to real buttons.</div>
+        <div class="notif-meta">New · Private Sector · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <main id="main-content" tabindex="-1">
+    
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:       #0d2340;  /* COS deep blue */
+  --navy-mid:   #1a3a5c;
+  --navy-soft:  #243d5c;
+  --ink:        #1a1a2e;
+  --ink-mid:    #3a4a5c;
+  --ink-mute:   #3a4a5c;
+  --on-navy:    #a8c8d8;
+  --white:      #ffffff;
+  --off-white:  #f7f8fa;
+  --rule:       rgba(13,35,64,.1);
+  --red:        #991b1b;         /* COS mountain red */
+  --red-bg:     #fef2f2;
+  --yellow:     #e8b547;         /* COS mountain yellow */
+  --teal:       #0b5f78;
+  --teal-bg:    #f0f9ff;
+  --green:      #065f46;
+  --green-bg:   #ecfdf5;
+  --focus:      #1d4ed8;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--off-white);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── SKIP LINK ── */
+.skip {
+  position: absolute; left: -9999px; top: 4px;
+  background: var(--navy); color: #fff;
+  padding: 8px 16px; font-size: 13px;
+  font-family: 'IBM Plex Mono', monospace;
+  border-radius: 2px; z-index: 999; text-decoration: none;
+}
+.skip:focus-visible { left: 8px; }
+
+/* ── EMERGENCY / ROUTING BAR ── */
+.emergency-bar {
+  background: var(--red);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.emergency-bar p {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: .01em;
+  font-family: 'IBM Plex Mono', monospace;
+  text-align: center;
+}
+.emergency-bar a {
+  color: #fde68a;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(253,230,138,.4);
+}
+.emergency-bar a:hover { border-color: #fde68a; }
+.emergency-bar a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--navy);
+  padding: 0 24px;
+  border-bottom: 2px solid var(--yellow);
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.logo-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+.logo-seal {
+  width: 44px; height: 44px;
+  background: var(--yellow);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; font-weight: 500;
+  color: var(--navy);
+  letter-spacing: .05em;
+  flex-shrink: 0;
+}
+.logo-text { color: #fff; }
+.logo-text strong {
+  display: block;
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: .02em;
+}
+.logo-text span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--on-navy);
+}
+.header-secure {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--on-navy);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lock-icon {
+  width: 12px; height: 12px;
+  border: 1.5px solid var(--on-navy);
+  border-radius: 2px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.lock-icon::before {
+  content: '';
+  position: absolute;
+  top: -5px; left: 2px;
+  width: 6px; height: 5px;
+  border: 1.5px solid var(--on-navy);
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--navy);
+  padding: 56px 24px 72px;
+}
+.hero-inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::after {
+  content: '';
+  flex: 1;
+  max-width: 48px;
+  height: 1px;
+  background: var(--yellow);
+  opacity: .4;
+}
+.hero h1 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 14px;
+  letter-spacing: -.01em;
+}
+.hero p {
+  font-size: 15px;
+  color: rgba(255,255,255,.78);
+  line-height: 1.75;
+  font-weight: 300;
+  max-width: 480px;
+}
+.hero p strong { color: #fff; font-weight: 500; }
+
+/* ── ROUTING NOTE ── */
+.routing-note {
+  background: var(--navy);
+  border: 1px solid var(--navy-mid);
+  border-radius: 3px;
+  padding: 14px 18px;
+  margin-top: 24px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.routing-note-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  line-height: 1.6;
+  color: var(--yellow);
+}
+.routing-note p {
+  font-size: 13px;
+  color: #ffffff; /* white on navy #0d2340 → 15.77 AAA */
+  font-family: 'IBM Plex Mono', monospace;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── MAIN FORM CARD ── */
+.form-section {
+  padding: 0 24px 24px;
+  margin-top: -2px;
+}
+.form-card {
+  max-width: 640px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 40px rgba(13,35,64,.1), 0 1px 4px rgba(13,35,64,.06);
+  overflow: hidden;
+  position: relative;
+  top: -32px;
+}
+.form-card-header {
+  padding: 28px 32px 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.form-card-header h2 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.form-card-header p {
+  font-size: 13px;
+  color: var(--ink-mute);
+  font-weight: 300;
+  line-height: 1.6;
+}
+.form-body { padding: 28px 32px; }
+
+/* ── FIELD STYLES ── */
+.field { margin-bottom: 20px; }
+.field label {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 6px;
+}
+.field textarea, .field input {
+  width: 100%;
+  border: 1px solid rgba(13,35,64,.18);
+  border-radius: 3px;
+  padding: 12px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  background: #fff;
+  line-height: 1.6;
+  transition: border-color .15s, box-shadow .15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+.field textarea:focus-visible, .field input:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 0;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(14,116,144,.15);
+}
+.field .hint {
+  margin-top: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.55;
+  letter-spacing: .02em;
+}
+.field-error {
+  margin-top: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--red);
+  font-weight: 500;
+  min-height: 0;
+}
+.field-error:empty { display: none; }
+textarea[aria-invalid="true"] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(196,58,58,.12);
+}
+
+.field-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.char-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  letter-spacing: .06em;
+}
+.char-count.near { color: var(--teal); }
+
+/* ── EXAMPLE CHIPS ── */
+.example-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.example-chip {
+  padding: 5px 10px;
+  border: 1px solid rgba(13,35,64,.15);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--ink-mid);
+  background: #fff;
+  cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s;
+  font-family: 'Inter', sans-serif;
+}
+.example-chip:hover {
+  background: var(--teal-bg);
+  border-color: rgba(14,116,144,.3);
+  color: var(--teal);
+}
+.example-chip:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ── SUBMIT ROW ── */
+.submit-row {
+  border-top: 1px solid var(--rule);
+  padding-top: 24px;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.btn-submit {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-submit:hover { background: var(--navy-mid); }
+.btn-submit:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.btn-submit:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+.submit-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.6;
+  letter-spacing: .04em;
+}
+
+/* ── LOADING ── */
+.loading {
+  display: none;
+  text-align: center;
+  padding: 32px;
+}
+.loading.visible { display: block; }
+.loading-dots {
+  display: inline-flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.loading-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--navy);
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+.loading-dot:nth-child(1) { animation-delay: -.32s; }
+.loading-dot:nth-child(2) { animation-delay: -.16s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); opacity: .3; }
+  40% { transform: scale(1); opacity: 1; }
+}
+.loading-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  letter-spacing: .06em;
+}
+
+/* ── RESULT ── */
+.result {
+  display: none;
+}
+.result.visible { display: block; }
+
+.result-card {
+  max-width: 640px;
+  margin: -16px auto 24px;
+  padding: 0 24px;
+}
+.result-inner {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 40px rgba(13,35,64,.08), 0 1px 4px rgba(13,35,64,.04);
+  overflow: hidden;
+  border-top: 3px solid var(--teal);
+}
+.result-inner.confidence-high { border-top-color: var(--green); }
+.result-inner.confidence-medium { border-top-color: var(--teal); }
+.result-inner.confidence-low { border-top-color: var(--yellow); }
+.result-inner.warning-path { border-top-color: var(--red); }
+
+.result-header {
+  padding: 22px 32px 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.result-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.confidence-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  letter-spacing: .12em;
+  font-weight: 500;
+}
+.confidence-pill.high { background: var(--green-bg); color: var(--green); }
+.confidence-pill.medium { background: var(--teal-bg); color: var(--teal); }
+.confidence-pill.low { background: #fef9e8; color: #8a6b1c; }
+
+.result-header h3 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.result-reason {
+  font-size: 14px;
+  color: var(--ink-mid);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.result-warning {
+  background: var(--red-bg);
+  border-left: 3px solid var(--red);
+  padding: 14px 20px;
+  margin: 0;
+}
+.result-warning p {
+  font-size: 13px;
+  color: var(--red);
+  line-height: 1.6;
+  font-weight: 500;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: .02em;
+}
+
+.result-actions {
+  padding: 20px 32px 24px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn-primary-link, .btn-secondary-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 3px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all .15s;
+}
+.btn-primary-link {
+  background: var(--navy);
+  color: #fff;
+}
+.btn-primary-link:hover { background: var(--navy-mid); }
+.btn-secondary-link {
+  background: #fff;
+  color: var(--navy);
+  border: 1px solid rgba(13,35,64,.18);
+}
+.btn-secondary-link:hover {
+  background: var(--off-white);
+  border-color: var(--navy);
+}
+.btn-primary-link:focus-visible, .btn-secondary-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ── ALTERNATES ── */
+.alternates {
+  padding: 0 32px 24px;
+  border-top: 1px solid var(--rule);
+  padding-top: 18px;
+  margin-top: 4px;
+}
+.alternates-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 12px;
+}
+.alt-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.alt-item:last-child { border-bottom: none; }
+.alt-item-text {
+  flex: 1;
+}
+.alt-item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+.alt-item-reason {
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.5;
+  font-weight: 300;
+}
+.alt-item-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .1em;
+  color: var(--teal);
+  text-decoration: none;
+  white-space: nowrap;
+  padding-top: 3px;
+}
+.alt-item-link:hover { text-decoration: underline; }
+.alt-item-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.retry-row {
+  padding: 18px 32px;
+  background: var(--off-white);
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.retry-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-mute);
+  letter-spacing: .04em;
+}
+.retry-btn {
+  background: #fff;
+  color: var(--navy);
+  border: 1px solid rgba(13,35,64,.18);
+  padding: 8px 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.retry-btn:hover { background: var(--off-white); }
+.retry-btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ── REFERENCE GRID ── */
+.ref-section {
+  max-width: 640px;
+  margin: 12px auto 0;
+  padding: 0 24px 16px;
+}
+.ref-section h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.ref-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 520px) {
+  .ref-grid { grid-template-columns: 1fr; }
+}
+.ref-card {
+  background: #fff;
+  padding: 14px 16px;
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color .15s, box-shadow .15s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ref-card:hover {
+  border-color: var(--teal);
+  box-shadow: 0 2px 8px rgba(14,116,144,.08);
+}
+.ref-card:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.ref-card-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.ref-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy);
+}
+.ref-card-desc {
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.5;
+  font-weight: 300;
+  margin-top: 2px;
+}
+.ref-card.pprbd {
+  border-left: 3px solid var(--red);
+}
+
+/* ── AUDIT SECTION ── */
+.audit-section {
+  max-width: 640px;
+  margin: 32px auto;
+  padding: 0 24px;
+}
+.audit-toggle-btn {
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--rule);
+  padding: 16px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .08em;
+  color: var(--ink-mid);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 3px;
+  transition: background .15s;
+}
+.audit-toggle-btn:hover { background: var(--off-white); }
+.audit-toggle-btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.toggle-arrow {
+  transition: transform .2s ease;
+}
+.audit-toggle-btn[aria-expanded="true"] .toggle-arrow {
+  transform: rotate(180deg);
+}
+.audit-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+  background: #fff;
+  border-radius: 0 0 3px 3px;
+}
+.audit-body.open { max-height: 2000px; }
+.audit-inner {
+  padding: 20px 24px 24px;
+  border: 1px solid var(--rule);
+  border-top: none;
+  border-radius: 0 0 3px 3px;
+}
+.audit-intro {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-mid);
+  margin-bottom: 18px;
+  font-weight: 300;
+}
+.audit-intro strong { color: var(--navy); font-weight: 500; }
+.audit-intro code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  background: var(--off-white);
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+
+.audit-finding {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+}
+.audit-finding:first-of-type { border-top: none; padding-top: 4px; }
+.finding-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+.dot-critical { background: var(--red); }
+.dot-arch { background: var(--teal); }
+.finding-text { flex: 1; }
+.finding-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.finding-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-mute);
+  font-weight: 300;
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  background: var(--navy);
+  color: rgba(255,255,255,.6);
+  padding: 32px 24px;
+  margin-top: 32px;
+}
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: .06em;
+  text-align: center;
+  line-height: 1.8;
+}
+.footer-inner a {
+  color: var(--on-navy);
+  text-decoration: none;
+}
+.footer-inner a:hover { color: #fff; text-decoration: underline; }
+.footer-inner a:focus-visible {
+  outline: 2px solid var(--on-navy);
+  outline-offset: 2px;
+}
+
+/* ── LIVE STATUS SR-ONLY ── */
+[role="status"].sr-only {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  overflow: hidden;
+}
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+  </style>
+<div role="status" class="sr-only" id="live-status" aria-atomic="true"></div>
+
+<!-- EMERGENCY / KEY ROUTING BAR -->
+<div role="region" aria-label="Important routing notice">
+  <div class="emergency-bar">
+    <p>
+      <strong>Home building permits (decks, roofs, water heaters, basement finishes):</strong>
+      &nbsp;·&nbsp; Call <a href="tel:17193272880" aria-label="Call PPRBD at 719-327-2880">PPRBD 719-327-2880</a>
+      &nbsp;·&nbsp; <a href="https://www.pprbd.org" target="_blank" rel="noopener noreferrer">pprbd.org →</a>
+      &nbsp;·&nbsp; (separate agency — not this portal)
+    </p>
+  </div>
+</div>
+
+<!-- HEADER -->
+<section role="region" aria-label="Page header" class="site-header">
+  <div class="header-inner">
+    <a href="#" class="logo-block" aria-label="Colorado Springs homepage">
+      <div class="logo-seal" aria-hidden="true">COS</div>
+      <div class="logo-text">
+        <strong>City of Colorado Springs</strong>
+        <span>Permits, licenses &amp; records</span>
+      </div>
+    </a>
+    <div class="header-secure" aria-label="This is a secure government website">
+      <span class="lock-icon" aria-hidden="true"></span>
+      <span>secure .gov</span>
+    </div>
+  </div>
+</section>
+
+<!-- HERO -->
+<div class="hero" role="region" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <p class="hero-eyebrow" aria-hidden="true">Plain-language routing</p>
+    <h1 id="hero-heading">Tell us what you need.<br>We'll point you to the right place.</h1>
+    <p>
+      Describe your situation in your own words.
+      <strong>You do not need to know which City department handles it.</strong>
+      We'll match you to the correct service and give you a direct link.
+    </p>
+    <div class="routing-note" role="note" aria-label="How this works">
+      <span class="routing-note-icon" aria-hidden="true">→</span>
+      <p>No 31-option dropdowns. No "Contact Type" jargon. No guessing which tab to click. Just tell us what happened, and we handle the routing.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div role="region" aria-label="Page content" class="form-section">
+  <div class="form-card" role="region" aria-labelledby="form-heading">
+    <div class="form-card-header">
+      <h2 id="form-heading">What do you need to do?</h2>
+      <p>Describe it in your own words. One sentence is enough.</p>
+    </div>
+
+    <form class="form-body" id="request-form" action="#" method="post" aria-label="Plain-language request form" novalidate>
+
+      <div class="field">
+        <div class="field-meta">
+          <label for="request-text">
+            Your situation
+            <span class="sr-only">(required)</span>
+          </label>
+          <span class="char-count" id="char-count" aria-live="polite" aria-atomic="true">0 / 500</span>
+        </div>
+        <textarea
+          id="request-text"
+          name="request_description"
+          required
+          aria-required="true"
+          aria-describedby="request-hint request-error"
+          maxlength="500"
+          placeholder="e.g. 'My neighbor's grass is three feet tall.' &#10;&#10;Or: 'I want to close Tejon Street for a street fair on June 15.' &#10;&#10;Or: 'I need a copy of a police report from a fender-bender last month.'"
+        ></textarea>
+        <p class="hint" id="request-hint">Be as specific as you can. Addresses, dates, and what you're trying to accomplish all help.</p>
+        <p class="field-error" id="request-error" role="alert" aria-atomic="true"></p>
+
+        <div class="example-chips" role="group" aria-label="Example scenarios">
+          <button type="button" class="example-chip" data-example="My neighbor hasn't mowed their lawn in two months and the HOA isn't doing anything.">Tall grass complaint</button>
+          <button type="button" class="example-chip" data-example="I want to add a deck to the back of my house.">Add a deck</button>
+          <button type="button" class="example-chip" data-example="I want to run a 5K through Old Colorado City on a Saturday morning.">Organize a race</button>
+          <button type="button" class="example-chip" data-example="I'm opening a small coffee shop and need to know what licenses I need.">Start a business</button>
+          <button type="button" class="example-chip" data-example="I need a copy of the police report from a car accident I was in last Tuesday.">Get a crash report</button>
+          <button type="button" class="example-chip" data-example="My landlord is operating a short-term rental next door and I don't think it's permitted.">Report an STR</button>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn-submit" id="submit-btn" aria-describedby="submit-note">
+          Find the right place →
+        </button>
+        <p class="submit-note" id="submit-note">Takes about 3 seconds.<br>We'll give you a direct link.</p>
+      </div>
+    </form>
+
+    <!-- LOADING -->
+    <div class="loading" id="loading" aria-live="polite" aria-atomic="true">
+      <div class="loading-dots" aria-hidden="true">
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+      </div>
+      <p class="loading-text" id="loading-text">Figuring out where this goes…</p>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="result" id="result" aria-live="polite">
+  <div class="result-card">
+    <div class="result-inner" id="result-inner">
+      <div id="result-warning-container"></div>
+      <div class="result-header">
+        <div class="result-label">
+          <span>Suggested department</span>
+          <span class="confidence-pill" id="confidence-pill"></span>
+        </div>
+        <h3 id="result-dept">—</h3>
+        <p class="result-reason" id="result-reason">—</p>
+      </div>
+      <div class="result-actions" id="result-actions"></div>
+      <div id="alternates-container"></div>
+      <div class="retry-row">
+        <span class="retry-text">Not what you meant?</span>
+        <button type="button" class="retry-btn" id="retry-btn">Try again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REFERENCE GRID -->
+<section class="ref-section" aria-labelledby="ref-heading">
+  <h2 id="ref-heading">All departments &amp; direct links</h2>
+  <div class="ref-grid">
+
+    <a class="ref-card pprbd" href="https://www.pprbd.org" target="_blank" rel="noopener noreferrer"
+       aria-label="PPRBD - residential building permits (opens in new tab)">
+      <div class="ref-card-label">Most residents</div>
+      <div class="ref-card-title">PPRBD (separate site)</div>
+      <div class="ref-card-desc">All residential building permits: decks, roofs, HVAC, plumbing, electrical, basement finishes. 719-327-2880.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Enforcement" target="_blank" rel="noopener noreferrer"
+       aria-label="Neighborhood Services / code enforcement (opens in new tab)">
+      <div class="ref-card-label">Complaints &amp; violations</div>
+      <div class="ref-card-title">Neighborhood Services</div>
+      <div class="ref-card-desc">Tall grass, junk vehicles, nuisances, zoning violations, unpermitted short-term rentals.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=PublicWorks" target="_blank" rel="noopener noreferrer"
+       aria-label="Public Works - street permits (opens in new tab)">
+      <div class="ref-card-label">Streets &amp; events</div>
+      <div class="ref-card-title">Public Works</div>
+      <div class="ref-card-desc">Right-of-way work, traffic control, special events, parades, block parties, street closures.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Licensing" target="_blank" rel="noopener noreferrer"
+       aria-label="Business Licensing (opens in new tab)">
+      <div class="ref-card-label">Starting a business</div>
+      <div class="ref-card-title">Business Licensing</div>
+      <div class="ref-card-desc">City business licenses, renewals, changes to existing licenses.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Police" target="_blank" rel="noopener noreferrer"
+       aria-label="Police Records (opens in new tab)">
+      <div class="ref-card-label">Police reports</div>
+      <div class="ref-card-title">Police Records</div>
+      <div class="ref-card-desc">Crash reports, background checks, clearance letters, public records requests.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Planning" target="_blank" rel="noopener noreferrer"
+       aria-label="Planning (opens in new tab)">
+      <div class="ref-card-label">Land use &amp; zoning</div>
+      <div class="ref-card-title">Planning</div>
+      <div class="ref-card-desc">Rezoning, subdivision, conditional use, plats. For development, not home remodels.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Fire" target="_blank" rel="noopener noreferrer"
+       aria-label="Fire Department permits (opens in new tab)">
+      <div class="ref-card-label">Commercial fire safety</div>
+      <div class="ref-card-title">Fire</div>
+      <div class="ref-card-desc">Alarms, sprinklers, hazmat, commercial kitchens, liquor licenses, commercial plan review.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=StormWater" target="_blank" rel="noopener noreferrer"
+       aria-label="Stormwater compliance (opens in new tab)">
+      <div class="ref-card-label">Developers &amp; contractors</div>
+      <div class="ref-card-title">Stormwater</div>
+      <div class="ref-card-desc">Erosion control, stormwater plans, outfall compliance. Mostly for construction sites.</div>
+    </a>
+
+    <a class="ref-card" href="https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Building" target="_blank" rel="noopener noreferrer"
+       aria-label="City Building - infrastructure permits (opens in new tab)">
+      <div class="ref-card-label">Infrastructure work</div>
+      <div class="ref-card-title">City "Building" tab</div>
+      <div class="ref-card-desc">Concrete, excavation, CSU utility permits. NOT residential — that's PPRBD.</div>
+    </a>
+
+  </div>
+</section>
+
+<!-- AUDIT -->
+<section class="audit-section" aria-labelledby="audit-toggle">
+  <button
+    class="audit-toggle-btn"
+    id="audit-toggle"
+    aria-expanded="false"
+    aria-controls="audit-body"
+    type="button"
+  >
+    <span>Why this exists — problems with the current portal</span>
+    <span class="toggle-arrow" aria-hidden="true">↓</span>
+  </button>
+  <div class="audit-body" id="audit-body" role="region" aria-labelledby="audit-toggle">
+    <div class="audit-inner">
+      <p class="audit-intro">
+        The current Colorado Springs permit portal runs on <strong>Accela Citizen Access</strong> — a hybrid of 2008-era ASP.NET WebForms and a newer Angular layer. Its front door asks residents to pick from <strong>nine department tabs</strong> organized around the City's org chart, then forces them through a <strong>31-option "Contact Type" dropdown</strong> with options like <code>Fire - Billing - DO NOT CHANGE</code> (an internal admin note leaked into public UI). The top-nav link colors fail WCAG contrast at 2.16:1, no focus indicator exists on form fields, and validation errors never announce to screen readers. This demo is a sketch of what the front door <em>could</em> look like: one plain-language textarea, AI routing to the right department, and a visible fallback grid if the suggestion is wrong.
+      </p>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-critical" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Residents don't think in departments</div>
+          <div class="finding-desc">A resident's intent is "my neighbor's grass is too tall" — not "I need the Enforcement module." The current portal makes the citizen do the translation. Plain-language routing moves that work to the system.</div>
+        </div>
+      </div>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-critical" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">PPRBD is the biggest invisible fork</div>
+          <div class="finding-desc">Most residents who want a permit want a <em>residential building permit</em> — which is PPRBD, a completely separate agency at pprbd.org. The current COS portal has a "Building" tab that suggests otherwise. Anyone adding a deck, replacing a water heater, or finishing a basement should be at PPRBD. Surfacing that branch at the top is the single highest-impact fix.</div>
+        </div>
+      </div>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-critical" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">The "Contact Type" step is a user-hostile routing tax</div>
+          <div class="finding-desc">Asking a resident to classify themselves as "Resident Agent for Service" or "Fire - Billing - DO NOT CHANGE" with no help text is WCAG 3.3.2 failure and a UX disaster. A routing system should infer contact type from parcel ownership, verified identity, and action — not ask.</div>
+        </div>
+      </div>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-arch" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Reversible identity creation</div>
+          <div class="finding-desc">The current system commits your username to the database before email confirmation, creating orphan accounts that only staff can delete. This demo has no account creation — you land, ask, get a link. Login happens on the destination, only if needed.</div>
+        </div>
+      </div>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-arch" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Always-visible alternatives</div>
+          <div class="finding-desc">The AI suggestion can be wrong. The reference grid below the result shows all nine paths at all times so a resident is never trapped in a bad routing decision. WCAG 2.4.5 — multiple ways to navigate.</div>
+        </div>
+      </div>
+
+      <div class="audit-finding">
+        <div class="finding-dot dot-arch" aria-hidden="true"></div>
+        <div class="finding-text">
+          <div class="finding-title">Architectural note</div>
+          <div class="finding-desc">This is a front-door prototype, not a full system. In the civic-Jira architecture this maps onto the "Public Layer" — plain-language output, property card, notifications — sitting above the Parcel Engine and the Record/Ticket system. The routing intelligence lives here; the actual records stay wherever they already live (Accela, PPRBD, or anywhere else).</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+<script>
+// ── CONFIG ──
+const DEPARTMENTS = {
+  'PPRBD': {
+    title: 'PPRBD (Pikes Peak Regional Building Department)',
+    url: 'https://www.pprbd.org',
+    phone: '719-327-2880',
+    scope: 'Residential building permits: decks, roofs, water heaters, furnaces, basement finishes, electrical, plumbing, mechanical. This is a SEPARATE agency from Colorado Springs — different website, different login.',
+    warning: true
+  },
+  'Neighborhood Services': {
+    title: 'Neighborhood Services',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Enforcement',
+    phone: null,
+    scope: 'Code enforcement — tall grass, junk vehicles, abandoned cars, nuisances, zoning violations, unpermitted short-term rentals.'
+  },
+  'Public Works': {
+    title: 'Public Works',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=PublicWorks',
+    phone: null,
+    scope: 'Street and right-of-way permits: traffic control, road closures, parades, races, block parties, sidewalk work.'
+  },
+  'Business Licensing': {
+    title: 'Business Licensing',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Licensing',
+    phone: null,
+    scope: 'City business licenses, renewals, new businesses, changes to existing licenses.'
+  },
+  'Police Records': {
+    title: 'Police Records',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Police',
+    phone: null,
+    scope: 'Crash reports, background checks, clearance letters, public records requests from Colorado Springs Police.'
+  },
+  'Planning': {
+    title: 'Planning',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Planning',
+    phone: null,
+    scope: 'Zoning, subdivision, rezoning, conditional-use applications, land-use decisions, plats. For development scale — not home remodels.'
+  },
+  'Fire': {
+    title: 'Fire',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Fire',
+    phone: null,
+    scope: 'Commercial fire-safety permits: alarm systems, sprinklers, hazmat, commercial kitchens, liquor licenses, commercial plan review.'
+  },
+  'Stormwater': {
+    title: 'Stormwater',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=StormWater',
+    phone: null,
+    scope: 'Stormwater compliance for construction sites — erosion control, stormwater management plans, outfall inspections.'
+  },
+  'Building': {
+    title: 'Building (infrastructure only)',
+    url: 'https://aca-prod.accela.com/COSPRINGS/Cap/CapHome.aspx?module=Building',
+    phone: null,
+    scope: 'NOT residential. Infrastructure work in public rights-of-way — concrete, excavation, CSU utility permits, city internal projects. For home improvement, use PPRBD instead.'
+  },
+  'Uncertain': {
+    title: 'Not sure — multiple paths',
+    url: null,
+    phone: '719-385-5169',
+    scope: 'Your request could go to more than one department. Consider calling the general City number below, or browse the full list of departments.'
+  }
+};
+
+// ── DOM ──
+const form        = document.getElementById('request-form');
+const requestText = document.getElementById('request-text');
+const charCount   = document.getElementById('char-count');
+const errEl       = document.getElementById('request-error');
+const submitBtn   = document.getElementById('submit-btn');
+const loading     = document.getElementById('loading');
+const loadingText = document.getElementById('loading-text');
+const result      = document.getElementById('result');
+const resultInner = document.getElementById('result-inner');
+const resultDept  = document.getElementById('result-dept');
+const resultReason = document.getElementById('result-reason');
+const resultActions = document.getElementById('result-actions');
+const alternatesContainer = document.getElementById('alternates-container');
+const confidencePill = document.getElementById('confidence-pill');
+const warningContainer = document.getElementById('result-warning-container');
+const retryBtn    = document.getElementById('retry-btn');
+const liveStatus  = document.getElementById('live-status');
+
+// ── CHAR COUNT ──
+requestText.addEventListener('input', () => {
+  const n = requestText.value.length;
+  charCount.textContent = n + ' / 500';
+  charCount.classList.toggle('near', n > 450);
+  if (requestText.getAttribute('aria-invalid') === 'true') {
+    requestText.removeAttribute('aria-invalid');
+    errEl.textContent = '';
+  }
+});
+
+// ── EXAMPLE CHIPS ──
+document.querySelectorAll('.example-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    requestText.value = chip.dataset.example;
+    requestText.dispatchEvent(new Event('input'));
+    requestText.focus();
+  });
+});
+
+// ── AUDIT ACCORDION ──
+const auditBtn = document.getElementById('audit-toggle');
+const auditBody = document.getElementById('audit-body');
+auditBtn.addEventListener('click', () => {
+  const open = auditBtn.getAttribute('aria-expanded') === 'true';
+  auditBtn.setAttribute('aria-expanded', String(!open));
+  auditBody.classList.toggle('open', !open);
+});
+
+// ── RETRY ──
+retryBtn.addEventListener('click', () => {
+  result.classList.remove('visible');
+  form.style.display = '';
+  requestText.focus();
+  requestText.select();
+});
+
+// ── LOADING MESSAGES ──
+const loadingMessages = [
+  'Reading what you wrote…',
+  'Checking which department handles this…',
+  'Making sure PPRBD isn\'t the real answer…',
+  'Almost there…'
+];
+let loadingInterval = null;
+function startLoadingAnimation() {
+  let i = 0;
+  loadingText.textContent = loadingMessages[0];
+  loadingInterval = setInterval(() => {
+    i = (i + 1) % loadingMessages.length;
+    loadingText.textContent = loadingMessages[i];
+  }, 1400);
+}
+function stopLoadingAnimation() {
+  if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; }
+}
+
+// ── FORM SUBMIT ──
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const text = requestText.value.trim();
+  if (!text) {
+    requestText.setAttribute('aria-invalid', 'true');
+    errEl.textContent = 'Please describe what you need before continuing.';
+    liveStatus.textContent = 'Error: please describe what you need before continuing.';
+    requestText.focus();
+    return;
+  }
+
+  // Show loading, hide form
+  form.style.display = 'none';
+  loading.classList.add('visible');
+  startLoadingAnimation();
+  liveStatus.textContent = 'Finding the right department. Please wait.';
+
+  try {
+    const routing = await routeRequest(text);
+    stopLoadingAnimation();
+    loading.classList.remove('visible');
+    renderResult(routing);
+    result.classList.add('visible');
+    // Scroll into view
+    setTimeout(() => {
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      resultInner.focus();
+    }, 100);
+  } catch (err) {
+    stopLoadingAnimation();
+    loading.classList.remove('visible');
+    form.style.display = '';
+    errEl.textContent = 'Something went wrong. Please try again, or browse the departments directly below.';
+    liveStatus.textContent = 'Error occurred. You can try again or use the department list below.';
+  }
+});
+
+// ── LOCAL KEYWORD ROUTING ──
+// Maps each department to keywords drawn from its scope + the ref-card tags.
+// Matching is case-insensitive, whole-word where practical, scored by hits.
+const KEYWORD_INDEX = {
+  'PPRBD': {
+    keywords: ['deck','roof','roofing','water heater','hvac','furnace','air conditioning','basement','finish','electrical','plumbing','mechanical','remodel','renovation','addition','permit','residential','house','home','building permit','pprbd','shed','garage','kitchen','bathroom','window','door','siding','insulation','solar panel','hot tub','fence','retaining wall','patio','pergola','carport'],
+    reason: 'That sounds like a residential building project — PPRBD handles all home permits. They\'re a separate agency from the city.',
+    warning: 'Important: PPRBD is a separate agency from Colorado Springs with its own website (pprbd.org) and its own login. The city portal cannot process residential building permits.'
+  },
+  'Neighborhood Services': {
+    keywords: ['tall grass','weeds','overgrown','mow','lawn','junk','abandoned vehicle','abandoned car','nuisance','noise','trash','garbage','dumping','zoning violation','code enforcement','short-term rental','str','airbnb','vrbo','complaint','blight','graffiti','parking','neighbor','eyesore','condemned','boarded'],
+    reason: 'That sounds like a code enforcement or neighborhood complaint — Neighborhood Services handles those.'
+  },
+  'Public Works': {
+    keywords: ['street','road','pothole','sidewalk','curb','right-of-way','traffic control','road closure','parade','race','5k','10k','marathon','block party','special event','barricade','detour','construction zone','crosswalk','sign','stop sign','traffic sign','street light','median'],
+    reason: 'That involves streets or a public event — Public Works handles right-of-way permits and traffic control.'
+  },
+  'Business Licensing': {
+    keywords: ['business license','start a business','open a business','coffee shop','restaurant','retail','store','shop','license renewal','vendor','food truck','mobile vendor','contractor license','liquor license','cannabis','marijuana','dispensary','salon','barber','tattoo'],
+    reason: 'That\'s about starting or licensing a business — Business Licensing is your path.'
+  },
+  'Police Records': {
+    keywords: ['police report','crash report','accident report','background check','clearance letter','police records','arrest record','incident report','body cam','body camera','911','dispatch','detective','theft report','car accident','hit and run','vin check'],
+    reason: 'That\'s a police records request — you can get crash reports, background checks, and clearance letters here.'
+  },
+  'Planning': {
+    keywords: ['zoning','rezone','rezoning','subdivision','plat','land use','conditional use','variance','annexation','comprehensive plan','overlay','setback','density','development','commercial development','mixed use','planned unit'],
+    reason: 'That\'s a land-use or zoning question — the Planning department handles those at the development scale.'
+  },
+  'Fire': {
+    keywords: ['fire permit','fire alarm','sprinkler','sprinkler system','hazmat','hazardous material','commercial kitchen','hood suppression','fire inspection','fire safety','fire marshal','commercial plan review','assembly permit','pyrotechnics','fireworks','fire suppression'],
+    reason: 'That\'s a commercial fire-safety matter — the Fire department handles permits for alarms, sprinklers, and commercial plan reviews.'
+  },
+  'Stormwater': {
+    keywords: ['stormwater','storm water','erosion','erosion control','sediment','runoff','drainage','outfall','swmp','construction site','grading','bmp','best management practice','ms4','stormwater management'],
+    reason: 'That\'s stormwater compliance — typically for construction sites needing erosion control or drainage plans.'
+  },
+  'Building': {
+    keywords: ['excavation','right of way permit','utility permit','csu','concrete','infrastructure','city project','public infrastructure','telecom','fiber','conduit','trench','boring'],
+    reason: 'That\'s infrastructure work in the public right-of-way — the Building module handles city-scale permits (not residential).'
+  }
+};
+
+// Score user text against each department's keywords
+function routeRequest(userText) {
+  return new Promise(resolve => {
+    const input = userText.toLowerCase();
+    const scores = {};
+    let bestDept = 'Uncertain';
+    let bestScore = 0;
+    const runners = [];
+
+    // Check for PPRBD-triggering residential keywords first (highest priority)
+    const residentialSignals = ['deck','roof','basement','water heater','hvac','furnace','remodel','addition','permit','plumbing','electrical','solar','shed','garage','patio','fence','kitchen','bathroom'];
+    const hasResidential = residentialSignals.some(kw => input.includes(kw));
+    const mentionsHome = /\b(house|home|my home|residential|my yard)\b/i.test(input);
+
+    for (const [dept, entry] of Object.entries(KEYWORD_INDEX)) {
+      let score = 0;
+      for (const kw of entry.keywords) {
+        if (input.includes(kw)) {
+          // Multi-word keywords get bonus weight
+          score += kw.includes(' ') ? 3 : 1;
+        }
+      }
+      scores[dept] = score;
+      if (score > bestScore) {
+        bestScore = score;
+        bestDept = dept;
+      }
+    }
+
+    // If residential signals + home context → force PPRBD even if Building scored higher
+    if (hasResidential && mentionsHome && bestDept === 'Building') {
+      bestDept = 'PPRBD';
+    }
+
+    // Confidence
+    const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    let confidence = 'low';
+    if (bestScore >= 4) confidence = 'high';
+    else if (bestScore >= 2) confidence = 'medium';
+
+    // Alternates: any dept with score > 0 that isn't the primary
+    const alternates = sortedScores
+      .filter(([d, s]) => d !== bestDept && s > 0)
+      .slice(0, 2)
+      .map(([d]) => ({
+        department: d,
+        reason: KEYWORD_INDEX[d] ? KEYWORD_INDEX[d].reason : ''
+      }));
+
+    // Build result in the same shape renderResult() expects
+    const entry = KEYWORD_INDEX[bestDept];
+    const result = {
+      primary: {
+        department: bestDept,
+        reason: entry ? entry.reason : 'Your request could match multiple departments. Browse the list below or call the general city number.',
+        confidence: confidence
+      },
+      alternates: alternates,
+      warning: entry && entry.warning ? entry.warning : null
+    };
+
+    // No score at all → Uncertain
+    if (bestScore === 0) {
+      result.primary.department = 'Uncertain';
+      result.primary.reason = 'We couldn\'t confidently match your description to one department. Browse the full list below, or call 719-385-5169.';
+      result.primary.confidence = 'low';
+    }
+
+    // Small delay to show loading animation naturally
+    setTimeout(() => resolve(result), 600);
+  });
+}
+
+// ── RENDER RESULT ──
+function renderResult(routing) {
+  const primary = routing.primary || {};
+  const deptKey = primary.department || 'Uncertain';
+  const dept = DEPARTMENTS[deptKey] || DEPARTMENTS['Uncertain'];
+  const confidence = primary.confidence || 'medium';
+
+  // Clear prior state
+  resultInner.className = 'result-inner';
+  warningContainer.innerHTML = '';
+  resultActions.innerHTML = '';
+  alternatesContainer.innerHTML = '';
+
+  // Confidence styling
+  resultInner.classList.add('confidence-' + confidence);
+
+  // PPRBD gets special treatment
+  if (deptKey === 'PPRBD') {
+    resultInner.classList.add('warning-path');
+  }
+
+  // Warning banner
+  if (routing.warning) {
+    warningContainer.innerHTML = `
+      <div class="result-warning" role="note">
+        <p>⚠ ${escapeHtml(routing.warning)}</p>
+      </div>
+    `;
+  }
+
+  // Primary content
+  resultDept.textContent = dept.title;
+  resultReason.textContent = primary.reason || dept.scope;
+  confidencePill.textContent = confidence;
+  confidencePill.className = 'confidence-pill ' + confidence;
+
+  // Actions
+  const actions = [];
+  if (dept.url) {
+    actions.push(`<a class="btn-primary-link" href="${escapeHtml(dept.url)}" target="_blank" rel="noopener noreferrer">Go to ${escapeHtml(deptKey === 'PPRBD' ? 'PPRBD' : dept.title.split(' (')[0])} →</a>`);
+  }
+  if (dept.phone) {
+    actions.push(`<a class="btn-secondary-link" href="tel:${dept.phone.replace(/\D/g,'')}">☎ ${escapeHtml(dept.phone)}</a>`);
+  }
+  if (deptKey !== 'Uncertain' && deptKey !== 'PPRBD') {
+    actions.push(`<a class="btn-secondary-link" href="https://aca-prod.accela.com/cosprings/Default.aspx" target="_blank" rel="noopener noreferrer">Sign in / Register</a>`);
+  }
+  resultActions.innerHTML = actions.join('');
+
+  // Alternates
+  if (routing.alternates && routing.alternates.length) {
+    const altItems = routing.alternates
+      .filter(a => DEPARTMENTS[a.department])
+      .map(a => {
+        const d = DEPARTMENTS[a.department];
+        const linkHref = d.url || 'https://aca-prod.accela.com/cosprings/Default.aspx';
+        return `
+          <div class="alt-item">
+            <div class="alt-item-text">
+              <div class="alt-item-title">${escapeHtml(d.title)}</div>
+              <div class="alt-item-reason">${escapeHtml(a.reason)}</div>
+            </div>
+            <a class="alt-item-link" href="${escapeHtml(linkHref)}" target="_blank" rel="noopener noreferrer">Open →</a>
+          </div>
+        `;
+      }).join('');
+    if (altItems) {
+      alternatesContainer.innerHTML = `
+        <div class="alternates">
+          <div class="alternates-label">Could also be</div>
+          ${altItems}
+        </div>
+      `;
+    }
+  }
+
+  liveStatus.textContent = 'Suggested: ' + dept.title + '. ' + (primary.reason || '');
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+</script>
+  </main>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     FOOTER — single source of truth, included by site.njk on every page.
+════════════════════════════════════════════════════════════════════ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  .subscribe-block {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    padding: 48px 0;
+    border-top: 1px solid var(--cc-border);
+  }
+  .subscribe-block .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+  .subscribe-block h2 {
+    font-family: var(--cc-serif);
+    margin: 0 0 12px;
+    color: var(--cc-text);
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .subscribe-block .deck {
+    color: var(--cc-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .gov-subscribe { display: flex; flex-direction: column; gap: 12px; }
+  .gov-subscribe label {
+    display: block;
+    font-family: var(--cc-sans);
+    font-size: 1rem;
+    color: var(--cc-text);
+    font-weight: 500;
+  }
+  .gov-subscribe input[type="email"] {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 12px;
+    font: inherit;
+    background: var(--cc-surface2);
+    color: var(--cc-text);
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+    min-height: 44px;
+  }
+  .gov-subscribe input[type="email"]::placeholder { color: var(--cc-quiet); opacity: 1; }
+  .gov-subscribe input[type="email"]:focus {
+    border-color: var(--cc-gold);
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 1px;
+  }
+  .gov-subscribe__consent {
+    font-size: 0.9rem;
+    color: var(--cc-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .gov-subscribe button[type="submit"] {
+    align-self: flex-start;
+    background: var(--cc-gold);
+    color: #0c1220;
+    border: 0;
+    padding: 12px 24px;
+    min-height: 44px;
+    font: 700 .85rem var(--cc-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+  .gov-subscribe button[type="submit"]:hover,
+  .gov-subscribe button[type="submit"]:focus-visible { background: var(--cc-gold-lt); }
+  .gov-subscribe output {
+    display: block;
+    min-height: 1.4em;
+    font-size: 0.95rem;
+    color: var(--cc-muted);
+  }
+</style>
+<section class="subscribe-block" aria-label="Subscribe to updates" data-topic="" hidden>
+  <div class="container">
+    <h2>Get email updates</h2>
+    <p class="deck">We&#39;ll email you a plain-language summary with links to the source documents whenever this office posts new public-record material.</p>
+
+    <form class="gov-subscribe" novalidate>
+      <label>
+        Email address
+        <input type="email" name="email" required autocomplete="email"
+               placeholder="you@example.com">
+      </label>
+      <p class="gov-subscribe__consent">
+        By subscribing you agree to receive emails about this topic. We&#39;ll send a confirmation link first. Unsubscribe any time. <em>(consent v2026-04-30-v1)</em>
+      </p>
+      <button type="submit">Subscribe</button>
+      <output role="status" aria-live="polite"></output>
+    </form>
+  </div>
+</section>
+
+
+<script>
+(function () {
+  if (window.__govSubscribeInit) return;
+  window.__govSubscribeInit = true;
+
+  // Skip top-level pages and /microsites/shared/* — no agency-specific topic.
+  var SKIP_JURISDICTIONS = { shared: 1 };
+
+  function inferTopicFromUrl() {
+    var parts = location.pathname.split('/').filter(Boolean);
+    // ["microsites", "<jurisdiction>", "<agency>", ...]
+    if (parts[0] !== 'microsites') return '';
+    if (!parts[1] || !parts[2]) return '';
+    if (SKIP_JURISDICTIONS[parts[1]]) return '';
+    return 'gov.' + parts[1] + '.' + parts[2];
+  }
+
+  function attach(host) {
+    // Resolve topic: explicit data-topic wins, else infer from URL.
+    var topic = host.dataset.topic || inferTopicFromUrl();
+    if (!topic) { host.remove(); return; }
+    host.dataset.topic = topic;
+    host.hidden = false;
+
+    var form = host.querySelector('form.gov-subscribe');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    var out = form.querySelector('output');
+    var source = location.pathname.replace(/^\/+/, '');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      out.textContent = 'Submitting…';
+      var email = form.email.value.trim();
+      var timezone = '';
+      try { timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) {}
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, topic: topic, source: source, timezone: timezone }),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
+          out.textContent = res.d.message || 'Check your email to confirm.';
+          form.reset();
+        })
+        .catch(function (err) { out.textContent = 'Something went wrong: ' + err.message; });
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('.subscribe-block[data-topic]').forEach(attach);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+
+<footer class="cc-footer" role="contentinfo">
+  <div class="container">
+    <p class="cc-footer-line">
+      &copy; 2026
+      CheetoChopsticks &amp;
+      <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener noreferrer">
+        StorySeed Studios<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      <a href="https://www.storyseedstudios.com/media-category/the-dais/" target="_blank" rel="noopener noreferrer">
+        The Dais<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      El Paso County, Colorado
+      &nbsp;·&nbsp;
+      For informational purposes only.
+      &nbsp;·&nbsp;
+      Open source.
+      &nbsp;·&nbsp;
+      <a href="/preferences/">Manage your subscriptions</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+/* ── Site nav + notifications panel scripts ──────────────────────────
+   Wrapped in an IIFE so locals never leak. The functions onclick handlers
+   call (openNotif, closeNotif, filterNotif) are explicitly attached to
+   `window` so a page's own scripts can't shadow them, and each function
+   is defensive about the DOM possibly being absent on a page that opted
+   out of the layout. */
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  var lastFocus;
+
+  function openNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    lastFocus = document.activeElement;
+    overlay.classList.add('open');
+    overlay.removeAttribute('aria-hidden');
+    panel.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { panel.focus(); }, 50);
+  }
+
+  function closeNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    panel.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  function filterNotif(tier, btn) {
+    document.querySelectorAll('.nf-btn').forEach(function (b) {
+      b.classList.remove('active');
+      b.removeAttribute('aria-pressed');
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    document.querySelectorAll('.notif-item').forEach(function (item) {
+      if (tier === 'all') {
+        item.classList.remove('hidden');
+        item.removeAttribute('aria-hidden');
+      } else {
+        var hide = item.dataset.tier !== tier;
+        item.classList.toggle('hidden', hide);
+        if (hide) item.setAttribute('aria-hidden', 'true');
+        else item.removeAttribute('aria-hidden');
+      }
+    });
+    document.querySelectorAll('.notif-group-label').forEach(function (label) {
+      label.style.display = tier === 'all' ? '' : 'none';
+    });
+  }
+
+  /* Escape closes the panel; Tab stays inside it while it's open. */
+  document.addEventListener('keydown', function (e) {
+    var panel = $('notif-panel');
+    if (!panel) return;
+    if (e.key === 'Escape') { closeNotif(); return; }
+    if (e.key === 'Tab' && panel.classList.contains('open')) {
+      var focusable = panel.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+
+  /* Active nav link on scroll — only runs when the index has the matching anchors. */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['you', 'dashboards', 'people', 'events'];
+  if (typeof IntersectionObserver === 'function' && navLinks.length) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function (l) {
+            var href = l.getAttribute('href') || '';
+            var active = href === '#' + id || href === '/#' + id;
+            l.classList.toggle('active', active);
+            if (active) l.setAttribute('aria-current', 'true');
+            else l.removeAttribute('aria-current');
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach(function (id) {
+      var el = $(id);
+      if (el) observer.observe(el);
+    });
+  }
+
+  /* Expose the click-target functions globally so inline onclick handlers
+     (and any page that needs them) can always reach them by name. */
+  window.openNotif   = openNotif;
+  window.closeNotif  = closeNotif;
+  window.filterNotif = filterNotif;
+
+  /* ─── Nav search (disclosure pattern + lazy fetch + filter) ───────
+     The toggle button uses aria-expanded to advertise state; opening
+     it un-hides the panel, moves focus to the input, attaches Escape
+     and click-outside handlers, and fetches /search-index.json on
+     first open (cached for the rest of the session). All search
+     scoring matches the homepage block so results rank identically. */
+  var nsToggle   = $('nav-search-toggle');
+  var nsPanel    = $('nav-search-panel');
+  var nsForm     = $('nav-search-form');
+  var nsInput    = $('nav-search-input');
+  var nsClose    = $('nav-search-close');
+  var nsStatus   = $('nav-search-status');
+  var nsResults  = $('nav-search-results');
+  var nsEmpty    = $('nav-search-empty');
+  var nsChips    = document.querySelectorAll('.nav-search-panel__chip');
+
+  if (nsToggle && nsPanel && nsForm && nsInput) {
+    var nsIndex = null;
+    var nsTier  = 'all';
+    var nsDebounce = null;
+
+    function nsOpen() {
+      nsPanel.hidden = false;
+      nsToggle.setAttribute('aria-expanded', 'true');
+      ensureIndex();
+      /* Defer focus one tick so the panel is in the layout. */
+      setTimeout(function(){ nsInput && nsInput.focus(); }, 0);
+      document.addEventListener('keydown', nsOnKey);
+      document.addEventListener('click', nsOnDocClick, true);
+    }
+    function nsClosePanel(returnFocus) {
+      nsPanel.hidden = true;
+      nsToggle.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('keydown', nsOnKey);
+      document.removeEventListener('click', nsOnDocClick, true);
+      if (returnFocus !== false) nsToggle.focus();
+    }
+    function nsOnKey(e) {
+      if (e.key === 'Escape') { e.preventDefault(); nsClosePanel(true); }
+    }
+    function nsOnDocClick(e) {
+      if (!nsPanel.contains(e.target) && e.target !== nsToggle && !nsToggle.contains(e.target)) {
+        nsClosePanel(false);
+      }
+    }
+
+    nsToggle.addEventListener('click', function() {
+      var open = nsToggle.getAttribute('aria-expanded') === 'true';
+      if (open) nsClosePanel(true); else nsOpen();
+    });
+    if (nsClose) nsClose.addEventListener('click', function() { nsClosePanel(true); });
+
+    function ensureIndex() {
+      if (nsIndex !== null) return Promise.resolve(nsIndex);
+      if (nsStatus) nsStatus.textContent = 'Loading search index…';
+      return fetch('/search-index.json', { headers: { 'Accept': 'application/json' } })
+        .then(function(r){ if (!r.ok) throw new Error('failed'); return r.json(); })
+        .then(function(data){ nsIndex = Array.isArray(data) ? data : []; if (nsStatus) nsStatus.textContent = ''; return nsIndex; })
+        .catch(function(){ nsIndex = []; if (nsStatus) nsStatus.textContent = 'Search index failed to load — try refreshing.'; return nsIndex; });
+    }
+
+    var ZIP_RE    = /^\s*\d{5}(-\d{4})?\s*$/;
+    var STREET_RE = /\b\d+\s+\w+.*\b(st|street|ave|avenue|blvd|boulevard|rd|road|dr|drive|ln|lane|way|ct|court|pl|place|hwy|highway|pkwy|parkway)\b/i;
+    function nsLooksLikeAddress(q) { return ZIP_RE.test(q) || STREET_RE.test(q); }
+    function nsEsc(s){
+      return String(s).replace(/[&<>"']/g, function(c){
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+      });
+    }
+    function nsHighlight(text, terms){
+      if (!terms.length) return nsEsc(text);
+      var safe = nsEsc(text);
+      var sorted = terms.slice().sort(function(a,b){ return b.length - a.length; });
+      var pattern = sorted.map(function(t){ return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|');
+      var re = new RegExp('(' + pattern + ')', 'gi');
+      return safe.replace(re, '<mark>$1</mark>');
+    }
+    function nsScore(item, terms){
+      var pathStr = (item.path || '').toLowerCase();
+      var hay = (item.title + ' ' + item.desc + ' ' + item.scope + ' ' + pathStr).toLowerCase();
+      var s = 0;
+      for (var i=0;i<terms.length;i++){
+        var t = terms[i];
+        if (item.title.toLowerCase().indexOf(t) !== -1) s += 5;
+        if (item.scope.toLowerCase().indexOf(t) !== -1) s += 3;
+        if (item.desc.toLowerCase().indexOf(t) !== -1)  s += 2;
+        if (pathStr.indexOf(t) !== -1)                   s += 1;
+        if (hay.indexOf(t) === -1) return -1;
+      }
+      return s;
+    }
+    function nsRender(items, terms){
+      nsResults.innerHTML = '';
+      if (!items.length) {
+        if (nsStatus) nsStatus.textContent = '';
+        if (nsEmpty)  nsEmpty.hidden = false;
+        return;
+      }
+      if (nsEmpty) nsEmpty.hidden = true;
+      if (nsStatus) nsStatus.textContent = items.length + ' result' + (items.length === 1 ? '' : 's');
+      var frag = document.createDocumentFragment();
+      items.forEach(function(it){
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.className = 'nav-search-panel__item nav-search-panel__item--' + it.tier;
+        a.href = it.url;
+        a.innerHTML =
+          '<p class="nav-search-panel__item-scope">' + nsEsc(it.scope) + '</p>' +
+          '<p class="nav-search-panel__item-title">' + nsHighlight(it.title, terms) + '</p>' +
+          (it.desc ? '<p class="nav-search-panel__item-desc">' + nsHighlight(it.desc, terms) + '</p>' : '');
+        li.appendChild(a);
+        frag.appendChild(li);
+      });
+      nsResults.appendChild(frag);
+    }
+    function nsRun(q) {
+      q = (q || '').trim();
+      if (!q) {
+        nsResults.innerHTML = '';
+        if (nsEmpty)  nsEmpty.hidden = true;
+        if (nsStatus) nsStatus.textContent = '';
+        return;
+      }
+      if (nsLooksLikeAddress(q)) {
+        window.location.href = '/microsites/shared/cos-find-my-jurisdiction.html?q=' + encodeURIComponent(q);
+        return;
+      }
+      ensureIndex().then(function(idx){
+        var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+        var pool  = (nsTier === 'all') ? idx : idx.filter(function(it){ return it.tier === nsTier; });
+        var scored = [];
+        for (var i=0;i<pool.length;i++) {
+          var s = nsScore(pool[i], terms);
+          if (s >= 0) scored.push({ s:s, it:pool[i] });
+        }
+        scored.sort(function(a,b){ return b.s - a.s; });
+        nsRender(scored.slice(0, 30).map(function(x){ return x.it; }), terms);
+      });
+    }
+
+    nsInput.addEventListener('input', function() {
+      clearTimeout(nsDebounce);
+      nsDebounce = setTimeout(function(){ nsRun(nsInput.value); }, 100);
+    });
+    nsForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      nsRun(nsInput.value);
+    });
+    nsChips.forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        nsTier = chip.dataset.tier;
+        nsChips.forEach(function(c){ c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+        nsRun(nsInput.value);
+      });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<h1>Pikes Peak Regional Office of Emergency Management</h1>
+<p>Two pages live in this folder, each delivered in three formats: a
+standalone HTML page, a cheetochopsticks <code>.njk</code> wrapper, and a DVersion
+partial bundle for Drupal / WordPress hosts.</p>
+<h2>Pages</h2>
+<h3>1. Pikes Peak Regional Emergency Operations Plan</h3>
+<p>Adopted January 2026 by El Paso County and the City of Colorado Springs.
+Long-form policy doc: TOC, 14 sections, appendix, signatories.</p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Use case</th>
+<th>Served at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="pikes-peak-regional-eop.html"><code>pikes-peak-regional-eop.html</code></a></td>
+<td>Standalone, self-contained — open in a browser, share offline, hand to a Drupal/WP team for reference. No cheetochopsticks chrome.</td>
+<td><code>/microsites/shared/PikesPeakEmergencyManagement/pikes-peak-regional-eop.html</code></td>
+</tr>
+<tr>
+<td><a href="pikes-peak-regional-eop.njk"><code>pikes-peak-regional-eop.njk</code></a></td>
+<td>Eleventy template — rendered through <code>site.njk</code> so cheetochopsticks.com shows the EOP with the site nav, subscribe block, and footer.</td>
+<td><code>/microsites/shared/PikesPeakEmergencyManagement/</code></td>
+</tr>
+<tr>
+<td><a href="dversion/"><code>dversion/dist/pikes-peak-eop.{html,css,js}</code></a></td>
+<td>Drupal/WordPress handoff bundle. Namespaced <code>cc-pikes-peak-eop</code>; scoped CSS via <code>@scope</code>; scoped JS via IIFE.</td>
+<td>not served on cheetochopsticks.com (excluded via <code>.eleventyignore</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3>2. PPROEM Current Alerts</h3>
+<p>Live regional alerts dashboard. Leaflet map, zone status table, address
+search, subscribe modal. <strong>Wired to live data</strong> — see &quot;Live data
+sources&quot; below.</p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Use case</th>
+<th>Served at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="pproem-alerts.html"><code>pproem-alerts.html</code></a></td>
+<td>Standalone, self-contained dashboard — drop into a static host.</td>
+<td><code>/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts.html</code></td>
+</tr>
+<tr>
+<td><a href="pproem-alerts.njk"><code>pproem-alerts.njk</code></a></td>
+<td>Eleventy template — rendered through <code>site.njk</code> for cheetochopsticks.com.</td>
+<td><code>/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts/</code></td>
+</tr>
+<tr>
+<td><a href="dversion/"><code>dversion/dist/pproem-alerts.{html,css,js}</code></a></td>
+<td>Drupal/WordPress handoff bundle. Namespaced <code>cc-pproem-alerts</code>. <strong>Requires Leaflet 1.9.4 (CSS + JS)</strong> loaded by the host before the partial JS runs.</td>
+<td>not served on cheetochopsticks.com</td>
+</tr>
+</tbody>
+</table>
+<h2>Source of truth</h2>
+<p>For each page, the standalone <code>.html</code> is the fully-formed source. The
+other two derive from it:</p>
+<ul>
+<li>The <code>.njk</code> is a body-fragment view: same <code>&lt;style&gt;</code> block and body
+markup, with the document-level wrappers (<code>DOCTYPE</code>, <code>&lt;html&gt;</code>,
+<code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>, the inline skip link) and the inner
+<code>&lt;main id=&quot;main-content&quot;&gt;</code> removed — <code>site.njk</code> provides those. It
+adds Eleventy front-matter (title, description, <code>headExtras</code> for fonts
+<ul>
+<li>Leaflet, the <code>subscribeTopic</code> for the cheetochopsticks subscribe
+block).</li>
+</ul>
+</li>
+<li>The <code>dversion/</code> build reads from each <code>.html</code> directly. Its
+<code>stripPatterns</code> config peels off the same document-level wrappers,
+re-extracts <code>&lt;style&gt;</code> / <code>&lt;script&gt;</code> blocks, and wraps the result in a
+namespaced <code>&lt;div class=&quot;cc-…&quot;&gt;</code> with <code>@scope</code> CSS and IIFE JS for
+drop-in safety on any host CMS.</li>
+</ul>
+<h2>When you edit a page</h2>
+<p>Update the <code>.html</code> first, then mirror the change to the other two:</p>
+<ol>
+<li>
+<p><strong>Edit the canonical <code>.html</code></strong> (<code>pikes-peak-regional-eop.html</code> or
+<code>pproem-alerts.html</code>).</p>
+</li>
+<li>
+<p><strong>Re-sync the matching <code>.njk</code></strong> — copy any changes inside the
+<code>&lt;style&gt;</code> block and the body content (between <code>&lt;body&gt;</code> and <code>&lt;/body&gt;</code>,
+skipping the skip link, with the inner <code>&lt;main id=&quot;main-content&quot;&gt;</code>
+replaced by <code>&lt;div class=&quot;eop-main&quot;&gt;</code> for the EOP page or
+<code>&lt;div class=&quot;alerts-main&quot;&gt;</code> for the alerts page). Front-matter stays.</p>
+</li>
+<li>
+<p><strong>Rebuild the DVersion</strong> — one command rebuilds both partials:</p>
+<pre><code class="language-sh">node microsites/shared/PikesPeakEmergencyManagement/dversion/build.mjs
+</code></pre>
+</li>
+</ol>
+<p>The <code>.njk</code> sync is manual (a small copy/paste). If it becomes a
+maintenance burden, the dversion library can be extended to also emit
+<code>.njk</code> variants — but with two pages, the duplication cost is low.</p>
+<h2>DVersion conventions</h2>
+<p>Follows the standard pattern documented in
+<a href="../../_dversion-build.mjs"><code>microsites/_dversion-build.mjs</code></a> and used
+by the forestry, CitizenConnect, traffic SafetyPlan, and police DVersion
+bundles:</p>
+<ul>
+<li><strong>Namespace class.</strong> Root is <code>&lt;div class=&quot;cc-pikes-peak-eop&quot;&gt;</code> or
+<code>&lt;div class=&quot;cc-pproem-alerts&quot;&gt;</code>. Add the matching <code>--themed</code>
+modifier for the source's editorial palette.</li>
+<li><strong>CSS isolation.</strong> Whole stylesheet wrapped in <code>@scope (.cc-…)</code>;
+design tokens hoisted outside <code>@scope</code> to set custom properties on
+the partial root.</li>
+<li><strong>JS isolation.</strong> Behaviors wrapped in an IIFE; <code>document.*</code> lookups
+proxied to resolve against the partial root. Inline <code>onclick=</code> /
+<code>onsubmit=</code> handlers auto-detected and exposed on <code>window</code>.</li>
+<li><strong>Build artifacts.</strong> <code>dversion/dist/</code> is the deliverable.
+<code>dversion/preview/&lt;page&gt;.html</code> is a self-contained harness that
+simulates a host page with a default/themed toggle.</li>
+</ul>
+<p>See <a href="dversion/README.md"><code>dversion/README.md</code></a> for both <strong>Drupal</strong> and
+<strong>WordPress</strong> integration instructions (including WPBakery / Visual
+Composer steps).</p>
+<h2>Live data sources (alerts page)</h2>
+<p>The alerts page reads from four CORS-friendly public endpoints. No
+auth, no API keys, no proxy — they're called directly from the browser
+in production:</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Purpose</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>https://services3.arcgis.com/4RbSpZqACDsi1hHk/arcgis/rest/services/Hazard_Boundary/FeatureServer/0</code></td>
+<td>Active hazard zones</td>
+<td>PPROEM-hosted ArcGIS feature service. The same feed their public viewer at <a href="https://experience.arcgis.com/experience/5a3a0e8317ca46689371b0f116a3231b/">experience.arcgis.com</a> reads. Filter <code>where=Status='Active'</code> for current zones; fields include <code>BoundaryType</code>, <code>Event</code>, <code>Status</code>, <code>Acres</code>, <code>Comments</code>, <code>Notes</code>.</td>
+</tr>
+<tr>
+<td><code>https://gisservices.elpasoco.com/arcgis2/rest/services/HubPublic/Parcels/MapServer/0</code></td>
+<td>El Paso County parcels</td>
+<td>Public Hub layer. Spatial query at a lat/long returns the parcel <code>PARCEL</code> ID and a <code>HYPERLINK</code> to the Spatialest property page.</td>
+</tr>
+<tr>
+<td><code>https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates</code></td>
+<td>Address → lat/long</td>
+<td>ArcGIS World Geocoder. Free for anonymous, browser-side use. We constrain <code>searchExtent</code> to the El Paso County bbox so addresses geocode locally.</td>
+</tr>
+<tr>
+<td><code>https://member.everbridge.net/1772417038942752/new</code></td>
+<td>Peak Alerts opt-in</td>
+<td>Where the <strong>subscribe</strong> modal sends users. PPROEM's actual push channel is Everbridge / Peak Alerts; it has no public pull API, so the page reads zone status from the ArcGIS feed (above) but writes subscriptions to Everbridge.</td>
+</tr>
+</tbody>
+</table>
+<h3>How PPROEM publishes alerts</h3>
+<p>PPROEM has two parallel alert channels:</p>
+<ul>
+<li><strong>Push (opt-in):</strong> <a href="https://member.everbridge.net/1772417038942752/new">Peak Alerts</a> on Everbridge — SMS, email, voice. Subscribers set their address and receive alerts that affect that location. No public pull API; the alert content lives inside Everbridge's tenant.</li>
+<li><strong>Pull (public-facing):</strong> the <a href="https://experience.arcgis.com/experience/5a3a0e8317ca46689371b0f116a3231b/">PPROEM Public Viewer</a> ArcGIS Experience reads from the <code>Hazard_Boundary</code>, <code>Road_Closure</code>, <code>Shelter_Public_View</code> feature services on <code>services3.arcgis.com/4RbSpZqACDsi1hHk/</code>. PPROEM staff edit features in those layers when they activate / clear a zone. Edits propagate to anyone querying the service in seconds.</li>
+</ul>
+<p>The alerts page on this site reads the <strong>pull</strong> side because it's the only machine-readable source. The Subscribe button routes users to the <strong>push</strong> side because that's the official notification channel.</p>
+<h3>Fallback behavior</h3>
+<p>If the live hazard fetch fails (network down, CORS hiccup, service outage), the page falls back to a small mock zone set so the page still demonstrates evacuation / warning / advisory / clear states. The status banner at the top of the page makes the data source explicit:</p>
+<ul>
+<li><strong>green dot, &quot;Live data — N active hazard zones&quot;</strong> — pulled from PPROEM</li>
+<li><strong>green dot, &quot;Live data — no active hazard zones&quot;</strong> — query succeeded but returned zero (a clear day)</li>
+<li><strong>red dot, &quot;Demo data — couldn't reach the live PPROEM hazard feed&quot;</strong> — fallback in effect</li>
+</ul>
+<p>Auto-refreshes every 5 minutes.</p>
+<h2>Source notes</h2>
+<p>Unlike the other DVersion sources in this repo (which are <code>.njk</code> body
+fragments rendered by Eleventy's <code>site.njk</code> layout), the PPROEM source
+pages are complete HTML documents. Each exists in two forms — a
+standalone <code>.html</code> AND a <code>.njk</code> that renders through <code>site.njk</code>. The
+DVersion build reads the <code>.html</code>; its <code>stripPatterns</code> config peels off
+the document-level wrappers (DOCTYPE, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>,
+skip link) so the partial body is only the page content. Style and
+script blocks are extracted <em>before</em> the strip patterns run, so they
+survive the wrapper removal.</p>
+<p>The alerts page additionally loads Leaflet (<code>leaflet.css</code> +
+<code>leaflet.js</code>) from unpkg. Those <code>&lt;link&gt;</code> and <code>&lt;script&gt;</code> tags are
+stripped along with <code>&lt;head&gt;</code>. The standalone <code>.html</code> keeps them inline
+and works as-is. The <code>.njk</code> puts them in <code>headExtras</code> so site.njk
+includes them. The DVersion bundle drops them — the host CMS must
+re-add Leaflet via its asset pipeline (Drupal library YAML or
+<code>wp_enqueue_*</code> — see the dversion README).</p>

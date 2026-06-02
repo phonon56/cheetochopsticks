@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DATP Public Comment — Open Reading Room · CheetoChopsticks</title>
+<meta name="description" content="An accessible reading room for the City of Colorado Springs Digital Accessibility Transition Plan (Draft, 2026), with a downloadable PDF and twelve structured public comments.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ─────────────────────────────────────────────────────────
+     Palette + type — matches CheetoChopsticks family
+     ───────────────────────────────────────────────────────── */
+  :root {
+    --paper: #faf8f3;
+    --paper-2: #fff;
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-muted: #5e5b56;
+    --rule: #e2ddd1;
+    --rule-soft: #efeae0;
+    --navy: #1f3a5f;
+    --navy-deep: #14283f;
+    --navy-tint: #e8eef5;
+    --gold: #c8a84b;
+    --gold-tint: #f7efd6;
+    --warn: #9c4a14;
+    --warn-tint: #fbeee0;
+    --good: #2f6a3a;
+    --good-tint: #e3efd9;
+
+    --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+    --font-body: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* visible focus, always */
+  :focus-visible {
+    outline: 2.5px solid var(--gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     Skip link
+     ───────────────────────────────────────────────────────── */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 8px;
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 16px;
+    text-decoration: none;
+    font-weight: 600;
+    z-index: 100;
+    border-radius: 0 0 4px 0;
+  }
+  .skip-link:focus {
+    left: 0;
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     Header (CheetoChopsticks chrome)
+     ───────────────────────────────────────────────────────── */
+  .site-header {
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .site-header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .wordmark {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .wordmark em {
+    font-style: italic;
+    color: var(--navy);
+    font-weight: 400;
+  }
+  .site-nav {
+    display: flex;
+    gap: 24px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .site-nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 4px 0;
+    border-bottom: 1.5px solid transparent;
+    transition: border-color .15s, color .15s;
+  }
+  .site-nav a:hover, .site-nav a:focus-visible {
+    color: var(--navy);
+    border-bottom-color: var(--gold);
+  }
+  .site-nav a[aria-current="page"] {
+    color: var(--navy);
+    border-bottom-color: var(--navy);
+  }
+  @media (max-width: 720px) {
+    .site-nav { display: none; }
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     Hero
+     ───────────────────────────────────────────────────────── */
+  .hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 64px 32px 32px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 28px;
+    height: 1.5px;
+    background: var(--gold);
+    flex: 0 0 auto;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin-bottom: 20px;
+    max-width: 22ch;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--navy);
+    font-weight: 400;
+  }
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin-bottom: 32px;
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    max-width: 720px;
+  }
+  @media (max-width: 720px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+  .stat {
+    border-left: 2px solid var(--navy);
+    padding: 4px 0 4px 14px;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-lab {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     Disclosure note
+     ───────────────────────────────────────────────────────── */
+  .disclosure {
+    max-width: 1100px;
+    margin: 24px auto 0;
+    padding: 16px 32px;
+  }
+  .disclosure-inner {
+    background: var(--gold-tint);
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    border-radius: 2px;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .disclosure strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .disclosure a {
+    color: var(--navy);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--navy);
+  }
+  .disclosure a:hover { border-bottom-style: solid; }
+
+  /* ─────────────────────────────────────────────────────────
+     Main / sections
+     ───────────────────────────────────────────────────────── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 32px 64px;
+  }
+
+  .section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    width: 22px;
+    height: 1.5px;
+    background: var(--gold);
+    flex: 0 0 auto;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .section-title em {
+    font-style: italic;
+    color: var(--navy);
+    font-weight: 400;
+  }
+  .section-sub {
+    font-size: 0.96rem;
+    color: var(--ink-soft);
+    max-width: 64ch;
+    margin-bottom: 24px;
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     Document viewer (accordion)
+     ───────────────────────────────────────────────────────── */
+  .doc-section {
+    margin-bottom: 56px;
+  }
+
+  details.doc-viewer {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: box-shadow .15s;
+  }
+  details.doc-viewer[open] {
+    box-shadow: 0 2px 12px rgba(20,18,12,.06);
+  }
+  details.doc-viewer summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 20px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: var(--paper-2);
+    transition: background .15s;
+  }
+  details.doc-viewer summary::-webkit-details-marker { display: none; }
+  details.doc-viewer summary:hover {
+    background: var(--rule-soft);
+  }
+  details.doc-viewer summary:focus-visible {
+    outline-offset: -2px;
+  }
+  .summary-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+  }
+  .summary-icon {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--navy-tint);
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 600;
+    transition: transform .25s;
+  }
+  details.doc-viewer[open] .summary-icon {
+    background: var(--navy);
+    color: #fff;
+    transform: rotate(90deg);
+  }
+  .summary-text {
+    min-width: 0;
+  }
+  .summary-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+  }
+  .summary-meta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+  }
+  .summary-state {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex: 0 0 auto;
+  }
+  details.doc-viewer[open] .summary-state .closed-label,
+  details.doc-viewer:not([open]) .summary-state .open-label {
+    display: none;
+  }
+
+  .doc-actions {
+    border-top: 1px dashed var(--rule);
+    padding: 18px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    background: var(--paper);
+  }
+  .btn-pdf {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--navy);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+    border-radius: 3px;
+    border: 1.5px solid var(--navy);
+    transition: background .15s;
+  }
+  .btn-pdf:hover, .btn-pdf:focus-visible {
+    background: var(--navy-deep);
+  }
+  .btn-pdf-secondary {
+    background: var(--paper-2);
+    color: var(--navy);
+  }
+  .btn-pdf-secondary:hover, .btn-pdf-secondary:focus-visible {
+    background: var(--navy-tint);
+    color: var(--navy-deep);
+  }
+  .btn-pdf-icon {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .doc-actions-meta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+    margin-left: auto;
+  }
+  @media (max-width: 600px) {
+    .doc-actions-meta { margin-left: 0; width: 100%; }
+  }
+
+  .doc-frame-wrap {
+    border-top: 1px solid var(--rule);
+    background: var(--rule-soft);
+    padding: 0;
+  }
+  .doc-frame {
+    width: 100%;
+    height: 720px;
+    border: 0;
+    display: block;
+    background: #fff;
+  }
+  @media (max-width: 720px) {
+    .doc-frame { height: 520px; }
+  }
+  .doc-frame-fallback {
+    padding: 24px;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    background: var(--paper-2);
+    text-align: center;
+  }
+  .doc-frame-fallback strong { color: var(--ink); }
+
+  /* ─────────────────────────────────────────────────────────
+     Comment cards (analytical comments)
+     ───────────────────────────────────────────────────────── */
+  .comments-section { margin-bottom: 56px; }
+
+  .comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  article.comment {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--navy);
+    padding: 22px 26px;
+    border-radius: 3px;
+    transition: box-shadow .15s;
+  }
+  article.comment:hover {
+    box-shadow: 0 2px 8px rgba(20,18,12,.06);
+  }
+  @media (max-width: 600px) {
+    article.comment { padding: 20px 18px; }
+  }
+
+  .comment-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: baseline;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .comment-num {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex: 0 0 auto;
+    padding-top: 4px;
+  }
+  .comment-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    flex: 1;
+    min-width: 0;
+  }
+  .badge-page {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    background: var(--navy-tint);
+    color: var(--navy);
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-weight: 600;
+    flex: 0 0 auto;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+
+  .comment-block {
+    margin-bottom: 12px;
+  }
+  .comment-block:last-of-type { margin-bottom: 0; }
+  .block-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .block-label-says { color: var(--ink-muted); }
+  .block-label-concern { color: var(--warn); }
+  .block-label-fix { color: var(--good); }
+
+  .block-body {
+    font-size: 0.94rem;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .block-body p { margin-bottom: 0.6em; }
+  .block-body p:last-child { margin-bottom: 0; }
+
+  /* highlight bar on the suggested-revision block */
+  .comment-block.is-fix {
+    background: var(--good-tint);
+    border-left: 2px solid var(--good);
+    padding: 12px 14px;
+    border-radius: 2px;
+    margin-top: 14px;
+  }
+  .comment-block.is-fix .block-label-fix { color: var(--good); }
+
+  /* ─────────────────────────────────────────────────────────
+     ADA contact panel
+     ───────────────────────────────────────────────────────── */
+  .ada-panel {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 4px;
+    padding: 32px 32px;
+    margin-bottom: 56px;
+  }
+  .ada-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ada-eyebrow::before {
+    content: '';
+    width: 22px;
+    height: 1.5px;
+    background: var(--gold);
+    flex: 0 0 auto;
+  }
+  .ada-title {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .ada-sub {
+    font-size: 0.96rem;
+    color: rgba(255,255,255,0.78);
+    max-width: 60ch;
+    margin-bottom: 24px;
+  }
+  .ada-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 720px) {
+    .ada-grid { grid-template-columns: 1fr; }
+  }
+  .ada-cell h3 {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .ada-cell .ada-value {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+  .ada-cell .ada-value a {
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 1px;
+  }
+  .ada-cell .ada-value a:hover, .ada-cell .ada-value a:focus-visible {
+    border-bottom-width: 2px;
+  }
+  .ada-cell .ada-note {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.6);
+    margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     Footer
+     ───────────────────────────────────────────────────────── */
+  .site-footer {
+    border-top: 1px solid var(--rule);
+    background: var(--paper);
+    margin-top: 48px;
+  }
+  .site-footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 32px 32px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 32px;
+  }
+  @media (max-width: 720px) {
+    .site-footer-inner { grid-template-columns: 1fr; gap: 24px; }
+  }
+  .footer-col h3 {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .footer-col p, .footer-col li {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col a {
+    color: var(--navy);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--navy);
+  }
+  .footer-col a:hover { border-bottom-style: solid; }
+  .footer-bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 32px 40px;
+    border-top: 1px dashed var(--rule);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* visually-hidden helper */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to public comment</a>
+
+<!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+<header class="site-header" role="banner">
+  <div class="site-header-inner">
+    <a href="/" class="wordmark">cheetochopsticks · <em>The Dais</em></a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/cos-traffic-hub.html">Dashboard</a>
+      <a href="/sap-comments.html">SAP Comments</a>
+      <a href="#" aria-current="page">DATP Comment</a>
+      <a href="/about">About</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+<section class="hero" aria-labelledby="hero-title">
+  <p class="hero-eyebrow">Public record · open reading room · DATP draft</p>
+  <h1 class="hero-title" id="hero-title">
+    The plan, <em>read in one place</em><br>with a public comment beneath it
+  </h1>
+  <p class="hero-sub">
+    The City of Colorado Springs has opened public comment on its 2026 Digital Accessibility Transition Plan.
+    The plan itself is a 65-page PDF; this page lets you read it inline or download it, and lays a structured
+    twelve-item comment beneath. Submit your own comment to the City directly using the addresses at the bottom.
+  </p>
+
+  <div class="hero-stats" role="list" aria-label="Reading room summary">
+    <div class="stat" role="listitem">
+      <div class="stat-num">12</div>
+      <div class="stat-lab">Comments</div>
+    </div>
+    <div class="stat" role="listitem">
+      <div class="stat-num">65</div>
+      <div class="stat-lab">Plan pages</div>
+    </div>
+    <div class="stat" role="listitem">
+      <div class="stat-num">Jan 26</div>
+      <div class="stat-lab">Comment period ends</div>
+    </div>
+    <div class="stat" role="listitem">
+      <div class="stat-num">Apr 26</div>
+      <div class="stat-lab">DOJ rule deadline</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ DISCLOSURE ═══════════════════════════ -->
+<aside class="disclosure" aria-label="About this page">
+  <div class="disclosure-inner">
+    <strong>About this reading room.</strong>
+    This is a courtesy mirror. The plan PDF is hosted by the City at
+    <a href="https://coloradosprings.gov/document/digital-accessibility-transition-plan.pdf" rel="noopener">coloradosprings.gov</a>;
+    public comment is collected by the City's Office of Accessibility, not here. The twelve items below are a single
+    submitter's structured comment, drafted to be read alongside the plan. <strong>This page is not the official record</strong> —
+    it is a reading aid intended to make the document and one set of comments easier to compare side by side.
+    To submit your own comment, use the <a href="#ada-contact">Office of Accessibility contact</a> further down the page.
+  </div>
+</aside>
+
+<!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+<main id="main-content" tabindex="-1">
+
+  <!-- ─────────── DOCUMENT VIEWER ─────────── -->
+  <section class="doc-section" aria-labelledby="doc-section-title">
+    <p class="section-eyebrow">Step one</p>
+    <h2 class="section-title" id="doc-section-title">Read the <em>plan itself</em></h2>
+    <p class="section-sub">
+      Open the document below to read the plan inline, or download the PDF if you'd rather read offline or with your own assistive
+      technology. The PDF is tagged, has a structure tree, and declares English as its language; the title-bar metadata is
+      empty, which is a minor issue worth noting.
+    </p>
+
+    <details class="doc-viewer" id="doc-viewer">
+      <summary aria-controls="doc-viewer-content">
+        <span class="summary-left">
+          <span class="summary-icon" aria-hidden="true">›</span>
+          <span class="summary-text">
+            <span class="summary-title">Digital Accessibility Transition Plan (Draft, 2026)</span>
+            <span class="summary-meta">PDF · 65 pages · ~0.8 MB · tagged · lang=EN-US</span>
+          </span>
+        </span>
+        <span class="summary-state" aria-hidden="true">
+          <span class="closed-label">Open viewer</span>
+          <span class="open-label">Close viewer</span>
+        </span>
+      </summary>
+
+      <div id="doc-viewer-content">
+        <div class="doc-actions">
+          <a class="btn-pdf" href="./digital-accessibility-transition-plan.pdf" download>
+            <span class="btn-pdf-icon" aria-hidden="true">↓</span>
+            <span>Download PDF</span>
+          </a>
+          <a class="btn-pdf btn-pdf-secondary" href="https://coloradosprings.gov/document/digital-accessibility-transition-plan.pdf" rel="noopener">
+            <span class="btn-pdf-icon" aria-hidden="true">↗</span>
+            <span>Open on coloradosprings.gov</span>
+          </a>
+          <span class="doc-actions-meta">Last updated by City: Dec 8, 2025</span>
+        </div>
+
+        <div class="doc-frame-wrap">
+          <iframe
+            class="doc-frame"
+            src="./digital-accessibility-transition-plan.pdf#view=FitH"
+            title="Digital Accessibility Transition Plan, full PDF, 65 pages"
+            loading="lazy">
+          </iframe>
+          <noscript>
+            <div class="doc-frame-fallback">
+              <strong>Inline preview unavailable in your browser.</strong>
+              Use the download button above to read the PDF locally.
+            </div>
+          </noscript>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ─────────── COMMENTS ─────────── -->
+  <section class="comments-section" aria-labelledby="comments-section-title">
+    <p class="section-eyebrow">Step two</p>
+    <h2 class="section-title" id="comments-section-title">Twelve <em>structured comments</em></h2>
+    <p class="section-sub">
+      Each comment cites the page it addresses, paraphrases what the plan currently says, states the concern, and proposes
+      a specific revision. The intent is for City staff to be able to address each item as a discrete revision request.
+    </p>
+
+    <div class="comment-list" id="comment-list" role="list">
+      <!-- comments injected from JSON below -->
+    </div>
+  </section>
+
+  <!-- ─────────── ADA CONTACT ─────────── -->
+  <section class="ada-panel" id="ada-contact" aria-labelledby="ada-title">
+    <p class="ada-eyebrow">Submit your own comment</p>
+    <h2 class="ada-title" id="ada-title">City of Colorado Springs · Office of Accessibility</h2>
+    <p class="ada-sub">
+      The comment period on the Draft Digital Accessibility Transition Plan is open through the end of January 2026.
+      Submit feedback through any of the channels below — the City has committed to providing all feedback to the Web
+      Accessibility Coordinator and the Accessibility Prioritization Committee.
+    </p>
+
+    <div class="ada-grid">
+      <div class="ada-cell">
+        <h3>Email</h3>
+        <p class="ada-value"><a href="mailto:ADAcompliance@ColoradoSprings.gov">ADAcompliance@ColoradoSprings.gov</a></p>
+        <p class="ada-note">Preferred for written comments and attachments.</p>
+      </div>
+      <div class="ada-cell">
+        <h3>Phone</h3>
+        <p class="ada-value"><a href="tel:+17193855175">719-385-5175</a></p>
+        <p class="ada-note">Dial 7-1-1 for Colorado Relay.</p>
+      </div>
+      <div class="ada-cell">
+        <h3>Mail</h3>
+        <p class="ada-value">Office of Accessibility<br>City of Colorado Springs<br>PO Box 1575, Mail Code 325<br>Colorado Springs, CO 80901-1575</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer-inner">
+
+    <div class="footer-col">
+      <h3>About this reading room</h3>
+      <p>
+        A residents' courtesy mirror of the City of Colorado Springs' 2026 Digital Accessibility Transition Plan
+        and one set of structured public comments. Built so the document and one critique can be read side by side.
+        Not the official record.
+      </p>
+      <p style="margin-top: 12px;">
+        Source: <a href="https://coloradosprings.gov/document/digital-accessibility-transition-plan.pdf" rel="noopener">DATP PDF</a> ·
+        <a href="https://coloradosprings.gov/office-accessibility/page/accessible-information-technology" rel="noopener">Accessible Information Technology page</a>
+      </p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Project</h3>
+      <ul>
+        <li><a href="/cos-traffic-hub.html">Traffic Dashboard</a></li>
+        <li><a href="/sap-comments.html">SAP Comments</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/about#methods">Methods</a></li>
+        <li><a href="/about#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>City references</h3>
+      <ul>
+        <li><a href="https://coloradosprings.gov/accessibility" rel="noopener">Office of Accessibility</a></li>
+        <li><a href="https://coloradosprings.gov/TitleIIADA" rel="noopener">Title II ADA</a></li>
+        <li><a href="https://coloradosprings.gov/project/ada-title-ii-transition-plan" rel="noopener">Transition plans</a></li>
+        <li><a href="https://coloradosprings.gov/office-accessibility/page/grievance-procedure-ada-section-504" rel="noopener">ADA / Section 504 grievance</a></li>
+        <li><a href="https://coloradosprings.gov/gocos" rel="noopener">GoCOS!</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 StorySeed Studios · The Dais · Colorado Springs</span>
+    <span>Reading room generated May 6, 2026</span>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════ DATA + LOGIC ═══════════════════════════ -->
+<script id="comments-data" type="application/json">
+[
+  {
+    "n": 1,
+    "title": "Reconsider the 50-page document remediation cutoff",
+    "pageRef": "pp. 20–21, 25",
+    "planSays": "The plan establishes that documents under 50 pages will be remediated as a matter of course, while documents over 50 pages will not be remediated by default; instead, those documents carry a disclaimer pointing readers to request an accessible version through the Office of Accessibility.",
+    "concern": "The City's most consequential public documents — annual budgets, the comprehensive plan, master plans, capital improvement plans, environmental impact reports, election guides — are routinely longer than 50 pages. A request-only policy applied to actively-used documents conflicts with the DOJ's April 2024 Title II final rule, which requires public entities serving populations of 50,000 or more (Colorado Springs is approximately 480,000) to make web content accessible by April 24, 2026, with no general size-based exemption for documents in active use.",
+    "fix": "Replace the page-count threshold with a use-based threshold. Documents actively used in a public program, service, or activity should be remediated regardless of length; the request-only pathway should apply only to true legacy or archived content no longer in active circulation."
+  },
+  {
+    "n": 2,
+    "title": "Narrow the \"Low-Impact or Redundant Documents\" exemption category",
+    "pageRef": "p. 12",
+    "planSays": "The plan exempts a category of documents identified by the Accessibility Prioritization Committee as low-impact or redundant. The listed examples include blueprints, architectural drawings, scanned historical publications, handwritten correspondence, technical drawings, and site plans, development plans, and maps.",
+    "concern": "Site plans, development plans, and maps are precisely the documents residents need in order to participate meaningfully in zoning hearings, neighborhood planning, and development review. Categorically classifying these as low-impact creates a structural barrier to civic participation for residents with disabilities.",
+    "fix": "Remove site plans, development plans, and maps from the default low-impact list. Where these document types are difficult to remediate, commit to providing accessible alternative formats (text descriptions, structured data tables, or accessible HTML alternatives) rather than treating them as exempt."
+  },
+  {
+    "n": 3,
+    "title": "Reconsider the blanket exemption for pre-existing electronic documents",
+    "pageRef": "p. 12, item 5(g)",
+    "planSays": "The plan lists \"preexisting conventional electronic documents\" as a category of low-impact or redundant content that may be excluded from accessibility requirements except upon request.",
+    "concern": "This phrasing is broader than the federal rule it implements. The DOJ Title II final rule provides specific, narrow exceptions tied to whether content is currently in use. A blanket exemption for all pre-existing conventional documents, regardless of current use status, exceeds those federal exceptions.",
+    "fix": "Replace the blanket exemption with the federal rule's actual standard, which conditions the exception on current use rather than creation date alone. Cite the relevant federal provisions directly so the City's exemption framework cannot be read as broader than the federal floor."
+  },
+  {
+    "n": 4,
+    "title": "Resolve the governance gap of an inactive Accessibility Prioritization Committee",
+    "pageRef": "pp. 10–12",
+    "planSays": "The plan acknowledges that the Accessibility Prioritization Committee is being relaunched, with draft bylaws and an organizational structure still under development. The same plan assigns this committee responsibility for compliance monitoring, content impact evaluation, and the determination of low-priority exemptions.",
+    "concern": "Substantive authority is being assigned to a body that does not yet exist in operational form. Until the committee is constituted, with named members and adopted bylaws, the plan does not identify who is making low-priority exemption determinations, on what authority, or how those decisions can be reviewed.",
+    "fix": "Add an interim provision identifying which existing official is authorized to make exemption determinations until the committee is operational, and add a target date for the committee's first meeting. Once seated, publish bylaws, membership, and meeting cadence on the same page that hosts this transition plan."
+  },
+  {
+    "n": 5,
+    "title": "Address the DOJ Title II final rule (April 2024) by name and by deadline",
+    "pageRef": "p. 7",
+    "planSays": "The plan states that \"in 2026, new digital accessibility guidance will be added to the ADA\" and treats this guidance as forward-looking.",
+    "concern": "The DOJ Title II final rule on web and mobile accessibility was finalized in April 2024, not 2026. For public entities serving populations of 50,000 or more, the compliance deadline is April 24, 2026; for smaller entities, April 24, 2027. The plan does not explicitly address the City's posture toward the April 2026 federal deadline.",
+    "fix": "Correct the timeline reference. State explicitly that the DOJ rule was finalized in April 2024 and that the City of Colorado Springs is subject to the April 24, 2026 compliance deadline. State the City's position on whether it will meet that deadline and, if a good-faith extension applies, identify the basis."
+  },
+  {
+    "n": 6,
+    "title": "Commit to a vendor accessibility review staffing plan",
+    "pageRef": "pp. 25–27, 36",
+    "planSays": "The plan describes the VPAT review process and notes that the City manages a portfolio of more than 600 digital applications. The Web Accessibility Coordinator leads VPAT review with support from the Digital Accessibility Team.",
+    "concern": "The City's own Q3 2024 quarterly progress report estimated that conducting accessibility reviews on roughly 600 ICT vendors would require approximately 2,400 hours per year — more than one full-time staff position. The transition plan does not commit to additional staffing, a target backlog reduction percentage, or a date by which the existing review backlog will be cleared.",
+    "fix": "Add a section that quantifies the current VPAT review backlog, sets a target backlog-reduction percentage and date, and identifies whether additional staffing or third-party review support will be sought."
+  },
+  {
+    "n": 7,
+    "title": "Commit to closing the gap between MAMM inventory and staff survey scores",
+    "pageRef": "pp. 39–65",
+    "planSays": "The plan reports an inventory maturity score of 4.03 out of 5 and a staff survey score of 2.88 out of 4. The plan describes this difference as a perceptual gap between strategic progress and staff experience.",
+    "concern": "The plan acknowledges the gap but does not commit specific actions, owners, or dates to close it. The lowest-scoring survey items — budgeting, internal-tool accessibility checks, design-and-development integration, and accessible hiring — each warrant their own remediation track.",
+    "fix": "For each of the four lowest-scoring survey items, add a section identifying the responsible team, a target score for the next survey period, and a small number of measurable milestones. Re-administer the survey on a fixed cadence and publish the comparison alongside this transition plan."
+  },
+  {
+    "n": 8,
+    "title": "Reconcile internal counts of documents and applications",
+    "pageRef": "pp. 18, 19, 34, 36, 57",
+    "planSays": "Different sections of the plan report different counts: ~3,000 documents and 40,000+ pages evaluated since 2022 (p. 18); ~7,000 documents and 85,000 pages remediated since 2020 (p. 19); ~90 external-facing applications evaluated (p. 34); 600+ digital applications in the portfolio (p. 36); and over 80 external-facing applications evaluated (p. 57).",
+    "concern": "These figures do not reconcile internally. The 7,000-since-2020 figure cannot be squared with the City's own quarterly progress reports, which show a year-end-2024 cumulative total of approximately 600 documents. A reviewer cannot tell which figure represents the most current state.",
+    "fix": "Add a single, dated reconciliation section at the front of the plan stating, as of a specific reporting date, the total documents evaluated, total documents remediated, total applications evaluated, and total applications in the City portfolio. Update whenever the plan is republished."
+  },
+  {
+    "n": 9,
+    "title": "Define a turnaround time for accessible-format requests",
+    "pageRef": "pp. 20, 25, 27–29",
+    "planSays": "The plan repeatedly invites people to request accessible versions of documents, captioning of recorded content, and other accommodations through the Office of Accessibility, but does not specify how long those requests will take to fulfill.",
+    "concern": "Without a defined response time, the request-only pathway has no service-level commitment. Delay in providing access is itself a form of denial of access; this is particularly significant for time-sensitive content such as election materials, public-hearing notices, and emergency communications.",
+    "fix": "Add a defined turnaround commitment — for example, five business days for routine documents and 24 hours for time-sensitive content — with a documented exception process for genuinely complex remediation. Track and report the average and 95th-percentile fulfillment time in each quarterly progress report."
+  },
+  {
+    "n": 10,
+    "title": "Add an appeal mechanism for low-priority exemption decisions",
+    "pageRef": "pp. 12, 27–28",
+    "planSays": "The plan identifies the Accessibility Prioritization Committee as the body that determines whether content qualifies as low-priority and exempt. The grievance procedure references the City's existing ADA / Section 504 grievance pathway.",
+    "concern": "There is no described process by which a person with a disability can challenge a low-priority classification or appeal an exemption decision. The general grievance procedure may apply by default, but the specific intersection between exemption decisions and grievance rights is not stated.",
+    "fix": "Add a short paragraph stating that any low-priority classification can be challenged through the City's ADA / Section 504 grievance procedure, that a successful challenge requires the City to remediate or provide an accessible alternative, and that the exemption determination is subject to redetermination upon any material change in how the content is used."
+  },
+  {
+    "n": 11,
+    "title": "Resolve the audit cadence ambiguity",
+    "pageRef": "pp. 12, 23",
+    "planSays": "Page 12 describes the audit cadence as \"routine\" and notes this changed from a previous \"annual\" requirement. Page 23 separately describes a biannual audit process for public-facing digital documents.",
+    "concern": "Routine is less specific than annual, and the relationship between the page 12 routine audit and the page 23 biannual audit is not stated. Moving from a defined cadence to an undefined one is, in practice, a regression in oversight rigor regardless of intent.",
+    "fix": "Adopt a single, named audit cadence and apply it consistently throughout the plan. If the intended cadence is biannual document audits plus quarterly progress reporting, say so plainly and remove the \"routine\" language from page 12."
+  },
+  {
+    "n": 12,
+    "title": "Define a remedy for vendor non-compliance",
+    "pageRef": "pp. 6, 33–36",
+    "planSays": "The plan describes procurement language requiring vendors to remediate accessibility issues at no additional cost and to indemnify the City. It cites HB 25-1152, which makes vendors legally liable for accessibility failures.",
+    "concern": "If a vendor refuses to remediate, the plan does not describe what the City will do. Termination procedures, contract escalation paths, and replacement timelines are not specified. Liability without a defined remedy does not help a resident currently waiting on access to an inaccessible product.",
+    "fix": "Add a vendor non-compliance remedy section describing escalation steps, the threshold and timeline for contract termination, and the interim accommodation the City will provide to residents while a non-compliant product is remediated or replaced."
+  }
+]
+</script>
+
+<script>
+(() => {
+  'use strict';
+  const RAW = JSON.parse(document.getElementById('comments-data').textContent);
+  const list = document.getElementById('comment-list');
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function paragraphs(text) {
+    return String(text).split(/\n\n+/).filter(Boolean)
+      .map(p => '<p>' + esc(p) + '</p>').join('');
+  }
+
+  function render(c) {
+    return `
+      <article class="comment" role="listitem" aria-labelledby="c-${c.n}-title">
+        <header class="comment-head">
+          <span class="comment-num">Comment ${c.n}</span>
+          <h3 class="comment-title" id="c-${c.n}-title">${esc(c.title)}</h3>
+          <span class="badge-page" aria-label="Plan reference: ${esc(c.pageRef)}">${esc(c.pageRef)}</span>
+        </header>
+
+        <div class="comment-block">
+          <div class="block-label block-label-says">What the plan says</div>
+          <div class="block-body">${paragraphs(c.planSays)}</div>
+        </div>
+
+        <div class="comment-block">
+          <div class="block-label block-label-concern">Concern</div>
+          <div class="block-body">${paragraphs(c.concern)}</div>
+        </div>
+
+        <div class="comment-block is-fix">
+          <div class="block-label block-label-fix">Suggested revision</div>
+          <div class="block-body">${paragraphs(c.fix)}</div>
+        </div>
+      </article>
+    `;
+  }
+
+  list.innerHTML = RAW.map(render).join('');
+})();
+</script>
+
+</body>
+</html>

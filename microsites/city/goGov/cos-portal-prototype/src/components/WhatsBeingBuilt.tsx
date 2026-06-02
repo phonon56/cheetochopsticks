@@ -10,24 +10,12 @@ import {
   type ProjectKind,
   type ProjectStatus,
 } from '../data/whatsBeingBuilt';
-import { JURISDICTION_SHORT } from '../data/facets';
-import type { Jurisdiction } from '../types';
-
-const JURISDICTION_COLORS: Record<Jurisdiction, string> = {
-  city: 'bg-blue-100 text-blue-900 border-blue-300',
-  county: 'bg-emerald-100 text-emerald-900 border-emerald-300',
-  state: 'bg-purple-100 text-purple-900 border-purple-300',
-  federal: 'bg-indigo-100 text-indigo-900 border-indigo-300',
-  regional: 'bg-amber-100 text-amber-900 border-amber-300',
-  utility: 'bg-orange-100 text-orange-900 border-orange-300',
-  'special-district': 'bg-pink-100 text-pink-900 border-pink-300',
-  tribal: 'bg-rose-100 text-rose-900 border-rose-300',
-};
+import { JurisdictionTag } from './JurisdictionTag';
 
 const ENTRY_STATUS_COLORS: Record<ProjectEntryStatus, string> = {
-  verified: 'bg-green-100 text-green-900 border-green-300',
-  snapshot: 'bg-blue-100 text-blue-900 border-blue-300',
-  illustrative: 'bg-amber-100 text-amber-900 border-amber-300',
+  verified: 'bg-success-surface text-success-ink border-success',
+  snapshot: 'bg-info-surface text-info-ink border-info',
+  illustrative: 'bg-warning-surface text-warning-ink border-warning',
 };
 
 export function WhatsBeingBuilt() {
@@ -52,11 +40,11 @@ export function WhatsBeingBuilt() {
   return (
     <section aria-labelledby="wbb-heading" className="space-y-6 max-w-4xl">
       <div className="space-y-2">
-        <p className="text-xs uppercase tracking-wide text-slate-600">Future state</p>
-        <h1 id="wbb-heading" className="text-3xl font-semibold text-slate-900">
+        <p className="text-xs uppercase tracking-wide text-ink-meta">Future state</p>
+        <h1 id="wbb-heading" className="text-3xl font-semibold text-ink">
           What's being built.
         </h1>
-        <p className="text-slate-700">
+        <p className="text-ink-secondary">
           Capital projects, bond programs, public hearings, metro-district filings, and
           annexations that will shape the region. Most entries today are prototype values
           showing the data shape a production build would pull from Capital Improvement
@@ -67,7 +55,7 @@ export function WhatsBeingBuilt() {
 
       <div className="grid gap-4 md:grid-cols-2">
         <fieldset>
-          <legend className="text-sm font-medium text-slate-900 mb-1">Kind</legend>
+          <legend className="text-sm font-medium text-ink mb-1">Kind</legend>
           <ul role="list" className="flex flex-wrap gap-1.5">
             <FilterChip
               active={kindFilter === 'all'}
@@ -85,7 +73,7 @@ export function WhatsBeingBuilt() {
           </ul>
         </fieldset>
         <fieldset>
-          <legend className="text-sm font-medium text-slate-900 mb-1">Status</legend>
+          <legend className="text-sm font-medium text-ink mb-1">Status</legend>
           <ul role="list" className="flex flex-wrap gap-1.5">
             <FilterChip
               active={statusFilter === 'all'}
@@ -104,7 +92,7 @@ export function WhatsBeingBuilt() {
         </fieldset>
       </div>
 
-      <div role="status" aria-live="polite" className="text-sm text-slate-700">
+      <div role="status" aria-live="polite" className="text-sm text-ink-secondary">
         Showing {filtered.length} of {projects.length} projects.
       </div>
 
@@ -114,8 +102,8 @@ export function WhatsBeingBuilt() {
         ))}
       </ul>
 
-      <div className="rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-700">
-        <p className="font-medium text-slate-900 mb-1">Why this page exists</p>
+      <div className="rounded-md border border-line bg-surface p-4 text-sm text-ink-secondary">
+        <p className="font-medium text-ink mb-1">Why this page exists</p>
         <p>
           Most residents never see the pipeline of what's coming — roads being rebuilt, metro
           districts being formed, rezonings being approved, annexations being weighed. The
@@ -145,8 +133,8 @@ function FilterChip({
         className={[
           'rounded-full border px-3 py-1 text-xs min-h-8',
           active
-            ? 'border-blue-700 bg-blue-700 text-white font-medium'
-            : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-50',
+            ? 'border-brand-hover bg-brand-hover text-white font-medium'
+            : 'border-line-strong bg-surface text-ink-strong hover:bg-surface-muted',
         ].join(' ')}
       >
         {label}
@@ -157,16 +145,16 @@ function FilterChip({
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <li className="rounded-lg border border-slate-200 bg-white p-4 space-y-2">
+    <li className="rounded-lg border border-line bg-surface p-4 space-y-2">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="flex-1 min-w-60">
-          <p className="text-xs uppercase tracking-wide text-slate-600">
+          <p className="text-xs uppercase tracking-wide text-ink-meta">
             {KIND_LABELS[project.kind]}
           </p>
-          <h2 className="text-base font-semibold text-slate-900 mt-0.5">
+          <h2 className="text-base font-semibold text-ink mt-0.5">
             {project.name}
           </h2>
-          <p className="text-xs text-slate-700 mt-0.5">{project.sponsor}</p>
+          <p className="text-xs text-ink-secondary mt-0.5">{project.sponsor}</p>
         </div>
         <div className="flex flex-wrap gap-1 items-start">
           <span
@@ -177,14 +165,7 @@ function ProjectCard({ project }: { project: Project }) {
           >
             {STATUS_LABELS[project.status]}
           </span>
-          <span
-            className={[
-              'rounded-full border px-2 py-0.5 text-xs',
-              JURISDICTION_COLORS[project.jurisdiction],
-            ].join(' ')}
-          >
-            {JURISDICTION_SHORT[project.jurisdiction]}
-          </span>
+          <JurisdictionTag jurisdiction={project.jurisdiction} />
           <span
             className={[
               'rounded-full border px-2 py-0.5 text-xs',
@@ -196,36 +177,36 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
       </div>
 
-      <p className="text-sm text-slate-800">{project.description}</p>
+      <p className="text-sm text-ink-strong">{project.description}</p>
 
-      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs text-slate-700">
+      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs text-ink-secondary">
         {project.location && (
           <>
-            <dt className="font-medium text-slate-900">Location</dt>
+            <dt className="font-medium text-ink">Location</dt>
             <dd>{project.location}</dd>
           </>
         )}
         {project.timeline && (
           <>
-            <dt className="font-medium text-slate-900">Timeline</dt>
+            <dt className="font-medium text-ink">Timeline</dt>
             <dd>{project.timeline}</dd>
           </>
         )}
         {project.hearingDate && (
           <>
-            <dt className="font-medium text-slate-900">Hearing</dt>
+            <dt className="font-medium text-ink">Hearing</dt>
             <dd>{project.hearingDate}</dd>
           </>
         )}
         {project.budget && (
           <>
-            <dt className="font-medium text-slate-900">Budget</dt>
+            <dt className="font-medium text-ink">Budget</dt>
             <dd>{project.budget}</dd>
           </>
         )}
         {project.fundingSource && (
           <>
-            <dt className="font-medium text-slate-900">Funding</dt>
+            <dt className="font-medium text-ink">Funding</dt>
             <dd>{project.fundingSource}</dd>
           </>
         )}
@@ -237,7 +218,7 @@ function ProjectCard({ project }: { project: Project }) {
             href={project.url}
             target={project.url.startsWith('http') ? '_blank' : undefined}
             rel="noreferrer"
-            className="inline-flex items-center gap-1 rounded-md bg-blue-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-800 min-h-8"
+            className="inline-flex items-center gap-1 rounded-md bg-brand-hover px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-dark min-h-8"
           >
             Project page {project.url.startsWith('http') ? <span aria-hidden="true">↗</span> : null}
           </a>

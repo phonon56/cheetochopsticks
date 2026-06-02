@@ -1,0 +1,217 @@
+---
+layout: site.njk
+permalink: /state/
+title: "State — Colorado · cheetochopsticks"
+description: "Colorado state agencies whose decisions reach into El Paso County: COAG, CCRD, CBI, DOLA, CDPHE."
+activeNav: "state"
+---
+
+{% include "partials/dashboard-styles.njk" %}
+
+<section class="section" id="tier-page">
+  <div class="container">
+
+    <section class="tier tier--state" id="tier-state" aria-labelledby="tier-state-heading">
+      <div class="tier__band">
+        <p class="tier__eyebrow">Tier 2 · Colorado</p>
+        <h3 class="tier__heading" id="tier-state-heading">State — Colorado</h3>
+        <p class="tier__intro">Statewide agencies whose decisions reach into El Paso County: CDPHE health data, CBI missing-persons records, CCRD complaint paths for ADA and discrimination, DOLA's special-district registry, and the Colorado Attorney General's enforcement surface. <a href="/microsites/shared/government-org-chart.html#orgchart-state">See the full org chart →</a></p>
+      </div>
+
+    <!-- ── State ───────────────────────────────────────────────── -->
+    <h4 class="scope-heading" id="scope-state">State of Colorado</h4>
+    <div class="page-grid" role="list" aria-labelledby="scope-state">
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">State · CBI · Missing Persons</p>
+          <p class="card-title">CBI Missing Persons — Form Audit &amp; Accessible Rebuild</p>
+          <p class="card-desc">An ADA audit of the Colorado Bureau of Investigation Missing Persons contact form, paired with a reference rebuild that resolves all seven critical findings — skip link, live regions, focus management, EN/ES toggle, optional Claude API routing layer. <em>Drop-in for the existing Drupal Webform infrastructure.</em></p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/state/CBI/cbi-missing-persons-redesign.html">
+            <div>
+              <div class="group-link-title">Missing Persons Form — Accessible Rebuild</div>
+              <span class="group-link-sub">WCAG 2.1 AA · EN/ES · Drupal Webform-ready</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/state/CBI/CBI_Missing_Persons_Form_ADA_Audit.docx">
+            <div>
+              <div class="group-link-title">CBI Missing Persons Form — ADA Audit (.docx)</div>
+              <span class="group-link-sub">Seven critical/serious findings · companion to the rebuild</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">State · CDPHE</p>
+          <p class="card-title">Colorado Dept. of Public Health &amp; Environment</p>
+          <p class="card-desc">An audit of the CDPHE CoHID Tableau dashboard, plus the El Paso County mortality redesign. Conducted 16 days before the April 24 ADA Title II deadline.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/state/CDPHE/CDPHE_CoHID_ADA_Audit.html">
+            <div>
+              <div class="group-link-title">CDPHE CoHID — ADA Audit</div>
+              <span class="group-link-sub">7 WCAG 2.1 AA gaps · Tableau</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html">
+            <div>
+              <div class="group-link-title">El Paso County Mortality Dashboard</div>
+              <span class="group-link-sub">Accessible redesign with military analysis</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <a class="page-card" role="listitem" href="/microsites/state/cdola/cdola-cora-audit-and-redesign.html">
+        <div class="card-left">
+          <p class="card-scope">State · CDOLA</p>
+          <p class="card-title">CDOLA — CORA Audit &amp; Redesign</p>
+          <p class="card-desc">Colorado's Department of Local Affairs handles money flowing to counties and municipalities. Their records-request process audited, with a redesign that <em>doesn't involve faxes.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">State · Attorney General</p>
+          <p class="card-title">Colorado Attorney General</p>
+          <p class="card-desc">A full audit, compliance brief, and accessible redesign of the Colorado AG's consumer complaint experience — plus a side-by-side comparison of the tools used to find the gaps.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/state/colorado-attorney-general/accessibility_tool_comparison.html">
+            <div>
+              <div class="group-link-title">Accessibility Tool Comparison</div>
+              <span class="group-link-sub">WAVE · axe · Lighthouse</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/state/colorado-attorney-general/coag-complaint-form.html">
+            <div>
+              <div class="group-link-title">COAG Complaint Form</div>
+              <span class="group-link-sub">Current state of the live form</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/state/colorado-attorney-general/coag-compliance-brief.html">
+            <div>
+              <div class="group-link-title">COAG Compliance Brief</div>
+              <span class="group-link-sub">ADA posture &amp; findings</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/state/colorado-attorney-general/coag-file-complaint-redesign.html">
+            <div>
+              <div class="group-link-title">File a Complaint — Redesign</div>
+              <span class="group-link-sub">Accessible, plain-language rebuild</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">State · Judicial Branch</p>
+          <p class="card-title">Colorado Judicial Branch — WCAG Audits</p>
+          <p class="card-desc">Accessibility audits of the Colorado Judicial Branch e-filing portal and public-facing site, including WCAG compliance findings.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/state/judicial/CJB_WCAG_Audit_2026-04-20.pdf">
+            <div>
+              <div class="group-link-title">CJB WCAG Audit</div>
+              <span class="group-link-sub">April 2026 · PDF</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/state/judicial/CJB_EFiling_Portal_WCAG_Audit_2026-04-20.docx">
+            <div>
+              <div class="group-link-title">CJB E-Filing Portal WCAG Audit</div>
+              <span class="group-link-sub">April 2026 · .docx</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">State · CCRD</p>
+          <p class="card-title">Colorado Civil Rights Division — Complaint Form &amp; Audit</p>
+          <p class="card-desc">Accessible complaint form prototype and accompanying WCAG audit of the CCRD intake experience.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/state/ccrd/ccrd-complaint-form.html">
+            <div>
+              <div class="group-link-title">CCRD Complaint Form — Redesign</div>
+              <span class="group-link-sub">Accessible, plain-language rebuild</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/state/ccrd/CCRD_Accessibility_Audit_2026-04-25.pdf">
+            <div>
+              <div class="group-link-title">CCRD Accessibility Audit</div>
+              <span class="group-link-sub">April 2026 · PDF</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">State · OEDIT</p>
+          <p class="card-title">Office of Economic Development — TravelStats Audit</p>
+          <p class="card-desc">Accessibility audit of the OEDIT TravelStats dashboard with cover letters for agency follow-up.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="/microsites/state/oedit/travelstats-accessibility-audit.docx">
+            <div>
+              <div class="group-link-title">TravelStats Accessibility Audit</div>
+              <span class="group-link-sub">April 2026 · .docx</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="/microsites/state/oedit/travelstats-cover-letters.docx">
+            <div>
+              <div class="group-link-title">TravelStats Cover Letters</div>
+              <span class="group-link-sub">April 2026 · .docx</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <a class="page-card" role="listitem" href="/microsites/state/coloradogeneralassembly/leg_colorado_accessibility_audit.docx">
+        <div class="card-left">
+          <p class="card-scope">State · General Assembly</p>
+          <p class="card-title">leg.colorado.gov — Accessibility Audit</p>
+          <p class="card-desc">WCAG audit of the Colorado General Assembly's public-facing legislative site.</p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">April 2026</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+    </div>
+
+    </section><!-- /tier-state -->
+
+      <aside class="connection-callout" aria-label="What comes next">
+        <p class="connection-callout__label">What comes next</p>
+        <p class="connection-callout__body">Next, see <a href="/national/">how federal agencies</a> set the floor — DOJ antitrust action driving local algorithmic-pricing concerns, DOJ Civil Rights as a parallel ADA filing path to CCRD, HUD funding behind the HOME-ARP comment process.</p>
+      </aside>
+
+  </div>
+</section>

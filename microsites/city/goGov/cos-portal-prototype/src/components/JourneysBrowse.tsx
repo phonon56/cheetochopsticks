@@ -70,10 +70,10 @@ export function JourneysBrowse({ onPickTopic }: Props) {
     return (
       <section aria-labelledby="journeys-heading" className="space-y-4 max-w-3xl">
         <div>
-          <h2 id="journeys-heading" className="text-xl font-semibold text-slate-900">
+          <h2 id="journeys-heading" className="font-serif text-xl font-semibold text-ink">
             Common scenarios
           </h2>
-          <p className="text-sm text-slate-700 mt-1">
+          <p className="text-sm text-ink-secondary mt-1">
             Most real-life things touch more than one department. Pick a scenario to see
             the typical order of steps.
           </p>
@@ -86,12 +86,12 @@ export function JourneysBrowse({ onPickTopic }: Props) {
                 <button
                   type="button"
                   onClick={() => setJourney(j)}
-                  className="w-full text-left rounded-lg border border-slate-300 bg-white p-4 hover:border-blue-700 hover:bg-blue-50 min-h-20"
+                  className="w-full text-left rounded-xl border border-line bg-surface p-4 shadow-sm transition-shadow hover:border-brand-ink hover:shadow-md min-h-24"
                 >
-                  <p className="text-base font-semibold text-slate-900">
+                  <p className="text-base font-semibold text-ink">
                     {JOURNEY_LABELS[j]}
                   </p>
-                  <p className="text-sm text-slate-700 mt-1">
+                  <p className="text-sm text-ink-secondary mt-1">
                     {count} step{count === 1 ? '' : 's'}
                   </p>
                 </button>
@@ -106,15 +106,15 @@ export function JourneysBrowse({ onPickTopic }: Props) {
   return (
     <section aria-labelledby="journey-heading" className="space-y-4 max-w-3xl">
       <nav aria-label="Breadcrumb" className="text-sm">
-        <button type="button" onClick={() => setJourney(null)} className="text-blue-700 underline">
+        <button type="button" onClick={() => setJourney(null)} className="text-brand-ink font-semibold underline underline-offset-2">
           ← All scenarios
         </button>
       </nav>
       <div>
-        <h2 id="journey-heading" className="text-xl font-semibold text-slate-900">
+        <h2 id="journey-heading" className="font-serif text-xl font-semibold text-ink">
           {JOURNEY_LABELS[journey]}
         </h2>
-        <p className="text-sm text-slate-700 mt-1">
+        <p className="text-sm text-ink-secondary mt-1">
           {orderedSteps.length} step{orderedSteps.length === 1 ? '' : 's'} in the typical order.
         </p>
       </div>
@@ -123,12 +123,12 @@ export function JourneysBrowse({ onPickTopic }: Props) {
           <li key={step.topic.topicId} className="flex gap-3">
             <div
               aria-hidden="true"
-              className="flex-none rounded-full bg-blue-700 text-white w-7 h-7 flex items-center justify-center text-sm font-semibold"
+              className="flex-none rounded-full bg-brand-hover text-white w-7 h-7 flex items-center justify-center text-sm font-semibold"
             >
               {i + 1}
             </div>
             <div className="flex-1">
-              <p className="text-sm text-slate-800">{step.note}</p>
+              <p className="text-sm text-ink-strong">{step.note}</p>
               <ul role="list" className="mt-1">
                 <TopicListItem topic={step.topic} onPickTopic={onPickTopic} />
               </ul>

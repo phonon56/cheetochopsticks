@@ -1,0 +1,184 @@
+{% extends "frontend/base.html" %}
+{% load url_filters %}
+
+{% block title %}Civic Records — Search{% endblock %}
+
+{% block content %}
+{% if featured_projects %}
+<nav class="featured-strip" aria-label="Featured initiatives">
+    <p class="eyebrow">Featured initiatives</p>
+    <ul class="chip-row">
+        {% for p in featured_projects %}
+            <li>
+                <a href="{% url 'project_detail' p.slug %}" class="chip chip-featured">
+                    {{ p.title|truncatechars:50 }}
+                    <span class="chip-count">{{ p.n_records }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+
+<section class="hero">
+    <h1>Search the civic record</h1>
+    <p class="lead">
+        Look up a parcel by ID, address, or street name. See every public
+        record attached to that location — permits, projects, service
+        requests, meeting items — in one place, in chronological order.
+    </p>
+
+    <form action="{% url 'home' %}" method="get" role="search" class="search-form">
+        <label for="search-input" class="visually-hidden">
+            Search by parcel ID, address, or street
+        </label>
+        <input
+            type="search"
+            id="search-input"
+            name="q"
+            value="{{ q }}"
+            placeholder="e.g., 6401303008, 9805 Federal Drive, Lorson Ranch"
+            autocomplete="off"
+            autofocus
+        >
+        {# Preserve active facets when re-submitting the search form #}
+        {% for tag in active_tags %}<input type="hidden" name="tag" value="{{ tag }}">{% endfor %}
+        {% for t in active_types %}<input type="hidden" name="type" value="{{ t }}">{% endfor %}
+        {% for s in active_status %}<input type="hidden" name="status" value="{{ s }}">{% endfor %}
+        <button type="submit">Search</button>
+    </form>
+
+    <p class="stats">
+        Currently indexing
+        <strong>{{ parcel_count }}</strong> parcels and
+        <strong>{{ record_count }}</strong> records.
+    </p>
+</section>
+
+{% if tag_facets %}
+<nav class="filter-strip" aria-label="Filter by topic">
+    <p class="eyebrow">Filter by topic</p>
+    <ul class="chip-row">
+        {% for tag in tag_facets %}
+            <li>
+                <a href="{% toggle_param 'tag' tag.slug %}"
+                   class="chip {% if tag.slug in active_tags %}chip-active{% endif %}"
+                   aria-pressed="{% if tag.slug in active_tags %}true{% else %}false{% endif %}">
+                    {{ tag.label }}
+                    <span class="chip-count">{{ tag.n }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+
+{% if has_filters %}
+<aside class="active-filters" aria-label="Active filters">
+    <span class="active-filters-label">Filtering by:</span>
+    {% for slug in active_tags %}
+        <a href="{% remove_param 'tag' slug %}" class="chip chip-active chip-removable">
+            {{ slug }} <span aria-hidden="true">×</span>
+            <span class="visually-hidden">Remove filter</span>
+        </a>
+    {% endfor %}
+    {% for t in active_types %}
+        <a href="{% remove_param 'type' t %}" class="chip chip-active chip-removable">
+            {{ t }} <span aria-hidden="true">×</span>
+        </a>
+    {% endfor %}
+    {% for s in active_status %}
+        <a href="{% remove_param 'status' s %}" class="chip chip-active chip-removable">
+            {{ s }} <span aria-hidden="true">×</span>
+        </a>
+    {% endfor %}
+    <a href="{% clear_filters 'q' %}" class="clear-filters">Clear all</a>
+</aside>
+{% endif %}
+
+{% if q and parcel_results %}
+    <section aria-labelledby="parcel-results-heading">
+        <h2 id="parcel-results-heading">
+            Parcels matching &ldquo;{{ q }}&rdquo;
+        </h2>
+        <ul class="result-list">
+            {% for p in parcel_results %}
+            <li>
+                <a href="{% url 'parcel_detail' p.parcel_id %}">
+                    <strong>{{ p.parcel_id }}</strong>
+                    {% if p.address %}— {{ p.address }}{% endif %}
+                </a>
+                <span class="meta">
+                    {{ p.n_records }} record{{ p.n_records|pluralize }}
+                    · {{ p.get_jurisdiction_display }}
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endif %}
+
+<section aria-labelledby="record-results-heading">
+    <h2 id="record-results-heading">
+        {% if q %}
+            Records matching &ldquo;{{ q }}&rdquo;
+        {% elif has_filters %}
+            Records
+        {% else %}
+            Recent activity
+        {% endif %}
+    </h2>
+    {% if record_results %}
+        <ul class="result-list">
+            {% for r in record_results %}
+            <li>
+                <a href="{% url 'record_detail' r.record_id %}">
+                    <strong>{{ r.title }}</strong>
+                </a>
+                <span class="meta">
+                    {{ r.get_record_type_display }} ·
+                    {{ r.get_status_display }} ·
+                    {{ r.updated_at|date:"M j, Y" }}
+                    {% if r.parcel %}
+                        · parcel
+                        <a href="{% url 'parcel_detail' r.parcel.parcel_id %}">
+                            {{ r.parcel.parcel_id }}
+                        </a>
+                    {% endif %}
+                    {% if r.project %}
+                        · project
+                        <a href="{% url 'project_detail' r.project.slug %}">
+                            {{ r.project.title|truncatechars:40 }}
+                        </a>
+                    {% endif %}
+                </span>
+                {% if r.plain_summary %}
+                    <p class="summary">{{ r.plain_summary }}</p>
+                {% endif %}
+                {% if r.topic_tags.all %}
+                    <ul class="tag-row" aria-label="Topics">
+                        {% for tag in r.topic_tags.all %}
+                            <li>
+                                <a href="{% toggle_param 'tag' tag.slug %}"
+                                   class="chip chip-sm {% if tag.slug in active_tags %}chip-active{% endif %}">
+                                    {{ tag.label }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {% if q or has_filters %}
+            <p>No records match the current filters.
+                {% if has_filters %}<a href="{% clear_filters 'q' %}">Clear filters</a>{% endif %}
+            </p>
+        {% else %}
+            <p>No records yet. Load sample data or add records via
+                <a href="/admin/">the admin</a>.</p>
+        {% endif %}
+    {% endif %}
+</section>
+{% endblock %}

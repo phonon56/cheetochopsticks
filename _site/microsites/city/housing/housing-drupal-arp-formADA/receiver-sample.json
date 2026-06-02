@@ -1,0 +1,27 @@
+{
+  "webform_id": "home_arp_comment",
+  "submission_id": 1,
+  "submission_uuid": "00000000-0000-4000-8000-000000000001",
+  "submitted_at": "2026-05-04T15:23:11-06:00",
+  "langcode": "es",
+  "name": "Maria Lopez",
+  "email": "maria@example.org",
+  "phone": null,
+  "zip": "80910",
+  "submitter_role": "advocate",
+  "submitter_role_other": null,
+  "organization": "Pikes Peak Tenants Union",
+  "topics": ["tbra", "affordable_rental"],
+  "topic_other": null,
+  "comment": "Estamos preocupados de que la asignación propuesta reduce TBRA a favor de proyectos de capital. La lista de espera para TBRA ya es de 14 meses en esta área.",
+  "attachment": null,
+  "contact_back": true,
+  "newsletter": false,
+  "needs_alternate_format": true,
+  "format_needed": "Resumen en lenguaje sencillo del borrador completo del plan, en español.",
+  "_metadata": {
+    "source_url": "https://coloradosprings.gov/es/home-arp-comment",
+    "user_agent_class": "mobile",
+    "ip_hash": "a3f1c8e7b2d5f4a1"
+  }
+}

@@ -118,11 +118,11 @@ export function About() {
   return (
     <section aria-labelledby="about-heading" className="space-y-6 max-w-3xl">
       <div className="space-y-2">
-        <p className="text-xs uppercase tracking-wide text-slate-600">About</p>
-        <h1 id="about-heading" className="text-3xl font-semibold text-slate-900">
+        <p className="text-xs uppercase tracking-wide text-ink-meta">About</p>
+        <h1 id="about-heading" className="text-3xl font-semibold text-ink">
           About this portal.
         </h1>
-        <p className="text-slate-700">
+        <p className="text-ink-secondary">
           This is a prototype — an architectural experiment in what a consolidated civic
           front door could look like for Colorado Springs. It spans the City, El Paso County,
           regional agencies, state and federal services, utilities, special districts, and
@@ -145,8 +145,8 @@ export function About() {
         hint="Open source — every commit visible, every design decision documented."
       />
 
-      <div className="rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-700">
-        <p className="font-medium text-slate-900 mb-1">Credits & source</p>
+      <div className="rounded-md border border-line bg-surface p-4 text-sm text-ink-secondary">
+        <p className="font-medium text-ink mb-1">Credits & source</p>
         <p>
           Service-request topics and forms are drawn from the live City of Colorado Springs
           GoOutreach platform. Contact data is public-record and was verified against
@@ -170,21 +170,21 @@ function LinkSection({
 }) {
   return (
     <section aria-labelledby={`sec-${heading}`} className="space-y-2">
-      <h2 id={`sec-${heading}`} className="text-xl font-semibold text-slate-900">
+      <h2 id={`sec-${heading}`} className="text-xl font-semibold text-ink">
         {heading}
       </h2>
-      {hint && <p className="text-xs text-slate-700">{hint}</p>}
+      {hint && <p className="text-xs text-ink-secondary">{hint}</p>}
       <ul role="list" className="space-y-2">
         {items.map((it) => (
           <li
             key={it.label}
-            className="rounded-md border border-slate-200 bg-white p-3"
+            className="rounded-md border border-line bg-surface p-3"
           >
             <a
               href={it.url}
               target={it.url.startsWith('http') ? '_blank' : undefined}
               rel="noreferrer"
-              className="text-base font-medium text-blue-700 underline"
+              className="text-base font-medium text-brand-ink underline"
             >
               {it.label}
               {it.url.startsWith('http') && (
@@ -193,7 +193,7 @@ function LinkSection({
                 </span>
               )}
             </a>
-            {it.note && <p className="text-sm text-slate-700 mt-1">{it.note}</p>}
+            {it.note && <p className="text-sm text-ink-secondary mt-1">{it.note}</p>}
           </li>
         ))}
       </ul>

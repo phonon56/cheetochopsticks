@@ -1,0 +1,109 @@
+{
+  "generated": "2026-04-20",
+  "series_complete": true,
+  "series_summary": "Complete modern-era (post-GASB 34) financial dataset for City of Colorado Springs, 2002-2024 inclusive. All values primary-source verified against each fiscal year's own CAFR/ACFR Table 1 where available.",
+  "source_documents": [
+    "2024 Colorado Springs ACFR",
+    "2023 Colorado Springs ACFR",
+    "2022 Colorado Springs ACFR",
+    "2021 Colorado Springs ACFR",
+    "2020 Colorado Springs CAFR",
+    "2019 Colorado Springs CAFR",
+    "2018 Colorado Springs CAFR",
+    "2017 Colorado Springs CAFR",
+    "2016 Colorado Springs CAFR",
+    "2015 Colorado Springs CAFR",
+    "2014 Colorado Springs CAFR",
+    "2013 Colorado Springs CAFR",
+    "2012 Colorado Springs CAFR",
+    "2011 Colorado Springs CAFR",
+    "2010 Colorado Springs CAFR (partial \u2014 MD&A rasterized)",
+    "2009 Colorado Springs CAFR (image-only, OCR extracted)",
+    "2008 Colorado Springs CAFR (image-only)",
+    "2007 Colorado Springs CAFR (image-only)",
+    "2006 Colorado Springs CAFR (image-only)",
+    "2005 Colorado Springs CAFR (image-only, OCR extracted)",
+    "2004 Colorado Springs CAFR (image-only)",
+    "2003 Colorado Springs CAFR (image-only)",
+    "2002 Colorado Springs CAFR (image-only)"
+  ],
+  "time_coverage": {
+    "earliest_data_point": 2002,
+    "latest_data_point": 2024,
+    "span_years": 23,
+    "structural_floor_note": "2002 is the earliest year because that is when Colorado Springs first implemented GASB Statement 34 (consolidated accrual-basis reporting). Per 2005 CAFR Table 1 and 2009 CAFR Table 1 footnotes: 'The City began to report accrual information when it implemented GASB Statement 34 in fiscal year 2002.' Pre-2002 data exists only at the fund level and is not comparable to the post-GASB-34 series. Rate history (1996-present) is available separately in sales_tax_history.json."
+  },
+  "files": [
+    {
+      "file": "bonds.json",
+      "description": "Individual bond issues with maturity, rate, outstanding principal. Aggregate debt service by year through 2053."
+    },
+    {
+      "file": "pension_opeb.json",
+      "description": "Four pension plans + three OPEB plans, 10-year trajectory each."
+    },
+    {
+      "file": "overlapping_debt.json",
+      "description": "27 overlapping jurisdictions with city's share of each."
+    },
+    {
+      "file": "mill_levy.json",
+      "description": "10-year mill levy stack and assessed valuation history."
+    },
+    {
+      "file": "urban_renewal.json",
+      "description": "11 CSURA sales tax increment financing authorizations."
+    },
+    {
+      "file": "utilities.json",
+      "description": "Utilities enterprise profile (ACFR-consolidated), 10-year revenue, 2024 operating detail, rate actions."
+    },
+    {
+      "file": "utilities_enterprise_detail.json",
+      "description": "PLACEHOLDER \u2014 typed scaffold with nulls awaiting Colorado Springs Utilities standalone financial statements for service-line detail (electric/gas/water/wastewater/streetlight)."
+    },
+    {
+      "file": "net_position_history.json",
+      "description": "23-year primary government net position (2002\u20132024), GASB adoption events, structural changes, voter-approved tax events, correction log."
+    },
+    {
+      "file": "sales_tax_history.json",
+      "description": "21-year city sales tax dollar series (2004\u20132024) + rate history back to 1996, with methodology divergences documented."
+    }
+  ],
+  "parcel_join_keys": {
+    "description": "How these datasets key to a parcel in the financial module",
+    "required_external_data": [
+      "El Paso County Assessor parcel tax roll",
+      "El Paso County GIS parcel shapefile",
+      "CSURA project area shapefiles (from City Clerk)"
+    ],
+    "computed_fields_per_parcel": [
+      "annual_property_tax = assessed_valuation * mill_levy_total / 1000",
+      "share_of_overlapping_debt = sum over applicable jurisdictions of (parcel_AV / jurisdiction_AV * jurisdiction_debt)",
+      "share_of_city_direct_debt = parcel_AV / city_AV * city_direct_debt",
+      "sales_tax_diverted_to_URA = if parcel_in_URA: pct_authorized * sales_tax_generated_at_parcel",
+      "true_cost_annual = property_tax + utility_charges + fee_based_assessments"
+    ]
+  },
+  "correction_log_summary": [
+    "2010 primary gov net position: was $2,338,901,049, corrected to $3,137,967,812 (Net investment in capital assets row mis-identified as total)",
+    "2015 primary gov net position: was $2,977,767,902, corrected to $2,933,293,322 (same extraction error on a different year)"
+  ],
+  "open_loops": [
+    {
+      "item": "Colorado Springs Utilities standalone financial statements",
+      "blocks": "utilities_enterprise_detail.json service-line population",
+      "status": "scaffold ready, awaiting source documents"
+    },
+    {
+      "item": "2010 CAFR MD&A",
+      "location": "pages 18-35 of 2010 CAFR",
+      "status": "image-based, OCR deferred \u2014 text body not material given 2009 CAFR covers the Great Recession narrative adequately"
+    },
+    {
+      "item": "2006-2008 CAFR statistical sections",
+      "status": "image-based, would only matter if intra-year restatements are of interest; overlap years (2006-2009) already verified via 2009 CAFR"
+    }
+  ]
+}

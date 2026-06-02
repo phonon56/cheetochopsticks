@@ -1,0 +1,589 @@
+# =============================================================================
+# Drupal Webform configuration: HOME-ARP Allocation Plan — Public Comment
+# =============================================================================
+# Place this file at:
+#   sites/default/files/config_<hash>/sync/webform.webform.home_arp_comment.yml
+# OR import via Admin > Configuration > Development > Configuration synchronization
+# OR import via the Webform UI at /admin/structure/webform → "+ Add webform"
+#   then "Source" tab and paste this file's contents.
+#
+# After import, edit the two CHANGE-ME values in the handlers section:
+#   1. completed_url       (the JSON webhook URL)
+#   2. to_mail              (the staff notification email recipient)
+# Optionally set a webhook signing secret in custom_options.
+#
+# UUID below is a placeholder — Drupal will assign a fresh UUID on first save
+# if you remove this line, OR will use the UUID provided if you import via
+# config sync. Keep the UUID stable across environments for portability.
+# =============================================================================
+
+uuid: 9b1c5e90-4f1d-4f2e-9c8a-cos-home-arp-001
+langcode: en
+status: open
+dependencies:
+  enforced:
+    module:
+      - webform
+weight: 0
+open: '2026-04-24T00:00:00-06:00'
+close: '2026-05-26T23:59:59-06:00'
+uid: 1
+template: false
+archive: false
+id: home_arp_comment
+title: 'HOME-ARP Allocation Plan — Public Comment'
+description: 'Submit a public comment on the City of Colorado Springs HOME-ARP Allocation Plan amendment. Comment period is April 24 through May 26, 2026.'
+categories:
+  - 'Public Participation'
+elements: |
+  intro:
+    '#type': webform_markup
+    '#markup': |
+      <h2>About this form</h2>
+      <p>The City of Colorado Springs is collecting public comment on a proposed amendment to its HOME-ARP Allocation Plan. The public comment period is open from <strong>April 24 through May 26, 2026</strong>.</p>
+      <p>You can submit comments through this form, or by any of the following methods. All methods enter the public record on equal footing.</p>
+      <ul>
+        <li><strong>Email:</strong> CityHousingAndCommunityVitality@coloradosprings.gov</li>
+        <li><strong>Phone:</strong> 719-385-5859 (TTY users may dial 711 for relay)</li>
+        <li><strong>Postal mail:</strong> Housing and Homelessness Response, 30 S. Nevada Ave., Colorado Springs, CO 80903</li>
+        <li><strong>In person:</strong> at any scheduled public hearing during the comment period</li>
+      </ul>
+      <p>If you need this form, the draft amendment, or any city document in another format (large print, Braille, ASL, audio, plain language, or another language), please tell us in the "Accessibility request" section at the bottom of this form, or contact the Office of Accessibility at 719-385-5169.</p>
+      <p>All fields except your comment are optional. We collect contact information only to follow up if you ask us to.</p>
+
+  about_you:
+    '#type': fieldset
+    '#title': 'About you'
+    '#description': 'All fields in this section are optional.'
+    name:
+      '#type': textfield
+      '#title': 'Your name'
+      '#description': 'Provide a name only if you are comfortable having it associated with your comment in the public record.'
+      '#maxlength': 255
+      '#autocomplete': 'name'
+    email:
+      '#type': email
+      '#title': 'Email address'
+      '#description': 'We will only use this to follow up if you ask us to.'
+      '#autocomplete': 'email'
+    phone:
+      '#type': tel
+      '#title': 'Phone number'
+      '#description': 'Optional. Include if you would like a phone follow-up.'
+      '#autocomplete': 'tel'
+    zip:
+      '#type': textfield
+      '#title': 'ZIP code'
+      '#description': 'Helps us understand which neighborhoods are weighing in.'
+      '#maxlength': 10
+      '#size': 10
+      '#autocomplete': 'postal-code'
+    submitter_role:
+      '#type': radios
+      '#title': 'I am submitting this comment as'
+      '#description': 'Choose the description that best fits.'
+      '#options':
+        resident: 'A resident of Colorado Springs'
+        qualifying_population: 'Someone who would qualify for HOME-ARP services (homeless, at risk of homelessness, fleeing violence, or other vulnerable population)'
+        service_provider: 'A service provider or housing professional'
+        advocate: 'An advocate or community organization representative'
+        elected_official: 'An elected or appointed official'
+        other: 'Other'
+    submitter_role_other:
+      '#type': textfield
+      '#title': 'Please describe'
+      '#states':
+        visible:
+          ':input[name="submitter_role"]':
+            value: other
+        required:
+          ':input[name="submitter_role"]':
+            value: other
+    organization:
+      '#type': textfield
+      '#title': 'Organization (if applicable)'
+      '#description': 'Only if you are commenting on behalf of an organization.'
+      '#states':
+        visible:
+          - ':input[name="submitter_role"]':
+              value: service_provider
+          - or
+          - ':input[name="submitter_role"]':
+              value: advocate
+          - or
+          - ':input[name="submitter_role"]':
+              value: elected_official
+
+  comment_topics:
+    '#type': fieldset
+    '#title': 'What is your comment about?'
+    '#description': 'Select all that apply. This helps us route your comment to the right team.'
+    topics:
+      '#type': checkboxes
+      '#title': 'Topics'
+      '#title_display': invisible
+      '#options':
+        affordable_rental: 'Production of affordable rental housing'
+        tbra: 'Tenant-Based Rental Assistance (TBRA)'
+        supportive_services: 'Supportive services'
+        non_congregate_shelter: 'Non-congregate shelter'
+        allocation: 'How funds are allocated across activities'
+        eligible_activities: 'Eligible activities and qualifying populations'
+        public_participation: 'The public participation process itself'
+        other: 'Other'
+    topic_other:
+      '#type': textfield
+      '#title': 'Please describe the other topic'
+      '#states':
+        visible:
+          ':input[name="topics[other]"]':
+            checked: true
+        required:
+          ':input[name="topics[other]"]':
+            checked: true
+
+  comment_section:
+    '#type': fieldset
+    '#title': 'Your comment'
+    comment:
+      '#type': textarea
+      '#title': 'Comment'
+      '#title_display': invisible
+      '#description': 'Please share your comment, question, or suggestion. There is no length limit, but more focused comments are easier to act on.'
+      '#required': true
+      '#rows': 8
+      '#counter_type': character
+      '#counter_maximum_message': '@count characters'
+    attachment:
+      '#type': managed_file
+      '#title': 'Supporting document (optional)'
+      '#description': 'Attach a letter, data, or supporting document. Accepted formats: PDF, Word, plain text, JPG, PNG. Maximum 10 MB.'
+      '#max_filesize': '10'
+      '#file_extensions': 'pdf doc docx odt txt rtf jpg jpeg png'
+
+  follow_up:
+    '#type': fieldset
+    '#title': 'Follow-up'
+    contact_back:
+      '#type': checkbox
+      '#title': 'Yes, please contact me about my comment'
+      '#description': 'If checked, the team may reach out using the contact information you provided.'
+      '#states':
+        visible:
+          - ':input[name="email"]':
+              filled: true
+          - or
+          - ':input[name="phone"]':
+              filled: true
+    newsletter:
+      '#type': checkbox
+      '#title': 'Add me to the Housing & Community Vitality newsletter'
+      '#description': 'Occasional updates from the Housing and Homelessness Response Department. You can unsubscribe at any time.'
+      '#states':
+        visible:
+          ':input[name="email"]':
+            filled: true
+
+  accessibility_request:
+    '#type': fieldset
+    '#title': 'Accessibility request'
+    '#description': 'If you need this form, the draft plan, or city documents in another format, tell us here. The Office of Accessibility will follow up.'
+    needs_alternate_format:
+      '#type': checkbox
+      '#title': 'I need an alternate format or accommodation'
+    format_needed:
+      '#type': textarea
+      '#title': 'What format or accommodation do you need?'
+      '#description': 'For example: large print, Braille, ASL interpretation, plain-language summary, Spanish translation, audio, or any other accommodation.'
+      '#rows': 3
+      '#states':
+        visible:
+          ':input[name="needs_alternate_format"]':
+            checked: true
+        required:
+          ':input[name="needs_alternate_format"]':
+            checked: true
+
+  privacy:
+    '#type': webform_markup
+    '#markup': |
+      <p><small><strong>Privacy notice.</strong> Comments submitted through this form become part of the public record for the HOME-ARP Allocation Plan amendment. Personal information you provide (name, contact details) is used only to follow up if you ask us to. Your comment will be summarized in the city's response to public comment, which is published with the final plan. The full submission is retained by the Housing and Homelessness Response Department in accordance with the city's records retention schedule.</small></p>
+
+css: ''
+javascript: ''
+
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: '/home-arp-comment'
+  page_confirm_path: '/home-arp-comment/confirmation'
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: true
+  form_exception_message: ''
+  form_open_message: ''
+  form_close_message: 'The HOME-ARP comment period has closed. Thank you to everyone who participated. The final plan will incorporate public feedback and be published on the HOME-ARP page.'
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_reset: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: true
+  form_unsaved: true
+  form_disable_back: false
+  form_submit_back: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_method: ''
+  form_action: ''
+  form_attributes: {  }
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body: true
+  share_page_footer: true
+  submission_label: ''
+  submission_log: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_start_label: ''
+  wizard_start_attributes: {  }
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_title: 'Thank you'
+  confirmation_message: |
+    <p>Your comment has been received and will be entered into the public record for the HOME-ARP Allocation Plan amendment.</p>
+    <p>If you provided contact information and asked us to follow up, someone from the Housing and Homelessness Response Department will be in touch.</p>
+    <p>If you requested an alternate format or accommodation, the Office of Accessibility will follow up within five business days.</p>
+  confirmation_url: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+
+handlers:
+
+  # ---------------------------------------------------------------------------
+  # Handler 1: JSON webhook (remote_post)
+  # POSTs every submission as JSON to the configured URL.
+  # CHANGE the completed_url and (optionally) custom_options below.
+  # ---------------------------------------------------------------------------
+  json_webhook:
+    id: remote_post
+    handler_id: json_webhook
+    label: 'JSON webhook to record system'
+    notes: 'Posts each submission as JSON to the city record system. Configure URL and shared secret in settings.'
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      method: POST
+      type: json
+      excluded_data:
+        - serial
+        - sid
+        - token
+        - uri
+        - request_uri
+        - request_user_agent
+        - request_remote_addr
+        - in_draft
+        - current_page
+      custom_data: ''
+      custom_options: |
+        headers:
+          X-Webform-Source: 'cos-home-arp-comment'
+          X-Webform-Secret: 'CHANGE-ME-set-shared-secret-or-rotate-via-key-module'
+      custom_response_message: ''
+      custom_response_messages: {  }
+      completed_url: 'https://CHANGE-ME.example.gov/webhook/home-arp-comment'
+      completed_custom_data: ''
+      updated_url: ''
+      updated_custom_data: ''
+      deleted_url: ''
+      deleted_custom_data: ''
+      draft_created_url: ''
+      draft_created_custom_data: ''
+      draft_updated_url: ''
+      draft_updated_custom_data: ''
+      converted_url: ''
+      converted_custom_data: ''
+      debug: false
+      cast: true
+      file_data: false
+      error_url: ''
+      error_message: 'There was a problem submitting your comment. Please try again or use one of the alternative submission methods listed at the top of this form.'
+
+  # ---------------------------------------------------------------------------
+  # Handler 2: Email notification to Housing & Community Vitality
+  # CHANGE the to_mail below if a different recipient is preferred.
+  # ---------------------------------------------------------------------------
+  email_notification:
+    id: email
+    handler_id: email_notification
+    label: 'Email to Housing & Community Vitality'
+    notes: 'Sends a plain-text notification email to staff for each submission.'
+    status: true
+    conditions: {  }
+    weight: 1
+    settings:
+      states:
+        - completed
+      to_mail: 'CityHousingAndCommunityVitality@coloradosprings.gov'
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: '[site:mail]'
+      from_options: {  }
+      from_name: '[site:name]'
+      reply_to: '[webform_submission:values:email:raw]'
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'New HOME-ARP comment received [#[webform_submission:serial]]'
+      body: |
+        A new comment has been submitted on the HOME-ARP Allocation Plan amendment.
+
+        Submission ID: [webform_submission:serial]
+        Submitted: [webform_submission:created]
+        Language: [webform_submission:langcode]
+
+        ----------------------------------------------------------------------
+        SUBMITTER
+        ----------------------------------------------------------------------
+        Name: [webform_submission:values:name]
+        Email: [webform_submission:values:email]
+        Phone: [webform_submission:values:phone]
+        ZIP: [webform_submission:values:zip]
+        Submitting as: [webform_submission:values:submitter_role]
+        Organization: [webform_submission:values:organization]
+
+        ----------------------------------------------------------------------
+        TOPICS
+        ----------------------------------------------------------------------
+        [webform_submission:values:topics]
+
+        ----------------------------------------------------------------------
+        COMMENT
+        ----------------------------------------------------------------------
+        [webform_submission:values:comment]
+
+        ----------------------------------------------------------------------
+        FOLLOW-UP
+        ----------------------------------------------------------------------
+        Wants follow-up: [webform_submission:values:contact_back]
+        Newsletter: [webform_submission:values:newsletter]
+
+        ----------------------------------------------------------------------
+        ACCESSIBILITY REQUEST
+        ----------------------------------------------------------------------
+        Needs alternate format: [webform_submission:values:needs_alternate_format]
+        Format needed: [webform_submission:values:format_needed]
+
+        View the full submission with attachments:
+        [webform_submission:url]
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: false
+      attachments: true
+      twig: false
+      debug: false
+      theme_name: ''
+      parameters: {  }
+
+  # ---------------------------------------------------------------------------
+  # Handler 3: Accessibility request side-channel (only fires when the
+  # accommodation checkbox is checked; routes to the Office of Accessibility)
+  # ---------------------------------------------------------------------------
+  accessibility_routing:
+    id: email
+    handler_id: accessibility_routing
+    label: 'Accessibility request to Office of Accessibility'
+    notes: 'Conditional notification when an accommodation is requested, with five-business-day SLA expectation.'
+    status: true
+    conditions:
+      enabled:
+        ':input[name="needs_alternate_format"]':
+          checked: true
+    weight: 2
+    settings:
+      states:
+        - completed
+      to_mail: 'CHANGE-ME-office-of-accessibility@coloradosprings.gov'
+      from_mail: '[site:mail]'
+      from_name: '[site:name]'
+      reply_to: '[webform_submission:values:email:raw]'
+      subject: 'Accommodation request from HOME-ARP comment form [#[webform_submission:serial]]'
+      body: |
+        An accommodation has been requested via the HOME-ARP public comment form.
+
+        Submission ID: [webform_submission:serial]
+        Submitted: [webform_submission:created]
+        Language: [webform_submission:langcode]
+
+        Format / accommodation needed:
+        [webform_submission:values:format_needed]
+
+        Requestor (if provided):
+        Name: [webform_submission:values:name]
+        Email: [webform_submission:values:email]
+        Phone: [webform_submission:values:phone]
+        ZIP: [webform_submission:values:zip]
+
+        Per city policy, the Office of Accessibility should follow up within five business days.
+
+        Full submission:
+        [webform_submission:url]
+      excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: true
+      html: false
+      attachments: false
+      twig: false
+      debug: false
+
+variants: {  }

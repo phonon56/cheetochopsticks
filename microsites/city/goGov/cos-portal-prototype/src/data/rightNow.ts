@@ -305,10 +305,10 @@ export const CATEGORY_ORDER: TileCategory[] = [
 ];
 
 export const SEVERITY_COLORS: Record<TileSeverity, string> = {
-  none: 'border-slate-200 bg-slate-50',
-  info: 'border-blue-300 bg-blue-50',
-  warning: 'border-amber-400 bg-amber-50',
-  critical: 'border-red-700 bg-red-50',
+  none: 'border-line bg-surface-muted',
+  info: 'border-info bg-info-surface',
+  warning: 'border-warning bg-warning-surface',
+  critical: 'border-danger bg-danger-surface',
 };
 
 export const STATUS_LABELS: Record<TileStatus, string> = {

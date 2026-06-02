@@ -1,0 +1,52 @@
+{
+  "generated": "2026-04-20",
+  "source_documents": [
+    "2024 Colorado Springs ACFR",
+    "2023 Colorado Springs ACFR",
+    "2022 Colorado Springs ACFR",
+    "2021 Colorado Springs ACFR",
+    "2020 Colorado Springs CAFR",
+    "2019 Colorado Springs CAFR"
+  ],
+  "files": [
+    {
+      "file": "bonds.json",
+      "description": "Individual bond issues with maturity, rate, and outstanding principal. Plus aggregate debt service by year through 2053."
+    },
+    {
+      "file": "pension_opeb.json",
+      "description": "Four pension plans + three OPEB plans with 10-year liability trajectory and annual contributions."
+    },
+    {
+      "file": "overlapping_debt.json",
+      "description": "27 overlapping jurisdictions with city's share of each (county, 10 school districts, BIDs, URA)."
+    },
+    {
+      "file": "mill_levy.json",
+      "description": "10-year mill levy stack (city + county + school + library + water conservancy) and assessed valuation history."
+    },
+    {
+      "file": "urban_renewal.json",
+      "description": "11 CSURA sales tax increment financing authorizations with % diverted and geographic area."
+    },
+    {
+      "file": "utilities.json",
+      "description": "Utilities enterprise profile: 10-year revenue, 2024 operating detail, rate actions, bond pledged collateral."
+    }
+  ],
+  "parcel_join_keys": {
+    "description": "How these datasets key to a parcel in the financial module",
+    "required_external_data": [
+      "El Paso County Assessor parcel tax roll (gives per-parcel assessed valuation, school district ID, BID membership)",
+      "El Paso County GIS parcel shapefile (gives polygon for URA boundary intersection)",
+      "CSURA project area shapefiles (from City Clerk) \u2014 needed to determine URA membership per parcel"
+    ],
+    "computed_fields_per_parcel": [
+      "annual_property_tax = assessed_valuation * mill_levy_total / 1000",
+      "share_of_overlapping_debt = sum over applicable jurisdictions of (parcel_AV / jurisdiction_AV * jurisdiction_debt)",
+      "share_of_city_direct_debt = parcel_AV / city_AV * city_direct_debt",
+      "sales_tax_diverted_to_URA = if parcel_in_URA: pct_authorized * sales_tax_generated_at_parcel",
+      "true_cost_annual = property_tax + utility_charges + fee_based_assessments"
+    ]
+  }
+}

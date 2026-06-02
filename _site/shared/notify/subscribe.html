@@ -1,0 +1,52 @@
+<!--
+  subscribe.html — drop-in snippet for any microsite.
+  Set data-topic to the dotted topic this page belongs to.
+  Example: <div data-topic="gov.city.police"></div>
+  Then include this file's <script> below.
+-->
+
+<form class="gov-subscribe" novalidate>
+  <label>
+    Get email updates from this office
+    <input type="email" name="email" required autocomplete="email"
+           placeholder="you@example.com">
+  </label>
+  <p class="gov-subscribe__consent">
+    By subscribing you agree to receive emails about this topic. We'll send a
+    confirmation link first. Unsubscribe any time.
+    <em>(consent v2026-04-30-v1)</em>
+  </p>
+  <button type="submit">Subscribe</button>
+  <output role="status" aria-live="polite"></output>
+</form>
+
+<script>
+(() => {
+  const form = document.currentScript.previousElementSibling;
+  const out  = form.querySelector('output');
+  // Find the nearest ancestor with data-topic (so one script handles many forms).
+  const host = form.closest('[data-topic]');
+  if (!host) { console.warn('gov-subscribe: missing data-topic ancestor'); return; }
+  const topic  = host.dataset.topic;
+  const source = location.pathname.replace(/^\/+/, ''); // e.g. "microsites/city/police/"
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    out.textContent = 'Submitting…';
+    const email = form.email.value.trim();
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, topic, source }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'subscribe failed');
+      out.textContent = data.message || 'Check your email to confirm.';
+      form.reset();
+    } catch (err) {
+      out.textContent = 'Something went wrong: ' + err.message;
+    }
+  });
+})();
+</script>

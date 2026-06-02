@@ -1,0 +1,214 @@
+{
+  "generated_from": "2024 Colorado Springs ACFR, Statistical Section Table 10",
+  "as_of": "2024-12-31",
+  "currency_unit": "USD",
+  "jurisdictions": [
+    {
+      "jurisdiction": "El Paso County",
+      "type": "county",
+      "pct_applicable_to_city": 70.89,
+      "total_debt_outstanding": 76599456,
+      "city_share": 54299576,
+      "city_share_ex_COPs": 2221943
+    },
+    {
+      "jurisdiction": "Harrison School District #2",
+      "type": "school_district",
+      "pct_applicable_to_city": 92.62,
+      "total_debt_outstanding": 204934076,
+      "city_share": 189802739,
+      "city_share_ex_COPs": 189802739
+    },
+    {
+      "jurisdiction": "Widefield School District #3",
+      "type": "school_district",
+      "pct_applicable_to_city": 19.51,
+      "total_debt_outstanding": 74940548,
+      "city_share": 14621667,
+      "city_share_ex_COPs": 9541993
+    },
+    {
+      "jurisdiction": "Fountain/Fort Carson School District #8",
+      "type": "school_district",
+      "pct_applicable_to_city": 0.03,
+      "total_debt_outstanding": 36204491,
+      "city_share": 11031,
+      "city_share_ex_COPs": 253
+    },
+    {
+      "jurisdiction": "Colorado Springs School District #11",
+      "type": "school_district",
+      "pct_applicable_to_city": 92.21,
+      "total_debt_outstanding": 152466541,
+      "city_share": 140588850,
+      "city_share_ex_COPs": 11253950
+    },
+    {
+      "jurisdiction": "Cheyenne Mountain School District #12",
+      "type": "school_district",
+      "pct_applicable_to_city": 97.49,
+      "total_debt_outstanding": 44107823,
+      "city_share": 42998648,
+      "city_share_ex_COPs": 42998648
+    },
+    {
+      "jurisdiction": "Manitou School District #14",
+      "type": "school_district",
+      "pct_applicable_to_city": 9.18,
+      "total_debt_outstanding": 3776282,
+      "city_share": 346774,
+      "city_share_ex_COPs": 2650
+    },
+    {
+      "jurisdiction": "Academy School District #20",
+      "type": "school_district",
+      "pct_applicable_to_city": 84.84,
+      "total_debt_outstanding": 235999367,
+      "city_share": 200229742,
+      "city_share_ex_COPs": 200229742
+    },
+    {
+      "jurisdiction": "Ellicott School District #22",
+      "type": "school_district",
+      "pct_applicable_to_city": 1.02,
+      "total_debt_outstanding": 5897300,
+      "city_share": 59889,
+      "city_share_ex_COPs": 0
+    },
+    {
+      "jurisdiction": "Falcon School District #49",
+      "type": "school_district",
+      "pct_applicable_to_city": 62.23,
+      "total_debt_outstanding": 115538537,
+      "city_share": 71894225,
+      "city_share_ex_COPs": 21131972
+    },
+    {
+      "jurisdiction": "Barnes & Powers North BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 2821089,
+      "city_share": 2821089
+    },
+    {
+      "jurisdiction": "Barnes & Powers South BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 145000,
+      "city_share": 145000
+    },
+    {
+      "jurisdiction": "Briargate Center BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 8943105,
+      "city_share": 8943105
+    },
+    {
+      "jurisdiction": "Catalyst Campus BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 275149,
+      "city_share": 275149
+    },
+    {
+      "jurisdiction": "Creekwalk Marketplace BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 67071275,
+      "city_share": 67071275
+    },
+    {
+      "jurisdiction": "Colorado Springs Urban Renewal Authority",
+      "type": "urban_renewal_authority",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 80757439,
+      "city_share": 80757439
+    },
+    {
+      "jurisdiction": "First & Main BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 1200000,
+      "city_share": 1200000
+    },
+    {
+      "jurisdiction": "First & Main No. 2 BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 26669415,
+      "city_share": 26669415
+    },
+    {
+      "jurisdiction": "First & Main North BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 1399793,
+      "city_share": 1399793
+    },
+    {
+      "jurisdiction": "Gold Hill North BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 32753511,
+      "city_share": 32753511
+    },
+    {
+      "jurisdiction": "Interquest North BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 23272000,
+      "city_share": 23272000
+    },
+    {
+      "jurisdiction": "Interquest South BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 4651122,
+      "city_share": 4651122
+    },
+    {
+      "jurisdiction": "Interquest Town Center BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 2975002,
+      "city_share": 2975002
+    },
+    {
+      "jurisdiction": "MW Retail BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 6451539,
+      "city_share": 6451539
+    },
+    {
+      "jurisdiction": "Park Union BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 38974299,
+      "city_share": 38974299
+    },
+    {
+      "jurisdiction": "Powers & Woodmen BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 4331927,
+      "city_share": 4331927
+    },
+    {
+      "jurisdiction": "True Commons North BID",
+      "type": "business_improvement_district",
+      "pct_applicable_to_city": 100.0,
+      "total_debt_outstanding": 92455357,
+      "city_share": 92455357
+    }
+  ],
+  "totals": {
+    "total_overlapping_debt": 1110000163,
+    "total_overlapping_debt_ex_COPs": 872330912,
+    "city_direct_debt": 63280000,
+    "city_direct_debt_ex_COPs": 27832000,
+    "grand_total_direct_plus_overlapping": 1173280163,
+    "grand_total_ex_COPs": 900162912
+  }
+}

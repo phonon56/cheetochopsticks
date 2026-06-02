@@ -1,0 +1,2370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Colorado Attorney General complaint form ADA compliance brief — posture and findings.">
+  <title>ADA Compliance Brief — Colorado Attorney General | Digital Accessibility Emergency Response Package</title>
+
+  
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
+         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
+           text    #ede8dc → 15.3  AAA
+           muted   #96adc4 →  8.1  AAA
+           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
+           gold    #c8a84b →  8.2  AAA
+           gold-lt #fde68a → 15.0  AAA
+           red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
+           green   #4ade80 → 10.7  AAA
+           blue    #60a5fa →  7.4  AAA
+           amber   #fbbf24 → 11.2  AAA                                  */
+      --cc-bg:         #0c1220;
+      --cc-surface:    #141e2e;
+      --cc-surface2:   #1c2a3e;
+      --cc-surface3:   #233045;
+      --cc-border:     rgba(255,255,255,.14);
+      --cc-border-hi:  rgba(255,255,255,.28);
+      --cc-gold:       #c8a84b;
+      --cc-gold-dim:   rgba(200,168,75,.22);
+      --cc-gold-faint: rgba(200,168,75,.09);
+      --cc-gold-lt:    #fde68a;
+      --cc-text:       #ede8dc;
+      --cc-muted:      #96adc4;
+      --cc-quiet:      #8ca3b8;
+      --cc-mono:       'IBM Plex Mono', monospace;
+      --cc-sans:       'IBM Plex Sans', sans-serif;
+      --cc-serif:      'Playfair Display', Georgia, serif;
+      --cc-red:        #fca5a5;
+      --cc-red-dim:    rgba(252,165,165,.16);
+      --cc-green:      #4ade80;
+      --cc-green-dim:  rgba(74,222,128,.14);
+      --cc-blue:       #60a5fa;
+      --cc-blue-dim:   rgba(96,165,250,.14);
+      --cc-amber:      #fbbf24;
+      --cc-amber-dim:  rgba(251,191,36,.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* ── Skip link (ADA) ────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--cc-gold);
+      color: #0c1220;
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 10px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ── Focus visible — universal gold ring ─────────────────────── */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Serif subheadline ───────────────────────────────────────── */
+    .section-sub {
+      font-family: var(--cc-sans);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--cc-muted);
+      line-height: 1.6;
+      margin-top: 4px;
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+
+    body {
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    .nav {
+      border-bottom: 1px solid var(--cc-border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,26,.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 200;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nav-logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      margin-right: 32px;
+      flex-shrink: 0;
+    }
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+    .nav-logo:focus-visible {
+      outline: 2px solid var(--cc-gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    /* Legacy text-logo styles kept for any other surfaces that reference them */
+    .nav-logo-word {
+      font-family: var(--cc-sans);
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: -.01em;
+      color: var(--cc-text);
+    }
+    .nav-logo-dot { color: var(--cc-gold); font-size: .95rem; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+    .nav-link {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--cc-text); background: rgba(255,255,255,.04); }
+    .nav-link.you-link {
+      color: var(--cc-gold);
+      border-color: var(--cc-gold-dim);
+      background: var(--cc-gold-faint);
+    }
+    .nav-link.you-link:hover { background: var(--cc-gold-dim); }
+    .nav-link.active {
+      color: var(--cc-text);
+      border-color: var(--cc-border-hi);
+      background: rgba(255,255,255,.06);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold);
+      text-underline-offset: 3px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: all .18s;
+    }
+    .notif-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+
+    /* ── NAV SEARCH (top-nav disclosure pattern) ───────────────────
+       Toggle button sits next to Subscribe / Alerts; the dropdown
+       panel is positioned absolutely below the nav and animates in
+       only when expanded. JS in nav-scripts.njk handles open/close,
+       focus management, Escape, click-outside, and lazy fetch. */
+    .nav-search-toggle {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 12px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: color .18s, border-color .18s;
+      margin-right: 8px;
+      min-height: 32px;
+    }
+    .nav-search-toggle:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nav-search-toggle:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-toggle[aria-expanded="true"] {
+      color: var(--cc-bg);
+      background: var(--cc-gold);
+      border-color: var(--cc-gold);
+    }
+    .nav-search-toggle__icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .nav-search-toggle__label {
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    @media (max-width: 600px) {
+      .nav-search-toggle { padding: 6px 8px; }
+      .nav-search-toggle__label { display: none; }
+    }
+
+    /* Dropdown panel — full-width below nav, dark surface that matches
+       the notification panel treatment for visual consistency. */
+    .nav-search-panel {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 35;
+      background: var(--cc-surface);
+      border-bottom: 1px solid var(--cc-border-hi);
+      box-shadow: 0 6px 20px rgba(0,0,0,.35);
+    }
+    .nav-search-panel[hidden] { display: none; }
+    .nav-search-panel__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 24px 24px;
+    }
+    .nav-search-panel__chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .nav-search-panel__chip {
+      background: transparent;
+      color: var(--cc-muted);
+      border: 1px solid var(--cc-border-hi);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-family: var(--cc-mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .nav-search-panel__chip:hover { color: var(--cc-text); border-color: var(--cc-gold); }
+    .nav-search-panel__chip:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__chip[aria-pressed="true"] {
+      color: var(--cc-bg);
+      background: var(--cc-gold);
+      border-color: var(--cc-gold);
+    }
+    .nav-search-panel__form {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .nav-search-panel__input {
+      flex: 1;
+      min-width: 0;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      border: 1px solid var(--cc-border-hi);
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.4;
+      min-height: 44px;
+    }
+    .nav-search-panel__input::placeholder { color: var(--cc-quiet); }
+    .nav-search-panel__input:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 1px;
+      border-color: var(--cc-gold);
+    }
+    .nav-search-panel__submit,
+    .nav-search-panel__close {
+      background: var(--cc-gold);
+      color: var(--cc-bg);
+      border: 1px solid var(--cc-gold);
+      border-radius: 4px;
+      padding: 0 16px;
+      font-family: var(--cc-mono);
+      font-size: 1rem;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-search-panel__close {
+      background: transparent;
+      color: var(--cc-muted);
+      border-color: var(--cc-border-hi);
+    }
+    .nav-search-panel__submit:hover,
+    .nav-search-panel__close:hover { background: var(--cc-gold-lt); border-color: var(--cc-gold-lt); color: var(--cc-bg); }
+    .nav-search-panel__submit:focus-visible,
+    .nav-search-panel__close:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__status {
+      font-family: var(--cc-mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 12px 0 8px;
+      min-height: 1.4em;
+    }
+    .nav-search-panel__results {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 60vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .nav-search-panel__item {
+      display: block;
+      padding: 12px 16px;
+      background: var(--cc-bg);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--cc-text);
+      border-left-width: 4px;
+      transition: border-color .15s, background .15s;
+    }
+    .nav-search-panel__item:hover { border-color: var(--cc-border-hi); background: var(--cc-surface); }
+    .nav-search-panel__item:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__item--local    { border-left-color: var(--cc-gold); }
+    .nav-search-panel__item--state    { border-left-color: var(--cc-blue); }
+    .nav-search-panel__item--national { border-left-color: var(--cc-green); }
+    .nav-search-panel__item-scope {
+      font-family: var(--cc-mono);
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 0 0 3px;
+    }
+    .nav-search-panel__item--local .nav-search-panel__item-scope    { color: var(--cc-gold); }
+    .nav-search-panel__item--state .nav-search-panel__item-scope    { color: var(--cc-blue); }
+    .nav-search-panel__item--national .nav-search-panel__item-scope { color: var(--cc-green); }
+    .nav-search-panel__item-title {
+      font-weight: 600;
+      font-size: .95rem;
+      color: var(--cc-text);
+      line-height: 1.35;
+      margin: 0 0 3px;
+    }
+    .nav-search-panel__item-desc {
+      font-size: .82rem;
+      color: var(--cc-muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .nav-search-panel__item mark {
+      background: rgba(200,168,75,.28);
+      color: var(--cc-text);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+    .nav-search-panel__empty {
+      font-size: .9rem;
+      color: var(--cc-muted);
+      padding: 12px 0;
+      margin: 0;
+    }
+    @media (max-width: 700px) {
+      .nav-search-panel__inner { padding: 16px 16px 18px; }
+      .nav-search-panel__chips { gap: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .nav-search-toggle,
+      .nav-search-panel__chip,
+      .nav-search-panel__item { transition: none; }
+    }
+    .notif-count {
+      background: var(--cc-red);
+      color: #0a0f1a;
+      font-size: .78rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 1px 5px;
+      font-family: var(--cc-mono);
+      line-height: 1.4;
+    }
+
+    /* ── NOTIFICATIONS PANEL ─────────────────────────────────────── */
+    .notif-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .notif-overlay.open { opacity: 1; pointer-events: all; }
+    .notif-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--cc-surface);
+      border-left: 1px solid var(--cc-border-hi);
+      z-index: 301;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.32,.72,0,1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .notif-panel.open { transform: translateX(0); }
+    .notif-panel-head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--cc-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .notif-panel-title {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-text);
+    }
+    .notif-close {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 3px;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: var(--cc-mono);
+      transition: all .15s;
+    }
+    .notif-close:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .notif-filters {
+      display: flex;
+      gap: 6px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--cc-border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .nf-btn {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--cc-border);
+      border-radius: 2px;
+      background: none;
+      color: var(--cc-muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .nf-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold); border-color: rgba(200,168,75,.3); }
+    .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .notif-group-label {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-quiet);
+      padding: 10px 20px 4px;
+    }
+    .notif-item {
+      padding: 12px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--cc-border);
+      transition: background .15s;
+      cursor: default;
+    }
+    .notif-item:hover { background: rgba(255,255,255,.02); }
+    .notif-item.hidden { display: none; }
+    .notif-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .nd-red    { background: var(--cc-red); }
+    .nd-amber  { background: var(--cc-amber); }
+    .nd-blue   { background: var(--cc-blue); }
+    .nd-green  { background: var(--cc-green); }
+    .nd-gold   { background: var(--cc-gold); }
+    .nd-quiet  { background: var(--cc-quiet); }
+    .notif-body { flex: 1; }
+    .notif-text {
+      font-size: .85rem;
+      color: var(--cc-text);
+      line-height: 1.55;
+      margin-bottom: 3px;
+    }
+    .notif-text strong { color: var(--cc-gold-lt); font-weight: 500; }
+    .notif-meta {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--cc-quiet);
+      margin-bottom: 4px;
+    }
+    .notif-action {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--cc-gold-dim);
+      padding-bottom: 1px;
+      transition: border-color .15s;
+    }
+    .notif-action:hover { border-color: var(--cc-gold); }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
+      border-top: 1px solid var(--cc-border);
+      padding: 32px 0 36px;
+      margin-top: 56px;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      position: relative;
+      z-index: 1;
+    }
+    .cc-footer .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .cc-footer-line {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .04em;
+      line-height: 1.9;
+      color: var(--cc-muted);
+      text-align: center;
+    }
+    .cc-footer-line a {
+      color: var(--cc-muted);
+      text-decoration: underline;
+      text-decoration-color: rgba(150, 173, 196, .35);
+      text-underline-offset: 3px;
+      transition: color .15s, text-decoration-color .15s;
+    }
+    .cc-footer-line a:hover,
+    .cc-footer-line a:focus-visible {
+      color: var(--cc-gold);
+      text-decoration-color: var(--cc-gold);
+    }
+    .cc-footer-ext {
+      display: inline-block;
+      font-size: .7em;
+      transform: translateY(-1px);
+      margin-left: 2px;
+      opacity: .7;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
+    }
+
+    /* ── MARKDOWN CONTENT (rendered .md docs) ───────────────────── */
+    .markdown-content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .markdown-header {
+      border-bottom: 1px solid var(--cc-border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .markdown-content > .markdown-header h1,
+    .markdown-content h1 {
+      font-family: var(--cc-serif);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--cc-text);
+      margin: 0 0 8px;
+    }
+    .markdown-subtitle {
+      font-style: italic;
+      color: var(--cc-muted);
+      font-size: 1.05rem;
+      margin: 0;
+    }
+    .markdown-content h2 {
+      font-family: var(--cc-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cc-text);
+      margin: 48px 0 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--cc-border);
+    }
+    .markdown-content h3 {
+      font-family: var(--cc-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cc-gold-lt);
+      margin: 32px 0 8px;
+    }
+    .markdown-content h4 {
+      font-family: var(--cc-mono);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 24px 0 6px;
+    }
+    .markdown-content p { margin: 0 0 16px; color: var(--cc-text); }
+    .markdown-content strong { color: var(--cc-gold-lt); font-weight: 600; }
+    .markdown-content em { color: var(--cc-muted); }
+    .markdown-content a {
+      color: var(--cc-gold);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold-dim);
+      text-underline-offset: 3px;
+    }
+    .markdown-content a:hover,
+    .markdown-content a:focus-visible {
+      color: var(--cc-gold-lt);
+      text-decoration-color: var(--cc-gold-lt);
+    }
+    .markdown-content ul, .markdown-content ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+    }
+    .markdown-content li { margin-bottom: 6px; color: var(--cc-text); }
+    .markdown-content li::marker { color: var(--cc-gold); }
+    .markdown-content blockquote {
+      border-left: 3px solid var(--cc-gold);
+      padding: 8px 16px;
+      margin: 16px 0;
+      color: var(--cc-muted);
+      font-style: italic;
+      background: var(--cc-surface);
+    }
+    .markdown-content code {
+      font-family: var(--cc-mono);
+      font-size: .92em;
+      color: var(--cc-gold-lt);
+      background: var(--cc-surface);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+    .markdown-content pre {
+      background: var(--cc-surface);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-size: .85rem;
+      line-height: 1.55;
+    }
+    .markdown-content pre code {
+      background: none;
+      padding: 0;
+      color: var(--cc-text);
+      font-size: inherit;
+    }
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: .92rem;
+    }
+    .markdown-content th, .markdown-content td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--cc-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .markdown-content th {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      border-bottom: 2px solid var(--cc-border);
+    }
+    .markdown-content hr {
+      border: none;
+      border-top: 1px solid var(--cc-border);
+      margin: 32px 0;
+    }
+    .markdown-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+</style>
+
+
+  
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NAV — sourced from a single partial; pages mark their active section
+     by setting `activeNav` in front-matter (one of: orgchart, local,
+     state, national). Legacy values (you, dashboards, people, events)
+     are still accepted by pages that haven't been retagged yet — they
+     simply won't highlight any nav item.
+════════════════════════════════════════════════════════════════════ -->
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
+        <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Site sections">
+        <a class="nav-link" href="/microsites/shared/government-org-chart.html">Org Chart</a>
+        <a class="nav-link" href="/local/">Local</a>
+        <a class="nav-link" href="/state/">State</a>
+        <a class="nav-link" href="/national/">National</a>
+      </nav>
+      <div class="nav-right">
+        <button
+          type="button"
+          class="nav-search-toggle"
+          id="nav-search-toggle"
+          aria-expanded="false"
+          aria-controls="nav-search-panel"
+          aria-label="Open site search">
+          <svg class="nav-search-toggle__icon" aria-hidden="true" viewBox="0 0 20 20" focusable="false">
+            <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+            <line x1="13.5" y1="13.5" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-search-toggle__label">Search</span>
+        </button>
+        <a class="subscribe-btn" href="/preferences/" aria-label="Subscribe to email updates">
+          <span>Subscribe</span>
+        </a>
+        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+          <span>Alerts</span>
+          <span class="notif-count" aria-live="polite">11</span>
+        </button>
+      </div>
+
+      <!-- ─── Nav search dropdown (disclosure pattern) ────────────────
+           Toggled by #nav-search-toggle. Lazy-fetches /search-index.json
+           on first open, then runs the same client-side filtering as
+           the homepage block. role="region" + aria-label gives screen
+           readers a recognizable landmark; hidden attribute is the
+           authoritative open/close state. -->
+      <div
+        id="nav-search-panel"
+        class="nav-search-panel"
+        role="region"
+        aria-label="Site search"
+        hidden>
+        <div class="nav-search-panel__inner">
+          <div class="nav-search-panel__chips" role="group" aria-label="Filter results by jurisdiction tier">
+            <button type="button" class="nav-search-panel__chip" data-tier="all"      aria-pressed="true">All</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="local"    aria-pressed="false">Local</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="state"    aria-pressed="false">State</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="national" aria-pressed="false">National</button>
+          </div>
+          <form class="nav-search-panel__form" id="nav-search-form" role="search" aria-label="Site search">
+            <label class="sr-only" for="nav-search-input">Search topics, agencies, records, or address</label>
+            <input
+              type="search"
+              id="nav-search-input"
+              class="nav-search-panel__input"
+              name="q"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Search anything — or type a ZIP / address"
+              aria-describedby="nav-search-status">
+            <button type="submit" class="nav-search-panel__submit">
+              <span class="sr-only">Run search</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-search-panel__close" id="nav-search-close" aria-label="Close search">
+              <span aria-hidden="true">✕</span>
+            </button>
+          </form>
+          <p class="nav-search-panel__status" id="nav-search-status" role="status" aria-live="polite"></p>
+          <ul class="nav-search-panel__results" id="nav-search-results" role="list"></ul>
+          <p class="nav-search-panel__empty" id="nav-search-empty" hidden>No matches in this tier. Try a different filter or a shorter query.</p>
+        </div>
+      </div>
+
+<style>
+  /* Subscribe button in the dark nav. Gold border + gold label on dark bg.
+     Contrast: cc-gold (#c8a84b) on cc-bg (#0c1220) = 8.2:1 (AAA). */
+  .subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--cc-gold);
+    border-radius: 4px;
+    padding: 7px 14px;
+    margin-right: 8px;
+    color: var(--cc-gold);
+    font-family: var(--cc-mono);
+    font-size: .75rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .18s, color .18s;
+    min-height: 32px;
+  }
+  .subscribe-btn:hover,
+  .subscribe-btn:focus-visible {
+    background: var(--cc-gold);
+    color: #0c1220;
+  }
+  @media (max-width: 600px) {
+    .subscribe-btn { padding: 7px 10px; }
+    .subscribe-btn span { display: none; }
+    .subscribe-btn::before {
+      content: "✉";
+      font-size: 1rem;
+      line-height: 1;
+    }
+  }
+</style>
+    </div>
+  </div>
+</header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NOTIFICATIONS PANEL
+════════════════════════════════════════════════════════════════════ -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">Alerts &amp; notifications</span>
+    <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
+  </div>
+  <div class="notif-filters" role="group" aria-label="Filter notifications">
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (21)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (10)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (4)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (7)</button>
+  </div>
+  <div class="notif-scroll">
+
+    <div class="notif-group-label">Critical — act now</div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>DATP Public Comment reading room is live.</strong> The City of Colorado Springs Digital Accessibility Transition Plan (Draft 2026), with the full plan embedded as a PDF and twelve structured public comments residents can adapt and submit. Comment portal links live in the reading room.</div>
+        <div class="notif-meta">Public comment · COS Digital Accessibility Transition Plan · May 2026</div>
+        <a class="notif-action" href="/microsites/city/ada/datp-comment.html">Open the DATP reading room <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>BOCC petition — service plan transparency &amp; algorithmic pricing disclosure.</strong> A general resident petition with four narrow asks within existing BOCC authority. Sign and send.</div>
+        <div class="notif-meta">Civic action · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/housing-rent-bocc_petition_letter.html">Open petition letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Veterans' petition to the EPC BOCC.</strong> Companion petition for veterans of any branch — service plan transparency and algorithmic pricing protections, framed around military housing harms.</div>
+        <div class="notif-meta">Civic action · Veterans · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/bocc_petition_veteran.html">Open veterans' petition <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LDC update — public comment on service plan transparency.</strong> A 300-word comment ready to submit through the El Paso County Land Development Code update process.</div>
+        <div class="notif-meta">Public comment · LDC update · El Paso County · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/ldc_update_comment.html">Open LDC comment <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Background brief — algorithmic rent pricing in El Paso County.</strong> Sourced reference for journalists, policy analysts, and the COS Chamber housing committee: federal antitrust action, local policy options, and the case for BOCC-level service plan transparency.</div>
+        <div class="notif-meta">Reference · Housing &amp; pricing · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/housing_pricing_background_brief.html">Read background brief <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
+        <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/home-arp-form-preview.html">Open the accessible HTML form preview <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle README <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Downtown Funding and Records Search</strong> Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</div>
+        <div class="notif-meta">Annual adopted budget — C.R.S. 29-1-101 et seq · April 10, 2026</div>
+        <a class="notif-action" href="/microsites/downtown/downtown_cs_search_portal_v2_ada.html">Open the search portal <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+	  
+	      <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
+        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35 · April 8, 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">Open district audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access their own district's records.</div>
+        <div class="notif-meta">EPC Assessor audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See district audit <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021. No governance docs. No financials. One compliance letter fixes all 30+ simultaneously.</div>
+        <div class="notif-meta">Platform audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">High priority</div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Plain-language IC3 intake — open-source reference.</strong> Single-file concept for the FBI IC3 complaint form: one free-text box, client-side extraction into the official complaint structure, honest provenance badges on every pre-filled field, hand-off to the real form. WCAG 2.1 AAA, restrictive CSP, no backend, no third-party requests. CONFIG-driven so any agency can re-point it at a different form.</div>
+        <div class="notif-meta">Open source · National · FBI IC3 · May 2026 · WCAG 2.1 AAA</div>
+        <a class="notif-action" href="/microsites/national/IC3/ic3_intake_opensource.html">Open the plain-language intake <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes, budgets, and audit docs are almost certainly untagged. This is the real HB21-1110 failure — not the homepage.</div>
+        <div class="notif-meta">ADA document audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">View ADA analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it. This is the foundational legal document. Not one district links it publicly.</div>
+        <div class="notif-meta">Governance gap · §32-1-202</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106. Due to State Auditor by July 31. The clock is running.</div>
+        <div class="notif-meta">Governance gap · §32-1-106 · due July 31</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">Informational</div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records both awaiting reply. Response window is still open.</div>
+        <div class="notif-meta">CORA tracker · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/requests_tracker_and_military_numbers.html">View tracker <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
+        <div class="notif-meta">Compliance analysis · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
+        <div class="notif-meta">New · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CSPD Blotter — Weekly History is live.</strong> 271 incidents pulled directly from the live blotter feed, paired with a Poisson 95% confidence band to flag statistical anomalies week to week. Tabs are full APG-pattern keyboard accessible; every chart has an aria-label.</div>
+        <div class="notif-meta">New · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Lorson Ranch financial dashboard is live.</strong> Seven cross-pledged metro districts, $94.2M aggregate audited deficit, IGA money flows, and a per-home tax calculator — sourced from 2026 budgets and 2024 audits. Companion plain-language briefing available as a download.</div>
+        <div class="notif-meta">New · Special Districts · April 2026</div>
+        <a class="notif-action" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CBI Missing Persons form — accessible rebuild is live.</strong> Resolves all seven critical/serious findings from the ADA audit: skip link, live regions, focus management, EN/ES localization, real-time validation messaging. Drops into the existing Drupal Webform infrastructure with optional Claude API routing.</div>
+        <div class="notif-meta">New · State · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LexisNexis ADAM Program dashboard — accessible rebuild is live.</strong> Audit and reference rebuild of the missing-children dashboard: APG-pattern tabs with roving tabindex and full keyboard nav, solid amber focus rings (3:1 against any surface), darker success-green for AA contrast, and "View Poster" placeholders converted from dead anchors to real buttons.</div>
+        <div class="notif-meta">New · Private Sector · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <main id="main-content" tabindex="-1">
+    
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  /* Palette — WCAG 2.1 verified.
+     Dark text (navy #0c1b2e) on --off → 16.02 AAA
+     Body ink #1c1a16 on --off → 16.07 AAA
+     Gold #c8a84b on navy → 7.56 AAA (light-on-dark only).
+     gold-d #7a5e1a added for dark text on light bgs (5.64 AA — was gold #c8a84b at 2.12 FAIL). */
+  --navy:#0c1b2e;
+  --navy-2:#152640;
+  --navy-3:#1e3354;
+  --gold:#c8a84b;
+  --gold-d:#7a5e1a;
+  --gold-light:#e8c878;
+  --gold-pale:rgba(200,168,75,.10);
+  --red:#b91c1c;
+  --red-pale:#fef2f2;
+  --white:#ffffff;
+  --off:#f7f6f2;
+  --ink:#1c1a16;
+  --ink-2:#3d3a32;
+  --ink-3:#6b6355;
+  --rule:rgba(200,168,75,.28);
+  --focus:#1d4ed8;
+}
+
+html{font-size:17px;scroll-behavior:smooth}
+body{background:var(--off);color:var(--ink);font-family:'Source Serif 4',Georgia,serif;-webkit-font-smoothing:antialiased;min-height:100vh;line-height:1.65}
+
+/* ── SKIP LINK ─────────────────────────── */
+.skip{position:absolute;left:-9999px;top:6px;z-index:9999;background:var(--navy);color:#fff;padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:.82rem;border-radius:3px;text-decoration:none;outline:3px solid var(--gold)}
+.skip:focus{left:8px}
+*:focus{outline:none}
+*:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  .deadline-pulse{animation:none}
+  .hero-inner>*{animation:none}
+}
+
+/* ── DEADLINE BANNER ───────────────────── */
+.deadline-banner{background:var(--red);padding:0}
+.deadline-inner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.deadline-left{display:flex;align-items:center;gap:14px}
+.deadline-pulse{width:12px;height:12px;border-radius:50%;background:#fff;flex-shrink:0;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.deadline-text{font-family:'IBM Plex Mono',monospace;font-size:.82rem;letter-spacing:.04em;color:#fff;line-height:1.5}
+.deadline-text strong{display:block;font-size:.9rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.deadline-count{font-family:'Playfair Display',Georgia,serif;font-size:1.7rem;font-weight:900;color:#fff;letter-spacing:-.02em;white-space:nowrap}
+/* rgba(255,255,255,.7) on red #b91c1c → ~3.05; raised to #ffffff for AAA */
+.deadline-count span{font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;display:block;text-align:right;color:#ffffff;margin-top:-2px}
+
+/* ── SITE HEADER ───────────────────────── */
+.site-header{background:var(--navy);border-bottom:3px solid var(--gold)}
+.header-inner{max-width:1100px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo-link{display:flex;align-items:center;gap:16px;text-decoration:none}
+.logo-link:focus-visible{outline:2px solid var(--gold-light);outline-offset:4px;border-radius:3px}
+.seal{width:50px;height:50px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.seal-text{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--gold);letter-spacing:.06em;text-align:center;line-height:1.3}
+.logo-words strong{display:block;font-family:'Playfair Display',Georgia,serif;font-size:1.05rem;font-weight:700;color:#fff;letter-spacing:.01em}
+/* was rgba(200,168,75,.8) 5.26 at 9.5px → #d0b052 8.26 AAA at .78rem */
+.logo-words span{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#d0b052}
+/* was rgba(255,255,255,.4) 3.77 FAIL → #c9cdd3 10.86 AAA */
+.header-doc-id{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:#c9cdd3;text-align:right;line-height:1.65}
+.header-doc-id strong{display:block;color:var(--gold);font-size:.82rem;letter-spacing:.1em}
+
+/* ── HERO ──────────────────────────────── */
+.hero{background:var(--navy-2);padding:72px 24px 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(200,168,75,.04) 39px,rgba(200,168,75,.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(200,168,75,.04) 39px,rgba(200,168,75,.04) 40px);pointer-events:none}
+.hero-inner{max-width:860px;margin:0 auto;position:relative}
+.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::after{content:'';flex:1;max-width:60px;height:1px;background:var(--gold);opacity:.6}
+.hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(30px,5vw,52px);font-weight:900;line-height:1.12;color:#fff;letter-spacing:-.02em;margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--gold-light)}
+.hero-lead{font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,.92);line-height:1.75;font-weight:400;max-width:700px;margin-bottom:32px}
+.hero-lead strong{color:#fff;font-weight:600}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:rgba(200,168,75,.4);border:1px solid rgba(200,168,75,.4);border-radius:6px;overflow:hidden;margin-top:8px}
+.stat-cell{background:var(--navy);padding:18px 20px}
+.stat-num{font-family:'Playfair Display',Georgia,serif;font-size:2rem;font-weight:900;color:var(--gold-light);line-height:1;letter-spacing:-.02em}
+.stat-num.red-stat{color:#fca5a5}
+/* was rgba(255,255,255,.45) 4.44 at 9.5px → #b8bec6 9.26 AAA at .78rem */
+.stat-label{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:#b8bec6;margin-top:8px;line-height:1.45}
+
+/* ── LEGAL NOTICE BLOCK ────────────────── */
+.legal-notice{background:var(--red-pale);border-left:4px solid var(--red);margin:0;padding:0}
+.legal-notice-inner{max-width:1100px;margin:0 auto;padding:32px 24px}
+.legal-notice-header{font-family:'IBM Plex Mono',monospace;font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.legal-notice-header::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0}
+.legal-body{font-size:1rem;line-height:1.85;color:#5f1d1d;max-width:900px}
+.legal-body p{margin-bottom:12px}
+.legal-body p:last-child{margin-bottom:0}
+.legal-body strong{font-weight:600;color:#7f1d1d}
+.cite{font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:#991b1b;background:rgba(185,28,28,.1);padding:1px 5px;border-radius:2px;white-space:nowrap}
+
+/* ── MAIN CONTENT ──────────────────────── */
+.main-content{max-width:1100px;margin:0 auto;padding:56px 24px 80px}
+
+/* ── SECTION HEADERS ───────────────────── */
+.section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:28px}
+/* was --gold #c8a84b on gold-pale 2.12 FAIL → --gold-d #7a5e1a 5.51 AA */
+.section-num{font-family:'IBM Plex Mono',monospace;font-size:.82rem;letter-spacing:.16em;color:var(--gold-d);background:var(--gold-pale);border:1px solid rgba(200,168,75,.45);border-radius:3px;padding:4px 10px;white-space:nowrap;font-weight:600}
+.section-title{font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;font-weight:700;color:var(--navy);letter-spacing:-.01em}
+.section-rule{height:1px;background:var(--rule);margin-bottom:28px}
+
+/* ── DOCUMENT GRID ─────────────────────── */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:48px}
+
+.doc-card{background:#fff;border:1px solid rgba(12,27,46,.10);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s}
+.doc-card:hover{box-shadow:0 8px 32px rgba(12,27,46,.10);transform:translateY(-2px)}
+.doc-card.featured{border:2px solid var(--gold)}
+
+.doc-card-top{background:var(--navy);padding:22px 22px 20px;position:relative}
+.doc-type-badge{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:block}
+.doc-card-title{font-family:'Playfair Display',Georgia,serif;font-size:1.2rem;font-weight:700;color:#fff;line-height:1.25;letter-spacing:-.01em}
+/* was rgba(255,255,255,.38) 3.54 FAIL → #b8bec6 9.26 AAA */
+.doc-card-meta{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:#b8bec6;margin-top:8px;letter-spacing:.06em}
+.doc-card-icon{position:absolute;top:20px;right:20px;font-size:1.4rem;opacity:.55}
+
+.doc-card-body{padding:20px 22px;flex:1;display:flex;flex-direction:column;gap:12px}
+.doc-card-desc{font-size:.95rem;line-height:1.7;color:var(--ink-2);flex:1}
+.doc-findings{display:flex;flex-wrap:wrap;gap:6px}
+.doc-finding-tag{font-family:'IBM Plex Mono',monospace;font-size:.78rem;padding:4px 9px;border-radius:3px;letter-spacing:.04em;font-weight:600}
+.tag-crit{background:#fee2e2;color:#991b1b}
+.tag-serious{background:#fef3c7;color:#92400e}
+.tag-pass{background:#dcfce7;color:#166534}
+.tag-info{background:#dbeafe;color:#1e40af}
+.tag-tool{background:#f3e8ff;color:#6b21a8}
+
+.doc-card-footer{padding:14px 22px;border-top:1px solid rgba(12,27,46,.15);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.doc-link{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:.82rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);padding:9px 14px;border:1.5px solid var(--navy);border-radius:3px;transition:background .15s,color .15s;white-space:nowrap}
+.doc-link:hover{background:var(--navy);color:#fff}
+.doc-link:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.doc-link svg{width:14px;height:14px;flex-shrink:0}
+.doc-size{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--ink-3);letter-spacing:.06em}
+
+/* ── FINDINGS SUMMARY TABLE ────────────── */
+.findings-table{width:100%;border-collapse:collapse;margin-bottom:48px;font-size:.95rem}
+.findings-table thead th{background:var(--navy);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;padding:14px 16px;text-align:left;font-weight:600;border:none}
+.findings-table tbody tr{border-bottom:1px solid rgba(12,27,46,.15);transition:background .15s}
+.findings-table tbody tr:hover{background:var(--gold-pale)}
+.findings-table tbody tr:last-child{border-bottom:none}
+.findings-table td{padding:13px 16px;vertical-align:top;line-height:1.5}
+.findings-table td:first-child{font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--ink-2);white-space:nowrap;font-weight:600}
+.findings-table tbody tr:nth-child(even){background:rgba(12,27,46,.04)}
+.findings-table tbody tr:nth-child(even):hover{background:var(--gold-pale)}
+.sev-badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:2px;font-weight:600;white-space:nowrap}
+.sev-crit{background:#fee2e2;color:#991b1b}
+.sev-ser{background:#fef3c7;color:#92400e}
+.sev-pass{background:#dcfce7;color:#166534}
+.wcag-sc{font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--ink-2)}
+
+/* ── REMEDIATION TIMELINE ──────────────── */
+.timeline{position:relative;padding-left:28px;margin-bottom:48px}
+.timeline::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:rgba(200,168,75,.3)}
+.tl-item{position:relative;margin-bottom:28px}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-23px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--gold-d);background:var(--off);flex-shrink:0}
+.tl-dot.urgent{background:var(--red);border-color:var(--red)}
+.tl-dot.done{background:var(--gold-d);border-color:var(--gold-d)}
+/* was --gold #c8a84b on off 2.12 FAIL → --gold-d #7a5e1a 5.51 AA */
+.tl-date{font-family:'IBM Plex Mono',monospace;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-d);margin-bottom:4px;font-weight:600}
+.tl-date.red-date{color:var(--red)}
+.tl-title{font-family:'Source Serif 4',Georgia,serif;font-size:1.05rem;font-weight:600;color:var(--navy);margin-bottom:4px}
+.tl-body{font-size:.95rem;color:var(--ink-2);line-height:1.65}
+.tl-body .cite{color:var(--ink-2);background:rgba(0,0,0,.08)}
+
+/* ── STATUTORY CITATIONS ───────────────── */
+.citations-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:48px}
+.citation-card{background:#fff;border:1px solid rgba(12,27,46,.10);border-radius:6px;padding:16px 18px}
+.citation-ref{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--navy);letter-spacing:.04em;margin-bottom:6px}
+.citation-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.citation-body{font-size:13px;color:var(--ink-3);line-height:1.6}
+
+/* ── CONTACT / COORDINATOR ─────────────── */
+.coordinator-card{background:var(--navy);border-radius:8px;padding:28px 32px;display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap;margin-bottom:48px}
+.coordinator-avatar{width:52px;height:52px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--navy);flex-shrink:0}
+.coordinator-info{flex:1;min-width:200px}
+.coordinator-label{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.7);margin-bottom:6px}
+.coordinator-name{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:4px}
+.coordinator-role{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:12px}
+.coordinator-contacts{display:flex;flex-wrap:wrap;gap:16px}
+.coord-link{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--gold-light);text-decoration:none;letter-spacing:.04em}
+.coord-link:hover{color:#fff;text-decoration:underline}
+.coord-link:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:2px}
+.coordinator-right{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.coord-stat{text-align:right}
+.coord-stat-num{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;color:var(--gold-light)}
+.coord-stat-label{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+
+/* ── FOOTER ────────────────────────────── */
+.site-footer{background:var(--navy);border-top:1px solid rgba(200,168,75,.15);padding:32px 24px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-left p{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);line-height:1.8}
+.footer-left strong{color:rgba(255,255,255,.5)}
+.footer-nav{display:flex;flex-wrap:wrap;gap:16px}
+.footer-nav a{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);text-decoration:underline;text-underline-offset:3px}
+.footer-nav a:hover{color:var(--gold)}
+.footer-nav a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* ── ANIMATIONS ─────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hero-inner>*{animation:fadeUp .5s ease both}
+.hero-eyebrow{animation-delay:.05s}
+.hero h1{animation-delay:.15s}
+.hero-lead{animation-delay:.25s}
+.stat-row{animation-delay:.35s}
+
+/* ── RESPONSIVE ─────────────────────────── */
+@media(max-width:600px){
+  .header-doc-id{display:none}
+  .findings-table{font-size:13px}
+  .findings-table td{padding:10px 10px}
+  .coordinator-right{display:none}
+}
+</style>
+<!-- ── DEADLINE BANNER ─────────────────────── -->
+<div role="region" aria-label="Compliance deadline notice">
+  <div class="deadline-banner">
+    <div class="deadline-inner">
+      <div class="deadline-left">
+        <span class="deadline-pulse" aria-hidden="true"></span>
+        <div class="deadline-text">
+          <strong>DOJ Title II Compliance Deadline</strong>
+          28 C.F.R. §§ 35.200–35.205 · WCAG 2.1 Level AA Required
+        </div>
+      </div>
+      <div class="deadline-count" aria-label="18 days remaining until deadline">
+        18 <span>days remaining</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── HEADER ──────────────────────────────── -->
+<header class="site-header" role="region" aria-label="Page header">
+  <div class="header-inner">
+    <a href="https://coag.gov" class="logo-link" aria-label="Colorado Attorney General — coag.gov">
+      <div class="seal" aria-hidden="true">
+        <div class="seal-text">CO<br>AG</div>
+      </div>
+      <div class="logo-words">
+        <strong>Colorado Attorney General</strong>
+        <span>Phil Weiser · Department of Law</span>
+      </div>
+    </a>
+    <div class="header-doc-id" aria-label="Document classification: ADA compliance brief, April 2026">
+      <strong>ADA Compliance Brief</strong>
+      April 2026 · Digital Accessibility<br>
+      Prepared for AG Office Review
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO ────────────────────────────────── -->
+<div class="hero" role="region" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <p class="hero-eyebrow" aria-hidden="true">Emergency Compliance Package · Colorado Dept. of Law</p>
+    <h1 id="hero-heading">
+      Digital Accessibility<br>
+      <em>Compliance Brief</em>
+    </h1>
+    <p class="hero-lead">
+      A comprehensive ADA / WCAG 2.1 Level AA audit of the Colorado Attorney General's digital complaint
+      infrastructure identified <strong>95 confirmed violations</strong> across four technology platforms.
+      The DOJ Title II compliance deadline of <strong>April 24, 2026</strong> — enacted by
+      <strong>28 C.F.R. §§ 35.200–35.205</strong> — is 18 days from the date of this brief.
+      This package contains the full audit record, compliant form prototype, and remediation roadmap
+      required to demonstrate good-faith compliance and reduce enforcement exposure.
+    </p>
+
+    <div class="stat-row" role="list" aria-label="Audit summary statistics">
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num red-stat">95</div>
+        <div class="stat-label">Confirmed<br>WCAG Violations</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num red-stat">37</div>
+        <div class="stat-label">Critical<br>Severity</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num red-stat">4</div>
+        <div class="stat-label">Technology<br>Platforms</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num">$115K</div>
+        <div class="stat-label">DOJ First<br>Violation Fine</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num">$815K</div>
+        <div class="stat-label">Max Precedent<br>Total Exposure</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="stat-num red-stat">18</div>
+        <div class="stat-label">Days to<br>Deadline</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LEGAL NOTICE ─────────────────────────── -->
+<section class="legal-notice" aria-labelledby="legal-notice-heading">
+  <div class="legal-notice-inner">
+    <div class="legal-notice-header" id="legal-notice-heading">
+      Mandatory Compliance Notice — Attorney General's Office of Colorado
+    </div>
+    <div class="legal-body">
+      <p>
+        The Colorado Attorney General's Office, as a state government entity, is legally obligated under
+        <strong>Title II of the Americans with Disabilities Act</strong> (<span class="cite">42 U.S.C. §§ 12131–12165</span>)
+        and the Department of Justice's <strong>Web Accessibility Final Rule</strong>
+        (<span class="cite">28 C.F.R. §§ 35.200–35.205</span>, effective June 24, 2024) to ensure that all
+        public-facing websites, web applications, and complaint intake systems conform to
+        <strong>WCAG 2.1 Level AA</strong> by no later than <strong>April 24, 2026</strong>.
+        The Colorado AG's office serves a population well exceeding 50,000 persons, placing it squarely
+        within the mandatory compliance cohort specified at <span class="cite">28 C.F.R. § 35.200(b)(1)</span>.
+        The DOJ has confirmed that no extensions to this deadline are available.
+      </p>
+      <p>
+        Enforcement of this obligation is compounded by the fact that this office is charged with
+        <em>enforcing</em> ADA Title II against other Colorado entities under
+        <span class="cite">42 U.S.C. § 12133</span>. Any failure to comply with the same standards this
+        office enforces creates substantial institutional, legal, and reputational exposure. The DOJ
+        Civil Rights Division enforces Title II through complaint investigations, compliance reviews, and
+        pattern-or-practice litigation. Civil penalties for a first violation are
+        <strong>$115,231</strong> (inflation-adjusted 2024); a second violation is
+        <strong>$230,464</strong>. Settlement agreements with comparable state agencies have resulted in
+        total costs of <strong>$665,000–$815,000</strong> inclusive of remediation, legal fees,
+        accessibility coordinator requirements, and mandatory staff training. Emergency remediation
+        rates — applicable to work commenced after April 24 — are currently running
+        <strong>4–5× normal vendor rates</strong> due to market scarcity.
+      </p>
+      <p>
+        Additional obligations arise under <strong>Section 504 of the Rehabilitation Act</strong>
+        (<span class="cite">29 U.S.C. § 794</span>), <strong>Executive Order 13166</strong> (LEP access —
+        directly implicated by the Spanish-language complaint infrastructure findings),
+        <strong>Title VI of the Civil Rights Act</strong> (<span class="cite">42 U.S.C. § 2000d</span>),
+        and <strong>8 CCR 1501-11</strong> (Colorado Technology Accessibility Standards).
+        The materials contained in this package constitute the good-faith compliance record recommended
+        by DOJ guidance for entities demonstrating documented remediation effort prior to enforcement action.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── MAIN ─────────────────────────────────── -->
+<div role="region" aria-label="Page content" class="main-content">
+
+  <!-- ── DELIVERABLES ───────────────────────── -->
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Compliance Package — Deliverables</h2>
+  </div>
+  <div class="section-rule" role="separator"></div>
+
+  <div class="doc-grid" role="list" aria-label="Compliance package documents">
+
+    <!-- PDF AUDIT REPORT -->
+    <article class="doc-card featured" role="listitem" aria-labelledby="doc1-title">
+      <div class="doc-card-top">
+        <span class="doc-type-badge">Primary Deliverable</span>
+        <h3 class="doc-card-title" id="doc1-title">ADA / WCAG 2.1 Formal Audit Report</h3>
+        <div class="doc-card-meta">PDF · 14 sections · 30+ pages</div>
+        <span class="doc-card-icon" aria-hidden="true">📋</span>
+      </div>
+      <div class="doc-card-body">
+        <p class="doc-card-desc">
+          Full formal audit covering coag.gov, complaints.coag.gov (Salesforce Experience Cloud),
+          all seven Gravity Forms deployments, the Spanish complaint infrastructure, and
+          coloradonocall.com. Includes statutory citations on every finding, technology stack map,
+          remediation priority matrix (top 30 findings), and platform recommendations.
+          Formatted for submission to DOJ as a good-faith compliance record.
+        </p>
+        <div class="doc-findings">
+          <span class="doc-finding-tag tag-crit">37 Critical</span>
+          <span class="doc-finding-tag tag-serious">51 Serious</span>
+          <span class="doc-finding-tag tag-info">4 Platforms</span>
+          <span class="doc-finding-tag tag-info">Statutory Citations</span>
+        </div>
+      </div>
+      <div class="doc-card-footer">
+        <a href="coag_ada_audit_report.pdf" class="doc-link" aria-label="Open ADA audit report PDF">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Open Report
+        </a>
+        <span class="doc-size">64 KB · PDF</span>
+      </div>
+    </article>
+
+    <!-- COMPLAINT FORM PROTOTYPE -->
+    <article class="doc-card" role="listitem" aria-labelledby="doc2-title">
+      <div class="doc-card-top">
+        <span class="doc-type-badge">Technical Prototype</span>
+        <h3 class="doc-card-title" id="doc2-title">Salesforce-Integrated Complaint Form</h3>
+        <div class="doc-card-meta">HTML · Production-ready · Bilingual EN/ES</div>
+        <span class="doc-card-icon" aria-hidden="true">⚡</span>
+      </div>
+      <div class="doc-card-body">
+        <p class="doc-card-desc">
+          Triage-first complaint intake form modeled on the FBI tips architecture. Single narrative
+          field — no forced self-categorization. Full Salesforce REST API integration (Case object),
+          Claude AI routing, bilingual English/Spanish toggle with correct <code>lang</code> switching,
+          and all 95 audit findings addressed in design. 131 accessibility passes, 0 failures
+          after remediation.
+        </p>
+        <div class="doc-findings">
+          <span class="doc-finding-tag tag-pass">131 A11y Passes</span>
+          <span class="doc-finding-tag tag-tool">Salesforce API</span>
+          <span class="doc-finding-tag tag-tool">AI Routing</span>
+          <span class="doc-finding-tag tag-pass">WCAG 2.1 AA</span>
+        </div>
+      </div>
+      <div class="doc-card-footer">
+        <a href="coag-complaint-form.html" class="doc-link" aria-label="Open accessible complaint form prototype">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Open Form
+        </a>
+        <span class="doc-size">74 KB · HTML</span>
+      </div>
+    </article>
+
+    <!-- ADA AUDIT HTML -->
+    <article class="doc-card" role="listitem" aria-labelledby="doc3-title">
+      <div class="doc-card-top">
+        <span class="doc-type-badge">Technical Audit</span>
+        <h3 class="doc-card-title" id="doc3-title">Interactive ADA Audit — coag.gov</h3>
+        <div class="doc-card-meta">HTML · DOM-level findings · Annotated</div>
+        <span class="doc-card-icon" aria-hidden="true">🔍</span>
+      </div>
+      <div class="doc-card-body">
+        <p class="doc-card-desc">
+          Interactive HTML record of the live browser audit. Documents real-time DOM inspection
+          results — tab order, focus indicators, ARIA chains, shadow DOM traversal, color contrast
+          computations, and heading hierarchy. Complements the formal PDF with technical evidence
+          at the code level. Useful for the development team implementing remediation.
+        </p>
+        <div class="doc-findings">
+          <span class="doc-finding-tag tag-info">DOM Analysis</span>
+          <span class="doc-finding-tag tag-info">Contrast Ratios</span>
+          <span class="doc-finding-tag tag-info">Tab Order Map</span>
+          <span class="doc-finding-tag tag-info">Shadow DOM</span>
+        </div>
+      </div>
+      <div class="doc-card-footer">
+        <a href="coag-ada-audit.html" class="doc-link" aria-label="Open interactive ADA audit record">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Open Audit
+        </a>
+        <span class="doc-size">34 KB · HTML</span>
+      </div>
+    </article>
+
+    <!-- REDESIGN PROTOTYPE -->
+    <article class="doc-card" role="listitem" aria-labelledby="doc4-title">
+      <div class="doc-card-top">
+        <span class="doc-type-badge">UX Prototype</span>
+        <h3 class="doc-card-title" id="doc4-title">File-a-Complaint Hub Redesign</h3>
+        <div class="doc-card-meta">HTML · Triage-first architecture · AG branded</div>
+        <span class="doc-card-icon" aria-hidden="true">✦</span>
+      </div>
+      <div class="doc-card-body">
+        <p class="doc-card-desc">
+          Full redesign of the coag.gov complaint intake hub applying the FBI tips triage model:
+          skip link first, global focus ring, descriptive card links, correct heading hierarchy,
+          no forced self-categorization. Demonstrates what the landing experience should be
+          post-remediation. Addresses findings #1–#20 and #45–#48 directly.
+        </p>
+        <div class="doc-findings">
+          <span class="doc-finding-tag tag-pass">Focus Fixed</span>
+          <span class="doc-finding-tag tag-pass">Links Descriptive</span>
+          <span class="doc-finding-tag tag-pass">Headings Correct</span>
+          <span class="doc-finding-tag tag-tool">FBI Tips Model</span>
+        </div>
+      </div>
+      <div class="doc-card-footer">
+        <a href="coag-file-complaint-redesign.html" class="doc-link" aria-label="Open file-a-complaint hub redesign prototype">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Open Redesign
+        </a>
+        <span class="doc-size">43 KB · HTML</span>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ── CRITICAL FINDINGS SUMMARY ──────────── -->
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Critical Findings Requiring Immediate Action</h2>
+  </div>
+  <div class="section-rule" role="separator"></div>
+
+  <table class="findings-table" aria-label="Critical accessibility findings requiring immediate remediation">
+    <thead>
+      <tr>
+        <th scope="col">Finding</th>
+        <th scope="col">Severity</th>
+        <th scope="col">Description</th>
+        <th scope="col">WCAG SC</th>
+        <th scope="col">Platform</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>#18</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>No visible focus indicator on any link site-wide — keyboard users receive no visual feedback on any interactive element</td>
+        <td><span class="wcag-sc">2.4.7</span></td>
+        <td>coag.gov</td>
+      </tr>
+      <tr>
+        <td>#19</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>All collapsed nav dropdowns remain in Tab order — 50+ invisible links precede main content for keyboard users</td>
+        <td><span class="wcag-sc">2.1.1, 2.4.3</span></td>
+        <td>coag.gov</td>
+      </tr>
+      <tr>
+        <td>#45–48</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>Four complaint categories route to broken destinations — Securities Fraud has no form; others redirect to licensing pages or press releases</td>
+        <td><span class="wcag-sc">2.4.4</span></td>
+        <td>coag.gov</td>
+      </tr>
+      <tr>
+        <td>#24</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>All Salesforce form field labels inaccessible — aria-labelledby chains broken by nested shadow DOM; every field announced as unlabeled to screen readers</td>
+        <td><span class="wcag-sc">1.3.1, 4.1.2</span></td>
+        <td>complaints.coag.gov</td>
+      </tr>
+      <tr>
+        <td>#79</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>Spanish complaint hub has 11 nameless image-only card links — entire Spanish complaint navigation invisible to assistive technology</td>
+        <td><span class="wcag-sc">1.1.1, 4.1.2</span></td>
+        <td>coag.gov / ES</td>
+      </tr>
+      <tr>
+        <td>#80</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>lang="en-US" on all Spanish-language pages — screen readers mispronounce all Spanish content; Level A (most fundamental) WCAG failure</td>
+        <td><span class="wcag-sc">3.1.1 (A), 3.1.2</span></td>
+        <td>coag.gov / ES</td>
+      </tr>
+      <tr>
+        <td>#92</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>coloradonocall.com error text: 1.33:1 contrast ratio on medium-blue background — validation messages physically unreadable</td>
+        <td><span class="wcag-sc">1.4.3</span></td>
+        <td>coloradonocall.com</td>
+      </tr>
+      <tr>
+        <td>#25</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>Salesforce form: focus drops to &lt;body&gt; after validation failure — users cannot locate error fields; no assertive announcement</td>
+        <td><span class="wcag-sc">3.3.1, 2.4.3</span></td>
+        <td>complaints.coag.gov</td>
+      </tr>
+      <tr>
+        <td>#35</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>Salesforce optional demographic step: fields marked required in DOM despite being presented as optional — users cannot advance without completing them</td>
+        <td><span class="wcag-sc">3.3.2, 1.3.1</span></td>
+        <td>complaints.coag.gov</td>
+      </tr>
+      <tr>
+        <td>#20</td>
+        <td><span class="sev-badge sev-crit">Critical</span></td>
+        <td>Skip link is not the first focusable element — announcement banner link precedes it, defeating its bypass function entirely</td>
+        <td><span class="wcag-sc">2.4.1</span></td>
+        <td>coag.gov</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── REMEDIATION TIMELINE ─────────────── -->
+  <div class="section-head">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Recommended Remediation Timeline</h2>
+  </div>
+  <div class="section-rule" role="separator"></div>
+
+  <div class="timeline" role="list" aria-label="Remediation timeline">
+
+    <div class="tl-item" role="listitem">
+      <div class="tl-dot urgent" aria-hidden="true"></div>
+      <div class="tl-date red-date">Immediately — April 7–10, 2026</div>
+      <div class="tl-title">Emergency fixes: broken routes, Spanish lang, skip link</div>
+      <div class="tl-body">
+        Fix four broken complaint category redirections (#45–48). Add <span class="cite">lang="es"</span>
+        to all Spanish page templates (#80). Move skip link to DOM position 1 (#20).
+        Add <span class="cite">alt</span> text to 11 Spanish hub card images (#79).
+        These are content/template changes — no development sprint required.
+        Under <span class="cite">28 C.F.R. § 35.130(b)(1)(i)</span>, denial of program access
+        is the highest-priority enforcement category.
+      </div>
+    </div>
+
+    <div class="tl-item" role="listitem">
+      <div class="tl-dot urgent" aria-hidden="true"></div>
+      <div class="tl-date red-date">Sprint 1 — April 10–17, 2026</div>
+      <div class="tl-title">Global CSS fixes: focus indicators, nav tab order, paragraph spacing</div>
+      <div class="tl-body">
+        Add global <span class="cite">:focus-visible</span> CSS rule (#18).
+        Apply <span class="cite">tabindex="-1"</span> to collapsed nav dropdown links (#19).
+        Set <span class="cite">scroll-padding-top: 40px</span> on html (#94).
+        Add <span class="cite">margin-bottom: 2em</span> to paragraph elements (#95).
+        These are single-file CSS changes deployable in minutes.
+      </div>
+    </div>
+
+    <div class="tl-item" role="listitem">
+      <div class="tl-dot" aria-hidden="true"></div>
+      <div class="tl-date">Sprint 2 — April 17–24, 2026 (deadline)</div>
+      <div class="tl-title">Gravity Forms template fixes — all 7 forms simultaneously</div>
+      <div class="tl-body">
+        Add <span class="cite">aria-hidden="true"</span> to required asterisk spans.
+        Change Previous button <span class="cite">type</span> from <span class="cite">submit</span>
+        to <span class="cite">button</span>. Add step indicators with
+        <span class="cite">aria-current="step"</span>. Wrap radio groups in
+        <span class="cite">fieldset/legend</span>. Add <span class="cite">role="alert"</span>
+        to validation container. Template-level — fix once, applies to all 7 forms.
+      </div>
+    </div>
+
+    <div class="tl-item" role="listitem">
+      <div class="tl-dot" aria-hidden="true"></div>
+      <div class="tl-date">Post-deadline — April 25 – June 2026</div>
+      <div class="tl-title">Salesforce platform remediation and CRM expansion</div>
+      <div class="tl-body">
+        Engage Salesforce on shadow DOM label failures (#24), CSS error dialog (#11),
+        switch toggle ARIA (#34), and progress indicator semantics (#30).
+        Begin Salesforce Government Cloud + Service Cloud Case Management evaluation.
+        Deploy the triage-first complaint form prototype included in this package as replacement
+        for the current multi-step categorization flow.
+      </div>
+    </div>
+
+    <div class="tl-item" role="listitem">
+      <div class="tl-dot done" aria-hidden="true"></div>
+      <div class="tl-date">Ongoing — Q3 2026 onward</div>
+      <div class="tl-title">Replace Siteimprove with WAVE + AI quarterly audit cycle</div>
+      <div class="tl-body">
+        Cancel Siteimprove at renewal (~$28,000/year savings). Deploy Pope Tech (WAVE-powered,
+        ~$1,200/year) for automated regression monitoring. Schedule quarterly DOM-level AI audits
+        to catch the 60–70% of issues automated tools cannot detect. Estimated 3-year savings:
+        $78,600, with superior coverage.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── STATUTORY CITATIONS ──────────────── -->
+  <div class="section-head">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Governing Legal Authority</h2>
+  </div>
+  <div class="section-rule" role="separator"></div>
+
+  <div class="citations-grid" role="list" aria-label="Governing statutes and regulations">
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">42 U.S.C. §§ 12131–12165</div>
+      <div class="citation-title">ADA Title II</div>
+      <div class="citation-body">Prohibits discrimination on the basis of disability in services, programs, and activities of state and local governments. Primary enforcement authority for AG website accessibility.</div>
+    </div>
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">28 C.F.R. §§ 35.200–35.205</div>
+      <div class="citation-title">DOJ Web Accessibility Final Rule</div>
+      <div class="citation-body">Effective June 24, 2024. Adopts WCAG 2.1 Level AA as the mandatory technical standard. Mandatory compliance for entities serving 50,000+ persons by April 24, 2026. No extensions.</div>
+    </div>
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">29 U.S.C. § 794</div>
+      <div class="citation-title">Section 504, Rehabilitation Act</div>
+      <div class="citation-body">Prohibits disability discrimination by any program receiving federal financial assistance. Applies to the AG's federally funded units (Medicaid Fraud Control, etc.).</div>
+    </div>
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">Executive Order 13166</div>
+      <div class="citation-title">Limited English Proficiency Access</div>
+      <div class="citation-body">Requires meaningful access for LEP persons to federally funded programs. Directly implicated by the Spanish-language infrastructure findings — particularly lang="en-US" on all Spanish pages.</div>
+    </div>
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">42 U.S.C. § 2000d</div>
+      <div class="citation-title">Title VI, Civil Rights Act</div>
+      <div class="citation-body">Prohibits discrimination based on national origin in federally assisted programs. Spanish-language nameless image links and English-only No-Call path implicate this authority.</div>
+    </div>
+    <div class="citation-card" role="listitem">
+      <div class="citation-ref">8 CCR 1501-11</div>
+      <div class="citation-title">Colorado Technology Accessibility</div>
+      <div class="citation-body">Colorado's state-level technology accessibility standards, requiring WCAG conformance for state digital services. Independent of — and in addition to — the federal DOJ rule.</div>
+    </div>
+  </div>
+
+  <!-- ── TITLE II COORDINATOR ─────────────── -->
+  <div class="section-head">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Title II Accessibility Coordinator</h2>
+  </div>
+  <div class="section-rule" role="separator"></div>
+
+  <div class="coordinator-card" role="region" aria-labelledby="coord-heading">
+    <div class="coordinator-avatar" aria-hidden="true">CP</div>
+    <div class="coordinator-info">
+      <div class="coordinator-label">Designated Title II ADA Coordinator</div>
+      <div class="coordinator-name" id="coord-heading">C. Pitman</div>
+      <div class="coordinator-role">ADA Title II Coordinator · Colorado Attorney General's Office</div>
+      <div class="coordinator-contacts">
+        <a href="mailto:Accessibility@coag.gov" class="coord-link" aria-label="Email the ADA coordinator at Accessibility at coag.gov">Accessibility@coag.gov</a>
+        <a href="tel:+17205086411" class="coord-link" aria-label="Call the ADA coordinator at 720-508-6411">720-508-6411</a>
+        <a href="https://coag.gov/colorado-office-of-the-attorney-general-accessibility-statement/" class="coord-link" aria-label="View the AG accessibility statement (opens in same window)">Accessibility Statement</a>
+      </div>
+    </div>
+    <div class="coordinator-right" aria-hidden="true">
+      <div class="coord-stat">
+        <div class="coord-stat-num">Jul 1, 2025</div>
+        <div class="coord-stat-label">Statement last updated</div>
+      </div>
+      <div class="coord-stat">
+        <div class="coord-stat-num">77585</div>
+        <div class="coord-stat-label">Siteimprove account</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ──────────────────────────────── -->
+
+<script>
+// Live deadline countdown
+(function() {
+  const deadline = new Date('2026-04-24T00:00:00');
+  function update() {
+    const now = new Date();
+    const diff = deadline - now;
+    if (diff <= 0) {
+      const el = document.querySelector('.deadline-count');
+      if (el) { el.innerHTML = 'DEADLINE<span>PASSED</span>'; el.style.color='#fca5a5'; }
+      return;
+    }
+    const days = Math.floor(diff / 86400000);
+    const el = document.querySelector('.deadline-count');
+    if (el) {
+      el.innerHTML = days + '<span>days remaining</span>';
+      el.setAttribute('aria-label', days + ' days remaining until deadline');
+    }
+  }
+  update();
+  setInterval(update, 60000);
+})();
+</script>
+  </main>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     FOOTER — single source of truth, included by site.njk on every page.
+════════════════════════════════════════════════════════════════════ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  .subscribe-block {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    padding: 48px 0;
+    border-top: 1px solid var(--cc-border);
+  }
+  .subscribe-block .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+  .subscribe-block h2 {
+    font-family: var(--cc-serif);
+    margin: 0 0 12px;
+    color: var(--cc-text);
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .subscribe-block .deck {
+    color: var(--cc-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .gov-subscribe { display: flex; flex-direction: column; gap: 12px; }
+  .gov-subscribe label {
+    display: block;
+    font-family: var(--cc-sans);
+    font-size: 1rem;
+    color: var(--cc-text);
+    font-weight: 500;
+  }
+  .gov-subscribe input[type="email"] {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 12px;
+    font: inherit;
+    background: var(--cc-surface2);
+    color: var(--cc-text);
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+    min-height: 44px;
+  }
+  .gov-subscribe input[type="email"]::placeholder { color: var(--cc-quiet); opacity: 1; }
+  .gov-subscribe input[type="email"]:focus {
+    border-color: var(--cc-gold);
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 1px;
+  }
+  .gov-subscribe__consent {
+    font-size: 0.9rem;
+    color: var(--cc-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .gov-subscribe button[type="submit"] {
+    align-self: flex-start;
+    background: var(--cc-gold);
+    color: #0c1220;
+    border: 0;
+    padding: 12px 24px;
+    min-height: 44px;
+    font: 700 .85rem var(--cc-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+  .gov-subscribe button[type="submit"]:hover,
+  .gov-subscribe button[type="submit"]:focus-visible { background: var(--cc-gold-lt); }
+  .gov-subscribe output {
+    display: block;
+    min-height: 1.4em;
+    font-size: 0.95rem;
+    color: var(--cc-muted);
+  }
+</style>
+<section class="subscribe-block" aria-label="Subscribe to updates" data-topic="" hidden>
+  <div class="container">
+    <h2>Get email updates</h2>
+    <p class="deck">We&#39;ll email you a plain-language summary with links to the source documents whenever this office posts new public-record material.</p>
+
+    <form class="gov-subscribe" novalidate>
+      <label>
+        Email address
+        <input type="email" name="email" required autocomplete="email"
+               placeholder="you@example.com">
+      </label>
+      <p class="gov-subscribe__consent">
+        By subscribing you agree to receive emails about this topic. We&#39;ll send a confirmation link first. Unsubscribe any time. <em>(consent v2026-04-30-v1)</em>
+      </p>
+      <button type="submit">Subscribe</button>
+      <output role="status" aria-live="polite"></output>
+    </form>
+  </div>
+</section>
+
+
+<script>
+(function () {
+  if (window.__govSubscribeInit) return;
+  window.__govSubscribeInit = true;
+
+  // Skip top-level pages and /microsites/shared/* — no agency-specific topic.
+  var SKIP_JURISDICTIONS = { shared: 1 };
+
+  function inferTopicFromUrl() {
+    var parts = location.pathname.split('/').filter(Boolean);
+    // ["microsites", "<jurisdiction>", "<agency>", ...]
+    if (parts[0] !== 'microsites') return '';
+    if (!parts[1] || !parts[2]) return '';
+    if (SKIP_JURISDICTIONS[parts[1]]) return '';
+    return 'gov.' + parts[1] + '.' + parts[2];
+  }
+
+  function attach(host) {
+    // Resolve topic: explicit data-topic wins, else infer from URL.
+    var topic = host.dataset.topic || inferTopicFromUrl();
+    if (!topic) { host.remove(); return; }
+    host.dataset.topic = topic;
+    host.hidden = false;
+
+    var form = host.querySelector('form.gov-subscribe');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    var out = form.querySelector('output');
+    var source = location.pathname.replace(/^\/+/, '');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      out.textContent = 'Submitting…';
+      var email = form.email.value.trim();
+      var timezone = '';
+      try { timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) {}
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, topic: topic, source: source, timezone: timezone }),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
+          out.textContent = res.d.message || 'Check your email to confirm.';
+          form.reset();
+        })
+        .catch(function (err) { out.textContent = 'Something went wrong: ' + err.message; });
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('.subscribe-block[data-topic]').forEach(attach);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+
+<footer class="cc-footer" role="contentinfo">
+  <div class="container">
+    <p class="cc-footer-line">
+      &copy; 2026
+      CheetoChopsticks &amp;
+      <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener noreferrer">
+        StorySeed Studios<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      <a href="https://www.storyseedstudios.com/media-category/the-dais/" target="_blank" rel="noopener noreferrer">
+        The Dais<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      El Paso County, Colorado
+      &nbsp;·&nbsp;
+      For informational purposes only.
+      &nbsp;·&nbsp;
+      Open source.
+      &nbsp;·&nbsp;
+      <a href="/preferences/">Manage your subscriptions</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+/* ── Site nav + notifications panel scripts ──────────────────────────
+   Wrapped in an IIFE so locals never leak. The functions onclick handlers
+   call (openNotif, closeNotif, filterNotif) are explicitly attached to
+   `window` so a page's own scripts can't shadow them, and each function
+   is defensive about the DOM possibly being absent on a page that opted
+   out of the layout. */
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  var lastFocus;
+
+  function openNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    lastFocus = document.activeElement;
+    overlay.classList.add('open');
+    overlay.removeAttribute('aria-hidden');
+    panel.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { panel.focus(); }, 50);
+  }
+
+  function closeNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    panel.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  function filterNotif(tier, btn) {
+    document.querySelectorAll('.nf-btn').forEach(function (b) {
+      b.classList.remove('active');
+      b.removeAttribute('aria-pressed');
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    document.querySelectorAll('.notif-item').forEach(function (item) {
+      if (tier === 'all') {
+        item.classList.remove('hidden');
+        item.removeAttribute('aria-hidden');
+      } else {
+        var hide = item.dataset.tier !== tier;
+        item.classList.toggle('hidden', hide);
+        if (hide) item.setAttribute('aria-hidden', 'true');
+        else item.removeAttribute('aria-hidden');
+      }
+    });
+    document.querySelectorAll('.notif-group-label').forEach(function (label) {
+      label.style.display = tier === 'all' ? '' : 'none';
+    });
+  }
+
+  /* Escape closes the panel; Tab stays inside it while it's open. */
+  document.addEventListener('keydown', function (e) {
+    var panel = $('notif-panel');
+    if (!panel) return;
+    if (e.key === 'Escape') { closeNotif(); return; }
+    if (e.key === 'Tab' && panel.classList.contains('open')) {
+      var focusable = panel.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+
+  /* Active nav link on scroll — only runs when the index has the matching anchors. */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['you', 'dashboards', 'people', 'events'];
+  if (typeof IntersectionObserver === 'function' && navLinks.length) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function (l) {
+            var href = l.getAttribute('href') || '';
+            var active = href === '#' + id || href === '/#' + id;
+            l.classList.toggle('active', active);
+            if (active) l.setAttribute('aria-current', 'true');
+            else l.removeAttribute('aria-current');
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach(function (id) {
+      var el = $(id);
+      if (el) observer.observe(el);
+    });
+  }
+
+  /* Expose the click-target functions globally so inline onclick handlers
+     (and any page that needs them) can always reach them by name. */
+  window.openNotif   = openNotif;
+  window.closeNotif  = closeNotif;
+  window.filterNotif = filterNotif;
+
+  /* ─── Nav search (disclosure pattern + lazy fetch + filter) ───────
+     The toggle button uses aria-expanded to advertise state; opening
+     it un-hides the panel, moves focus to the input, attaches Escape
+     and click-outside handlers, and fetches /search-index.json on
+     first open (cached for the rest of the session). All search
+     scoring matches the homepage block so results rank identically. */
+  var nsToggle   = $('nav-search-toggle');
+  var nsPanel    = $('nav-search-panel');
+  var nsForm     = $('nav-search-form');
+  var nsInput    = $('nav-search-input');
+  var nsClose    = $('nav-search-close');
+  var nsStatus   = $('nav-search-status');
+  var nsResults  = $('nav-search-results');
+  var nsEmpty    = $('nav-search-empty');
+  var nsChips    = document.querySelectorAll('.nav-search-panel__chip');
+
+  if (nsToggle && nsPanel && nsForm && nsInput) {
+    var nsIndex = null;
+    var nsTier  = 'all';
+    var nsDebounce = null;
+
+    function nsOpen() {
+      nsPanel.hidden = false;
+      nsToggle.setAttribute('aria-expanded', 'true');
+      ensureIndex();
+      /* Defer focus one tick so the panel is in the layout. */
+      setTimeout(function(){ nsInput && nsInput.focus(); }, 0);
+      document.addEventListener('keydown', nsOnKey);
+      document.addEventListener('click', nsOnDocClick, true);
+    }
+    function nsClosePanel(returnFocus) {
+      nsPanel.hidden = true;
+      nsToggle.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('keydown', nsOnKey);
+      document.removeEventListener('click', nsOnDocClick, true);
+      if (returnFocus !== false) nsToggle.focus();
+    }
+    function nsOnKey(e) {
+      if (e.key === 'Escape') { e.preventDefault(); nsClosePanel(true); }
+    }
+    function nsOnDocClick(e) {
+      if (!nsPanel.contains(e.target) && e.target !== nsToggle && !nsToggle.contains(e.target)) {
+        nsClosePanel(false);
+      }
+    }
+
+    nsToggle.addEventListener('click', function() {
+      var open = nsToggle.getAttribute('aria-expanded') === 'true';
+      if (open) nsClosePanel(true); else nsOpen();
+    });
+    if (nsClose) nsClose.addEventListener('click', function() { nsClosePanel(true); });
+
+    function ensureIndex() {
+      if (nsIndex !== null) return Promise.resolve(nsIndex);
+      if (nsStatus) nsStatus.textContent = 'Loading search index…';
+      return fetch('/search-index.json', { headers: { 'Accept': 'application/json' } })
+        .then(function(r){ if (!r.ok) throw new Error('failed'); return r.json(); })
+        .then(function(data){ nsIndex = Array.isArray(data) ? data : []; if (nsStatus) nsStatus.textContent = ''; return nsIndex; })
+        .catch(function(){ nsIndex = []; if (nsStatus) nsStatus.textContent = 'Search index failed to load — try refreshing.'; return nsIndex; });
+    }
+
+    var ZIP_RE    = /^\s*\d{5}(-\d{4})?\s*$/;
+    var STREET_RE = /\b\d+\s+\w+.*\b(st|street|ave|avenue|blvd|boulevard|rd|road|dr|drive|ln|lane|way|ct|court|pl|place|hwy|highway|pkwy|parkway)\b/i;
+    function nsLooksLikeAddress(q) { return ZIP_RE.test(q) || STREET_RE.test(q); }
+    function nsEsc(s){
+      return String(s).replace(/[&<>"']/g, function(c){
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+      });
+    }
+    function nsHighlight(text, terms){
+      if (!terms.length) return nsEsc(text);
+      var safe = nsEsc(text);
+      var sorted = terms.slice().sort(function(a,b){ return b.length - a.length; });
+      var pattern = sorted.map(function(t){ return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|');
+      var re = new RegExp('(' + pattern + ')', 'gi');
+      return safe.replace(re, '<mark>$1</mark>');
+    }
+    function nsScore(item, terms){
+      var pathStr = (item.path || '').toLowerCase();
+      var hay = (item.title + ' ' + item.desc + ' ' + item.scope + ' ' + pathStr).toLowerCase();
+      var s = 0;
+      for (var i=0;i<terms.length;i++){
+        var t = terms[i];
+        if (item.title.toLowerCase().indexOf(t) !== -1) s += 5;
+        if (item.scope.toLowerCase().indexOf(t) !== -1) s += 3;
+        if (item.desc.toLowerCase().indexOf(t) !== -1)  s += 2;
+        if (pathStr.indexOf(t) !== -1)                   s += 1;
+        if (hay.indexOf(t) === -1) return -1;
+      }
+      return s;
+    }
+    function nsRender(items, terms){
+      nsResults.innerHTML = '';
+      if (!items.length) {
+        if (nsStatus) nsStatus.textContent = '';
+        if (nsEmpty)  nsEmpty.hidden = false;
+        return;
+      }
+      if (nsEmpty) nsEmpty.hidden = true;
+      if (nsStatus) nsStatus.textContent = items.length + ' result' + (items.length === 1 ? '' : 's');
+      var frag = document.createDocumentFragment();
+      items.forEach(function(it){
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.className = 'nav-search-panel__item nav-search-panel__item--' + it.tier;
+        a.href = it.url;
+        a.innerHTML =
+          '<p class="nav-search-panel__item-scope">' + nsEsc(it.scope) + '</p>' +
+          '<p class="nav-search-panel__item-title">' + nsHighlight(it.title, terms) + '</p>' +
+          (it.desc ? '<p class="nav-search-panel__item-desc">' + nsHighlight(it.desc, terms) + '</p>' : '');
+        li.appendChild(a);
+        frag.appendChild(li);
+      });
+      nsResults.appendChild(frag);
+    }
+    function nsRun(q) {
+      q = (q || '').trim();
+      if (!q) {
+        nsResults.innerHTML = '';
+        if (nsEmpty)  nsEmpty.hidden = true;
+        if (nsStatus) nsStatus.textContent = '';
+        return;
+      }
+      if (nsLooksLikeAddress(q)) {
+        window.location.href = '/microsites/shared/cos-find-my-jurisdiction.html?q=' + encodeURIComponent(q);
+        return;
+      }
+      ensureIndex().then(function(idx){
+        var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+        var pool  = (nsTier === 'all') ? idx : idx.filter(function(it){ return it.tier === nsTier; });
+        var scored = [];
+        for (var i=0;i<pool.length;i++) {
+          var s = nsScore(pool[i], terms);
+          if (s >= 0) scored.push({ s:s, it:pool[i] });
+        }
+        scored.sort(function(a,b){ return b.s - a.s; });
+        nsRender(scored.slice(0, 30).map(function(x){ return x.it; }), terms);
+      });
+    }
+
+    nsInput.addEventListener('input', function() {
+      clearTimeout(nsDebounce);
+      nsDebounce = setTimeout(function(){ nsRun(nsInput.value); }, 100);
+    });
+    nsForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      nsRun(nsInput.value);
+    });
+    nsChips.forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        nsTier = chip.dataset.tier;
+        nsChips.forEach(function(c){ c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+        nsRun(nsInput.value);
+      });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

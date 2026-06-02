@@ -1,0 +1,737 @@
+<!--
+  WastelessCOS — Accessible redesign (v2)
+  WCAG 2.1 AA. Audit fixes 1–11 retained (see inline notes).
+  v2 changes: uniform body type + measure across all tabs; full hauler directory
+  with Card + Row (table) views, websites, "Free" tag sorted first, and a new
+  "How to Sort" tab for recycling/trash/batteries/electronics/hazardous waste.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WastelessCOS: Waste Diversion, Resource Directory &amp; Sorting Guide | City of Colorado Springs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf5ec; --paper-2:#f3ebdc; --card:#fffdf8;
+    --ink:#241f17; --ink-soft:#4d4435;
+    --pine:#1d4634; --pine-2:#27583f;
+    --rust:#9c3d1c; --rust-deep:#7e3015;
+    --gold:#b7842d; --green-free:#1f6b3a;
+    --line:#ddd0b8; --line-soft:#e9dec9; --sky:#3c627e;
+    --focus:#1d4634;
+    --shadow:0 1px 2px rgba(36,31,23,.06),0 8px 22px rgba(36,31,23,.07);
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:1.06rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;line-height:1.14;color:var(--pine);margin:0 0 .5em;font-weight:600}
+  p{margin:0 0 1em}
+  a{color:var(--rust-deep);text-underline-offset:3px;text-decoration-thickness:1.5px}
+  a:hover{color:var(--rust)}
+
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{
+    outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+
+  .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  .skip-link{position:absolute;left:12px;top:-60px;z-index:200;background:var(--pine);color:#fff;padding:.7rem 1.1rem;border-radius:8px;font-weight:600;text-decoration:none;transition:top .15s ease}
+  .skip-link:focus{top:12px;color:#fff}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+  /* ---- UNIFORM PROSE: same size + same wrapping measure on every tab ---- */
+  [role="tabpanel"]{padding:30px 0 10px}
+  [role="tabpanel"]:focus-visible{outline:3px solid var(--focus);outline-offset:6px;border-radius:8px}
+  section.block{margin-bottom:38px}
+  section.block > p{max-width:68ch;font-size:1.06rem;line-height:1.62}      /* body copy identical across tabs */
+  .lead{max-width:68ch;font-size:1.18rem;line-height:1.55;color:var(--ink-soft)} /* hero intro only */
+  /* Inside tab panels, intro copy matches body copy exactly so every tab reads the same */
+  [role="tabpanel"] .lead{font-size:1.06rem;line-height:1.62;color:var(--ink)}
+  /* All panel text + boxes span the full content width, so their right edge lines up
+     with the cards, filter bar, and the tab/menu row above them */
+  [role="tabpanel"] section.block > p,
+  [role="tabpanel"] .lead,
+  [role="tabpanel"] .callout,
+  [role="tabpanel"] .callout p,
+  [role="tabpanel"] .faq-list p,
+  [role="tabpanel"] .doc-list{max-width:none}
+
+  /* Utility bar */
+  .util{background:var(--pine);color:#f3ecdd;font-size:.92rem}
+  .util .wrap{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:space-between;padding:.5rem 22px}
+  .util a{color:#f3ecdd}.util a:hover{color:#fff}
+  .util-actions{display:flex;gap:6px;align-items:center}
+  .icon-btn{background:transparent;border:1.5px solid rgba(243,236,221,.4);color:#f3ecdd;border-radius:8px;padding:.35rem .7rem;font:inherit;font-size:.9rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem}
+  .icon-btn:hover{background:rgba(243,236,221,.12)}
+
+  /* Masthead */
+  .masthead{background:
+      linear-gradient(180deg,rgba(250,245,236,0) 0%,var(--paper) 100%),
+      radial-gradient(120% 90% at 80% -10%,rgba(183,132,45,.18),transparent 60%),
+      radial-gradient(120% 80% at 0% 0%,rgba(29,70,52,.14),transparent 55%);
+    border-bottom:1px solid var(--line);position:relative;overflow:hidden}
+  .ridge{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:90px;color:var(--pine);opacity:.10}
+  .masthead .wrap{position:relative;padding:30px 22px 84px}
+  .eyebrow{font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:.78rem;color:var(--rust);margin:0 0 .6rem;display:flex;align-items:center;gap:.6rem}
+  .eyebrow::before{content:"";width:30px;height:2px;background:var(--rust);display:inline-block}
+  .masthead h1{font-size:clamp(2.4rem,6vw,4rem);max-width:14ch;font-weight:700}
+  .masthead .lead{color:var(--ink-soft)}
+  .stat-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:22px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1.1rem;box-shadow:var(--shadow);min-width:150px}
+  .stat b{font-family:"Fraunces";font-size:1.9rem;color:var(--pine);display:block;line-height:1}
+  .stat span{font-size:.92rem;color:var(--ink-soft)}
+
+  /* Breadcrumb */
+  .crumbs{font-size:.9rem;padding:.7rem 0;color:var(--ink-soft)}
+  .crumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:.4rem;margin:0;padding:0}
+  .crumbs li{display:flex;align-items:center;gap:.4rem}
+  .crumbs li+li::before{content:"\203A";color:var(--line);font-weight:700}
+  .crumbs a[aria-current="page"]{color:var(--ink);font-weight:700;text-decoration:none}
+
+  /* Tabs */
+  [role="tablist"]{display:flex;flex-wrap:wrap;gap:6px;border-bottom:2px solid var(--line)}
+  [role="tab"]{appearance:none;background:transparent;border:none;border-bottom:3px solid transparent;font:inherit;font-weight:600;color:var(--ink-soft);cursor:pointer;padding:.85rem 1.05rem;margin-bottom:-2px;border-radius:8px 8px 0 0}
+  [role="tab"]:hover{color:var(--pine);background:var(--paper-2)}
+  [role="tab"][aria-selected="true"]{color:var(--pine);border-bottom-color:var(--rust)}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media(max-width:760px){.grid-2{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.3rem 1.4rem;box-shadow:var(--shadow)}
+  .card h3{font-size:1.3rem}
+  .card p{font-size:1rem}
+  .callout{border-left:5px solid var(--rust);background:var(--paper-2);padding:1.1rem 1.3rem;border-radius:0 var(--radius) var(--radius) 0;max-width:74ch}
+  .callout h3{color:var(--rust-deep)}.callout p{max-width:none}
+  ul.clean{margin:.2rem 0 1rem;padding-left:1.2rem}ul.clean li{margin:.35rem 0}
+
+  /* Pills / tags */
+  .pill{display:inline-block;font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.25rem .6rem;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+  .pill.city{background:#e7f0e9;color:var(--pine);border-color:#bcd6c3}
+  .pill.county{background:#e8eef3;color:var(--sky);border-color:#c2d3e0}
+  .pill.private{background:#f5e8df;color:var(--rust-deep);border-color:#e3c9b8}
+  .pill.tip{background:#f6edd6;color:#6b4f12;border-color:#e6cf9c}
+  .pill.nonprofit{background:#efe7f1;color:#6b3f7a;border-color:#d9c6df}
+  .pill.free{background:#e3f3e7;color:var(--green-free);border-color:#aedabd}
+
+  /* PDF / doc links */
+  .doc-list{list-style:none;margin:0;padding:0;display:grid;gap:.6rem;max-width:60ch}
+  .doc-list a{display:flex;align-items:center;gap:.6rem;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.75rem .95rem;text-decoration:none;color:var(--ink);font-weight:600}
+  .doc-list a:hover{border-color:var(--rust);color:var(--rust-deep)}
+  .doc-list svg{flex:0 0 auto;color:var(--rust)}
+  .filetag{margin-left:auto;font-size:.78rem;font-weight:700;color:var(--rust-deep);border:1px solid var(--line);border-radius:6px;padding:.1rem .45rem}
+
+  /* Video */
+  .video-frame{aspect-ratio:16/9;background:var(--pine);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:#e8e0cd;border:1px solid var(--pine-2);text-align:center;padding:1rem}
+
+  /* Accordion */
+  .accordion{display:grid;gap:.7rem}
+  .acc-item{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+  .acc-btn{width:100%;text-align:left;background:transparent;border:none;font:inherit;font-weight:700;color:var(--pine);cursor:pointer;padding:1rem 1.15rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:1.05rem}
+  .acc-btn:hover{background:var(--paper-2)}
+  .acc-btn .chev{transition:transform .2s ease;flex:0 0 auto;color:var(--rust)}
+  .acc-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+  .acc-panel{padding:0 1.15rem 1.15rem}.acc-panel[hidden]{display:none}
+  /* Plain FAQ list (no accordion) */
+  .faq-list h3{font-size:1.12rem;margin:1.3rem 0 .25rem}
+  .faq-list h3:first-child{margin-top:0}
+  .faq-list p{max-width:74ch;margin:0 0 .5rem}
+
+  /* Directory controls */
+  .filter-bar{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem 1.2rem;box-shadow:var(--shadow);margin-bottom:18px}
+  .controls-top{display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;justify-content:space-between}
+  .field{flex:1 1 280px}
+  label.lbl{display:block;font-weight:700;font-size:.9rem;margin-bottom:.35rem;color:var(--ink)}
+  input[type="search"]{width:100%;font:inherit;padding:.7rem .9rem;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink)}
+  fieldset{border:none;margin:0;padding:0}
+  fieldset legend{font-weight:700;font-size:.9rem;margin-bottom:.55rem;color:var(--ink);padding:0}
+  .filters{margin-top:1rem}
+  .chips{display:flex;flex-wrap:wrap;gap:.5rem}
+  .chip{appearance:none;font:inherit;font-weight:600;font-size:.92rem;cursor:pointer;background:var(--paper);border:1.5px solid var(--line);color:var(--ink-soft);border-radius:999px;padding:.5rem .95rem;display:inline-flex;align-items:center;gap:.45rem}
+  .chip:hover{border-color:var(--pine);color:var(--pine)}
+  .chip[aria-pressed="true"]{background:var(--pine);border-color:var(--pine);color:#fff}
+  .chip[data-filter="free"][aria-pressed="true"]{background:var(--green-free);border-color:var(--green-free)}
+  /* View switch */
+  .viewswitch{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper)}
+  .viewswitch button{appearance:none;font:inherit;font-weight:600;border:none;background:transparent;color:var(--ink-soft);padding:.55rem .9rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem}
+  .viewswitch button[aria-pressed="true"]{background:var(--pine);color:#fff}
+
+  .results-meta{font-size:.95rem;color:var(--ink-soft);margin:.4rem 0 1rem}
+
+  /* Directory — card view */
+  .dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+  .res{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem 1.25rem;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:.55rem}
+  .res.is-free{border-color:#aedabd;box-shadow:0 0 0 1px #cfe9d6 inset,var(--shadow)}
+  .res h3{font-size:1.18rem;margin:0}
+  .res .meta{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+  .res p{margin:0;color:var(--ink-soft);font-size:.97rem}
+  .res .row{display:flex;flex-wrap:wrap;gap:.35rem .9rem;font-size:.92rem}
+  .res .contact{font-weight:600;color:var(--pine-2)}
+  .res .cats{margin-top:auto;font-size:.78rem;color:var(--ink-soft);padding-top:.3rem}
+
+  /* Directory — row/table view */
+  .dir-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow)}
+  table.dir-table{border-collapse:collapse;width:100%;min-width:680px;font-size:.96rem}
+  table.dir-table caption{text-align:left;padding:.9rem 1rem .2rem;color:var(--ink-soft);font-size:.9rem}
+  table.dir-table th,table.dir-table td{text-align:left;padding:.7rem 1rem;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  table.dir-table thead th{background:var(--paper-2);color:var(--pine);font-family:"Fraunces",serif;font-weight:600;border-bottom:2px solid var(--line);padding:0}
+  table.dir-table tbody tr:hover{background:var(--paper-2)}
+  table.dir-table .name{font-weight:700;color:var(--ink)}
+  /* Click-to-sort column headers */
+  .th-sort{width:100%;text-align:left;background:transparent;border:none;font:inherit;font-weight:600;color:var(--pine);cursor:pointer;padding:.7rem 1rem;display:flex;align-items:center;gap:.4rem}
+  .th-sort:hover{background:#ece2cf}
+  .th-sort .arr{font-size:.8rem;color:var(--rust);opacity:.4}
+  th[aria-sort="ascending"] .th-sort .arr,th[aria-sort="descending"] .th-sort .arr{opacity:1}
+  .no-results{padding:1.4rem;border:1px dashed var(--line);border-radius:var(--radius);background:var(--paper-2);text-align:center;color:var(--ink-soft)}
+
+  /* Helpful tips — full-text boxes below the directory */
+  .tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:.6rem}
+  .tip-box{background:var(--paper-2);border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:var(--radius);padding:1.05rem 1.2rem}
+  .tip-box h4{font-family:"Fraunces",serif;font-size:1.08rem;color:var(--pine);margin:0 0 .4rem}
+  .tip-box p{margin:0;font-size:.97rem;color:var(--ink)}
+  .tip-box .pill{margin-bottom:.5rem}
+
+  /* Sorting guide */
+  .sort-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+  .bin{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:var(--radius);padding:1.15rem 1.25rem;box-shadow:var(--shadow)}
+  .bin.recycle{border-left-color:var(--sky)} .bin.trash{border-left-color:var(--ink-soft)}
+  .bin.hazard{border-left-color:var(--rust)} .bin.ewaste{border-left-color:var(--pine)}
+  .bin.organics{border-left-color:var(--green-free)}
+  .bin h3{font-size:1.15rem;margin:0 0 .5rem;display:flex;align-items:center;gap:.5rem}
+  .bin .yes,.bin .no{font-size:.95rem;margin:.3rem 0}
+  .bin .yes b{color:var(--green-free)} .bin .no b{color:var(--rust-deep)}
+  .bin ul{margin:.2rem 0 .6rem;padding-left:1.1rem}.bin li{margin:.2rem 0}
+  .bin .where{font-size:.9rem;color:var(--pine-2);font-weight:600}
+
+  footer{background:var(--pine);color:#e9e1cf;margin-top:50px;padding:34px 0}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
+  footer a{color:#f1e9d6}
+  footer nav ul{list-style:none;margin:.4rem 0 0;padding:0;display:grid;gap:.4rem;font-size:.95rem}
+  footer h2{color:#fff;font-size:1.05rem;margin:0}
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<nav class="util" aria-label="Site utilities">
+  <span>City of Colorado Springs</span>
+  <div class="util-actions">
+    <button type="button" class="icon-btn" id="translateBtn" aria-expanded="false" aria-controls="translatePanel"><span aria-hidden="true">&#127760;</span> Translate</button>
+    <a class="icon-btn" href="https://coloradosprings.gov/search" rel="noopener" aria-label="Open city search"><span aria-hidden="true">&#128269;</span> Search</a>
+  </div>
+</nav>
+<div id="translatePanel" hidden style="background:#163a2b">
+  <div class="wrap" style="padding:.6rem 22px">
+    <label class="lbl" for="langSelect" style="color:#e9e1cf;margin-bottom:.3rem">Select a language</label>
+    <select id="langSelect" style="font:inherit;padding:.45rem .7rem;border-radius:8px;border:1px solid #2c5a44;background:#0f2c20;color:#e9e1cf">
+      <option value="en">English</option>
+      <option value="es">Espa&ntilde;ol</option>
+      <option value="vi">Ti&#7871;ng Vi&#7879;t</option>
+      <option value="ko">&#54620;&#44397;&#50612;</option>
+    </select>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">WastelessCOS</p>
+    <h1>Keeping Colorado clean, by design.</h1>
+    <p class="lead">A 20-year roadmap to nearly double how much Colorado Springs reuses and recycles &mdash; plus a directory and a sorting guide so you can find the right service for whatever you need to get rid of.</p>
+    <div class="stat-row">
+      <div class="stat"><b>16%</b><span>diverted from landfill today</span></div>
+      <div class="stat"><b>37%</b><span>community goal by 2045</span></div>
+      <div class="stat"><b>~9,000 lbs</b><span>of waste sorted to build the plan</span></div>
+    </div>
+  </div>
+  <svg class="ridge" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path fill="currentColor" d="M0 90 L0 55 L160 30 L320 60 L470 18 L620 52 L760 8 L920 50 L1080 22 L1240 58 L1440 28 L1440 90 Z"/></svg>
+</header>
+
+<nav class="crumbs" aria-label="Breadcrumb">
+  <div class="wrap"><ol>
+    <li><a href="https://coloradosprings.gov">Home</a></li>
+    <li><a href="https://coloradosprings.gov/sustainability">Sustainability</a></li>
+    <li><a href="https://coloradosprings.gov/WastelessCOS" aria-current="page">WastelessCOS</a></li>
+  </ol></div>
+</nav>
+
+<main id="main-content" class="wrap">
+  <div class="tabs">
+    <div role="tablist" aria-label="WastelessCOS sections">
+      <button role="tab" id="tab-overview"  aria-selected="true"  aria-controls="panel-overview"  tabindex="0">Overview</button>
+      <button role="tab" id="tab-why"       aria-selected="false" aria-controls="panel-why"       tabindex="-1">The Why</button>
+      <button role="tab" id="tab-directory" aria-selected="false" aria-controls="panel-directory" tabindex="-1">Resource Directory</button>
+      <button role="tab" id="tab-sort"      aria-selected="false" aria-controls="panel-sort"      tabindex="-1">How to Sort</button>
+      <button role="tab" id="tab-faq"       aria-selected="false" aria-controls="panel-faq"       tabindex="-1">Plan &amp; FAQ</button>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" tabindex="0">
+      <section class="block">
+        <h2>What the plan does</h2>
+        <p class="lead">Colorado Springs recycles or composts about 16% of its waste today &mdash; less than half the national average. The Waste Diversion Action Plan is a 20-year roadmap to reach 37% by 2045 by making recycling and composting easier, cheaper, and clearer for everyone.</p>
+        <p>Importantly, nothing about your current trash service changes right now; the plan guides improvements over time. Here is what it focuses on and what residents told the City they want.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>The five strategies</h3>
+            <ul class="clean">
+              <li>Leverage Colorado&rsquo;s Extended Producer Responsibility (EPR) program</li>
+              <li>Education &amp; outreach</li>
+              <li>Organics management (food scraps &amp; yard waste)</li>
+              <li>Governance &amp; data tracking</li>
+              <li>Construction &amp; specialty waste diversion</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>What residents asked for</h3>
+            <ul class="clean">
+              <li><strong>69.6%</strong> want curbside yard-waste collection</li>
+              <li><strong>50.4%</strong> want curbside food-waste collection</li>
+              <li>Clearer guidance on what is actually recyclable</li>
+              <li>More drop-off sites and fairer access for apartments &amp; rural areas</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section class="block">
+        <div class="callout">
+          <h3>How it&rsquo;s paid for</h3>
+          <p>The study and plan were funded by a grant from <strong>Colorado Circular Communities (C3)</strong>, a state program. Going forward, much of the cost of recycling shifts onto producers under Colorado&rsquo;s EPR law (HB&nbsp;22-1355), which began reimbursing recycling services in 2026 &mdash; not onto your city tax bill. (The often-quoted &ldquo;$400&nbsp;million&rdquo; figure is the size of El Paso County&rsquo;s existing recycling <em>economy</em>, not a project budget.)</p>
+        </div>
+      </section>
+      <section class="block">
+        <h2>Watch: the waste characterization study</h2>
+        <div class="video-frame" role="img" aria-label="Video player placeholder for the WastelessCOS waste characterization study">
+          <p style="margin:0">&#9654; &nbsp;WastelessCOS: Waste Characterization<br><span style="font-size:.85rem;opacity:.85">Closed captions available &middot; embed your hosted video here</span></p>
+        </div>
+        <p style="font-size:.9rem;color:var(--ink-soft);margin-top:.6rem">Captions are enabled on this video. A full text transcript is provided below.</p>
+        <button type="button" class="icon-btn" id="transcriptBtn" aria-expanded="false" aria-controls="transcriptPanel" style="border-color:var(--line);color:var(--pine)"><span aria-hidden="true">&#128196;</span> Show video transcript</button>
+        <div id="transcriptPanel" hidden class="card" style="margin-top:.8rem;max-width:74ch">
+          <h3 style="font-size:1.1rem">Transcript</h3>
+          <p>Over two seasons, crews sorted roughly nine thousand pounds of household trash and recycling by hand. The biggest surprise: a large share of what we throw away never needed to be trash at all. Food scraps made up about fifteen percent of the pile, and yard debris another ten percent &mdash; material that can be composted instead of buried. The study gives the City a clear, data-backed starting point for the goals in this plan.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- THE WHY -->
+    <div role="tabpanel" id="panel-why" aria-labelledby="tab-why" tabindex="0" hidden>
+      <section class="block">
+        <h2>The Why</h2>
+        <p class="lead">Colorado is the country of the Wild West &mdash; wide open land, big sky, and country worth protecting. Keeping it clean and beautiful isn&rsquo;t nostalgia; it&rsquo;s the whole point. Every ton we keep out of a landfill is land left for the next generation to ride, hike, and call home.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Land worth keeping</h3>
+            <p>Colorado Springs is on track to rival Denver as Colorado&rsquo;s largest city by 2050 &mdash; already the largest by land area, with population projected to close the gap (Colorado State Demography Office). More people means more waste &mdash; unless we change how we handle it. Diverting waste protects open space, water, and the views that drew people here in the first place.</p>
+          </div>
+          <div class="card">
+            <h3>It pays off locally</h3>
+            <p>Recycling and reuse already support more than <strong>2,700 jobs</strong> and over <strong>$400&nbsp;million</strong> in economic activity across El Paso County (Recycle Colorado / CDPHE economic impact data). Strengthening these systems keeps dollars &mdash; and materials &mdash; circulating close to home.</p>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:22px">
+          <h3>Frontier ethic, modern tools</h3>
+          <p>The old code of the West was simple: leave a place better than you found it. WastelessCOS is that same idea with a roadmap attached &mdash; clear goals, better access, and honest data so the land stays wild where it should be.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- RESOURCE DIRECTORY -->
+    <div role="tabpanel" id="panel-directory" aria-labelledby="tab-directory" tabindex="0" hidden>
+      <section class="block">
+        <h2>Resource Directory</h2>
+        <p class="lead">Every hauler and drop-off in one place, so you don&rsquo;t give up and say &ldquo;forget about it.&rdquo; Filter by category, search by item, and switch between card and row views.</p>
+
+        <div class="callout" style="margin-bottom:18px">
+          <h3>How do I choose a trash hauler?</h3>
+          <p>Colorado Springs has <strong>no city-run trash service</strong> &mdash; private companies compete, and you sign up directly with one. You don&rsquo;t have to call them all: most haulers have an <em>address checker</em> on their website that shows whether they serve you, your pickup day, and price in a couple of minutes. When comparing, look at four things: (1) does recycling come included or cost extra, (2) cart size and bulk/yard-waste options, (3) whether a bear-resistant cart is required for your area (west of I-25), and (4) contract length and fees. Starting in 2026, the state&rsquo;s producer-responsibility program is expected to make curbside recycling free through participating haulers.</p>
+        </div>
+
+        <div class="filter-bar">
+          <div class="controls-top">
+            <div class="field">
+              <label class="lbl" for="dirSearch">Search resources &amp; items</label>
+              <input type="search" id="dirSearch" placeholder="e.g. mulch, batteries, bulk pickup, bear cart&hellip;" autocomplete="off">
+            </div>
+            <fieldset>
+              <legend>View</legend>
+              <div class="viewswitch" role="group" aria-label="Choose how the directory is displayed">
+                <button type="button" id="viewCards" aria-pressed="true"><span aria-hidden="true">&#9783;</span> Cards</button>
+                <button type="button" id="viewRows" aria-pressed="false"><span aria-hidden="true">&#9776;</span> Rows</button>
+              </div>
+            </fieldset>
+          </div>
+          <fieldset class="filters">
+            <legend>Filter by category</legend>
+            <div class="chips" id="chips">
+              <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
+              <button type="button" class="chip" data-filter="free" aria-pressed="false"><span class="pill free" style="padding:.05rem .4rem;font-size:.7rem" aria-hidden="true">Free</span><span class="visually-hidden">Free options only</span></button>
+              <button type="button" class="chip" data-filter="curbside" aria-pressed="false">Curbside &amp; weekly</button>
+              <button type="button" class="chip" data-filter="bulk" aria-pressed="false">Bulk &amp; large items</button>
+              <button type="button" class="chip" data-filter="private" aria-pressed="false">Private haulers</button>
+              <button type="button" class="chip" data-filter="city" aria-pressed="false">City &amp; county</button>
+              <button type="button" class="chip" data-filter="yard" aria-pressed="false">Yard waste &amp; mulch</button>
+              <button type="button" class="chip" data-filter="recycle" aria-pressed="false">Recycling drop-off</button>
+              <button type="button" class="chip" data-filter="ewaste" aria-pressed="false">Electronics &amp; batteries</button>
+              <button type="button" class="chip" data-filter="hazard" aria-pressed="false">Hazardous waste</button>
+            </div>
+          </fieldset>
+        </div>
+
+        <p class="results-meta" id="resultsMeta" role="status" aria-live="polite"></p>
+
+        <div id="cardView"><div class="dir-grid" id="dirGrid"></div></div>
+        <div id="rowView" hidden></div>
+        <p class="no-results" id="noResults" hidden>No resources match those filters. Try removing a filter or clearing the search.</p>
+
+        <p style="font-size:.88rem;color:var(--ink-soft);margin-top:1.4rem">Free options are listed first, then alphabetically. Listings are compiled from public information &mdash; confirm phone numbers, websites, fees, and hours with each provider before publishing.</p>
+
+        <h3 style="font-size:1.5rem;margin-top:2.4rem">Helpful tips &amp; free options</h3>
+        <p>Quick ways to save money and keep more out of the landfill &mdash; the full tip is in each box.</p>
+        <div class="tips-grid" id="tipsGrid"></div>
+      </section>
+    </div>
+
+    <!-- HOW TO SORT -->
+    <div role="tabpanel" id="panel-sort" aria-labelledby="tab-sort" tabindex="0" hidden>
+      <section class="block">
+        <h2>How to Sort: where does it go?</h2>
+        <p class="lead">Not sure if something is recyclable, trash, or needs special handling? Type an item below, or browse the bins. A few things &mdash; batteries and electronics especially &mdash; should <em>never</em> go in either curbside cart.</p>
+
+        <div class="filter-bar" style="max-width:60ch">
+          <label class="lbl" for="sortSearch">Look up an item</label>
+          <input type="search" id="sortSearch" placeholder="e.g. battery, TV, pizza box, paint, light bulb&hellip;" autocomplete="off">
+          <p class="results-meta" id="sortMeta" role="status" aria-live="polite" style="margin-bottom:0"></p>
+        </div>
+
+        <div class="sort-grid" id="sortGrid"></div>
+        <p class="no-results" id="sortNone" hidden>No match. Try a simpler word, or check the El Paso County Recycling Directory in the Plan &amp; FAQ tab.</p>
+      </section>
+    </div>
+
+    <!-- PLAN & FAQ -->
+    <div role="tabpanel" id="panel-faq" aria-labelledby="tab-faq" tabindex="0" hidden>
+      <section class="block">
+        <h2>Documents</h2>
+        <p>The City&rsquo;s plan and fact sheet are posted on the official WastelessCOS page; the County&rsquo;s item-by-item directory is a direct PDF.</p>
+        <ul class="doc-list">
+          <li><a href="https://coloradosprings.gov/WastelessCOS" target="_blank" rel="noopener noreferrer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Waste Diversion Action Plan<span class="filetag" aria-hidden="true">WastelessCOS page</span><span class="visually-hidden">(opens in new tab)</span></a></li>
+          <li><a href="https://coloradosprings.gov/WastelessCOS" target="_blank" rel="noopener noreferrer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Fact Sheet &mdash; English<span class="filetag" aria-hidden="true">WastelessCOS page</span><span class="visually-hidden">(opens in new tab)</span></a></li>
+          <li><a href="https://epc-assets.elpasoco.com/wp-content/uploads/sites/20/Recycling-Directory-2026.pdf" target="_blank" rel="noopener noreferrer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>El Paso County Recycling Directory<span class="filetag" aria-hidden="true">PDF</span><span class="visually-hidden">(PDF, opens in new tab)</span></a></li>
+        </ul>
+        <p style="font-size:.88rem;color:var(--ink-soft)">Replace the first two links with the City&rsquo;s direct PDF URLs once you have them &mdash; they currently point to the official WastelessCOS page where both documents are published.</p>
+      </section>
+      <section class="block">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-list">
+          <h3>Why did the City create this plan?</h3>
+          <p>The City lacked comprehensive data and a clear roadmap for waste diversion. A state grant funded a study and this 20-year plan so improvements can be made deliberately as the city grows.</p>
+          <h3>Does my trash or recycling service change now?</h3>
+          <p>No. The plan creates no immediate changes to how trash and recycling are collected. It is a roadmap for improving services over time.</p>
+          <h3>Who pays for expanded recycling?</h3>
+          <p>Under Colorado&rsquo;s Extended Producer Responsibility law, companies that sell packaging and paper products fund the recycling system. As of 2026, reimbursements to participating haulers have begun, shifting cost away from residents.</p>
+          <h3>Do I have to compost or recycle?</h3>
+          <p>No. Participation is voluntary. The plan focuses on making recycling and composting easier and cheaper, not on mandates.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><h2>WastelessCOS</h2><p style="max-width:34ch;font-size:.95rem">A cleaner, more sustainable Colorado Springs &mdash; built on community input and honest data.</p></div>
+    <nav aria-label="Footer navigation">
+      <h2>Links</h2>
+      <ul>
+        <li><a href="https://coloradosprings.gov/WastelessCOS">WastelessCOS home</a></li>
+        <li><a href="https://coloradosprings.gov/citycode" target="_blank" rel="noopener noreferrer">City Code &amp; Charter<span class="visually-hidden"> (opens in new tab)</span></a></li>
+        <li><a href="https://coloradosprings.gov/subscribe" target="_blank" rel="noopener noreferrer">Subscribe to updates<span class="visually-hidden"> (opens in new tab)</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script>
+function wireDisclosure(b,p){var btn=document.getElementById(b),pan=document.getElementById(p);btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!o));pan.hidden=o;});}
+wireDisclosure('translateBtn','translatePanel');
+wireDisclosure('transcriptBtn','transcriptPanel');
+
+/* Language select → Google Translate. English keeps the current page. */
+document.getElementById('langSelect').addEventListener('change',function(e){
+  var lang=e.target.value;
+  if(!lang||lang==='en')return;
+  var u='https://translate.google.com/translate?sl=en&tl='+encodeURIComponent(lang)+'&u='+encodeURIComponent(location.href);
+  window.open(u,'_blank','noopener');
+});
+
+/* Tabs */
+(function(){var tl=document.querySelector('[role="tablist"]'),tabs=[].slice.call(tl.querySelectorAll('[role="tab"]'));
+ function sel(t){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',String(on));x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});}
+ tabs.forEach(function(t,i){t.addEventListener('click',function(){sel(t);});
+  t.addEventListener('keydown',function(e){var n=i;
+   if(e.key==='ArrowRight'||e.key==='ArrowDown')n=(i+1)%tabs.length;
+   else if(e.key==='ArrowLeft'||e.key==='ArrowUp')n=(i-1+tabs.length)%tabs.length;
+   else if(e.key==='Home')n=0;else if(e.key==='End')n=tabs.length-1;else return;
+   e.preventDefault();sel(tabs[n]);tabs[n].focus();});});
+})();
+
+/* ---------------- Directory data ---------------- */
+var R=[
+ {n:"Apex Waste Solutions",who:"private",free:false,cats:["private","curbside","bulk","recycle"],web:"https://apexwasteco.com",phone:"",
+  d:"Locally owned weekly curbside trash and recycling. Online address map shows your pickup day and recycling week."},
+ {n:"Waste Management (WM)",who:"private",free:false,cats:["private","curbside","recycle"],web:"https://www.wm.com",phone:"",
+  d:"Large hauler with low-emission CNG trucks and an app for scheduling. Trash plus single-stream recycling."},
+ {n:"Waste Connections",who:"private",free:false,cats:["private","curbside","bulk","recycle"],web:"https://www.wasteconnections.com/colorado-springs",phone:"719-591-5000",
+  d:"Residential and commercial trash, recycling, and roll-off dumpsters across El Paso County."},
+ {n:"Republic Services",who:"private",free:false,cats:["private","curbside","bulk","recycle"],web:"https://www.republicservices.com",phone:"",
+  d:"Curbside trash, single-stream recycling, and dumpster rental. No plastic bags in recycling."},
+ {n:"SOCO Waste",who:"private",free:false,cats:["private","curbside","bulk"],web:"https://www.socowaste.com",phone:"",
+  d:"Local hauler offering bear-resistant cart service, dumpsters, and curbside junk removal."},
+ {n:"HBS Trash",who:"private",free:false,cats:["private","curbside","bulk"],web:"https://www.hbstrash.com",phone:"",
+  d:"25+ years serving the Springs and eastern county (incl. Calhan). 95-gallon cart, once-weekly pickup."},
+ {n:"Infinite Disposal",who:"private",free:false,cats:["private","curbside"],web:"",phone:"",
+  d:"Locally owned and operated curbside trash and recycling service. Search the company name to confirm current contact info and service area."},
+ {n:"Junk King (bulk & junk removal)",who:"private",free:false,cats:["bulk"],web:"https://www.junk-king.com",phone:"1-888-888-5865",
+  d:"Full-service hauling for furniture, appliances, and large cleanouts. Eco-friendly sorting for reuse/recycling."},
+ {n:"Galvanize Recycling",who:"private",free:false,cats:["recycle","ewaste","bulk","yard"],web:"https://galvanizerecycling.com",phone:"719-645-4165",
+  d:"Broad recycler &mdash; TVs and electronics, microwaves, fluorescent bulbs &amp; ballasts, smoke alarms, batteries, nursery pots, plastic bags, shoes, fabric, vinyl records, construction debris, and untreated wood pallets. Call for current acceptance and fees."},
+ {n:"Peak Disposal & Recycling",who:"private",free:false,cats:["private","bulk","recycle"],web:"https://www.peakdr.com",phone:"719-481-2340",
+  d:"Monument-area transfer station, dumpsters, and bulk pickup at 856 Washington St. Accepts appliances (including freon), mattresses &amp; box springs, and metals."},
+ {n:"El Paso County Household Hazardous Waste Facility",who:"county",free:true,cats:["city","hazard","recycle","ewaste"],web:"https://communityresources.elpasoco.com/environmental-division/household-hazardous-waste/",phone:"719-520-7878",
+  d:"FREE drop-off for paint, chemicals, pesticides, antifreeze, batteries, bulbs, and many electronics. 3255 Akers Dr. Hours: Mon/Tue/Thu/Fri 8:30am&ndash;noon &amp; 1&ndash;4pm; Wed 8:30am&ndash;noon (recycling drop-off &amp; reuse area also open Wed). 2026 Saturdays 8:30am&ndash;noon: Jan 10, Mar 14, May 9, Jul 11, Sep 19, Nov 7. Bring photo ID; El Paso &amp; Teller County residents only."},
+ {n:"El Paso County Recycling Directory",who:"county",free:true,cats:["city","recycle","tip","ewaste","hazard"],web:"https://epc-assets.elpasoco.com/wp-content/uploads/sites/20/Recycling-Directory-2026.pdf",phone:"",
+  d:"FREE searchable guide listing where to take almost any specific item in the county."},
+ {n:"E-Tech Recyclers",who:"private",free:false,cats:["recycle","ewaste"],web:"https://www.etechrecyclers.com",phone:"719-799-6517",
+  d:"Electronics recycling at 2854 N. Prospect St. Takes large/CRT TVs for a small fee, household batteries, microwaves, ink &amp; toner cartridges, and may pay you for working computers."},
+ {n:"Best Buy electronics drop-off",who:"private",free:true,cats:["recycle","ewaste"],web:"https://www.bestbuy.com/recycling",phone:"",
+  d:"Free in-store recycling for many small electronics, cables, and accessories (limits apply per day)."},
+ {n:"Batteries Plus",who:"private",free:false,cats:["ewaste","recycle"],web:"https://www.batteriesplus.com",phone:"",
+  d:"Drop-off recycling for household batteries and fluorescent light bulbs."},
+ {n:"Wine Punts LLC",who:"private",free:true,cats:["recycle","ewaste"],web:"",phone:"719-418-2691",
+  d:"FREE drop-off for small appliances, limited electronics, auto batteries, aluminum, and scrap metal. 30 W. Las Vegas St."},
+ {n:"Woodmen Dump",who:"private",free:false,cats:["recycle","bulk","yard"],web:"https://www.woodmendump.com",phone:"719-792-3867",
+  d:"Drop-off site on the north side. 8808 Cliff Allen Pt. Call to confirm accepted items and fees."},
+ {n:"Colorado Springs Landfill (fridges & freezers)",who:"private",free:false,cats:["bulk","recycle"],web:"",phone:"719-683-2600",
+  d:"Accepts refrigerators and freezers, which need special refrigerant handling. 1010 Blaney Rd."},
+ {n:"Rocky Top Resources",who:"private",free:false,cats:["yard","recycle"],web:"https://rockytopresources.com",phone:"719-579-9103",
+  d:"Yard-waste drop-off at 1755 E. Las Vegas St. Hosts the El Paso County Yard Waste Recycling Program Saturdays 8am&ndash;4pm ($10 per vehicle, households only). Sells finished mulch and compost. Also takes untreated lumber and live Christmas trees."},
+ {n:"Free City mulch",who:"city",free:true,cats:["yard","city","tip"],web:"https://coloradosprings.gov",phone:"",
+  d:"FREE mulch giveaway from designated City locations &mdash; great for beds and water-saving."},
+ {n:"Ask your landscaper for free wood chips",who:"tip",free:true,cats:["yard","tip"],web:"",phone:"",
+  d:"Local landscapers and arborists often give away or let you pick up wood chips for free or a small fee instead of paying to dump them. Just ask."},
+ {n:"Compost at home",who:"tip",free:true,cats:["yard","tip"],web:"",phone:"",
+  d:"Food scraps and yard debris are the two biggest things we throw away. A backyard bin cuts your trash and feeds your garden."},
+ {n:"Goodwill / donation centers",who:"nonprofit",free:true,cats:["recycle","ewaste","tip"],web:"https://www.goodwillcolorado.org",phone:"",
+  d:"Donate working electronics, small appliances, and household goods to keep usable items out of the landfill."},
+ {n:"Free recycling under EPR (active 2026)",who:"city",free:true,cats:["recycle","city"],web:"https://coloradosprings.gov/WastelessCOS",phone:"",
+  d:"Colorado&rsquo;s producer-responsibility program now reimburses participating haulers for curbside recycling, lowering or eliminating recycling fees for residents. Confirm with your hauler."},
+ {n:"Report illegal dumping",who:"city",free:true,cats:["city","tip"],web:"",phone:"719-385-2900",
+  d:"See dumping on open land? Call Colorado Springs Code Enforcement to help keep the land clean."},
+ {n:"Bear-resistant carts (west of I-25)",who:"tip",free:false,cats:["tip","curbside"],web:"",phone:"",
+  d:"Properties west of I-25 are required to use bear-resistant trash carts. Ask your hauler &mdash; several offer them."},
+ {n:"Pikes Peak Habitat for Humanity ReStore",who:"nonprofit",free:true,cats:["bulk","recycle","tip"],web:"https://pikespeakhabitat.org/restore/",phone:"719-667-0840",
+  d:"Donate or buy gently used furniture, appliances, building materials, cabinets, and home goods. Locations at 6250 Tutt Blvd. and 411 S. Wahsatch Ave. Proceeds build affordable housing."},
+ {n:"ARC Thrift Stores",who:"nonprofit",free:true,cats:["bulk","recycle","tip"],web:"https://www.arcthrift.com",phone:"",
+  d:"Donate clothing, housewares, and furniture &mdash; free pickup available for large furniture. Sales fund disability advocacy."},
+ {n:"Who Gives a Scrap",who:"nonprofit",free:false,cats:["recycle","tip"],web:"https://whogivesascrapcolorado.com",phone:"",
+  d:"Creative-reuse center: drop off and shop craft supplies, fabric, art materials, and odd bits that would otherwise be trashed. 810 Arcturus Dr."},
+ {n:"Food to Power (compost pickup & drop-off)",who:"nonprofit",free:true,cats:["yard","tip"],web:"https://foodtopowerco.org/compost",phone:"719-470-2737",
+  d:"Local pay-what-you-can curbside food-scrap pickup and neighborhood drop-off; members get finished compost back twice a year. Accepts food scraps (fruit, veg, coffee filters, loose tea, eggshells, cartons, bread, rice, pasta, cereal), plus cardboard, paper, and leaves."},
+ {n:"Urban Recycling",who:"private",free:false,cats:["bulk","recycle","ewaste"],web:"https://www.urbanrecyclingcolo.com",phone:"719-644-6493",
+  d:"Broad drop-off recycler at 3341 N. Cascade Ave. <strong>FREE</strong> for small appliances, limited electronics, auto batteries, artificial Christmas trees, aluminum &amp; misc. metal. <strong>Fees apply</strong> for cardboard, TVs, mattresses &amp; box springs, couches, ottomans, large appliances, microwaves, and freon appliances (fridges, freezers, AC)."},
+ {n:"Koscove Metal (scrap metal)",who:"private",free:false,cats:["recycle","bulk"],web:"https://koscovemetal.com",phone:"719-636-3559",
+  d:"Scrap-metal recycling at 431 W. Colorado Ave. for appliances, metal furniture frames, and other metal items; may pay for some loads."},
+ {n:"Grocery store plastic-film drop-off",who:"tip",free:true,cats:["recycle","tip"],web:"",phone:"",
+  d:"Plastic bags and film can&rsquo;t go in curbside recycling. Return them to the bins at the front of King Soopers, Safeway, and most supermarkets."},
+ {n:"Used motor oil & auto fluids",who:"tip",free:true,cats:["hazard","tip"],web:"",phone:"",
+  d:"Many auto-parts stores accept used motor oil, oil filters, and antifreeze for free, as does the County HHW facility. Never pour these on the ground or down a drain."},
+ {n:"Medication & sharps disposal",who:"tip",free:true,cats:["hazard","tip"],web:"",phone:"",
+  d:"Drop unused medications in pharmacy take-back kiosks or law-enforcement drop boxes &mdash; never flush or trash them. Use rigid, labeled containers for needles."},
+ {n:"Christmas tree recycling",who:"city",free:true,cats:["yard","tip"],web:"",phone:"",
+  d:"Seasonal free tree-recycling drop-offs each January turn live trees into mulch. Remove all lights, tinsel, and stands first."},
+ {n:"Christmas Tree Project (donations)",who:"nonprofit",free:true,cats:["yard","tip"],web:"https://www.thechristmastreeproject.org",phone:"719-799-6074",
+  d:"Year-round donation of real and artificial Christmas trees, ornaments, and decorations. 4575 Galley Rd. Ste 200E. Lights must be new."},
+ {n:"Black Forest Slash & Mulch Program",who:"county",free:false,cats:["yard","city"],web:"https://www.elpasoco.com",phone:"719-520-7878",
+  d:"Annual El Paso County wildfire-mitigation program (May&ndash;September) for slash drop-off and mulch pickup at Shoup &amp; Herring Rd. Fees apply. Tree and bush debris only &mdash; no stumps, roots, or pine needles. Maximum 6 ft long, 8 in diameter. Mulch loader available Saturdays."}
+];
+var WHO={city:["City","pill city"],county:["County","pill county"],private:["Private","pill private"],tip:["Tip","pill tip"],nonprofit:["Nonprofit","pill nonprofit"]};
+var CAT={curbside:"Curbside",bulk:"Bulk & large",private:"Private hauler",city:"City/County",yard:"Yard & mulch",recycle:"Recycling drop-off",ewaste:"Electronics & batteries",hazard:"Hazardous waste",tip:"Tip"};
+
+var grid=document.getElementById('dirGrid'),rowView=document.getElementById('rowView'),
+    meta=document.getElementById('resultsMeta'),none=document.getElementById('noResults'),
+    search=document.getElementById('dirSearch'),chips=[].slice.call(document.querySelectorAll('#chips .chip'));
+var active=[],view='cards';
+/* Escapes plain-text values used inside element bodies. Note: description (r.d)
+   is intentionally inserted as HTML so curated entities like &mdash; render. */
+function esc(s){return String(s).replace(/&(?!\w+;)/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+var PLACES=R.filter(function(r){return r.who!=='tip';});
+var TIPS=R.filter(function(r){return r.who==='tip';});
+var sortState={key:'default',dir:1};
+var COLS=[{k:'name',l:'Resource'},{k:'type',l:'Type'},{k:'free',l:'Cost'},{k:'contact',l:'Contact'},{k:'web',l:'Website'}];
+function val(r,k){
+  if(k==='name')return r.n.toLowerCase();
+  if(k==='type')return WHO[r.who][0].toLowerCase();
+  if(k==='free')return r.free?'0':'1';
+  if(k==='contact')return r.phone?r.phone.toLowerCase():'\uffff';
+  if(k==='web')return r.web?r.web.replace(/^https?:\/\/(www\.)?/,'').toLowerCase():'\uffff';
+  return '';
+}
+function cmp(a,b){
+  if(sortState.key==='default'){ if(a.free!==b.free)return a.free?-1:1; return a.n.localeCompare(b.n); }
+  var av=val(a,sortState.key),bv=val(b,sortState.key),d=sortState.dir;
+  if(av<bv)return -1*d; if(av>bv)return 1*d; return a.n.localeCompare(b.n);
+}
+function current(){
+  var q=search.value.trim().toLowerCase();
+  /* Singular→plural variants so "battery" matches "batteries", "tire" matches "tires", etc. */
+  var qs=q?[q]:[];
+  if(q.length>=4){
+    if(q.charAt(q.length-1)==='y')qs.push(q.slice(0,-1)+'ies');
+    if(q.charAt(q.length-1)!=='s')qs.push(q+'s');
+  }
+  return PLACES.filter(function(r){
+    var mc=active.length===0||active.some(function(c){return c==='free'?r.free:r.cats.indexOf(c)>-1;});
+    var hay=(r.n+' '+r.d+' '+r.cats.join(' ')+' '+(r.free?'free':'')).toLowerCase();
+    return mc&&(qs.length===0||qs.some(function(qv){return hay.indexOf(qv)>-1;}));
+  }).sort(cmp);
+}
+function webLink(r){
+  if(!r.web)return'';
+  var pdf=(r.web.indexOf('.pdf')>-1);
+  var label=pdf?'View directory (PDF)':'Visit website';
+  return '<a href="'+escAttr(r.web)+'" target="_blank" rel="noopener noreferrer">'+label+'<span class="visually-hidden"> for '+esc(r.n)+(pdf?' (PDF,':' (')+' opens in new tab)</span></a>';
+}
+function renderCards(list){
+  grid.innerHTML=list.map(function(r){var w=WHO[r.who];
+    var cats=r.cats.map(function(c){return CAT[c];}).filter(Boolean).join(' &middot; ');
+    return '<article class="res'+(r.free?' is-free':'')+'">'
+      +'<div class="meta">'+(r.free?'<span class="pill free">Free</span>':'')+'<span class="'+w[1]+'">'+w[0]+'</span></div>'
+      +'<h3>'+esc(r.n)+'</h3><p>'+r.d+'</p>'
+      +'<div class="row">'+(r.phone?'<span class="contact">&#9742; '+esc(r.phone)+'</span>':'')+(r.web?webLink(r):'')+'</div>'
+      +'<p class="cats">'+cats+'</p></article>';
+  }).join('');
+}
+function renderRows(list){
+  var head=COLS.map(function(col){
+    var s=(sortState.key===col.k)?(sortState.dir===1?'ascending':'descending'):'none';
+    var arr=(sortState.key===col.k)?(sortState.dir===1?'\u25b2':'\u25bc'):'\u21c5';
+    return '<th scope="col" aria-sort="'+s+'"><button type="button" class="th-sort" data-key="'+col.k+'">'+col.l+' <span class="arr" aria-hidden="true">'+arr+'</span></button></th>';
+  }).join('');
+  rowView.innerHTML='<div class="dir-table-wrap"><table class="dir-table">'
+    +'<caption>Recycling and waste resources. Click a column heading to sort; default shows free options first, then alphabetical.</caption>'
+    +'<thead><tr>'+head+'</tr></thead><tbody>'
+    +list.map(function(r){var w=WHO[r.who];
+      var cats=r.cats.map(function(c){return CAT[c];}).filter(Boolean).join(', ');
+      return '<tr><th scope="row" class="name">'+esc(r.n)+'<br><span style="font-weight:400;color:var(--ink-soft);font-size:.85rem">'+cats+'</span></th>'
+        +'<td><span class="'+w[1]+'">'+w[0]+'</span></td>'
+        +'<td>'+(r.free?'<span class="pill free">Free</span>':'Varies')+'</td>'
+        +'<td>'+(r.phone?esc(r.phone):'&mdash;')+'</td>'
+        +'<td>'+(r.web?webLink(r):'&mdash;')+'</td></tr>';
+    }).join('')+'</tbody></table></div>';
+}
+function render(){
+  var list=current(),empty=list.length===0;
+  if(view==='cards')renderCards(list);else renderRows(list);
+  document.getElementById('cardView').hidden=empty||view!=='cards';
+  rowView.hidden=empty||view!=='rows';
+  none.hidden=!empty;
+  var fc=list.filter(function(r){return r.free;}).length;
+  meta.textContent=list.length+(list.length===1?' resource':' resources')+' shown ('+fc+' free) \u00b7 '+(view==='cards'?'card view':'row view')
+    +(active.length?' \u00b7 filtered':'')+(search.value.trim()?' \u00b7 matching \u201c'+search.value.trim()+'\u201d':'');
+}
+chips.forEach(function(c){c.addEventListener('click',function(){
+  var f=c.dataset.filter;
+  if(f==='all'){active=[];chips.forEach(function(x){x.setAttribute('aria-pressed',String(x.dataset.filter==='all'));});}
+  else{var on=c.getAttribute('aria-pressed')==='true';c.setAttribute('aria-pressed',String(!on));
+    if(on)active=active.filter(function(x){return x!==f;});else active.push(f);
+    document.querySelector('.chip[data-filter="all"]').setAttribute('aria-pressed',String(active.length===0));}
+  render();
+}); });
+document.getElementById('viewCards').addEventListener('click',function(){view='cards';this.setAttribute('aria-pressed','true');document.getElementById('viewRows').setAttribute('aria-pressed','false');render();});
+document.getElementById('viewRows').addEventListener('click',function(){view='rows';this.setAttribute('aria-pressed','true');document.getElementById('viewCards').setAttribute('aria-pressed','false');render();});
+rowView.addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('.th-sort'):null; if(!b)return;
+  var k=b.getAttribute('data-key');
+  if(sortState.key===k){
+    if(sortState.dir===1){sortState.dir=-1;}
+    else {sortState.key='default';sortState.dir=1;}
+  } else {sortState.key=k;sortState.dir=1;}
+  render();
+});
+function renderTips(){
+  document.getElementById('tipsGrid').innerHTML=TIPS.map(function(t){
+    return '<div class="tip-box">'+(t.free?'<span class="pill free">Free</span>':'<span class="pill tip">Tip</span>')+'<h4>'+esc(t.n)+'</h4><p>'+t.d+'</p></div>';
+  }).join('');
+}
+renderTips();
+search.addEventListener('input',render);
+render();
+
+/* ---------------- How to Sort data ---------------- */
+var BINS=[
+ {cls:"recycle",icon:"\u267b\ufe0f",title:"Curbside recycling",
+  yes:["Paper, junk mail, magazines","Cardboard, flattened (max ~2&times;2 ft)","Rigid plastics #1&ndash;#7 (bottles, jugs, tubs)","Metal cans (steel &amp; aluminum)","Clean glass bottles &amp; jars"],
+  no:["Plastic bags &amp; film (jam the sorter)","Foam / Styrofoam","Food-soiled items, greasy pizza boxes","Ceramics, drinking glasses, lightbulbs"],
+  where:"Empty and rinse first. Single-stream &mdash; all together in one cart.",
+  kw:"paper cardboard box plastic bottle jug can aluminum steel glass jar magazine mail newspaper recycle recycling"},
+ {cls:"trash",icon:"\ud83d\uddd1\ufe0f",title:"Landfill trash",
+  yes:["Food-soiled packaging &amp; greasy boxes","Foam and plastic film (unless store drop-off)","Diapers, hygiene products","Broken ceramics &amp; drinking glass"],
+  no:["Batteries (fire risk!)","Electronics (banned from CO landfills)","Paint, chemicals, oil","Anything still usable &mdash; donate it"],
+  where:"Weekly curbside cart from your chosen private hauler.",
+  kw:"trash garbage diaper foam styrofoam tissue food waste landfill greasy pizza"},
+ {cls:"ewaste",icon:"\ud83d\udcbb",title:"Electronics (e-waste)",
+  yes:["TVs, monitors, computers, laptops","Tablets, phones, printers","Cables, keyboards, accessories"],
+  no:["Never in curbside trash or recycling","Banned from Colorado landfills since 2013"],
+  where:"Drop at E-Tech Recyclers, Best Buy, or the County HHW facility (small/CRT TVs). Reset devices to factory settings first. See the Directory tab.",
+  kw:"electronics e-waste ewaste tv television monitor computer laptop tablet phone cellphone printer cable keyboard charger"},
+ {cls:"ewaste",icon:"\ud83d\udd0b",title:"Batteries",
+  yes:["Single-use AA/AAA/9V","Rechargeable &amp; lithium","Car / auto batteries","Button cells"],
+  no:["Never in curbside trash or recycling","Loose lithium batteries can spark fires"],
+  where:"County HHW facility (free), Batteries Plus, or Wine Punts (auto batteries). See the Directory tab.",
+  kw:"battery batteries aa aaa lithium rechargeable car auto button cell 9v power"},
+ {cls:"hazard",icon:"\u2620\ufe0f",title:"Household hazardous waste",
+  yes:["Paint, stain, solvents","Pesticides, fertilizer, antifreeze","Cleaning chemicals, aerosols","Fluorescent bulbs (mercury), smoke alarms"],
+  no:["Never down the drain or in any cart"],
+  where:"FREE at El Paso County HHW Facility, 3255 Akers Dr. Bring photo ID. See the Directory tab.",
+  kw:"paint stain solvent pesticide fertilizer antifreeze chemical aerosol fluorescent bulb light mercury smoke alarm hazardous oil cleaner"},
+ {cls:"organics",icon:"\ud83c\udf3f",title:"Yard waste &amp; food scraps",
+  yes:["Branches, leaves, grass clippings","Fruit &amp; vegetable scraps","Coffee grounds, eggshells"],
+  no:["Not accepted in most curbside carts yet","Meat/dairy not ideal for backyard bins"],
+  where:"Compost at home, drop at Rocky Top Resources, or grab free City mulch. See the Directory tab.",
+  kw:"yard waste leaves grass branches compost food scraps organic mulch wood chips garden tree leaf"},
+ {cls:"recycle",icon:"\ud83e\uddca",title:"Large appliances",
+  yes:["Fridges &amp; freezers (refrigerant)","Washers, dryers, stoves","Microwaves, dishwashers"],
+  no:["Won&rsquo;t fit in curbside carts"],
+  where:"Schedule bulk pickup with your hauler, or take fridges/freezers to the CS Landfill (1010 Blaney Rd). See the Directory tab.",
+  kw:"appliance fridge refrigerator freezer washer dryer stove oven microwave dishwasher metal bulky large"},
+ {cls:"recycle",icon:"\ud83d\uded2",title:"Plastic bags &amp; film",
+  yes:["Grocery &amp; produce bags","Bread bags, dry-cleaning film","Bubble wrap, air pillows"],
+  no:["Never in the curbside recycling cart","They tangle and jam the sorting machines"],
+  where:"Return to grocery-store film drop-off bins at the front of most supermarkets.",
+  kw:"plastic bag film grocery produce bread bubble wrap shrink wrap store drop off"}
+];
+var sortGrid=document.getElementById('sortGrid'),sortNone=document.getElementById('sortNone'),
+    sortSearch=document.getElementById('sortSearch'),sortMeta=document.getElementById('sortMeta');
+function renderBins(){
+  var q=sortSearch.value.trim().toLowerCase();
+  var list=BINS.filter(function(b){return q===''||(b.title+' '+b.kw).toLowerCase().indexOf(q)>-1;});
+  sortGrid.innerHTML=list.map(function(b){
+    return '<article class="bin '+b.cls+'"><h3><span aria-hidden="true">'+b.icon+'</span> '+b.title+'</h3>'
+      +'<p class="yes"><b>Goes here:</b></p><ul>'+b.yes.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul>'
+      +'<p class="no"><b>Keep out:</b></p><ul>'+b.no.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul>'
+      +'<p class="where">'+b.where+'</p></article>';
+  }).join('');
+  sortNone.hidden=list.length>0;sortGrid.hidden=list.length===0;
+  sortMeta.textContent=q?(list.length+(list.length===1?' category':' categories')+' matching \u201c'+sortSearch.value.trim()+'\u201d'):'';
+}
+sortSearch.addEventListener('input',renderBins);
+renderBins();
+</script>
+</body>
+</html>

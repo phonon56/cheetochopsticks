@@ -1,0 +1,4029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="cheetochopsticks — trying to figure things out, one step at a time. Public records, jurisdiction tools, and open data for El Paso County residents. Free, no invoice attached.">
+  <title>cheetochopsticks — figuring it out · El Paso County</title>
+
+  
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
+         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
+           text    #ede8dc → 15.3  AAA
+           muted   #96adc4 →  8.1  AAA
+           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
+           gold    #c8a84b →  8.2  AAA
+           gold-lt #fde68a → 15.0  AAA
+           red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
+           green   #4ade80 → 10.7  AAA
+           blue    #60a5fa →  7.4  AAA
+           amber   #fbbf24 → 11.2  AAA                                  */
+      --cc-bg:         #0c1220;
+      --cc-surface:    #141e2e;
+      --cc-surface2:   #1c2a3e;
+      --cc-surface3:   #233045;
+      --cc-border:     rgba(255,255,255,.14);
+      --cc-border-hi:  rgba(255,255,255,.28);
+      --cc-gold:       #c8a84b;
+      --cc-gold-dim:   rgba(200,168,75,.22);
+      --cc-gold-faint: rgba(200,168,75,.09);
+      --cc-gold-lt:    #fde68a;
+      --cc-text:       #ede8dc;
+      --cc-muted:      #96adc4;
+      --cc-quiet:      #8ca3b8;
+      --cc-mono:       'IBM Plex Mono', monospace;
+      --cc-sans:       'IBM Plex Sans', sans-serif;
+      --cc-serif:      'Playfair Display', Georgia, serif;
+      --cc-red:        #fca5a5;
+      --cc-red-dim:    rgba(252,165,165,.16);
+      --cc-green:      #4ade80;
+      --cc-green-dim:  rgba(74,222,128,.14);
+      --cc-blue:       #60a5fa;
+      --cc-blue-dim:   rgba(96,165,250,.14);
+      --cc-amber:      #fbbf24;
+      --cc-amber-dim:  rgba(251,191,36,.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* ── Skip link (ADA) ────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--cc-gold);
+      color: #0c1220;
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 10px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ── Focus visible — universal gold ring ─────────────────────── */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Serif subheadline ───────────────────────────────────────── */
+    .section-sub {
+      font-family: var(--cc-sans);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--cc-muted);
+      line-height: 1.6;
+      margin-top: 4px;
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+
+    body {
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    .nav {
+      border-bottom: 1px solid var(--cc-border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,26,.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 200;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nav-logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      margin-right: 32px;
+      flex-shrink: 0;
+    }
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+    .nav-logo:focus-visible {
+      outline: 2px solid var(--cc-gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    /* Legacy text-logo styles kept for any other surfaces that reference them */
+    .nav-logo-word {
+      font-family: var(--cc-sans);
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: -.01em;
+      color: var(--cc-text);
+    }
+    .nav-logo-dot { color: var(--cc-gold); font-size: .95rem; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+    .nav-link {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--cc-text); background: rgba(255,255,255,.04); }
+    .nav-link.you-link {
+      color: var(--cc-gold);
+      border-color: var(--cc-gold-dim);
+      background: var(--cc-gold-faint);
+    }
+    .nav-link.you-link:hover { background: var(--cc-gold-dim); }
+    .nav-link.active {
+      color: var(--cc-text);
+      border-color: var(--cc-border-hi);
+      background: rgba(255,255,255,.06);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold);
+      text-underline-offset: 3px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: all .18s;
+    }
+    .notif-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+
+    /* ── NAV SEARCH (top-nav disclosure pattern) ───────────────────
+       Toggle button sits next to Subscribe / Alerts; the dropdown
+       panel is positioned absolutely below the nav and animates in
+       only when expanded. JS in nav-scripts.njk handles open/close,
+       focus management, Escape, click-outside, and lazy fetch. */
+    .nav-search-toggle {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 12px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: color .18s, border-color .18s;
+      margin-right: 8px;
+      min-height: 32px;
+    }
+    .nav-search-toggle:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nav-search-toggle:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-toggle[aria-expanded="true"] {
+      color: var(--cc-bg);
+      background: var(--cc-gold);
+      border-color: var(--cc-gold);
+    }
+    .nav-search-toggle__icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .nav-search-toggle__label {
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    @media (max-width: 600px) {
+      .nav-search-toggle { padding: 6px 8px; }
+      .nav-search-toggle__label { display: none; }
+    }
+
+    /* Dropdown panel — full-width below nav, dark surface that matches
+       the notification panel treatment for visual consistency. */
+    .nav-search-panel {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 35;
+      background: var(--cc-surface);
+      border-bottom: 1px solid var(--cc-border-hi);
+      box-shadow: 0 6px 20px rgba(0,0,0,.35);
+    }
+    .nav-search-panel[hidden] { display: none; }
+    .nav-search-panel__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 24px 24px;
+    }
+    .nav-search-panel__chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .nav-search-panel__chip {
+      background: transparent;
+      color: var(--cc-muted);
+      border: 1px solid var(--cc-border-hi);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-family: var(--cc-mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .nav-search-panel__chip:hover { color: var(--cc-text); border-color: var(--cc-gold); }
+    .nav-search-panel__chip:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__chip[aria-pressed="true"] {
+      color: var(--cc-bg);
+      background: var(--cc-gold);
+      border-color: var(--cc-gold);
+    }
+    .nav-search-panel__form {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .nav-search-panel__input {
+      flex: 1;
+      min-width: 0;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      border: 1px solid var(--cc-border-hi);
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.4;
+      min-height: 44px;
+    }
+    .nav-search-panel__input::placeholder { color: var(--cc-quiet); }
+    .nav-search-panel__input:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 1px;
+      border-color: var(--cc-gold);
+    }
+    .nav-search-panel__submit,
+    .nav-search-panel__close {
+      background: var(--cc-gold);
+      color: var(--cc-bg);
+      border: 1px solid var(--cc-gold);
+      border-radius: 4px;
+      padding: 0 16px;
+      font-family: var(--cc-mono);
+      font-size: 1rem;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-search-panel__close {
+      background: transparent;
+      color: var(--cc-muted);
+      border-color: var(--cc-border-hi);
+    }
+    .nav-search-panel__submit:hover,
+    .nav-search-panel__close:hover { background: var(--cc-gold-lt); border-color: var(--cc-gold-lt); color: var(--cc-bg); }
+    .nav-search-panel__submit:focus-visible,
+    .nav-search-panel__close:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__status {
+      font-family: var(--cc-mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 12px 0 8px;
+      min-height: 1.4em;
+    }
+    .nav-search-panel__results {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 60vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .nav-search-panel__item {
+      display: block;
+      padding: 12px 16px;
+      background: var(--cc-bg);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--cc-text);
+      border-left-width: 4px;
+      transition: border-color .15s, background .15s;
+    }
+    .nav-search-panel__item:hover { border-color: var(--cc-border-hi); background: var(--cc-surface); }
+    .nav-search-panel__item:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__item--local    { border-left-color: var(--cc-gold); }
+    .nav-search-panel__item--state    { border-left-color: var(--cc-blue); }
+    .nav-search-panel__item--national { border-left-color: var(--cc-green); }
+    .nav-search-panel__item-scope {
+      font-family: var(--cc-mono);
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 0 0 3px;
+    }
+    .nav-search-panel__item--local .nav-search-panel__item-scope    { color: var(--cc-gold); }
+    .nav-search-panel__item--state .nav-search-panel__item-scope    { color: var(--cc-blue); }
+    .nav-search-panel__item--national .nav-search-panel__item-scope { color: var(--cc-green); }
+    .nav-search-panel__item-title {
+      font-weight: 600;
+      font-size: .95rem;
+      color: var(--cc-text);
+      line-height: 1.35;
+      margin: 0 0 3px;
+    }
+    .nav-search-panel__item-desc {
+      font-size: .82rem;
+      color: var(--cc-muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .nav-search-panel__item mark {
+      background: rgba(200,168,75,.28);
+      color: var(--cc-text);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+    .nav-search-panel__empty {
+      font-size: .9rem;
+      color: var(--cc-muted);
+      padding: 12px 0;
+      margin: 0;
+    }
+    @media (max-width: 700px) {
+      .nav-search-panel__inner { padding: 16px 16px 18px; }
+      .nav-search-panel__chips { gap: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .nav-search-toggle,
+      .nav-search-panel__chip,
+      .nav-search-panel__item { transition: none; }
+    }
+    .notif-count {
+      background: var(--cc-red);
+      color: #0a0f1a;
+      font-size: .78rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 1px 5px;
+      font-family: var(--cc-mono);
+      line-height: 1.4;
+    }
+
+    /* ── NOTIFICATIONS PANEL ─────────────────────────────────────── */
+    .notif-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .notif-overlay.open { opacity: 1; pointer-events: all; }
+    .notif-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--cc-surface);
+      border-left: 1px solid var(--cc-border-hi);
+      z-index: 301;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.32,.72,0,1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .notif-panel.open { transform: translateX(0); }
+    .notif-panel-head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--cc-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .notif-panel-title {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-text);
+    }
+    .notif-close {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 3px;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: var(--cc-mono);
+      transition: all .15s;
+    }
+    .notif-close:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .notif-filters {
+      display: flex;
+      gap: 6px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--cc-border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .nf-btn {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--cc-border);
+      border-radius: 2px;
+      background: none;
+      color: var(--cc-muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .nf-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold); border-color: rgba(200,168,75,.3); }
+    .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .notif-group-label {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-quiet);
+      padding: 10px 20px 4px;
+    }
+    .notif-item {
+      padding: 12px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--cc-border);
+      transition: background .15s;
+      cursor: default;
+    }
+    .notif-item:hover { background: rgba(255,255,255,.02); }
+    .notif-item.hidden { display: none; }
+    .notif-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .nd-red    { background: var(--cc-red); }
+    .nd-amber  { background: var(--cc-amber); }
+    .nd-blue   { background: var(--cc-blue); }
+    .nd-green  { background: var(--cc-green); }
+    .nd-gold   { background: var(--cc-gold); }
+    .nd-quiet  { background: var(--cc-quiet); }
+    .notif-body { flex: 1; }
+    .notif-text {
+      font-size: .85rem;
+      color: var(--cc-text);
+      line-height: 1.55;
+      margin-bottom: 3px;
+    }
+    .notif-text strong { color: var(--cc-gold-lt); font-weight: 500; }
+    .notif-meta {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--cc-quiet);
+      margin-bottom: 4px;
+    }
+    .notif-action {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--cc-gold-dim);
+      padding-bottom: 1px;
+      transition: border-color .15s;
+    }
+    .notif-action:hover { border-color: var(--cc-gold); }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
+      border-top: 1px solid var(--cc-border);
+      padding: 32px 0 36px;
+      margin-top: 56px;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      position: relative;
+      z-index: 1;
+    }
+    .cc-footer .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .cc-footer-line {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .04em;
+      line-height: 1.9;
+      color: var(--cc-muted);
+      text-align: center;
+    }
+    .cc-footer-line a {
+      color: var(--cc-muted);
+      text-decoration: underline;
+      text-decoration-color: rgba(150, 173, 196, .35);
+      text-underline-offset: 3px;
+      transition: color .15s, text-decoration-color .15s;
+    }
+    .cc-footer-line a:hover,
+    .cc-footer-line a:focus-visible {
+      color: var(--cc-gold);
+      text-decoration-color: var(--cc-gold);
+    }
+    .cc-footer-ext {
+      display: inline-block;
+      font-size: .7em;
+      transform: translateY(-1px);
+      margin-left: 2px;
+      opacity: .7;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
+    }
+
+    /* ── MARKDOWN CONTENT (rendered .md docs) ───────────────────── */
+    .markdown-content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .markdown-header {
+      border-bottom: 1px solid var(--cc-border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .markdown-content > .markdown-header h1,
+    .markdown-content h1 {
+      font-family: var(--cc-serif);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--cc-text);
+      margin: 0 0 8px;
+    }
+    .markdown-subtitle {
+      font-style: italic;
+      color: var(--cc-muted);
+      font-size: 1.05rem;
+      margin: 0;
+    }
+    .markdown-content h2 {
+      font-family: var(--cc-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cc-text);
+      margin: 48px 0 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--cc-border);
+    }
+    .markdown-content h3 {
+      font-family: var(--cc-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cc-gold-lt);
+      margin: 32px 0 8px;
+    }
+    .markdown-content h4 {
+      font-family: var(--cc-mono);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 24px 0 6px;
+    }
+    .markdown-content p { margin: 0 0 16px; color: var(--cc-text); }
+    .markdown-content strong { color: var(--cc-gold-lt); font-weight: 600; }
+    .markdown-content em { color: var(--cc-muted); }
+    .markdown-content a {
+      color: var(--cc-gold);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold-dim);
+      text-underline-offset: 3px;
+    }
+    .markdown-content a:hover,
+    .markdown-content a:focus-visible {
+      color: var(--cc-gold-lt);
+      text-decoration-color: var(--cc-gold-lt);
+    }
+    .markdown-content ul, .markdown-content ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+    }
+    .markdown-content li { margin-bottom: 6px; color: var(--cc-text); }
+    .markdown-content li::marker { color: var(--cc-gold); }
+    .markdown-content blockquote {
+      border-left: 3px solid var(--cc-gold);
+      padding: 8px 16px;
+      margin: 16px 0;
+      color: var(--cc-muted);
+      font-style: italic;
+      background: var(--cc-surface);
+    }
+    .markdown-content code {
+      font-family: var(--cc-mono);
+      font-size: .92em;
+      color: var(--cc-gold-lt);
+      background: var(--cc-surface);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+    .markdown-content pre {
+      background: var(--cc-surface);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-size: .85rem;
+      line-height: 1.55;
+    }
+    .markdown-content pre code {
+      background: none;
+      padding: 0;
+      color: var(--cc-text);
+      font-size: inherit;
+    }
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: .92rem;
+    }
+    .markdown-content th, .markdown-content td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--cc-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .markdown-content th {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      border-bottom: 2px solid var(--cc-border);
+    }
+    .markdown-content hr {
+      border: none;
+      border-top: 1px solid var(--cc-border);
+      margin: 32px 0;
+    }
+    .markdown-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+</style>
+
+
+  
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NAV — sourced from a single partial; pages mark their active section
+     by setting `activeNav` in front-matter (one of: orgchart, local,
+     state, national). Legacy values (you, dashboards, people, events)
+     are still accepted by pages that haven't been retagged yet — they
+     simply won't highlight any nav item.
+════════════════════════════════════════════════════════════════════ -->
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
+        <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Site sections">
+        <a class="nav-link" href="/microsites/shared/government-org-chart.html">Org Chart</a>
+        <a class="nav-link" href="/local/">Local</a>
+        <a class="nav-link" href="/state/">State</a>
+        <a class="nav-link" href="/national/">National</a>
+      </nav>
+      <div class="nav-right">
+        <button
+          type="button"
+          class="nav-search-toggle"
+          id="nav-search-toggle"
+          aria-expanded="false"
+          aria-controls="nav-search-panel"
+          aria-label="Open site search">
+          <svg class="nav-search-toggle__icon" aria-hidden="true" viewBox="0 0 20 20" focusable="false">
+            <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+            <line x1="13.5" y1="13.5" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-search-toggle__label">Search</span>
+        </button>
+        <a class="subscribe-btn" href="/preferences/" aria-label="Subscribe to email updates">
+          <span>Subscribe</span>
+        </a>
+        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+          <span>Alerts</span>
+          <span class="notif-count" aria-live="polite">11</span>
+        </button>
+      </div>
+
+      <!-- ─── Nav search dropdown (disclosure pattern) ────────────────
+           Toggled by #nav-search-toggle. Lazy-fetches /search-index.json
+           on first open, then runs the same client-side filtering as
+           the homepage block. role="region" + aria-label gives screen
+           readers a recognizable landmark; hidden attribute is the
+           authoritative open/close state. -->
+      <div
+        id="nav-search-panel"
+        class="nav-search-panel"
+        role="region"
+        aria-label="Site search"
+        hidden>
+        <div class="nav-search-panel__inner">
+          <div class="nav-search-panel__chips" role="group" aria-label="Filter results by jurisdiction tier">
+            <button type="button" class="nav-search-panel__chip" data-tier="all"      aria-pressed="true">All</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="local"    aria-pressed="false">Local</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="state"    aria-pressed="false">State</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="national" aria-pressed="false">National</button>
+          </div>
+          <form class="nav-search-panel__form" id="nav-search-form" role="search" aria-label="Site search">
+            <label class="sr-only" for="nav-search-input">Search topics, agencies, records, or address</label>
+            <input
+              type="search"
+              id="nav-search-input"
+              class="nav-search-panel__input"
+              name="q"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Search anything — or type a ZIP / address"
+              aria-describedby="nav-search-status">
+            <button type="submit" class="nav-search-panel__submit">
+              <span class="sr-only">Run search</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-search-panel__close" id="nav-search-close" aria-label="Close search">
+              <span aria-hidden="true">✕</span>
+            </button>
+          </form>
+          <p class="nav-search-panel__status" id="nav-search-status" role="status" aria-live="polite"></p>
+          <ul class="nav-search-panel__results" id="nav-search-results" role="list"></ul>
+          <p class="nav-search-panel__empty" id="nav-search-empty" hidden>No matches in this tier. Try a different filter or a shorter query.</p>
+        </div>
+      </div>
+
+<style>
+  /* Subscribe button in the dark nav. Gold border + gold label on dark bg.
+     Contrast: cc-gold (#c8a84b) on cc-bg (#0c1220) = 8.2:1 (AAA). */
+  .subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--cc-gold);
+    border-radius: 4px;
+    padding: 7px 14px;
+    margin-right: 8px;
+    color: var(--cc-gold);
+    font-family: var(--cc-mono);
+    font-size: .75rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .18s, color .18s;
+    min-height: 32px;
+  }
+  .subscribe-btn:hover,
+  .subscribe-btn:focus-visible {
+    background: var(--cc-gold);
+    color: #0c1220;
+  }
+  @media (max-width: 600px) {
+    .subscribe-btn { padding: 7px 10px; }
+    .subscribe-btn span { display: none; }
+    .subscribe-btn::before {
+      content: "✉";
+      font-size: 1rem;
+      line-height: 1;
+    }
+  }
+</style>
+    </div>
+  </div>
+</header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NOTIFICATIONS PANEL
+════════════════════════════════════════════════════════════════════ -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">Alerts &amp; notifications</span>
+    <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
+  </div>
+  <div class="notif-filters" role="group" aria-label="Filter notifications">
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (21)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (10)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (4)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (7)</button>
+  </div>
+  <div class="notif-scroll">
+
+    <div class="notif-group-label">Critical — act now</div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>DATP Public Comment reading room is live.</strong> The City of Colorado Springs Digital Accessibility Transition Plan (Draft 2026), with the full plan embedded as a PDF and twelve structured public comments residents can adapt and submit. Comment portal links live in the reading room.</div>
+        <div class="notif-meta">Public comment · COS Digital Accessibility Transition Plan · May 2026</div>
+        <a class="notif-action" href="/microsites/city/ada/datp-comment.html">Open the DATP reading room <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>BOCC petition — service plan transparency &amp; algorithmic pricing disclosure.</strong> A general resident petition with four narrow asks within existing BOCC authority. Sign and send.</div>
+        <div class="notif-meta">Civic action · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/housing-rent-bocc_petition_letter.html">Open petition letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Veterans' petition to the EPC BOCC.</strong> Companion petition for veterans of any branch — service plan transparency and algorithmic pricing protections, framed around military housing harms.</div>
+        <div class="notif-meta">Civic action · Veterans · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/bocc_petition_veteran.html">Open veterans' petition <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LDC update — public comment on service plan transparency.</strong> A 300-word comment ready to submit through the El Paso County Land Development Code update process.</div>
+        <div class="notif-meta">Public comment · LDC update · El Paso County · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/ldc_update_comment.html">Open LDC comment <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Background brief — algorithmic rent pricing in El Paso County.</strong> Sourced reference for journalists, policy analysts, and the COS Chamber housing committee: federal antitrust action, local policy options, and the case for BOCC-level service plan transparency.</div>
+        <div class="notif-meta">Reference · Housing &amp; pricing · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/housing_pricing_background_brief.html">Read background brief <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
+        <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/home-arp-form-preview.html">Open the accessible HTML form preview <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle README <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Downtown Funding and Records Search</strong> Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</div>
+        <div class="notif-meta">Annual adopted budget — C.R.S. 29-1-101 et seq · April 10, 2026</div>
+        <a class="notif-action" href="/microsites/downtown/downtown_cs_search_portal_v2_ada.html">Open the search portal <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+	  
+	      <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
+        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35 · April 8, 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">Open district audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access their own district's records.</div>
+        <div class="notif-meta">EPC Assessor audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See district audit <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021. No governance docs. No financials. One compliance letter fixes all 30+ simultaneously.</div>
+        <div class="notif-meta">Platform audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">High priority</div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Plain-language IC3 intake — open-source reference.</strong> Single-file concept for the FBI IC3 complaint form: one free-text box, client-side extraction into the official complaint structure, honest provenance badges on every pre-filled field, hand-off to the real form. WCAG 2.1 AAA, restrictive CSP, no backend, no third-party requests. CONFIG-driven so any agency can re-point it at a different form.</div>
+        <div class="notif-meta">Open source · National · FBI IC3 · May 2026 · WCAG 2.1 AAA</div>
+        <a class="notif-action" href="/microsites/national/IC3/ic3_intake_opensource.html">Open the plain-language intake <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes, budgets, and audit docs are almost certainly untagged. This is the real HB21-1110 failure — not the homepage.</div>
+        <div class="notif-meta">ADA document audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">View ADA analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it. This is the foundational legal document. Not one district links it publicly.</div>
+        <div class="notif-meta">Governance gap · §32-1-202</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106. Due to State Auditor by July 31. The clock is running.</div>
+        <div class="notif-meta">Governance gap · §32-1-106 · due July 31</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">Informational</div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records both awaiting reply. Response window is still open.</div>
+        <div class="notif-meta">CORA tracker · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/requests_tracker_and_military_numbers.html">View tracker <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
+        <div class="notif-meta">Compliance analysis · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
+        <div class="notif-meta">New · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CSPD Blotter — Weekly History is live.</strong> 271 incidents pulled directly from the live blotter feed, paired with a Poisson 95% confidence band to flag statistical anomalies week to week. Tabs are full APG-pattern keyboard accessible; every chart has an aria-label.</div>
+        <div class="notif-meta">New · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Lorson Ranch financial dashboard is live.</strong> Seven cross-pledged metro districts, $94.2M aggregate audited deficit, IGA money flows, and a per-home tax calculator — sourced from 2026 budgets and 2024 audits. Companion plain-language briefing available as a download.</div>
+        <div class="notif-meta">New · Special Districts · April 2026</div>
+        <a class="notif-action" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CBI Missing Persons form — accessible rebuild is live.</strong> Resolves all seven critical/serious findings from the ADA audit: skip link, live regions, focus management, EN/ES localization, real-time validation messaging. Drops into the existing Drupal Webform infrastructure with optional Claude API routing.</div>
+        <div class="notif-meta">New · State · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LexisNexis ADAM Program dashboard — accessible rebuild is live.</strong> Audit and reference rebuild of the missing-children dashboard: APG-pattern tabs with roving tabindex and full keyboard nav, solid amber focus rings (3:1 against any surface), darker success-green for AA contrast, and "View Poster" placeholders converted from dead anchors to real buttons.</div>
+        <div class="notif-meta">New · Private Sector · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <main id="main-content" tabindex="-1">
+    
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
+         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
+           text    #ede8dc → 15.3  AAA
+           muted   #96adc4 →  8.1  AAA
+           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
+           gold    #c8a84b →  8.2  AAA
+           gold-lt #fde68a → 15.0  AAA
+           red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
+           green   #4ade80 → 10.7  AAA
+           blue    #60a5fa →  7.4  AAA
+           amber   #fbbf24 → 11.2  AAA                                  */
+      --bg:         #0c1220;
+      --surface:    #141e2e;
+      --surface2:   #1c2a3e;
+      --surface3:   #233045;
+      --border:     rgba(255,255,255,.14);
+      --border-hi:  rgba(255,255,255,.28);
+      --gold:       #c8a84b;
+      --gold-dim:   rgba(200,168,75,.22);
+      --gold-faint: rgba(200,168,75,.09);
+      --gold-lt:    #fde68a;
+      --text:       #ede8dc;
+      --muted:      #96adc4;
+      --quiet:      #8ca3b8;
+      --mono:       'IBM Plex Mono', monospace;
+      --sans:       'IBM Plex Sans', sans-serif;
+      --serif:      'Playfair Display', Georgia, serif;
+      --red:        #fca5a5;
+      --red-dim:    rgba(252,165,165,.16);
+      --green:      #4ade80;
+      --green-dim:  rgba(74,222,128,.14);
+      --blue:       #60a5fa;
+      --blue-dim:   rgba(96,165,250,.14);
+      --amber:      #fbbf24;
+      --amber-dim:  rgba(251,191,36,.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* ── Skip link (ADA) ────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--gold);
+      color: #0c1220;
+      font-family: var(--mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 10px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ── Focus visible — universal gold ring ─────────────────────── */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Serif subheadline ───────────────────────────────────────── */
+    .section-sub {
+      font-family: var(--sans);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 4px;
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    .nav {
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,26,.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 200;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nav-logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      margin-right: 32px;
+      flex-shrink: 0;
+    }
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+    .nav-logo:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    /* Legacy text-logo styles kept for any other surfaces that reference them */
+    .nav-logo-word {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: -.01em;
+      color: var(--text);
+    }
+    .nav-logo-dot { color: var(--gold); font-size: .95rem; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+    .nav-link {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,.04); }
+    .nav-link.you-link {
+      color: var(--gold);
+      border-color: var(--gold-dim);
+      background: var(--gold-faint);
+    }
+    .nav-link.you-link:hover { background: var(--gold-dim); }
+    .nav-link.active {
+      color: var(--text);
+      border-color: var(--border-hi);
+      background: rgba(255,255,255,.06);
+      text-decoration: underline;
+      text-decoration-color: var(--gold);
+      text-underline-offset: 3px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      letter-spacing: .06em;
+      transition: all .18s;
+    }
+    .notif-btn:hover { color: var(--text); border-color: var(--border-hi); }
+    .notif-count {
+      background: var(--red);
+      color: #0a0f1a;
+      font-size: .78rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 1px 5px;
+      font-family: var(--mono);
+      line-height: 1.4;
+    }
+
+    /* ── NOTIFICATIONS PANEL ─────────────────────────────────────── */
+    .notif-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .notif-overlay.open { opacity: 1; pointer-events: all; }
+    .notif-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--surface);
+      border-left: 1px solid var(--border-hi);
+      z-index: 301;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.32,.72,0,1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .notif-panel.open { transform: translateX(0); }
+    .notif-panel-head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .notif-panel-title {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .notif-close {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--muted);
+      font-size: .78rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: var(--mono);
+      transition: all .15s;
+    }
+    .notif-close:hover { color: var(--text); border-color: var(--border-hi); }
+    .notif-filters {
+      display: flex;
+      gap: 6px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .nf-btn {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .nf-btn:hover { color: var(--text); border-color: var(--border-hi); }
+    .nf-btn.active { background: var(--gold-dim); color: var(--gold); border-color: rgba(200,168,75,.3); }
+    .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .notif-group-label {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--quiet);
+      padding: 10px 20px 4px;
+    }
+    .notif-item {
+      padding: 12px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+      transition: background .15s;
+      cursor: default;
+    }
+    .notif-item:hover { background: rgba(255,255,255,.02); }
+    .notif-item.hidden { display: none; }
+    .notif-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .nd-red    { background: var(--red); }
+    .nd-amber  { background: var(--amber); }
+    .nd-blue   { background: var(--blue); }
+    .nd-green  { background: var(--green); }
+    .nd-gold   { background: var(--gold); }
+    .nd-quiet  { background: var(--quiet); }
+    .notif-body { flex: 1; }
+    .notif-text {
+      font-size: .85rem;
+      color: var(--text);
+      line-height: 1.55;
+      margin-bottom: 3px;
+    }
+    .notif-text strong { color: var(--gold-lt); font-weight: 500; }
+    .notif-meta {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--quiet);
+      margin-bottom: 4px;
+    }
+    .notif-action {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--gold-dim);
+      padding-bottom: 1px;
+      transition: border-color .15s;
+    }
+    .notif-action:hover { border-color: var(--gold); }
+
+    /* ── TICKER ──────────────────────────────────────────────────── */
+    .ticker-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      position: relative;
+    }
+    .ticker-wrap::before,
+    .ticker-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+    }
+    .ticker-wrap::before { left: 0;  background: linear-gradient(90deg, var(--bg), transparent); }
+    .ticker-wrap::after  { right: 0; background: linear-gradient(-90deg, var(--bg), transparent); }
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      animation: ticker 36s linear infinite;
+      width: max-content;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .ticker-item {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 28px;
+      white-space: nowrap;
+    }
+    .ticker-item strong { color: var(--text); }
+    .ticker-item.alert { color: var(--red); }
+    .ticker-sep { width: 1px; background: var(--border-hi); flex-shrink: 0; align-self: stretch; margin: 2px 0; }
+
+    /* ── SECTIONS ────────────────────────────────────────────────── */
+    .section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+    .section-anchor { position: relative; top: -80px; }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .section-eyebrow {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px; height: 1px;
+      background: var(--gold);
+      opacity: .5;
+    }
+    .section-header h2 {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .section-note {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── HERO ────────────────────────────────────────────────────── */
+    .hero {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid var(--border);
+    }
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 1px;
+      background: var(--gold);
+      opacity: .5;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -.02em;
+      color: var(--text);
+      margin-bottom: 22px;
+    }
+    .hero h1 em { font-style: normal; color: var(--gold); }
+    .hero-sub {
+      max-width: 560px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 32px;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 500; }
+
+    /* ── YOU SECTION ─────────────────────────────────────────────── */
+    .you-banner {
+      background: var(--gold-faint);
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .you-banner::after {
+      content: 'YOU';
+      position: absolute;
+      right: 24px; top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--serif);
+      font-size: 7rem;
+      font-weight: 900;
+      font-style: normal;
+      color: rgba(200,168,75,.06);
+      pointer-events: none;
+      line-height: 1;
+      user-select: none;
+    }
+    .you-banner h3 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .you-banner p {
+      font-size: .95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 500px;
+      margin-bottom: 18px;
+    }
+    .you-banner p strong { color: var(--text); font-weight: 500; }
+    .you-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: #0a0f1a;
+      font-family: var(--mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: background .18s;
+    }
+    .you-cta:hover { background: var(--gold-lt); }
+    .you-cta:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    /* Address finder inside the homepage's "You" banner.
+       Submits via GET to the jurisdiction finder with ?q=<address>;
+       the finder reads that param and runs the lookup automatically. */
+    .you-finder { margin-top: 4px; }
+    .you-finder__label {
+      display: block;
+      font-family: var(--mono);
+      font-size: .74rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .you-finder__row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+    .you-finder__input {
+      flex: 1 1 280px;
+      min-width: 0;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border-hi);
+      border-radius: 3px;
+      padding: 11px 14px;
+      font-family: var(--sans);
+      font-size: 1rem;
+      line-height: 1.4;
+      min-height: 44px;
+    }
+    .you-finder__input::placeholder { color: var(--quiet); }
+    .you-finder__input:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 1px;
+      border-color: var(--gold);
+    }
+    .you-finder__btn {
+      flex: 0 0 auto;
+      min-height: 44px;
+      cursor: pointer;
+      border: 1px solid var(--gold);
+    }
+    .you-finder__hint {
+      font-size: .82rem;
+      color: var(--quiet);
+      line-height: 1.5;
+      margin: 8px 0 0;
+    }
+    @media (max-width: 600px) {
+      .you-finder__btn { width: 100%; }
+    }
+
+    .you-stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .you-stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 14px 16px;
+    }
+    .you-stat-label {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--quiet);
+      margin-bottom: 6px;
+    }
+    .you-stat-val {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .you-stat-val.red { color: var(--red); }
+    .you-stat-val.amber { color: var(--amber); }
+    .you-stat-val.gold { color: var(--gold); }
+    .you-stat-sub {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── PAGE CARDS ──────────────────────────────────────────────── */
+    .page-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .page-card {
+      background: var(--surface);
+      padding: 22px 26px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+      text-decoration: none;
+      transition: background .18s;
+      position: relative;
+    }
+    .page-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--gold);
+      opacity: 0;
+      transition: opacity .18s;
+    }
+    .page-card:hover { background: var(--surface2); }
+    .page-card:hover::before { opacity: 1; }
+    .page-card:hover .card-title { color: var(--gold); }
+    .card-left { min-width: 0; }
+    .card-scope {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .card-title {
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      transition: color .18s;
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+    .card-desc {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .card-desc em { font-style: normal; color: var(--muted); }
+    .card-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      padding-top: 2px;
+      white-space: nowrap;
+    }
+    .card-arrow {
+      font-size: .85rem;
+      color: var(--muted);
+      transition: color .18s, transform .18s;
+    }
+    .page-card:hover .card-arrow { color: var(--gold); transform: translate(2px,-1px); }
+
+    /* ── GROUP CARDS (multi-link) ────────────────────────────────── */
+    .group-card {
+      background: var(--surface);
+      padding: 22px 26px 6px;
+      position: relative;
+      border-left: 3px solid transparent;
+      transition: border-color .18s, background .18s;
+    }
+    .group-card:hover { border-left-color: var(--gold); background: var(--surface2); }
+    .group-card .card-left { padding-bottom: 10px; }
+    .group-links {
+      border-top: 1px solid var(--border);
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+    }
+    .group-link {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 2px;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: padding-left .18s;
+    }
+    .group-link:last-child { border-bottom: none; }
+    .group-link:hover { padding-left: 8px; }
+    .group-link:hover .group-link-title { color: var(--gold); }
+    .group-link:hover .group-link-arrow { color: var(--gold); transform: translate(2px,-1px); }
+    .group-link-title {
+      font-family: var(--sans);
+      font-size: .92rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.35;
+      transition: color .18s;
+    }
+    .group-link-sub {
+      display: block;
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--quiet);
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .group-link-arrow {
+      font-size: .85rem;
+      color: var(--muted);
+      transition: color .18s, transform .18s;
+    }
+
+    /* ── SCOPE HEADINGS within Dashboards section ────────────────── */
+    .scope-heading {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 40px 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .scope-heading:first-of-type { margin-top: 6px; }
+    .scope-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── TAPE BADGES ─────────────────────────────────────────────── */
+    .tape {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 2px;
+      vertical-align: middle;
+    }
+    .tape-live    { background: rgba(74,222,128,.12); color: #4ade80; border: 1px solid rgba(74,222,128,.25); }
+    .tape-wip     { background: rgba(251,191,36,.12); color: #fbbf24; border: 1px solid rgba(251,191,36,.25); }
+    .tape-soon    { background: rgba(96,165,250,.1);  color: #60a5fa; border: 1px solid rgba(96,165,250,.2); }
+    .tape-critical{ background: var(--red-dim);        color: var(--red); border: 1px solid rgba(248,113,113,.25); }
+    .tape-shared  { background: var(--gold-faint);    color: var(--gold); border: 1px solid var(--gold-dim); }
+
+    /* ── MINI CARDS (2-col grid) ─────────────────────────────────── */
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .mini-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 16px 18px;
+      text-decoration: none;
+      display: block;
+      transition: all .18s;
+      position: relative;
+    }
+    .mini-card:hover { background: var(--surface2); border-color: var(--border-hi); }
+    .mini-card:hover .mini-title { color: var(--gold); }
+    .mini-tag {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .mini-title {
+      font-family: var(--sans);
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 5px;
+      line-height: 1.3;
+      transition: color .18s;
+    }
+    .mini-desc { font-size: .83rem; color: var(--muted); line-height: 1.55; }
+    .mini-footer {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mini-stat {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--quiet);
+    }
+    .mini-stat strong { color: var(--muted); }
+
+    /* ── PEOPLE ──────────────────────────────────────────────────── */
+    .people-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .person-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: border-color .18s;
+    }
+    .person-card:hover { border-color: var(--border-hi); }
+    .person-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      border: 1px solid rgba(200,168,75,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono);
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+      letter-spacing: .04em;
+    }
+    .person-name {
+      font-size: .95rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .person-role {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .person-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: var(--gold-faint);
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      padding: 2px 6px;
+      border-radius: 2px;
+      margin-top: 5px;
+    }
+
+    /* ── EVENTS ──────────────────────────────────────────────────── */
+    .events-list { display: flex; flex-direction: column; gap: 8px; }
+    .event-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: border-color .18s;
+    }
+    .event-row:hover { border-color: var(--border-hi); }
+    .event-date { text-align: center; flex-shrink: 0; width: 38px; }
+    .event-month {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .event-day {
+      font-family: var(--sans);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .event-body { flex: 1; }
+    .event-title {
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .event-detail { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+    .event-badge {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      margin-left: auto;
+      align-self: flex-start;
+      white-space: nowrap;
+    }
+    .eb-critical { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
+    .eb-warn { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(251,191,36,.2); }
+    .eb-info { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,165,250,.2); }
+    .eb-ok   { background: var(--green-dim); color: var(--green); border: 1px solid rgba(74,222,128,.2); }
+
+    /* ── COMING SOON ─────────────────────────────────────────────── */
+    .coming-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .coming-card {
+      background: var(--surface);
+      border: 1px dashed rgba(255,255,255,.08);
+      border-radius: 4px;
+      padding: 16px 18px;
+    }
+    .coming-card p {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .coming-card p strong { color: var(--text); font-weight: 600; }
+
+    /* ── DISPATCH ────────────────────────────────────────────────── */
+    .dispatch { padding: 48px 0; }
+    .dispatch-box {
+      background: var(--gold-faint);
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+      padding: 32px 36px;
+    }
+    .dispatch-box h3 {
+      font-family: var(--sans);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .dispatch-box p { color: var(--muted); font-size: .95rem; line-height: 1.7; max-width: 540px; }
+    .dispatch-box p + p { margin-top: 10px; }
+    .dispatch-box strong { color: var(--text); font-weight: 500; }
+
+    /* ── FOOTER ──────────────────────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer p {
+      font-family: var(--mono);
+      font-size: .8rem;
+      letter-spacing: .09em;
+      color: var(--muted);
+    }
+    .footer a { color: var(--muted); text-decoration: none; }
+    .footer a:hover { color: var(--gold); }
+
+    /* ── DIVIDERS ────────────────────────────────────────────────── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 32px 0 24px;
+    }
+    .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+    .section-divider-label {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--quiet);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 48px 0 40px; }
+      .page-card { grid-template-columns: 1fr; }
+      .card-right { flex-direction: row; align-items: center; }
+      .dispatch-box { padding: 24px 20px; }
+      .you-banner { padding: 22px 20px; }
+      .you-banner::after { display: none; }
+      .notif-panel { width: 100%; }
+      .nav-links { display: none; }
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: rgba(12,18,32,.98);
+        border-bottom: 1px solid var(--border-hi);
+        padding: 12px 16px;
+        gap: 4px;
+        z-index: 199;
+      }
+      .nav-menu-btn { display: flex; }
+    }
+    @media (min-width: 601px) {
+      .nav-menu-btn { display: none; }
+    }
+    .nav-menu-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      font-size: .78rem;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-family: var(--mono);
+      transition: all .15s;
+      margin-left: 8px;
+    }
+    .nav-menu-btn:hover { color: var(--text); border-color: var(--border-hi); }
+
+    /* ─── Tier organization — Local / State / National ────────────────────
+       Three-tier grouping for the dashboards section. Each tier has an
+       intro band, an h3 heading, the existing scope sub-sections nested
+       inside (their h3 → h4 demotion preserves heading hierarchy under
+       the section's h2), and a "How this connects" callout between tiers.
+
+       Naming convention (block__element--modifier):
+         .tier                              outermost wrapper
+         .tier--local / --state / --national   per-tier modifier
+         .tier__band                        colored intro band
+         .tier__eyebrow / __heading / __intro   band contents
+         .connection-callout                between-tier callout
+         .connection-callout__label / __body
+         .start-here                        local-tier hero block
+         .start-here__finder / __initiatives / __tile
+         .tier-nav                          sticky in-page tier nav
+         .tier-nav__list / __label / __link
+         .tier-nav__link--current           active link modifier
+       Edit one of these classes to change the look across all tiers.   */
+
+    .tier { margin: 56px 0; }
+    .tier:first-of-type { margin-top: 24px; }
+    .tier__band {
+      border-left: 4px solid var(--gold);
+      padding: 22px 26px 20px;
+      margin-bottom: 26px;
+      border-radius: 0 4px 4px 0;
+    }
+    .tier--local    .tier__band { background: rgba(200,168,75,.07); }
+    .tier--state    .tier__band { background: rgba(96,165,250,.07);  border-left-color: var(--blue); }
+    .tier--national .tier__band { background: rgba(74,222,128,.07);  border-left-color: var(--green); }
+    .tier__eyebrow {
+      font-family: var(--mono);
+      font-size: .74rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .tier__heading {
+      font-family: var(--serif);
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .tier__intro {
+      font-size: .95rem;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 720px;
+    }
+    .tier__intro strong { color: var(--text); }
+    .tier__intro a {
+      color: #ffffff;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(200,168,75,.5);
+      font-weight: 500;
+      padding-bottom: 1px;
+    }
+    .tier__intro a:hover { border-bottom-color: var(--gold); color: var(--gold-lt); }
+    .tier__intro a:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+      color: var(--gold-lt);
+    }
+
+    /* Between-tier "how these connect" callout */
+    .connection-callout {
+      margin: 30px 0 6px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .9rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .connection-callout__label {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .connection-callout__body strong { color: var(--text); }
+    .connection-callout__body a {
+      color: #ffffff;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(200,168,75,.5);
+      font-weight: 500;
+    }
+    .connection-callout__body a:hover { color: var(--gold-lt); border-bottom-color: var(--gold); }
+    .connection-callout__body a:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+      color: var(--gold-lt);
+    }
+
+    /* "Start here" block at the top of Local */
+    .start-here {
+      margin: 0 0 30px;
+      padding: 22px 24px 22px;
+      background: var(--surface2);
+      border: 1px solid var(--border-hi);
+      border-radius: 5px;
+    }
+    .start-here__eyebrow {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .start-here__title {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .start-here__finder {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .start-here__finder-label {
+      width: 100%;
+      font-family: var(--mono);
+      font-size: .74rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+      margin-bottom: 4px;
+    }
+    .start-here__input {
+      flex: 1 1 240px;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border-hi);
+      border-radius: 4px;
+      padding: 11px 14px;
+      font-family: var(--sans);
+      font-size: .94rem;
+    }
+    .start-here__input::placeholder { color: var(--quiet); }
+    .start-here__input:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 1px;
+      border-color: var(--gold);
+    }
+    .start-here__btn {
+      background: var(--gold);
+      color: var(--bg);
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      padding: 11px 22px;
+      font-family: var(--mono);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .start-here__btn:hover { background: var(--gold-lt); border-color: var(--gold-lt); }
+    .start-here__btn:focus-visible {
+      outline: 3px solid var(--gold-lt);
+      outline-offset: 3px;
+    }
+    .start-here__hint {
+      width: 100%;
+      font-size: .82rem;
+      color: var(--quiet);
+      line-height: 1.5;
+      margin: 4px 0 18px;
+    }
+    .start-here__rail-label {
+      font-family: var(--mono);
+      font-size: .74rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 4px 0 12px;
+    }
+    .start-here__initiatives {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .start-here__tile {
+      display: block;
+      padding: 14px 16px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      text-decoration: none;
+      transition: border-color .15s;
+    }
+    .start-here__tile:hover { border-color: var(--gold); }
+    .start-here__tile:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+    .start-here__tile-scope {
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .start-here__tile-title {
+      font-weight: 600;
+      font-size: .94rem;
+      line-height: 1.35;
+      color: var(--text);
+    }
+    .start-here__tile-meta {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ── Universal search & discovery (homepage hero block) ──────────
+       Naming: .search-discovery (block) with __element pieces. The
+       results list reuses .search-discovery__list-item for each row
+       and a tier-badge gets a --modifier per jurisdiction.            */
+    .search-discovery {
+      padding: 48px 0 24px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(200,168,75,0.04), transparent);
+    }
+    .search-discovery__heading {
+      font-family: var(--serif);
+      font-size: clamp(1.5rem, 1rem + 1.8vw, 2rem);
+      color: var(--text);
+      margin: 0 0 8px;
+      line-height: 1.2;
+    }
+    .search-discovery__deck {
+      color: var(--muted);
+      max-width: 64ch;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin: 0 0 22px;
+    }
+    .search-discovery__chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .search-discovery__chip {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border-hi);
+      border-radius: 999px;
+      padding: 7px 16px;
+      font-family: var(--mono);
+      font-size: .8rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .search-discovery__chip:hover { color: var(--text); border-color: var(--gold); }
+    .search-discovery__chip:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+    .search-discovery__chip[aria-pressed="true"] {
+      color: var(--bg);
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+    .search-discovery__form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .search-discovery__input {
+      flex: 1 1 320px;
+      min-width: 0;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border-hi);
+      border-radius: 4px;
+      padding: 14px 18px;
+      font-family: var(--sans);
+      font-size: 1.05rem;
+      line-height: 1.4;
+      min-height: 48px;
+    }
+    .search-discovery__input::placeholder { color: var(--quiet); }
+    .search-discovery__input:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 1px;
+      border-color: var(--gold);
+    }
+    .search-discovery__btn {
+      background: var(--gold);
+      color: var(--bg);
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      padding: 12px 26px;
+      font-family: var(--mono);
+      font-size: .82rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 48px;
+    }
+    .search-discovery__btn:hover,
+    .search-discovery__btn:focus-visible {
+      background: var(--gold-lt);
+      border-color: var(--gold-lt);
+    }
+    .search-discovery__btn:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+    }
+    .search-discovery__hint {
+      font-size: .82rem;
+      color: var(--quiet);
+      line-height: 1.5;
+      margin: 8px 0 0;
+    }
+    .search-discovery__results {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .search-discovery__count {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 12px;
+    }
+    .search-discovery__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .search-discovery__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .15s, background .15s;
+      border-left-width: 4px;
+    }
+    .search-discovery__item:hover { border-color: var(--border-hi); background: var(--surface2); }
+    .search-discovery__item:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+    .search-discovery__item--local    { border-left-color: var(--gold); }
+    .search-discovery__item--state    { border-left-color: var(--blue); }
+    .search-discovery__item--national { border-left-color: var(--green); }
+    .search-discovery__item-body { flex: 1; min-width: 0; }
+    .search-discovery__item-scope {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .search-discovery__item--local .search-discovery__item-scope    { color: var(--gold); }
+    .search-discovery__item--state .search-discovery__item-scope    { color: var(--blue); }
+    .search-discovery__item--national .search-discovery__item-scope { color: var(--green); }
+    .search-discovery__item-title {
+      font-weight: 600;
+      font-size: .98rem;
+      color: var(--text);
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+    .search-discovery__item-desc {
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .search-discovery__item mark {
+      background: rgba(200,168,75,.28);
+      color: var(--text);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+    .search-discovery__empty {
+      font-size: .9rem;
+      color: var(--muted);
+      padding: 12px 0;
+      margin: 0;
+    }
+    @media (max-width: 600px) {
+      .search-discovery { padding: 32px 0 18px; }
+      .search-discovery__btn { width: 100%; }
+    }
+
+    /* Tier preview cards on the homepage (three big jump-into-tier blocks) */
+    .tier-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 32px 0 12px;
+    }
+    .tier-preview {
+      display: block;
+      padding: 24px 26px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .15s, transform .15s;
+      border-left-width: 4px;
+    }
+    .tier-preview--local    { border-left-color: var(--gold); }
+    .tier-preview--state    { border-left-color: var(--blue); }
+    .tier-preview--national { border-left-color: var(--green); }
+    .tier-preview:hover {
+      border-color: var(--border-hi);
+      transform: translateY(-1px);
+    }
+    .tier-preview:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+    .tier-preview__eyebrow {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .tier-preview--local .tier-preview__eyebrow    { color: var(--gold); }
+    .tier-preview--state .tier-preview__eyebrow    { color: var(--blue); }
+    .tier-preview--national .tier-preview__eyebrow { color: var(--green); }
+    .tier-preview__title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+    .tier-preview__sub {
+      font-size: .9rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .tier-preview__desc {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+    .tier-preview__cta {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: #ffffff;
+      border-bottom: 1px solid rgba(200,168,75,.5);
+      padding-bottom: 1px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .tier-preview:hover .tier-preview__cta { color: var(--gold-lt); border-bottom-color: var(--gold); }
+    .tier-preview-orglink {
+      color: #ffffff;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(200,168,75,.5);
+      padding-bottom: 1px;
+    }
+    .tier-preview-orglink:hover { color: var(--gold-lt); border-bottom-color: var(--gold); }
+    .tier-preview-orglink:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    /* Sticky in-page tier nav */
+    .tier-nav {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(12,18,32,.92);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      margin: 0 0 18px;
+    }
+    .tier-nav__list {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      align-items: center;
+      list-style: none;
+      margin: 0 auto;
+      padding: 0 24px;
+      max-width: 1200px;
+    }
+    .tier-nav__label {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--quiet);
+      margin-right: 10px;
+    }
+    .tier-nav__link {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .8rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 14px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .tier-nav__link:hover { color: var(--text); border-color: var(--border-hi); }
+    .tier-nav__link:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+    .tier-nav__link--current,
+    .tier-nav__link[aria-current="location"] {
+      color: var(--bg);
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    @media (max-width: 640px) {
+      .tier-nav__list {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        padding: 0 16px;
+      }
+      .tier-nav__label,
+      .tier-nav__link { flex-shrink: 0; }
+      .tier__band { padding: 18px 18px 16px; }
+      .tier__heading { font-size: 1.35rem; }
+      .start-here { padding: 18px 18px 20px; }
+      .start-here__btn { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .start-here__tile,
+      .tier-nav__link { transition: none; }
+      html { scroll-behavior: auto !important; }
+    }
+  </style>
+
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     TICKER
+════════════════════════════════════════════════════════════════════ -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item alert"><strong>ADA deadline</strong> · April 24 · 16 days</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>284</strong> metro districts · El Paso County</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item alert"><strong>249</strong> districts · zero web presence</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>390</strong> fatalities over 9 years</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">No invoice attached</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>0%</strong> of districts post service plans publicly</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">Built by residents · Colorado Springs</span>
+    <span class="ticker-sep"></span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item alert"><strong>ADA deadline</strong> · April 24 · 16 days</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>284</strong> metro districts · El Paso County</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item alert"><strong>249</strong> districts · zero web presence</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>390</strong> fatalities over 9 years</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">No invoice attached</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>0%</strong> of districts post service plans publicly</span>
+    <span class="ticker-sep"></span>
+    <span class="ticker-item">Built by residents · Colorado Springs</span>
+    <span class="ticker-sep"></span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════════════════════════════ -->
+<div role="region" aria-label="Page content">
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="container">
+    <p class="eyebrow">StorySeed Studios · The Dais · El Paso County, Colorado</p>
+    <h1 id="hero-heading">
+      Trying to figure<br>
+      things out —<br>
+      <em>one step at a time.</em>
+    </h1>
+    <p class="hero-sub">
+      284 metro districts. One county. <strong>Zero invoices attached.</strong>
+      Everything here is free, built from public records, and written so that
+      a resident can read it — not just a lawyer or a lobbyist.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ UNIVERSAL SEARCH & DISCOVERY ═════════════════════════════════
+     One input handles three jobs:
+       • address or ZIP → routes to the jurisdiction finder
+       • topic / subject ("housing", "metro district", "ada") → results
+       • agency name ("CSPD", "BOCC", "DOLA")              → results
+     Filter chips above the input scope the search to a tier.
+     Search index is generated at build time in _data/searchIndex.js
+     and inlined below so client-side filtering is instant.            -->
+<section class="search-discovery" aria-labelledby="search-discovery-h">
+  <div class="container">
+    <h2 id="search-discovery-h" class="search-discovery__heading">Search the site</h2>
+    <p class="search-discovery__deck">Type a topic, an agency, a record, or an address. Filter by jurisdiction tier. Address lookups route to the finder.</p>
+
+    <div class="search-discovery__chips" role="group" aria-label="Filter results by jurisdiction tier">
+      <button type="button" class="search-discovery__chip" data-tier="all"      aria-pressed="true">All</button>
+      <button type="button" class="search-discovery__chip" data-tier="local"    aria-pressed="false">Local</button>
+      <button type="button" class="search-discovery__chip" data-tier="state"    aria-pressed="false">State</button>
+      <button type="button" class="search-discovery__chip" data-tier="national" aria-pressed="false">National</button>
+    </div>
+
+    <form class="search-discovery__form" id="search-discovery-form" role="search" aria-label="Site search">
+      <label class="sr-only" for="search-discovery-input">Search topics, agencies, records, or address</label>
+      <input
+        type="search"
+        id="search-discovery-input"
+        class="search-discovery__input"
+        name="q"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Try &quot;housing&quot;, &quot;CSPD&quot;, &quot;metro district audit&quot;, or 80903"
+        aria-describedby="search-discovery-hint">
+      <button type="submit" class="search-discovery__btn">Search&nbsp;→</button>
+    </form>
+    <p class="search-discovery__hint" id="search-discovery-hint">Filtering happens as you type. Press Enter to deep-link the search.</p>
+
+    <div class="search-discovery__results" id="search-discovery-results" role="region" aria-live="polite" aria-label="Search results" hidden>
+      <p class="search-discovery__count" id="search-discovery-count"></p>
+      <ul class="search-discovery__list" id="search-discovery-list" role="list"></ul>
+      <p class="search-discovery__empty" id="search-discovery-empty" hidden>No matches in this tier. Try a different filter or a shorter query.</p>
+    </div>
+  </div>
+
+  <script id="search-discovery-index" type="application/json">[{"title":"80915 Property Conveyances — El Paso County Assessor","desc":"Property transfer records from the El Paso County Assessor — who owns what, and when did that change.","url":"/microsites/county/land/Assessor_Property Conveyances.html","tier":"local","scope":"El Paso County","path":"county land Assessor Property Conveyances"},{"title":"Accela replacement drupal (PDF)","desc":"PDF document · city / police / requests","url":"/microsites/city/police/requests/Accela_replacement_drupal.pdf","tier":"local","scope":"City of Colorado Springs","path":"city police requests Accela replacement drupal.pdf"},{"title":"Accessibility & Data Quality Audit — CSPD Crash Data (bjpt-tkzq)","desc":"ADA and data-quality audit of CSPD's bjpt-tkzq fatality register dataset.","url":"/microsites/city/police/neighborhood/audit-bjpt-tkzq.html","tier":"local","scope":"City of Colorado Springs","path":"city police neighborhood audit bjpt tkzq"},{"title":"Accessibility Audit Colorado Springs (DOCX)","desc":"DOCX document · city / ada","url":"/microsites/city/ada/Accessibility_Audit_Colorado_Springs.docx","tier":"local","scope":"City of Colorado Springs","path":"city ada Accessibility Audit Colorado Springs.docx"},{"title":"Accessibility Audit Pothole Story Map (PDF)","desc":"PDF document · city / infrastructure / roads","url":"/microsites/city/infrastructure/roads/Accessibility_Audit_Pothole_StoryMap.pdf","tier":"local","scope":"City of Colorado Springs","path":"city infrastructure roads Accessibility Audit Pothole Story Map.pdf"},{"title":"Accessibility Statement — El Paso County Land Development Code Update","desc":"Land Development Code accessibility statement — WCAG posture and remediation.","url":"/microsites/county/land/LandDevelopmentCode/ldc-page-04-accessibility-statement.html","tier":"local","scope":"El Paso County","path":"county land Land Development Code ldc page 04 accessibility statement"},{"title":"ada audit accela cospd (PDF)","desc":"PDF document · city / police / requests","url":"/microsites/city/police/requests/ada_audit_accela_cospd.pdf","tier":"local","scope":"City of Colorado Springs","path":"city police requests ada audit accela cospd.pdf"},{"title":"ADA Audit Community Resources List (DOCX)","desc":"DOCX document · city / community-resources-list","url":"/microsites/city/community-resources-list/ADA-Audit-Community-Resources-List.docx","tier":"local","scope":"City of Colorado Springs","path":"city community resources list ADA Audit Community Resources List.docx"},{"title":"ADA Audit EPC Public Works Road Bridge (DOCX)","desc":"DOCX document · county / publicworks","url":"/microsites/county/publicworks/ADA_Audit_EPC_PublicWorks_RoadBridge.docx","tier":"local","scope":"El Paso County","path":"county publicworks ADA Audit EPC Public Works Road Bridge.docx"},{"title":"ADA Remediation Checklist EPC Public Works (PDF)","desc":"PDF document · county / publicworks","url":"/microsites/county/publicworks/ADA_Remediation_Checklist_EPC_PublicWorks.pdf","tier":"local","scope":"El Paso County","path":"county publicworks ADA Remediation Checklist EPC Public Works.pdf"},{"title":"ADA Tri Site Audit DOJ Complaint (DOCX)","desc":"DOCX document · county / sheriff","url":"/microsites/county/sheriff/ADA_TriSite_Audit_DOJ_Complaint.docx","tier":"local","scope":"El Paso County","path":"county sheriff ADA Tri Site Audit DOJ Complaint.docx"},{"title":"Background Brief — Algorithmic Rent Pricing in El Paso County","desc":"A sourced background brief for journalists, policy analysts, and the Colorado Springs Chamber housing committee on algorithmic rent pricing, federal antitrust action, and local policy options.","url":"/microsites/county/BOCC/housing_pricing_background_brief.html","tier":"local","scope":"El Paso County","path":"county BOCC housing pricing background brief"},{"title":"Bilingual Form Pattern — EN/ES Language Switcher","desc":"Reusable accessible language-switcher pattern for any bilingual form on the City of Colorado Springs site.","url":"/microsites/city/housing/housing-drupal-arp-formADA/language-pattern.html","tier":"local","scope":"City of Colorado Springs","path":"city housing housing drupal arp form ADA language pattern"},{"title":"Business Directory — Downtown Colorado Springs","desc":"Every business inside the Downtown Colorado Springs BID footprint — searchable directory.","url":"/microsites/downtown/downtown_cs_business_directory.html","tier":"local","scope":"Downtown Colorado Springs","path":"downtown downtown cs business directory"},{"title":"CCJRA Records Request Packet (DOCX)","desc":"DOCX document · city / police / neighborhood","url":"/microsites/city/police/neighborhood/CCJRA_Records_Request_Packet.docx","tier":"local","scope":"City of Colorado Springs","path":"city police neighborhood CCJRA Records Request Packet.docx"},{"title":"Centennial Hall Proposal (DOCX)","desc":"DOCX document · county / BOCC","url":"/microsites/county/BOCC/Centennial_Hall_Proposal.docx","tier":"local","scope":"El Paso County","path":"county BOCC Centennial Hall Proposal.docx"},{"title":"chart_snippet-cspdblotter-weekly","desc":"CSPD blotter weekly history dashboard with Poisson anomaly detection and small-multiples by incident type.","url":"/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html","tier":"local","scope":"City of Colorado Springs","path":"city police neighborhood chart snippet cspdblotter weekly"},{"title":"Citizen Connect — ADA / WCAG 2.1 AA Audit · cheetochopsticks","desc":"ADA audit of El Paso County's CitizenConnect platform — accessibility findings and remediation plan.","url":"/microsites/county/CitizenConnect/ada_audit_citizenconnect.html","tier":"local","scope":"El Paso County","path":"county Citizen Connect ada audit citizenconnect"},{"title":"City Council Email trafficsignalrequest (PDF)","desc":"PDF document · city / traffic / SafetyPlan","url":"/microsites/city/traffic/SafetyPlan/CityCouncilEmail_trafficsignalrequest.pdf","tier":"local","scope":"City of Colorado Springs","path":"city traffic Safety Plan City Council Email trafficsignalrequest.pdf"},{"title":"Colorado Springs · Traffic Safety Intelligence · StorySeed / The Dais","desc":"Colorado Springs traffic safety intelligence — 64,434 crash records, 12 charts, FHWA funding analysis.","url":"/microsites/city/traffic/SafetyPlan/cos-traffic-hub.html","tier":"local","scope":"City of Colorado Springs","path":"city traffic Safety Plan cos traffic hub"},{"title":"Colorado Springs PERF CSPD ADA Audit (PDF)","desc":"PDF document · city / police","url":"/microsites/city/police/ColoradoSprings_PERF_CSPD_ADA_Audit.pdf","tier":"local","scope":"City of Colorado Springs","path":"city police Colorado Springs PERF CSPD ADA Audit.pdf"},{"title":"Compared to What — A Civic Dashboard — The Dais","desc":"A civic dashboard putting El Paso County wages, housing affordability, and public investment side-by-side with Denver County.","url":"/microsites/county/land/compared-to-what-dashboard.html","tier":"local","scope":"El Paso County","path":"county land compared to what dashboard"},{"title":"Consolidated Audit Memo — CSPD Crash Data chart portfolio","desc":"Audit of every Tyler Data & Insights view derived from the Colorado Springs Police Department crash dataset: seven chart views and a story page.","url":"/microsites/city/police/neighborhood/audit-memo-12C-consolidated.html","tier":"local","scope":"City of Colorado Springs","path":"city police neighborhood audit memo 12C consolidated"},{"title":"Contact — El Paso County Land Development Code Update","desc":"Land Development Code contact and navigation — who to reach at El Paso County for development questions.","url":"/microsites/county/land/LandDevelopmentCode/ldc-page-03-contact.html","tier":"local","scope":"El Paso County","path":"county land Land Development Code ldc page 03 contact"},{"title":"Contact the City — Colorado Springs","desc":"File a request, report an issue, or contact a department of the City of Colorado Springs.","url":"/microsites/city/goGov/cos-portal-prototype/build/index.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype build index"},{"title":"Contact the City — Colorado Springs","desc":"File a request, report an issue, or contact a department of the City of Colorado Springs.","url":"/microsites/city/goGov/cos-portal-prototype/index.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype index"},{"title":"CORA Form — Implementation Guide · City of Colorado Springs","desc":"Plain-language guide to how the City of Colorado Springs is supposed to handle Colorado Open Records Act (CORA) requests.","url":"/microsites/city/coraform/cos-cora-implementation-guide.html","tier":"local","scope":"City of Colorado Springs","path":"city coraform cos cora implementation guide"},{"title":"cora request corona solutions (DOCX)","desc":"DOCX document · county / sheriff","url":"/microsites/county/sheriff/cora_request_corona_solutions.docx","tier":"local","scope":"El Paso County","path":"county sheriff cora request corona solutions.docx"},{"title":"CORA Requests Tracker — cheetochopsticks","desc":"Live tracker for all open records requests and military housing number analysis for El Paso County.","url":"/microsites/shared/requests_tracker_and_military_numbers.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared requests tracker and military numbers"},{"title":"cos cora ada letter (DOCX)","desc":"DOCX document · city / coraform","url":"/microsites/city/coraform/cos-cora-ada-letter.docx","tier":"local","scope":"City of Colorado Springs","path":"city coraform cos cora ada letter.docx"},{"title":"COS Digital Accessibility Audit 2026 05 04 (DOCX)","desc":"DOCX document · city / housing / housing-drupal-arp-formADA","url":"/microsites/city/housing/housing-drupal-arp-formADA/COS_Digital_Accessibility_Audit_2026-05-04.docx","tier":"local","scope":"City of Colorado Springs","path":"city housing housing drupal arp form ADA COS Digital Accessibility Audit 2026 05 04.docx"},{"title":"cos portal ada audit (DOCX)","desc":"DOCX document · city / CitizenConnect","url":"/microsites/city/CitizenConnect/cos-portal-ada-audit.docx","tier":"local","scope":"City of Colorado Springs","path":"city Citizen Connect cos portal ada audit.docx"},{"title":"CSPD Fatality Register bjpt tkzq (XLSX)","desc":"XLSX document · city / police / neighborhood","url":"/microsites/city/police/neighborhood/CSPD_Fatality_Register_bjpt-tkzq.xlsx","tier":"local","scope":"City of Colorado Springs","path":"city police neighborhood CSPD Fatality Register bjpt tkzq.xlsx"},{"title":"CSPD Field Entry v8 — Drag-Drop & Lightbox","desc":"CSPD crash report field-entry prototype with drag-and-drop and lightbox photo handling.","url":"/microsites/city/police/requests/cspd-field-entry.html","tier":"local","scope":"City of Colorado Springs","path":"city police requests cspd field entry"},{"title":"CSU Residential Water Accounts Dashboard · CORA W001936-041726","desc":"Colorado Springs Utilities residential water account data 2005–2026 YTD — sourced from CORA W001936-041726.","url":"/microsites/county/utilities/CSU_Water_Accounts_Dashboard.html","tier":"local","scope":"El Paso County","path":"county utilities CSU Water Accounts Dashboard"},{"title":"Current Alerts — Pikes Peak Regional Emergency Management","desc":"","url":"/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared Pikes Peak Emergency Management pproem alerts"},{"title":"Current Alerts | Pikes Peak Regional Office of Emergency Management","desc":"Live regional emergency alerts and zone status for the Pikes Peak region — wildfire, flood, and severe weather coverage from PPROEM with an interactive map.","url":"/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts/index.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared Pikes Peak Emergency Management pproem alerts index"},{"title":"D11 FNS Chef Director Proposal (PDF)","desc":"PDF document · shared / Schools / Food","url":"/microsites/shared/Schools/Food/D11_FNS_Chef_Director_Proposal.pdf","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared Schools Food D11 FNS Chef Director Proposal.pdf"},{"title":"DATP Public Comment — Open Reading Room · CheetoChopsticks","desc":"An accessible reading room for the City of Colorado Springs Digital Accessibility Transition Plan (Draft, 2026), with a downloadable PDF and twelve structured public comments.","url":"/microsites/city/ada/datp-comment.html","tier":"local","scope":"City of Colorado Springs","path":"city ada datp comment"},{"title":"doj title ii complaint corona solutions (DOCX)","desc":"DOCX document · county / sheriff","url":"/microsites/county/sheriff/doj_title_ii_complaint_corona_solutions.docx","tier":"local","scope":"El Paso County","path":"county sheriff doj title ii complaint corona solutions.docx"},{"title":"Downtown COS Transparency Report April2026 (DOCX)","desc":"DOCX document · downtown","url":"/microsites/downtown/Downtown_COS_Transparency_Report_April2026.docx","tier":"local","scope":"Downtown Colorado Springs","path":"downtown Downtown COS Transparency Report April2026.docx"},{"title":"Downtown Funding & Records Search Portal — Colorado Springs","desc":"Search BID assessments, DDA grants, TIF reimbursements, board meetings, and downtown financial records in one place.","url":"/microsites/downtown/downtown_cs_search_portal_v2_ada.html","tier":"local","scope":"Downtown Colorado Springs","path":"downtown downtown cs search portal v2 ada"},{"title":"El Paso County Public Safety Dashboard","desc":"El Paso County Sheriff public safety dashboard — calls for service, response times, and crime trends.","url":"/microsites/county/sheriff/public_safety_dashboard.html","tier":"local","scope":"El Paso County","path":"county sheriff public safety dashboard"},{"title":"el_paso_population_components","desc":"El Paso County population components — births, deaths, and migration broken down for residents rather than demographers.","url":"/microsites/county/land/dashboard/el_paso_population_components.html","tier":"local","scope":"El Paso County","path":"county land dashboard el paso population components"},{"title":"Engineering redlightsignal request (PDF)","desc":"PDF document · city / traffic / SafetyPlan","url":"/microsites/city/traffic/SafetyPlan/Engineering_redlightsignal_request.pdf","tier":"local","scope":"City of Colorado Springs","path":"city traffic Safety Plan Engineering redlightsignal request.pdf"},{"title":"EP Population Ledger Methodology (DOCX)","desc":"DOCX document · county / BOCC","url":"/microsites/county/BOCC/EP_Population_Ledger_Methodology.docx","tier":"local","scope":"El Paso County","path":"county BOCC EP Population Ledger Methodology.docx"},{"title":"EPC Citizen Connect ADA Technical Report Palmer (DOCX)","desc":"DOCX document · city / CitizenConnect","url":"/microsites/city/CitizenConnect/EPC-CitizenConnect-ADA-Technical-Report-Palmer.docx","tier":"local","scope":"City of Colorado Springs","path":"city Citizen Connect EPC Citizen Connect ADA Technical Report Palmer.docx"},{"title":"EPC Metro District Audit Dashboard — cheetochopsticks","desc":"Governance and ADA compliance analysis across 284 El Paso County metro districts and 3 platform types.","url":"/microsites/shared/epc_district_audit_dashboard.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared epc district audit dashboard"},{"title":"EPCSO Crime Map ADA Audit Escalation (DOCX)","desc":"DOCX document · county / sheriff","url":"/microsites/county/sheriff/EPCSO_CrimeMap_ADA_Audit_Escalation.docx","tier":"local","scope":"El Paso County","path":"county sheriff EPCSO Crime Map ADA Audit Escalation.docx"},{"title":"Fatality Register — CSPD Crash Data (bjpt-tkzq)","desc":"Ten-year per-year fatality breakdown and interactive register of every fatal crash in the Colorado Springs Police Department public crash dataset.","url":"/microsites/city/police/neighborhood/fatality_register_bjpt-tkzq.html","tier":"local","scope":"City of Colorado Springs","path":"city police neighborhood fatality register bjpt tkzq"},{"title":"Field Entry — CSPD Crash Report Prototype","desc":"Earlier prototype of the CSPD crash report field-entry form.","url":"/microsites/city/police/requests/cspd-field-entry-prototype.html","tier":"local","scope":"City of Colorado Springs","path":"city police requests cspd field entry prototype"},{"title":"Fruit Trees for Colorado Springs (PDF)","desc":"PDF document · city / forestry","url":"/microsites/city/forestry/Fruit_Trees_for_Colorado_Springs.pdf","tier":"local","scope":"City of Colorado Springs","path":"city forestry Fruit Trees for Colorado Springs.pdf"},{"title":"GOGov Accessibility Audit (PDF)","desc":"PDF document · city / goGov","url":"/microsites/city/goGov/GOGovAccessibilityAudit.pdf","tier":"local","scope":"City of Colorado Springs","path":"city go Gov GOGov Accessibility Audit.pdf"},{"title":"goGov portal — cheetochopsticks re-theme preview","desc":"","url":"/microsites/city/goGov/cos-portal-prototype/portal-preview.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype portal preview"},{"title":"goGov Portal — full integration walkthrough","desc":"","url":"/microsites/city/goGov/cos-portal-prototype/portal-walkthrough.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype portal walkthrough"},{"title":"Government Org Chart — Federal · State · Local · cheetochopsticks","desc":"How power flows from federal to state to local government in El Paso County, Colorado, and where to find each agency's records, audits, and accountability work on this site.","url":"/microsites/shared/government-org-chart.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared government org chart"},{"title":"Helping Hands — El Paso County Community Resources","desc":"A searchable index of community resources in El Paso County, Colorado. Adapted from the Pikes Peak Library District Helping Hands guide.","url":"/microsites/city/community-resources-list/helping-hands.html","tier":"local","scope":"City of Colorado Springs","path":"city community resources list helping hands"},{"title":"Helping Hands — El Paso County Community Resources","desc":"A searchable index of community resources in El Paso County, Colorado. Adapted from the Pikes Peak Library District Helping Hands guide.","url":"/microsites/city/community-resources-list/index.html","tier":"local","scope":"City of Colorado Springs","path":"city community resources list index"},{"title":"Helping Hands Directory (PDF)","desc":"PDF document · city / community-resources-list","url":"/microsites/city/community-resources-list/Helping-Hands-Directory.pdf","tier":"local","scope":"City of Colorado Springs","path":"city community resources list Helping Hands Directory.pdf"},{"title":"HOME-ARP Comment Form — Drupal Webform Replacement Bundle","desc":"A WCAG 2.1 AA Drupal Webform replacement for the city's ArcGIS Survey123 HOME-ARP comment form, with bilingual EN/ES, JSON webhook, and accessibility-first design.","url":"/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html","tier":"local","scope":"City of Colorado Springs","path":"city housing housing drupal arp form ADA bundle readme"},{"title":"HOME-ARP Comment Webform — Install Guide","desc":"Step-by-step Drupal admin installation guide for the HOME-ARP Comment Webform bundle.","url":"/microsites/city/housing/housing-drupal-arp-formADA/install.html","tier":"local","scope":"City of Colorado Springs","path":"city housing housing drupal arp form ADA install"},{"title":"HOME-ARP Public Comment Form — Accessible Preview","desc":"An accessible HTML preview of the WCAG 2.1 AA Drupal Webform replacement for the City of Colorado Springs HOME-ARP Allocation Plan public comment form. Bilingual EN/ES.","url":"/microsites/city/housing/housing-drupal-arp-formADA/home-arp-form-preview.html","tier":"local","scope":"City of Colorado Springs","path":"city housing housing drupal arp form ADA home arp form preview"},{"title":"JSON Lint","desc":"","url":"/microsites/city/goGov/cos-portal-prototype/node_modules/@mapbox/jsonlint-lines-primitives/web/jsonlint.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype node modules @mapbox jsonlint lines primitives web jsonlint"},{"title":"konveio ldc accessibility legal audit (DOCX)","desc":"DOCX document · county / land / LandDevelopmentCode","url":"/microsites/county/land/LandDevelopmentCode/konveio-ldc-accessibility-legal-audit.docx","tier":"local","scope":"El Paso County","path":"county land Land Development Code konveio ldc accessibility legal audit.docx"},{"title":"KPI detail — El Paso County","desc":"Detailed view of a strategic plan key performance indicator, including methodology, current value, sub-metrics, and related actions.","url":"/microsites/county/infrastructure/Roads/kpi.html","tier":"local","scope":"El Paso County","path":"county infrastructure Roads kpi"},{"title":"LDC Update Public Comment — Service Plan Transparency","desc":"A 300-word public comment to submit to the El Paso County Land Development Code update process.","url":"/microsites/county/BOCC/ldc_update_comment.html","tier":"local","scope":"El Paso County","path":"county BOCC ldc update comment"},{"title":"Letter to BOCC (DOCX)","desc":"DOCX document · county / BOCC","url":"/microsites/county/BOCC/Letter_to_BOCC.docx","tier":"local","scope":"El Paso County","path":"county BOCC Letter to BOCC.docx"},{"title":"lgaasarecordexample (PDF)","desc":"PDF document · specialdistricts / LorsonRanch","url":"/microsites/specialdistricts/LorsonRanch/lgaasarecordexample.pdf","tier":"local","scope":"Special districts","path":"specialdistricts Lorson Ranch lgaasarecordexample.pdf"},{"title":"lorson ranch briefing (DOCX)","desc":"DOCX document · specialdistricts / LorsonRanch","url":"/microsites/specialdistricts/LorsonRanch/lorson_ranch_briefing.docx","tier":"local","scope":"Special districts","path":"specialdistricts Lorson Ranch lorson ranch briefing.docx"},{"title":"Lorson Ranch Metropolitan Districts — Financial Dashboard","desc":"Lorson Ranch Metropolitan Districts Nos. 1–7 financial dashboard — mill levies, bond debt, IGA money flows, audited net position, and a per-home tax calculator.","url":"/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html","tier":"local","scope":"Special districts","path":"specialdistricts Lorson Ranch lorson ranch dashboard"},{"title":"Metro District Citizen Toolkit — cheetochopsticks","desc":"Sample CORA letters, BOCC templates, DOJ complaint drafts, and every contact you need to push for change in El Paso County.","url":"/microsites/shared/metro_district_citizen_toolkit.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared metro district citizen toolkit"},{"title":"Mocha Tests","desc":"","url":"/microsites/city/goGov/cos-portal-prototype/node_modules/requestidlecallback/test/index.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype node modules requestidlecallback test index"},{"title":"Petition to El Paso County BOCC — Service Plan Transparency & Algorithmic Pricing Disclosure","desc":"A general petition letter any El Paso County resident can sign and send to the Board of County Commissioners. Four narrow, legally-defensible asks within existing BOCC authority.","url":"/microsites/county/BOCC/housing-rent-bocc_petition_letter.html","tier":"local","scope":"El Paso County","path":"county BOCC housing rent bocc petition letter"},{"title":"Pikes Peak Regional Emergency Operations Plan (January 2026) | El Paso County & Colorado Springs","desc":"The official Pikes Peak Regional Emergency Operations Plan (EOP), adopted January 2026 by El Paso County and the City of Colorado Springs. Coordinates preparedness, response, and recovery for all hazards across the Pikes Peak region.","url":"/microsites/shared/PikesPeakEmergencyManagement/pikes-peak-regional-eop.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared Pikes Peak Emergency Management pikes peak regional eop"},{"title":"Pikes Peak Regional Emergency Operations Plan (January 2026) | El Paso County & Colorado Springs","desc":"The official Pikes Peak Regional Emergency Operations Plan (EOP), adopted January 2026 by El Paso County and the City of Colorado Springs. Coordinates preparedness, response, and recovery for all hazards across the Pikes Peak region.","url":"/microsites/shared/PikesPeakEmergencyManagement/index.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared Pikes Peak Emergency Management index"},{"title":"Playwright Dashboard","desc":"","url":"/microsites/city/goGov/cos-portal-prototype/node_modules/playwright-core/lib/vite/dashboard/index.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype node modules playwright core lib vite dashboard index"},{"title":"Playwright Inspector","desc":"","url":"/microsites/city/goGov/cos-portal-prototype/node_modules/playwright-core/lib/vite/recorder/index.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype node modules playwright core lib vite recorder index"},{"title":"Playwright Test","desc":"","url":"/microsites/city/goGov/cos-portal-prototype/node_modules/playwright-core/lib/vite/traceViewer/uiMode.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype node modules playwright core lib vite trace Viewer ui Mode"},{"title":"Playwright Test Report","desc":"","url":"/microsites/city/goGov/cos-portal-prototype/node_modules/playwright-core/lib/vite/htmlReport/index.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype node modules playwright core lib vite html Report index"},{"title":"Playwright Trace Viewer","desc":"","url":"/microsites/city/goGov/cos-portal-prototype/node_modules/playwright-core/lib/vite/traceViewer/index.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype node modules playwright core lib vite trace Viewer index"},{"title":"PPRBD Accessibility Audit April2026 (DOCX)","desc":"DOCX document · county / land / pprbd","url":"/microsites/county/land/pprbd/PPRBD_Accessibility_Audit_April2026.docx","tier":"local","scope":"El Paso County","path":"county land pprbd PPRBD Accessibility Audit April2026.docx"},{"title":"pproem alerts accessibility audit (DOCX)","desc":"DOCX document · shared / PikesPeakEmergencyManagement","url":"/microsites/shared/PikesPeakEmergencyManagement/pproem-alerts-accessibility-audit.docx","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared Pikes Peak Emergency Management pproem alerts accessibility audit.docx"},{"title":"Project Background · Colorado Springs Safety Action Plan · StorySeed / The Dais","desc":"Funding, timeline, contact, and the public engagement record for the Colorado Springs Safety Action Plan — a Safe Streets for All federally-funded transportation safety initiative.","url":"/microsites/city/traffic/SafetyPlan/sap-context.html","tier":"local","scope":"City of Colorado Springs","path":"city traffic Safety Plan sap context"},{"title":"Property accountability — El Paso County","desc":"What your county tracks — and doesn't — about the road in front of your property.","url":"/microsites/county/infrastructure/Roads/epc_parcel_lookup.html","tier":"local","scope":"El Paso County","path":"county infrastructure Roads epc parcel lookup"},{"title":"Public Comment DATP 2026 (DOCX)","desc":"DOCX document · city / ada","url":"/microsites/city/ada/Public_Comment_DATP_2026.docx","tier":"local","scope":"City of Colorado Springs","path":"city ada Public Comment DATP 2026.docx"},{"title":"Public Comments on the SAP Draft · Colorado Springs Safety Action Plan · StorySeed / The Dais","desc":"Searchable, accessible mirror of the public comments left on the Colorado Springs Safety Action Plan draft and appendices, March – April 2026.","url":"/microsites/city/traffic/SafetyPlan/sap-comments.html","tier":"local","scope":"City of Colorado Springs","path":"city traffic Safety Plan sap comments"},{"title":"Red light camera data — Colorado Springs Police Department","desc":"Red light safety camera citation statistics for the City of Colorado Springs. Interactive data from 20 intersections, 2022 through Q1 2026.","url":"/microsites/city/traffic/SafetyPlan/red-light-data.html","tier":"local","scope":"City of Colorado Springs","path":"city traffic Safety Plan red light data"},{"title":"Request a City Record — Colorado Springs CORA","desc":"Submit a Colorado Open Records Act (CORA) request to the City of Colorado Springs.","url":"/microsites/city/coraform/cos-cora-form.html","tier":"local","scope":"City of Colorado Springs","path":"city coraform cos cora form"},{"title":"Request police records — Colorado Springs Police Department","desc":"Request police records from the Colorado Springs Police Department. Police reports, traffic accidents, 911 audio, body-worn camera video, background checks, and more.","url":"/microsites/city/police/requests/cospd_records_page_redesign.html","tier":"local","scope":"City of Colorado Springs","path":"city police requests cospd records page redesign"},{"title":"safe streets cos audit (DOCX)","desc":"DOCX document · city / infrastructure / roads","url":"/microsites/city/infrastructure/roads/safe_streets_cos_audit.docx","tier":"local","scope":"City of Colorado Springs","path":"city infrastructure roads safe streets cos audit.docx"},{"title":"sap appendices (PDF)","desc":"PDF document · city / traffic / SafetyPlan","url":"/microsites/city/traffic/SafetyPlan/sap-appendices.pdf","tier":"local","scope":"City of Colorado Springs","path":"city traffic Safety Plan sap appendices.pdf"},{"title":"sap draft plan (PDF)","desc":"PDF document · city / traffic / SafetyPlan","url":"/microsites/city/traffic/SafetyPlan/sap-draft-plan.pdf","tier":"local","scope":"City of Colorado Springs","path":"city traffic Safety Plan sap draft plan.pdf"},{"title":"Strategic Performance Dashboard — El Paso County","desc":"Strategic plan objectives, key performance indicators, and accountability across infrastructure, service quality, community trust, and health & safety.","url":"/microsites/county/infrastructure/Roads/epc_strategic_dashboard.html","tier":"local","scope":"El Paso County","path":"county infrastructure Roads epc strategic dashboard"},{"title":"Tell us what you need | City of Colorado Springs","desc":"City of Colorado Springs permits, licenses, and records — citizen-friendly lookup.","url":"/microsites/city/CitizenConnect/city-permits-licenses-records.html","tier":"local","scope":"City of Colorado Springs","path":"city Citizen Connect city permits licenses records"},{"title":"Tell us what you need | City of Colorado Springs","desc":"Describe what you need in plain language. We'll point you to the right City department — no guessing required.","url":"/microsites/city/police/requests/cos-portal-redesign.html","tier":"local","scope":"City of Colorado Springs","path":"city police requests cos portal redesign"},{"title":"The Dais — Civic Calendar · Colorado Springs / El Paso County","desc":"","url":"/microsites/city/CitizenConnect/Calendar/dais-calendar.html","tier":"local","scope":"City of Colorado Springs","path":"city Citizen Connect Calendar dais calendar"},{"title":"The Dais — Civic Calendar · Colorado Springs / El Paso County","desc":"","url":"/microsites/city/goGov/cos-portal-prototype/calendar.html","tier":"local","scope":"City of Colorado Springs","path":"city go Gov cos portal prototype calendar"},{"title":"The Unsung Heroes — A CORA Project Anyone Can Do — The Dais","desc":"The Unsung Heroes — a semester-length CORA project for students, teachers, and curious residents asking what El Paso County actually invests in supporting its 911 dispatchers.","url":"/microsites/specialdistricts/teller911/unsung-heroes-cora-project.html","tier":"local","scope":"Special districts","path":"specialdistricts teller911 unsung heroes cora project"},{"title":"Trees for Colorado Springs — Forestry Reference","desc":"A reference of trees suitable for Colorado Springs at 6,000–7,500 ft. Combines the city's Approved Street Tree List with curated private-property fruit and native options.","url":"/microsites/city/forestry/trees-of-colorado-springs.html","tier":"local","scope":"City of Colorado Springs","path":"city forestry trees of colorado springs"},{"title":"Trees for Colorado Springs — Forestry Reference","desc":"A reference of trees suitable for Colorado Springs at 6,000–7,500 ft. Combines the city's Approved Street Tree List with curated private-property fruit and native options.","url":"/microsites/city/forestry/trees-of-colorado-springs1.html","tier":"local","scope":"City of Colorado Springs","path":"city forestry trees of colorado springs1"},{"title":"USAA signalrequest trafficredlight (PDF)","desc":"PDF document · city / traffic / SafetyPlan","url":"/microsites/city/traffic/SafetyPlan/USAA_signalrequest_trafficredlight.pdf","tier":"local","scope":"City of Colorado Springs","path":"city traffic Safety Plan USAA signalrequest trafficredlight.pdf"},{"title":"Veterans' Petition to EPC BOCC — Service Plan Transparency & Algorithmic Pricing","desc":"A petition letter for veterans of any branch to send to the El Paso County Board of County Commissioners.","url":"/microsites/county/BOCC/bocc_petition_veteran.html","tier":"local","scope":"El Paso County","path":"county BOCC bocc petition veteran"},{"title":"WastelessCOS: Waste Diversion, Resource Directory & Sorting Guide | City of Colorado Springs","desc":"","url":"/microsites/city/wastelesscos/wastelesscos.html","tier":"local","scope":"City of Colorado Springs","path":"city wastelesscos wastelesscos"},{"title":"WCAG 2 1 AA Audit Colorado Springs 2C Page (PDF)","desc":"PDF document · city / infrastructure / roads","url":"/microsites/city/infrastructure/roads/WCAG_2_1_AA_Audit_Colorado_Springs_2C_Page.pdf","tier":"local","scope":"City of Colorado Springs","path":"city infrastructure roads WCAG 2 1 AA Audit Colorado Springs 2C Page.pdf"},{"title":"WCAG Audit 1 Colorado Springs 2C Page (PDF)","desc":"PDF document · city / infrastructure / roads","url":"/microsites/city/infrastructure/roads/WCAG_Audit_1_ColoradoSprings_2C_Page.pdf","tier":"local","scope":"City of Colorado Springs","path":"city infrastructure roads WCAG Audit 1 Colorado Springs 2C Page.pdf"},{"title":"WCAG Audit 2 Arc GIS Story Map (PDF)","desc":"PDF document · city / infrastructure / roads","url":"/microsites/city/infrastructure/roads/WCAG_Audit_2_ArcGIS_StoryMap.pdf","tier":"local","scope":"City of Colorado Springs","path":"city infrastructure roads WCAG Audit 2 Arc GIS Story Map.pdf"},{"title":"What residents actually ask — CSPD data, reorganized","desc":"CSPD data reorganized around the five questions residents actually ask about their neighborhoods.","url":"/microsites/city/police/neighborhood/cspd_five_questions.html","tier":"local","scope":"City of Colorado Springs","path":"city police neighborhood cspd five questions"},{"title":"Who governs your address — cheetochopsticks · El Paso County","desc":"Type your address. Find out who is in charge of it — city, county, school district, utilities. El Paso County and Colorado Springs. Free, plain language.","url":"/microsites/shared/You/cos-find-my-jurisdiction.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared You cos find my jurisdiction"},{"title":"Who governs your address — cheetochopsticks · El Paso County","desc":"Type your address. Find out who is in charge of it — city, county, school district, utilities. El Paso County and Colorado Springs. Free, plain language.","url":"/microsites/shared/cos-find-my-jurisdiction.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared cos find my jurisdiction"},{"title":"Wolfersberger Compliance & Bella Mesa Analysis — cheetochopsticks","desc":"Developer compliance history, oversight gaps, and the Bella Mesa connection for El Paso County metro districts.","url":"/microsites/shared/wolfersberger_compliance_bellamese_analysis.html","tier":"local","scope":"Shared · cross-jurisdiction","path":"shared wolfersberger compliance bellamese analysis"},{"title":"Your Intersection, Your Voice · Colorado Springs Signal Timing Action Dashboard · StorySeed / The Dais","desc":"Colorado Springs signal-timing action dashboard — your intersection, your voice.","url":"/microsites/city/traffic/SafetyPlan/cos-signal-timing-action.html","tier":"local","scope":"City of Colorado Springs","path":"city traffic Safety Plan cos signal timing action"},{"title":"Accessibility Tool Comparison | Colorado AG — Should We Keep Siteimprove?","desc":"Side-by-side comparison of WAVE, axe, and Lighthouse on the Colorado AG complaint form.","url":"/microsites/state/colorado-attorney-general/accessibility_tool_comparison.html","tier":"state","scope":"State of Colorado","path":"state colorado attorney general accessibility tool comparison"},{"title":"ADA Accessibility Audit – CDPHE CoHID Mortality Dashboard","desc":"ADA accessibility audit of the CDPHE CoHID Mortality Dashboard — seven WCAG 2.1 AA gaps identified in the Tableau-based visualization, with remediation recommendations.","url":"/microsites/state/CDPHE/CDPHE_CoHID_ADA_Audit.html","tier":"state","scope":"State of Colorado","path":"state CDPHE CDPHE Co HID ADA Audit"},{"title":"ADA Compliance Brief — Colorado Attorney General | Digital Accessibility Emergency Response Package","desc":"Colorado Attorney General complaint form ADA compliance brief — posture and findings.","url":"/microsites/state/colorado-attorney-general/coag-compliance-brief.html","tier":"state","scope":"State of Colorado","path":"state colorado attorney general coag compliance brief"},{"title":"CBI Missing Persons Form ADA Audit (DOCX)","desc":"DOCX document · state / CBI","url":"/microsites/state/CBI/CBI_Missing_Persons_Form_ADA_Audit.docx","tier":"state","scope":"State of Colorado","path":"state CBI CBI Missing Persons Form ADA Audit.docx"},{"title":"CCRD Accessibility Audit 2026 04 25 (PDF)","desc":"PDF document · state / ccrd","url":"/microsites/state/ccrd/CCRD_Accessibility_Audit_2026-04-25.pdf","tier":"state","scope":"State of Colorado","path":"state ccrd CCRD Accessibility Audit 2026 04 25.pdf"},{"title":"CDOC ADA Accessibility Audit. search (DOCX)","desc":"DOCX document · state / coloradodepartmentofcorrections","url":"/microsites/state/coloradodepartmentofcorrections/CDOC_ADA_Accessibility_Audit._search.docx","tier":"state","scope":"State of Colorado","path":"state coloradodepartmentofcorrections CDOC ADA Accessibility Audit. search.docx"},{"title":"CDOLA Open Records Request — Accessibility Audit & Redesign · StorySeed / The Dais","desc":"Colorado Department of Local Affairs CORA audit and redesigned records-request flow.","url":"/microsites/state/cdola/cdola-cora-audit-and-redesign.html","tier":"state","scope":"State of Colorado","path":"state cdola cdola cora audit and redesign"},{"title":"CJB EFiling Portal WCAG Audit 2026 04 20 (DOCX)","desc":"DOCX document · state / judicial","url":"/microsites/state/judicial/CJB_EFiling_Portal_WCAG_Audit_2026-04-20.docx","tier":"state","scope":"State of Colorado","path":"state judicial CJB EFiling Portal WCAG Audit 2026 04 20.docx"},{"title":"CJB WCAG Audit 2026 04 20 (PDF)","desc":"PDF document · state / judicial","url":"/microsites/state/judicial/CJB_WCAG_Audit_2026-04-20.pdf","tier":"state","scope":"State of Colorado","path":"state judicial CJB WCAG Audit 2026 04 20.pdf"},{"title":"coag ada audit report (PDF)","desc":"PDF document · state / colorado-attorney-general","url":"/microsites/state/colorado-attorney-general/coag_ada_audit_report.pdf","tier":"state","scope":"State of Colorado","path":"state colorado attorney general coag ada audit report.pdf"},{"title":"coag compliance cover letter (PDF)","desc":"PDF document · state / colorado-attorney-general","url":"/microsites/state/colorado-attorney-general/coag_compliance_cover_letter.pdf","tier":"state","scope":"State of Colorado","path":"state colorado attorney general coag compliance cover letter.pdf"},{"title":"El Paso County Mortality — National Benchmark Dashboard","desc":"El Paso County death data compared to Colorado and US averages, with dedicated Fort Carson and military installation analysis. Data: CDPHE CoHID + CDC NCHS + DoD Fort Carson.","url":"/microsites/state/CDPHE/ElPaso_Mortality_Dashboard.html","tier":"state","scope":"State of Colorado","path":"state CDPHE El Paso Mortality Dashboard"},{"title":"File a Civil Rights Complaint | Colorado Civil Rights Division","desc":"Colorado Civil Rights Division complaint form — accessible rebuild.","url":"/microsites/state/ccrd/ccrd-complaint-form.html","tier":"state","scope":"State of Colorado","path":"state ccrd ccrd complaint form"},{"title":"File a Complaint | Colorado Attorney General","desc":"Colorado Attorney General consumer complaint form — current state of the live form.","url":"/microsites/state/colorado-attorney-general/coag-complaint-form.html","tier":"state","scope":"State of Colorado","path":"state colorado attorney general coag complaint form"},{"title":"File a Complaint | Colorado Attorney General — Phil Weiser","desc":"Colorado Attorney General complaint form — accessible redesign.","url":"/microsites/state/colorado-attorney-general/coag-file-complaint-redesign.html","tier":"state","scope":"State of Colorado","path":"state colorado attorney general coag file complaint redesign"},{"title":"leg colorado accessibility audit (DOCX)","desc":"DOCX document · state / coloradogeneralassembly","url":"/microsites/state/coloradogeneralassembly/leg_colorado_accessibility_audit.docx","tier":"state","scope":"State of Colorado","path":"state coloradogeneralassembly leg colorado accessibility audit.docx"},{"title":"Missing Person Contact Form | Colorado Bureau of Investigation","desc":"CBI Missing Persons contact form — accessible reference rebuild that resolves all seven critical/serious findings from the ADA audit.","url":"/microsites/state/CBI/cbi-missing-persons-redesign.html","tier":"state","scope":"State of Colorado","path":"state CBI cbi missing persons redesign"},{"title":"travelstats accessibility audit (DOCX)","desc":"DOCX document · state / oedit","url":"/microsites/state/oedit/travelstats-accessibility-audit.docx","tier":"state","scope":"State of Colorado","path":"state oedit travelstats accessibility audit.docx"},{"title":"travelstats cover letters (DOCX)","desc":"DOCX document · state / oedit","url":"/microsites/state/oedit/travelstats-cover-letters.docx","tier":"state","scope":"State of Colorado","path":"state oedit travelstats cover letters.docx"},{"title":"ADA / WCAG 2.1 AA Audit — ReportFraud.ftc.gov","desc":"FTC ReportFraud.gov ADA audit — WCAG 2.1 AA findings and remediation.","url":"/microsites/national/FTC/ftc-reportfraud-ada-audit.html","tier":"national","scope":"Federal","path":"national FTC ftc reportfraud ada audit"},{"title":"ADA Audit Summary Letter April2026 v3 (DOCX)","desc":"DOCX document · national / DOJ","url":"/microsites/national/DOJ/ADA_Audit_Summary_Letter_April2026_v3.docx","tier":"national","scope":"Federal","path":"national DOJ ADA Audit Summary Letter April2026 v3.docx"},{"title":"ADA Compliance Audit Report (DOCX)","desc":"DOCX document · privatesector / LexisNexis / ADAMProgram","url":"/microsites/privatesector/LexisNexis/ADAMProgram/ADA_Compliance_Audit_Report.docx","tier":"national","scope":"Private sector","path":"privatesector Lexis Nexis ADAMProgram ADA Compliance Audit Report.docx"},{"title":"ADAM Dashboard - Active Missing Children Cases","desc":"LexisNexis ADAM Program missing-children dashboard — accessible reference rebuild.","url":"/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html","tier":"national","scope":"Private sector","path":"privatesector Lexis Nexis ADAMProgram adam dashboard redesign"},{"title":"doj ada letter tips fbi gov (DOCX)","desc":"DOCX document · FBI","url":"/microsites/FBI/doj-ada-letter-tips-fbi-gov.docx","tier":"national","scope":"Federal · FBI","path":"FBI doj ada letter tips fbi gov.docx"},{"title":"DOJ Audit and Title II Framework 2026 04 20 (PDF)","desc":"PDF document · national / DOJ","url":"/microsites/national/DOJ/DOJ_Audit_and_Title_II_Framework_2026-04-20.pdf","tier":"national","scope":"Federal","path":"national DOJ DOJ Audit and Title II Framework 2026 04 20.pdf"},{"title":"File a Civil Rights Complaint | U.S. Department of Justice — Civil Rights Division","desc":"Department of Justice complaint form — accessible redesign.","url":"/microsites/national/DOJ/doj-complaint-redesign.html","tier":"national","scope":"Federal","path":"national DOJ doj complaint redesign"},{"title":"IC3 ADA Accessibility Audit processtofinding (PDF)","desc":"PDF document · national / IC3","url":"/microsites/national/IC3/IC3_ADA_Accessibility_Audit_processtofinding.pdf","tier":"national","scope":"Federal","path":"national IC3 IC3 ADA Accessibility Audit processtofinding.pdf"},{"title":"IC3 Complaint Form ADA Audit (PDF)","desc":"PDF document · national / IC3","url":"/microsites/national/IC3/IC3_ComplaintForm_ADA_Audit.pdf","tier":"national","scope":"Federal","path":"national IC3 IC3 Complaint Form ADA Audit.pdf"},{"title":"IC3 Direct Complaint ADA Audit (PDF)","desc":"PDF document · national / IC3","url":"/microsites/national/IC3/IC3_DirectComplaint_ADA_Audit.pdf","tier":"national","scope":"Federal","path":"national IC3 IC3 Direct Complaint ADA Audit.pdf"},{"title":"Report an Internet Crime — Plain-Language Intake","desc":"Describe what happened in your own words. This open-source intake organizes your story into the official complaint fields and hands off to the official form. It does not submit on your behalf.","url":"/microsites/national/IC3/ic3_intake_opensource.html","tier":"national","scope":"Federal","path":"national IC3 ic3 intake opensource"},{"title":"Submit a Tip | FBI","desc":"FBI tips.fbi.gov form — accessible reference rebuild and DOJ ADA letter.","url":"/microsites/FBI/tips-fbi-redesign.html","tier":"national","scope":"Federal · FBI","path":"FBI tips fbi redesign"}]</script>
+</section>
+
+<!-- ═══ Subscribe CTA ══════════════════════════════════════════════ -->
+<section class="subscribe-cta" aria-labelledby="subscribe-cta-heading">
+  <div class="container">
+    <div class="subscribe-cta-inner">
+      <div>
+        <p class="eyebrow" aria-hidden="true">Stay informed</p>
+        <h2 id="subscribe-cta-heading">Get email updates from your government — your way.</h2>
+        <p class="subscribe-cta-deck">
+          Pick the offices, dashboards, and districts that matter to you. Choose how often we email
+          (immediate, daily, weekly, or monthly digest). Tell us what else you wish we covered.
+        </p>
+      </div>
+      <a class="you-cta subscribe-cta-btn" href="/preferences/">
+        Choose your topics →
+      </a>
+    </div>
+  </div>
+</section>
+<style>
+  /* Subscribe CTA banner (homepage). Uses --cc-* tokens from shell-css. */
+  .subscribe-cta {
+    background: var(--cc-surface);
+    border-top: 1px solid var(--cc-border);
+    border-bottom: 1px solid var(--cc-border);
+    padding: 40px 0;
+    color: var(--cc-text);
+  }
+  .subscribe-cta .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .subscribe-cta-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .subscribe-cta .eyebrow {
+    color: var(--cc-gold);
+    font-family: var(--cc-mono);
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .subscribe-cta h2 {
+    font-family: var(--cc-serif);
+    font-size: clamp(1.4rem, 1rem + 1.6vw, 1.85rem);
+    margin: 6px 0 8px;
+    color: var(--cc-text);
+    line-height: 1.25;
+  }
+  .subscribe-cta-deck {
+    color: var(--cc-muted);
+    max-width: 56ch;
+    margin: 0;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+  .subscribe-cta-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 14px 24px;
+    background: var(--cc-gold);
+    color: #0c1220;
+    border-radius: 3px;
+    font: 700 .85rem var(--cc-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .18s;
+  }
+  .subscribe-cta-btn:hover,
+  .subscribe-cta-btn:focus-visible { background: var(--cc-gold-lt); }
+  @media (max-width: 700px) {
+    .subscribe-cta-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+
+<!-- ═══ YOU ════════════════════════════════════════════════════════ -->
+<section class="section" id="you" aria-labelledby="you-heading">
+  <div class="container">
+    <div id="you-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow" aria-hidden="true">You</div>
+    <div class="section-header">
+      <h2 id="you-heading">Start with where you are</h2>
+      <span class="section-note">Jurisdiction → district → everything else</span>
+    </div>
+    <p class="section-sub">Because if you don't know where you are on the map, nothing else on this site quite makes sense yet.</p>
+
+    <div class="you-banner">
+      <h3>If you don't know where you are on the map, how do you know what's going on?</h3>
+      <p>
+        El Paso County has <strong>284 metro districts</strong>. You're probably in at least one —
+        and paying a mill levy for it on every property tax bill. But which district?
+        Who manages it? What do they owe you, legally? It starts with your address.
+      </p>
+
+      <form class="you-finder" action="/microsites/shared/cos-find-my-jurisdiction.html" method="get" role="search" aria-label="Find what governs your address">
+        <label class="you-finder__label" for="you-finder-input">Enter a ZIP code or street address</label>
+        <div class="you-finder__row">
+          <input
+            class="you-finder__input"
+            id="you-finder-input"
+            type="text"
+            name="q"
+            inputmode="text"
+            autocomplete="postal-code"
+            placeholder="80903, or 200 S. Cascade Ave, Colorado Springs"
+            aria-describedby="you-finder-hint">
+          <button type="submit" class="you-cta you-finder__btn">Find my jurisdiction&nbsp;→</button>
+        </div>
+        <p class="you-finder__hint" id="you-finder-hint">Routes to the jurisdiction finder with your input. Results will load immediately — no typing again.</p>
+      </form>
+    </div>
+
+    <div class="you-stat-row">
+      <div class="you-stat">
+        <div class="you-stat-label">Districts in EPC</div>
+        <div class="you-stat-val">284</div>
+        <div class="you-stat-sub">Confirmed via Assessor</div>
+      </div>
+      <div class="you-stat">
+        <div class="you-stat-label">Have a website</div>
+        <div class="you-stat-val amber">~35</div>
+        <div class="you-stat-sub">12% of all districts</div>
+      </div>
+      <div class="you-stat">
+        <div class="you-stat-label">Dark — no web access</div>
+        <div class="you-stat-val red">249</div>
+        <div class="you-stat-sub">CORA request only</div>
+      </div>
+      <div class="you-stat">
+        <div class="you-stat-label">ADA deadline</div>
+        <div class="you-stat-val red">Apr 24</div>
+        <div class="you-stat-sub">16 days from today</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ DASHBOARDS ═══════════════════════════════════════════════════ -->
+<section class="section" id="dashboards" aria-labelledby="dashboards-heading">
+  <div class="container">
+    <div id="dashboards-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow" aria-hidden="true">Dashboards</div>
+    <div class="section-header">
+      <h2 id="dashboards-heading">Everything, grouped by jurisdiction</h2>
+      <span class="section-note">Each card holds one or more pages</span>
+    </div>
+    <p class="section-sub">Each dashboard lives under the jurisdiction whose records it covers. Cards with multiple links mean that scope has a small family of pages that belong together.</p>
+
+    <!-- ─── Sticky in-page tier nav ────────────────────────────── -->
+    <!-- ═══ TIER PREVIEW — pick a jurisdiction ════════════════ -->
+    <div class="tier-preview-grid" role="list" aria-label="Jurisdiction tiers">
+
+      <a class="tier-preview tier-preview--local" role="listitem" href="/local/">
+        <p class="tier-preview__eyebrow">Tier 1 · Where you live</p>
+        <h3 class="tier-preview__title">Local</h3>
+        <p class="tier-preview__sub">El Paso County &amp; Colorado Springs</p>
+        <p class="tier-preview__desc">Find what governs your address. BOCC petitions, CSU water data, CSPD records, sheriff dashboard, downtown funding, the 284 metro districts billed to your property — everything that touches your address day to day.</p>
+        <span class="tier-preview__cta">Browse Local <span aria-hidden="true">→</span></span>
+      </a>
+
+      <a class="tier-preview tier-preview--state" role="listitem" href="/state/">
+        <p class="tier-preview__eyebrow">Tier 2 · Colorado</p>
+        <h3 class="tier-preview__title">State</h3>
+        <p class="tier-preview__sub">Statewide agencies reaching El Paso County</p>
+        <p class="tier-preview__desc">CDPHE health data, CBI missing persons, CCRD complaint paths, DOLA's special-district registry under CRS Title 32, and the Colorado Attorney General's enforcement surface.</p>
+        <span class="tier-preview__cta">Browse State <span aria-hidden="true">→</span></span>
+      </a>
+
+      <a class="tier-preview tier-preview--national" role="listitem" href="/national/">
+        <p class="tier-preview__eyebrow">Tier 3 · Federal &amp; private sector</p>
+        <h3 class="tier-preview__title">National</h3>
+        <p class="tier-preview__sub">Federal agencies setting the floor</p>
+        <p class="tier-preview__desc">DOJ Civil Rights and antitrust, FTC consumer protection, FBI intake, HUD funding behind HOME-ARP, and private-sector platforms operated at national scale.</p>
+        <span class="tier-preview__cta">Browse National <span aria-hidden="true">→</span></span>
+      </a>
+
+    </div>
+
+    <p class="section-sub" style="margin-top:28px;">Want the structural overview instead? See the <a href="/microsites/shared/government-org-chart.html" class="tier-preview-orglink">full government org chart →</a></p>
+
+
+  </div>
+</section>
+
+<!-- ═══ PEOPLE ══════════════════════════════════════════════════════ -->
+<section class="section" id="people" aria-labelledby="people-heading">
+  <div class="container">
+    <div id="people-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow" aria-hidden="true">People</div>
+    <div class="section-header">
+      <h2 id="people-heading">Who you need to know</h2>
+      <span class="section-note">BOCC · District managers · State contacts</span>
+    </div>
+    <p class="section-sub">The organizations and offices that make decisions affecting your property, your taxes, and your streets — whether you know their names or not.</p>
+
+    <div class="people-grid" role="list">
+
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">EPC</div>
+        <div>
+          <div class="person-name">El Paso County BOCC</div>
+          <div class="person-role">Board of County Commissioners · 5 members · Oversight of all metro districts in unincorporated EPC</div>
+          <span class="person-tag">Decision maker</span>
+        </div>
+      </div>
+
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">WSD</div>
+        <div>
+          <div class="person-name">WS Districts (WSDM)</div>
+          <div class="person-role">Manages 30+ metro district websites · Single WordPress platform · Primary compliance contact for bulk remediation</div>
+          <span class="person-tag">Compliance target</span>
+        </div>
+      </div>
+
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">SG</div>
+        <div>
+          <div class="person-name">Streamline Government</div>
+          <div class="person-role">Platform for 4 district sites · 13 districts covered · Best ADA baseline · Contact for PDF tagging requirements</div>
+          <span class="person-tag">Platform vendor</span>
+        </div>
+      </div>
+
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">DOJ</div>
+        <div>
+          <div class="person-name">U.S. DOJ Civil Rights Division</div>
+          <div class="person-role">ADA Title II enforcement · 28 C.F.R. Part 35 · Complaint intake for districts failing April 24 deadline</div>
+          <span class="person-tag">Federal enforcement</span>
+        </div>
+      </div>
+
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">OSA</div>
+        <div>
+          <div class="person-name">Colorado State Auditor</div>
+          <div class="person-role">Receives annual district audits by July 31 · C.R.S. §32-1-106 · Currently receives what the public cannot access</div>
+          <span class="person-tag">State oversight</span>
+        </div>
+      </div>
+
+      <div class="person-card" role="listitem">
+        <div class="person-avatar" aria-hidden="true">DL</div>
+        <div>
+          <div class="person-name">DOLA — Dept. of Local Affairs</div>
+          <div class="person-role">Colorado's municipal oversight body · Metro district registration and service plan approval · CORA contact</div>
+          <span class="person-tag">State oversight</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider" style="margin-top:28px">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">Full contact lists in the citizen toolkit</div>
+      <div class="section-divider-line"></div>
+    </div>
+    <div style="text-align:center;margin-top:4px;">
+      <a class="you-cta" href="microsites/shared/metro_district_citizen_toolkit.html" style="font-size:.78rem;padding:10px 20px;">
+        Open citizen toolkit — all contacts →
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ EVENTS ══════════════════════════════════════════════════════ -->
+<section class="section" id="events" aria-labelledby="events-heading">
+  <div class="container">
+    <div id="events-anchor" class="section-anchor"></div>
+    <div class="section-eyebrow" aria-hidden="true">Events</div>
+    <div class="section-header">
+      <h2 id="events-heading">Dates that matter</h2>
+      <span class="section-note">Deadlines · meetings · filings</span>
+    </div>
+    <p class="section-sub">The dates that move slowly until they don't. A few of these are legally binding. Most residents have never heard of them.</p>
+
+    <div class="events-list" role="list">
+
+      <div class="event-row" role="listitem">
+        <div class="event-date">
+          <div class="event-month">Apr</div>
+          <div class="event-day" style="color:var(--red)">24</div>
+        </div>
+        <div class="event-body">
+          <div class="event-title">ADA Title II compliance deadline — all local government websites</div>
+          <div class="event-detail">WCAG 2.1 AA required for all public entity websites under 28 C.F.R. Part 35. HB21-1110 applies to PDF documents. Zero district sites confirmed compliant on document accessibility. <strong>16 days.</strong></div>
+        </div>
+        <span class="event-badge eb-critical">Critical · 16 days</span>
+      </div>
+
+      <div class="event-row" role="listitem">
+        <div class="event-date">
+          <div class="event-month">Jul</div>
+          <div class="event-day" style="color:var(--amber)">31</div>
+        </div>
+        <div class="event-body">
+          <div class="event-title">Annual audit due to Colorado State Auditor — all metro districts</div>
+          <div class="event-detail">C.R.S. §32-1-106 requires annual audits submitted to the State Auditor by July 31. Currently, 0 of 8 audited districts post these publicly. The State Auditor sees it. Residents don't.</div>
+        </div>
+        <span class="event-badge eb-warn">High · Q3</span>
+      </div>
+
+      <div class="event-row" role="listitem">
+        <div class="event-date">
+          <div class="event-month">May</div>
+          <div class="event-day">6</div>
+        </div>
+        <div class="event-body">
+          <div class="event-title">El Paso County BOCC regular meeting</div>
+          <div class="event-detail">BOCC meetings are the primary venue for metro district oversight action. Draft BOCC resolution requiring service plans and audit docs on all district websites — full template in the citizen toolkit.</div>
+        </div>
+        <span class="event-badge eb-info">Meeting</span>
+      </div>
+
+      <div class="event-row" role="listitem">
+        <div class="event-date">
+          <div class="event-month">May</div>
+          <div class="event-day">20</div>
+        </div>
+        <div class="event-body">
+          <div class="event-title">CORA response window closes — pending requests</div>
+          <div class="event-detail">Two outstanding CORA requests (military housing numbers, district governance records). Colorado law requires response within 3 business days with up to 7-day extension. Response window tracked in CORA tracker.</div>
+        </div>
+        <span class="event-badge eb-warn">CORA deadline</span>
+      </div>
+
+      <div class="event-row" role="listitem">
+        <div class="event-date">
+          <div class="event-month">Jan</div>
+          <div class="event-day">31</div>
+        </div>
+        <div class="event-body">
+          <div class="event-title">BOCC proposed mandate — tagged PDFs on all district sites</div>
+          <div class="event-detail">Proposed: BOCC resolution requiring all publicly posted PDFs to be WCAG 1.3.1 tagged by January 31, 2027. Currently zero sites comply. One resolution, 284 districts. <em>Proposed — not yet filed.</em></div>
+        </div>
+        <span class="event-badge eb-info">Proposed '27</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMING SOON ══════════════════════════════════════════════════ -->
+<section class="section" aria-labelledby="coming-heading">
+  <div class="container">
+    <div class="section-eyebrow" aria-hidden="true">Coming up</div>
+    <div class="section-header">
+      <h2 id="coming-heading">What's in the queue</h2>
+      <span class="section-note">No ETA. We have day jobs.</span>
+    </div>
+    <p class="section-sub">The list is longer than this page. That's intentional.</p>
+    <div class="coming-grid" role="list" aria-label="Upcoming pages in the queue">
+      <div class="coming-card" role="listitem">
+        <p><strong>County Dashboard</strong><br>El Paso County — all jurisdictions, all crash data, full picture.</p>
+      </div>
+      <div class="coming-card" role="listitem">
+        <p><strong>LOSS Corridor Ratings</strong><br>Danger ratings for every major road. Pending records request filed April 2026.</p>
+      </div>
+      <div class="coming-card" role="listitem">
+        <p><strong>Zip Code Search</strong><br>Your block, your crashes, your street. Hyper-local lookup coming.</p>
+      </div>
+      <div class="coming-card" role="listitem">
+        <p><strong>Metro District Portal</strong><br>Unified public interface for the 249 districts with no website. CORA shouldn't be the only option.</p>
+      </div>
+      <div class="coming-card" role="listitem">
+        <p><strong>State Dashboard</strong><br>CDOT data across all 64 counties. Colorado from 30,000 feet.</p>
+      </div>
+      <div class="coming-card" role="listitem">
+        <p><strong>Mill Levy Explainer</strong><br>You're paying it. Every property tax bill. No district explains what it is or why.</p>
+      </div>
+      <div class="coming-card" role="listitem">
+        <p><strong>Bond &amp; Debt Tracker</strong><br>Outstanding balances, maturity dates, resident liability. The stuff that outlasts administrations.</p>
+      </div>
+      <div class="coming-card" role="listitem">
+        <p><strong>Stories</strong><br>Long-form analysis when the data says something nobody's saying out loud.</p>
+      </div>
+      <div class="coming-card" role="listitem">
+        <p><strong>A lot more</strong><br>The list is longer than this page. That's intentional.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISPATCH -->
+<section class="dispatch">
+  <div class="container">
+    <div class="dispatch-box">
+      <h3>What is this, exactly?</h3>
+      <p>
+        cheetochopsticks is a civic data project built by two residents of Colorado Springs —
+        <strong>StorySeed Studios and The Dais</strong> — at a kitchen table, with public records,
+        too much coffee, and a sincere belief that people who live somewhere
+        deserve to actually understand it.
+      </p>
+      <p>
+        Everything here is free. No paywall, no pitch deck, no monetization strategy.
+        <strong>No invoice attached.</strong> If it helps one person ask a better question
+        at a city council meeting, or understand why their street feels dangerous,
+        or find out which metro district is charging them a mill levy they can't look up —
+        that's the whole point.
+      </p>
+      <p>
+        The <strong>Alerts</strong> button in the nav is real. Those nine notifications are current.
+        If you want to know when something new drops —
+        <strong>before the press release, before the tweet</strong>
+        — bookmark this page and check the ticker. We'll be here.
+      </p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- ─── Tier-nav active-state observer ────────────────────────────────
+     Watches the three tier sections (#tier-local / #tier-state /
+     #tier-national) and toggles aria-current="location" on the matching
+     .tier-nav__link as the user scrolls through them. Falls back to no
+     active state if IntersectionObserver is unavailable. -->
+<script>
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+
+  /* Gather every link that points to a tier anchor — covers both the
+     in-page sticky tier-nav (.tier-nav__link[data-tier-link]) and the
+     top nav (.nav-link href="/#tier-X"). Group by target id so we can
+     toggle all matching links together as the observer fires. */
+  var ids = ['tier-local','tier-state','tier-national'];
+  var linksById = {};
+  ids.forEach(function(id){ linksById[id] = []; });
+
+  document.querySelectorAll('.tier-nav__link[data-tier-link]').forEach(function(a){
+    var id = a.dataset.tierLink;
+    if(linksById[id]) linksById[id].push(a);
+  });
+  document.querySelectorAll('.nav-link[href]').forEach(function(a){
+    var href = a.getAttribute('href') || '';
+    var m = href.match(/#(tier-(?:local|state|national))$/);
+    if(m && linksById[m[1]]) linksById[m[1]].push(a);
+  });
+
+  var observed = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if(!observed.length) return;
+
+  function setCurrent(id){
+    ids.forEach(function(k){
+      linksById[k].forEach(function(link){
+        if(k === id){
+          link.setAttribute('aria-current', 'location');
+          link.classList.add('tier-nav__link--current');
+          if(link.classList.contains('nav-link')) link.classList.add('active');
+        } else {
+          link.removeAttribute('aria-current');
+          link.classList.remove('tier-nav__link--current');
+          if(link.classList.contains('nav-link')) link.classList.remove('active');
+        }
+      });
+    });
+  }
+
+  var observer = new IntersectionObserver(function(entries){
+    /* Pick the most-visible section among entries that are intersecting. */
+    var best = null;
+    entries.forEach(function(e){
+      if(e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) best = e;
+    });
+    if(best) setCurrent(best.target.id);
+  }, { rootMargin: '-30% 0px -55% 0px', threshold: [0, 0.1, 0.3, 0.6] });
+
+  observed.forEach(function(el){ observer.observe(el); });
+})();
+</script>
+
+<!-- ─── Universal search & discovery wiring ───────────────────────────
+     Reads the inlined search index, runs client-side filtering as the
+     user types, lets four tier chips scope results to All / Local /
+     State / National, and detects address-shaped queries (ZIP, street
+     number + street word) so they route to the jurisdiction finder
+     instead of returning topic results. Submitting the form deep-links
+     to itself with ?q= and &tier= so the result state is shareable. -->
+<script>
+(function(){
+  var idxEl = document.getElementById('search-discovery-index');
+  var form  = document.getElementById('search-discovery-form');
+  var input = document.getElementById('search-discovery-input');
+  var chips = document.querySelectorAll('.search-discovery__chip');
+  var resultsBox = document.getElementById('search-discovery-results');
+  var listEl    = document.getElementById('search-discovery-list');
+  var countEl   = document.getElementById('search-discovery-count');
+  var emptyEl   = document.getElementById('search-discovery-empty');
+  if (!idxEl || !form || !input || !listEl) return;
+
+  var INDEX = [];
+  try { INDEX = JSON.parse(idxEl.textContent); } catch (e) { INDEX = []; }
+  if (!Array.isArray(INDEX) || INDEX.length === 0) return;
+
+  var tier = 'all';
+
+  /* Address shape: a 5-digit ZIP, OR digits + a street-type word.
+     If it matches, route the query to the jurisdiction finder rather
+     than returning topic-search results. */
+  var ZIP_RE   = /^\s*\d{5}(-\d{4})?\s*$/;
+  var STREET_RE = /\b\d+\s+\w+.*\b(st|street|ave|avenue|blvd|boulevard|rd|road|dr|drive|ln|lane|way|ct|court|pl|place|hwy|highway|pkwy|parkway)\b/i;
+  function looksLikeAddress(q) {
+    if (!q) return false;
+    return ZIP_RE.test(q) || STREET_RE.test(q);
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+  function highlight(text, terms){
+    if (!terms.length) return escapeHtml(text);
+    var safe = escapeHtml(text);
+    /* Build a single regex from the terms, longest-first, case-insensitive. */
+    var sorted = terms.slice().sort(function(a,b){ return b.length - a.length; });
+    var pattern = sorted.map(function(t){ return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|');
+    var re = new RegExp('(' + pattern + ')', 'gi');
+    return safe.replace(re, '<mark>$1</mark>');
+  }
+  function score(item, terms){
+    /* Searchable corpus: title (weighted highest), scope, description,
+       and the URL path tokens (so "roads" matches /Roads/, "parcel"
+       matches parcel_lookup, etc., even when those words aren't in
+       the title or description). */
+    var pathStr = (item.path || '').toLowerCase();
+    var hay = (item.title + ' ' + item.desc + ' ' + item.scope + ' ' + pathStr).toLowerCase();
+    var s = 0;
+    for (var i=0;i<terms.length;i++){
+      var t = terms[i];
+      if (item.title.toLowerCase().indexOf(t) !== -1) s += 5;
+      if (item.scope.toLowerCase().indexOf(t) !== -1) s += 3;
+      if (item.desc.toLowerCase().indexOf(t) !== -1)  s += 2;
+      if (pathStr.indexOf(t) !== -1)                   s += 1;
+      if (hay.indexOf(t) === -1) return -1; /* must hit every term */
+    }
+    return s;
+  }
+  function render(items, terms){
+    listEl.innerHTML = '';
+    if (!items.length) {
+      countEl.textContent = '';
+      emptyEl.hidden = false;
+      return;
+    }
+    emptyEl.hidden = true;
+    countEl.textContent = items.length + ' result' + (items.length === 1 ? '' : 's');
+    var frag = document.createDocumentFragment();
+    items.forEach(function(it){
+      var li = document.createElement('li');
+      var a  = document.createElement('a');
+      a.className = 'search-discovery__item search-discovery__item--' + it.tier;
+      a.href = it.url;
+      a.innerHTML =
+        '<div class="search-discovery__item-body">' +
+          '<p class="search-discovery__item-scope">' + escapeHtml(it.scope) + '</p>' +
+          '<p class="search-discovery__item-title">' + highlight(it.title, terms) + '</p>' +
+          (it.desc ? '<p class="search-discovery__item-desc">' + highlight(it.desc, terms) + '</p>' : '') +
+        '</div>';
+      li.appendChild(a);
+      frag.appendChild(li);
+    });
+    listEl.appendChild(frag);
+  }
+  function runSearch(q){
+    q = (q || '').trim();
+    if (!q) {
+      resultsBox.hidden = true;
+      return;
+    }
+    /* Address shortcut — redirect, don't render. */
+    if (looksLikeAddress(q)) {
+      window.location.href = '/microsites/shared/cos-find-my-jurisdiction.html?q=' + encodeURIComponent(q);
+      return;
+    }
+    var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+    var pool = (tier === 'all') ? INDEX : INDEX.filter(function(it){ return it.tier === tier; });
+    var scored = [];
+    for (var i=0;i<pool.length;i++){
+      var s = score(pool[i], terms);
+      if (s >= 0) scored.push({ s:s, it:pool[i] });
+    }
+    scored.sort(function(a,b){ return b.s - a.s; });
+    resultsBox.hidden = false;
+    render(scored.slice(0, 30).map(function(x){ return x.it; }), terms);
+  }
+
+  /* Input — debounce light filtering as you type. */
+  var debounceTimer = null;
+  input.addEventListener('input', function(){
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function(){ runSearch(input.value); }, 100);
+  });
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    runSearch(input.value);
+    /* Update URL for deep-linking without reloading. */
+    try {
+      var u = new URL(window.location.href);
+      var q = input.value.trim();
+      if (q) { u.searchParams.set('q', q); } else { u.searchParams.delete('q'); }
+      u.searchParams.set('tier', tier);
+      window.history.replaceState({}, '', u);
+    } catch (err) {}
+  });
+
+  /* Tier chips. */
+  chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      tier = chip.dataset.tier;
+      chips.forEach(function(c){ c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+      runSearch(input.value);
+    });
+  });
+
+  /* Deep link on load: ?q=foo&tier=local */
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var pq = params.get('q');
+    var pt = params.get('tier');
+    if (pt && ['all','local','state','national'].indexOf(pt) !== -1) {
+      tier = pt;
+      chips.forEach(function(c){ c.setAttribute('aria-pressed', c.dataset.tier === pt ? 'true' : 'false'); });
+    }
+    if (pq) {
+      input.value = pq;
+      runSearch(pq);
+    }
+  } catch (err) {}
+})();
+</script>
+
+<!-- FOOTER lives in _includes/partials/footer.njk and is rendered by site.njk on every page. -->
+
+
+
+  </main>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     FOOTER — single source of truth, included by site.njk on every page.
+════════════════════════════════════════════════════════════════════ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  .subscribe-block {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    padding: 48px 0;
+    border-top: 1px solid var(--cc-border);
+  }
+  .subscribe-block .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+  .subscribe-block h2 {
+    font-family: var(--cc-serif);
+    margin: 0 0 12px;
+    color: var(--cc-text);
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .subscribe-block .deck {
+    color: var(--cc-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .gov-subscribe { display: flex; flex-direction: column; gap: 12px; }
+  .gov-subscribe label {
+    display: block;
+    font-family: var(--cc-sans);
+    font-size: 1rem;
+    color: var(--cc-text);
+    font-weight: 500;
+  }
+  .gov-subscribe input[type="email"] {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 12px;
+    font: inherit;
+    background: var(--cc-surface2);
+    color: var(--cc-text);
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+    min-height: 44px;
+  }
+  .gov-subscribe input[type="email"]::placeholder { color: var(--cc-quiet); opacity: 1; }
+  .gov-subscribe input[type="email"]:focus {
+    border-color: var(--cc-gold);
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 1px;
+  }
+  .gov-subscribe__consent {
+    font-size: 0.9rem;
+    color: var(--cc-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .gov-subscribe button[type="submit"] {
+    align-self: flex-start;
+    background: var(--cc-gold);
+    color: #0c1220;
+    border: 0;
+    padding: 12px 24px;
+    min-height: 44px;
+    font: 700 .85rem var(--cc-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+  .gov-subscribe button[type="submit"]:hover,
+  .gov-subscribe button[type="submit"]:focus-visible { background: var(--cc-gold-lt); }
+  .gov-subscribe output {
+    display: block;
+    min-height: 1.4em;
+    font-size: 0.95rem;
+    color: var(--cc-muted);
+  }
+</style>
+<section class="subscribe-block" aria-label="Subscribe to updates" data-topic="" hidden>
+  <div class="container">
+    <h2>Get email updates</h2>
+    <p class="deck">We&#39;ll email you a plain-language summary with links to the source documents whenever this office posts new public-record material.</p>
+
+    <form class="gov-subscribe" novalidate>
+      <label>
+        Email address
+        <input type="email" name="email" required autocomplete="email"
+               placeholder="you@example.com">
+      </label>
+      <p class="gov-subscribe__consent">
+        By subscribing you agree to receive emails about this topic. We&#39;ll send a confirmation link first. Unsubscribe any time. <em>(consent v2026-04-30-v1)</em>
+      </p>
+      <button type="submit">Subscribe</button>
+      <output role="status" aria-live="polite"></output>
+    </form>
+  </div>
+</section>
+
+
+<script>
+(function () {
+  if (window.__govSubscribeInit) return;
+  window.__govSubscribeInit = true;
+
+  // Skip top-level pages and /microsites/shared/* — no agency-specific topic.
+  var SKIP_JURISDICTIONS = { shared: 1 };
+
+  function inferTopicFromUrl() {
+    var parts = location.pathname.split('/').filter(Boolean);
+    // ["microsites", "<jurisdiction>", "<agency>", ...]
+    if (parts[0] !== 'microsites') return '';
+    if (!parts[1] || !parts[2]) return '';
+    if (SKIP_JURISDICTIONS[parts[1]]) return '';
+    return 'gov.' + parts[1] + '.' + parts[2];
+  }
+
+  function attach(host) {
+    // Resolve topic: explicit data-topic wins, else infer from URL.
+    var topic = host.dataset.topic || inferTopicFromUrl();
+    if (!topic) { host.remove(); return; }
+    host.dataset.topic = topic;
+    host.hidden = false;
+
+    var form = host.querySelector('form.gov-subscribe');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    var out = form.querySelector('output');
+    var source = location.pathname.replace(/^\/+/, '');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      out.textContent = 'Submitting…';
+      var email = form.email.value.trim();
+      var timezone = '';
+      try { timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) {}
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, topic: topic, source: source, timezone: timezone }),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
+          out.textContent = res.d.message || 'Check your email to confirm.';
+          form.reset();
+        })
+        .catch(function (err) { out.textContent = 'Something went wrong: ' + err.message; });
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('.subscribe-block[data-topic]').forEach(attach);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+
+<footer class="cc-footer" role="contentinfo">
+  <div class="container">
+    <p class="cc-footer-line">
+      &copy; 2026
+      CheetoChopsticks &amp;
+      <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener noreferrer">
+        StorySeed Studios<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      <a href="https://www.storyseedstudios.com/media-category/the-dais/" target="_blank" rel="noopener noreferrer">
+        The Dais<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      El Paso County, Colorado
+      &nbsp;·&nbsp;
+      For informational purposes only.
+      &nbsp;·&nbsp;
+      Open source.
+      &nbsp;·&nbsp;
+      <a href="/preferences/">Manage your subscriptions</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+/* ── Site nav + notifications panel scripts ──────────────────────────
+   Wrapped in an IIFE so locals never leak. The functions onclick handlers
+   call (openNotif, closeNotif, filterNotif) are explicitly attached to
+   `window` so a page's own scripts can't shadow them, and each function
+   is defensive about the DOM possibly being absent on a page that opted
+   out of the layout. */
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  var lastFocus;
+
+  function openNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    lastFocus = document.activeElement;
+    overlay.classList.add('open');
+    overlay.removeAttribute('aria-hidden');
+    panel.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { panel.focus(); }, 50);
+  }
+
+  function closeNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    panel.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  function filterNotif(tier, btn) {
+    document.querySelectorAll('.nf-btn').forEach(function (b) {
+      b.classList.remove('active');
+      b.removeAttribute('aria-pressed');
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    document.querySelectorAll('.notif-item').forEach(function (item) {
+      if (tier === 'all') {
+        item.classList.remove('hidden');
+        item.removeAttribute('aria-hidden');
+      } else {
+        var hide = item.dataset.tier !== tier;
+        item.classList.toggle('hidden', hide);
+        if (hide) item.setAttribute('aria-hidden', 'true');
+        else item.removeAttribute('aria-hidden');
+      }
+    });
+    document.querySelectorAll('.notif-group-label').forEach(function (label) {
+      label.style.display = tier === 'all' ? '' : 'none';
+    });
+  }
+
+  /* Escape closes the panel; Tab stays inside it while it's open. */
+  document.addEventListener('keydown', function (e) {
+    var panel = $('notif-panel');
+    if (!panel) return;
+    if (e.key === 'Escape') { closeNotif(); return; }
+    if (e.key === 'Tab' && panel.classList.contains('open')) {
+      var focusable = panel.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+
+  /* Active nav link on scroll — only runs when the index has the matching anchors. */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['you', 'dashboards', 'people', 'events'];
+  if (typeof IntersectionObserver === 'function' && navLinks.length) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function (l) {
+            var href = l.getAttribute('href') || '';
+            var active = href === '#' + id || href === '/#' + id;
+            l.classList.toggle('active', active);
+            if (active) l.setAttribute('aria-current', 'true');
+            else l.removeAttribute('aria-current');
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach(function (id) {
+      var el = $(id);
+      if (el) observer.observe(el);
+    });
+  }
+
+  /* Expose the click-target functions globally so inline onclick handlers
+     (and any page that needs them) can always reach them by name. */
+  window.openNotif   = openNotif;
+  window.closeNotif  = closeNotif;
+  window.filterNotif = filterNotif;
+
+  /* ─── Nav search (disclosure pattern + lazy fetch + filter) ───────
+     The toggle button uses aria-expanded to advertise state; opening
+     it un-hides the panel, moves focus to the input, attaches Escape
+     and click-outside handlers, and fetches /search-index.json on
+     first open (cached for the rest of the session). All search
+     scoring matches the homepage block so results rank identically. */
+  var nsToggle   = $('nav-search-toggle');
+  var nsPanel    = $('nav-search-panel');
+  var nsForm     = $('nav-search-form');
+  var nsInput    = $('nav-search-input');
+  var nsClose    = $('nav-search-close');
+  var nsStatus   = $('nav-search-status');
+  var nsResults  = $('nav-search-results');
+  var nsEmpty    = $('nav-search-empty');
+  var nsChips    = document.querySelectorAll('.nav-search-panel__chip');
+
+  if (nsToggle && nsPanel && nsForm && nsInput) {
+    var nsIndex = null;
+    var nsTier  = 'all';
+    var nsDebounce = null;
+
+    function nsOpen() {
+      nsPanel.hidden = false;
+      nsToggle.setAttribute('aria-expanded', 'true');
+      ensureIndex();
+      /* Defer focus one tick so the panel is in the layout. */
+      setTimeout(function(){ nsInput && nsInput.focus(); }, 0);
+      document.addEventListener('keydown', nsOnKey);
+      document.addEventListener('click', nsOnDocClick, true);
+    }
+    function nsClosePanel(returnFocus) {
+      nsPanel.hidden = true;
+      nsToggle.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('keydown', nsOnKey);
+      document.removeEventListener('click', nsOnDocClick, true);
+      if (returnFocus !== false) nsToggle.focus();
+    }
+    function nsOnKey(e) {
+      if (e.key === 'Escape') { e.preventDefault(); nsClosePanel(true); }
+    }
+    function nsOnDocClick(e) {
+      if (!nsPanel.contains(e.target) && e.target !== nsToggle && !nsToggle.contains(e.target)) {
+        nsClosePanel(false);
+      }
+    }
+
+    nsToggle.addEventListener('click', function() {
+      var open = nsToggle.getAttribute('aria-expanded') === 'true';
+      if (open) nsClosePanel(true); else nsOpen();
+    });
+    if (nsClose) nsClose.addEventListener('click', function() { nsClosePanel(true); });
+
+    function ensureIndex() {
+      if (nsIndex !== null) return Promise.resolve(nsIndex);
+      if (nsStatus) nsStatus.textContent = 'Loading search index…';
+      return fetch('/search-index.json', { headers: { 'Accept': 'application/json' } })
+        .then(function(r){ if (!r.ok) throw new Error('failed'); return r.json(); })
+        .then(function(data){ nsIndex = Array.isArray(data) ? data : []; if (nsStatus) nsStatus.textContent = ''; return nsIndex; })
+        .catch(function(){ nsIndex = []; if (nsStatus) nsStatus.textContent = 'Search index failed to load — try refreshing.'; return nsIndex; });
+    }
+
+    var ZIP_RE    = /^\s*\d{5}(-\d{4})?\s*$/;
+    var STREET_RE = /\b\d+\s+\w+.*\b(st|street|ave|avenue|blvd|boulevard|rd|road|dr|drive|ln|lane|way|ct|court|pl|place|hwy|highway|pkwy|parkway)\b/i;
+    function nsLooksLikeAddress(q) { return ZIP_RE.test(q) || STREET_RE.test(q); }
+    function nsEsc(s){
+      return String(s).replace(/[&<>"']/g, function(c){
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+      });
+    }
+    function nsHighlight(text, terms){
+      if (!terms.length) return nsEsc(text);
+      var safe = nsEsc(text);
+      var sorted = terms.slice().sort(function(a,b){ return b.length - a.length; });
+      var pattern = sorted.map(function(t){ return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|');
+      var re = new RegExp('(' + pattern + ')', 'gi');
+      return safe.replace(re, '<mark>$1</mark>');
+    }
+    function nsScore(item, terms){
+      var pathStr = (item.path || '').toLowerCase();
+      var hay = (item.title + ' ' + item.desc + ' ' + item.scope + ' ' + pathStr).toLowerCase();
+      var s = 0;
+      for (var i=0;i<terms.length;i++){
+        var t = terms[i];
+        if (item.title.toLowerCase().indexOf(t) !== -1) s += 5;
+        if (item.scope.toLowerCase().indexOf(t) !== -1) s += 3;
+        if (item.desc.toLowerCase().indexOf(t) !== -1)  s += 2;
+        if (pathStr.indexOf(t) !== -1)                   s += 1;
+        if (hay.indexOf(t) === -1) return -1;
+      }
+      return s;
+    }
+    function nsRender(items, terms){
+      nsResults.innerHTML = '';
+      if (!items.length) {
+        if (nsStatus) nsStatus.textContent = '';
+        if (nsEmpty)  nsEmpty.hidden = false;
+        return;
+      }
+      if (nsEmpty) nsEmpty.hidden = true;
+      if (nsStatus) nsStatus.textContent = items.length + ' result' + (items.length === 1 ? '' : 's');
+      var frag = document.createDocumentFragment();
+      items.forEach(function(it){
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.className = 'nav-search-panel__item nav-search-panel__item--' + it.tier;
+        a.href = it.url;
+        a.innerHTML =
+          '<p class="nav-search-panel__item-scope">' + nsEsc(it.scope) + '</p>' +
+          '<p class="nav-search-panel__item-title">' + nsHighlight(it.title, terms) + '</p>' +
+          (it.desc ? '<p class="nav-search-panel__item-desc">' + nsHighlight(it.desc, terms) + '</p>' : '');
+        li.appendChild(a);
+        frag.appendChild(li);
+      });
+      nsResults.appendChild(frag);
+    }
+    function nsRun(q) {
+      q = (q || '').trim();
+      if (!q) {
+        nsResults.innerHTML = '';
+        if (nsEmpty)  nsEmpty.hidden = true;
+        if (nsStatus) nsStatus.textContent = '';
+        return;
+      }
+      if (nsLooksLikeAddress(q)) {
+        window.location.href = '/microsites/shared/cos-find-my-jurisdiction.html?q=' + encodeURIComponent(q);
+        return;
+      }
+      ensureIndex().then(function(idx){
+        var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+        var pool  = (nsTier === 'all') ? idx : idx.filter(function(it){ return it.tier === nsTier; });
+        var scored = [];
+        for (var i=0;i<pool.length;i++) {
+          var s = nsScore(pool[i], terms);
+          if (s >= 0) scored.push({ s:s, it:pool[i] });
+        }
+        scored.sort(function(a,b){ return b.s - a.s; });
+        nsRender(scored.slice(0, 30).map(function(x){ return x.it; }), terms);
+      });
+    }
+
+    nsInput.addEventListener('input', function() {
+      clearTimeout(nsDebounce);
+      nsDebounce = setTimeout(function(){ nsRun(nsInput.value); }, 100);
+    });
+    nsForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      nsRun(nsInput.value);
+    });
+    nsChips.forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        nsTier = chip.dataset.tier;
+        nsChips.forEach(function(c){ c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+        nsRun(nsInput.value);
+      });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

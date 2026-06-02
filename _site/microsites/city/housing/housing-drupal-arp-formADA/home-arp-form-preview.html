@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOME-ARP Public Comment Form — Accessible Preview</title>
+<meta name="description" content="An accessible HTML preview of the WCAG 2.1 AA Drupal Webform replacement for the City of Colorado Springs HOME-ARP Allocation Plan public comment form. Bilingual EN/ES.">
+<meta name="theme-color" content="#0a0f1a">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#fafaf7; --paper:#ffffff; --ink:#1a1f2e; --ink-soft:#3d4759;
+  --gold:#8b6f1a; --gold-soft:#b8941f; --rule:#d4cfc0;
+  --quiet:#6b7280;
+  --error:#9b1c1c; --error-bg:#fef2f2;
+  --ok:#166534; --ok-bg:#f0fdf4;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --serif:'Playfair Display',Georgia,serif;
+}
+body{
+  font-family:var(--sans);font-size:1rem;line-height:1.6;
+  color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  padding:20px 0 60px;
+}
+
+/* Skip link — WCAG 2.4.1 */
+.skip-link{
+  position:absolute;left:-9999px;top:0;
+  background:var(--ink);color:#fff;padding:10px 16px;
+  font-family:var(--mono);font-size:.85rem;
+  text-decoration:none;border-radius:0 0 3px 0;z-index:1000;
+}
+.skip-link:focus{left:0;}
+
+/* Banner — preview disclosure */
+.preview-banner{
+  max-width:780px;margin:0 auto 20px;padding:14px 20px;
+  background:#fdf6dc;border:1px solid var(--gold);border-radius:3px;
+  font-size:.85rem;color:var(--ink-soft);line-height:1.55;
+}
+.preview-banner strong{color:var(--ink);}
+
+/* Language toggle */
+.lang-bar{
+  max-width:780px;margin:0 auto 16px;padding:0 24px;
+  display:flex;justify-content:flex-end;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:.78rem;color:var(--quiet);
+}
+.lang-bar button{
+  background:var(--paper);color:var(--ink);border:1px solid var(--rule);
+  font-family:var(--mono);font-size:.78rem;font-weight:500;
+  padding:7px 14px;border-radius:3px;cursor:pointer;
+}
+.lang-bar button[aria-pressed="true"]{
+  background:var(--ink);color:#fff;border-color:var(--ink);
+}
+.lang-bar button:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+/* Page card */
+.page{
+  max-width:780px;margin:0 auto;background:var(--paper);
+  padding:48px 56px;
+  border:1px solid var(--rule);
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+
+/* Header */
+.head{
+  border-bottom:2px solid var(--ink);
+  padding-bottom:24px;margin-bottom:32px;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:8px;
+}
+.head h1{
+  font-family:var(--serif);font-size:1.85rem;font-weight:700;
+  line-height:1.2;color:var(--ink);margin-bottom:10px;
+}
+.head-sub{
+  font-family:var(--sans);font-size:.95rem;color:var(--ink-soft);
+  line-height:1.55;
+}
+
+/* Intro */
+.intro{margin-bottom:32px;font-size:.96rem;color:var(--ink-soft);line-height:1.65;}
+.intro h2{
+  font-family:var(--serif);font-size:1.15rem;font-weight:700;
+  color:var(--ink);margin-bottom:10px;
+}
+.intro p{margin-bottom:12px;}
+.intro ul{margin:8px 0 12px 22px;}
+.intro li{padding:3px 0;}
+.intro strong{color:var(--ink);font-weight:600;}
+
+/* Fieldset / section */
+fieldset{
+  border:1px solid var(--rule);
+  padding:22px 26px 24px;
+  margin-bottom:24px;
+  background:#fdfcf6;
+}
+legend{
+  font-family:var(--serif);font-size:1.15rem;font-weight:700;
+  color:var(--ink);padding:0 10px;
+}
+.fs-desc{
+  font-size:.86rem;color:var(--ink-soft);
+  margin:8px 0 16px;line-height:1.55;
+}
+
+/* Field rows */
+.field{margin-bottom:18px;}
+.field:last-child{margin-bottom:0;}
+.field label,
+.radio-group-legend,
+.checkbox-group-legend{
+  display:block;font-weight:500;color:var(--ink);
+  font-size:.95rem;margin-bottom:5px;
+}
+.field .required{color:var(--error);margin-left:3px;}
+.field-desc{
+  font-size:.82rem;color:var(--quiet);
+  margin-bottom:7px;line-height:1.5;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea,
+select{
+  width:100%;
+  font-family:var(--sans);font-size:.95rem;
+  color:var(--ink);background:#fff;
+  border:1px solid var(--ink-soft);border-radius:3px;
+  padding:9px 12px;
+  line-height:1.5;
+}
+input[type="text"]:focus-visible,
+input[type="email"]:focus-visible,
+input[type="tel"]:focus-visible,
+textarea:focus-visible,
+select:focus-visible{
+  outline:3px solid var(--gold);outline-offset:1px;
+  border-color:var(--gold);
+}
+input[aria-invalid="true"],
+textarea[aria-invalid="true"]{
+  border-color:var(--error);background:var(--error-bg);
+}
+textarea{min-height:160px;resize:vertical;}
+
+/* Radio + checkbox lists */
+.radio-list,
+.checkbox-list{margin-top:4px;}
+.radio-list li,
+.checkbox-list li{
+  list-style:none;padding:5px 0;
+  display:flex;align-items:flex-start;gap:9px;
+}
+.radio-list input,
+.checkbox-list input{
+  width:18px;height:18px;flex-shrink:0;margin-top:3px;
+  accent-color:var(--ink);
+}
+.radio-list label,
+.checkbox-list label{
+  font-weight:400;font-size:.94rem;color:var(--ink);
+  line-height:1.5;cursor:pointer;
+}
+.radio-list input:focus-visible,
+.checkbox-list input:focus-visible{
+  outline:3px solid var(--gold);outline-offset:2px;
+}
+
+/* Conditional sub-fields */
+.conditional{
+  margin-top:8px;padding:14px 16px;
+  background:#fff;border-left:3px solid var(--gold);
+  border-radius:0 3px 3px 0;
+}
+.conditional[hidden]{display:none;}
+
+/* File upload */
+.file-row{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:14px 16px;background:#fff;
+  border:1px dashed var(--ink-soft);border-radius:3px;
+}
+.file-row input[type="file"]{
+  font-family:var(--mono);font-size:.85rem;color:var(--ink);
+}
+.file-row input[type="file"]:focus-visible{
+  outline:3px solid var(--gold);outline-offset:3px;
+}
+.file-hint{
+  font-size:.8rem;color:var(--quiet);width:100%;line-height:1.5;
+}
+
+/* Character counter */
+.char-counter{
+  font-family:var(--mono);font-size:.78rem;
+  color:var(--quiet);text-align:right;margin-top:4px;
+}
+
+/* Privacy notice */
+.privacy{
+  margin-top:24px;padding:14px 18px;
+  background:#f3efe1;border-left:3px solid var(--gold);
+  font-size:.82rem;color:var(--ink-soft);line-height:1.6;
+}
+.privacy strong{color:var(--ink);}
+
+/* Submit row */
+.submit-row{
+  margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+}
+.btn-primary{
+  background:var(--ink);color:#fff;
+  font-family:var(--sans);font-size:.95rem;font-weight:600;
+  letter-spacing:.04em;
+  border:none;border-radius:3px;cursor:pointer;
+  padding:12px 28px;
+}
+.btn-primary:hover{background:var(--gold);}
+.btn-primary:focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
+.btn-secondary{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:.95rem;font-weight:500;
+  border:1px solid var(--ink);border-radius:3px;cursor:pointer;
+  padding:12px 22px;
+}
+.btn-secondary:hover{background:#f3efe1;}
+.btn-secondary:focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
+
+/* Error / success summary */
+.summary{
+  padding:16px 20px;margin-bottom:22px;border-radius:3px;
+  font-size:.93rem;line-height:1.55;
+}
+.summary[hidden]{display:none;}
+.summary-error{background:var(--error-bg);border:1px solid var(--error);color:var(--error);}
+.summary-ok{background:var(--ok-bg);border:1px solid var(--ok);color:var(--ok);}
+.summary strong{font-weight:600;}
+.summary ul{margin:6px 0 0 22px;}
+.summary a{color:inherit;text-decoration:underline;}
+
+/* Footer */
+footer.foot{
+  margin-top:32px;padding-top:18px;border-top:1px dashed var(--rule);
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;
+  color:var(--quiet);text-align:center;line-height:1.7;
+}
+
+/* Screen-reader-only utility */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none !important;animation:none !important;}
+  html{scroll-behavior:auto !important;}
+}
+
+/* Print */
+@media print{
+  body{background:#fff;padding:0;}
+  .preview-banner,.lang-bar,.submit-row,.skip-link{display:none;}
+  .page{box-shadow:none;border:none;max-width:none;padding:0.5in 0.65in;}
+  fieldset{break-inside:avoid;background:#fff;}
+}
+
+/* Mobile */
+@media (max-width:680px){
+  .page{padding:32px 22px;}
+  fieldset{padding:18px 18px 20px;}
+  .head h1{font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<a href="#main-form" class="skip-link">Skip to the comment form</a>
+
+<div class="preview-banner" role="note">
+  <strong>Preview only.</strong> This is an accessible HTML preview of the WCAG 2.1 AA Drupal Webform that replaces the current ArcGIS Survey123 form. Submissions on this page do not enter the city's records — use the live city portal to submit your comment.
+  See the <a href="bundle-readme.html">bundle README</a> for install and import.
+</div>
+
+<div class="lang-bar" role="group" aria-label="Language selector">
+  <span id="lang-label">Language:</span>
+  <button type="button" lang="en" aria-pressed="true" aria-describedby="lang-label" onclick="setLang('en', this)">English</button>
+  <button type="button" lang="es" aria-pressed="false" aria-describedby="lang-label" onclick="setLang('es', this)">Español</button>
+</div>
+
+<main class="page" id="main-form">
+
+  <header class="head">
+    <p class="eyebrow" data-i18n-eyebrow>HOME-ARP Allocation Plan · Public Comment</p>
+    <h1 data-i18n-h1>HOME-ARP Allocation Plan — Public Comment</h1>
+    <p class="head-sub" data-i18n-headsub>Submit a public comment on the City of Colorado Springs HOME-ARP Allocation Plan amendment. Comment period is April 24 through May 26, 2026.</p>
+  </header>
+
+  <section class="intro" aria-labelledby="intro-h2">
+    <h2 id="intro-h2" data-i18n="intro_h2">About this form</h2>
+    <p data-i18n="intro_p1">The City of Colorado Springs is collecting public comment on a proposed amendment to its HOME-ARP Allocation Plan. The public comment period is open from <strong>April 24 through May 26, 2026</strong>.</p>
+    <p data-i18n="intro_p2">You can submit comments through this form, or by any of the following methods. All methods enter the public record on equal footing.</p>
+    <ul>
+      <li data-i18n="intro_email"><strong>Email:</strong> CityHousingAndCommunityVitality@coloradosprings.gov</li>
+      <li data-i18n="intro_phone"><strong>Phone:</strong> 719-385-5859 (TTY users may dial 711 for relay)</li>
+      <li data-i18n="intro_mail"><strong>Postal mail:</strong> Housing and Homelessness Response, 30 S. Nevada Ave., Colorado Springs, CO 80903</li>
+      <li data-i18n="intro_person"><strong>In person:</strong> at any scheduled public hearing during the comment period</li>
+    </ul>
+    <p data-i18n="intro_a11y">If you need this form, the draft amendment, or any city document in another format (large print, Braille, ASL, audio, plain language, or another language), tell us in the Accessibility request section at the bottom of this form, or contact the Office of Accessibility at 719-385-5169.</p>
+    <p data-i18n="intro_optional">All fields except your comment are optional. We collect contact information only to follow up if you ask us to.</p>
+  </section>
+
+  <div class="summary summary-error" role="alert" id="error-summary" hidden>
+    <strong data-i18n="err_heading">Please fix the items below before submitting:</strong>
+    <ul id="error-list"></ul>
+  </div>
+
+  <div class="summary summary-ok" role="status" aria-live="polite" id="ok-summary" hidden>
+    <strong data-i18n="ok_msg">Thank you. Your comment has been received.</strong>
+    <p data-i18n="ok_note" style="margin-top:6px;">A confirmation will be emailed to you if you provided an email address. The full submission is retained in the public record.</p>
+  </div>
+
+  <form id="comment-form" novalidate aria-describedby="form-required-note">
+    <p id="form-required-note" class="sr-only" data-i18n="required_note">Fields marked with an asterisk are required.</p>
+
+    <!-- ─────────────────────────────  About you  ───────────────────────────── -->
+    <fieldset>
+      <legend data-i18n="about_legend">About you</legend>
+      <p class="fs-desc" data-i18n="about_desc">All fields in this section are optional.</p>
+
+      <div class="field">
+        <label for="f-name" data-i18n="lbl_name">Your name</label>
+        <p class="field-desc" id="d-name" data-i18n="desc_name">Provide a name only if you are comfortable having it associated with your comment in the public record.</p>
+        <input type="text" id="f-name" name="name" maxlength="255" autocomplete="name" aria-describedby="d-name">
+      </div>
+
+      <div class="field">
+        <label for="f-email" data-i18n="lbl_email">Email address</label>
+        <p class="field-desc" id="d-email" data-i18n="desc_email">We will only use this to follow up if you ask us to.</p>
+        <input type="email" id="f-email" name="email" autocomplete="email" aria-describedby="d-email">
+      </div>
+
+      <div class="field">
+        <label for="f-phone" data-i18n="lbl_phone">Phone number</label>
+        <p class="field-desc" id="d-phone" data-i18n="desc_phone">Optional. Include if you would like a phone follow-up.</p>
+        <input type="tel" id="f-phone" name="phone" autocomplete="tel" aria-describedby="d-phone">
+      </div>
+
+      <div class="field">
+        <label for="f-zip" data-i18n="lbl_zip">ZIP code</label>
+        <p class="field-desc" id="d-zip" data-i18n="desc_zip">Helps us understand which neighborhoods are weighing in.</p>
+        <input type="text" id="f-zip" name="zip" maxlength="10" size="10" inputmode="numeric" autocomplete="postal-code" aria-describedby="d-zip">
+      </div>
+
+      <fieldset class="field" style="margin-top:8px;border:none;padding:0;background:transparent;">
+        <legend class="radio-group-legend" data-i18n="lbl_role">I am submitting this comment as</legend>
+        <p class="field-desc" id="d-role" data-i18n="desc_role">Choose the description that best fits.</p>
+        <ul class="radio-list" aria-describedby="d-role">
+          <li><input type="radio" id="r-resident" name="submitter_role" value="resident"><label for="r-resident" data-i18n="role_resident">A resident of Colorado Springs</label></li>
+          <li><input type="radio" id="r-qual" name="submitter_role" value="qualifying_population"><label for="r-qual" data-i18n="role_qual">Someone who would qualify for HOME-ARP services (homeless, at risk of homelessness, fleeing violence, or other vulnerable population)</label></li>
+          <li><input type="radio" id="r-provider" name="submitter_role" value="service_provider"><label for="r-provider" data-i18n="role_provider">A service provider or housing professional</label></li>
+          <li><input type="radio" id="r-advocate" name="submitter_role" value="advocate"><label for="r-advocate" data-i18n="role_advocate">An advocate or community organization representative</label></li>
+          <li><input type="radio" id="r-official" name="submitter_role" value="elected_official"><label for="r-official" data-i18n="role_official">An elected or appointed official</label></li>
+          <li><input type="radio" id="r-other" name="submitter_role" value="other" aria-controls="cond-role-other"><label for="r-other" data-i18n="role_other">Other</label></li>
+        </ul>
+      </fieldset>
+
+      <div class="conditional" id="cond-role-other" hidden>
+        <div class="field">
+          <label for="f-role-other" data-i18n="lbl_role_other">Please describe<span class="required" aria-hidden="true">*</span></label>
+          <input type="text" id="f-role-other" name="submitter_role_other" aria-required="false">
+        </div>
+      </div>
+
+      <div class="conditional" id="cond-organization" hidden>
+        <div class="field">
+          <label for="f-org" data-i18n="lbl_org">Organization (if applicable)</label>
+          <p class="field-desc" id="d-org" data-i18n="desc_org">Only if you are commenting on behalf of an organization.</p>
+          <input type="text" id="f-org" name="organization" aria-describedby="d-org">
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ─────────────────────────────  Comment topics  ───────────────────────────── -->
+    <fieldset>
+      <legend data-i18n="topics_legend">What is your comment about?</legend>
+      <p class="fs-desc" id="d-topics" data-i18n="topics_desc">Select all that apply. This helps us route your comment to the right team.</p>
+
+      <fieldset style="border:none;padding:0;background:transparent;">
+        <legend class="sr-only" data-i18n="topics_sr_legend">Topics</legend>
+        <ul class="checkbox-list" aria-describedby="d-topics">
+          <li><input type="checkbox" id="t-rental" name="topics[]" value="affordable_rental"><label for="t-rental" data-i18n="topic_rental">Production of affordable rental housing</label></li>
+          <li><input type="checkbox" id="t-tbra" name="topics[]" value="tbra"><label for="t-tbra" data-i18n="topic_tbra">Tenant-Based Rental Assistance (TBRA)</label></li>
+          <li><input type="checkbox" id="t-services" name="topics[]" value="supportive_services"><label for="t-services" data-i18n="topic_services">Supportive services</label></li>
+          <li><input type="checkbox" id="t-shelter" name="topics[]" value="non_congregate_shelter"><label for="t-shelter" data-i18n="topic_shelter">Non-congregate shelter</label></li>
+          <li><input type="checkbox" id="t-alloc" name="topics[]" value="allocation"><label for="t-alloc" data-i18n="topic_alloc">How funds are allocated across activities</label></li>
+          <li><input type="checkbox" id="t-eligible" name="topics[]" value="eligible_activities"><label for="t-eligible" data-i18n="topic_eligible">Eligible activities and qualifying populations</label></li>
+          <li><input type="checkbox" id="t-participation" name="topics[]" value="public_participation"><label for="t-participation" data-i18n="topic_participation">The public participation process itself</label></li>
+          <li><input type="checkbox" id="t-other" name="topics[]" value="other" aria-controls="cond-topic-other"><label for="t-other" data-i18n="topic_other">Other</label></li>
+        </ul>
+      </fieldset>
+
+      <div class="conditional" id="cond-topic-other" hidden>
+        <div class="field">
+          <label for="f-topic-other" data-i18n="lbl_topic_other">Please describe the other topic<span class="required" aria-hidden="true">*</span></label>
+          <input type="text" id="f-topic-other" name="topic_other" aria-required="false">
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ─────────────────────────────  Your comment  ───────────────────────────── -->
+    <fieldset>
+      <legend data-i18n="comment_legend">Your comment</legend>
+
+      <div class="field">
+        <label for="f-comment">
+          <span class="sr-only" data-i18n="lbl_comment_sr">Comment</span>
+          <span aria-hidden="true" data-i18n="lbl_comment_required">Comment</span><span class="required" aria-hidden="true">*</span>
+        </label>
+        <p class="field-desc" id="d-comment" data-i18n="desc_comment">Please share your comment, question, or suggestion. There is no length limit, but more focused comments are easier to act on.</p>
+        <textarea id="f-comment" name="comment" rows="8" required aria-required="true" aria-describedby="d-comment counter-comment"></textarea>
+        <div class="char-counter" id="counter-comment" aria-live="off"><span id="counter-num">0</span> <span data-i18n="counter_unit">characters</span></div>
+      </div>
+
+      <div class="field">
+        <label for="f-attachment" data-i18n="lbl_attachment">Supporting document (optional)</label>
+        <p class="field-desc" id="d-attachment" data-i18n="desc_attachment">Attach a letter, data, or supporting document. Accepted formats: PDF, Word, plain text, JPG, PNG. Maximum 10 MB.</p>
+        <div class="file-row">
+          <input type="file" id="f-attachment" name="attachment" accept=".pdf,.doc,.docx,.odt,.txt,.rtf,.jpg,.jpeg,.png" aria-describedby="d-attachment a-attachment-hint">
+          <p class="file-hint" id="a-attachment-hint" data-i18n="hint_attachment">10 MB maximum · PDF, DOC, DOCX, ODT, TXT, RTF, JPG, PNG</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ─────────────────────────────  Follow-up  ───────────────────────────── -->
+    <fieldset>
+      <legend data-i18n="follow_legend">Follow-up</legend>
+
+      <div class="conditional" id="cond-contact-back" hidden>
+        <div class="field">
+          <ul class="checkbox-list">
+            <li>
+              <input type="checkbox" id="f-contact" name="contact_back" value="1" aria-describedby="d-contact">
+              <label for="f-contact" data-i18n="lbl_contact">Yes, please contact me about my comment</label>
+            </li>
+          </ul>
+          <p class="field-desc" id="d-contact" data-i18n="desc_contact">If checked, the team may reach out using the contact information you provided.</p>
+        </div>
+      </div>
+
+      <div class="conditional" id="cond-newsletter" hidden>
+        <div class="field">
+          <ul class="checkbox-list">
+            <li>
+              <input type="checkbox" id="f-newsletter" name="newsletter" value="1" aria-describedby="d-newsletter">
+              <label for="f-newsletter" data-i18n="lbl_newsletter">Add me to the Housing &amp; Community Vitality newsletter</label>
+            </li>
+          </ul>
+          <p class="field-desc" id="d-newsletter" data-i18n="desc_newsletter">Occasional updates from the Housing and Homelessness Response Department. You can unsubscribe at any time.</p>
+        </div>
+      </div>
+
+      <p class="field-desc" id="follow-empty-note" data-i18n="follow_empty">Provide an email or phone above to enable follow-up options.</p>
+    </fieldset>
+
+    <!-- ─────────────────────────────  Accessibility request  ───────────────────────────── -->
+    <fieldset>
+      <legend data-i18n="a11y_legend">Accessibility request</legend>
+      <p class="fs-desc" data-i18n="a11y_desc">If you need this form, the draft plan, or city documents in another format, tell us here. The Office of Accessibility will follow up.</p>
+
+      <div class="field">
+        <ul class="checkbox-list">
+          <li>
+            <input type="checkbox" id="f-alt" name="needs_alternate_format" value="1" aria-controls="cond-format">
+            <label for="f-alt" data-i18n="lbl_alt">I need an alternate format or accommodation</label>
+          </li>
+        </ul>
+      </div>
+
+      <div class="conditional" id="cond-format" hidden>
+        <div class="field">
+          <label for="f-format" data-i18n="lbl_format">What format or accommodation do you need?<span class="required" aria-hidden="true">*</span></label>
+          <p class="field-desc" id="d-format" data-i18n="desc_format">For example: large print, Braille, ASL interpretation, plain-language summary, Spanish translation, audio, or any other accommodation.</p>
+          <textarea id="f-format" name="format_needed" rows="3" aria-describedby="d-format" aria-required="false"></textarea>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Privacy -->
+    <div class="privacy" id="privacy">
+      <p data-i18n="privacy_text"><strong>Privacy notice.</strong> Comments submitted through this form become part of the public record for the HOME-ARP Allocation Plan amendment. Personal information you provide (name, contact details) is used only to follow up if you ask us to. Your comment will be summarized in the city's response to public comment, which is published with the final plan. The full submission is retained by the Housing and Homelessness Response Department in accordance with the city's records retention schedule.</p>
+    </div>
+
+    <div class="submit-row">
+      <button type="submit" class="btn-primary" data-i18n="btn_submit">Submit comment</button>
+      <button type="reset" class="btn-secondary" data-i18n="btn_reset">Reset form</button>
+    </div>
+  </form>
+
+  <footer class="foot" data-i18n="footer">
+    Accessible HTML preview of the Drupal Webform replacement · WCAG 2.1 AA · Bilingual EN/ES · Companion to bundle-readme.html
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ───── Language strings ───── */
+  const STR = {
+    en: {}, // English values are inline in the markup
+    es: {
+      eyebrow:'Plan de Asignación HOME-ARP · Comentario Público',
+      h1:'Plan de Asignación HOME-ARP — Comentario Público',
+      headsub:'Envíe un comentario público sobre la enmienda al Plan de Asignación HOME-ARP de la Ciudad de Colorado Springs. El período de comentarios va del 24 de abril al 26 de mayo de 2026.',
+      intro_h2:'Sobre este formulario',
+      intro_p1:'La Ciudad de Colorado Springs está recopilando comentarios públicos sobre una enmienda propuesta a su Plan de Asignación HOME-ARP. El período de comentarios públicos está abierto del <strong>24 de abril al 26 de mayo de 2026</strong>.',
+      intro_p2:'Puede enviar comentarios mediante este formulario, o por cualquiera de los siguientes métodos. Todos los métodos ingresan al expediente público en igualdad de condiciones.',
+      intro_email:'<strong>Correo electrónico:</strong> CityHousingAndCommunityVitality@coloradosprings.gov',
+      intro_phone:'<strong>Teléfono:</strong> 719-385-5859 (los usuarios de TTY pueden marcar 711 para retransmisión)',
+      intro_mail:'<strong>Correo postal:</strong> Housing and Homelessness Response, 30 S. Nevada Ave., Colorado Springs, CO 80903',
+      intro_person:'<strong>En persona:</strong> en cualquier audiencia pública programada durante el período de comentarios',
+      intro_a11y:'Si necesita este formulario, el borrador de la enmienda o cualquier documento de la ciudad en otro formato (letra grande, Braille, ASL, audio, lenguaje sencillo u otro idioma), díganoslo en la sección Solicitud de accesibilidad al final de este formulario, o comuníquese con la Oficina de Accesibilidad al 719-385-5169.',
+      intro_optional:'Todos los campos excepto su comentario son opcionales. Recopilamos información de contacto solo para hacer seguimiento si usted lo solicita.',
+      err_heading:'Por favor corrija los siguientes elementos antes de enviar:',
+      ok_msg:'Gracias. Su comentario ha sido recibido.',
+      ok_note:'Se le enviará una confirmación por correo electrónico si proporcionó una dirección de correo. La presentación completa se conserva en el expediente público.',
+      required_note:'Los campos marcados con asterisco son obligatorios.',
+      about_legend:'Sobre usted',
+      about_desc:'Todos los campos en esta sección son opcionales.',
+      lbl_name:'Su nombre',
+      desc_name:'Indique un nombre solo si se siente cómodo con que se asocie a su comentario en el expediente público.',
+      lbl_email:'Correo electrónico',
+      desc_email:'Solo lo usaremos para hacer seguimiento si usted lo solicita.',
+      lbl_phone:'Número de teléfono',
+      desc_phone:'Opcional. Inclúyalo si desea seguimiento por teléfono.',
+      lbl_zip:'Código postal',
+      desc_zip:'Nos ayuda a entender qué vecindarios están participando.',
+      lbl_role:'Envío este comentario como',
+      desc_role:'Elija la descripción que mejor se ajuste.',
+      role_resident:'Un residente de Colorado Springs',
+      role_qual:'Alguien que calificaría para los servicios HOME-ARP (sin hogar, en riesgo de quedarse sin hogar, que huye de la violencia u otra población vulnerable)',
+      role_provider:'Un proveedor de servicios o profesional de vivienda',
+      role_advocate:'Un defensor o representante de una organización comunitaria',
+      role_official:'Un funcionario electo o designado',
+      role_other:'Otro',
+      lbl_role_other:'Por favor describa',
+      lbl_org:'Organización (si corresponde)',
+      desc_org:'Solo si comenta en nombre de una organización.',
+      topics_legend:'¿De qué se trata su comentario?',
+      topics_desc:'Seleccione todo lo que aplique. Esto nos ayuda a dirigir su comentario al equipo correcto.',
+      topics_sr_legend:'Temas',
+      topic_rental:'Producción de vivienda de alquiler asequible',
+      topic_tbra:'Asistencia de Alquiler Basada en Inquilinos (TBRA)',
+      topic_services:'Servicios de apoyo',
+      topic_shelter:'Refugio no congregado',
+      topic_alloc:'Cómo se asignan los fondos entre actividades',
+      topic_eligible:'Actividades elegibles y poblaciones que califican',
+      topic_participation:'El proceso de participación pública en sí',
+      topic_other:'Otro',
+      lbl_topic_other:'Describa el otro tema',
+      comment_legend:'Su comentario',
+      lbl_comment_sr:'Comentario',
+      lbl_comment_required:'Comentario',
+      desc_comment:'Por favor comparta su comentario, pregunta o sugerencia. No hay límite de longitud, pero los comentarios más enfocados son más fáciles de procesar.',
+      counter_unit:'caracteres',
+      lbl_attachment:'Documento de apoyo (opcional)',
+      desc_attachment:'Adjunte una carta, datos o un documento de apoyo. Formatos aceptados: PDF, Word, texto plano, JPG, PNG. Máximo 10 MB.',
+      hint_attachment:'Máximo 10 MB · PDF, DOC, DOCX, ODT, TXT, RTF, JPG, PNG',
+      follow_legend:'Seguimiento',
+      lbl_contact:'Sí, por favor contácteme sobre mi comentario',
+      desc_contact:'Si marca esta casilla, el equipo puede contactarlo usando la información que proporcionó.',
+      lbl_newsletter:'Agregarme al boletín de Vivienda y Vitalidad Comunitaria',
+      desc_newsletter:'Actualizaciones ocasionales del Departamento de Respuesta a la Falta de Vivienda. Puede darse de baja en cualquier momento.',
+      follow_empty:'Proporcione un correo electrónico o teléfono arriba para habilitar las opciones de seguimiento.',
+      a11y_legend:'Solicitud de accesibilidad',
+      a11y_desc:'Si necesita este formulario, el borrador del plan o documentos de la ciudad en otro formato, díganoslo aquí. La Oficina de Accesibilidad hará seguimiento.',
+      lbl_alt:'Necesito un formato alternativo o adaptación',
+      lbl_format:'¿Qué formato o adaptación necesita?',
+      desc_format:'Por ejemplo: letra grande, Braille, interpretación en ASL, resumen en lenguaje sencillo, traducción al español, audio o cualquier otra adaptación.',
+      privacy_text:'<strong>Aviso de privacidad.</strong> Los comentarios enviados mediante este formulario se convierten en parte del expediente público para la enmienda al Plan de Asignación HOME-ARP. La información personal que proporciona (nombre, datos de contacto) se utiliza solo para hacer seguimiento si usted lo solicita. Su comentario será resumido en la respuesta de la ciudad a los comentarios públicos, que se publica con el plan final. La presentación completa la conserva el Departamento de Respuesta a la Falta de Vivienda de acuerdo con el calendario de retención de registros de la ciudad.',
+      btn_submit:'Enviar comentario',
+      btn_reset:'Restablecer formulario',
+      footer:'Vista previa HTML accesible del reemplazo del Drupal Webform · WCAG 2.1 AA · Bilingüe EN/ES · Compañero de bundle-readme.html'
+    }
+  };
+
+  // Capture English defaults from the DOM so language toggle can restore them.
+  const enDefaults = {};
+  document.querySelectorAll('[data-i18n]').forEach(el=>{enDefaults[el.dataset.i18n]=el.innerHTML;});
+  ['eyebrow','h1','headsub'].forEach(k=>{
+    const el=document.querySelector(`[data-i18n-${k}]`);
+    if(el) enDefaults[k]=el.innerHTML;
+  });
+  STR.en = Object.assign({},enDefaults);
+
+  function setLang(code, btn){
+    document.documentElement.lang = code;
+    document.querySelectorAll('.lang-bar button').forEach(b=>b.setAttribute('aria-pressed', b===btn ? 'true' : 'false'));
+    const dict = STR[code] || STR.en;
+    ['eyebrow','h1','headsub'].forEach(k=>{
+      const el=document.querySelector(`[data-i18n-${k}]`);
+      if(el && dict[k]) el.innerHTML = dict[k];
+    });
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const k=el.dataset.i18n;
+      if(dict[k]) el.innerHTML = dict[k];
+    });
+  }
+  window.setLang = setLang;
+
+  /* ───── Conditional fields ───── */
+  function show(el){if(el){el.hidden=false; el.querySelectorAll('[aria-required]').forEach(i=>i.setAttribute('aria-required','true'));}}
+  function hide(el){if(el){el.hidden=true; el.querySelectorAll('[aria-required]').forEach(i=>i.setAttribute('aria-required','false'));}}
+
+  const roleRadios = document.querySelectorAll('input[name="submitter_role"]');
+  const condRoleOther = document.getElementById('cond-role-other');
+  const condOrg = document.getElementById('cond-organization');
+  function updateRole(){
+    const sel = document.querySelector('input[name="submitter_role"]:checked');
+    if(!sel){hide(condRoleOther); hide(condOrg); return;}
+    if(sel.value === 'other'){show(condRoleOther);} else {hide(condRoleOther);}
+    if(['service_provider','advocate','elected_official'].includes(sel.value)){show(condOrg);} else {hide(condOrg);}
+  }
+  roleRadios.forEach(r=>r.addEventListener('change', updateRole));
+
+  const topicOther = document.getElementById('t-other');
+  const condTopicOther = document.getElementById('cond-topic-other');
+  topicOther && topicOther.addEventListener('change', ()=>{
+    topicOther.checked ? show(condTopicOther) : hide(condTopicOther);
+  });
+
+  const altCheckbox = document.getElementById('f-alt');
+  const condFormat = document.getElementById('cond-format');
+  altCheckbox && altCheckbox.addEventListener('change', ()=>{
+    altCheckbox.checked ? show(condFormat) : hide(condFormat);
+  });
+
+  const emailInput = document.getElementById('f-email');
+  const phoneInput = document.getElementById('f-phone');
+  const condContact = document.getElementById('cond-contact-back');
+  const condNewsletter = document.getElementById('cond-newsletter');
+  const followEmptyNote = document.getElementById('follow-empty-note');
+  function updateFollow(){
+    const hasEmail = emailInput && emailInput.value.trim().length > 0;
+    const hasPhone = phoneInput && phoneInput.value.trim().length > 0;
+    if(hasEmail || hasPhone){show(condContact);} else {hide(condContact);}
+    if(hasEmail){show(condNewsletter);} else {hide(condNewsletter);}
+    if(followEmptyNote) followEmptyNote.hidden = (hasEmail || hasPhone);
+  }
+  emailInput && emailInput.addEventListener('input', updateFollow);
+  phoneInput && phoneInput.addEventListener('input', updateFollow);
+  updateFollow();
+
+  /* ───── Character counter ───── */
+  const commentField = document.getElementById('f-comment');
+  const counterNum = document.getElementById('counter-num');
+  commentField && commentField.addEventListener('input', ()=>{
+    counterNum.textContent = commentField.value.length;
+  });
+
+  /* ───── Form validation + submit ───── */
+  const form = document.getElementById('comment-form');
+  const errorSummary = document.getElementById('error-summary');
+  const errorList = document.getElementById('error-list');
+  const okSummary = document.getElementById('ok-summary');
+
+  form.addEventListener('submit', e=>{
+    e.preventDefault();
+    errorList.innerHTML='';
+    const errors=[];
+
+    if(!commentField.value.trim()){
+      commentField.setAttribute('aria-invalid','true');
+      errors.push({id:'f-comment', msg: document.documentElement.lang==='es' ? 'El campo de comentario es obligatorio.' : 'The comment field is required.'});
+    } else {
+      commentField.removeAttribute('aria-invalid');
+    }
+
+    if(emailInput.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)){
+      emailInput.setAttribute('aria-invalid','true');
+      errors.push({id:'f-email', msg: document.documentElement.lang==='es' ? 'La dirección de correo electrónico no es válida.' : 'The email address is not valid.'});
+    } else {
+      emailInput.removeAttribute('aria-invalid');
+    }
+
+    if(document.getElementById('r-other').checked && !document.getElementById('f-role-other').value.trim()){
+      document.getElementById('f-role-other').setAttribute('aria-invalid','true');
+      errors.push({id:'f-role-other', msg: document.documentElement.lang==='es' ? 'Por favor describa su rol.' : 'Please describe your role.'});
+    }
+
+    if(topicOther.checked && !document.getElementById('f-topic-other').value.trim()){
+      document.getElementById('f-topic-other').setAttribute('aria-invalid','true');
+      errors.push({id:'f-topic-other', msg: document.documentElement.lang==='es' ? 'Por favor describa el otro tema.' : 'Please describe the other topic.'});
+    }
+
+    if(altCheckbox.checked && !document.getElementById('f-format').value.trim()){
+      document.getElementById('f-format').setAttribute('aria-invalid','true');
+      errors.push({id:'f-format', msg: document.documentElement.lang==='es' ? 'Por favor describa el formato o adaptación que necesita.' : 'Please describe the format or accommodation you need.'});
+    }
+
+    if(errors.length){
+      errors.forEach(err=>{
+        const li=document.createElement('li');
+        const a=document.createElement('a');
+        a.href='#'+err.id; a.textContent=err.msg;
+        li.appendChild(a);
+        errorList.appendChild(li);
+      });
+      okSummary.hidden=true;
+      errorSummary.hidden=false;
+      errorSummary.focus({preventScroll:false});
+      errorSummary.scrollIntoView({behavior:'smooth', block:'start'});
+      return;
+    }
+
+    errorSummary.hidden=true;
+    okSummary.hidden=false;
+    okSummary.scrollIntoView({behavior:'smooth', block:'start'});
+    /* In production this would POST to the webhook receiver — preview only. */
+  });
+})();
+</script>
+
+</body>
+</html>

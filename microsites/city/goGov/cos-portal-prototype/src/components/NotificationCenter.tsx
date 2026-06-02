@@ -52,11 +52,11 @@ export function NotificationCenter() {
   return (
     <section aria-labelledby="notif-heading" className="space-y-6 max-w-4xl">
       <div className="space-y-2">
-        <p className="text-xs uppercase tracking-wide text-slate-600">Subscriptions</p>
-        <h1 id="notif-heading" className="text-3xl font-semibold text-slate-900">
+        <p className="text-xs uppercase tracking-wide text-ink-meta">Subscriptions</p>
+        <h1 id="notif-heading" className="text-3xl font-semibold text-ink">
           Notifications.
         </h1>
-        <p className="text-slate-700">
+        <p className="text-ink-secondary">
           One place to manage how the City stays in touch with you — newsletters,
           zipcode-specific alerts, volunteer matches, project updates, and accountability
           dashboard changes. Zipcode subscriptions narrow automatically to the jurisdictions
@@ -75,8 +75,8 @@ export function NotificationCenter() {
 
       <NewSubscriptionFlow onAdd={add} channels={channels} email={email} />
 
-      <div className="rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-700">
-        <p className="font-medium text-slate-900 mb-1">Why this page exists</p>
+      <div className="rounded-md border border-line bg-surface p-4 text-sm text-ink-secondary">
+        <p className="font-medium text-ink mb-1">Why this page exists</p>
         <p>
           Subscriptions are the spine of a civic relationship. A one-way directory tells you
           what exists. Subscriptions tell you when what exists changes — a pothole you
@@ -112,13 +112,13 @@ function ChannelSetup({
   return (
     <section
       aria-labelledby="channels-heading"
-      className="rounded-md border border-slate-300 bg-slate-50 p-4 space-y-3"
+      className="rounded-md border border-line-strong bg-surface-muted p-4 space-y-3"
     >
-      <h2 id="channels-heading" className="text-base font-semibold text-slate-900">
+      <h2 id="channels-heading" className="text-base font-semibold text-ink">
         How should we reach you?
       </h2>
       <div>
-        <label htmlFor="notif-email" className="block text-sm font-medium text-slate-900">
+        <label htmlFor="notif-email" className="block text-sm font-medium text-ink">
           Email
         </label>
         <input
@@ -128,15 +128,15 @@ function ChannelSetup({
           value={email}
           onChange={(e) => onEmail(e.target.value)}
           placeholder="you@example.com"
-          className="mt-1 w-full rounded-md border border-slate-400 px-3 py-2 text-sm focus:border-blue-700"
+          className="mt-1 w-full rounded-md border border-line-stronger px-3 py-2 text-sm focus:border-brand-ink min-h-11"
         />
       </div>
       <fieldset>
-        <legend className="text-sm font-medium text-slate-900 mb-1">Channels</legend>
+        <legend className="text-sm font-medium text-ink mb-1">Channels</legend>
         <ul role="list" className="flex flex-wrap gap-2">
           {(['email', 'sms', 'push'] as DeliveryChannel[]).map((c) => (
             <li key={c}>
-              <label className="inline-flex items-center gap-2 text-sm text-slate-800 min-h-8">
+              <label className="inline-flex items-center gap-2 text-sm text-ink-strong min-h-8">
                 <input
                   type="checkbox"
                   checked={channels.has(c)}
@@ -164,12 +164,12 @@ function ActiveSubscriptions({
     return (
       <section
         aria-labelledby="active-heading"
-        className="rounded-md border border-slate-200 bg-white p-4"
+        className="rounded-md border border-line bg-surface p-4"
       >
-        <h2 id="active-heading" className="text-base font-semibold text-slate-900">
+        <h2 id="active-heading" className="text-base font-semibold text-ink">
           Your subscriptions
         </h2>
-        <p className="text-sm text-slate-700 mt-1">
+        <p className="text-sm text-ink-secondary mt-1">
           None yet. Add one below — nothing is actually sent in the prototype, but every
           sub is saved to browser storage so you can see the shape.
         </p>
@@ -178,35 +178,35 @@ function ActiveSubscriptions({
   }
   return (
     <section aria-labelledby="active-heading" className="space-y-2">
-      <h2 id="active-heading" className="text-base font-semibold text-slate-900">
+      <h2 id="active-heading" className="text-base font-semibold text-ink">
         Your subscriptions ({subs.length})
       </h2>
       <ul role="list" className="space-y-2">
         {subs.map((s) => (
           <li
             key={s.id}
-            className="rounded-md border border-slate-200 bg-white p-3 space-y-1"
+            className="rounded-md border border-line bg-surface p-3 space-y-1"
           >
             <div className="flex items-start justify-between gap-2">
-              <p className="text-sm font-medium text-slate-900">
+              <p className="text-sm font-medium text-ink">
                 {summarizeSpec(s.spec)}
               </p>
               <button
                 type="button"
                 onClick={() => onRemove(s.id)}
                 aria-label={`Remove subscription: ${summarizeSpec(s.spec)}`}
-                className="rounded-md border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800 hover:bg-slate-50 min-h-8"
+                className="rounded-md border border-line-strong bg-surface px-2 py-1 text-xs text-ink-strong hover:bg-surface-muted min-h-8"
               >
                 Remove
               </button>
             </div>
-            <p className="text-xs text-slate-700">
+            <p className="text-xs text-ink-secondary">
               {s.email && <>Delivered to {s.email} · </>}
               {s.channels.join(', ')}
             </p>
             {s.resolvedJurisdictions && s.resolvedJurisdictions.length > 0 && (
-              <p className="text-xs text-slate-700">
-                <span className="font-medium text-slate-900">Jurisdictions:</span>{' '}
+              <p className="text-xs text-ink-secondary">
+                <span className="font-medium text-ink">Jurisdictions:</span>{' '}
                 {s.resolvedJurisdictions
                   .map((j) => JURISDICTION_LABELS[j])
                   .join(' · ')}
@@ -234,19 +234,19 @@ function NewSubscriptionFlow({
   return (
     <section
       aria-labelledby="new-heading"
-      className="rounded-md border border-slate-300 bg-white p-4 space-y-4"
+      className="rounded-md border border-line-strong bg-surface p-4 space-y-4"
     >
       <div>
-        <h2 id="new-heading" className="text-base font-semibold text-slate-900">
+        <h2 id="new-heading" className="text-base font-semibold text-ink">
           Add a subscription
         </h2>
-        <p className="text-xs text-slate-700 mt-0.5">
+        <p className="text-xs text-ink-secondary mt-0.5">
           Pick a kind. Add as many as you want. Everything saves locally for the prototype.
         </p>
       </div>
 
       <fieldset>
-        <legend className="text-sm font-medium text-slate-900 mb-1">Kind</legend>
+        <legend className="text-sm font-medium text-ink mb-1">Kind</legend>
         <ul role="list" className="flex flex-wrap gap-2">
           {(
             [
@@ -264,8 +264,8 @@ function NewSubscriptionFlow({
                 className={[
                   'rounded-full border px-3 py-1 text-xs min-h-8',
                   kind === k
-                    ? 'border-blue-700 bg-blue-700 text-white font-medium'
-                    : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-50',
+                    ? 'border-brand-hover bg-brand-hover text-white font-medium'
+                    : 'border-line-strong bg-surface text-ink-strong hover:bg-surface-muted',
                 ].join(' ')}
               >
                 {lbl}
@@ -276,7 +276,7 @@ function NewSubscriptionFlow({
       </fieldset>
 
       {!canSubmit && (
-        <p className="rounded-md border border-amber-400 bg-amber-50 p-2 text-xs text-amber-900">
+        <p className="rounded-md border border-warning bg-warning-surface p-2 text-xs text-warning-ink">
           Add an email and pick at least one channel above first.
         </p>
       )}
@@ -308,11 +308,11 @@ function NewsletterForm({
       className="space-y-2"
     >
       <fieldset>
-        <legend className="text-sm font-medium text-slate-900 mb-1">Cadence</legend>
+        <legend className="text-sm font-medium text-ink mb-1">Cadence</legend>
         <ul role="list" className="flex gap-2">
           {(['weekly', 'monthly'] as const).map((c) => (
             <li key={c}>
-              <label className="inline-flex items-center gap-2 text-sm text-slate-800 min-h-8">
+              <label className="inline-flex items-center gap-2 text-sm text-ink-strong min-h-8">
                 <input
                   type="radio"
                   name="cadence"
@@ -329,7 +329,7 @@ function NewsletterForm({
       <button
         type="submit"
         disabled={disabled}
-        className="rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 disabled:opacity-50 min-h-11"
+        className="rounded-md bg-brand-hover px-4 py-2 text-sm font-medium text-white hover:bg-brand-dark disabled:opacity-50 min-h-11"
       >
         Subscribe
       </button>
@@ -370,7 +370,7 @@ function ZipcodeForm({
       }}
       className="space-y-2"
     >
-      <label htmlFor="zip-input" className="block text-sm font-medium text-slate-900">
+      <label htmlFor="zip-input" className="block text-sm font-medium text-ink">
         Your zipcode
       </label>
       <input
@@ -382,17 +382,17 @@ function ZipcodeForm({
         value={zip}
         onChange={(e) => setZip(e.target.value.replace(/\D/g, '').slice(0, 5))}
         placeholder="e.g. 80903"
-        className="w-full max-w-48 rounded-md border border-slate-400 px-3 py-2 text-sm focus:border-blue-700"
+        className="w-full max-w-48 rounded-md border border-line-stronger px-3 py-2 text-sm focus:border-brand-ink min-h-11"
       />
       {resolved.length > 0 && (
-        <p role="status" aria-live="polite" className="text-xs text-slate-700">
-          <span className="font-medium text-slate-900">Your jurisdictions:</span>{' '}
+        <p role="status" aria-live="polite" className="text-xs text-ink-secondary">
+          <span className="font-medium text-ink">Your jurisdictions:</span>{' '}
           {resolved.map((j) => JURISDICTION_LABELS[j]).join(' · ')}. Alerts narrow to these
           automatically.
         </p>
       )}
       <fieldset>
-        <legend className="text-sm font-medium text-slate-900 mb-1">
+        <legend className="text-sm font-medium text-ink mb-1">
           Which kinds of alerts?
         </legend>
         <ul role="list" className="flex flex-wrap gap-1.5">
@@ -405,8 +405,8 @@ function ZipcodeForm({
                 className={[
                   'rounded-full border px-3 py-1 text-xs min-h-8',
                   cats.has(c)
-                    ? 'border-blue-700 bg-blue-700 text-white font-medium'
-                    : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-50',
+                    ? 'border-brand-hover bg-brand-hover text-white font-medium'
+                    : 'border-line-strong bg-surface text-ink-strong hover:bg-surface-muted',
                 ].join(' ')}
               >
                 {ZIP_CATEGORY_LABELS[c]}
@@ -418,7 +418,7 @@ function ZipcodeForm({
       <button
         type="submit"
         disabled={disabled || !zip || cats.size === 0}
-        className="rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 disabled:opacity-50 min-h-11"
+        className="rounded-md bg-brand-hover px-4 py-2 text-sm font-medium text-white hover:bg-brand-dark disabled:opacity-50 min-h-11"
       >
         Subscribe
       </button>
@@ -443,7 +443,7 @@ function ProjectUpdatesForm({
       }}
       className="space-y-2"
     >
-      <label htmlFor="project-id" className="block text-sm font-medium text-slate-900">
+      <label htmlFor="project-id" className="block text-sm font-medium text-ink">
         Project ID (find one on "What's being built")
       </label>
       <input
@@ -452,12 +452,12 @@ function ProjectUpdatesForm({
         value={projectId}
         onChange={(e) => setProjectId(e.target.value)}
         placeholder="e.g. cip-union-blvd"
-        className="w-full rounded-md border border-slate-400 px-3 py-2 text-sm focus:border-blue-700"
+        className="w-full rounded-md border border-line-stronger px-3 py-2 text-sm focus:border-brand-ink min-h-11"
       />
       <button
         type="submit"
         disabled={disabled || !projectId}
-        className="rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 disabled:opacity-50 min-h-11"
+        className="rounded-md bg-brand-hover px-4 py-2 text-sm font-medium text-white hover:bg-brand-dark disabled:opacity-50 min-h-11"
       >
         Subscribe
       </button>
@@ -492,14 +492,14 @@ function DashboardThresholdForm({
       className="space-y-2"
     >
       <div>
-        <label htmlFor="metric-pick" className="block text-sm font-medium text-slate-900">
+        <label htmlFor="metric-pick" className="block text-sm font-medium text-ink">
           Metric
         </label>
         <select
           id="metric-pick"
           value={metricId}
           onChange={(e) => setMetricId(e.target.value)}
-          className="mt-1 w-full rounded-md border border-slate-400 px-3 py-2 text-sm bg-white focus:border-blue-700 min-h-11"
+          className="mt-1 w-full rounded-md border border-line-stronger px-3 py-2 text-sm bg-surface focus:border-brand-ink min-h-11"
         >
           {metrics.map((m) => (
             <option key={m.id} value={m.id}>
@@ -509,7 +509,7 @@ function DashboardThresholdForm({
         </select>
       </div>
       <fieldset>
-        <legend className="text-sm font-medium text-slate-900 mb-1">Notify me when</legend>
+        <legend className="text-sm font-medium text-ink mb-1">Notify me when</legend>
         <ul role="list" className="space-y-1">
           {(
             [
@@ -519,7 +519,7 @@ function DashboardThresholdForm({
             ] as const
           ).map(([v, lbl]) => (
             <li key={v}>
-              <label className="inline-flex items-center gap-2 text-sm text-slate-800 min-h-8">
+              <label className="inline-flex items-center gap-2 text-sm text-ink-strong min-h-8">
                 <input
                   type="radio"
                   name="trigger"
@@ -536,7 +536,7 @@ function DashboardThresholdForm({
       <button
         type="submit"
         disabled={disabled}
-        className="rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 disabled:opacity-50 min-h-11"
+        className="rounded-md bg-brand-hover px-4 py-2 text-sm font-medium text-white hover:bg-brand-dark disabled:opacity-50 min-h-11"
       >
         Subscribe
       </button>

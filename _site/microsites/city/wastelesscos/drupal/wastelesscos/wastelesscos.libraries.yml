@@ -1,0 +1,18 @@
+wastelesscos:
+  version: 1.0.0
+  css:
+    theme:
+      css/wastelesscos.css: {}
+  js:
+    js/wastelesscos.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+  header: false
+
+fonts:
+  version: 1.0.0
+  css:
+    theme:
+      'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap':
+        { type: external, minified: true }

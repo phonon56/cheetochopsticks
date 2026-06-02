@@ -1,0 +1,73 @@
+{
+  "generated_from": "2024 Colorado Springs ACFR, Notes to Financial Statements III.G Sales Tax Increment Financings",
+  "as_of": "2024-12-31",
+  "description": "CSURA authorizations to use a percentage of annual City General Fund sales tax increments generated within defined geographies to support urban renewal projects. Parcels within these boundaries generate sales tax that is redirected, not seen by the General Fund.",
+  "authorizations": [
+    {
+      "project": "OneVeLa",
+      "year_adopted": 2024,
+      "percentage_authorized": 87.5,
+      "limit": "Not to exceed 25 years"
+    },
+    {
+      "project": "City Gate 2.0",
+      "year_adopted": 2023,
+      "percentage_authorized": 100.0,
+      "limit": "Not to exceed 25 years"
+    },
+    {
+      "project": "Gold Hill Mesa Commercial",
+      "year_adopted": 2023,
+      "percentage_authorized": 100.0,
+      "limit": "Not to exceed 25 years"
+    },
+    {
+      "project": "Hancock Commons",
+      "year_adopted": 2023,
+      "percentage_authorized": 50.0,
+      "limit": "Not to exceed 25 years"
+    },
+    {
+      "project": "True North Commons",
+      "year_adopted": 2019,
+      "percentage_authorized": 87.5,
+      "limit": "Not to exceed 25 years"
+    },
+    {
+      "project": "Museum and Park",
+      "year_adopted": 2018,
+      "percentage_authorized": 87.5,
+      "limit": "Not to exceed 25 years"
+    },
+    {
+      "project": "Tejon and Costilla",
+      "year_adopted": 2018,
+      "percentage_authorized": 87.5,
+      "limit": "Not to exceed 25 years"
+    },
+    {
+      "project": "South Nevada Area",
+      "year_adopted": 2015,
+      "percentage_authorized": 100.0,
+      "limit": "Not to exceed 25 years"
+    },
+    {
+      "project": "Copper Ridge Metropolitan District Area",
+      "year_adopted": 2013,
+      "percentage_authorized": 87.5,
+      "limit": "Through 2044"
+    },
+    {
+      "project": "Ivywild",
+      "year_adopted": 2012,
+      "percentage_authorized": 100.0,
+      "limit": "Through June 28, 2036"
+    },
+    {
+      "project": "North Nevada Avenue Corridor",
+      "year_adopted": 2007,
+      "percentage_authorized": 100.0,
+      "limit": "Not to exceed 23 years and not to exceed $98.8 million"
+    }
+  ]
+}

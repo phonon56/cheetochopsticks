@@ -10,9 +10,9 @@ import {
 } from '../data/performance';
 
 const STATUS_COLORS: Record<ReceiptStatus, string> = {
-  verified: 'bg-green-100 text-green-900 border-green-300',
-  snapshot: 'bg-blue-100 text-blue-900 border-blue-300',
-  illustrative: 'bg-amber-100 text-amber-900 border-amber-300',
+  verified: 'bg-success-surface text-success-ink border-success',
+  snapshot: 'bg-info-surface text-info-ink border-info',
+  illustrative: 'bg-warning-surface text-warning-ink border-warning',
 };
 
 export function Performance() {
@@ -27,13 +27,13 @@ export function Performance() {
   return (
     <section aria-labelledby="performance-heading" className="space-y-6 max-w-4xl">
       <div className="space-y-2">
-        <p className="text-xs uppercase tracking-wide text-slate-600">
+        <p className="text-xs uppercase tracking-wide text-ink-meta">
           Public receipts
         </p>
-        <h1 id="performance-heading" className="text-3xl font-semibold text-slate-900">
+        <h1 id="performance-heading" className="text-3xl font-semibold text-ink">
           How we're doing.
         </h1>
-        <p className="text-slate-700">
+        <p className="text-ink-secondary">
           The numbers behind the service. Audits, response times, compliance scores —
           the kind of information most civic sites bury. Every receipt is tagged with
           its status so you can tell what's live, what's a snapshot, and what's a
@@ -41,9 +41,9 @@ export function Performance() {
         </p>
       </div>
 
-      <div className="rounded-md border border-slate-300 bg-slate-50 p-3 text-sm">
-        <p className="font-medium text-slate-900">Receipts shown: {receipts.length}</p>
-        <ul className="flex flex-wrap gap-3 mt-1 text-xs text-slate-800">
+      <div className="rounded-md border border-line-strong bg-surface-muted p-3 text-sm">
+        <p className="font-medium text-ink">Receipts shown: {receipts.length}</p>
+        <ul className="flex flex-wrap gap-3 mt-1 text-xs text-ink-strong">
           <li>
             <StatusBadge status="verified" /> {counts.verified} live & verified
           </li>
@@ -63,8 +63,8 @@ export function Performance() {
         return <CategorySection key={cat} category={cat} receipts={list} />;
       })}
 
-      <div className="rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-700">
-        <p className="font-medium text-slate-900 mb-1">Why this page exists</p>
+      <div className="rounded-md border border-line bg-surface p-4 text-sm text-ink-secondary">
+        <p className="font-medium text-ink mb-1">Why this page exists</p>
         <p>
           Residents deserve to see the numbers that describe how their city is doing,
           not just what their city offers. Building the portal as the measurement
@@ -87,7 +87,7 @@ function CategorySection({
 }) {
   return (
     <section aria-labelledby={`cat-${category}`} className="space-y-3">
-      <h2 id={`cat-${category}`} className="text-xl font-semibold text-slate-900">
+      <h2 id={`cat-${category}`} className="text-xl font-semibold text-ink">
         {CATEGORY_LABELS[category]}
       </h2>
       <ul role="list" className="grid gap-3 md:grid-cols-2">
@@ -102,22 +102,22 @@ function CategorySection({
 function ReceiptCard({ receipt }: { receipt: Receipt }) {
   const trend = receipt.trend && receipt.trend !== 'unknown' ? receipt.trend : null;
   return (
-    <li className="rounded-lg border border-slate-200 bg-white p-4 space-y-2">
+    <li className="rounded-lg border border-line bg-surface p-4 space-y-2">
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-base font-semibold text-slate-900">{receipt.title}</h3>
+        <h3 className="text-base font-semibold text-ink">{receipt.title}</h3>
         <StatusBadge status={receipt.status} />
       </div>
-      <p className="text-2xl font-semibold text-slate-900">
+      <p className="text-2xl font-semibold text-ink">
         {receipt.headline}
         {trend && (
           <span
             className={[
               'ml-2 text-sm font-normal',
               trend === 'better'
-                ? 'text-green-800'
+                ? 'text-success-ink'
                 : trend === 'worse'
-                  ? 'text-red-800'
-                  : 'text-slate-600',
+                  ? 'text-danger-ink'
+                  : 'text-ink-meta',
             ].join(' ')}
           >
             <span aria-hidden="true">{TREND_LABELS[trend].label}</span>
@@ -126,26 +126,26 @@ function ReceiptCard({ receipt }: { receipt: Receipt }) {
         )}
       </p>
       {receipt.subhead && (
-        <p className="text-sm text-slate-700">{receipt.subhead}</p>
+        <p className="text-sm text-ink-secondary">{receipt.subhead}</p>
       )}
       {receipt.target && (
-        <p className="text-xs text-slate-700">
-          <span className="font-medium text-slate-900">Target:</span> {receipt.target}
+        <p className="text-xs text-ink-secondary">
+          <span className="font-medium text-ink">Target:</span> {receipt.target}
         </p>
       )}
       {receipt.method && (
-        <p className="text-xs text-slate-600 italic">{receipt.method}</p>
+        <p className="text-xs text-ink-meta italic">{receipt.method}</p>
       )}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-700 pt-1">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-secondary pt-1">
         <span>
-          <span className="font-medium text-slate-900">As of:</span> {receipt.asOf}
+          <span className="font-medium text-ink">As of:</span> {receipt.asOf}
         </span>
         {receipt.source && (
           <a
             href={receipt.source.url}
             target={receipt.source.url.startsWith('http') ? '_blank' : undefined}
             rel="noreferrer"
-            className="text-blue-700 underline"
+            className="text-brand-ink underline"
           >
             {receipt.source.label} {receipt.source.url.startsWith('http') ? '↗' : ''}
           </a>

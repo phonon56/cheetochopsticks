@@ -1,0 +1,110 @@
+<h1>Plain-Language Complaint Intake</h1>
+<p>An open-source, single-file reference implementation of a <strong>plain-language intake</strong> for a multi-step government complaint form. A person describes what happened in one natural-language box; the page extracts structured details <strong>in their browser</strong> and presents a pre-filled, reviewable copy of the form's steps, then hands off to the official form.</p>
+<p>It is built as a concept/demonstration around the FBI <strong>IC3</strong> complaint flow, but every agency-specific detail is data in one <code>CONFIG</code> block, so it can be re-pointed at any structured form.</p>
+<ul>
+<li><strong>No backend, no build step, no third-party runtime.</strong> One HTML file.</li>
+<li><strong>Nothing is transmitted.</strong> All processing is client-side. The tool never submits on the user's behalf — it hands off to the official form.</li>
+<li><strong>Accessibility target: WCAG 2.1 Level AAA.</strong></li>
+</ul>
+<hr>
+<h2>Quick start</h2>
+<p>Open <code>ic3_intake_opensource.html</code> in a browser. That's it — there is no install step. To host it, drop the file on any static web server (or GitHub Pages, S3, an agency CMS, etc.).</p>
+<p>The page ships with a restrictive <code>Content-Security-Policy</code> meta tag and <strong>no third-party requests by default</strong> — it renders with system-font fallbacks (Georgia / system sans / system mono). To use the original web fonts (Libre Baskerville, Inter, IBM Plex Mono), uncomment the Google Fonts block at the top of the <code>&lt;head&gt;</code> and extend the CSP <code>style-src</code> / <code>font-src</code> to allow <code>fonts.googleapis.com</code> and <code>fonts.gstatic.com</code>. For zero third-party dependencies, self-host the <code>.woff2</code> files via <code>@font-face</code>.</p>
+<hr>
+<h2>How it works</h2>
+<ol>
+<li><strong>One input.</strong> The user writes a free-text account of the incident. Prompt chips nudge for missing detail (when, money &amp; method, who, first contact, contact details).</li>
+<li><strong>Client-side extraction.</strong> Configurable pattern matchers detect amounts, dates, emails, phone numbers, URLs, payment method, likely crime type, location, and subject name/business.</li>
+<li><strong>Pre-filled review.</strong> The detected data is mapped into the destination form's steps. Each field shows an honest provenance badge:
+<ul>
+<li><code>✓ from your description</code> — quoted from the text</li>
+<li><code>auto-suggested · check</code> — inferred (e.g., payment method from keywords)</li>
+<li><code>guessed · please confirm</code> — low-confidence (e.g., a relative date)</li>
+<li><code>you fill this in</code> — not detected</li>
+</ul>
+</li>
+<li><strong>Hand-off.</strong> The user reviews/edits, optionally copies a plain-text summary, and continues to the official form to submit (including any CAPTCHA step).</li>
+</ol>
+<p>Browser autofill is supported on the personal-contact fields via correct <code>autocomplete</code> tokens (<code>name</code>, <code>tel</code>, <code>email</code>, <code>address-level2</code>, <code>address-level1</code>, <code>postal-code</code>).</p>
+<hr>
+<h2>Adapting it (edit only <code>CONFIG</code>)</h2>
+<p>Everything an agency needs to change lives in the <code>CONFIG</code> object at the top of the <code>&lt;script&gt;</code> block. The engine below it does not need editing. Search the file for <strong><code>EDIT HERE</code></strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brand</code>, <code>govNote</code>, <code>copy</code></td>
+<td>Names, seal text, headings, hero copy, textarea placeholder, hand-off text</td>
+</tr>
+<tr>
+<td><code>officialForm</code></td>
+<td>The destination form URL and button label</td>
+</tr>
+<tr>
+<td><code>prompts</code></td>
+<td>The detail-prompt chips under the textarea</td>
+</tr>
+<tr>
+<td><code>altPaths</code></td>
+<td>Alternative-path cards <strong>and</strong> the emergency bar (any entry with <code>bar:true</code>)</td>
+</tr>
+<tr>
+<td><code>definitions</code></td>
+<td>Contents of the accessible &quot;What are these?&quot; dialog</td>
+</tr>
+<tr>
+<td><code>extractors</code></td>
+<td>The detection patterns. <code>regex</code>, <code>capture</code>, <code>keywordMap</code>, and <code>date</code> types are supported</td>
+</tr>
+<tr>
+<td><code>steps</code></td>
+<td>The destination form's steps and fields (id, label, type, <code>autocomplete</code>, <code>required</code>)</td>
+</tr>
+<tr>
+<td><code>MAP</code></td>
+<td>How each detected value lands in a field (<code>fieldId → {value, source}</code>)</td>
+</tr>
+<tr>
+<td><code>TOKENS</code></td>
+<td>Which detected items appear in the &quot;What we picked up&quot; strip</td>
+</tr>
+<tr>
+<td><code>CONFIG.theme</code> <em>(optional)</em></td>
+<td>Override any CSS color variable at runtime to re-skin without touching the stylesheet</td>
+</tr>
+</tbody>
+</table>
+<p><strong>To point this at a different form:</strong> rewrite <code>steps</code> to match that form's fields, adjust <code>MAP</code> so detected data fills the right field ids, and add/remove <code>extractors</code> for the data that form needs. No engine changes required.</p>
+<blockquote>
+<p>⚠️ If you change colors via <code>CONFIG.theme</code> or the CSS variables, re-check contrast. All text in the default palette meets <strong>7:1</strong> and control borders/focus meet <strong>3:1</strong>; new colors must be verified to keep AAA conformance.</p>
+</blockquote>
+<hr>
+<h2>Accessibility conformance</h2>
+<p>Designed and tested against <strong>WCAG 2.1 Level AAA</strong>, including:</p>
+<ul>
+<li><strong>1.4.6 Contrast (Enhanced)</strong> — all text ≥ 7:1; large text and non-text UI (borders, focus rings) verified separately.</li>
+<li><strong>2.4.13 / 2.4.7 Focus</strong> — thick (3px), offset, high-contrast focus indicators on every interactive element, with a light ring variant on dark surfaces.</li>
+<li><strong>1.4.8 Visual Presentation</strong> — left-aligned text, line height ≥ 1.5, generous paragraph spacing, and a capped line length (<code>--measure</code>, default <code>70ch</code>).</li>
+<li><strong>1.4.4 Resize / 1.4.10 Reflow</strong> — <code>rem</code>-based sizing; reflows to a 320px viewport without horizontal scrolling.</li>
+<li><strong>1.3.1 / 2.4.6 / 2.4.10</strong> — a single <code>&lt;h1&gt;</code>, an ordered heading outline, and labeled <code>&lt;section&gt;</code>/<code>&lt;nav&gt;</code> regions.</li>
+<li><strong>4.1.2 / 4.1.3</strong> — labeled controls; <code>role=&quot;radiogroup&quot;</code> with <code>aria-labelledby</code>; status and error messages in <code>aria-live</code>/<code>role=&quot;status&quot;</code> regions.</li>
+<li><strong>Dialog</strong> — a true modal (<code>&lt;dialog&gt;</code>/<code>role=&quot;dialog&quot;</code>) with focus moved in, focus trapped, <code>Esc</code> to close, and focus returned to the trigger.</li>
+<li><strong>Forms</strong> — explicit <code>&lt;label for&gt;</code> on every input, screen-reader <code>(required)</code> text instead of a spoken asterisk, and <code>autocomplete</code> tokens on contact fields.</li>
+<li><strong>2.4.4 / 2.4.9</strong> — links are self-describing (with <code>aria-label</code> where the visible text is short), and external links announce that they open a new tab.</li>
+</ul>
+<p>This addresses, as a working reference, the same issues raised in the IC3 accessibility audits (heading structure, announced errors, modal semantics, autocomplete, focus management).</p>
+<p><strong>Note:</strong> Conformance applies to this intake page. The official destination form is separate and must be assessed on its own.</p>
+<hr>
+<h2>Privacy</h2>
+<p>All extraction runs locally in the browser. The page makes <strong>no network calls</strong> in its default configuration — a <code>Content-Security-Policy</code> meta tag enforces <code>connect-src 'none'</code>, <code>form-action 'none'</code>, <code>default-src 'self'</code>, and there are no third-party scripts, fonts, or images. It stores nothing — no cookies, no <code>localStorage</code>, no analytics.</p>
+<hr>
+<h2>Limitations</h2>
+<p>Extraction is best-effort pattern matching, not natural-language understanding. It reliably catches amounts, dates, emails, phone numbers, URLs, and keyworded payment/crime types, but it will miss information that isn't explicitly stated and will occasionally mis-detect. <strong>Every field is editable and nothing is auto-submitted.</strong> This tool does not provide legal advice and is not an official government service.</p>
+<hr>
+<h2>License</h2>
+<p>Released under the <strong>MIT License</strong> (see <code>LICENSE</code>). For works authored by U.S. government employees, you may instead dedicate it to the <strong>public domain (CC0)</strong>; replace the header and <code>LICENSE</code> accordingly.</p>

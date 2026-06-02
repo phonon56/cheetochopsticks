@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property accountability — El Paso County</title>
+<meta name="description" content="What your county tracks — and doesn't — about the road in front of your property.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --epc-blue: #0074b7;
+    --epc-blue-dark: #005a8e;
+    --epc-blue-pale: #eaf3fa;
+    --epc-blue-line: #b8d7e8;
+    --ink: #0e1726;
+    --ink-2: #1f2a3d;
+    --slate: #475569;
+    --slate-2: #64748b;
+    --mute: #94a3b8;
+    --line: #e6e8eb;
+    --line-2: #d4d8de;
+    --paper: #fbfaf6;
+    --paper-2: #f5f3ec;
+    --white: #ffffff;
+    --amber: #92400e;
+    --amber-bg: #fef3c7;
+    --amber-line: #fbbf24;
+    --green: #14532d;
+    --green-bg: #d1fae5;
+    --rust: #7f1d1d;
+    --rust-bg: #fee2e2;
+    --focus: 0 0 0 3px rgba(0,116,183,0.4);
+    --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-body: 'Public Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.55;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  *:focus-visible {
+    outline: none;
+    box-shadow: var(--focus);
+    border-radius: 4px;
+  }
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--ink);
+    color: var(--white);
+    padding: 12px 18px;
+    z-index: 100;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 0 0 6px 0;
+  }
+  .skip:focus { left: 0; }
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--slate);
+  }
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .seal {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .seal-mark {
+    width: 28px; height: 28px;
+    background: var(--epc-blue);
+    border-radius: 50%;
+    color: var(--white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .topbar nav { display: flex; gap: 22px; }
+  .topbar nav a { color: var(--slate); text-decoration: none; font-weight: 500; }
+  .topbar nav a:hover { color: var(--epc-blue); }
+  @media (max-width: 720px) { .topbar nav { display: none; } }
+  .hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--line);
+    background:
+      radial-gradient(ellipse at 90% -10%, var(--epc-blue-pale) 0%, transparent 55%),
+      var(--paper);
+  }
+  .hero-inner { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+  .hero-kicker {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--epc-blue);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-kicker::before {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--epc-blue);
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.25rem, 4.8vw, 3.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.018em;
+    margin: 0 0 22px;
+    max-width: 18ch;
+    color: var(--ink);
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--epc-blue);
+    font-weight: 500;
+  }
+  .hero-deck {
+    font-size: 1.125rem;
+    color: var(--slate);
+    max-width: 56ch;
+    line-height: 1.55;
+    margin: 0;
+  }
+  main { max-width: 1180px; margin: 0 auto; padding: 48px 28px 80px; }
+  .search {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 56px;
+    box-shadow: 0 1px 3px rgba(14,23,38,0.04), 0 8px 24px -12px rgba(14,23,38,0.06);
+  }
+  .search-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .search-form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .search-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid var(--line-2);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    color: var(--ink);
+    background: var(--white);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    font-variant-numeric: tabular-nums;
+    height: 52px;
+  }
+  .search-input::placeholder { color: var(--mute); }
+  .search-input:hover { border-color: var(--slate-2); }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--epc-blue);
+    box-shadow: var(--focus);
+  }
+  .search-btn {
+    padding: 0 28px;
+    background: var(--ink);
+    color: var(--white);
+    border: 1.5px solid var(--ink);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.05s;
+    height: 52px;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .search-btn:hover { background: var(--epc-blue); border-color: var(--epc-blue); }
+  .search-btn:active { transform: translateY(1px); }
+  .search-btn:disabled { opacity: 0.6; cursor: wait; }
+  .search-hint {
+    font-size: 0.875rem;
+    color: var(--slate-2);
+    margin-top: 10px;
+  }
+  @media (max-width: 560px) {
+    .search-form { grid-template-columns: 1fr; }
+    .search-btn { width: 100%; }
+  }
+  .status {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 0.9375rem;
+    display: none;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .status.show { display: flex; }
+  .status.loading { background: var(--epc-blue-pale); color: var(--epc-blue-dark); border-left: 3px solid var(--epc-blue); }
+  .status.error { background: var(--rust-bg); color: var(--rust); border-left: 3px solid var(--rust); }
+  .status.success { background: var(--green-bg); color: var(--green); border-left: 3px solid var(--green); }
+  .section-head {
+    margin: 64px 0 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .section-head:first-of-type { margin-top: 0; }
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.75rem;
+    margin: 0;
+    color: var(--ink);
+    letter-spacing: -0.012em;
+    line-height: 1.2;
+  }
+  .section-head .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    /* var(--mute) #94a3b8 on var(--paper) #fbfaf6 = ~2.46:1 — fails WCAG
+       2.1 AA for normal text. --slate-2 (#64748b) clears 4.5:1; the other
+       two pages in this folder already use it for the same eyebrow style. */
+    color: var(--slate-2);
+    text-transform: uppercase;
+  }
+  .section-deck {
+    color: var(--slate);
+    font-size: 1.0625rem;
+    margin: -16px 0 28px;
+    max-width: 64ch;
+    line-height: 1.6;
+  }
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .kpi {
+    background: var(--white);
+    padding: 22px 20px;
+    position: relative;
+  }
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate-2);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .kpi-value {
+    font-family: var(--font-display);
+    font-size: 2.125rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .kpi-value.unknown {
+    color: var(--amber);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+  .kpi-goal {
+    font-size: 0.8125rem;
+    color: var(--slate-2);
+    margin-top: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi-status {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .kpi-status.s-ok { background: #16a34a; }
+  .kpi-status.s-measuring { background: var(--amber-line); }
+  .kpi-status.s-missing { background: var(--rust); }
+  .parcel-hero {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .parcel-hero-top {
+    padding: 32px;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: start;
+  }
+  .parcel-meta {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--epc-blue);
+    margin-bottom: 10px;
+  }
+  .parcel-address {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 6px;
+    letter-spacing: -0.012em;
+  }
+  .parcel-owner {
+    font-size: 0.9375rem;
+    color: var(--slate);
+    font-variant-numeric: tabular-nums;
+  }
+  .parcel-value-block { text-align: right; }
+  .parcel-value-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate-2);
+  }
+  .parcel-value-amount {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-top: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 640px) {
+    .parcel-hero-top { grid-template-columns: 1fr; }
+    .parcel-value-block { text-align: left; }
+  }
+  .parcel-details {
+    padding: 24px 32px 32px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 6px 32px;
+  }
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    gap: 16px;
+    font-size: 0.9375rem;
+  }
+  .detail-row:last-child { border-bottom: 0; }
+  .detail-key { color: var(--slate); font-weight: 400; }
+  .detail-val { color: var(--ink); font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; word-break: break-word; }
+  .gap-section {
+    background: var(--paper-2);
+    border: 1px solid var(--amber-line);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+  .gap-section .eyebrow-warn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .gap-section .eyebrow-warn::before {
+    content: "";
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--amber-line);
+    border-radius: 50%;
+  }
+  .gap-section h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin: 0 0 10px;
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .gap-section p { color: var(--slate); margin: 0 0 22px; max-width: 64ch; }
+  .gap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1px;
+    background: var(--amber-line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .gap-cell { background: var(--paper); padding: 18px; }
+  .gap-cell-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .gap-cell-val {
+    font-size: 0.9375rem;
+    color: var(--amber);
+    font-style: italic;
+    font-weight: 500;
+  }
+  .spend, .neighbors {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+  .spend h3, .neighbors h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .spend-deck, .neighbors-deck { color: var(--slate); margin: 0 0 24px; max-width: 64ch; }
+  .neighbors-deck { margin-bottom: 8px; }
+  .neighbors-note {
+    font-size: 0.8125rem;
+    color: var(--amber);
+    margin: 0 0 24px;
+    padding: 8px 12px;
+    background: var(--amber-bg);
+    border-radius: 6px;
+    display: inline-block;
+  }
+  .spend-table { width: 100%; }
+  .spend-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    gap: 24px;
+  }
+  .spend-row.summary {
+    padding-top: 18px;
+    margin-top: 6px;
+    border-top: 2px solid var(--ink);
+    border-bottom: 0;
+  }
+  .spend-row.gap-row {
+    background: var(--amber-bg);
+    margin: 0 -16px;
+    padding: 14px 16px;
+    border-radius: 6px;
+    border-bottom: 0;
+    margin-top: 8px;
+  }
+  .spend-label { color: var(--slate); font-size: 0.9375rem; flex: 1; }
+  .spend-label strong { color: var(--ink); font-weight: 600; }
+  .spend-row .indent { padding-left: 18px; color: var(--slate-2); }
+  .spend-amount {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .spend-amount.muted { color: var(--amber); font-style: italic; font-family: var(--font-body); font-weight: 500; font-size: 0.9375rem; }
+  .spend-amount.big { font-size: 1.5rem; }
+  .nb-table { margin-top: 20px; }
+  .nb-headers {
+    display: grid;
+    grid-template-columns: 2fr repeat(5, 1fr) 1fr;
+    gap: 8px;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .nb-headers .col-right { text-align: right; }
+  .nb-row {
+    display: grid;
+    grid-template-columns: 2fr repeat(5, 1fr) 1fr;
+    gap: 8px;
+    padding: 12px;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.875rem;
+  }
+  .nb-row:last-child { border-bottom: 0; }
+  .nb-row.you {
+    background: var(--epc-blue-pale);
+    border-radius: 6px;
+    border-bottom: 1px solid var(--epc-blue-line);
+    font-weight: 500;
+  }
+  .nb-addr {
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+  }
+  .nb-addr small {
+    display: block;
+    color: var(--slate-2);
+    font-weight: 400;
+    font-size: 0.75rem;
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+  }
+  .nb-bar-cell {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 36px;
+    position: relative;
+  }
+  .nb-bar {
+    width: 100%;
+    height: 100%;
+    background: var(--paper-2);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+  }
+  .nb-bar-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--epc-blue);
+    border-radius: 0 0 3px 3px;
+  }
+  .nb-row.you .nb-bar-fill { background: var(--epc-blue-dark); }
+  .nb-bar-empty {
+    width: 6px;
+    height: 6px;
+    background: var(--mute);
+    border-radius: 50%;
+    opacity: 0.4;
+    margin: auto;
+  }
+  .nb-total {
+    text-align: right;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    font-size: 0.9375rem;
+  }
+  @media (max-width: 720px) {
+    .nb-headers, .nb-row {
+      grid-template-columns: 1.5fr repeat(5, 1fr) 0.8fr;
+      font-size: 0.75rem;
+    }
+  }
+  @media (max-width: 560px) {
+    .nb-table { overflow-x: auto; }
+    .nb-headers, .nb-row { min-width: 580px; }
+  }
+  .actions {
+    background: var(--ink);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 36px;
+    margin-bottom: 48px;
+  }
+  .actions h3 {
+    font-family: var(--font-display);
+    color: var(--white);
+    margin: 0 0 8px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .actions p {
+    color: rgba(255,255,255,0.75);
+    margin: 0 0 24px;
+    max-width: 56ch;
+  }
+  .action-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .action-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .action-list a:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.25);
+  }
+  .action-list a::after {
+    content: "→";
+    color: rgba(255,255,255,0.5);
+  }
+  .sources {
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+    margin-top: 48px;
+    color: var(--slate);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  .sources h3 {
+    font-family: var(--font-display);
+    color: var(--ink);
+    font-size: 1.0625rem;
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+  .sources ul { margin: 0; padding-left: 18px; list-style: none; }
+  .sources li { position: relative; margin-bottom: 8px; padding-left: 14px; }
+  .sources li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 1px;
+    background: var(--slate-2);
+  }
+  .sources a { color: var(--epc-blue); text-decoration: none; border-bottom: 1px solid var(--epc-blue-line); }
+  .sources a:hover { color: var(--epc-blue-dark); border-bottom-color: var(--epc-blue); }
+  .results { display: none; }
+  .results.visible { display: block; animation: fadeIn 0.4s ease-out; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip">Skip to main content</a>
+
+<div class="topbar" role="banner">
+  <div class="topbar-inner">
+    <a href="epc_strategic_dashboard.html" class="seal">
+      <span class="seal-mark" aria-hidden="true">E</span>
+      <span>El Paso County, Colorado</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="epc_strategic_dashboard.html">Dashboard</a>
+      <a href="#lookup" aria-current="page">Property lookup</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+</div>
+
+<section class="hero" aria-labelledby="hero-h">
+  <div class="hero-inner">
+    <div class="hero-kicker">Property accountability</div>
+    <h1 id="hero-h">What is happening on the road in <em>front of your house</em>.</h1>
+    <p class="hero-deck">Look up any El Paso County parcel and review the public record.</p>
+  </div>
+</section>
+
+<main id="main-content">
+
+  <section id="dashboard" aria-labelledby="dash-h">
+    <div class="section-head">
+      <h2 id="dash-h">Strategic performance, today</h2>
+      <span class="eyebrow">Published KPIs · Updated continuously</span>
+    </div>
+    <p class="section-deck">The County publishes six asset-condition metrics. They report the state of the assets. They do not report the operations that produce those assets — the dispatch decisions, the response times, the bundling rates that determine how the $59.1M roads budget gets spent in the field.</p>
+
+    <div class="kpis" role="list" aria-label="Published strategic plan KPIs">
+      <div class="kpi" role="listitem">
+        <span class="kpi-status s-ok" aria-label="On track"></span>
+        <div class="kpi-label">Bridge Sufficiency</div>
+        <div class="kpi-value">91</div>
+        <div class="kpi-goal">Goal 80–100</div>
+      </div>
+      <div class="kpi" role="listitem">
+        <span class="kpi-status s-ok" aria-label="On track"></span>
+        <div class="kpi-label">Pavement Condition Index</div>
+        <div class="kpi-value">71</div>
+        <div class="kpi-goal">Goal 55–85</div>
+      </div>
+      <div class="kpi" role="listitem">
+        <span class="kpi-status s-ok" aria-label="On track"></span>
+        <div class="kpi-label">Fleet Readiness</div>
+        <div class="kpi-value">95<span style="font-size:1.5rem;color:var(--slate-2)">%</span></div>
+        <div class="kpi-goal">Goal 80–100</div>
+      </div>
+      <div class="kpi" role="listitem">
+        <span class="kpi-status s-ok" aria-label="On track"></span>
+        <div class="kpi-label">Facilities</div>
+        <div class="kpi-value">90<span style="font-size:1.5rem;color:var(--slate-2)">%</span></div>
+        <div class="kpi-goal">Goal 87–95%</div>
+      </div>
+      <div class="kpi" role="listitem">
+        <span class="kpi-status s-measuring" aria-label="Still measuring"></span>
+        <div class="kpi-label">Community Trust</div>
+        <div class="kpi-value unknown">Measuring</div>
+        <div class="kpi-goal">4 factors pending</div>
+      </div>
+      <div class="kpi" role="listitem">
+        <span class="kpi-status s-missing" aria-label="Not published"></span>
+        <div class="kpi-label">Road Service Ops</div>
+        <div class="kpi-value unknown">Not published</div>
+        <div class="kpi-goal">Proposed addition</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lookup" aria-labelledby="lookup-h">
+    <div class="section-head">
+      <h2 id="lookup-h">Look up a property</h2>
+      <span class="eyebrow">Live · State of Colorado parcel API</span>
+    </div>
+    <p class="section-deck">Enter any 10-digit El Paso County parcel schedule number. The page queries the State of Colorado's public parcel composite in real time and shows you both what's published and what isn't.</p>
+
+    <form class="search" id="lookup-form" novalidate aria-labelledby="search-label">
+      <label for="parcel-input" class="search-label" id="search-label">Parcel schedule number</label>
+      <div class="search-form">
+        <input
+          type="text"
+          id="parcel-input"
+          class="search-input"
+          name="parcel"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="e.g. 6401303008"
+          value="6401303008"
+          aria-describedby="parcel-hint"
+          aria-required="true"
+        >
+        <button type="submit" class="search-btn" id="lookup-btn">Look up</button>
+      </div>
+      <p class="search-hint" id="parcel-hint">10-digit El Paso County assessor schedule number. Find it on your tax bill or the Assessor's site.</p>
+      <div class="status" id="status" role="status" aria-live="polite"></div>
+    </form>
+  </section>
+
+  <div class="results" id="results" aria-live="polite">
+
+    <article class="parcel-hero" aria-labelledby="parcel-h">
+      <div class="parcel-hero-top">
+        <div>
+          <div class="parcel-meta">Parcel <span id="r-parcel-id">—</span></div>
+          <h3 class="parcel-address" id="r-address">—</h3>
+          <div class="parcel-owner" id="r-owner">—</div>
+        </div>
+        <div class="parcel-value-block">
+          <div class="parcel-value-label">Appraised value</div>
+          <div class="parcel-value-amount" id="r-value">—</div>
+        </div>
+      </div>
+      <div class="parcel-details">
+        <div class="detail-row"><span class="detail-key">County</span><span class="detail-val" id="r-county">—</span></div>
+        <div class="detail-row"><span class="detail-key">Acreage</span><span class="detail-val" id="r-acres">—</span></div>
+        <div class="detail-row"><span class="detail-key">Zoning</span><span class="detail-val" id="r-zoning">—</span></div>
+        <div class="detail-row"><span class="detail-key">Land use</span><span class="detail-val" id="r-landuse">—</span></div>
+        <div class="detail-row"><span class="detail-key">Subdivision</span><span class="detail-val" id="r-sub">—</span></div>
+        <div class="detail-row"><span class="detail-key">Taxable value</span><span class="detail-val" id="r-taxable">—</span></div>
+        <div class="detail-row"><span class="detail-key">Last sale</span><span class="detail-val" id="r-sale">—</span></div>
+        <div class="detail-row"><span class="detail-key">Record updated</span><span class="detail-val" id="r-received">—</span></div>
+      </div>
+    </article>
+
+    <section class="gap-section" aria-labelledby="gap-h">
+      <div class="eyebrow-warn">Accountability gap</div>
+      <h3 id="gap-h">What's not published for your road</h3>
+      <p>The State publishes your parcel data. El Paso County does not publish operational data for the road in front of it, even though the County collects most of it internally. These six fields are blank because that's the truth.</p>
+      <div class="gap-grid" role="list">
+        <div class="gap-cell" role="listitem">
+          <div class="gap-cell-label">Segment PCI</div>
+          <div class="gap-cell-val">Not published</div>
+        </div>
+        <div class="gap-cell" role="listitem">
+          <div class="gap-cell-label">Last scanned</div>
+          <div class="gap-cell-val">Not published</div>
+        </div>
+        <div class="gap-cell" role="listitem">
+          <div class="gap-cell-label">Next treatment scheduled</div>
+          <div class="gap-cell-val">Not published</div>
+        </div>
+        <div class="gap-cell" role="listitem">
+          <div class="gap-cell-label">2026 budget for segment</div>
+          <div class="gap-cell-val">Not published</div>
+        </div>
+        <div class="gap-cell" role="listitem">
+          <div class="gap-cell-label">Open service requests</div>
+          <div class="gap-cell-val">Not published</div>
+        </div>
+        <div class="gap-cell" role="listitem">
+          <div class="gap-cell-label">Treatment history</div>
+          <div class="gap-cell-val">CORA request only</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="spend" aria-labelledby="spend-h">
+      <h3 id="spend-h">Your share of the road budget</h3>
+      <p class="spend-deck">The County publishes the aggregate. The per-parcel share below is computed from real budget figures, assuming proportional distribution by road frontage. The actual allocation is not published.</p>
+
+      <div class="spend-table">
+        <div class="spend-row">
+          <span class="spend-label"><strong>2026 Roads &amp; Infrastructure</strong> (countywide)</span>
+          <span class="spend-amount big">$59,100,000</span>
+        </div>
+        <div class="spend-row">
+          <span class="spend-label indent">↳ Road &amp; Bridge operations</span>
+          <span class="spend-amount">$4,200,000</span>
+        </div>
+        <div class="spend-row">
+          <span class="spend-label indent">↳ Pavement preservation (PPRTA + county)</span>
+          <span class="spend-amount">$24,000,000</span>
+        </div>
+        <div class="spend-row">
+          <span class="spend-label">Paved network maintained</span>
+          <span class="spend-amount">2,429 lane mi</span>
+        </div>
+        <div class="spend-row">
+          <span class="spend-label">Average per lane mile (theoretical)</span>
+          <span class="spend-amount">$24,330</span>
+        </div>
+        <div class="spend-row summary">
+          <span class="spend-label"><strong>Estimated share for your parcel</strong> <span style="color:var(--slate-2);font-size:0.875rem" id="r-frontage-note">(est. frontage)</span></span>
+          <span class="spend-amount big" id="r-share">—</span>
+        </div>
+        <div class="spend-row gap-row">
+          <span class="spend-label">Actual spend on your road segment</span>
+          <span class="spend-amount muted">Not published</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="neighbors" aria-labelledby="nb-h">
+      <h3 id="nb-h">How does your road compare?</h3>
+      <p class="neighbors-deck">Pavement treatment spend on neighboring parcels, 2021 through 2025. A blank cell means no treatment was performed that year. A filled bar shows relative spend.</p>
+      <p class="neighbors-note">Sample data shown for illustration. Real per-parcel spend is not published — populating these bars with actual numbers requires a CORA request for work-order history.</p>
+
+      <div class="nb-table" role="table" aria-label="Neighbor treatment spend comparison">
+        <div class="nb-headers" role="row">
+          <span role="columnheader">Address</span>
+          <span role="columnheader">2021</span>
+          <span role="columnheader">2022</span>
+          <span role="columnheader">2023</span>
+          <span role="columnheader">2024</span>
+          <span role="columnheader">2025</span>
+          <span role="columnheader" class="col-right">5-yr total</span>
+        </div>
+        <div id="nb-rows"></div>
+      </div>
+    </section>
+
+    <section class="actions" aria-labelledby="action-h">
+      <h3 id="action-h">What you can do now</h3>
+      <p>Three things that take less than ten minutes and create a paper trail.</p>
+      <ul class="action-list">
+        <li><a href="https://citizenconnect.elpasoco.com" target="_blank" rel="noopener">Report a road issue</a></li>
+        <li><a href="https://www.elpasoco.com/colorado-open-records-act/" target="_blank" rel="noopener">File a CORA request</a></li>
+        <li><a href="https://bocc.elpasoco.com/" target="_blank" rel="noopener">Email your Commissioner</a></li>
+        <li><a href="https://www.elpasoco.com/strategic-plan/strategic-plan-dashboard/" target="_blank" rel="noopener">View official dashboard</a></li>
+      </ul>
+    </section>
+
+  </div>
+
+  <aside class="sources" id="sources" aria-labelledby="sources-h">
+    <h3 id="sources-h">Sources &amp; disclosures</h3>
+    <ul>
+      <li>Parcel data is queried live from the <a href="https://gis.colorado.gov/public/rest/services/Address_and_Parcel/Colorado_Public_Parcels/FeatureServer/0" target="_blank" rel="noopener">State of Colorado Public Parcel Composite</a>, maintained by the Governor's Office of Information Technology GIS Team and updated annually from county records.</li>
+      <li>Budget figures from El Paso County 2026 Adopted Budget and Department of Public Works published material.</li>
+      <li>The "not published" fields reflect actual transparency gaps: the County collects this data internally but does not publish it in a queryable form.</li>
+      <li>Per-parcel share is a theoretical proportional estimate. Actual allocations vary by road class, segment condition, and PPRTA funding decisions.</li>
+      <li>Neighbor comparison uses synthetic spend figures derived deterministically from parcel attributes for illustration only. Real numbers require CORA-requested work-order history.</li>
+      <li>This page is a citizen-built demonstration. Not affiliated with El Paso County or its Department of Public Works.</li>
+    </ul>
+  </aside>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var SERVICE_URL = 'https://gis.colorado.gov/public/rest/services/Address_and_Parcel/Colorado_Public_Parcels/FeatureServer/0/query';
+
+  var form = document.getElementById('lookup-form');
+  var input = document.getElementById('parcel-input');
+  var btn = document.getElementById('lookup-btn');
+  var status = document.getElementById('status');
+  var results = document.getElementById('results');
+
+  function setStatus(message, kind) {
+    if (!message) { status.className = 'status'; status.textContent = ''; return; }
+    status.className = 'status show ' + (kind || 'loading');
+    status.textContent = message;
+  }
+  function fmtMoney(val) {
+    if (val === null || val === undefined || val === '' || val === '0') return '—';
+    var n = parseFloat(String(val).replace(/[^0-9.\-]/g, ''));
+    if (isNaN(n) || n === 0) return '—';
+    return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  }
+  function fmtText(val) {
+    if (val === null || val === undefined || val === '') return '—';
+    return String(val).trim() || '—';
+  }
+  function fmtAcres(val) {
+    if (val === null || val === undefined || val === '') return '—';
+    var n = parseFloat(val);
+    if (isNaN(n)) return '—';
+    return n.toFixed(3) + ' acres';
+  }
+  function setText(id, value) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+  function computeShare(acres) {
+    var TOTAL_PRESERVATION = 24000000;
+    var LANE_MILES = 2429;
+    var perLaneMile = TOTAL_PRESERVATION / LANE_MILES;
+    var sqft = acres * 43560;
+    var frontageFt = Math.sqrt(Math.max(sqft, 1));
+    var share = (perLaneMile / 5280) * frontageFt;
+    return { frontage: frontageFt, share: share };
+  }
+  function hashId(s) {
+    var h = 0;
+    s = String(s);
+    for (var i = 0; i < s.length; i++) {
+      h = ((h << 5) - h) + s.charCodeAt(i);
+      h = h & h;
+    }
+    return Math.abs(h);
+  }
+  function syntheticSpend(parcelId, year) {
+    var h = hashId(parcelId + ':' + year);
+    var roll = h % 100;
+    if (roll < 60) return 0;
+    if (roll < 85) return 40 + (h % 60);
+    if (roll < 97) return 120 + (h % 180);
+    return 400 + (h % 400);
+  }
+
+  function renderNeighbors(myParcelId, myAddress) {
+    var streetMatch = (myAddress || '').match(/^(\d+)\s+(.+?)(?:,|$)/);
+    var baseNum = streetMatch ? parseInt(streetMatch[1], 10) : 4400;
+    var street = streetMatch ? streetMatch[2] : 'Republic Drive';
+
+    var offsets = [-4, -2, 0, 2, 4];
+    var neighbors = offsets.map(function (o) {
+      var pid = o === 0 ? String(myParcelId) : (parseInt(myParcelId, 10) + o).toString();
+      return {
+        addr: (baseNum + o) + ' ' + street,
+        pid: pid,
+        isYou: o === 0
+      };
+    });
+
+    var years = [2021, 2022, 2023, 2024, 2025];
+    var allSpends = [];
+    var rows = neighbors.map(function (n) {
+      var spends = years.map(function (y) { return syntheticSpend(n.pid, y); });
+      allSpends = allSpends.concat(spends);
+      var total = spends.reduce(function (a, b) { return a + b; }, 0);
+      return { n: n, spends: spends, total: total };
+    });
+    var globalMax = Math.max.apply(null, allSpends) || 1;
+
+    var html = rows.map(function (r) {
+      var bars = r.spends.map(function (s) {
+        if (s === 0) {
+          return '<div class="nb-bar-cell" role="cell" aria-label="No spend"><span class="nb-bar-empty" aria-hidden="true"></span></div>';
+        }
+        var pct = Math.max(12, Math.round((s / globalMax) * 100));
+        return '<div class="nb-bar-cell" role="cell" aria-label="$' + s + ' in pavement treatment"><div class="nb-bar"><div class="nb-bar-fill" style="height:' + pct + '%"></div></div></div>';
+      }).join('');
+      return '<div class="nb-row' + (r.n.isYou ? ' you' : '') + '" role="row">' +
+        '<div class="nb-addr" role="cell">' + r.n.addr +
+          (r.n.isYou ? ' <small>(your parcel)</small>' : '<small>#' + r.n.pid + '</small>') +
+        '</div>' + bars +
+        '<div class="nb-total" role="cell">$' + r.total.toLocaleString() + '</div>' +
+        '</div>';
+    }).join('');
+
+    document.getElementById('nb-rows').innerHTML = html;
+  }
+
+  function renderParcel(props) {
+    setText('r-parcel-id', fmtText(props.parcel_id || props.account));
+    var addr = [props.situsAdd, props.sitAddCty, props.sitAddZip].filter(Boolean).join(', ');
+    setText('r-address', addr || 'No situs address on record');
+    setText('r-owner', props.owner ? 'Owner of record: ' + props.owner : '');
+    setText('r-value', fmtMoney(props.apprValTot));
+    setText('r-county', fmtText(props.countyName));
+    setText('r-acres', fmtAcres(props.landAcres));
+    setText('r-sub', fmtText(props.subName));
+    setText('r-zoning', [props.zoningCode, props.zoningDesc].filter(Boolean).join(' — ') || '—');
+    setText('r-landuse', fmtText(props.landUseDsc));
+    setText('r-taxable', fmtMoney(props.asedValTot));
+    setText('r-sale',
+      props.saleDate || props.salePrice
+        ? (props.saleDate || '') + (props.salePrice ? ' — ' + fmtMoney(props.salePrice) : '')
+        : '—'
+    );
+    setText('r-received', fmtText(props.dateReceived));
+
+    var acres = parseFloat(props.landAcres);
+    if (!isNaN(acres) && acres > 0) {
+      var s = computeShare(acres);
+      setText('r-share', '$' + s.share.toFixed(0) + ' / yr');
+      var note = document.getElementById('r-frontage-note');
+      if (note) note.textContent = '(~' + Math.round(s.frontage) + ' ft frontage)';
+    }
+
+    renderNeighbors(
+      props.parcel_id || props.account || '0000000000',
+      props.situsAdd || '4408 Republic Drive'
+    );
+
+    results.classList.add('visible');
+  }
+
+  function buildQueryUrl(parcelId) {
+    var where = "parcel_id = '" + parcelId.replace(/'/g, "''") + "' AND countyName = 'El Paso'";
+    var params = new URLSearchParams({
+      where: where,
+      outFields: '*',
+      returnGeometry: 'false',
+      f: 'geojson'
+    });
+    return SERVICE_URL + '?' + params.toString();
+  }
+
+  function lookup(parcelId) {
+    setStatus('Querying State of Colorado parcel service for ' + parcelId + '…', 'loading');
+    btn.disabled = true;
+
+    fetch(buildQueryUrl(parcelId), { method: 'GET' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Service returned ' + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        if (!data.features || data.features.length === 0) {
+          setStatus('No parcel with that schedule number found in El Paso County. Check the number — it should be 10 digits, from your tax bill.', 'error');
+          results.classList.remove('visible');
+          return;
+        }
+        renderParcel(data.features[0].properties || {});
+        setStatus('Parcel ' + parcelId + ' loaded from State of Colorado public parcel composite.', 'success');
+      })
+      .catch(function (err) {
+        setStatus('Could not reach the parcel service (' + err.message + '). Showing sample data below so you can see the layout.', 'error');
+        renderParcel({
+          parcel_id: parcelId,
+          countyName: 'El Paso',
+          situsAdd: '4408 Republic Drive',
+          sitAddCty: 'Colorado Springs',
+          sitAddZip: '80916',
+          owner: '(offline mode — sample data)',
+          apprValTot: '487200',
+          asedValTot: '34104',
+          landAcres: '0.214',
+          subName: 'Stetson Hills Filing 12',
+          zoningCode: 'RS-6',
+          zoningDesc: 'Residential Suburban',
+          landUseDsc: 'Single Family Residential',
+          saleDate: '06/14/2021',
+          salePrice: '425000',
+          dateReceived: '2024'
+        });
+      })
+      .finally(function () {
+        btn.disabled = false;
+      });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var val = (input.value || '').trim();
+    if (!val) {
+      setStatus('Please enter a parcel schedule number.', 'error');
+      input.focus();
+      return;
+    }
+    lookup(val);
+  });
+
+  window.addEventListener('DOMContentLoaded', function () {
+    var val = (input.value || '').trim();
+    if (val) lookup(val);
+  });
+})();
+</script>
+
+</body>
+</html>

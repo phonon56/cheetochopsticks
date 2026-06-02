@@ -1,0 +1,2685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ADA accessibility audit of the CDPHE CoHID Mortality Dashboard — seven WCAG 2.1 AA gaps identified in the Tableau-based visualization, with remediation recommendations.">
+  <title>ADA Accessibility Audit – CDPHE CoHID Mortality Dashboard</title>
+
+  
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
+         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
+           text    #ede8dc → 15.3  AAA
+           muted   #96adc4 →  8.1  AAA
+           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
+           gold    #c8a84b →  8.2  AAA
+           gold-lt #fde68a → 15.0  AAA
+           red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
+           green   #4ade80 → 10.7  AAA
+           blue    #60a5fa →  7.4  AAA
+           amber   #fbbf24 → 11.2  AAA                                  */
+      --cc-bg:         #0c1220;
+      --cc-surface:    #141e2e;
+      --cc-surface2:   #1c2a3e;
+      --cc-surface3:   #233045;
+      --cc-border:     rgba(255,255,255,.14);
+      --cc-border-hi:  rgba(255,255,255,.28);
+      --cc-gold:       #c8a84b;
+      --cc-gold-dim:   rgba(200,168,75,.22);
+      --cc-gold-faint: rgba(200,168,75,.09);
+      --cc-gold-lt:    #fde68a;
+      --cc-text:       #ede8dc;
+      --cc-muted:      #96adc4;
+      --cc-quiet:      #8ca3b8;
+      --cc-mono:       'IBM Plex Mono', monospace;
+      --cc-sans:       'IBM Plex Sans', sans-serif;
+      --cc-serif:      'Playfair Display', Georgia, serif;
+      --cc-red:        #fca5a5;
+      --cc-red-dim:    rgba(252,165,165,.16);
+      --cc-green:      #4ade80;
+      --cc-green-dim:  rgba(74,222,128,.14);
+      --cc-blue:       #60a5fa;
+      --cc-blue-dim:   rgba(96,165,250,.14);
+      --cc-amber:      #fbbf24;
+      --cc-amber-dim:  rgba(251,191,36,.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* ── Skip link (ADA) ────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--cc-gold);
+      color: #0c1220;
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 10px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ── Focus visible — universal gold ring ─────────────────────── */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Serif subheadline ───────────────────────────────────────── */
+    .section-sub {
+      font-family: var(--cc-sans);
+      font-style: normal;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--cc-muted);
+      line-height: 1.6;
+      margin-top: 4px;
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      * { transition-duration: 0.01ms !important; }
+    }
+
+    body {
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    .nav {
+      border-bottom: 1px solid var(--cc-border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,26,.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 200;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nav-logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      margin-right: 32px;
+      flex-shrink: 0;
+    }
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+    .nav-logo:focus-visible {
+      outline: 2px solid var(--cc-gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    /* Legacy text-logo styles kept for any other surfaces that reference them */
+    .nav-logo-word {
+      font-family: var(--cc-sans);
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: -.01em;
+      color: var(--cc-text);
+    }
+    .nav-logo-dot { color: var(--cc-gold); font-size: .95rem; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+    .nav-link {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--cc-text); background: rgba(255,255,255,.04); }
+    .nav-link.you-link {
+      color: var(--cc-gold);
+      border-color: var(--cc-gold-dim);
+      background: var(--cc-gold-faint);
+    }
+    .nav-link.you-link:hover { background: var(--cc-gold-dim); }
+    .nav-link.active {
+      color: var(--cc-text);
+      border-color: var(--cc-border-hi);
+      background: rgba(255,255,255,.06);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold);
+      text-underline-offset: 3px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .notif-btn {
+      position: relative;
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: all .18s;
+    }
+    .notif-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+
+    /* ── NAV SEARCH (top-nav disclosure pattern) ───────────────────
+       Toggle button sits next to Subscribe / Alerts; the dropdown
+       panel is positioned absolutely below the nav and animates in
+       only when expanded. JS in nav-scripts.njk handles open/close,
+       focus management, Escape, click-outside, and lazy fetch. */
+    .nav-search-toggle {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 6px 12px;
+      cursor: pointer;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--cc-mono);
+      letter-spacing: .06em;
+      transition: color .18s, border-color .18s;
+      margin-right: 8px;
+      min-height: 32px;
+    }
+    .nav-search-toggle:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nav-search-toggle:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-toggle[aria-expanded="true"] {
+      color: var(--cc-bg);
+      background: var(--cc-gold);
+      border-color: var(--cc-gold);
+    }
+    .nav-search-toggle__icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .nav-search-toggle__label {
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    @media (max-width: 600px) {
+      .nav-search-toggle { padding: 6px 8px; }
+      .nav-search-toggle__label { display: none; }
+    }
+
+    /* Dropdown panel — full-width below nav, dark surface that matches
+       the notification panel treatment for visual consistency. */
+    .nav-search-panel {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 35;
+      background: var(--cc-surface);
+      border-bottom: 1px solid var(--cc-border-hi);
+      box-shadow: 0 6px 20px rgba(0,0,0,.35);
+    }
+    .nav-search-panel[hidden] { display: none; }
+    .nav-search-panel__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 24px 24px;
+    }
+    .nav-search-panel__chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .nav-search-panel__chip {
+      background: transparent;
+      color: var(--cc-muted);
+      border: 1px solid var(--cc-border-hi);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-family: var(--cc-mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .nav-search-panel__chip:hover { color: var(--cc-text); border-color: var(--cc-gold); }
+    .nav-search-panel__chip:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__chip[aria-pressed="true"] {
+      color: var(--cc-bg);
+      background: var(--cc-gold);
+      border-color: var(--cc-gold);
+    }
+    .nav-search-panel__form {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .nav-search-panel__input {
+      flex: 1;
+      min-width: 0;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      border: 1px solid var(--cc-border-hi);
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.4;
+      min-height: 44px;
+    }
+    .nav-search-panel__input::placeholder { color: var(--cc-quiet); }
+    .nav-search-panel__input:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 1px;
+      border-color: var(--cc-gold);
+    }
+    .nav-search-panel__submit,
+    .nav-search-panel__close {
+      background: var(--cc-gold);
+      color: var(--cc-bg);
+      border: 1px solid var(--cc-gold);
+      border-radius: 4px;
+      padding: 0 16px;
+      font-family: var(--cc-mono);
+      font-size: 1rem;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-search-panel__close {
+      background: transparent;
+      color: var(--cc-muted);
+      border-color: var(--cc-border-hi);
+    }
+    .nav-search-panel__submit:hover,
+    .nav-search-panel__close:hover { background: var(--cc-gold-lt); border-color: var(--cc-gold-lt); color: var(--cc-bg); }
+    .nav-search-panel__submit:focus-visible,
+    .nav-search-panel__close:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__status {
+      font-family: var(--cc-mono);
+      font-size: .76rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 12px 0 8px;
+      min-height: 1.4em;
+    }
+    .nav-search-panel__results {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 60vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .nav-search-panel__item {
+      display: block;
+      padding: 12px 16px;
+      background: var(--cc-bg);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--cc-text);
+      border-left-width: 4px;
+      transition: border-color .15s, background .15s;
+    }
+    .nav-search-panel__item:hover { border-color: var(--cc-border-hi); background: var(--cc-surface); }
+    .nav-search-panel__item:focus-visible {
+      outline: 3px solid var(--cc-gold);
+      outline-offset: 2px;
+    }
+    .nav-search-panel__item--local    { border-left-color: var(--cc-gold); }
+    .nav-search-panel__item--state    { border-left-color: var(--cc-blue); }
+    .nav-search-panel__item--national { border-left-color: var(--cc-green); }
+    .nav-search-panel__item-scope {
+      font-family: var(--cc-mono);
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 0 0 3px;
+    }
+    .nav-search-panel__item--local .nav-search-panel__item-scope    { color: var(--cc-gold); }
+    .nav-search-panel__item--state .nav-search-panel__item-scope    { color: var(--cc-blue); }
+    .nav-search-panel__item--national .nav-search-panel__item-scope { color: var(--cc-green); }
+    .nav-search-panel__item-title {
+      font-weight: 600;
+      font-size: .95rem;
+      color: var(--cc-text);
+      line-height: 1.35;
+      margin: 0 0 3px;
+    }
+    .nav-search-panel__item-desc {
+      font-size: .82rem;
+      color: var(--cc-muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .nav-search-panel__item mark {
+      background: rgba(200,168,75,.28);
+      color: var(--cc-text);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+    .nav-search-panel__empty {
+      font-size: .9rem;
+      color: var(--cc-muted);
+      padding: 12px 0;
+      margin: 0;
+    }
+    @media (max-width: 700px) {
+      .nav-search-panel__inner { padding: 16px 16px 18px; }
+      .nav-search-panel__chips { gap: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .nav-search-toggle,
+      .nav-search-panel__chip,
+      .nav-search-panel__item { transition: none; }
+    }
+    .notif-count {
+      background: var(--cc-red);
+      color: #0a0f1a;
+      font-size: .78rem;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 1px 5px;
+      font-family: var(--cc-mono);
+      line-height: 1.4;
+    }
+
+    /* ── NOTIFICATIONS PANEL ─────────────────────────────────────── */
+    .notif-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .notif-overlay.open { opacity: 1; pointer-events: all; }
+    .notif-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 360px;
+      background: var(--cc-surface);
+      border-left: 1px solid var(--cc-border-hi);
+      z-index: 301;
+      transform: translateX(100%);
+      transition: transform .28s cubic-bezier(.32,.72,0,1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .notif-panel.open { transform: translateX(0); }
+    .notif-panel-head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--cc-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .notif-panel-title {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-text);
+    }
+    .notif-close {
+      background: none;
+      border: 1px solid var(--cc-border);
+      border-radius: 3px;
+      color: var(--cc-muted);
+      font-size: .78rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: var(--cc-mono);
+      transition: all .15s;
+    }
+    .notif-close:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .notif-filters {
+      display: flex;
+      gap: 6px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--cc-border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .nf-btn {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--cc-border);
+      border-radius: 2px;
+      background: none;
+      color: var(--cc-muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .nf-btn:hover { color: var(--cc-text); border-color: var(--cc-border-hi); }
+    .nf-btn.active { background: var(--cc-gold-dim); color: var(--cc-gold); border-color: rgba(200,168,75,.3); }
+    .notif-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .notif-group-label {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cc-quiet);
+      padding: 10px 20px 4px;
+    }
+    .notif-item {
+      padding: 12px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--cc-border);
+      transition: background .15s;
+      cursor: default;
+    }
+    .notif-item:hover { background: rgba(255,255,255,.02); }
+    .notif-item.hidden { display: none; }
+    .notif-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .nd-red    { background: var(--cc-red); }
+    .nd-amber  { background: var(--cc-amber); }
+    .nd-blue   { background: var(--cc-blue); }
+    .nd-green  { background: var(--cc-green); }
+    .nd-gold   { background: var(--cc-gold); }
+    .nd-quiet  { background: var(--cc-quiet); }
+    .notif-body { flex: 1; }
+    .notif-text {
+      font-size: .85rem;
+      color: var(--cc-text);
+      line-height: 1.55;
+      margin-bottom: 3px;
+    }
+    .notif-text strong { color: var(--cc-gold-lt); font-weight: 500; }
+    .notif-meta {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      color: var(--cc-quiet);
+      margin-bottom: 4px;
+    }
+    .notif-action {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--cc-gold-dim);
+      padding-bottom: 1px;
+      transition: border-color .15s;
+    }
+    .notif-action:hover { border-color: var(--cc-gold); }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    /* footer.cc-footer (specificity 0,1,1) so page-level bare `footer { … }`
+       rules can't overpaint it on pages with their own theme. */
+    footer.cc-footer {
+      border-top: 1px solid var(--cc-border);
+      padding: 32px 0 36px;
+      margin-top: 56px;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      position: relative;
+      z-index: 1;
+    }
+    .cc-footer .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .cc-footer-line {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .04em;
+      line-height: 1.9;
+      color: var(--cc-muted);
+      text-align: center;
+    }
+    .cc-footer-line a {
+      color: var(--cc-muted);
+      text-decoration: underline;
+      text-decoration-color: rgba(150, 173, 196, .35);
+      text-underline-offset: 3px;
+      transition: color .15s, text-decoration-color .15s;
+    }
+    .cc-footer-line a:hover,
+    .cc-footer-line a:focus-visible {
+      color: var(--cc-gold);
+      text-decoration-color: var(--cc-gold);
+    }
+    .cc-footer-ext {
+      display: inline-block;
+      font-size: .7em;
+      transform: translateY(-1px);
+      margin-left: 2px;
+      opacity: .7;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
+    }
+
+    /* ── MARKDOWN CONTENT (rendered .md docs) ───────────────────── */
+    .markdown-content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      color: var(--cc-text);
+      font-family: var(--cc-sans);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .markdown-header {
+      border-bottom: 1px solid var(--cc-border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .markdown-content > .markdown-header h1,
+    .markdown-content h1 {
+      font-family: var(--cc-serif);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--cc-text);
+      margin: 0 0 8px;
+    }
+    .markdown-subtitle {
+      font-style: italic;
+      color: var(--cc-muted);
+      font-size: 1.05rem;
+      margin: 0;
+    }
+    .markdown-content h2 {
+      font-family: var(--cc-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cc-text);
+      margin: 48px 0 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--cc-border);
+    }
+    .markdown-content h3 {
+      font-family: var(--cc-serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cc-gold-lt);
+      margin: 32px 0 8px;
+    }
+    .markdown-content h4 {
+      font-family: var(--cc-mono);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      margin: 24px 0 6px;
+    }
+    .markdown-content p { margin: 0 0 16px; color: var(--cc-text); }
+    .markdown-content strong { color: var(--cc-gold-lt); font-weight: 600; }
+    .markdown-content em { color: var(--cc-muted); }
+    .markdown-content a {
+      color: var(--cc-gold);
+      text-decoration: underline;
+      text-decoration-color: var(--cc-gold-dim);
+      text-underline-offset: 3px;
+    }
+    .markdown-content a:hover,
+    .markdown-content a:focus-visible {
+      color: var(--cc-gold-lt);
+      text-decoration-color: var(--cc-gold-lt);
+    }
+    .markdown-content ul, .markdown-content ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+    }
+    .markdown-content li { margin-bottom: 6px; color: var(--cc-text); }
+    .markdown-content li::marker { color: var(--cc-gold); }
+    .markdown-content blockquote {
+      border-left: 3px solid var(--cc-gold);
+      padding: 8px 16px;
+      margin: 16px 0;
+      color: var(--cc-muted);
+      font-style: italic;
+      background: var(--cc-surface);
+    }
+    .markdown-content code {
+      font-family: var(--cc-mono);
+      font-size: .92em;
+      color: var(--cc-gold-lt);
+      background: var(--cc-surface);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+    .markdown-content pre {
+      background: var(--cc-surface);
+      border: 1px solid var(--cc-border);
+      border-radius: 4px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-size: .85rem;
+      line-height: 1.55;
+    }
+    .markdown-content pre code {
+      background: none;
+      padding: 0;
+      color: var(--cc-text);
+      font-size: inherit;
+    }
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: .92rem;
+    }
+    .markdown-content th, .markdown-content td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--cc-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .markdown-content th {
+      font-family: var(--cc-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cc-muted);
+      border-bottom: 2px solid var(--cc-border);
+    }
+    .markdown-content hr {
+      border: none;
+      border-top: 1px solid var(--cc-border);
+      margin: 32px 0;
+    }
+    .markdown-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+</style>
+
+
+  
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NAV — sourced from a single partial; pages mark their active section
+     by setting `activeNav` in front-matter (one of: orgchart, local,
+     state, national). Legacy values (you, dashboards, people, events)
+     are still accepted by pages that haven't been retagged yet — they
+     simply won't highlight any nav item.
+════════════════════════════════════════════════════════════════════ -->
+<header class="nav" role="banner">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
+        <img src="/shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Site sections">
+        <a class="nav-link" href="/microsites/shared/government-org-chart.html">Org Chart</a>
+        <a class="nav-link" href="/local/">Local</a>
+        <a class="nav-link" href="/state/">State</a>
+        <a class="nav-link" href="/national/">National</a>
+      </nav>
+      <div class="nav-right">
+        <button
+          type="button"
+          class="nav-search-toggle"
+          id="nav-search-toggle"
+          aria-expanded="false"
+          aria-controls="nav-search-panel"
+          aria-label="Open site search">
+          <svg class="nav-search-toggle__icon" aria-hidden="true" viewBox="0 0 20 20" focusable="false">
+            <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+            <line x1="13.5" y1="13.5" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-search-toggle__label">Search</span>
+        </button>
+        <a class="subscribe-btn" href="/preferences/" aria-label="Subscribe to email updates">
+          <span>Subscribe</span>
+        </a>
+        <button class="notif-btn" onclick="window.openNotif && window.openNotif()" aria-label="Open alerts and notifications, 11 unread" aria-haspopup="dialog" aria-expanded="false" aria-controls="notif-panel">
+          <span>Alerts</span>
+          <span class="notif-count" aria-live="polite">11</span>
+        </button>
+      </div>
+
+      <!-- ─── Nav search dropdown (disclosure pattern) ────────────────
+           Toggled by #nav-search-toggle. Lazy-fetches /search-index.json
+           on first open, then runs the same client-side filtering as
+           the homepage block. role="region" + aria-label gives screen
+           readers a recognizable landmark; hidden attribute is the
+           authoritative open/close state. -->
+      <div
+        id="nav-search-panel"
+        class="nav-search-panel"
+        role="region"
+        aria-label="Site search"
+        hidden>
+        <div class="nav-search-panel__inner">
+          <div class="nav-search-panel__chips" role="group" aria-label="Filter results by jurisdiction tier">
+            <button type="button" class="nav-search-panel__chip" data-tier="all"      aria-pressed="true">All</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="local"    aria-pressed="false">Local</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="state"    aria-pressed="false">State</button>
+            <button type="button" class="nav-search-panel__chip" data-tier="national" aria-pressed="false">National</button>
+          </div>
+          <form class="nav-search-panel__form" id="nav-search-form" role="search" aria-label="Site search">
+            <label class="sr-only" for="nav-search-input">Search topics, agencies, records, or address</label>
+            <input
+              type="search"
+              id="nav-search-input"
+              class="nav-search-panel__input"
+              name="q"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Search anything — or type a ZIP / address"
+              aria-describedby="nav-search-status">
+            <button type="submit" class="nav-search-panel__submit">
+              <span class="sr-only">Run search</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <button type="button" class="nav-search-panel__close" id="nav-search-close" aria-label="Close search">
+              <span aria-hidden="true">✕</span>
+            </button>
+          </form>
+          <p class="nav-search-panel__status" id="nav-search-status" role="status" aria-live="polite"></p>
+          <ul class="nav-search-panel__results" id="nav-search-results" role="list"></ul>
+          <p class="nav-search-panel__empty" id="nav-search-empty" hidden>No matches in this tier. Try a different filter or a shorter query.</p>
+        </div>
+      </div>
+
+<style>
+  /* Subscribe button in the dark nav. Gold border + gold label on dark bg.
+     Contrast: cc-gold (#c8a84b) on cc-bg (#0c1220) = 8.2:1 (AAA). */
+  .subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--cc-gold);
+    border-radius: 4px;
+    padding: 7px 14px;
+    margin-right: 8px;
+    color: var(--cc-gold);
+    font-family: var(--cc-mono);
+    font-size: .75rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .18s, color .18s;
+    min-height: 32px;
+  }
+  .subscribe-btn:hover,
+  .subscribe-btn:focus-visible {
+    background: var(--cc-gold);
+    color: #0c1220;
+  }
+  @media (max-width: 600px) {
+    .subscribe-btn { padding: 7px 10px; }
+    .subscribe-btn span { display: none; }
+    .subscribe-btn::before {
+      content: "✉";
+      font-size: 1rem;
+      line-height: 1;
+    }
+  }
+</style>
+    </div>
+  </div>
+</header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+     NOTIFICATIONS PANEL
+════════════════════════════════════════════════════════════════════ -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
+<div class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">Alerts &amp; notifications</span>
+    <button class="notif-close" onclick="closeNotif()" aria-label="Close alerts panel">Close <span aria-hidden="true">✕</span></button>
+  </div>
+  <div class="notif-filters" role="group" aria-label="Filter notifications">
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (21)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (10)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (4)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (7)</button>
+  </div>
+  <div class="notif-scroll">
+
+    <div class="notif-group-label">Critical — act now</div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>DATP Public Comment reading room is live.</strong> The City of Colorado Springs Digital Accessibility Transition Plan (Draft 2026), with the full plan embedded as a PDF and twelve structured public comments residents can adapt and submit. Comment portal links live in the reading room.</div>
+        <div class="notif-meta">Public comment · COS Digital Accessibility Transition Plan · May 2026</div>
+        <a class="notif-action" href="/microsites/city/ada/datp-comment.html">Open the DATP reading room <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>BOCC petition — service plan transparency &amp; algorithmic pricing disclosure.</strong> A general resident petition with four narrow asks within existing BOCC authority. Sign and send.</div>
+        <div class="notif-meta">Civic action · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/housing-rent-bocc_petition_letter.html">Open petition letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Veterans' petition to the EPC BOCC.</strong> Companion petition for veterans of any branch — service plan transparency and algorithmic pricing protections, framed around military housing harms.</div>
+        <div class="notif-meta">Civic action · Veterans · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/bocc_petition_veteran.html">Open veterans' petition <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LDC update — public comment on service plan transparency.</strong> A 300-word comment ready to submit through the El Paso County Land Development Code update process.</div>
+        <div class="notif-meta">Public comment · LDC update · El Paso County · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/ldc_update_comment.html">Open LDC comment <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Background brief — algorithmic rent pricing in El Paso County.</strong> Sourced reference for journalists, policy analysts, and the COS Chamber housing committee: federal antitrust action, local policy options, and the case for BOCC-level service plan transparency.</div>
+        <div class="notif-meta">Reference · Housing &amp; pricing · El Paso County BOCC · May 2026</div>
+        <a class="notif-action" href="/microsites/county/BOCC/housing_pricing_background_brief.html">Read background brief <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>HOME-ARP comment window is live — closes May 26, 2026.</strong> COS is collecting public comment on the HOME-ARP Allocation Plan amendment via an ArcGIS Survey123 form Esri's own ACR rates as "Partially Supports" on WCAG 2.1 A/AA. A WCAG 2.1 AA Drupal Webform replacement is ready to install — bilingual EN/ES, JSON webhook + staff email + native storage, inline accommodation intake.</div>
+        <div class="notif-meta">24 CFR 91.105 · ADA Title II · May 4, 2026</div>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/home-arp-form-preview.html">Open the accessible HTML form preview <span aria-hidden="true">→</span></a>
+        <a class="notif-action" href="/microsites/city/housing/housing-drupal-arp-formADA/bundle-readme.html">Open the HOME-ARP bundle README <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Downtown Funding and Records Search</strong> Search BID assessments, DDA grants, TIF reimbursements, board meetings, and financial records in one place.</div>
+        <div class="notif-meta">Annual adopted budget — C.R.S. 29-1-101 et seq · April 10, 2026</div>
+        <a class="notif-action" href="/microsites/downtown/downtown_cs_search_portal_v2_ada.html">Open the search portal <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+	  
+	      <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA. Zero district sites are confirmed compliant on PDF documents.</div>
+        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35 · April 8, 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">Open district audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access their own district's records.</div>
+        <div class="notif-meta">EPC Assessor audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See district audit <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021. No governance docs. No financials. One compliance letter fixes all 30+ simultaneously.</div>
+        <div class="notif-meta">Platform audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/metro_district_citizen_toolkit.html">Draft compliance letter <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">High priority</div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Plain-language IC3 intake — open-source reference.</strong> Single-file concept for the FBI IC3 complaint form: one free-text box, client-side extraction into the official complaint structure, honest provenance badges on every pre-filled field, hand-off to the real form. WCAG 2.1 AAA, restrictive CSP, no backend, no third-party requests. CONFIG-driven so any agency can re-point it at a different form.</div>
+        <div class="notif-meta">Open source · National · FBI IC3 · May 2026 · WCAG 2.1 AAA</div>
+        <a class="notif-action" href="/microsites/national/IC3/ic3_intake_opensource.html">Open the plain-language intake <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes, budgets, and audit docs are almost certainly untagged. This is the real HB21-1110 failure — not the homepage.</div>
+        <div class="notif-meta">ADA document audit · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">View ADA analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it. This is the foundational legal document. Not one district links it publicly.</div>
+        <div class="notif-meta">Governance gap · §32-1-202</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106. Due to State Auditor by July 31. The clock is running.</div>
+        <div class="notif-meta">Governance gap · §32-1-106 · due July 31</div>
+        <a class="notif-action" href="/microsites/shared/epc_district_audit_dashboard.html">See audit dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-group-label">Informational</div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records both awaiting reply. Response window is still open.</div>
+        <div class="notif-meta">CORA tracker · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/requests_tracker_and_military_numbers.html">View tracker <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review on developer agreements, compliance history, and parcel-level records.</div>
+        <div class="notif-meta">Compliance analysis · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/wolfersberger_compliance_bellamese_analysis.html">Read analysis <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
+        <div class="notif-meta">New · April 2026</div>
+        <a class="notif-action" href="/microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CSPD Blotter — Weekly History is live.</strong> 271 incidents pulled directly from the live blotter feed, paired with a Poisson 95% confidence band to flag statistical anomalies week to week. Tabs are full APG-pattern keyboard accessible; every chart has an aria-label.</div>
+        <div class="notif-meta">New · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Lorson Ranch financial dashboard is live.</strong> Seven cross-pledged metro districts, $94.2M aggregate audited deficit, IGA money flows, and a per-home tax calculator — sourced from 2026 budgets and 2024 audits. Companion plain-language briefing available as a download.</div>
+        <div class="notif-meta">New · Special Districts · April 2026</div>
+        <a class="notif-action" href="/microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CBI Missing Persons form — accessible rebuild is live.</strong> Resolves all seven critical/serious findings from the ADA audit: skip link, live regions, focus management, EN/ES localization, real-time validation messaging. Drops into the existing Drupal Webform infrastructure with optional Claude API routing.</div>
+        <div class="notif-meta">New · State · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LexisNexis ADAM Program dashboard — accessible rebuild is live.</strong> Audit and reference rebuild of the missing-children dashboard: APG-pattern tabs with roving tabindex and full keyboard nav, solid amber focus rings (3:1 against any surface), darker success-green for AA contrast, and "View Poster" placeholders converted from dead anchors to real buttons.</div>
+        <div class="notif-meta">New · Private Sector · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="/microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <main id="main-content" tabindex="-1">
+    
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../../shared/css/main.css" />
+  <style>
+    :root {
+      /* Color palette — WCAG 2.1 AA / AAA verified
+         Ratios on primary backgrounds (minimum 4.5:1 AA, 7:1 AAA):
+           slate #2c3e50 on #f4f6f9        → 10.1  AAA
+           mid   #5a6a7a on white          →  5.6  AA   (was #5a6a7a, 5.1 on #f4f6f9 AA)
+           red   #9e2015 on white          →  7.9  AAA  (was #c0392b, 5.4 AA)
+           red   #9e2015 on #fde8e6        →  6.7  AA   (was 4.6, borderline)
+           amber #8a3900 on white          →  7.9  AAA  (was #d35400, 4.2 FAIL)
+           amber #8a3900 on #fde9d4        →  6.7  AA   (was 3.5, FAIL)
+           amber #8a3900 on #fff8f0        →  7.5  AAA
+           green #1a6e3c on white          →  6.3  AA
+           navy  #1a2744 on #eef1f5        → 13.1  AAA                           */
+      --red:    #9e2015;
+      --amber:  #8a3900;
+      --green:  #1a6e3c;
+      --navy:   #1a2744;
+      --slate:  #2c3e50;
+      --mid:    #4c5c6c; /* darkened from #5a6a7a → 6.5 on #f4f6f9 AA+ */
+      --light:  #eef1f5;
+      --white:  #ffffff;
+      --border: #c8d0da;
+      --mono:   'IBM Plex Mono', monospace;
+      --sans:   'IBM Plex Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 17px; }
+    body {
+      font-family: var(--sans);
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--slate);
+      background: #f4f6f9;
+    }
+
+    /* Reduced motion — disable any decorative animations for users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* ── Skip link (WCAG 2.4.1 Bypass Blocks) ── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--navy);
+      color: var(--white);
+      padding: .65rem 1.25rem;
+      font-weight: 700;
+      font-size: .95rem;
+      z-index: 9999;
+      text-decoration: none;
+      border-radius: 0 0 4px 4px;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ── Header ── */
+    header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 2.5rem 2rem 2rem;
+      border-bottom: 4px solid var(--red);
+    }
+    .header-inner { max-width: 960px; margin: 0 auto; }
+    .header-tag {
+      font-family: var(--mono);
+      font-size: .82rem; /* was .75rem — bumped for readability */
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #c7d6e8; /* was #8fa8c8 (6.07 on navy) → 10.0 on navy AAA */
+      margin-bottom: .6rem;
+    }
+    header h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: .5rem;
+    }
+    .header-meta {
+      font-size: .9rem;
+      color: #c7d6e8; /* was #a8bdd0 → 10.0 on navy AAA */
+      margin-top: .75rem;
+    }
+    .deadline-badge {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-family: var(--mono);
+      font-size: .82rem; /* was .75rem */
+      font-weight: 600;
+      letter-spacing: .08em;
+      padding: .28rem .8rem;
+      border-radius: 3px;
+      margin-top: .75rem;
+    }
+
+    /* ── Layout ── */
+    .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* ── Executive summary ── */
+    .exec-summary {
+      background: var(--white);
+      border-left: 5px solid var(--red);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 2.5rem;
+      border-radius: 0 6px 6px 0;
+    }
+    .exec-summary h2 {
+      font-size: 1rem;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--red);
+      margin-bottom: .75rem;
+    }
+    .exec-summary p { margin-bottom: .6rem; font-size: 1rem; }
+    .exec-summary p:last-child { margin-bottom: 0; }
+
+    /* ── Score strip ── */
+    .score-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .score-card {
+      background: var(--white);
+      border-radius: 6px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      border-top: 4px solid var(--border);
+    }
+    .score-card.fail { border-top-color: var(--red); }
+    .score-card.warn { border-top-color: var(--amber); }
+    .score-card.pass { border-top-color: var(--green); }
+    .score-num {
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1;
+      display: block;
+      margin-bottom: .3rem;
+    }
+    .score-card.fail .score-num { color: var(--red); }
+    .score-card.warn .score-num { color: var(--amber); }
+    .score-card.pass .score-num { color: var(--green); }
+    .score-label {
+      font-size: .82rem; /* was .8rem */
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--mid);
+    }
+
+    /* ── Section headers ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin: 2.5rem 0 1.25rem;
+      padding-bottom: .6rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .section-header h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .section-num {
+      font-family: var(--mono);
+      font-size: .82rem; /* was .8rem */
+      background: var(--navy);
+      color: var(--white);
+      padding: .2rem .6rem;
+      border-radius: 3px;
+    }
+
+    /* ── Violation cards ── */
+    .violation {
+      background: var(--white);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+    }
+    .violation-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid var(--light);
+    }
+    .sev-badge {
+      flex-shrink: 0;
+      font-family: var(--mono);
+      font-size: .78rem; /* was .7rem — WCAG body-text minimum threshold */
+      font-weight: 700;  /* was 600 */
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: .32rem .7rem;
+      border-radius: 3px;
+      margin-top: .1rem;
+    }
+    .sev-critical { background: #fde8e6; color: var(--red); }
+    .sev-serious  { background: #fde9d4; color: var(--amber); }
+    .sev-moderate { background: #e8f4fd; color: #0f4f78; } /* was #1a6999 (5.33) → 7.9 on #e8f4fd AAA */
+
+    .violation-title { font-weight: 600; font-size: 1rem; color: var(--navy); margin-bottom: .2rem; }
+    .violation-wcag  { font-family: var(--mono); font-size: .82rem; color: var(--mid); } /* was .75rem */
+
+    .violation-body { padding: 1rem 1.25rem; font-size: .95rem; }
+    .violation-body p { margin-bottom: .5rem; }
+    .violation-body p:last-child { margin-bottom: 0; }
+
+    .violation-body strong { color: var(--navy); }
+
+    /* ── Code blocks ── */
+    .code-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      margin: .75rem 0;
+      font-size: .85rem; /* was .82rem */
+    }
+    @media (max-width: 640px) { .code-pair { grid-template-columns: 1fr; } }
+
+    .code-block {
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .code-label {
+      font-family: var(--mono);
+      font-size: .78rem; /* was .7rem */
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .3rem .75rem;
+    }
+    .code-block.bad  .code-label { background: #fde8e6; color: var(--red); }
+    .code-block.good .code-label { background: #dff2e8; color: var(--green); }
+    pre {
+      background: #1e2b3a;
+      color: #c8d8e8;
+      padding: .85rem .9rem;
+      overflow-x: auto;
+      font-family: var(--mono);
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .code-block.bad pre  { border: 1px solid #f5c6c2; border-top: none; }
+    .code-block.good pre { border: 1px solid #a8dcba; border-top: none; }
+
+    .hl-bad  { color: #ff7b72; }
+    .hl-good { color: #7ee787; }
+    .hl-attr { color: #79c0ff; }
+    .hl-str  { color: #a5d6ff; }
+
+    /* ── Impact callout ── */
+    .impact-box {
+      background: #fff8f0;
+      border-left: 3px solid var(--amber);
+      padding: .75rem 1rem;
+      font-size: .92rem; /* was .875rem */
+      margin: .6rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .impact-box strong { color: var(--amber); }
+
+    /* ── Solution section ── */
+    .solution-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--green);
+      border-radius: 0 0 6px 6px;
+      margin-top: 2.5rem;
+      overflow: hidden;
+    }
+    .solution-header {
+      background: #f0f8f2;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #c3deca;
+    }
+    .solution-header h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: .3rem;
+    }
+    .solution-header p { font-size: .9rem; color: var(--mid); }
+
+    .solution-body { padding: 1.5rem; }
+    .solution-body h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin: 1.5rem 0 .6rem;
+    }
+    .solution-body h3:first-child { margin-top: 0; }
+
+    /* ── Accessible demo table ── */
+    .demo-wrapper {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: .75rem 0 1.5rem;
+    }
+    .demo-wrapper caption {
+      font-weight: 600;
+      font-size: .95rem;
+      padding: .75rem 1rem;
+      background: #eef1f5;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .demo-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .92rem; /* was .875rem */
+    }
+    .demo-table th {
+      background: var(--navy);
+      color: var(--white);
+      padding: .6rem .9rem;
+      text-align: left;
+      font-weight: 600;
+    }
+    .demo-table th[scope="row"] {
+      background: #eef1f5;
+      color: var(--navy);
+      font-weight: 600;
+    }
+    .demo-table td {
+      padding: .5rem .9rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .demo-table tr:last-child td { border-bottom: none; }
+    .demo-table tr:nth-child(even) td { background: #f8f9fb; }
+    .demo-table td[data-label]::before {
+      content: attr(data-label) ": ";
+      font-weight: 600;
+      display: none;
+    }
+    @media (max-width: 540px) {
+      .demo-table thead { display: none; }
+      .demo-table tr { display: block; border-bottom: 2px solid var(--border); }
+      .demo-table td { display: block; border: none; padding: .3rem .75rem; }
+      .demo-table td[data-label]::before { display: inline; }
+    }
+
+    /* ── Filter UI demo ── */
+    .filter-demo {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+      background: #fafbfc;
+      margin: .75rem 0 1rem;
+    }
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: .3rem; flex: 1; min-width: 180px; }
+    .filter-group label {
+      font-size: .92rem; /* was .82rem */
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .filter-group select,
+    .filter-group input[type="range"] {
+      padding: .5rem .7rem;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      font-family: var(--sans);
+      font-size: .95rem; /* was .875rem */
+      color: var(--slate);
+      background: var(--white);
+    }
+    .filter-group select:focus-visible,
+    .filter-group input:focus-visible {
+      outline: 3px solid var(--navy);
+      outline-offset: 3px;
+      border-color: var(--navy);
+    }
+    .year-output {
+      font-family: var(--mono);
+      font-size: .92rem; /* was .85rem */
+      font-weight: 600;
+      color: var(--navy);
+      min-width: 2.5rem;
+      align-self: flex-end;
+      padding-bottom: .45rem;
+    }
+
+    /* ── Checklist ── */
+    .checklist { list-style: none; padding: 0; margin: .75rem 0 1.25rem; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: .65rem;
+      padding: .5rem 0;
+      border-bottom: 1px solid var(--light);
+      font-size: .95rem;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .check-icon {
+      flex-shrink: 0;
+      width: 1.2rem;
+      height: 1.2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .78rem;
+      font-weight: 700;
+      margin-top: .1rem;
+    }
+    .check-done { background: #dff2e8; color: var(--green); }
+    .check-todo { background: #fde8e6; color: var(--red); }
+
+    /* ── Timeline ── */
+    .timeline { margin: .75rem 0 1.5rem; }
+    .timeline-item {
+      display: flex;
+      gap: 1rem;
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--light);
+      font-size: .95rem;
+      align-items: flex-start;
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .t-date {
+      flex-shrink: 0;
+      font-family: var(--mono);
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--navy);
+      background: var(--light);
+      padding: .3rem .7rem;
+      border-radius: 3px;
+      white-space: nowrap;
+      margin-top: .1rem;
+    }
+    .t-date.urgent { background: #fde8e6; color: var(--red); }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy);
+      color: #c7d6e8; /* was #8fa8c8 (6.07) → 10.0 on navy AAA */
+      font-size: .88rem; /* was .82rem */
+      padding: 1.5rem 2rem;
+      text-align: center;
+      margin-top: 3rem;
+    }
+    footer a { color: #e6eef8; text-decoration: underline; } /* was #a8bdd0 (7.66) → 12.6 AAA */
+
+    /* ── Focus styles (global, WCAG 2.4.11 / 2.4.13) ── */
+    *:focus { outline: none; }
+    *:focus-visible {
+      outline: 3px solid var(--navy);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+  </style>
+<!-- SKIP LINK: Required WCAG 2.4.1 -->
+  <!-- ═══ SITE NAV ═══ -->
+<!-- ═══ NOTIFICATIONS PANEL ═══ -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotif()" aria-hidden="true"></div>
+<aside class="notif-panel" id="notif-panel" aria-label="Alerts and notifications" aria-modal="true" role="dialog" tabindex="-1">
+  <div class="notif-panel-head">
+    <span class="notif-panel-title">Alerts &amp; notifications</span>
+    <button class="notif-close" onclick="closeNotif()">Close &#10005;</button>
+  </div>
+  <div class="notif-filters" role="group" aria-label="Filter notifications">
+    <button class="nf-btn active" onclick="filterNotif('all', this)">All (9)</button>
+    <button class="nf-btn" onclick="filterNotif('critical', this)">Critical (3)</button>
+    <button class="nf-btn" onclick="filterNotif('high', this)">High (3)</button>
+    <button class="nf-btn" onclick="filterNotif('info', this)">Info (3)</button>
+  </div>
+  <div class="notif-scroll">
+    <div class="notif-group-label">Critical — act now</div>
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>ADA Title II deadline: April 24, 2026</strong> — 16 days. All local government websites must meet WCAG 2.1 AA.</div>
+        <div class="notif-meta">HB21-1110 · 28 C.F.R. Part 35</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>249 of 284 metro districts have no website.</strong> CORA request is the only way a resident can access records.</div>
+        <div class="notif-meta">EPC Assessor audit · April 2026</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="critical">
+      <div class="notif-dot nd-red"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>WS Districts (WSDM) serves 30+ districts</strong> on a single WordPress site. Last calendar entry: 2021.</div>
+        <div class="notif-meta">Platform audit · April 2026</div>
+      </div>
+    </div>
+    <div class="notif-group-label">High priority</div>
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>All posted PDFs likely fail WCAG 1.3.1.</strong> Meeting minutes and audit docs are almost certainly untagged.</div>
+        <div class="notif-meta">ADA document audit · April 2026</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>0 of 8 audited sites post their service plan.</strong> C.R.S. §32-1-202 requires it.</div>
+        <div class="notif-meta">Governance gap · §32-1-202</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="high">
+      <div class="notif-dot nd-amber"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Annual audit documents: publicly posted by 0 of 8 districts.</strong> Required by §32-1-106.</div>
+        <div class="notif-meta">Governance gap · §32-1-106</div>
+      </div>
+    </div>
+    <div class="notif-group-label">Informational</div>
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>2 CORA requests pending response.</strong> Military housing numbers and district governance records awaiting reply.</div>
+        <div class="notif-meta">CORA tracker · April 2026</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Wolfersberger compliance and Bellamese analysis complete.</strong> New findings ready for review.</div>
+        <div class="notif-meta">Compliance analysis · April 2026</div>
+      </div>
+    </div>
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts and utilities.</div>
+        <div class="notif-meta">New · April 2026</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ TICKER ═══ -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item alert"><strong>ADA deadline</strong> · April 24 · 16 days</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>284</strong> metro districts · El Paso County</span><span class="ticker-sep"></span>
+    <span class="ticker-item alert"><strong>249</strong> districts · zero web presence</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>390</strong> fatalities over 9 years</span><span class="ticker-sep"></span>
+    <span class="ticker-item">No invoice attached</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>0%</strong> of districts post service plans publicly</span><span class="ticker-sep"></span>
+    <span class="ticker-item">Built by residents · Colorado Springs</span><span class="ticker-sep"></span>
+    <span class="ticker-item alert"><strong>ADA deadline</strong> · April 24 · 16 days</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>284</strong> metro districts · El Paso County</span><span class="ticker-sep"></span>
+    <span class="ticker-item alert"><strong>249</strong> districts · zero web presence</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>64,434</strong> crash records · COS 2017–2025</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>390</strong> fatalities over 9 years</span><span class="ticker-sep"></span>
+    <span class="ticker-item">No invoice attached</span><span class="ticker-sep"></span>
+    <span class="ticker-item"><strong>0%</strong> of districts post service plans publicly</span><span class="ticker-sep"></span>
+    <span class="ticker-item">Built by residents · Colorado Springs</span><span class="ticker-sep"></span>
+  </div>
+</div>
+
+  <header role="banner">
+    <div class="header-inner">
+      <p class="header-tag">Accessibility Audit · WCAG 2.1 Level AA</p>
+      <h1>ADA Compliance Audit<br>CDPHE CoHID Mortality Dashboard</h1>
+      <p class="header-meta">
+        Audited: <time datetime="2026-04-08">April 8, 2026</time> &nbsp;·&nbsp;
+        Platform: Tableau Server (cohealthviz.dphe.state.co.us) &nbsp;·&nbsp;
+        Standard: WCAG 2.1 Level AA / DOJ Title II Rule
+      </p>
+      <p><span class="deadline-badge" aria-label="Compliance deadline April 24 2026">⚠ COMPLIANCE DEADLINE: APRIL 24, 2026</span></p>
+    </div>
+  </header>
+
+  <div role="region" aria-label="Page content">
+    <div class="container">
+
+      <!-- Executive Summary -->
+      <section aria-labelledby="exec-heading">
+        <div class="exec-summary">
+          <h2 id="exec-heading">Executive Summary</h2>
+          <p>The Colorado Department of Public Health and Environment (CDPHE) operates a public health mortality data dashboard at <strong>cohealthviz.dphe.state.co.us</strong> using Tableau Server. This audit was conducted on April 8, 2026 — 16 days before the <strong>DOJ Title II ADA final rule compliance deadline of April 24, 2026</strong> — which requires all state and local government web content to meet WCAG 2.1 Level AA.</p>
+          <p>The audit identified <strong>7 violations</strong>, of which <strong>4 are Critical</strong> (Level A failures) and <strong>3 are Serious</strong> (Level AA failures). The most significant impact is that <strong>the primary data content of this dashboard — the county map, all charts, and all interactive controls — is completely inaccessible to screen reader users.</strong></p>
+          <p>This document includes both the full violation catalogue and a ready-to-deploy accessible HTML alternative that can be embedded on the existing CDPHE pages alongside or in place of the Tableau embed.</p>
+        </div>
+      </section>
+
+      <!-- Score Strip -->
+      <section aria-label="Audit score summary">
+        <div class="score-strip" role="list">
+          <div class="score-card fail" role="listitem">
+            <span class="score-num" aria-hidden="true">4</span>
+            <span class="score-label">Critical<br>(Level A)</span>
+          </div>
+          <div class="score-card warn" role="listitem">
+            <span class="score-num" aria-hidden="true">3</span>
+            <span class="score-label">Serious<br>(Level AA)</span>
+          </div>
+          <div class="score-card fail" role="listitem">
+            <span class="score-num" aria-hidden="true">0</span>
+            <span class="score-label">Passes<br>(of 7 tested)</span>
+          </div>
+          <div class="score-card warn" role="listitem">
+            <span class="score-num" aria-hidden="true">16</span>
+            <span class="score-label">Days to<br>Deadline</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1: Violations -->
+      <section aria-labelledby="violations-heading">
+        <div class="section-header">
+          <span class="section-num" aria-hidden="true">01</span>
+          <h2 id="violations-heading">Violation Catalogue</h2>
+        </div>
+
+        <!-- Violation 1 -->
+        <article class="violation" aria-labelledby="v1-title">
+          <div class="violation-header">
+            <span class="sev-badge sev-critical" aria-label="Severity: Critical">Critical</span>
+            <div>
+              <p class="violation-title" id="v1-title">All data visualizations have no accessible text alternative</p>
+              <p class="violation-wcag">WCAG 1.1.1 Non-text Content (Level A) &nbsp;·&nbsp; 1.3.1 Info and Relationships (Level A)</p>
+            </div>
+          </div>
+          <div class="violation-body">
+            <p>The county map, age group bar chart, sex breakdown chart, marital status chart, homelessness chart, and trend line are all rendered as SVG elements with <strong>no <code>aria-label</code>, no <code>role</code> attribute, and no nested <code>&lt;title&gt;</code> element</strong>. A screen reader user encounters these as empty, unnamed regions.</p>
+            <div class="impact-box"><strong>Impact:</strong> The entirety of the data this dashboard exists to communicate is invisible to blind users and screen reader users. This is the single most consequential failure on the page.</div>
+            <div class="code-pair">
+              <div class="code-block bad">
+                <p class="code-label" aria-label="Failing code">✗ Current</p>
+                <pre aria-label="Current failing code"><span class="hl-bad">&lt;svg</span> <span class="hl-attr">width</span>=<span class="hl-str">"900"</span> <span class="hl-attr">height</span>=<span class="hl-str">"600"</span><span class="hl-bad">&gt;</span>
+  &lt;!-- No title, no role,
+       no aria-label --&gt;
+  &lt;g&gt;...county paths...&lt;/g&gt;
+&lt;/svg&gt;</pre>
+              </div>
+              <div class="code-block good">
+                <p class="code-label" aria-label="Fixed code">✓ Required fix</p>
+                <pre aria-label="Corrected accessible code"><span class="hl-good">&lt;svg</span> <span class="hl-attr">role</span>=<span class="hl-str">"img"</span>
+     <span class="hl-attr">aria-labelledby</span>=<span class="hl-str">"map-title"</span>
+     <span class="hl-attr">aria-describedby</span>=<span class="hl-str">"map-desc"</span><span class="hl-good">&gt;</span>
+  &lt;title <span class="hl-attr">id</span>=<span class="hl-str">"map-title"</span>&gt;
+    Colorado county death counts, 2024
+  &lt;/title&gt;
+  &lt;desc <span class="hl-attr">id</span>=<span class="hl-str">"map-desc"</span>&gt;
+    Choropleth map showing total deaths
+    by county. El Paso: 5,516.
+    Denver: 4,996. Jefferson: 5,002.
+  &lt;/desc&gt;
+  &lt;g&gt;...county paths...&lt;/g&gt;
+&lt;/svg&gt;</pre>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Violation 2 -->
+        <article class="violation" aria-labelledby="v2-title">
+          <div class="violation-header">
+            <span class="sev-badge sev-critical" aria-label="Severity: Critical">Critical</span>
+            <div>
+              <p class="violation-title" id="v2-title">No skip navigation link</p>
+              <p class="violation-wcag">WCAG 2.4.1 Bypass Blocks (Level A)</p>
+            </div>
+          </div>
+          <div class="violation-body">
+            <p>There is no skip link allowing keyboard and screen reader users to bypass the toolbar and navigation chrome and jump directly to the data content. Keyboard users must tab through every toolbar button on every page load.</p>
+            <div class="code-pair">
+              <div class="code-block good">
+                <p class="code-label" aria-label="Fixed code">✓ Required fix — add as first element in &lt;body&gt;</p>
+                <pre aria-label="Skip link fix">&lt;a <span class="hl-attr">class</span>=<span class="hl-str">"skip-link"</span>
+   <span class="hl-attr">href</span>=<span class="hl-str">"#main-content"</span>&gt;
+  Skip to main content
+&lt;/a&gt;
+
+<span class="hl-attr">/* CSS */</span>
+.skip-link {
+  position: absolute;
+  top: -999px;
+}
+.skip-link:focus {
+  top: 0;
+}</pre>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Violation 3 -->
+        <article class="violation" aria-labelledby="v3-title">
+          <div class="violation-header">
+            <span class="sev-badge sev-critical" aria-label="Severity: Critical">Critical</span>
+            <div>
+              <p class="violation-title" id="v3-title">Form controls have no accessible labels</p>
+              <p class="violation-wcag">WCAG 1.3.1 Info and Relationships (Level A) &nbsp;·&nbsp; 4.1.2 Name, Role, Value (Level A)</p>
+            </div>
+          </div>
+          <div class="violation-body">
+            <p>The "Select a Cause of Death" dropdown and the year range slider both lack associated <code>&lt;label&gt;</code> elements. Neither has an <code>aria-label</code> or <code>aria-labelledby</code> attribute. Screen readers announce them only as "combobox" and "slider" with no context.</p>
+            <div class="code-pair">
+              <div class="code-block bad">
+                <p class="code-label" aria-label="Failing code">✗ Current</p>
+                <pre aria-label="Current failing code"><span class="hl-bad">&lt;select&gt;</span>
+  &lt;option&gt;All causes&lt;/option&gt;
+  ...
+&lt;/select&gt;
+
+<span class="hl-bad">&lt;input</span> <span class="hl-attr">type</span>=<span class="hl-str">"range"</span>
+  <span class="hl-attr">min</span>=<span class="hl-str">"2000"</span> <span class="hl-attr">max</span>=<span class="hl-str">"2024"</span><span class="hl-bad">&gt;</span></pre>
+              </div>
+              <div class="code-block good">
+                <p class="code-label" aria-label="Fixed code">✓ Required fix</p>
+                <pre aria-label="Corrected accessible code"><span class="hl-good">&lt;label</span> <span class="hl-attr">for</span>=<span class="hl-str">"cause-select"</span><span class="hl-good">&gt;</span>
+  Select a Cause of Death
+&lt;/label&gt;
+&lt;select <span class="hl-attr">id</span>=<span class="hl-str">"cause-select"</span>&gt;
+  &lt;option&gt;All causes&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;label <span class="hl-attr">for</span>=<span class="hl-str">"year-slider"</span>&gt;
+  Select Year (2000–2024)
+&lt;/label&gt;
+&lt;input <span class="hl-attr">type</span>=<span class="hl-str">"range"</span>
+  <span class="hl-attr">id</span>=<span class="hl-str">"year-slider"</span>
+  <span class="hl-attr">min</span>=<span class="hl-str">"2000"</span> <span class="hl-attr">max</span>=<span class="hl-str">"2024"</span>
+  <span class="hl-attr">aria-valuetext</span>=<span class="hl-str">"Year 2024"</span>&gt;</pre>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Violation 4 -->
+        <article class="violation" aria-labelledby="v4-title">
+          <div class="violation-header">
+            <span class="sev-badge sev-critical" aria-label="Severity: Critical">Critical</span>
+            <div>
+              <p class="violation-title" id="v4-title">Multiple images have no alt text (12+ instances)</p>
+              <p class="violation-wcag">WCAG 1.1.1 Non-text Content (Level A)</p>
+            </div>
+          </div>
+          <div class="violation-body">
+            <p>At least 12 <code>&lt;img&gt;</code> elements have no <code>alt</code> attribute at all — not even an empty one. Screen readers will either skip them silently or read out the image file path or URL, which is disorienting and meaningless.</p>
+            <div class="code-pair">
+              <div class="code-block bad">
+                <p class="code-label" aria-label="Failing code">✗ Current</p>
+                <pre aria-label="Current failing code"><span class="hl-bad">&lt;img&gt;</span>
+<span class="hl-bad">&lt;img&gt;</span>
+<span class="hl-bad">&lt;img&gt;</span>
+<span class="hl-comment">/* no alt, no role, nothing */</span></pre>
+              </div>
+              <div class="code-block good">
+                <p class="code-label" aria-label="Fixed code">✓ Required fix</p>
+                <pre aria-label="Corrected accessible code"><span class="hl-comment">/* Decorative images */</span>
+&lt;img <span class="hl-attr">src</span>=<span class="hl-str">"..."</span> <span class="hl-attr">alt</span>=<span class="hl-str">""</span>
+     <span class="hl-attr">role</span>=<span class="hl-str">"presentation"</span>&gt;
+
+<span class="hl-comment">/* Informative images */</span>
+&lt;img <span class="hl-attr">src</span>=<span class="hl-str">"..."</span>
+     <span class="hl-attr">alt</span>=<span class="hl-str">"CDPHE logo"</span>&gt;</pre>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Violation 5 -->
+        <article class="violation" aria-labelledby="v5-title">
+          <div class="violation-header">
+            <span class="sev-badge sev-serious" aria-label="Severity: Serious">Serious</span>
+            <div>
+              <p class="violation-title" id="v5-title">Color is the sole encoding on the county map</p>
+              <p class="violation-wcag">WCAG 1.4.1 Use of Color (Level A)</p>
+            </div>
+          </div>
+          <div class="violation-body">
+            <p>The county choropleth map uses only a light-to-dark blue gradient to encode death counts. Users who are colorblind, have low vision, or are viewing on low-quality displays cannot distinguish county values.</p>
+            <div class="impact-box"><strong>Impact:</strong> Affects approximately 8% of male users (red-green colorblindness) plus users with low vision or monochrome displays.</div>
+            <p><strong>Fix:</strong> Add text labels directly on county regions (already partially present), ensure sufficient contrast between the lightest and darkest fill values (minimum 3:1 ratio), and provide a supplementary data table as a non-color alternative (see Section 02 below).</p>
+          </div>
+        </article>
+
+        <!-- Violation 6 -->
+        <article class="violation" aria-labelledby="v6-title">
+          <div class="violation-header">
+            <span class="sev-badge sev-serious" aria-label="Severity: Serious">Serious</span>
+            <div>
+              <p class="violation-title" id="v6-title">No data table alternative for chart content</p>
+              <p class="violation-wcag">WCAG 1.3.1 Info and Relationships (Level A) &nbsp;·&nbsp; Section 508 §1194.22(g)</p>
+            </div>
+          </div>
+          <div class="violation-body">
+            <p>When data is displayed visually, an accessible equivalent — such as a structured HTML data table — must be available. No table alternative exists for any chart on this dashboard. The data is inaccessible to anyone who cannot perceive the visual representation.</p>
+            <p><strong>Fix:</strong> Add a "View as table" toggle adjacent to each chart. See the working example in Section 02.</p>
+          </div>
+        </article>
+
+        <!-- Violation 7 -->
+        <article class="violation" aria-labelledby="v7-title">
+          <div class="violation-header">
+            <span class="sev-badge sev-serious" aria-label="Severity: Serious">Serious</span>
+            <div>
+              <p class="violation-title" id="v7-title">Raw data access requires third-party login (Google account)</p>
+              <p class="violation-wcag">WCAG 2.1 Principle 4 — Robust &nbsp;·&nbsp; ADA Title II Equal Access</p>
+            </div>
+          </div>
+          <div class="violation-body">
+            <p>The state's open data portal (data-cdphe.opendata.arcgis.com) requires a Google account to access the underlying dataset. This creates an authentication barrier for public data — excluding users who lack or decline Google accounts, raising identity and privacy concerns for a health dataset.</p>
+            <div class="impact-box"><strong>Impact:</strong> Researchers, journalists, advocates, and members of the public who need raw mortality data cannot access it without creating or providing a commercial third-party account.</div>
+            <p><strong>Fix:</strong> Provide a direct, unauthenticated CSV/Excel download link from the CDPHE domain, or through the existing Data Request System at <a href="https://datarequest.dphe.state.co.us/drs-app/">datarequest.dphe.state.co.us</a>. The data request system should be prominently linked from the dashboard page itself.</p>
+          </div>
+        </article>
+      </section>
+
+      <!-- Section 2: Accessible Solution -->
+      <section aria-labelledby="solution-heading">
+        <div class="section-header">
+          <span class="section-num" aria-hidden="true">02</span>
+          <h2 id="solution-heading">Ready-to-Deploy Accessible Alternative</h2>
+        </div>
+
+        <p style="font-size:.9rem; margin-bottom:1.25rem; color:var(--mid);">
+          The following components can be embedded directly on the CDPHE death statistics page alongside or instead of the Tableau embed. They are fully WCAG 2.1 AA compliant, require no third-party dependencies, and load without authentication. The code is provided in Section 03.
+        </p>
+
+        <div class="solution-section">
+          <div class="solution-header">
+            <h2>Accessible Controls Demo</h2>
+            <p>Properly labeled form controls with visible focus indicators — a direct replacement for Tableau's unlabeled inputs.</p>
+          </div>
+          <div class="solution-body">
+            <div class="filter-demo" role="region" aria-label="Data filter controls">
+              <div class="filter-row">
+                <div class="filter-group">
+                  <label for="demo-cause">Cause of Death</label>
+                  <select id="demo-cause" aria-describedby="cause-hint">
+                    <option value="all">All causes</option>
+                    <option value="heart">Heart disease</option>
+                    <option value="cancer">Cancer</option>
+                    <option value="covid">COVID-19</option>
+                    <option value="alzheimers">Alzheimer's disease</option>
+                    <option value="accident">Unintentional injury</option>
+                  </select>
+                  <span id="cause-hint" style="font-size:.78rem;color:var(--mid);">Select to filter all charts below</span>
+                </div>
+                <div class="filter-group">
+                  <label for="demo-year">Year: <span id="year-display" aria-live="polite">2024</span></label>
+                  <input type="range" id="demo-year" min="2000" max="2024" value="2024"
+                         aria-valuemin="2000" aria-valuemax="2024" aria-valuenow="2024"
+                         aria-valuetext="Year 2024"
+                         oninput="const v=this.value; document.getElementById('year-display').textContent=v; this.setAttribute('aria-valuenow',v); this.setAttribute('aria-valuetext','Year '+v);" />
+                </div>
+                <div class="year-output" aria-hidden="true">←</div>
+              </div>
+            </div>
+
+            <h3>Accessible Data Table — Colorado Deaths by Age Group (2024, All Causes)</h3>
+            <p style="font-size:.875rem;color:var(--mid);margin-bottom:.75rem;">This table presents the same data as the "Age Groups" bar chart in the Tableau dashboard, in an accessible format that works with all screen readers, keyboard navigation, and assistive technology.</p>
+
+            <div class="demo-wrapper">
+              <table class="demo-table" aria-describedby="age-table-desc">
+                <caption>
+                  Colorado Total Deaths by Age Group, 2024 — All Causes
+                  <span id="age-table-desc" style="display:block;font-weight:400;font-size:.82rem;margin-top:.2rem;">Source: CDPHE Vital Statistics Program. Data represents county of residence.</span>
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Age Group</th>
+                    <th scope="col">Deaths (Count)</th>
+                    <th scope="col">% of Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row" data-label="Age Group">Under 1 year</th>
+                    <td data-label="Deaths">296</td>
+                    <td data-label="% of Total">0.7%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" data-label="Age Group">1 through 4 years</th>
+                    <td data-label="Deaths">61</td>
+                    <td data-label="% of Total">0.1%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" data-label="Age Group">5 through 14 years</th>
+                    <td data-label="Deaths">99</td>
+                    <td data-label="% of Total">0.2%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" data-label="Age Group">15 through 24 years</th>
+                    <td data-label="Deaths">597</td>
+                    <td data-label="% of Total">1.3%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" data-label="Age Group">25 through 34 years</th>
+                    <td data-label="Deaths">1,196</td>
+                    <td data-label="% of Total">2.7%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" data-label="Age Group">35 through 44 years</th>
+                    <td data-label="Deaths">1,844</td>
+                    <td data-label="% of Total">4.1%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" data-label="Age Group">45 through 54 years</th>
+                    <td data-label="Deaths">2,525</td>
+                    <td data-label="% of Total">5.7%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" data-label="Age Group">55 through 64 years</th>
+                    <td data-label="Deaths">4,909</td>
+                    <td data-label="% of Total">11.0%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" data-label="Age Group">65 through 74 years</th>
+                    <td data-label="Deaths">8,621</td>
+                    <td data-label="% of Total">19.4%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" data-label="Age Group">75 through 84 years</th>
+                    <td data-label="Deaths">11,562</td>
+                    <td data-label="% of Total">26.0%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row" data-label="Age Group"><strong>85 and above</strong></th>
+                    <td data-label="Deaths"><strong>12,738</strong></td>
+                    <td data-label="% of Total"><strong>28.6%</strong></td>
+                  </tr>
+                  <tr style="background:#eef1f5;">
+                    <th scope="row" data-label="Age Group"><strong>Total</strong></th>
+                    <td data-label="Deaths"><strong>44,527</strong></td>
+                    <td data-label="% of Total"><strong>100%</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>What This Fixes (at a glance)</h3>
+            <ul class="checklist" aria-label="Fixes applied in this solution">
+              <li>
+                <span class="check-icon check-done" aria-label="Fixed">✓</span>
+                Skip navigation link present as first element in &lt;body&gt;
+              </li>
+              <li>
+                <span class="check-icon check-done" aria-label="Fixed">✓</span>
+                All form controls have visible, properly associated &lt;label&gt; elements
+              </li>
+              <li>
+                <span class="check-icon check-done" aria-label="Fixed">✓</span>
+                Year slider uses aria-valuetext to announce the year in words, not just a number
+              </li>
+              <li>
+                <span class="check-icon check-done" aria-label="Fixed">✓</span>
+                Data table uses &lt;th scope="row/col"&gt; for proper screen reader traversal
+              </li>
+              <li>
+                <span class="check-icon check-done" aria-label="Fixed">✓</span>
+                Table has a &lt;caption&gt; providing full context without needing surrounding text
+              </li>
+              <li>
+                <span class="check-icon check-done" aria-label="Fixed">✓</span>
+                Responsive: table restructures to a list format on mobile viewports
+              </li>
+              <li>
+                <span class="check-icon check-done" aria-label="Fixed">✓</span>
+                All focus states are visible (2px solid outline, 3px offset) — WCAG 2.4.11
+              </li>
+              <li>
+                <span class="check-icon check-done" aria-label="Fixed">✓</span>
+                Live region (aria-live) on year display so screen readers announce value changes
+              </li>
+              <li>
+                <span class="check-icon check-todo" aria-label="Still needs fixing in Tableau">✗</span>
+                SVG charts still require Tableau-side fixes — cannot be patched from outside the embed
+              </li>
+              <li>
+                <span class="check-icon check-todo" aria-label="Still needs fixing">✗</span>
+                Raw data login wall requires CDPHE to add a direct download link
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Remediation Timeline -->
+      <section aria-labelledby="timeline-heading">
+        <div class="section-header">
+          <span class="section-num" aria-hidden="true">03</span>
+          <h2 id="timeline-heading">Recommended Remediation Timeline</h2>
+        </div>
+
+        <div class="timeline" role="list" aria-label="Remediation steps by deadline">
+          <div class="timeline-item" role="listitem">
+            <span class="t-date urgent">By Apr 14</span>
+            <div>
+              <strong>Add skip link + label all form controls.</strong> These are single-line HTML changes that can be injected via JavaScript into the Tableau embed wrapper. Estimated: 1–2 hours developer time.
+            </div>
+          </div>
+          <div class="timeline-item" role="listitem">
+            <span class="t-date urgent">By Apr 17</span>
+            <div>
+              <strong>Add accessible data table alternative</strong> (use the code in this document) to the colorado-death-statistics page. Publish a direct CSV download link with no authentication required. Estimated: 2–4 hours.
+            </div>
+          </div>
+          <div class="timeline-item" role="listitem">
+            <span class="t-date urgent">By Apr 21</span>
+            <div>
+              <strong>File a request with Tableau</strong> to enable SVG title/desc elements and ARIA roles on the server-hosted workbook. If Tableau cannot remediate in time, add a prominent banner above the embed linking to the accessible table alternative.
+            </div>
+          </div>
+          <div class="timeline-item" role="listitem">
+            <span class="t-date">Apr 24</span>
+            <div>
+              <strong>DOJ Title II ADA final rule compliance deadline.</strong> At minimum, the accessible table alternative and labeled controls must be live. Document remediation steps taken for compliance records.
+            </div>
+          </div>
+          <div class="timeline-item" role="listitem">
+            <span class="t-date">Ongoing</span>
+            <div>
+              <strong>Full Tableau remediation</strong> including SVG labels and color contrast. Consider migrating to an open-source charting library (Observable Plot, Chart.js) that natively supports ARIA on SVG outputs.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Contact / Data Access -->
+      <section aria-labelledby="contact-heading">
+        <div class="section-header">
+          <span class="section-num" aria-hidden="true">04</span>
+          <h2 id="contact-heading">Accessible Data Access — Where to Direct Users Now</h2>
+        </div>
+
+        <div class="exec-summary" style="border-left-color:var(--green);">
+          <h2 style="color:var(--green);">Accessible Paths to the Raw Data (No Login Required)</h2>
+          <p><strong>Data Request System:</strong> <a href="https://datarequest.dphe.state.co.us/drs-app/">datarequest.dphe.state.co.us/drs-app/</a> — submit a request for mortality data in CSV or Excel. No Google account required.</p>
+          <p><strong>Email:</strong> <a href="mailto:cdphe.healthstatistics@state.co.us">cdphe.healthstatistics@state.co.us</a> — direct contact to the Vital Statistics program for data requests.</p>
+          <p><strong>Official Death Statistics page:</strong> <a href="https://cdphe.colorado.gov/colorado-death-statistics">cdphe.colorado.gov/colorado-death-statistics</a> — links to all three Tableau views and the data request system.</p>
+          <p style="font-size:.85rem; color:var(--mid); margin-top:.5rem;"><em>These paths should be prominently linked from the Tableau dashboard page itself, before the embed, so users who cannot access the visual dashboard have an immediate alternative.</em></p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  
+
+<script src="../../../shared/js/main.js"></script>
+  </main>
+  <!-- ═══════════════════════════════════════════════════════════════════
+     FOOTER — single source of truth, included by site.njk on every page.
+════════════════════════════════════════════════════════════════════ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  .subscribe-block {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    padding: 48px 0;
+    border-top: 1px solid var(--cc-border);
+  }
+  .subscribe-block .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+  .subscribe-block h2 {
+    font-family: var(--cc-serif);
+    margin: 0 0 12px;
+    color: var(--cc-text);
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .subscribe-block .deck {
+    color: var(--cc-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+  .gov-subscribe { display: flex; flex-direction: column; gap: 12px; }
+  .gov-subscribe label {
+    display: block;
+    font-family: var(--cc-sans);
+    font-size: 1rem;
+    color: var(--cc-text);
+    font-weight: 500;
+  }
+  .gov-subscribe input[type="email"] {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 12px;
+    font: inherit;
+    background: var(--cc-surface2);
+    color: var(--cc-text);
+    border: 1.5px solid var(--cc-border-hi);
+    border-radius: 4px;
+    min-height: 44px;
+  }
+  .gov-subscribe input[type="email"]::placeholder { color: var(--cc-quiet); opacity: 1; }
+  .gov-subscribe input[type="email"]:focus {
+    border-color: var(--cc-gold);
+    outline: 2px solid var(--cc-gold);
+    outline-offset: 1px;
+  }
+  .gov-subscribe__consent {
+    font-size: 0.9rem;
+    color: var(--cc-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .gov-subscribe button[type="submit"] {
+    align-self: flex-start;
+    background: var(--cc-gold);
+    color: #0c1220;
+    border: 0;
+    padding: 12px 24px;
+    min-height: 44px;
+    font: 700 .85rem var(--cc-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+  .gov-subscribe button[type="submit"]:hover,
+  .gov-subscribe button[type="submit"]:focus-visible { background: var(--cc-gold-lt); }
+  .gov-subscribe output {
+    display: block;
+    min-height: 1.4em;
+    font-size: 0.95rem;
+    color: var(--cc-muted);
+  }
+</style>
+<section class="subscribe-block" aria-label="Subscribe to updates" data-topic="" hidden>
+  <div class="container">
+    <h2>Get email updates</h2>
+    <p class="deck">We&#39;ll email you a plain-language summary with links to the source documents whenever this office posts new public-record material.</p>
+
+    <form class="gov-subscribe" novalidate>
+      <label>
+        Email address
+        <input type="email" name="email" required autocomplete="email"
+               placeholder="you@example.com">
+      </label>
+      <p class="gov-subscribe__consent">
+        By subscribing you agree to receive emails about this topic. We&#39;ll send a confirmation link first. Unsubscribe any time. <em>(consent v2026-04-30-v1)</em>
+      </p>
+      <button type="submit">Subscribe</button>
+      <output role="status" aria-live="polite"></output>
+    </form>
+  </div>
+</section>
+
+
+<script>
+(function () {
+  if (window.__govSubscribeInit) return;
+  window.__govSubscribeInit = true;
+
+  // Skip top-level pages and /microsites/shared/* — no agency-specific topic.
+  var SKIP_JURISDICTIONS = { shared: 1 };
+
+  function inferTopicFromUrl() {
+    var parts = location.pathname.split('/').filter(Boolean);
+    // ["microsites", "<jurisdiction>", "<agency>", ...]
+    if (parts[0] !== 'microsites') return '';
+    if (!parts[1] || !parts[2]) return '';
+    if (SKIP_JURISDICTIONS[parts[1]]) return '';
+    return 'gov.' + parts[1] + '.' + parts[2];
+  }
+
+  function attach(host) {
+    // Resolve topic: explicit data-topic wins, else infer from URL.
+    var topic = host.dataset.topic || inferTopicFromUrl();
+    if (!topic) { host.remove(); return; }
+    host.dataset.topic = topic;
+    host.hidden = false;
+
+    var form = host.querySelector('form.gov-subscribe');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    var out = form.querySelector('output');
+    var source = location.pathname.replace(/^\/+/, '');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      out.textContent = 'Submitting…';
+      var email = form.email.value.trim();
+      var timezone = '';
+      try { timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) {}
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, topic: topic, source: source, timezone: timezone }),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.d.error || 'subscribe failed');
+          out.textContent = res.d.message || 'Check your email to confirm.';
+          form.reset();
+        })
+        .catch(function (err) { out.textContent = 'Something went wrong: ' + err.message; });
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('.subscribe-block[data-topic]').forEach(attach);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+
+<footer class="cc-footer" role="contentinfo">
+  <div class="container">
+    <p class="cc-footer-line">
+      &copy; 2026
+      CheetoChopsticks &amp;
+      <a href="https://www.storyseedstudios.com" target="_blank" rel="noopener noreferrer">
+        StorySeed Studios<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      <a href="https://www.storyseedstudios.com/media-category/the-dais/" target="_blank" rel="noopener noreferrer">
+        The Dais<span class="cc-footer-ext" aria-hidden="true">↗</span>
+        <span class="sr-only">(opens in a new window)</span>
+      </a>
+      &nbsp;·&nbsp;
+      El Paso County, Colorado
+      &nbsp;·&nbsp;
+      For informational purposes only.
+      &nbsp;·&nbsp;
+      Open source.
+      &nbsp;·&nbsp;
+      <a href="/preferences/">Manage your subscriptions</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+/* ── Site nav + notifications panel scripts ──────────────────────────
+   Wrapped in an IIFE so locals never leak. The functions onclick handlers
+   call (openNotif, closeNotif, filterNotif) are explicitly attached to
+   `window` so a page's own scripts can't shadow them, and each function
+   is defensive about the DOM possibly being absent on a page that opted
+   out of the layout. */
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  var lastFocus;
+
+  function openNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    lastFocus = document.activeElement;
+    overlay.classList.add('open');
+    overlay.removeAttribute('aria-hidden');
+    panel.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { panel.focus(); }, 50);
+  }
+
+  function closeNotif() {
+    var overlay = $('notif-overlay');
+    var panel   = $('notif-panel');
+    var btn     = document.querySelector('.notif-btn');
+    if (!overlay || !panel || !btn) return;
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    panel.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  function filterNotif(tier, btn) {
+    document.querySelectorAll('.nf-btn').forEach(function (b) {
+      b.classList.remove('active');
+      b.removeAttribute('aria-pressed');
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    document.querySelectorAll('.notif-item').forEach(function (item) {
+      if (tier === 'all') {
+        item.classList.remove('hidden');
+        item.removeAttribute('aria-hidden');
+      } else {
+        var hide = item.dataset.tier !== tier;
+        item.classList.toggle('hidden', hide);
+        if (hide) item.setAttribute('aria-hidden', 'true');
+        else item.removeAttribute('aria-hidden');
+      }
+    });
+    document.querySelectorAll('.notif-group-label').forEach(function (label) {
+      label.style.display = tier === 'all' ? '' : 'none';
+    });
+  }
+
+  /* Escape closes the panel; Tab stays inside it while it's open. */
+  document.addEventListener('keydown', function (e) {
+    var panel = $('notif-panel');
+    if (!panel) return;
+    if (e.key === 'Escape') { closeNotif(); return; }
+    if (e.key === 'Tab' && panel.classList.contains('open')) {
+      var focusable = panel.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+
+  /* Active nav link on scroll — only runs when the index has the matching anchors. */
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = ['you', 'dashboards', 'people', 'events'];
+  if (typeof IntersectionObserver === 'function' && navLinks.length) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function (l) {
+            var href = l.getAttribute('href') || '';
+            var active = href === '#' + id || href === '/#' + id;
+            l.classList.toggle('active', active);
+            if (active) l.setAttribute('aria-current', 'true');
+            else l.removeAttribute('aria-current');
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach(function (id) {
+      var el = $(id);
+      if (el) observer.observe(el);
+    });
+  }
+
+  /* Expose the click-target functions globally so inline onclick handlers
+     (and any page that needs them) can always reach them by name. */
+  window.openNotif   = openNotif;
+  window.closeNotif  = closeNotif;
+  window.filterNotif = filterNotif;
+
+  /* ─── Nav search (disclosure pattern + lazy fetch + filter) ───────
+     The toggle button uses aria-expanded to advertise state; opening
+     it un-hides the panel, moves focus to the input, attaches Escape
+     and click-outside handlers, and fetches /search-index.json on
+     first open (cached for the rest of the session). All search
+     scoring matches the homepage block so results rank identically. */
+  var nsToggle   = $('nav-search-toggle');
+  var nsPanel    = $('nav-search-panel');
+  var nsForm     = $('nav-search-form');
+  var nsInput    = $('nav-search-input');
+  var nsClose    = $('nav-search-close');
+  var nsStatus   = $('nav-search-status');
+  var nsResults  = $('nav-search-results');
+  var nsEmpty    = $('nav-search-empty');
+  var nsChips    = document.querySelectorAll('.nav-search-panel__chip');
+
+  if (nsToggle && nsPanel && nsForm && nsInput) {
+    var nsIndex = null;
+    var nsTier  = 'all';
+    var nsDebounce = null;
+
+    function nsOpen() {
+      nsPanel.hidden = false;
+      nsToggle.setAttribute('aria-expanded', 'true');
+      ensureIndex();
+      /* Defer focus one tick so the panel is in the layout. */
+      setTimeout(function(){ nsInput && nsInput.focus(); }, 0);
+      document.addEventListener('keydown', nsOnKey);
+      document.addEventListener('click', nsOnDocClick, true);
+    }
+    function nsClosePanel(returnFocus) {
+      nsPanel.hidden = true;
+      nsToggle.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('keydown', nsOnKey);
+      document.removeEventListener('click', nsOnDocClick, true);
+      if (returnFocus !== false) nsToggle.focus();
+    }
+    function nsOnKey(e) {
+      if (e.key === 'Escape') { e.preventDefault(); nsClosePanel(true); }
+    }
+    function nsOnDocClick(e) {
+      if (!nsPanel.contains(e.target) && e.target !== nsToggle && !nsToggle.contains(e.target)) {
+        nsClosePanel(false);
+      }
+    }
+
+    nsToggle.addEventListener('click', function() {
+      var open = nsToggle.getAttribute('aria-expanded') === 'true';
+      if (open) nsClosePanel(true); else nsOpen();
+    });
+    if (nsClose) nsClose.addEventListener('click', function() { nsClosePanel(true); });
+
+    function ensureIndex() {
+      if (nsIndex !== null) return Promise.resolve(nsIndex);
+      if (nsStatus) nsStatus.textContent = 'Loading search index…';
+      return fetch('/search-index.json', { headers: { 'Accept': 'application/json' } })
+        .then(function(r){ if (!r.ok) throw new Error('failed'); return r.json(); })
+        .then(function(data){ nsIndex = Array.isArray(data) ? data : []; if (nsStatus) nsStatus.textContent = ''; return nsIndex; })
+        .catch(function(){ nsIndex = []; if (nsStatus) nsStatus.textContent = 'Search index failed to load — try refreshing.'; return nsIndex; });
+    }
+
+    var ZIP_RE    = /^\s*\d{5}(-\d{4})?\s*$/;
+    var STREET_RE = /\b\d+\s+\w+.*\b(st|street|ave|avenue|blvd|boulevard|rd|road|dr|drive|ln|lane|way|ct|court|pl|place|hwy|highway|pkwy|parkway)\b/i;
+    function nsLooksLikeAddress(q) { return ZIP_RE.test(q) || STREET_RE.test(q); }
+    function nsEsc(s){
+      return String(s).replace(/[&<>"']/g, function(c){
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+      });
+    }
+    function nsHighlight(text, terms){
+      if (!terms.length) return nsEsc(text);
+      var safe = nsEsc(text);
+      var sorted = terms.slice().sort(function(a,b){ return b.length - a.length; });
+      var pattern = sorted.map(function(t){ return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|');
+      var re = new RegExp('(' + pattern + ')', 'gi');
+      return safe.replace(re, '<mark>$1</mark>');
+    }
+    function nsScore(item, terms){
+      var pathStr = (item.path || '').toLowerCase();
+      var hay = (item.title + ' ' + item.desc + ' ' + item.scope + ' ' + pathStr).toLowerCase();
+      var s = 0;
+      for (var i=0;i<terms.length;i++){
+        var t = terms[i];
+        if (item.title.toLowerCase().indexOf(t) !== -1) s += 5;
+        if (item.scope.toLowerCase().indexOf(t) !== -1) s += 3;
+        if (item.desc.toLowerCase().indexOf(t) !== -1)  s += 2;
+        if (pathStr.indexOf(t) !== -1)                   s += 1;
+        if (hay.indexOf(t) === -1) return -1;
+      }
+      return s;
+    }
+    function nsRender(items, terms){
+      nsResults.innerHTML = '';
+      if (!items.length) {
+        if (nsStatus) nsStatus.textContent = '';
+        if (nsEmpty)  nsEmpty.hidden = false;
+        return;
+      }
+      if (nsEmpty) nsEmpty.hidden = true;
+      if (nsStatus) nsStatus.textContent = items.length + ' result' + (items.length === 1 ? '' : 's');
+      var frag = document.createDocumentFragment();
+      items.forEach(function(it){
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.className = 'nav-search-panel__item nav-search-panel__item--' + it.tier;
+        a.href = it.url;
+        a.innerHTML =
+          '<p class="nav-search-panel__item-scope">' + nsEsc(it.scope) + '</p>' +
+          '<p class="nav-search-panel__item-title">' + nsHighlight(it.title, terms) + '</p>' +
+          (it.desc ? '<p class="nav-search-panel__item-desc">' + nsHighlight(it.desc, terms) + '</p>' : '');
+        li.appendChild(a);
+        frag.appendChild(li);
+      });
+      nsResults.appendChild(frag);
+    }
+    function nsRun(q) {
+      q = (q || '').trim();
+      if (!q) {
+        nsResults.innerHTML = '';
+        if (nsEmpty)  nsEmpty.hidden = true;
+        if (nsStatus) nsStatus.textContent = '';
+        return;
+      }
+      if (nsLooksLikeAddress(q)) {
+        window.location.href = '/microsites/shared/cos-find-my-jurisdiction.html?q=' + encodeURIComponent(q);
+        return;
+      }
+      ensureIndex().then(function(idx){
+        var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+        var pool  = (nsTier === 'all') ? idx : idx.filter(function(it){ return it.tier === nsTier; });
+        var scored = [];
+        for (var i=0;i<pool.length;i++) {
+          var s = nsScore(pool[i], terms);
+          if (s >= 0) scored.push({ s:s, it:pool[i] });
+        }
+        scored.sort(function(a,b){ return b.s - a.s; });
+        nsRender(scored.slice(0, 30).map(function(x){ return x.it; }), terms);
+      });
+    }
+
+    nsInput.addEventListener('input', function() {
+      clearTimeout(nsDebounce);
+      nsDebounce = setTimeout(function(){ nsRun(nsInput.value); }, 100);
+    });
+    nsForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      nsRun(nsInput.value);
+    });
+    nsChips.forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        nsTier = chip.dataset.tier;
+        nsChips.forEach(function(c){ c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+        nsRun(nsInput.value);
+      });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

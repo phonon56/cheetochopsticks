@@ -1,0 +1,65 @@
+/* ============================================================
+   Civic Records — brand layer
+   Palette borrowed from cheetochopsticks for visual continuity
+   across the civic-tech project family.
+   Loaded after tokens.css so it can override or extend.
+   ============================================================ */
+
+:root {
+    /* ── Cheetochopsticks raw palette ──────────────────────── */
+    --cc-ink:        #0a0f1a;
+    --cc-ink-mid:    #111827;
+    --cc-ink-card:   #161e2e;
+    --cc-ink-border: #1e2d4a;
+
+    --cc-paper:      #f0ece0;
+    --cc-paper-mid:  #d8d2c0;
+    --cc-paper-dim:  #a89e88;
+
+    --cc-gold:       #c8a84b;
+    --cc-gold-light: #e8c870;
+    --cc-gold-dark:  #9a7e30;
+
+    --cc-navy:       #001a4d;
+    --cc-blue:       #0049b1;
+    --cc-sky:        #4a9eff;
+
+    --cc-red:        #b91c1c;
+    --cc-red-light:  #ef4444;
+
+    --cc-teal:       #0b7a75;
+    --cc-green:      #065f46;
+
+    /* ── Civic Records semantic tokens ─────────────────────── */
+    /* Surfaces */
+    --bg:           var(--cc-ink);
+    --card:         var(--cc-ink-card);
+    --card-raised: var(--cc-ink-mid);
+    --rule:         var(--cc-ink-border);
+
+    /* Text */
+    --ink:          var(--cc-paper);       /* primary text */
+    --subtle:       var(--cc-paper-mid);   /* secondary text */
+    --muted:        var(--cc-paper-dim);   /* tertiary / hint text */
+
+    /* Accent */
+    --accent:       var(--cc-gold);
+    --accent-dark:  var(--cc-gold-dark);
+    --accent-tint:  rgba(200, 168, 75, 0.1);
+
+    /* Links — sky reads well on dark */
+    --link:         var(--cc-sky);
+    --link-visited: var(--cc-gold-light);
+
+    /* Status */
+    --warn:         #f59e0b;
+    --crit:         var(--cc-red-light);
+
+    /* Type stack — matches cheetochopsticks family */
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-sans:    'IBM Plex Sans', system-ui, -apple-system,
+                    BlinkMacSystemFont, "Segoe UI", Helvetica,
+                    Arial, sans-serif;
+    --font-mono:    'IBM Plex Mono', ui-monospace, SFMono-Regular,
+                    "SF Mono", Menlo, Consolas, monospace;
+}

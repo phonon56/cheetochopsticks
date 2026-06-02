@@ -1,0 +1,159 @@
+{% extends "frontend/base.html" %}
+
+{% block title %}{{ record.title|truncatechars:80 }} — Civic Records{% endblock %}
+
+{% block content %}
+<nav aria-label="Breadcrumb">
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}">Search</a></li>
+        {% if record.project %}
+            <li>
+                <a href="{% url 'project_detail' record.project.slug %}">
+                    {{ record.project.title|truncatechars:40 }}
+                </a>
+            </li>
+        {% elif record.parcel %}
+            <li>
+                <a href="{% url 'parcel_detail' record.parcel.parcel_id %}">
+                    Parcel {{ record.parcel.parcel_id }}
+                </a>
+            </li>
+        {% endif %}
+        <li aria-current="page">{{ record.record_id }}</li>
+    </ol>
+</nav>
+
+<header>
+    <p class="eyebrow">{{ record.get_record_type_display }}</p>
+    <h1>{{ record.title }}</h1>
+
+    {% if record.topic_tags.all %}
+        <ul class="tag-row" aria-label="Topics">
+            {% for tag in record.topic_tags.all %}
+                <li>
+                    <a href="{% url 'home' %}?tag={{ tag.slug }}" class="chip chip-sm">
+                        {{ tag.label }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <dl class="parcel-meta">
+        <dt>Record ID</dt><dd>{{ record.record_id }}</dd>
+        <dt>Status</dt><dd>{{ record.get_status_display }}</dd>
+        <dt>Owner</dt>
+        <dd>
+            {{ record.owner_department|default:"—" }}
+            {% if record.owner_person %}— {{ record.owner_person }}{% endif %}
+        </dd>
+        {% if record.occurred_at %}
+        <dt>Occurred</dt><dd>{{ record.occurred_at|date:"F j, Y" }}</dd>
+        {% endif %}
+        <dt>Last update</dt><dd>{{ record.updated_at|date:"F j, Y, P" }}</dd>
+        {% if record.parcel %}
+        <dt>Parcel</dt>
+        <dd>
+            <a href="{% url 'parcel_detail' record.parcel.parcel_id %}">
+                {{ record.parcel.parcel_id }}
+            </a>
+            {% if record.parcel.address %} — {{ record.parcel.address }}{% endif %}
+        </dd>
+        {% endif %}
+        {% if record.project %}
+        <dt>Project</dt>
+        <dd>
+            <a href="{% url 'project_detail' record.project.slug %}">
+                {{ record.project.title }}
+            </a>
+            {% if record.project.status %} — {{ record.project.status }}{% endif %}
+        </dd>
+        {% endif %}
+        {% if record.source_system %}
+        <dt>Source</dt>
+        <dd>
+            {{ record.source_system }}
+            {% if record.source_url %}
+                — <a href="{{ record.source_url }}" rel="noopener">
+                    view original ↗
+                </a>
+            {% endif %}
+        </dd>
+        {% endif %}
+    </dl>
+</header>
+
+{% if record.plain_summary %}
+<section aria-labelledby="summary-heading" class="callout">
+    <h2 id="summary-heading">In plain language</h2>
+    <p>{{ record.plain_summary }}</p>
+</section>
+{% endif %}
+
+{% if record.description %}
+<section aria-labelledby="description-heading">
+    <h2 id="description-heading">Description</h2>
+    <p>{{ record.description|linebreaksbr }}</p>
+</section>
+{% endif %}
+
+{% if record.history.all %}
+<section aria-labelledby="history-heading">
+    <h2 id="history-heading">Progression trail</h2>
+    <ol class="history">
+        {% for h in record.history.all %}
+        <li>
+            <span class="when">{{ h.changed_at|date:"M j, Y" }}</span>
+            <span class="transition">
+                {{ h.from_status|default:"—" }} → <strong>{{ h.to_status }}</strong>
+            </span>
+            {% if h.changed_by %}
+                <span class="who">by {{ h.changed_by }}</span>
+            {% endif %}
+            {% if h.note %}
+                <p class="note">{{ h.note }}</p>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ol>
+</section>
+{% endif %}
+
+{% if record.connected_records.all %}
+<section aria-labelledby="connected-heading">
+    <h2 id="connected-heading">Connected records</h2>
+    <ul class="record-list">
+        {% for cr in record.connected_records.all %}
+        <li>
+            <a href="{% url 'record_detail' cr.record_id %}">
+                <strong>{{ cr.title }}</strong>
+            </a>
+            <span class="meta">
+                {{ cr.get_record_type_display }} ·
+                {{ cr.get_status_display }}
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+
+{% if record.documents.all %}
+<section aria-labelledby="documents-heading">
+    <h2 id="documents-heading">Documents</h2>
+    <ul class="record-list">
+        {% for d in record.documents.all %}
+        <li>
+            <a href="{{ d.file.url }}" rel="noopener">
+                <strong>{{ d.filename }}</strong>
+            </a>
+            <span class="meta">
+                {{ d.get_document_type_display }}
+                {% if d.page_count %} · {{ d.page_count }} pages{% endif %}
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+{% endblock %}

@@ -70,7 +70,7 @@ export function ImageDropzone({
 
   return (
     <div>
-      <label htmlFor={inputId} className="block text-sm font-medium text-slate-900 mb-1">
+      <label htmlFor={inputId} className="block text-sm font-semibold text-ink mb-1.5">
         Photos (optional)
       </label>
       <div
@@ -85,16 +85,16 @@ export function ImageDropzone({
           if (e.dataTransfer.files?.length) addFiles(e.dataTransfer.files);
         }}
         className={[
-          'rounded-md border-2 border-dashed p-4 text-sm',
-          isOver ? 'border-blue-700 bg-blue-50' : 'border-slate-400 bg-slate-50',
+          'rounded-xl border-2 border-dashed p-4 text-sm',
+          isOver ? 'border-brand-ink bg-brand-surface' : 'border-line-stronger bg-surface-muted',
         ].join(' ')}
       >
-        <p id={hintId} className="text-slate-700">
+        <p id={hintId} className="text-ink-secondary">
           Drag images here, or{' '}
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="text-blue-700 underline"
+            className="text-brand-ink font-semibold underline underline-offset-2"
           >
             choose files
           </button>
@@ -120,11 +120,11 @@ export function ImageDropzone({
           {value.map((f, i) => (
             <li
               key={`${f.name}-${i}`}
-              className="flex items-center justify-between gap-3 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
+              className="flex items-center justify-between gap-3 rounded-lg border border-line bg-surface px-3 py-2 text-sm shadow-sm"
             >
               <span className="truncate">
-                <span className="font-medium text-slate-900">{f.name}</span>
-                <span className="ml-2 text-xs text-slate-600">
+                <span className="font-semibold text-ink">{f.name}</span>
+                <span className="ml-2 text-xs text-ink-meta">
                   {(f.size / 1024 / 1024).toFixed(2)} MB
                 </span>
               </span>
@@ -132,7 +132,7 @@ export function ImageDropzone({
                 type="button"
                 onClick={() => removeAt(i)}
                 aria-label={`Remove ${f.name}`}
-                className="rounded-md border border-slate-300 px-2 py-1 text-xs text-slate-800 hover:bg-slate-50 min-h-8"
+                className="rounded-lg border border-line-stronger px-2 py-1 text-xs font-semibold text-ink-strong hover:bg-surface-muted min-h-8"
               >
                 Remove
               </button>
@@ -142,7 +142,7 @@ export function ImageDropzone({
       )}
 
       {error && (
-        <p role="alert" className="mt-2 text-xs text-red-800">
+        <p role="alert" className="mt-2 text-xs text-danger-ink">
           {error}
         </p>
       )}

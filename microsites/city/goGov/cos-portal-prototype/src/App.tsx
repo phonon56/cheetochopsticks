@@ -3,6 +3,7 @@ import { TopicNav } from './components/TopicNav';
 import { TopicForm, type SubmissionPayload } from './components/TopicForm';
 import { HomeTabs } from './components/HomeTabs';
 import { ModeBar, MODES, type Mode } from './components/ModeBar';
+import { GetHelp } from './components/GetHelp';
 import { GetInvolved } from './components/GetInvolved';
 import { Performance } from './components/Performance';
 import { RightNow } from './components/RightNow';
@@ -11,6 +12,7 @@ import { About } from './components/About';
 import { NotificationCenter } from './components/NotificationCenter';
 import { topicsById } from './data';
 import { ADA_CONTACT } from './data/contacts';
+import logoUrl from './assets/logo_0.png';
 
 function readIdFromUrl(): string | null {
   if (typeof window === 'undefined') return null;
@@ -62,38 +64,53 @@ export default function App() {
     else document.title = 'Contact the City — Colorado Springs';
   }, [topic]);
 
+  const peakRibbon = (
+    <div
+      aria-hidden="true"
+      className="h-1.5 w-full"
+      style={{
+        background:
+          'linear-gradient(90deg,#00943a 0 20%,#0074c8 20% 40%,#c61f6e 40% 60%,#ea0d44 60% 80%,#fea30b 80% 100%)',
+      }}
+    />
+  );
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col">
+      {peakRibbon}
       <a href="#main" className="skip-link">
         Skip to main content
       </a>
 
-      <header className="border-b border-slate-200 bg-white px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold text-slate-900">City of Colorado Springs</p>
-            <p className="text-xs text-slate-600">Your Colorado Springs</p>
+      <header className="border-b border-line bg-surface">
+        <div className="mx-auto max-w-6xl px-5 md:px-8 py-3.5 flex items-center justify-between gap-4">
+          <img
+            src={logoUrl}
+            alt="City of Colorado Springs — Olympic City USA"
+            className="h-11 w-auto"
+          />
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              aria-expanded={mobileNavOpen}
+              aria-controls="topic-nav"
+              onClick={() => setMobileNavOpen((o) => !o)}
+              className="md:hidden rounded-lg border border-line-stronger bg-surface px-3.5 py-2 text-sm font-semibold text-ink-strong hover:border-brand-ink hover:text-brand-ink min-h-11"
+            >
+              {mobileNavOpen ? 'Close' : 'Choose topic'}
+            </button>
           </div>
-          <button
-            type="button"
-            aria-expanded={mobileNavOpen}
-            aria-controls="topic-nav"
-            onClick={() => setMobileNavOpen((o) => !o)}
-            className="md:hidden rounded-md border border-slate-300 px-3 py-2 text-sm min-h-11"
-          >
-            {mobileNavOpen ? 'Close' : 'Choose topic'}
-          </button>
         </div>
       </header>
 
       <ModeBar mode={mode} onChange={setMode} />
 
-      <div className="flex-1 md:grid md:grid-cols-[320px_1fr]">
+      <div className="flex-1 mx-auto w-full max-w-6xl px-5 md:px-8 py-8 md:py-10 md:grid md:grid-cols-[250px_1fr] md:gap-10">
         <aside
           id="topic-nav"
           className={[
-            'md:sticky md:top-0 md:h-screen',
-            mobileNavOpen ? 'block' : 'hidden md:block',
+            'md:sticky md:top-4 md:self-start',
+            mobileNavOpen ? 'block mb-6' : 'hidden md:block',
           ].join(' ')}
         >
           <TopicNav
@@ -110,7 +127,7 @@ export default function App() {
             }}
           />
         </aside>
-        <main id="main" tabIndex={-1} className="p-4 md:p-8">
+        <main id="main" tabIndex={-1} className="min-w-0">
           {(topic || submitted) && (
             <nav aria-label="Breadcrumb" className="mb-4">
               <button
@@ -123,7 +140,7 @@ export default function App() {
                     document.getElementById('plain-language-heading')?.focus();
                   });
                 }}
-                className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-800 hover:bg-slate-50 min-h-11"
+                className="inline-flex items-center gap-1 rounded-lg border border-line-stronger bg-surface px-3.5 py-2 text-sm font-semibold text-ink-strong hover:border-brand-ink hover:text-brand-ink min-h-11"
               >
                 <span aria-hidden="true">←</span> Home
               </button>
@@ -158,6 +175,8 @@ export default function App() {
                 });
               }}
             />
+          ) : mode === 'help' ? (
+            <GetHelp onPickMode={(m) => setMode(m)} />
           ) : mode === 'involved' ? (
             <GetInvolved />
           ) : mode === 'performance' ? (
@@ -177,6 +196,7 @@ export default function App() {
       </div>
 
       <AccessibilityFooter />
+      {peakRibbon}
     </div>
   );
 }
@@ -222,23 +242,23 @@ function ComingSoon({ mode }: { mode: Mode }) {
   return (
     <section className="max-w-2xl space-y-4">
       <div>
-        <p className="text-xs uppercase tracking-wide text-slate-600">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-ink">
           Coming next
         </p>
-        <h1 className="text-3xl font-semibold text-slate-900">{c.title}</h1>
+        <h1 className="font-serif text-3xl font-semibold tracking-tight text-ink mt-1">{c.title}</h1>
       </div>
-      <p className="text-slate-700">{c.body}</p>
+      <p className="text-[15px] text-ink-secondary leading-relaxed">{c.body}</p>
       {c.notes && (
-        <div className="rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-800">
-          <p className="font-medium text-slate-900 mb-1">Planned surfaces</p>
-          <ul className="list-disc pl-5 space-y-1">
+        <div className="rounded-xl border border-line bg-surface p-4 text-sm text-ink-strong shadow-sm">
+          <p className="font-semibold text-ink mb-1">Planned surfaces</p>
+          <ul className="list-disc pl-5 space-y-1 text-ink-secondary">
             {c.notes.map((n) => (
               <li key={n}>{n}</li>
             ))}
           </ul>
         </div>
       )}
-      <p className="text-xs text-slate-600">
+      <p className="text-xs text-ink-meta">
         Not built yet. The mode bar exists so this lands in its right home when it ships.
       </p>
     </section>
@@ -254,28 +274,33 @@ function Confirmation({
 }) {
   return (
     <div className="max-w-2xl space-y-4" role="status" aria-live="polite">
-      <div className="rounded-lg border border-green-700 bg-green-50 p-5">
-        <h2 className="text-xl font-semibold text-green-900">Request received</h2>
-        <p className="text-sm text-green-900 mt-1">
-          Your <strong>{payload.topicName}</strong> request was submitted.
-        </p>
-        <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
-          <dt className="text-green-900 font-medium">Trace ID</dt>
-          <dd className="font-mono text-green-900">{payload.traceId}</dd>
-          <dt className="text-green-900 font-medium">Classification</dt>
-          <dd className="text-green-900">#{payload.classificationId}</dd>
-          <dt className="text-green-900 font-medium">Submitted</dt>
-          <dd className="text-green-900">
-            {new Date(payload.submittedAt).toLocaleString()}
-          </dd>
-        </dl>
+      <div className="flex gap-3 rounded-xl border border-line border-l-4 border-l-success bg-success-surface p-5 shadow-sm">
+        <span className="text-success shrink-0 mt-0.5" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="m20 6-11 11-5-5" /></svg>
+        </span>
+        <div className="flex-1">
+          <h2 className="font-serif text-xl font-semibold text-success-ink">Request received</h2>
+          <p className="text-sm text-success-ink/90 mt-1">
+            Your <strong>{payload.topicName}</strong> request was submitted.
+          </p>
+          <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+            <dt className="text-success-ink font-semibold">Trace ID</dt>
+            <dd className="font-mono text-success-ink">{payload.traceId}</dd>
+            <dt className="text-success-ink font-semibold">Classification</dt>
+            <dd className="text-success-ink">#{payload.classificationId}</dd>
+            <dt className="text-success-ink font-semibold">Submitted</dt>
+            <dd className="text-success-ink">
+              {new Date(payload.submittedAt).toLocaleString()}
+            </dd>
+          </dl>
+        </div>
       </div>
 
-      <details className="rounded-md border border-slate-200 bg-white p-3 text-sm">
-        <summary className="cursor-pointer font-medium text-slate-900">
+      <details className="rounded-xl border border-line bg-surface p-4 text-sm shadow-sm">
+        <summary className="cursor-pointer font-semibold text-ink">
           Routing payload (what would be POSTed to the department system)
         </summary>
-        <pre className="mt-2 overflow-x-auto text-xs text-slate-800">
+        <pre className="mt-2 overflow-x-auto text-xs text-ink-strong">
           {JSON.stringify(payload, null, 2)}
         </pre>
       </details>
@@ -283,9 +308,12 @@ function Confirmation({
       <button
         type="button"
         onClick={onFileAnother}
-        className="rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 min-h-11"
+        className="inline-flex items-center gap-2 rounded-lg bg-brand-hover px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark min-h-11"
       >
         File another request
+        <span aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+        </span>
       </button>
     </div>
   );
@@ -296,10 +324,10 @@ function AccessibilityFooter() {
     <footer
       role="contentinfo"
       aria-label="Accessibility and language assistance"
-      className="border-t border-slate-200 bg-white mt-8"
+      className="border-t border-line bg-surface mt-8"
     >
-      <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 text-sm text-slate-800 space-y-3">
-        <h2 className="text-base font-semibold text-slate-900">
+      <div className="mx-auto max-w-6xl px-5 md:px-8 py-8 text-sm text-ink-secondary space-y-3">
+        <h2 className="font-serif text-lg font-semibold text-ink">
           Accessibility & language assistance
         </h2>
         <p>
@@ -310,7 +338,7 @@ function AccessibilityFooter() {
           assistance to use this form, contact the{' '}
           <a
             href={ADA_CONTACT.website}
-            className="text-blue-700 underline"
+            className="text-brand-ink font-semibold underline underline-offset-2"
             target="_blank"
             rel="noreferrer"
           >
@@ -321,13 +349,13 @@ function AccessibilityFooter() {
         <ul className="space-y-1">
           <li>
             <span className="font-medium">Email:</span>{' '}
-            <a href={`mailto:${ADA_CONTACT.email}`} className="text-blue-700 underline">
+            <a href={`mailto:${ADA_CONTACT.email}`} className="text-brand-ink font-semibold underline underline-offset-2">
               {ADA_CONTACT.email}
             </a>
           </li>
           <li>
             <span className="font-medium">Phone / TTY via Relay 711:</span>{' '}
-            <a href={`tel:${ADA_CONTACT.phone.replace(/[^0-9+]/g, '')}`} className="text-blue-700 underline">
+            <a href={`tel:${ADA_CONTACT.phone.replace(/[^0-9+]/g, '')}`} className="text-brand-ink font-semibold underline underline-offset-2">
               {ADA_CONTACT.phone}
             </a>
           </li>
@@ -335,16 +363,16 @@ function AccessibilityFooter() {
             <span className="font-medium">Address:</span> {ADA_CONTACT.address}
           </li>
           <li>
-            <a href={ADA_CONTACT.request} target="_blank" rel="noreferrer" className="text-blue-700 underline">
+            <a href={ADA_CONTACT.request} target="_blank" rel="noreferrer" className="text-brand-ink font-semibold underline underline-offset-2">
               Request an ADA accommodation or service
             </a>
             {' · '}
-            <a href={ADA_CONTACT.grievance} target="_blank" rel="noreferrer" className="text-blue-700 underline">
+            <a href={ADA_CONTACT.grievance} target="_blank" rel="noreferrer" className="text-brand-ink font-semibold underline underline-offset-2">
               File an ADA / Section 504 grievance
             </a>
           </li>
         </ul>
-        <p className="text-xs text-slate-600">
+        <p className="text-xs text-ink-meta">
           Language access (Title VI of the Civil Rights Act): free translation and
           interpretation services are available. Request one from the address above or
           through the Language Access topic in the menu.

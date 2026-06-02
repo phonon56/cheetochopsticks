@@ -1,0 +1,388 @@
+{
+  "generated_from": "2024 Colorado Springs ACFR, Required Supplementary Information Exhibits 16-22",
+  "as_of": "2024-12-31",
+  "plans": {
+    "PERA_Local_Govt": {
+      "plan_name": "Colorado PERA Local Government Division Trust Fund",
+      "type": "cost_sharing_multi_employer_defined_benefit",
+      "coverage": "most_city_civilian_employees",
+      "trajectory": [
+        {
+          "year": 2015,
+          "net_pension_liability": 332843150,
+          "funded_ratio": 80.72,
+          "covered_payroll": 204135871,
+          "nl_pct_payroll": 163.05,
+          "city_proportion_pct": 37.1349,
+          "actual_contribution": 26548367,
+          "contribution_pct_payroll": 12.72
+        },
+        {
+          "year": 2016,
+          "net_pension_liability": 403069697,
+          "funded_ratio": 76.87,
+          "covered_payroll": 208704241,
+          "nl_pct_payroll": 193.13,
+          "city_proportion_pct": 36.5901,
+          "actual_contribution": 27723419,
+          "contribution_pct_payroll": 12.8
+        },
+        {
+          "year": 2017,
+          "net_pension_liability": 499777602,
+          "funded_ratio": 73.65,
+          "covered_payroll": 216649184,
+          "nl_pct_payroll": 230.69,
+          "city_proportion_pct": 37.0112,
+          "actual_contribution": 28775859,
+          "contribution_pct_payroll": 12.78
+        },
+        {
+          "year": 2018,
+          "net_pension_liability": 396153661,
+          "funded_ratio": 79.37,
+          "covered_payroll": 225147540,
+          "nl_pct_payroll": 175.95,
+          "city_proportion_pct": 35.5796,
+          "actual_contribution": 30705118,
+          "contribution_pct_payroll": 12.99
+        },
+        {
+          "year": 2019,
+          "net_pension_liability": 455336546,
+          "funded_ratio": 75.96,
+          "covered_payroll": 236427277,
+          "nl_pct_payroll": 192.59,
+          "city_proportion_pct": 36.2179,
+          "actual_contribution": 32516796,
+          "contribution_pct_payroll": 13.05
+        },
+        {
+          "year": 2020,
+          "net_pension_liability": 264915173,
+          "funded_ratio": 86.26,
+          "covered_payroll": 249094029,
+          "nl_pct_payroll": 106.35,
+          "city_proportion_pct": 36.2208,
+          "actual_contribution": 33908959,
+          "contribution_pct_payroll": 12.73
+        },
+        {
+          "year": 2021,
+          "net_pension_liability": 189005146,
+          "funded_ratio": 90.88,
+          "covered_payroll": 266314402,
+          "nl_pct_payroll": 70.97,
+          "city_proportion_pct": 36.2685,
+          "actual_contribution": 36484054,
+          "contribution_pct_payroll": 13.24
+        },
+        {
+          "year": 2022,
+          "net_pension_liability": -31579357,
+          "funded_ratio": 101.49,
+          "covered_payroll": 275496362,
+          "nl_pct_payroll": -11.46,
+          "city_proportion_pct": 36.8329,
+          "actual_contribution": 41113522,
+          "contribution_pct_payroll": 14.07,
+          "note": "briefly_overfunded"
+        },
+        {
+          "year": 2023,
+          "net_pension_liability": 371023119,
+          "funded_ratio": 82.99,
+          "covered_payroll": 292258661,
+          "nl_pct_payroll": 126.95,
+          "city_proportion_pct": 37.0075,
+          "actual_contribution": 45788612,
+          "contribution_pct_payroll": 14.37
+        },
+        {
+          "year": 2024,
+          "net_pension_liability": 275485527,
+          "funded_ratio": 88.03,
+          "covered_payroll": 318613333,
+          "nl_pct_payroll": 86.46,
+          "city_proportion_pct": 37.53,
+          "actual_contribution": 50420428,
+          "contribution_pct_payroll": 14.75
+        }
+      ]
+    },
+    "Old_Hire_Fire": {
+      "plan_name": "Colorado Springs Old Hire Fire Defined Benefit Pension Plan",
+      "type": "single_employer_closed_defined_benefit",
+      "coverage": "retirees_only_closed",
+      "active_employees": 0,
+      "trajectory": [
+        {
+          "year": 2015,
+          "total_pension_liability": 94992823,
+          "net_pension_liability": 16487979,
+          "funded_ratio": 82.64
+        },
+        {
+          "year": 2016,
+          "total_pension_liability": 98527662,
+          "net_pension_liability": 25201627,
+          "funded_ratio": 74.42
+        },
+        {
+          "year": 2017,
+          "total_pension_liability": 97526320,
+          "net_pension_liability": 27032487,
+          "funded_ratio": 72.28
+        },
+        {
+          "year": 2018,
+          "total_pension_liability": 95398783,
+          "net_pension_liability": 20731089,
+          "funded_ratio": 78.27
+        },
+        {
+          "year": 2019,
+          "total_pension_liability": 94066095,
+          "net_pension_liability": 25223296,
+          "funded_ratio": 73.19
+        },
+        {
+          "year": 2020,
+          "total_pension_liability": 107110925,
+          "net_pension_liability": 36200523,
+          "funded_ratio": 66.2
+        },
+        {
+          "year": 2021,
+          "total_pension_liability": 104712193,
+          "net_pension_liability": 33671428,
+          "funded_ratio": 67.84
+        },
+        {
+          "year": 2022,
+          "total_pension_liability": 102446312,
+          "net_pension_liability": 29015417,
+          "funded_ratio": 71.68
+        },
+        {
+          "year": 2023,
+          "total_pension_liability": 99679175,
+          "net_pension_liability": 37608453,
+          "funded_ratio": 62.27
+        },
+        {
+          "year": 2024,
+          "total_pension_liability": 96345374,
+          "net_pension_liability": 36516294,
+          "funded_ratio": 62.1
+        }
+      ]
+    },
+    "FPPA_Statewide": {
+      "plan_name": "Fire & Police Pension Association Statewide Retirement Plan",
+      "type": "cost_sharing_multi_employer_defined_benefit",
+      "coverage": "fire_and_police_chiefs_opt_in_per_SB15_028",
+      "trajectory": [
+        {
+          "year": 2015,
+          "net_pension_liability": -7918956,
+          "funded_ratio": 106.83,
+          "covered_payroll": 31535933,
+          "actual_contribution": 2976381
+        },
+        {
+          "year": 2019,
+          "net_pension_liability": 9380877,
+          "funded_ratio": 95.23,
+          "covered_payroll": 49702739,
+          "actual_contribution": 4841239
+        },
+        {
+          "year": 2022,
+          "net_pension_liability": -48069241,
+          "funded_ratio": 116.16,
+          "covered_payroll": 71346564,
+          "actual_contribution": 7301723
+        },
+        {
+          "year": 2023,
+          "net_pension_liability": 8251363,
+          "funded_ratio": 97.63,
+          "covered_payroll": 80875445,
+          "actual_contribution": 8550933
+        },
+        {
+          "year": 2024,
+          "net_pension_liability": 0,
+          "funded_ratio": 100.0,
+          "covered_payroll": 89434475,
+          "actual_contribution": 9957910
+        }
+      ]
+    },
+    "New_Hire_Police": {
+      "plan_name": "Colorado Springs New Hire Police Pension Plan",
+      "type": "single_employer_defined_benefit",
+      "trajectory_contributions": [
+        {
+          "year": 2020,
+          "actual_contribution": 6457477,
+          "covered_payroll": 25086796,
+          "contribution_pct": 25.74
+        },
+        {
+          "year": 2021,
+          "actual_contribution": 10530459,
+          "covered_payroll": 21134307,
+          "contribution_pct": 49.83
+        },
+        {
+          "year": 2022,
+          "actual_contribution": 9137018,
+          "covered_payroll": 19060165,
+          "contribution_pct": 47.94
+        },
+        {
+          "year": 2023,
+          "actual_contribution": 7242719,
+          "covered_payroll": 17669863,
+          "contribution_pct": 40.99
+        },
+        {
+          "year": 2024,
+          "actual_contribution": 8270864,
+          "covered_payroll": 17315396,
+          "contribution_pct": 47.77
+        }
+      ]
+    }
+  },
+  "opeb_plans": {
+    "PERA_Health_Care_Trust": {
+      "plan_name": "Colorado PERA Health Care Trust Fund",
+      "trajectory": [
+        {
+          "year": 2018,
+          "net_opeb_liability": 35904195,
+          "funded_ratio": 17.53,
+          "covered_payroll": 225147540
+        },
+        {
+          "year": 2019,
+          "net_opeb_liability": 38186373,
+          "funded_ratio": 17.03,
+          "covered_payroll": 236427277
+        },
+        {
+          "year": 2020,
+          "net_opeb_liability": 31134645,
+          "funded_ratio": 24.49,
+          "covered_payroll": 249094029
+        },
+        {
+          "year": 2021,
+          "net_opeb_liability": 26236717,
+          "funded_ratio": 32.78,
+          "covered_payroll": 266314402
+        },
+        {
+          "year": 2022,
+          "net_opeb_liability": 24614443,
+          "funded_ratio": 39.4,
+          "covered_payroll": 275496365
+        },
+        {
+          "year": 2023,
+          "net_opeb_liability": 24268368,
+          "funded_ratio": 38.57,
+          "covered_payroll": 292258661
+        },
+        {
+          "year": 2024,
+          "net_opeb_liability": 21166224,
+          "funded_ratio": 46.16,
+          "covered_payroll": 318613333
+        }
+      ]
+    },
+    "City_OPEB": {
+      "plan_name": "City of Colorado Springs OPEB Plan",
+      "type": "pay_as_you_go_no_trust",
+      "funded_ratio": 0,
+      "trajectory": [
+        {
+          "year": 2018,
+          "total_opeb_liability": 30107637,
+          "covered_payroll": 170699626
+        },
+        {
+          "year": 2019,
+          "total_opeb_liability": 29052980,
+          "covered_payroll": 183328604
+        },
+        {
+          "year": 2020,
+          "total_opeb_liability": 31694639,
+          "covered_payroll": 203394298
+        },
+        {
+          "year": 2021,
+          "total_opeb_liability": 23093544,
+          "covered_payroll": 218386539
+        },
+        {
+          "year": 2022,
+          "total_opeb_liability": 22671789,
+          "covered_payroll": 224978171
+        },
+        {
+          "year": 2023,
+          "total_opeb_liability": 18833854,
+          "covered_payroll": 248010781
+        },
+        {
+          "year": 2024,
+          "total_opeb_liability": 19152398,
+          "covered_payroll": 268526498
+        }
+      ]
+    },
+    "Utilities_OPEB": {
+      "plan_name": "Colorado Springs Utilities OPEB Plan",
+      "type": "pay_as_you_go_no_trust",
+      "status": "closed_group_shrinking",
+      "trajectory": [
+        {
+          "year": 2018,
+          "total_opeb_liability": 21390000,
+          "covered_payroll": 5683000
+        },
+        {
+          "year": 2020,
+          "total_opeb_liability": 19228000,
+          "covered_payroll": 2207000
+        },
+        {
+          "year": 2022,
+          "total_opeb_liability": 16693000,
+          "covered_payroll": 1219000
+        },
+        {
+          "year": 2023,
+          "total_opeb_liability": 13317000,
+          "covered_payroll": 667000
+        },
+        {
+          "year": 2024,
+          "total_opeb_liability": 13151000,
+          "covered_payroll": 476000
+        }
+      ]
+    }
+  },
+  "summary_2024": {
+    "total_net_pension_liability": 311001821,
+    "total_net_opeb_liability": 53469622,
+    "combined_long_tail_liability": 364471443
+  }
+}

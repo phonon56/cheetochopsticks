@@ -1,0 +1,154 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}{{ project.title }} — Civic Records{% endblock %}
+
+{% block content %}
+<nav aria-label="Breadcrumb">
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}">Search</a></li>
+        <li aria-current="page">Project</li>
+    </ol>
+</nav>
+
+<header class="project-header">
+    <p class="eyebrow">{{ project.get_source_display }}</p>
+    <h1>{{ project.title }}</h1>
+
+    <div class="project-meta-row">
+        {% if project.status %}
+            <span class="chip chip-status">{{ project.status }}</span>
+        {% endif %}
+        {% if project.featured %}
+            <span class="chip chip-active">Featured</span>
+        {% endif %}
+        {% if project.source_url %}
+            <a href="{{ project.source_url }}" rel="external" class="chip">
+                View on {{ project.get_source_display }} ↗
+            </a>
+        {% endif %}
+    </div>
+
+    {% if project.topic_tags.all %}
+        <ul class="tag-row" aria-label="Topics">
+            {% for tag in project.topic_tags.all %}
+                <li><span class="chip chip-sm">{{ tag.label }}</span></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if project.description %}
+        <p class="lead">{{ project.description|truncatechars:480 }}</p>
+    {% endif %}
+</header>
+
+{% if project.extent %}
+<section aria-labelledby="map-heading">
+    <h2 id="map-heading">Location</h2>
+    <div id="project-map" role="img"
+         aria-label="Map showing extent of {{ project.title }}"
+         style="height: 320px; border: 1px solid var(--rule); border-radius: var(--radius-sm);"></div>
+</section>
+{% endif %}
+
+<section aria-labelledby="timeline-heading">
+    <h2 id="timeline-heading">
+        Lifecycle
+        <span class="count">({{ records|length }} record{{ records|length|pluralize }})</span>
+    </h2>
+
+    {% if type_counts %}
+        <p class="muted" style="margin-bottom: var(--space-4);">
+            {% for label, n in type_counts %}
+                <strong>{{ n }}</strong> {{ label }}{% if not forloop.last %} · {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+
+    {% if records %}
+        <ol class="timeline">
+            {% for r in records %}
+            <li class="timeline-item timeline-item--{{ r.record_type }}">
+                <div class="timeline-marker" aria-hidden="true"></div>
+                <div class="timeline-body">
+                    <p class="timeline-when">
+                        {% if r.occurred_at %}
+                            {{ r.occurred_at|date:"M j, Y" }}
+                        {% else %}
+                            <span class="muted">undated</span>
+                        {% endif %}
+                        ·
+                        <span class="chip chip-sm">{{ r.get_record_type_display }}</span>
+                        ·
+                        <span class="muted">{{ r.get_status_display }}</span>
+                    </p>
+                    <p class="timeline-title">
+                        <a href="{% url 'record_detail' r.record_id %}">
+                            {{ r.title }}
+                        </a>
+                    </p>
+                    {% if r.plain_summary %}
+                        <p class="summary">{{ r.plain_summary }}</p>
+                    {% endif %}
+                    {% if r.parcel %}
+                        <p class="muted" style="font-size: var(--fs-sm);">
+                            Parcel
+                            <a href="{% url 'parcel_detail' r.parcel.parcel_id %}">
+                                {{ r.parcel.parcel_id }}
+                            </a>
+                            {% if r.parcel.address %} · {{ r.parcel.address }}{% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>No records linked to this project yet. Linkage happens automatically
+            when ingest commands fuzzy-match a record's title to this project.</p>
+    {% endif %}
+</section>
+
+{% if project.parcels.all %}
+<section aria-labelledby="parcels-heading">
+    <h2 id="parcels-heading">
+        Associated parcels
+        <span class="count">({{ project.parcels.count }})</span>
+    </h2>
+    <ul class="result-list">
+        {% for p in project.parcels.all %}
+        <li>
+            <a href="{% url 'parcel_detail' p.parcel_id %}">
+                <strong>{{ p.parcel_id }}</strong>
+                {% if p.address %}— {{ p.address }}{% endif %}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if project.extent %}
+<script>
+(function() {
+    var geojson = {{ project.extent.geojson|safe }};
+    var map = L.map('project-map', { scrollWheelZoom: false, keyboard: true });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    var layer = L.geoJSON(geojson, {
+        style: {
+            color: getComputedStyle(document.documentElement)
+                .getPropertyValue('--accent').trim() || '#c8a84b',
+            weight: 2,
+            fillOpacity: 0.18
+        }
+    }).addTo(map);
+    map.fitBounds(layer.getBounds(), { padding: [20, 20] });
+})();
+</script>
+{% endif %}
+{% endblock %}

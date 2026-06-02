@@ -1,0 +1,52 @@
+# Mirror of .assetsignore — keeps build noise and source files out of _site/.
+**/node_modules/**
+microsites/city/goGov/cos-portal-prototype/src/**
+microsites/city/goGov/cos-portal-prototype/scripts/**
+microsites/city/goGov/cos-portal-prototype/public/**
+microsites/city/goGov/cos-portal-prototype/*.json
+microsites/city/goGov/cos-portal-prototype/*.ts
+microsites/city/goGov/cos-portal-prototype/*.js
+microsites/city/goGov/cos-portal-prototype/*.md
+microsites/city/goGov/cos-portal-prototype/.gitignore
+microsites/city/goGov/cos-portal-prototype/index.html
+microsites/city/goGov/cos-portal-prototype/eslint.config.*
+
+# The Eleventy source files themselves shouldn't be served
+package.json
+package-lock.json
+.eleventy.js
+node_modules/**
+
+# Claude Code state — settings, worktrees, all of it. Never serve.
+.claude/**
+**/.claude/**
+
+# OS cruft.
+**/.DS_Store
+
+# Internal BLS wage-data tooling (scripts + worktree snapshots), not pages.
+shared/optimizingScripts/**
+
+# .md files that are notes / project docs, not pages we want rendered.
+# Only the explicitly-curated docs in microsites/.../housing-drupal-arp-formADA/*.md
+# are intended as pages — anything else stays raw or is excluded.
+README.md
+microsites/state/CBI/CBI_Missing_Children_Reports_ADA_Audit.md
+microsites/city/traffic/SafetyPlan/TODO.md
+shared/optimizingScripts/Wage_Data/methodology.md
+
+# DVersion folders are Drupal-handoff bundles (live on GitHub, not the
+# cheetochopsticks.com site). Each contains a build script, README,
+# scoped dist files, and a self-contained preview harness. The shared
+# build library at microsites/_dversion-build.mjs is internal infrastructure.
+microsites/**/dversion/**
+microsites/_dversion-build.mjs
+
+# WastelessCOS Drupal module — Twig syntax ({{ '…'|t }}) collides with
+# Nunjucks; the standalone HTML at microsites/city/wastelesscos/wastelesscos.html
+# is the version that ships to cheetochopsticks.com.
+microsites/city/wastelesscos/drupal/**
+
+# The Dais Civic Calendar Drupal module — same reason. The standalone HTML
+# at microsites/city/CitizenConnect/Calendar/dais-calendar.html is what ships.
+microsites/city/CitizenConnect/Calendar/drupal/**

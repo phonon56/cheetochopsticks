@@ -1,0 +1,18 @@
+dais_calendar:
+  version: 1.0.0
+  css:
+    theme:
+      css/dais-calendar.css: {}
+  js:
+    js/dais-calendar.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+  header: false
+
+fonts:
+  version: 1.0.0
+  css:
+    theme:
+      'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap':
+        { type: external, minified: true }

@@ -40,10 +40,10 @@ export function ByIntentBrowse({ onPickTopic }: Props) {
     return (
       <section aria-labelledby="by-intent-heading" className="space-y-4 max-w-3xl">
         <div>
-          <h2 id="by-intent-heading" className="text-xl font-semibold text-slate-900">
+          <h2 id="by-intent-heading" className="font-serif text-xl font-semibold text-ink">
             What do you want to do?
           </h2>
-          <p className="text-sm text-slate-700 mt-1">
+          <p className="text-sm text-ink-secondary mt-1">
             Pick the intent that fits best — you can change it anytime.
           </p>
         </div>
@@ -55,21 +55,21 @@ export function ByIntentBrowse({ onPickTopic }: Props) {
                 <button
                   type="button"
                   onClick={() => setIntent(i)}
-                  className="w-full text-left rounded-lg border border-slate-300 bg-white p-4 hover:border-blue-700 hover:bg-blue-50 min-h-24"
+                  className="w-full text-left rounded-xl border border-line bg-surface p-4 shadow-sm transition-shadow hover:border-brand-ink hover:shadow-md min-h-24"
                 >
-                  <p className="text-base font-semibold text-slate-900">
+                  <p className="text-base font-semibold text-ink">
                     {INTENT_LABELS[i]}{' '}
-                    <span className="text-xs font-normal text-slate-600">
+                    <span className="text-xs font-normal text-ink-meta">
                       ({count})
                     </span>
                   </p>
-                  <p className="text-sm text-slate-700 mt-1">{INTENT_DESCRIPTIONS[i]}</p>
+                  <p className="text-sm text-ink-secondary mt-1">{INTENT_DESCRIPTIONS[i]}</p>
                 </button>
               </li>
             );
           })}
         </ul>
-        <p className="text-xs text-slate-600">
+        <p className="text-xs text-ink-meta">
           Catalog covers {allTopics.length} topics across {new Set(allTopics.map((t) => t.group)).size}{' '}
           offices.
         </p>
@@ -86,21 +86,21 @@ export function ByIntentBrowse({ onPickTopic }: Props) {
             setIntent(null);
             setSubject(null);
           }}
-          className="text-blue-700 underline"
+          className="text-brand-ink font-semibold underline underline-offset-2"
         >
           ← All intents
         </button>
       </nav>
       <div>
-        <h2 id="by-intent-heading" className="text-xl font-semibold text-slate-900">
+        <h2 id="by-intent-heading" className="font-serif text-xl font-semibold text-ink">
           {INTENT_LABELS[intent]}
         </h2>
-        <p className="text-sm text-slate-700 mt-1">{INTENT_DESCRIPTIONS[intent]}</p>
+        <p className="text-sm text-ink-secondary mt-1">{INTENT_DESCRIPTIONS[intent]}</p>
       </div>
 
       {availableSubjects.length > 0 && (
         <div>
-          <p className="text-sm font-medium text-slate-900 mb-2">Filter by subject</p>
+          <p className="text-sm font-medium text-ink mb-2">Filter by subject</p>
           <ul role="list" className="flex flex-wrap gap-2">
             <li>
               <button
@@ -146,7 +146,7 @@ function chipClass(active: boolean) {
   return [
     'rounded-full border px-3 py-1 text-sm min-h-8',
     active
-      ? 'border-blue-700 bg-blue-700 text-white font-medium'
-      : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-50',
+      ? 'border-brand-hover bg-brand-hover text-white font-semibold'
+      : 'border-line-strong bg-surface text-ink-strong hover:border-brand-ink hover:text-brand-ink',
   ].join(' ');
 }

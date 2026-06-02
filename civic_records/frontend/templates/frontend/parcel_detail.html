@@ -1,0 +1,114 @@
+{% extends "frontend/base.html" %}
+
+{% block title %}Parcel {{ parcel.parcel_id }} — Civic Records{% endblock %}
+
+{% block content %}
+<nav aria-label="Breadcrumb">
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}">Search</a></li>
+        <li aria-current="page">Parcel {{ parcel.parcel_id }}</li>
+    </ol>
+</nav>
+
+<header class="parcel-header">
+    <h1>
+        Parcel <span class="parcel-id">{{ parcel.parcel_id }}</span>
+    </h1>
+    {% if parcel.address %}
+        <p class="address">{{ parcel.address }}{% if parcel.zip_code %},
+            {{ parcel.city }}, {{ parcel.state }} {{ parcel.zip_code }}{% endif %}</p>
+    {% endif %}
+    <dl class="parcel-meta">
+        <dt>Jurisdiction</dt>
+        <dd>{{ parcel.get_jurisdiction_display }}</dd>
+        {% if parcel.council_district %}
+        <dt>{{ parcel.council_district.get_district_type_display }}</dt>
+        <dd>
+            District {{ parcel.council_district.number }}
+            {% if parcel.council_district.representative %}
+                — {{ parcel.council_district.representative }}
+            {% endif %}
+        </dd>
+        {% endif %}
+        {% if parcel.zoning %}
+        <dt>Zoning</dt><dd>{{ parcel.zoning }}</dd>
+        {% endif %}
+        {% if parcel.acres %}
+        <dt>Acres</dt><dd>{{ parcel.acres }}</dd>
+        {% endif %}
+    </dl>
+</header>
+
+{% if parcel.geometry %}
+<section aria-labelledby="map-heading">
+    <h2 id="map-heading">Location</h2>
+    <div id="parcel-map" role="img"
+         aria-label="Map showing parcel {{ parcel.parcel_id }}"
+         style="height: 360px; border: 1px solid var(--rule);"></div>
+</section>
+{% endif %}
+
+<section aria-labelledby="records-heading">
+    <h2 id="records-heading">
+        All records on this parcel
+        <span class="count">({{ records|length }})</span>
+    </h2>
+
+    {% if records %}
+        {% for type_label, items in records_by_type.items %}
+            <section class="record-group" aria-labelledby="group-{{ forloop.counter }}">
+                <h3 id="group-{{ forloop.counter }}">
+                    {{ type_label }}
+                    <span class="count">({{ items|length }})</span>
+                </h3>
+                <ul class="record-list">
+                    {% for r in items %}
+                    <li>
+                        <a href="{% url 'record_detail' r.record_id %}">
+                            <strong>{{ r.title }}</strong>
+                        </a>
+                        <span class="meta">
+                            {{ r.get_status_display }} ·
+                            {{ r.owner_department|default:"—" }} ·
+                            updated {{ r.updated_at|date:"M j, Y" }}
+                        </span>
+                        {% if r.plain_summary %}
+                            <p class="summary">{{ r.plain_summary }}</p>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endfor %}
+    {% else %}
+        <p>No records found for this parcel.</p>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+{% if parcel.geometry %}
+<script>
+(function() {
+    var geojson = {{ parcel.geometry.geojson|safe }};
+    var map = L.map('parcel-map', {
+        scrollWheelZoom: false,
+        keyboard: true,
+    });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    var layer = L.geoJSON(geojson, {
+        style: {
+            color: getComputedStyle(document.documentElement)
+                .getPropertyValue('--accent').trim() || '#c8a84b',
+            weight: 2,
+            fillOpacity: 0.18
+        }
+    }).addTo(map);
+    map.fitBounds(layer.getBounds(), { padding: [20, 20] });
+})();
+</script>
+{% endif %}
+{% endblock %}

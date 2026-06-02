@@ -139,11 +139,22 @@
     .nav-logo {
       text-decoration: none;
       display: flex;
-      align-items: baseline;
+      align-items: center;
       gap: 1px;
       margin-right: 32px;
       flex-shrink: 0;
     }
+    .nav-logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+    .nav-logo:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    /* Legacy text-logo styles kept for any other surfaces that reference them */
     .nav-logo-word {
       font-family: var(--sans);
       font-weight: 600;
@@ -1027,7 +1038,7 @@
   <div class="container">
     <div class="nav-inner">
       <a href="/" class="nav-logo" aria-label="cheetochopsticks home">
-        <span class="nav-logo-word">cheetochopsticks</span><span class="nav-logo-dot">.com</span>
+        <img src="shared/cheetochopstickslogo.svg" alt="" class="nav-logo-img" width="437" height="42">
       </a>
       <nav class="nav-links" id="nav-links" aria-label="Site sections">
         <a class="nav-link you-link" href="#you">You</a>
@@ -1156,6 +1167,42 @@
         <div class="notif-text"><strong>Jurisdiction finder is live.</strong> Enter any El Paso County address to find your metro districts, school district, city jurisdiction, and utilities — plain language, no login.</div>
         <div class="notif-meta">New · April 2026</div>
         <a class="notif-action" href="microsites/shared/You/cos-find-my-jurisdiction.html">Find my jurisdiction <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CSPD Blotter — Weekly History is live.</strong> 271 incidents pulled directly from the live blotter feed, paired with a Poisson 95% confidence band to flag statistical anomalies week to week. Tabs are full APG-pattern keyboard accessible; every chart has an aria-label.</div>
+        <div class="notif-meta">New · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">Open blotter dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-blue"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>Lorson Ranch financial dashboard is live.</strong> Seven cross-pledged metro districts, $94.2M aggregate audited deficit, IGA money flows, and a per-home tax calculator — sourced from 2026 budgets and 2024 audits. Companion plain-language briefing available as a download.</div>
+        <div class="notif-meta">New · Special Districts · April 2026</div>
+        <a class="notif-action" href="microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">Open Lorson Ranch dashboard <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>CBI Missing Persons form — accessible rebuild is live.</strong> Resolves all seven critical/serious findings from the ADA audit: skip link, live regions, focus management, EN/ES localization, real-time validation messaging. Drops into the existing Drupal Webform infrastructure with optional Claude API routing.</div>
+        <div class="notif-meta">New · State · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="microsites/state/CBI/cbi-missing-persons-redesign.html">Open CBI form rebuild <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="notif-item" data-tier="info">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-text"><strong>LexisNexis ADAM Program dashboard — accessible rebuild is live.</strong> Audit and reference rebuild of the missing-children dashboard: APG-pattern tabs with roving tabindex and full keyboard nav, solid amber focus rings (3:1 against any surface), darker success-green for AA contrast, and "View Poster" placeholders converted from dead anchors to real buttons.</div>
+        <div class="notif-meta">New · Private Sector · April 2026 · WCAG 2.1 AA</div>
+        <a class="notif-action" href="microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">Open ADAM dashboard <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
@@ -1443,6 +1490,20 @@
             </div>
             <span class="group-link-arrow" aria-hidden="true">↗</span>
           </a>
+          <a class="group-link" role="listitem" href="microsites/city/police/neighborhood/chart_snippet-cspdblotter-weekly.html">
+            <div>
+              <div class="group-link-title">CSPD Blotter — Weekly History &amp; Trend</div>
+              <span class="group-link-sub">271 incidents scraped live · week detail + Poisson anomaly band</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="microsites/city/police/neighborhood/CCJRA_Records_Request_Packet.docx">
+            <div>
+              <div class="group-link-title">CCJRA Records Request Packet (.docx)</div>
+              <span class="group-link-sub">Drop-in template for Colorado Criminal Justice Records Act</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
           <a class="group-link" role="listitem" href="microsites/city/police/neighborhood/fatality_register_bjpt-tkzq.html">
             <div>
               <div class="group-link-title">CSPD Fatality Register</div>
@@ -1646,9 +1707,75 @@
 
     </div>
 
+    <!-- ── Special Districts ───────────────────────────────────── -->
+    <h3 class="scope-heading" id="scope-specialdistricts">Special Districts</h3>
+    <div class="page-grid" role="list" aria-labelledby="scope-specialdistricts">
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">Special Districts · Lorson Ranch MDs 1–7</p>
+          <p class="card-title">Lorson Ranch Metropolitan Districts</p>
+          <p class="card-desc">Seven cross-pledged metro districts financing one community. Mill levies, bond debt, IGA money flows, audited net position, and a tax calculator — sourced from 2026 budgets and 2024 audits. <em>$94.2M aggregate deficit, in plain language.</em></p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/specialdistricts/LorsonRanch/lorson_ranch_dashboard.html">
+            <div>
+              <div class="group-link-title">Financial Dashboard</div>
+              <span class="group-link-sub">Interactive · mill levies, bonds, IGAs, calculator</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="microsites/specialdistricts/LorsonRanch/lorson_ranch_briefing.docx">
+            <div>
+              <div class="group-link-title">Briefing (.docx)</div>
+              <span class="group-link-sub">Companion narrative · full plain-language walk-through</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+
+      <a class="page-card" role="listitem" href="microsites/specialdistricts/teller911/unsung-heroes-cora-project.html">
+        <div class="card-left">
+          <p class="card-scope">Special Districts · Teller 911 · CORA starter</p>
+          <p class="card-title">The Unsung Heroes — A CORA Project Anyone Can Do</p>
+          <p class="card-desc">A semester-length public records project that produces real findings about how El Paso County supports its 911 dispatchers. Three records requests. Three agencies. One ratio that tells you whether the support matches the load. <em>Whatever the answer, it belongs in the public record.</em></p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-wip">In Progress</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+    </div>
+
     <!-- ── State ───────────────────────────────────────────────── -->
     <h3 class="scope-heading" id="scope-state">State of Colorado</h3>
     <div class="page-grid" role="list" aria-labelledby="scope-state">
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">State · CBI · Missing Persons</p>
+          <p class="card-title">CBI Missing Persons — Form Audit &amp; Accessible Rebuild</p>
+          <p class="card-desc">An ADA audit of the Colorado Bureau of Investigation Missing Persons contact form, paired with a reference rebuild that resolves all seven critical findings — skip link, live regions, focus management, EN/ES toggle, optional Claude API routing layer. <em>Drop-in for the existing Drupal Webform infrastructure.</em></p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/state/CBI/cbi-missing-persons-redesign.html">
+            <div>
+              <div class="group-link-title">Missing Persons Form — Accessible Rebuild</div>
+              <span class="group-link-sub">WCAG 2.1 AA · EN/ES · Drupal Webform-ready</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="microsites/state/CBI/CBI_Missing_Persons_Form_ADA_Audit.docx">
+            <div>
+              <div class="group-link-title">CBI Missing Persons Form — ADA Audit (.docx)</div>
+              <span class="group-link-sub">Seven critical/serious findings · companion to the rebuild</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
 
       <div class="group-card" role="listitem">
         <div class="card-left">
@@ -1744,6 +1871,96 @@
               <span class="group-link-sub">April 2026 · .docx</span>
             </div>
             <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">State · CCRD</p>
+          <p class="card-title">Colorado Civil Rights Division — Complaint Form &amp; Audit</p>
+          <p class="card-desc">Accessible complaint form prototype and accompanying WCAG audit of the CCRD intake experience.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/state/ccrd/ccrd-complaint-form.html">
+            <div>
+              <div class="group-link-title">CCRD Complaint Form — Redesign</div>
+              <span class="group-link-sub">Accessible, plain-language rebuild</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="microsites/state/ccrd/CCRD_Accessibility_Audit_2026-04-25.pdf">
+            <div>
+              <div class="group-link-title">CCRD Accessibility Audit</div>
+              <span class="group-link-sub">April 2026 · PDF</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">State · OEDIT</p>
+          <p class="card-title">Office of Economic Development — TravelStats Audit</p>
+          <p class="card-desc">Accessibility audit of the OEDIT TravelStats dashboard with cover letters for agency follow-up.</p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/state/oedit/travelstats-accessibility-audit.docx">
+            <div>
+              <div class="group-link-title">TravelStats Accessibility Audit</div>
+              <span class="group-link-sub">April 2026 · .docx</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="microsites/state/oedit/travelstats-cover-letters.docx">
+            <div>
+              <div class="group-link-title">TravelStats Cover Letters</div>
+              <span class="group-link-sub">April 2026 · .docx</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <a class="page-card" role="listitem" href="microsites/state/coloradogeneralassembly/leg_colorado_accessibility_audit.docx">
+        <div class="card-left">
+          <p class="card-scope">State · General Assembly</p>
+          <p class="card-title">leg.colorado.gov — Accessibility Audit</p>
+          <p class="card-desc">WCAG audit of the Colorado General Assembly's public-facing legislative site.</p>
+        </div>
+        <div class="card-right">
+          <span class="tape tape-live">April 2026</span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ── Private Sector ──────────────────────────────────────── -->
+    <h3 class="scope-heading" id="scope-privatesector">Private Sector</h3>
+    <div class="page-grid" role="list" aria-labelledby="scope-privatesector">
+
+      <div class="group-card" role="listitem">
+        <div class="card-left">
+          <p class="card-scope">Private Sector · LexisNexis · ADAM Program</p>
+          <p class="card-title">ADAM Program Dashboard — Audit &amp; Accessible Rebuild</p>
+          <p class="card-desc">An ADA compliance audit of the LexisNexis Risk Solutions ADAM Program missing-children dashboard, paired with a reference rebuild — APG-pattern tabs with full keyboard nav, live-region announcements on filter changes, scoped table headers, and aria-labelled charts. <em>The tool that helps the public search for missing kids should be reachable by every member of the public.</em></p>
+        </div>
+        <div class="group-links" role="list">
+          <a class="group-link" role="listitem" href="microsites/privatesector/LexisNexis/ADAMProgram/adam-dashboard-redesign.html">
+            <div>
+              <div class="group-link-title">ADAM Dashboard — Accessible Rebuild</div>
+              <span class="group-link-sub">WCAG 2.1 AA · APG tabs · roving tabindex</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="group-link" role="listitem" href="microsites/privatesector/LexisNexis/ADAMProgram/ADA_Compliance_Audit_Report.docx">
+            <div>
+              <div class="group-link-title">ADA Compliance Audit Report (.docx)</div>
+              <span class="group-link-sub">Findings the rebuild resolves</span>
+            </div>
+            <span class="group-link-arrow" aria-hidden="true">↓</span>
           </a>
         </div>
       </div>

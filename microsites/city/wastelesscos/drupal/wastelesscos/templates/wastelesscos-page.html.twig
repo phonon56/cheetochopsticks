@@ -1,0 +1,256 @@
+{#
+/**
+ * @file
+ * Default theme implementation for the WastelessCOS landing page.
+ *
+ * The page chrome (header, breadcrumb, footer) is provided by the active
+ * Drupal theme. This template only renders the content region.
+ *
+ * Available variables:
+ *  - stats: array of [{value, label}, ...] hero stats.
+ */
+#}
+<div class="wlc" data-wlc-root>
+
+  {# In-page utility row (translate + search). Kept inside the page so it
+     reads alongside the masthead even when the theme header is collapsed. #}
+  <nav class="util" aria-label="{{ 'WastelessCOS utilities'|t }}">
+    <div class="wrap">
+      <span>{{ 'City of Colorado Springs'|t }}</span>
+      <div class="util-actions">
+        <button type="button" class="icon-btn" id="translateBtn" aria-expanded="false" aria-controls="translatePanel">
+          <span aria-hidden="true">🌐</span> {{ 'Translate'|t }}
+        </button>
+        <a class="icon-btn" href="https://coloradosprings.gov/search" rel="noopener" aria-label="{{ 'Open city search'|t }}">
+          <span aria-hidden="true">🔍</span> {{ 'Search'|t }}
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div id="translatePanel" hidden style="background:#163a2b">
+    <div class="wrap" style="padding:.6rem 22px">
+      <label class="lbl" for="langSelect" style="color:#e9e1cf;margin-bottom:.3rem">{{ 'Select a language'|t }}</label>
+      <select id="langSelect" style="font:inherit;padding:.45rem .7rem;border-radius:8px;border:1px solid #2c5a44;background:#0f2c20;color:#e9e1cf">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="vi">Tiếng Việt</option>
+        <option value="ko">한국어</option>
+      </select>
+    </div>
+  </div>
+
+  <header class="masthead">
+    <div class="wrap">
+      <p class="eyebrow">WastelessCOS</p>
+      <h1>{{ 'Keeping Colorado clean, by design.'|t }}</h1>
+      <p class="lead">{{ 'A 20-year roadmap to nearly double how much Colorado Springs reuses and recycles — plus a directory and a sorting guide so you can find the right service for whatever you need to get rid of.'|t }}</p>
+      <div class="stat-row">
+        {% for s in stats %}
+          <div class="stat"><b>{{ s.value }}</b><span>{{ s.label }}</span></div>
+        {% endfor %}
+      </div>
+    </div>
+    <svg class="ridge" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M0 90 L0 55 L160 30 L320 60 L470 18 L620 52 L760 8 L920 50 L1080 22 L1240 58 L1440 28 L1440 90 Z"/>
+    </svg>
+  </header>
+
+  <main class="wrap">
+    <div class="tabs">
+      <div role="tablist" aria-label="{{ 'WastelessCOS sections'|t }}">
+        <button role="tab" id="tab-overview"  aria-selected="true"  aria-controls="panel-overview"  tabindex="0">{{ 'Overview'|t }}</button>
+        <button role="tab" id="tab-why"       aria-selected="false" aria-controls="panel-why"       tabindex="-1">{{ 'The Why'|t }}</button>
+        <button role="tab" id="tab-directory" aria-selected="false" aria-controls="panel-directory" tabindex="-1">{{ 'Resource Directory'|t }}</button>
+        <button role="tab" id="tab-sort"      aria-selected="false" aria-controls="panel-sort"      tabindex="-1">{{ 'How to Sort'|t }}</button>
+        <button role="tab" id="tab-faq"       aria-selected="false" aria-controls="panel-faq"       tabindex="-1">{{ 'Plan & FAQ'|t }}</button>
+      </div>
+
+      {# OVERVIEW #}
+      <div role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" tabindex="0">
+        <section class="block">
+          <h2>{{ 'What the plan does'|t }}</h2>
+          <p class="lead">{{ 'Colorado Springs recycles or composts about 16% of its waste today — less than half the national average. The Waste Diversion Action Plan is a 20-year roadmap to reach 37% by 2045 by making recycling and composting easier, cheaper, and clearer for everyone.'|t }}</p>
+          <p>{{ 'Importantly, nothing about your current trash service changes right now; the plan guides improvements over time. Here is what it focuses on and what residents told the City they want.'|t }}</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>{{ 'The five strategies'|t }}</h3>
+              <ul class="clean">
+                <li>{{ "Leverage Colorado's Extended Producer Responsibility (EPR) program"|t }}</li>
+                <li>{{ 'Education & outreach'|t }}</li>
+                <li>{{ 'Organics management (food scraps & yard waste)'|t }}</li>
+                <li>{{ 'Governance & data tracking'|t }}</li>
+                <li>{{ 'Construction & specialty waste diversion'|t }}</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>{{ 'What residents asked for'|t }}</h3>
+              <ul class="clean">
+                <li><strong>69.6%</strong> {{ 'want curbside yard-waste collection'|t }}</li>
+                <li><strong>50.4%</strong> {{ 'want curbside food-waste collection'|t }}</li>
+                <li>{{ 'Clearer guidance on what is actually recyclable'|t }}</li>
+                <li>{{ 'More drop-off sites and fairer access for apartments & rural areas'|t }}</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section class="block">
+          <div class="callout">
+            <h3>{{ "How it's paid for"|t }}</h3>
+            <p>{{ "The study and plan were funded by a grant from <strong>Colorado Circular Communities (C3)</strong>, a state program. Going forward, much of the cost of recycling shifts onto producers under Colorado's EPR law (HB 22-1355), which began reimbursing recycling services in 2026 — not onto your city tax bill. (The often-quoted “$400 million” figure is the size of El Paso County's existing recycling <em>economy</em>, not a project budget.)"|t }}</p>
+          </div>
+        </section>
+        <section class="block">
+          <h2>{{ 'Watch: the waste characterization study'|t }}</h2>
+          {# Video placeholder — DO NOT alter this block; the transcript stays
+             as-is so the next person can fill in the blank. #}
+          <div class="video-frame" role="img" aria-label="{{ 'Video player placeholder for the WastelessCOS waste characterization study'|t }}">
+            <p style="margin:0">▶  WastelessCOS: Waste Characterization<br><span style="font-size:.85rem;opacity:.85">Closed captions available · embed your hosted video here</span></p>
+          </div>
+          <p style="font-size:.9rem;color:var(--ink-soft);margin-top:.6rem">{{ 'Captions are enabled on this video. A full text transcript is provided below.'|t }}</p>
+          <button type="button" class="icon-btn" id="transcriptBtn" aria-expanded="false" aria-controls="transcriptPanel" style="border-color:var(--line);color:var(--pine)">
+            <span aria-hidden="true">📄</span> {{ 'Show video transcript'|t }}
+          </button>
+          <div id="transcriptPanel" hidden class="card" style="margin-top:.8rem;max-width:74ch">
+            <h3 style="font-size:1.1rem">{{ 'Transcript'|t }}</h3>
+            <p>{{ 'Over two seasons, crews sorted roughly nine thousand pounds of household trash and recycling by hand. The biggest surprise: a large share of what we throw away never needed to be trash at all. Food scraps made up about fifteen percent of the pile, and yard debris another ten percent — material that can be composted instead of buried. The study gives the City a clear, data-backed starting point for the goals in this plan.'|t }}</p>
+          </div>
+        </section>
+      </div>
+
+      {# THE WHY #}
+      <div role="tabpanel" id="panel-why" aria-labelledby="tab-why" tabindex="0" hidden>
+        <section class="block">
+          <h2>{{ 'The Why'|t }}</h2>
+          <p class="lead">{{ "Colorado is the country of the Wild West — wide open land, big sky, and country worth protecting. Keeping it clean and beautiful isn't nostalgia; it's the whole point. Every ton we keep out of a landfill is land left for the next generation to ride, hike, and call home."|t }}</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>{{ 'Land worth keeping'|t }}</h3>
+              <p>{{ "Colorado Springs is on track to rival Denver as Colorado's largest city by 2050 — already the largest by land area, with population projected to close the gap (Colorado State Demography Office). More people means more waste — unless we change how we handle it. Diverting waste protects open space, water, and the views that drew people here in the first place."|t }}</p>
+            </div>
+            <div class="card">
+              <h3>{{ 'It pays off locally'|t }}</h3>
+              <p>{{ 'Recycling and reuse already support more than <strong>2,700 jobs</strong> and over <strong>$400 million</strong> in economic activity across El Paso County (Recycle Colorado / CDPHE economic impact data). Strengthening these systems keeps dollars — and materials — circulating close to home.'|t }}</p>
+            </div>
+          </div>
+          <div class="callout" style="margin-top:22px">
+            <h3>{{ 'Frontier ethic, modern tools'|t }}</h3>
+            <p>{{ 'The old code of the West was simple: leave a place better than you found it. WastelessCOS is that same idea with a roadmap attached — clear goals, better access, and honest data so the land stays wild where it should be.'|t }}</p>
+          </div>
+        </section>
+      </div>
+
+      {# RESOURCE DIRECTORY #}
+      <div role="tabpanel" id="panel-directory" aria-labelledby="tab-directory" tabindex="0" hidden>
+        <section class="block">
+          <h2>{{ 'Resource Directory'|t }}</h2>
+          <p class="lead">{{ 'Every hauler and drop-off in one place, so you don\'t give up and say "forget about it." Filter by category, search by item, and switch between card and row views.'|t }}</p>
+
+          <div class="callout" style="margin-bottom:18px">
+            <h3>{{ 'How do I choose a trash hauler?'|t }}</h3>
+            <p>{{ "Colorado Springs has <strong>no city-run trash service</strong> — private companies compete, and you sign up directly with one. You don't have to call them all: most haulers have an <em>address checker</em> on their website that shows whether they serve you, your pickup day, and price in a couple of minutes. When comparing, look at four things: (1) does recycling come included or cost extra, (2) cart size and bulk/yard-waste options, (3) whether a bear-resistant cart is required for your area (west of I-25), and (4) contract length and fees. Starting in 2026, the state's producer-responsibility program is expected to make curbside recycling free through participating haulers."|t }}</p>
+          </div>
+
+          <div class="filter-bar">
+            <div class="controls-top">
+              <div class="field">
+                <label class="lbl" for="dirSearch">{{ 'Search resources & items'|t }}</label>
+                <input type="search" id="dirSearch" placeholder="{{ 'e.g. mulch, batteries, bulk pickup, bear cart…'|t }}" autocomplete="off">
+              </div>
+              <fieldset>
+                <legend>{{ 'View'|t }}</legend>
+                <div class="viewswitch" role="group" aria-label="{{ 'Choose how the directory is displayed'|t }}">
+                  <button type="button" id="viewCards" aria-pressed="true"><span aria-hidden="true">▦</span> {{ 'Cards'|t }}</button>
+                  <button type="button" id="viewRows" aria-pressed="false"><span aria-hidden="true">☰</span> {{ 'Rows'|t }}</button>
+                </div>
+              </fieldset>
+            </div>
+            <fieldset class="filters">
+              <legend>{{ 'Filter by category'|t }}</legend>
+              <div class="chips" id="chips">
+                <button type="button" class="chip" data-filter="all" aria-pressed="true">{{ 'All'|t }}</button>
+                <button type="button" class="chip" data-filter="free" aria-pressed="false">
+                  <span class="pill free" style="padding:.05rem .4rem;font-size:.7rem" aria-hidden="true">Free</span>
+                  <span class="visually-hidden">{{ 'Free options only'|t }}</span>
+                </button>
+                <button type="button" class="chip" data-filter="curbside" aria-pressed="false">{{ 'Curbside & weekly'|t }}</button>
+                <button type="button" class="chip" data-filter="bulk" aria-pressed="false">{{ 'Bulk & large items'|t }}</button>
+                <button type="button" class="chip" data-filter="private" aria-pressed="false">{{ 'Private haulers'|t }}</button>
+                <button type="button" class="chip" data-filter="city" aria-pressed="false">{{ 'City & county'|t }}</button>
+                <button type="button" class="chip" data-filter="yard" aria-pressed="false">{{ 'Yard waste & mulch'|t }}</button>
+                <button type="button" class="chip" data-filter="recycle" aria-pressed="false">{{ 'Recycling drop-off'|t }}</button>
+                <button type="button" class="chip" data-filter="ewaste" aria-pressed="false">{{ 'Electronics & batteries'|t }}</button>
+                <button type="button" class="chip" data-filter="hazard" aria-pressed="false">{{ 'Hazardous waste'|t }}</button>
+              </div>
+            </fieldset>
+          </div>
+
+          <p class="results-meta" id="resultsMeta" role="status" aria-live="polite"></p>
+
+          <div id="cardView"><div class="dir-grid" id="dirGrid"></div></div>
+          <div id="rowView" hidden></div>
+          <p class="no-results" id="noResults" hidden>{{ 'No resources match those filters. Try removing a filter or clearing the search.'|t }}</p>
+
+          <p style="font-size:.88rem;color:var(--ink-soft);margin-top:1.4rem">{{ 'Free options are listed first, then alphabetically. Listings are compiled from public information — confirm phone numbers, websites, fees, and hours with each provider before publishing.'|t }}</p>
+
+          <h3 style="font-size:1.5rem;margin-top:2.4rem">{{ 'Helpful tips & free options'|t }}</h3>
+          <p>{{ 'Quick ways to save money and keep more out of the landfill — the full tip is in each box.'|t }}</p>
+          <div class="tips-grid" id="tipsGrid"></div>
+        </section>
+      </div>
+
+      {# HOW TO SORT #}
+      <div role="tabpanel" id="panel-sort" aria-labelledby="tab-sort" tabindex="0" hidden>
+        <section class="block">
+          <h2>{{ 'How to Sort: where does it go?'|t }}</h2>
+          <p class="lead">{{ 'Not sure if something is recyclable, trash, or needs special handling? Type an item below, or browse the bins. A few things — batteries and electronics especially — should <em>never</em> go in either curbside cart.'|t }}</p>
+
+          <div class="filter-bar" style="max-width:60ch">
+            <label class="lbl" for="sortSearch">{{ 'Look up an item'|t }}</label>
+            <input type="search" id="sortSearch" placeholder="{{ 'e.g. battery, TV, pizza box, paint, light bulb…'|t }}" autocomplete="off">
+            <p class="results-meta" id="sortMeta" role="status" aria-live="polite" style="margin-bottom:0"></p>
+          </div>
+
+          <div class="sort-grid" id="sortGrid"></div>
+          <p class="no-results" id="sortNone" hidden>{{ 'No match. Try a simpler word, or check the El Paso County Recycling Directory in the Plan & FAQ tab.'|t }}</p>
+        </section>
+      </div>
+
+      {# PLAN & FAQ #}
+      <div role="tabpanel" id="panel-faq" aria-labelledby="tab-faq" tabindex="0" hidden>
+        <section class="block">
+          <h2>{{ 'Documents'|t }}</h2>
+          <p>{{ "The City's plan and fact sheet are posted on the official WastelessCOS page; the County's item-by-item directory is a direct PDF."|t }}</p>
+          <ul class="doc-list">
+            <li><a href="https://coloradosprings.gov/WastelessCOS" target="_blank" rel="noopener noreferrer">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+              {{ 'Waste Diversion Action Plan'|t }}<span class="filetag" aria-hidden="true">WastelessCOS page</span><span class="visually-hidden">{{ '(opens in new tab)'|t }}</span>
+            </a></li>
+            <li><a href="https://coloradosprings.gov/WastelessCOS" target="_blank" rel="noopener noreferrer">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+              {{ 'Fact Sheet — English'|t }}<span class="filetag" aria-hidden="true">WastelessCOS page</span><span class="visually-hidden">{{ '(opens in new tab)'|t }}</span>
+            </a></li>
+            <li><a href="https://epc-assets.elpasoco.com/wp-content/uploads/sites/20/Recycling-Directory-2026.pdf" target="_blank" rel="noopener noreferrer">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+              {{ 'El Paso County Recycling Directory'|t }}<span class="filetag" aria-hidden="true">PDF</span><span class="visually-hidden">{{ '(PDF, opens in new tab)'|t }}</span>
+            </a></li>
+          </ul>
+          <p style="font-size:.88rem;color:var(--ink-soft)">{{ "Replace the first two links with the City's direct PDF URLs once you have them — they currently point to the official WastelessCOS page where both documents are published."|t }}</p>
+        </section>
+        <section class="block">
+          <h2>{{ 'Frequently asked questions'|t }}</h2>
+          <div class="faq-list">
+            <h3>{{ 'Why did the City create this plan?'|t }}</h3>
+            <p>{{ 'The City lacked comprehensive data and a clear roadmap for waste diversion. A state grant funded a study and this 20-year plan so improvements can be made deliberately as the city grows.'|t }}</p>
+            <h3>{{ 'Does my trash or recycling service change now?'|t }}</h3>
+            <p>{{ 'No. The plan creates no immediate changes to how trash and recycling are collected. It is a roadmap for improving services over time.'|t }}</p>
+            <h3>{{ 'Who pays for expanded recycling?'|t }}</h3>
+            <p>{{ "Under Colorado's Extended Producer Responsibility law, companies that sell packaging and paper products fund the recycling system. As of 2026, reimbursements to participating haulers have begun, shifting cost away from residents."|t }}</p>
+            <h3>{{ 'Do I have to compost or recycle?'|t }}</h3>
+            <p>{{ 'No. Participation is voluntary. The plan focuses on making recycling and composting easier and cheaper, not on mandates.'|t }}</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
