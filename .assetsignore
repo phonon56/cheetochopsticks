@@ -11,3 +11,12 @@ microsites/city/goGov/cos-portal-prototype/*.md
 microsites/city/goGov/cos-portal-prototype/.gitignore
 microsites/city/goGov/cos-portal-prototype/index.html
 microsites/city/goGov/cos-portal-prototype/eslint.config.*
+
+# Editor / agent state and OS cruft — never serve. Note: Eleventy's
+# addPassthroughCopy("shared"/"microsites") copies whole trees verbatim and
+# ignores .eleventyignore, so this file (with prune-build) is the real gate.
+**/.claude/**
+**/.DS_Store
+
+# Internal data tooling (BLS wage scripts + agent worktree snapshots), not pages.
+shared/optimizingScripts/**

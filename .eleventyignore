@@ -17,9 +17,15 @@ package-lock.json
 .eleventy.js
 node_modules/**
 
-# Claude Code worktrees — temporary repo copies, never serve
-.claude/worktrees/**
-**/.claude/worktrees/**
+# Claude Code state — settings, worktrees, all of it. Never serve.
+.claude/**
+**/.claude/**
+
+# OS cruft.
+**/.DS_Store
+
+# Internal BLS wage-data tooling (scripts + worktree snapshots), not pages.
+shared/optimizingScripts/**
 
 # .md files that are notes / project docs, not pages we want rendered.
 # Only the explicitly-curated docs in microsites/.../housing-drupal-arp-formADA/*.md

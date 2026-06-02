@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "eleventy && npm run prune-build",
-    "prune-build": "rm -rf _site/microsites/city/goGov/cos-portal-prototype/node_modules _site/microsites/city/goGov/cos-portal-prototype/src _site/microsites/city/goGov/cos-portal-prototype/scripts _site/microsites/city/goGov/cos-portal-prototype/public _site/**/node_modules _site/**/*.tsbuildinfo && rm -f _site/microsites/city/traffic/SafetyPlan/TODO.md _site/microsites/city/traffic/SafetyPlan/patch_audit_deadline.py && find _site -name '*.njk' -delete",
+    "prune-build": "rm -rf _site/microsites/city/goGov/cos-portal-prototype/node_modules _site/microsites/city/goGov/cos-portal-prototype/src _site/microsites/city/goGov/cos-portal-prototype/scripts _site/microsites/city/goGov/cos-portal-prototype/public _site/shared/optimizingScripts && rm -f _site/microsites/city/traffic/SafetyPlan/TODO.md _site/microsites/city/traffic/SafetyPlan/patch_audit_deadline.py && find _site -type d -name node_modules -prune -exec rm -rf {} + && find _site -type d -name .claude -prune -exec rm -rf {} + && find _site -name '*.tsbuildinfo' -delete && find _site -name .DS_Store -delete && find _site -name '*.njk' -delete",
     "watch": "eleventy --watch",
     "serve": "eleventy --serve"
   },
