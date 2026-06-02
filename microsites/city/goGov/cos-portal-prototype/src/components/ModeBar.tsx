@@ -3,6 +3,7 @@ import { useRef } from 'react';
 
 export type Mode =
   | 'do'
+  | 'help'
   | 'involved'
   | 'now'
   | 'built'
@@ -12,6 +13,7 @@ export type Mode =
 
 export const MODE_LABELS: Record<Mode, { label: string; hint: string }> = {
   do: { label: 'Do something', hint: 'File, request, contact' },
+  help: { label: 'Get help', hint: 'Food, shelter, crisis' },
   involved: { label: 'Get involved', hint: 'Volunteer, serve, help' },
   now: { label: 'Right now', hint: 'Live alerts & status' },
   built: { label: "What's being built", hint: 'Projects & hearings' },
@@ -22,6 +24,7 @@ export const MODE_LABELS: Record<Mode, { label: string; hint: string }> = {
 
 export const MODES: Mode[] = [
   'do',
+  'help',
   'involved',
   'now',
   'built',
@@ -38,6 +41,7 @@ interface Props {
 export function ModeBar({ mode, onChange }: Props) {
   const refs = useRef<Record<Mode, HTMLAnchorElement | null>>({
     do: null,
+    help: null,
     involved: null,
     now: null,
     built: null,
@@ -62,42 +66,44 @@ export function ModeBar({ mode, onChange }: Props) {
   return (
     <nav
       aria-label="Portal sections"
-      className="border-b border-slate-300 bg-white"
+      className="border-b border-line bg-surface"
     >
-      <ul role="list" className="flex flex-wrap gap-0">
-        {MODES.map((m) => {
-          const selected = mode === m;
-          const label = MODE_LABELS[m];
-          return (
-            <li key={m} className="flex-1 min-w-36">
-              <a
-                ref={(el) => {
-                  refs.current[m] = el;
-                }}
-                href={`?mode=${m}`}
-                aria-current={selected ? 'page' : undefined}
-                onClick={(e) => {
-                  e.preventDefault();
-                  onChange(m);
-                }}
-                onKeyDown={onKeyDown}
-                tabIndex={selected ? 0 : -1}
-                className={[
-                  'block px-4 py-3 text-sm border-b-2 -mb-px min-h-11',
-                  selected
-                    ? 'border-blue-700 bg-blue-50 text-blue-900 font-semibold'
-                    : 'border-transparent text-slate-800 hover:bg-slate-50 hover:border-slate-400',
-                ].join(' ')}
-              >
-                <span className="block">{label.label}</span>
-                <span className="block text-xs font-normal text-slate-600">
-                  {label.hint}
-                </span>
-              </a>
-            </li>
-          );
-        })}
-      </ul>
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <ul role="list" className="flex flex-wrap gap-1">
+          {MODES.map((m) => {
+            const selected = mode === m;
+            const label = MODE_LABELS[m];
+            return (
+              <li key={m} className="flex-1 min-w-36">
+                <a
+                  ref={(el) => {
+                    refs.current[m] = el;
+                  }}
+                  href={`?mode=${m}`}
+                  aria-current={selected ? 'page' : undefined}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onChange(m);
+                  }}
+                  onKeyDown={onKeyDown}
+                  tabIndex={selected ? 0 : -1}
+                  className={[
+                    'flex flex-col px-4 py-3 text-sm border-b-2 -mb-px min-h-11',
+                    selected
+                      ? 'border-brand-ink text-brand-ink font-semibold'
+                      : 'border-transparent text-ink-strong hover:text-brand-ink hover:border-line-stronger',
+                  ].join(' ')}
+                >
+                  <span>{label.label}</span>
+                  <span className="text-xs font-normal text-ink-meta">
+                    {label.hint}
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </nav>
   );
 }

@@ -281,6 +281,20 @@ export const JURISDICTION_SHORT: Record<Jurisdiction, string> = {
   tribal: 'Tribal',
 };
 
+// Categorical dot color per jurisdiction, drawn from the "Olympic City" peak
+// palette. Rendered as a small dot inside a neutral chip (see JurisdictionTag),
+// so the legend stays colorful without the UI becoming a wall of bright pills.
+export const JURISDICTION_DOT: Record<Jurisdiction, string> = {
+  city: 'bg-peak-blue',
+  county: 'bg-peak-green',
+  state: 'bg-peak-magenta',
+  federal: 'bg-peak-indigo',
+  regional: 'bg-peak-orange',
+  utility: 'bg-peak-teal',
+  'special-district': 'bg-peak-red',
+  tribal: 'bg-peak-purple',
+};
+
 export const INTENT_LABELS: Record<Intent, string> = {
   report: 'Report a problem',
   permit: 'Get a permit or license',

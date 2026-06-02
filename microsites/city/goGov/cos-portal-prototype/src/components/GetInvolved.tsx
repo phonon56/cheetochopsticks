@@ -7,25 +7,13 @@ import {
   COMMITMENT_LABELS,
   COMPENSATION_LABELS,
 } from '../data/opportunities';
-import { JURISDICTION_SHORT } from '../data/facets';
+import { JurisdictionTag } from './JurisdictionTag';
 import type {
   Audience,
   Interest,
-  Jurisdiction,
   Opportunity,
   Skill,
 } from '../types';
-
-const JURISDICTION_COLORS: Record<Jurisdiction, string> = {
-  city: 'bg-blue-100 text-blue-900 border-blue-300',
-  county: 'bg-emerald-100 text-emerald-900 border-emerald-300',
-  state: 'bg-purple-100 text-purple-900 border-purple-300',
-  federal: 'bg-indigo-100 text-indigo-900 border-indigo-300',
-  regional: 'bg-amber-100 text-amber-900 border-amber-300',
-  utility: 'bg-orange-100 text-orange-900 border-orange-300',
-  'special-district': 'bg-pink-100 text-pink-900 border-pink-300',
-  tribal: 'bg-rose-100 text-rose-900 border-rose-300',
-};
 
 type HoursBand = 'any' | 'light' | 'medium' | 'deep';
 const HOURS_BANDS: Record<HoursBand, { label: string; max?: number; min?: number }> = {
@@ -79,10 +67,10 @@ export function GetInvolved() {
   return (
     <section aria-labelledby="involved-heading" className="space-y-6 max-w-4xl">
       <div className="space-y-2">
-        <h1 id="involved-heading" className="text-3xl font-semibold text-slate-900">
+        <h1 id="involved-heading" className="text-3xl font-semibold text-ink">
           How can you help?
         </h1>
-        <p className="text-slate-700">
+        <p className="text-ink-secondary">
           A single place to find city, county, regional, state, tribal, and
           special-district opportunities. Paid and unpaid, one-time and lifelong. New to
           civics, transitioning out of the military, new to Colorado Springs, or just
@@ -128,13 +116,13 @@ export function GetInvolved() {
           }}
         />
         <fieldset>
-          <legend className="text-sm font-medium text-slate-900 mb-2">
+          <legend className="text-sm font-medium text-ink mb-2">
             How much time do you have?
           </legend>
           <ul role="list" className="space-y-1">
             {(Object.keys(HOURS_BANDS) as HoursBand[]).map((b) => (
               <li key={b}>
-                <label className="flex items-center gap-2 text-sm text-slate-800 min-h-8">
+                <label className="flex items-center gap-2 text-sm text-ink-strong min-h-8">
                   <input
                     type="radio"
                     name="hours-band"
@@ -151,7 +139,7 @@ export function GetInvolved() {
         </fieldset>
       </div>
 
-      <div role="status" aria-live="polite" className="text-sm text-slate-700">
+      <div role="status" aria-live="polite" className="text-sm text-ink-secondary">
         {filtered.length === 0
           ? 'No matches with those filters. Loosen one and try again.'
           : `${filtered.length} opportunit${filtered.length === 1 ? 'y' : 'ies'} match.`}
@@ -190,8 +178,8 @@ function FilterGroup({
 }) {
   return (
     <fieldset>
-      <legend className="text-sm font-medium text-slate-900">{heading}</legend>
-      {hint && <p className="text-xs text-slate-600 mt-0.5 mb-2">{hint}</p>}
+      <legend className="text-sm font-medium text-ink">{heading}</legend>
+      {hint && <p className="text-xs text-ink-meta mt-0.5 mb-2">{hint}</p>}
       <ul role="list" className="flex flex-wrap gap-1.5">
         {Object.entries(labels).map(([k, lbl]) => {
           const active = selected.has(k);
@@ -204,8 +192,8 @@ function FilterGroup({
                 className={[
                   'rounded-full border px-3 py-1 text-xs min-h-8',
                   active
-                    ? 'border-blue-700 bg-blue-700 text-white font-medium'
-                    : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-50',
+                    ? 'border-brand-hover bg-brand-hover text-white font-medium'
+                    : 'border-line-strong bg-surface text-ink-strong hover:bg-surface-muted',
                 ].join(' ')}
               >
                 {lbl}
@@ -220,51 +208,44 @@ function FilterGroup({
 
 function OpportunityCard({ opp }: { opp: Opportunity }) {
   return (
-    <li className="rounded-lg border border-slate-200 bg-white p-4 space-y-2">
+    <li className="rounded-lg border border-line bg-surface p-4 space-y-2">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <h3 className="text-base font-semibold text-slate-900">{opp.name}</h3>
-          <p className="text-xs text-slate-700 mt-0.5">{opp.sponsor}</p>
+          <h3 className="text-base font-semibold text-ink">{opp.name}</h3>
+          <p className="text-xs text-ink-secondary mt-0.5">{opp.sponsor}</p>
         </div>
         <div className="flex flex-wrap gap-1">
-          <span
-            className={[
-              'rounded-full border px-2 py-0.5 text-xs font-medium',
-              JURISDICTION_COLORS[opp.jurisdiction],
-            ].join(' ')}
-          >
-            {JURISDICTION_SHORT[opp.jurisdiction]}
-          </span>
-          <span className="rounded-full border border-slate-300 bg-slate-50 px-2 py-0.5 text-xs text-slate-800">
+          <JurisdictionTag jurisdiction={opp.jurisdiction} />
+          <span className="rounded-full border border-line-strong bg-surface-muted px-2 py-0.5 text-xs text-ink-strong">
             {opp.hoursPerYear.min}
             {opp.hoursPerYear.max > opp.hoursPerYear.min ? `–${opp.hoursPerYear.max}` : ''}{' '}
             hr/yr
           </span>
-          <span className="rounded-full border border-slate-300 bg-slate-50 px-2 py-0.5 text-xs text-slate-800">
+          <span className="rounded-full border border-line-strong bg-surface-muted px-2 py-0.5 text-xs text-ink-strong">
             {COMMITMENT_LABELS[opp.commitment]}
           </span>
           <span
             className={[
               'rounded-full border px-2 py-0.5 text-xs',
               opp.compensation === 'unpaid'
-                ? 'border-slate-300 bg-slate-50 text-slate-800'
-                : 'border-green-300 bg-green-50 text-green-900 font-medium',
+                ? 'border-line-strong bg-surface-muted text-ink-strong'
+                : 'border-success bg-success-surface text-success-ink font-medium',
             ].join(' ')}
           >
             {COMPENSATION_LABELS[opp.compensation]}
           </span>
         </div>
       </div>
-      <p className="text-sm text-slate-800">{opp.description}</p>
+      <p className="text-sm text-ink-strong">{opp.description}</p>
       {opp.audiences.length > 0 && (
-        <p className="text-xs text-slate-600">
+        <p className="text-xs text-ink-meta">
           Good fit for:{' '}
           {opp.audiences.map((a) => AUDIENCE_LABELS[a]).join(' · ')}
         </p>
       )}
       {opp.applyWindow && (
-        <p className="text-xs text-slate-600">
-          <span className="font-medium text-slate-800">When:</span> {opp.applyWindow}
+        <p className="text-xs text-ink-meta">
+          <span className="font-medium text-ink-strong">When:</span> {opp.applyWindow}
         </p>
       )}
       <div>
@@ -272,7 +253,7 @@ function OpportunityCard({ opp }: { opp: Opportunity }) {
           href={opp.url}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-md bg-blue-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-800 min-h-8"
+          className="inline-flex items-center gap-2 rounded-md bg-brand-hover px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-dark min-h-8"
         >
           Learn more / apply <span aria-hidden="true">↗</span>
         </a>
@@ -316,10 +297,10 @@ function NotifySignup({
       <div
         role="status"
         aria-live="polite"
-        className="rounded-md border border-green-700 bg-green-50 p-4"
+        className="rounded-md border border-success bg-success-surface p-4"
       >
-        <p className="text-sm font-semibold text-green-900">Got it.</p>
-        <p className="text-sm text-green-900 mt-1">
+        <p className="text-sm font-semibold text-success-ink">Got it.</p>
+        <p className="text-sm text-success-ink mt-1">
           We saved your preferences locally (prototype). In production, {email} would be
           added to a City notification list and emailed when new opportunities match
           your filters.
@@ -331,12 +312,12 @@ function NotifySignup({
   return (
     <form
       onSubmit={submit}
-      className="rounded-md border border-slate-300 bg-slate-50 p-4 space-y-2"
+      className="rounded-md border border-line-strong bg-surface-muted p-4 space-y-2"
     >
-      <p className="text-sm font-semibold text-slate-900">
+      <p className="text-sm font-semibold text-ink">
         Want to hear when new opportunities match?
       </p>
-      <p className="text-xs text-slate-700">
+      <p className="text-xs text-ink-secondary">
         Save your current filters and leave an email. You'll be notified when new
         matching opportunities are added.
       </p>
@@ -351,16 +332,16 @@ function NotifySignup({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="flex-1 min-w-48 rounded-md border border-slate-400 px-3 py-2 text-sm focus:border-blue-700"
+          className="flex-1 min-w-48 rounded-md border border-line-stronger px-3 py-2 text-sm focus:border-brand-ink min-h-11"
         />
         <button
           type="submit"
-          className="rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 min-h-11"
+          className="rounded-md bg-brand-hover px-4 py-2 text-sm font-medium text-white hover:bg-brand-dark min-h-11"
         >
           Notify me
         </button>
       </div>
-      <p className="text-xs text-slate-600">
+      <p className="text-xs text-ink-meta">
         Prototype — nothing is actually sent. We save your filters to browser storage
         so the behavior is visible.
       </p>

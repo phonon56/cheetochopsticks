@@ -89,35 +89,43 @@ function ExternalOrEmailView({ topic }: { topic: Topic }) {
   if (!d || d.kind === 'form') return null;
   const jurisdiction = topic.facets?.jurisdiction;
   return (
-    <div className="max-w-2xl space-y-4">
-      <header className="space-y-1">
-        <p className="text-xs uppercase tracking-wide text-slate-600">
-          {d.kind === 'external' ? 'External destination' : 'Direct email'}
+    <div className="max-w-2xl rounded-2xl border border-line bg-surface shadow-sm p-6 md:p-8 space-y-6">
+      <header className="space-y-2">
+        <p className="inline-flex items-center gap-2 text-xs">
+          <span className="font-semibold uppercase tracking-[0.16em] text-brand-ink">
+            {d.kind === 'external' ? 'External destination' : 'Direct email'}
+          </span>
           {jurisdiction && (
             <>
-              {' · '}
-              <span>{JURISDICTION_LABELS[jurisdiction]}</span>
+              <span className="text-ink-meta">·</span>
+              <span className="text-ink-meta">{JURISDICTION_LABELS[jurisdiction]}</span>
             </>
           )}
         </p>
         <h2
           id="topic-heading"
           tabIndex={-1}
-          className="text-2xl font-semibold text-slate-900 focus:outline-none"
+          className="font-serif text-3xl font-semibold tracking-tight text-ink focus:outline-none"
         >
           {topic.name}
         </h2>
         {topic.description && (
-          <p className="text-sm text-slate-700">{topic.description}</p>
+          <p className="text-[15px] text-ink-secondary leading-relaxed">{topic.description}</p>
         )}
       </header>
 
       {d.kind === 'external' && d.warning && (
         <div
           role="note"
-          className="rounded-md border border-amber-400 bg-amber-50 p-3 text-sm text-amber-900"
+          className="flex gap-3 rounded-xl border border-line border-l-4 border-l-warning bg-warning-surface p-4 shadow-sm"
         >
-          <strong>Heads up:</strong> {d.warning}
+          <span className="text-warning shrink-0 mt-0.5" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /></svg>
+          </span>
+          <div>
+            <p className="font-semibold text-warning-ink">Heads up</p>
+            <p className="text-sm text-warning-ink/90 mt-0.5">{d.warning}</p>
+          </div>
         </div>
       )}
 
@@ -126,7 +134,7 @@ function ExternalOrEmailView({ topic }: { topic: Topic }) {
           href={d.url}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 min-h-11"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand-hover px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark min-h-11"
         >
           {d.ctaLabel ?? `Continue to ${d.agency}`}
           <span aria-hidden="true">↗</span>
@@ -134,15 +142,15 @@ function ExternalOrEmailView({ topic }: { topic: Topic }) {
       ) : (
         <a
           href={`mailto:${d.address}${d.subjectTemplate ? '?subject=' + encodeURIComponent(d.subjectTemplate) : ''}`}
-          className="inline-flex items-center gap-2 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 min-h-11"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand-hover px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark min-h-11"
         >
           {d.ctaLabel ?? `Email ${d.address}`}
         </a>
       )}
 
       {topic.contact && (
-        <aside className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-          <p className="font-medium text-slate-900 mb-1">Contact details</p>
+        <aside className="rounded-xl border border-line bg-surface-muted p-4 text-sm text-ink-secondary">
+          <p className="font-semibold text-ink mb-1">Contact details</p>
           <ul className="space-y-0.5">
             {topic.contact.website && (
               <li>
@@ -151,7 +159,7 @@ function ExternalOrEmailView({ topic }: { topic: Topic }) {
                   href={topic.contact.website}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-blue-700 underline"
+                  className="text-brand-ink font-semibold underline underline-offset-2"
                 >
                   {topic.contact.website.replace(/^https?:\/\//, '')}
                 </a>
@@ -160,7 +168,7 @@ function ExternalOrEmailView({ topic }: { topic: Topic }) {
             {topic.contact.email && (
               <li>
                 Email:{' '}
-                <a href={`mailto:${topic.contact.email}`} className="text-blue-700 underline">
+                <a href={`mailto:${topic.contact.email}`} className="text-brand-ink font-semibold underline underline-offset-2">
                   {topic.contact.email}
                 </a>
               </li>
@@ -170,13 +178,13 @@ function ExternalOrEmailView({ topic }: { topic: Topic }) {
                 Phone:{' '}
                 <a
                   href={`tel:${topic.contact.phone.replace(/[^0-9+]/g, '')}`}
-                  className="text-blue-700 underline"
+                  className="text-brand-ink font-semibold underline underline-offset-2"
                 >
                   {topic.contact.phone}
                 </a>
               </li>
             )}
-            {topic.contact.notes && <li className="text-slate-700">{topic.contact.notes}</li>}
+            {topic.contact.notes && <li className="text-ink-secondary">{topic.contact.notes}</li>}
           </ul>
         </aside>
       )}
@@ -263,32 +271,34 @@ function InternalTopicForm({
         await new Promise((r) => setTimeout(r, 300));
         onSubmitted(payload);
       })}
-      className="space-y-5 max-w-2xl"
+      className="max-w-2xl rounded-2xl border border-line bg-surface shadow-sm p-6 md:p-8 space-y-6"
       aria-labelledby="topic-heading"
     >
-      <header className="space-y-1">
-        <p className="text-xs uppercase tracking-wide text-slate-600">
-          Classification #{topic.topicId}
+      <header className="space-y-2">
+        <div className="flex items-center gap-2 text-xs flex-wrap">
+          <span className="font-semibold uppercase tracking-[0.16em] text-brand-ink">
+            Classification #{topic.topicId}
+          </span>
           {topic.facets?.jurisdiction && (
             <>
-              {' · '}
-              <span>{JURISDICTION_LABELS[topic.facets.jurisdiction]}</span>
+              <span className="text-ink-meta">·</span>
+              <span className="text-ink-meta">{JURISDICTION_LABELS[topic.facets.jurisdiction]}</span>
             </>
           )}
-        </p>
+        </div>
         <h2
           id="topic-heading"
           tabIndex={-1}
-          className="text-2xl font-semibold text-slate-900 focus:outline-none"
+          className="font-serif text-3xl font-semibold tracking-tight text-ink focus:outline-none"
         >
           {topic.name}
         </h2>
         {topic.description && (
-          <p className="text-sm text-slate-600">{topic.description}</p>
+          <p className="text-[15px] text-ink-secondary leading-relaxed">{topic.description}</p>
         )}
         {topic.contact && (
-          <aside className="mt-2 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-            <p className="font-medium text-slate-800 mb-1">Prefer to contact directly?</p>
+          <aside className="mt-3 rounded-xl border border-line bg-surface-muted p-4 text-sm text-ink-secondary">
+            <p className="font-semibold text-ink mb-1">Prefer to contact directly?</p>
             <ul className="space-y-0.5">
               {topic.contact.website && (
                 <li>
@@ -297,7 +307,7 @@ function InternalTopicForm({
                     href={topic.contact.website}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-blue-700 underline"
+                    className="text-brand-ink font-semibold underline underline-offset-2"
                   >
                     {topic.contact.website.replace(/^https?:\/\//, '')}
                   </a>
@@ -306,7 +316,7 @@ function InternalTopicForm({
               {topic.contact.email && (
                 <li>
                   Email:{' '}
-                  <a href={`mailto:${topic.contact.email}`} className="text-blue-700 underline">
+                  <a href={`mailto:${topic.contact.email}`} className="text-brand-ink font-semibold underline underline-offset-2">
                     {topic.contact.email}
                   </a>
                 </li>
@@ -314,12 +324,12 @@ function InternalTopicForm({
               {topic.contact.phone && (
                 <li>
                   Phone:{' '}
-                  <a href={`tel:${topic.contact.phone}`} className="text-blue-700 underline">
+                  <a href={`tel:${topic.contact.phone}`} className="text-brand-ink font-semibold underline underline-offset-2">
                     {topic.contact.phone}
                   </a>
                 </li>
               )}
-              {topic.contact.notes && <li className="text-slate-600">{topic.contact.notes}</li>}
+              {topic.contact.notes && <li className="text-ink-meta">{topic.contact.notes}</li>}
             </ul>
           </aside>
         )}
@@ -329,24 +339,29 @@ function InternalTopicForm({
         <div
           role="alert"
           aria-labelledby="error-summary-heading"
-          className="rounded-md border border-red-700 bg-red-50 p-4"
+          className="flex gap-3 rounded-xl border border-line border-l-4 border-l-danger bg-danger-surface p-4 shadow-sm"
         >
-          <h3 id="error-summary-heading" className="text-sm font-semibold text-red-900">
-            There {Object.keys(errors).length === 1 ? 'is 1 problem' : `are ${Object.keys(errors).length} problems`} with your submission
-          </h3>
-          <ul className="mt-2 list-disc pl-5 text-sm text-red-900 space-y-0.5">
-            {Object.entries(errors).map(([name, err]) => {
-              const message = (err as { message?: string } | undefined)?.message;
-              if (!message) return null;
-              return (
-                <li key={name}>
-                  <a href={`#f-${name}`} className="underline">
-                    {message}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+          <span className="text-danger shrink-0 mt-0.5" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /></svg>
+          </span>
+          <div className="flex-1">
+            <h3 id="error-summary-heading" className="text-sm font-semibold text-danger-ink">
+              There {Object.keys(errors).length === 1 ? 'is 1 problem' : `are ${Object.keys(errors).length} problems`} with your submission
+            </h3>
+            <ul className="mt-2 list-disc pl-5 text-sm text-danger-ink/90 space-y-0.5">
+              {Object.entries(errors).map(([name, err]) => {
+                const message = (err as { message?: string } | undefined)?.message;
+                if (!message) return null;
+                return (
+                  <li key={name}>
+                    <a href={`#f-${name}`} className="underline">
+                      {message}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       )}
 
@@ -355,9 +370,9 @@ function InternalTopicForm({
           return (
             <fieldset
               key={`grp-${item.groupLabel}-${idx}`}
-              className="border border-slate-200 rounded-md p-4"
+              className="border border-line rounded-xl p-4"
             >
-              <legend className="px-2 text-sm font-medium text-slate-800">
+              <legend className="px-2 text-sm font-semibold text-ink-strong">
                 {item.groupLabel}
               </legend>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
@@ -419,27 +434,30 @@ function InternalTopicForm({
         className="absolute left-[-10000px] top-auto w-px h-px overflow-hidden"
       />
 
-      <p className="text-xs text-slate-600">
-        Fields marked <span aria-hidden="true" className="text-red-700">*</span>{' '}
+      <p className="text-xs text-ink-meta">
+        Fields marked <span aria-hidden="true" className="text-danger-ink">*</span>{' '}
         <span className="sr-only">(required)</span> are required.
       </p>
 
-      <div className="flex flex-wrap items-center gap-3 pt-2">
+      <div className="flex flex-wrap items-center gap-3 pt-1">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 disabled:opacity-50 min-h-11"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand-hover px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark disabled:opacity-50 min-h-11"
         >
           {isSubmitting ? 'Submitting…' : 'Submit request'}
+          <span aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+          </span>
         </button>
         <button
           type="button"
           onClick={() => reset({ description: '' })}
-          className="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-800 hover:bg-slate-50 min-h-11"
+          className="rounded-lg border border-line-stronger bg-surface px-4 py-2.5 text-sm font-semibold text-ink-strong hover:bg-surface-muted min-h-11"
         >
-          Clear form
+          Clear
         </button>
-        <span className="text-xs text-slate-600">
+        <span className="text-xs text-ink-meta">
           Will route to the department that owns “{topic.name}”.
         </span>
       </div>
@@ -463,7 +481,7 @@ function FieldRenderer({
   const label = field.label || field.name;
   const requiredMark = required ? (
     <>
-      <span aria-hidden="true" className="text-red-700"> *</span>
+      <span aria-hidden="true" className="text-danger-ink"> *</span>
       <span className="sr-only"> (required)</span>
     </>
   ) : null;
@@ -471,7 +489,7 @@ function FieldRenderer({
   if (field.type === 'textarea') {
     return (
       <div>
-        <label htmlFor={id} className="block text-sm font-medium text-slate-900 mb-1">
+        <label htmlFor={id} className="block text-sm font-semibold text-ink mb-1.5">
           {label}
           {requiredMark}
         </label>
@@ -482,7 +500,7 @@ function FieldRenderer({
           aria-describedby={describedBy}
           aria-required={required || undefined}
           {...register(field.name)}
-          className="w-full rounded-md border border-slate-400 px-3 py-2 text-sm focus:border-blue-700"
+          className="w-full rounded-lg border border-line-stronger bg-surface px-3 py-2.5 text-sm focus:border-brand-ink focus:ring-2 focus:ring-brand-ink/20 focus:outline-none"
         />
         <ErrorText id={`${id}-error`} error={error} />
       </div>
@@ -492,7 +510,7 @@ function FieldRenderer({
   if (field.type === 'select-one') {
     return (
       <div>
-        <label htmlFor={id} className="block text-sm font-medium text-slate-900 mb-1">
+        <label htmlFor={id} className="block text-sm font-semibold text-ink mb-1.5">
           {label}
           {requiredMark}
         </label>
@@ -502,7 +520,7 @@ function FieldRenderer({
           aria-describedby={describedBy}
           aria-required={required || undefined}
           {...register(field.name)}
-          className="w-full rounded-md border border-slate-400 px-3 py-2 text-sm bg-white focus:border-blue-700 min-h-11"
+          className="w-full rounded-lg border border-line-stronger bg-surface px-3 py-2.5 text-sm focus:border-brand-ink focus:ring-2 focus:ring-brand-ink/20 focus:outline-none min-h-11"
         >
           <option value="">— Select —</option>
           {field.options?.map((o) => (
@@ -518,12 +536,12 @@ function FieldRenderer({
 
   if (field.type === 'checkbox') {
     return (
-      <label className="flex items-start gap-2 text-sm text-slate-900 min-h-11">
+      <label className="flex items-start gap-2.5 text-sm text-ink-strong min-h-11">
         <input
           id={id}
           type="checkbox"
           {...register(field.name)}
-          className="mt-1 h-4 w-4"
+          className="mt-1 h-4 w-4 accent-[var(--color-brand)]"
         />
         <span>{label}</span>
       </label>
@@ -532,11 +550,11 @@ function FieldRenderer({
 
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-slate-900 mb-1">
+      <label htmlFor={id} className="block text-sm font-medium text-ink mb-1">
         {label}
         {requiredMark}
         {field.name === 'location' && (
-          <span className="ml-2 text-xs font-normal text-slate-600">
+          <span className="ml-2 text-xs font-normal text-ink-meta">
             (address or cross-street — map picker coming soon)
           </span>
         )}
@@ -548,7 +566,7 @@ function FieldRenderer({
         aria-describedby={describedBy}
         aria-required={required || undefined}
         {...register(field.name)}
-        className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-600"
+        className="w-full rounded-lg border border-line-stronger bg-surface px-3 py-2.5 text-sm focus:border-brand-ink focus:ring-2 focus:ring-brand-ink/20 focus:outline-none min-h-11"
       />
       <ErrorText id={`${id}-error`} error={error} />
     </div>
@@ -558,7 +576,7 @@ function FieldRenderer({
 function ErrorText({ id, error }: { id: string; error?: string }) {
   if (!error) return null;
   return (
-    <p id={id} role="alert" className="mt-1 text-xs text-red-700">
+    <p id={id} role="alert" className="mt-1 text-xs text-danger-ink">
       {error}
     </p>
   );

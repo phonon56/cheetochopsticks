@@ -46,15 +46,12 @@ export function TopicNav({ selectedId, onSelect }: Props) {
       ref={navRef}
       onKeyDown={handleKeyDown}
       aria-label="Service topics"
-      className="h-full flex flex-col border-r border-slate-200 bg-white"
+      className="space-y-3"
     >
-      <div className="p-4 border-b border-slate-200">
-        <h1 className="text-lg font-semibold text-slate-900">
-          City of Colorado Springs
-        </h1>
-        <p className="text-sm text-slate-600">Report an issue or contact a department</p>
-      </div>
-      <div className="p-3 border-b border-slate-200">
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-meta px-1">
+        Browse by topic
+      </p>
+      <div>
         <label htmlFor="topic-search" className="sr-only">
           Search topics
         </label>
@@ -64,15 +61,15 @@ export function TopicNav({ selectedId, onSelect }: Props) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search (pothole, noise, CORA…)"
-          className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-600"
+          className="w-full rounded-lg border border-line-stronger bg-surface px-3 py-2 text-sm focus:border-brand-ink focus:ring-2 focus:ring-brand-ink/20 focus:outline-none min-h-11"
         />
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div>
         {searching ? (
-          <ul role="list" className="py-2">
+          <ul role="list" className="space-y-1">
             {results.length === 0 && (
-              <li className="px-4 py-3 text-sm text-slate-500">
+              <li className="px-3 py-2.5 text-sm text-ink-meta">
                 No topics match “{query}”.
               </li>
             )}
@@ -87,36 +84,35 @@ export function TopicNav({ selectedId, onSelect }: Props) {
             ))}
           </ul>
         ) : (
-          <ul role="list">
+          <ul role="list" className="space-y-1">
             {catalog.groups.map((g) => {
               const isOpen = openGroup === g.groupName;
               return (
-                <li key={g.groupName} className="border-b border-slate-100">
+                <li key={g.groupName}>
                   <button
                     type="button"
                     data-nav-item
                     aria-expanded={isOpen}
                     aria-controls={`group-${slug(g.groupName)}`}
                     onClick={() => setOpenGroup(isOpen ? null : g.groupName)}
-                    className="w-full flex items-center justify-between px-4 py-3 text-left text-sm font-medium text-slate-900 hover:bg-slate-50 min-h-11"
+                    className="w-full flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-left text-sm font-semibold text-ink-strong hover:bg-surface-muted min-h-11"
                   >
                     <span>{g.groupName}</span>
-                    <span className="flex items-center gap-2 text-xs text-slate-500">
+                    <span className="flex items-center gap-2 text-xs text-ink-meta font-normal">
                       <span>{g.items.length}</span>
-                      <span aria-hidden className={isOpen ? 'rotate-180' : ''}>
+                      <span aria-hidden className={isOpen ? 'rotate-180 inline-block' : 'inline-block'}>
                         ▾
                       </span>
                     </span>
                   </button>
                   {isOpen && (
-                    <ul id={`group-${slug(g.groupName)}`} role="list" className="pb-2">
+                    <ul id={`group-${slug(g.groupName)}`} role="list" className="space-y-1 pl-2 pt-1 pb-1">
                       {g.items.map((t) => (
                         <TopicRow
                           key={t.topicId}
                           topic={t}
                           selected={t.topicId === selectedId}
                           onSelect={onSelect}
-                          indent
                         />
                       ))}
                     </ul>
@@ -135,13 +131,11 @@ function TopicRow({
   topic,
   selected,
   onSelect,
-  indent,
   groupLabel,
 }: {
   topic: Topic;
   selected: boolean;
   onSelect: (id: string) => void;
-  indent?: boolean;
   groupLabel?: string;
 }) {
   const needsLocation = topicRequiresLocation(topic);
@@ -153,27 +147,25 @@ function TopicRow({
         onClick={() => onSelect(topic.topicId)}
         aria-current={selected ? 'true' : undefined}
         className={[
-          'w-full flex items-center justify-between gap-3 text-left text-sm py-2 min-h-11',
-          indent ? 'pl-8 pr-4' : 'px-4',
+          'w-full flex items-center justify-between gap-3 text-left text-sm py-2.5 pr-3 min-h-11 rounded-lg',
           selected
-            ? 'bg-blue-50 text-blue-900 font-medium'
-            : 'text-slate-800 hover:bg-slate-50',
+            ? 'bg-surface-muted text-brand-ink font-semibold border-l-[3px] border-brand-ink pl-[calc(0.75rem-3px)]'
+            : 'text-ink-strong hover:bg-surface-muted pl-3',
         ].join(' ')}
       >
         <span className="flex-1">
           {topic.name}
           {groupLabel && (
-            <span className="block text-xs text-slate-500 mt-0.5">{groupLabel}</span>
+            <span className="block text-xs text-ink-meta mt-0.5 font-normal">{groupLabel}</span>
           )}
         </span>
         {needsLocation && (
-          <span
-            aria-label="Location required"
-            title="Location required"
-            className="text-xs text-slate-400"
-          >
-            📍
-          </span>
+          <>
+            <span className="sr-only">Location required</span>
+            <span aria-hidden="true" className="text-xs text-ink-meta">
+              📍
+            </span>
+          </>
         )}
       </button>
     </li>

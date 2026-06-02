@@ -204,26 +204,35 @@ export function PlainLanguageSearch({ onPickTopic }: Props) {
   }, [text, turnstileToken]);
 
   return (
-    <section aria-labelledby="plain-language-heading" className="max-w-2xl space-y-4">
-      <div className="space-y-1">
-        <p className="text-xs uppercase tracking-wide text-slate-600">
-          Plain-language routing
+    <section aria-labelledby="plain-language-heading" className="max-w-2xl space-y-6">
+      <div>
+        <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-ink mb-3">
+          <span aria-hidden="true" className="inline-flex gap-1">
+            <span className="inline-block h-2 w-2 rounded-full" style={{ background: '#00943a' }} />
+            <span className="inline-block h-2 w-2 rounded-full" style={{ background: '#0074c8' }} />
+            <span className="inline-block h-2 w-2 rounded-full" style={{ background: '#fea30b' }} />
+          </span>
+          Contact the City
         </p>
-        <h1 id="plain-language-heading" className="text-3xl font-semibold text-slate-900">
-          Tell us what you need.
+        <h1
+          id="plain-language-heading"
+          tabIndex={-1}
+          className="font-serif text-[2.7rem] leading-[1.1] font-semibold tracking-tight text-ink focus:outline-none"
+        >
+          What do you need to get done today?
         </h1>
-        <p className="text-slate-700">
-          Describe your situation in your own words — you don't need to know which
-          department handles it.
+        <p className="mt-4 text-[16px] text-ink-secondary leading-relaxed max-w-xl">
+          Describe it in your own words. We'll route you to the right department — or show
+          you exactly who to contact.
         </p>
       </div>
 
       <div>
-        <div className="flex items-center justify-between mb-1">
-          <label htmlFor="plain-language-input" className="text-sm font-medium text-slate-900">
+        <div className="flex items-start justify-between mb-1.5">
+          <label htmlFor="plain-language-input" className="text-sm font-semibold text-ink">
             Your situation <span className="sr-only">(optional)</span>
           </label>
-          <span aria-live="polite" className="text-xs text-slate-600">
+          <span aria-live="polite" className="text-xs text-ink-meta">
             {text.length} / {MAX}
           </span>
         </div>
@@ -233,22 +242,22 @@ export function PlainLanguageSearch({ onPickTopic }: Props) {
           onChange={(e) => setText(e.target.value.slice(0, MAX))}
           rows={4}
           placeholder="e.g. 'My neighbor's grass is three feet tall.' — or — 'I want to close Tejon Street for a street fair on June 15.'"
-          className="w-full rounded-md border border-slate-400 px-3 py-2 text-sm focus:border-blue-700"
+          className="w-full rounded-lg border border-line-stronger bg-surface px-3.5 py-2.5 text-[15px] text-ink placeholder:text-ink-meta focus:border-brand-ink focus:ring-2 focus:ring-brand-ink/20 focus:outline-none"
         />
-        <p className="mt-1 text-xs text-slate-600">
+        <p className="mt-1.5 text-xs text-ink-meta">
           Addresses, dates, and what you're trying to accomplish all help.
         </p>
       </div>
 
       <div>
-        <p className="text-sm font-medium text-slate-900 mb-2">Or try one of these</p>
+        <p className="text-sm font-semibold text-ink mb-2">Or try one of these</p>
         <ul role="list" className="flex flex-wrap gap-2">
           {EXAMPLES.map((ex) => (
             <li key={ex}>
               <button
                 type="button"
                 onClick={() => setText(ex)}
-                className="rounded-full border border-slate-300 bg-white px-3 py-1 text-sm text-slate-800 hover:bg-slate-50 min-h-8"
+                className="rounded-full border border-line-strong bg-surface px-3 py-1 text-sm text-ink-strong hover:border-brand-ink hover:text-brand-ink min-h-8"
               >
                 {ex.length > 40 ? ex.slice(0, 38) + '…' : ex}
               </button>
@@ -284,15 +293,20 @@ export function PlainLanguageSearch({ onPickTopic }: Props) {
       )}
 
       {text.trim().length > 4 && !result.primary && (
-        <div className="rounded-md border border-amber-400 bg-amber-50 p-4 text-sm text-amber-900">
-          <p className="font-medium">We couldn't confidently match that.</p>
-          <p className="mt-1">
-            Browse the topic menu on the left, or call the general City line at{' '}
-            <a href="tel:+17193855169" className="underline">
-              (719) 385-5169
-            </a>
-            .
-          </p>
+        <div className="flex gap-3 rounded-xl border border-line border-l-4 border-l-warning bg-warning-surface p-4 shadow-sm">
+          <span className="text-warning shrink-0 mt-0.5" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /></svg>
+          </span>
+          <div>
+            <p className="font-semibold text-warning-ink">We couldn't confidently match that.</p>
+            <p className="mt-0.5 text-sm text-warning-ink/90">
+              Browse the topic menu on the left, or call the general City line at{' '}
+              <a href="tel:+17193855169" className="underline">
+                (719) 385-5169
+              </a>
+              .
+            </p>
+          </div>
         </div>
       )}
     </section>
@@ -308,19 +322,24 @@ function ZipContext({ zip }: { zip: string }) {
     <div
       role="note"
       aria-live="polite"
-      className="rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-800"
+      className="flex gap-3 rounded-xl border border-line border-l-4 border-l-info bg-surface p-4 shadow-sm"
     >
-      <p>
-        <span className="font-medium">We saw {zip} in your question.</span>{' '}
-        That zip is in: {jurisdictions.map((j) => JURISDICTION_LABELS[j]).join(' · ')}.
-      </p>
-      {hasCity && hasCounty && (
-        <p className="mt-1 text-xs text-slate-700">
-          Most of this zip is handled by City of Colorado Springs agencies. Small unincorporated
-          slivers fall under El Paso County — if you need the unincorporated side, add a street
-          address and we'll narrow further.
+      <span className="text-info shrink-0 mt-0.5" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 8h.01M11 12h1v4h1" /></svg>
+      </span>
+      <div>
+        <p className="text-sm text-ink-strong">
+          <span className="font-semibold text-info-ink">We saw {zip} in your question.</span>{' '}
+          That zip is in: {jurisdictions.map((j) => JURISDICTION_LABELS[j]).join(' · ')}.
         </p>
-      )}
+        {hasCity && hasCounty && (
+          <p className="mt-1 text-xs text-ink-secondary">
+            Most of this zip is handled by City of Colorado Springs agencies. Small unincorporated
+            slivers fall under El Paso County — if you need the unincorporated side, add a street
+            address and we'll narrow further.
+          </p>
+        )}
+      </div>
     </div>
   );
 }
@@ -342,29 +361,28 @@ function RouteResultCard({
       role="region"
       aria-label="Suggested destination"
       aria-live="polite"
-      className="rounded-lg border border-blue-700 bg-blue-50 p-4 space-y-3"
+      className="rounded-xl border border-line border-l-4 border-l-brand bg-brand-surface p-5 shadow-sm space-y-3"
     >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-blue-900">
-            Suggested destination · {confidenceLabel(primary.confidence)}
-          </p>
-          <h2 className="text-lg font-semibold text-blue-950 mt-1">{topic.name}</h2>
-          <p className="text-sm text-blue-900 mt-1">{primary.reason}</p>
-        </div>
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-ink">
+          Suggested destination · {confidenceLabel(primary.confidence)}
+        </p>
+        <h2 className="font-serif text-lg font-semibold text-brand-ink mt-1.5">{topic.name}</h2>
+        <p className="text-sm text-brand-ink mt-1 leading-relaxed">{primary.reason}</p>
       </div>
 
       {primary.warning && (
-        <p className="rounded-md border border-amber-400 bg-amber-50 p-2 text-xs text-amber-900">
-          ⚠ {primary.warning}
-        </p>
+        <div className="flex gap-2 rounded-lg border border-line border-l-4 border-l-warning bg-warning-surface p-3 text-xs text-warning-ink">
+          <span className="shrink-0" aria-hidden="true">⚠</span>
+          <p>{primary.warning}</p>
+        </div>
       )}
 
       <DestinationCta topic={topic} onPickTopic={onPickTopic} />
 
       {alternates.length > 0 && (
         <details className="text-sm">
-          <summary className="cursor-pointer text-blue-900 font-medium">
+          <summary className="cursor-pointer text-brand-ink font-semibold">
             Not quite right? Show {alternates.length} alternative
             {alternates.length === 1 ? '' : 's'}
           </summary>
@@ -375,10 +393,10 @@ function RouteResultCard({
               return (
                 <li
                   key={alt.topicId}
-                  className="rounded-md border border-slate-300 bg-white p-3"
+                  className="rounded-lg border border-line-strong bg-surface p-3 shadow-sm"
                 >
-                  <p className="text-sm font-medium text-slate-900">{altTopic.name}</p>
-                  <p className="text-xs text-slate-700 mt-0.5">{alt.reason}</p>
+                  <p className="text-sm font-semibold text-ink">{altTopic.name}</p>
+                  <p className="text-xs text-ink-secondary mt-0.5">{alt.reason}</p>
                   <div className="mt-2">
                     <DestinationCta topic={altTopic} onPickTopic={onPickTopic} compact />
                   </div>
@@ -403,8 +421,8 @@ function DestinationCta({
 }) {
   const d: Destination = topic.destination ?? { kind: 'form' };
   const base = compact
-    ? 'inline-flex items-center gap-2 rounded-md bg-blue-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-800 min-h-8'
-    : 'inline-flex items-center gap-2 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 min-h-11';
+    ? 'inline-flex items-center gap-2 rounded-lg bg-brand-hover px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-dark min-h-8'
+    : 'inline-flex items-center gap-2 rounded-lg bg-brand-hover px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark min-h-11';
 
   if (d.kind === 'external') {
     return (
@@ -449,14 +467,14 @@ function EngineStatus({
 }) {
   if (loading) {
     return (
-      <p className="text-xs text-slate-600" aria-live="polite">
+      <p className="text-xs text-ink-meta" aria-live="polite">
         Routing…
       </p>
     );
   }
   if (turnstileError) {
     return (
-      <p className="text-xs text-amber-800" role="status">
+      <p className="text-xs text-warning-ink" role="status">
         Using local matcher only — {turnstileError}.
       </p>
     );
@@ -472,9 +490,9 @@ function EngineStatus({
 
   if (!label) return null;
   const tone =
-    engine === 'workers-ai' ? 'text-emerald-800' :
-    engine === 'keyword-fallback' ? 'text-slate-600' :
-    'text-amber-800';
+    engine === 'workers-ai' ? 'text-success-ink' :
+    engine === 'keyword-fallback' ? 'text-ink-meta' :
+    'text-warning-ink';
 
   return (
     <p className={`text-xs ${tone}`} role="status" aria-live="polite">

@@ -279,10 +279,10 @@ export const ENTRY_STATUS_LABELS: Record<ProjectEntryStatus, string> = {
 };
 
 export const STATUS_COLORS: Record<ProjectStatus, string> = {
-  upcoming: 'bg-blue-100 text-blue-900 border-blue-300',
-  planning: 'bg-slate-100 text-slate-900 border-slate-300',
-  design: 'bg-purple-100 text-purple-900 border-purple-300',
-  construction: 'bg-amber-100 text-amber-900 border-amber-300',
-  'under-review': 'bg-teal-100 text-teal-900 border-teal-300',
-  completed: 'bg-green-100 text-green-900 border-green-300',
+  upcoming: 'bg-info-surface text-info-ink border-info',
+  planning: 'bg-surface-muted text-ink-strong border-line-strong',
+  design: 'bg-brand-surface text-brand-ink border-brand',
+  construction: 'bg-warning-surface text-warning-ink border-warning',
+  'under-review': 'bg-surface-muted text-ink-strong border-line-strong',
+  completed: 'bg-success-surface text-success-ink border-success',
 };

@@ -113,14 +113,14 @@ export function MapPicker({ value, onChange }: Props) {
         ref={containerRef}
         role="application"
         aria-label="Map picker. Click anywhere on the map to drop a pin at that location. If you cannot use the map, type the address in the location field above."
-        className="h-64 w-full rounded-md border border-slate-400 overflow-hidden"
+        className="h-64 w-full rounded-md border border-line-stronger overflow-hidden"
       />
-      <div className="flex items-center gap-3 text-xs text-slate-700">
+      <div className="flex items-center gap-3 text-xs text-ink-secondary">
         <button
           type="button"
           onClick={clearPin}
           disabled={!markerRef.current}
-          className="rounded-md border border-slate-300 px-3 py-1 text-slate-800 hover:bg-slate-50 disabled:opacity-50 min-h-8"
+          className="rounded-md border border-line-strong px-3 py-1 text-ink-strong hover:bg-surface-muted disabled:opacity-50 min-h-8"
         >
           Clear pin
         </button>

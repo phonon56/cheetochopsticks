@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>COS Portal — playful, brand-anchored</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/*! tailwindcss v4.2.4 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: "Source Sans 3", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --color-white: #fff;
+    --spacing: 0.25rem;
+    --container-xl: 36rem;
+    --container-2xl: 42rem;
+    --container-6xl: 72rem;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1 / 0.75);
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --tracking-tight: -0.025em;
+    --leading-relaxed: 1.625;
+    --radius-lg: 0.65rem;
+    --radius-xl: 0.85rem;
+    --radius-2xl: 1.1rem;
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+    --color-brand: #a8501e;
+    --color-brand-hover: #8c4118;
+    --color-accent: #0074c8;
+    --color-canvas: #faf7f2;
+    --color-surface: #ffffff;
+    --color-surface-muted: #f4f0ea;
+    --color-ink: #24272a;
+    --color-ink-strong: #3b3e42;
+    --color-ink-secondary: #56595e;
+    --color-ink-muted: #686c70;
+    --color-ink-subtle: #989ca1;
+    --color-line: #ece6dd;
+    --color-line-strong: #dcd4c8;
+    --color-line-stronger: #8a7d68;
+    --color-success: #14823f;
+    --color-success-surface: #eaf6ee;
+    --color-success-ink: #0b5026;
+    --color-warning: #b8791a;
+    --color-warning-surface: #fbefd6;
+    --color-warning-ink: #6b4a0f;
+    --color-danger: #d12736;
+    --color-danger-surface: #fcebec;
+    --color-danger-ink: #7e1620;
+    --color-info: #0074c8;
+    --color-info-ink: #00528f;
+    --color-focus-ring: #a8501e;
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .mx-auto {
+    margin-inline: auto;
+  }
+  .mt-0\.5 {
+    margin-top: calc(var(--spacing) * 0.5);
+  }
+  .mt-1 {
+    margin-top: calc(var(--spacing) * 1);
+  }
+  .mt-4 {
+    margin-top: calc(var(--spacing) * 4);
+  }
+  .mt-7 {
+    margin-top: calc(var(--spacing) * 7);
+  }
+  .-mb-px {
+    margin-bottom: -1px;
+  }
+  .mb-1 {
+    margin-bottom: calc(var(--spacing) * 1);
+  }
+  .mb-1\.5 {
+    margin-bottom: calc(var(--spacing) * 1.5);
+  }
+  .mb-2 {
+    margin-bottom: calc(var(--spacing) * 2);
+  }
+  .mb-3 {
+    margin-bottom: calc(var(--spacing) * 3);
+  }
+  .block {
+    display: block;
+  }
+  .flex {
+    display: flex;
+  }
+  .grid {
+    display: grid;
+  }
+  .hidden {
+    display: none;
+  }
+  .inline-block {
+    display: inline-block;
+  }
+  .inline-flex {
+    display: inline-flex;
+  }
+  .h-2 {
+    height: calc(var(--spacing) * 2);
+  }
+  .h-4 {
+    height: calc(var(--spacing) * 4);
+  }
+  .min-h-11 {
+    min-height: calc(var(--spacing) * 11);
+  }
+  .min-h-24 {
+    min-height: calc(var(--spacing) * 24);
+  }
+  .w-2 {
+    width: calc(var(--spacing) * 2);
+  }
+  .w-4 {
+    width: calc(var(--spacing) * 4);
+  }
+  .w-full {
+    width: 100%;
+  }
+  .max-w-2xl {
+    max-width: var(--container-2xl);
+  }
+  .max-w-6xl {
+    max-width: var(--container-6xl);
+  }
+  .max-w-xl {
+    max-width: var(--container-xl);
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .shrink-0 {
+    flex-shrink: 0;
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .items-start {
+    align-items: flex-start;
+  }
+  .justify-between {
+    justify-content: space-between;
+  }
+  .gap-1 {
+    gap: calc(var(--spacing) * 1);
+  }
+  .gap-1\.5 {
+    gap: calc(var(--spacing) * 1.5);
+  }
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-2\.5 {
+    gap: calc(var(--spacing) * 2.5);
+  }
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
+  }
+  .gap-10 {
+    gap: calc(var(--spacing) * 10);
+  }
+  .space-y-1 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 1) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 1) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-2 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-3 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-6 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-8 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 8) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .rounded-2xl {
+    border-radius: var(--radius-2xl);
+  }
+  .rounded-full {
+    border-radius: calc(infinity * 1px);
+  }
+  .rounded-lg {
+    border-radius: var(--radius-lg);
+  }
+  .rounded-xl {
+    border-radius: var(--radius-xl);
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+  .border-t {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 1px;
+  }
+  .border-b {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 1px;
+  }
+  .border-b-2 {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 2px;
+  }
+  .border-l-4 {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 4px;
+  }
+  .border-l-\[3px\] {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 3px;
+  }
+  .border-brand {
+    border-color: var(--color-brand);
+  }
+  .border-line {
+    border-color: var(--color-line);
+  }
+  .border-line-strong {
+    border-color: var(--color-line-strong);
+  }
+  .border-line-stronger {
+    border-color: var(--color-line-stronger);
+  }
+  .border-transparent {
+    border-color: transparent;
+  }
+  .border-l-danger {
+    border-left-color: var(--color-danger);
+  }
+  .border-l-info {
+    border-left-color: var(--color-info);
+  }
+  .border-l-success {
+    border-left-color: var(--color-success);
+  }
+  .border-l-warning {
+    border-left-color: var(--color-warning);
+  }
+  .bg-brand {
+    background-color: var(--color-brand);
+  }
+  .bg-canvas {
+    background-color: var(--color-canvas);
+  }
+  .bg-danger-surface {
+    background-color: var(--color-danger-surface);
+  }
+  .bg-success-surface {
+    background-color: var(--color-success-surface);
+  }
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+  .bg-surface-muted {
+    background-color: var(--color-surface-muted);
+  }
+  .bg-transparent {
+    background-color: transparent;
+  }
+  .bg-warning-surface {
+    background-color: var(--color-warning-surface);
+  }
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
+  }
+  .p-5 {
+    padding: calc(var(--spacing) * 5);
+  }
+  .p-6 {
+    padding: calc(var(--spacing) * 6);
+  }
+  .px-1 {
+    padding-inline: calc(var(--spacing) * 1);
+  }
+  .px-2\.5 {
+    padding-inline: calc(var(--spacing) * 2.5);
+  }
+  .px-3 {
+    padding-inline: calc(var(--spacing) * 3);
+  }
+  .px-3\.5 {
+    padding-inline: calc(var(--spacing) * 3.5);
+  }
+  .px-4 {
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .px-5 {
+    padding-inline: calc(var(--spacing) * 5);
+  }
+  .py-0\.5 {
+    padding-block: calc(var(--spacing) * 0.5);
+  }
+  .py-2 {
+    padding-block: calc(var(--spacing) * 2);
+  }
+  .py-2\.5 {
+    padding-block: calc(var(--spacing) * 2.5);
+  }
+  .py-3 {
+    padding-block: calc(var(--spacing) * 3);
+  }
+  .py-3\.5 {
+    padding-block: calc(var(--spacing) * 3.5);
+  }
+  .py-8 {
+    padding-block: calc(var(--spacing) * 8);
+  }
+  .py-10 {
+    padding-block: calc(var(--spacing) * 10);
+  }
+  .py-14 {
+    padding-block: calc(var(--spacing) * 14);
+  }
+  .pt-1 {
+    padding-top: calc(var(--spacing) * 1);
+  }
+  .pr-3 {
+    padding-right: calc(var(--spacing) * 3);
+  }
+  .pl-3 {
+    padding-left: calc(var(--spacing) * 3);
+  }
+  .text-left {
+    text-align: left;
+  }
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+  .text-3xl {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+  }
+  .text-lg {
+    font-size: var(--text-lg);
+    line-height: var(--tw-leading, var(--text-lg--line-height));
+  }
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+  .text-xs {
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
+  .text-\[2\.7rem\] {
+    font-size: 2.7rem;
+  }
+  .text-\[15px\] {
+    font-size: 15px;
+  }
+  .text-\[16px\] {
+    font-size: 16px;
+  }
+  .leading-\[1\.1\] {
+    --tw-leading: 1.1;
+    line-height: 1.1;
+  }
+  .leading-relaxed {
+    --tw-leading: var(--leading-relaxed);
+    line-height: var(--leading-relaxed);
+  }
+  .font-medium {
+    --tw-font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-medium);
+  }
+  .font-normal {
+    --tw-font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-normal);
+  }
+  .font-semibold {
+    --tw-font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-semibold);
+  }
+  .tracking-\[0\.14em\] {
+    --tw-tracking: 0.14em;
+    letter-spacing: 0.14em;
+  }
+  .tracking-\[0\.16em\] {
+    --tw-tracking: 0.16em;
+    letter-spacing: 0.16em;
+  }
+  .tracking-\[0\.18em\] {
+    --tw-tracking: 0.18em;
+    letter-spacing: 0.18em;
+  }
+  .tracking-tight {
+    --tw-tracking: var(--tracking-tight);
+    letter-spacing: var(--tracking-tight);
+  }
+  .text-accent {
+    color: var(--color-accent);
+  }
+  .text-brand {
+    color: var(--color-brand);
+  }
+  .text-danger {
+    color: var(--color-danger);
+  }
+  .text-danger-ink {
+    color: var(--color-danger-ink);
+  }
+  .text-danger-ink\/90 {
+    color: color-mix(in srgb, #7e1620 90%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-danger-ink) 90%, transparent);
+    }
+  }
+  .text-info {
+    color: var(--color-info);
+  }
+  .text-info-ink {
+    color: var(--color-info-ink);
+  }
+  .text-ink {
+    color: var(--color-ink);
+  }
+  .text-ink-muted {
+    color: var(--color-ink-muted);
+  }
+  .text-ink-secondary {
+    color: var(--color-ink-secondary);
+  }
+  .text-ink-strong {
+    color: var(--color-ink-strong);
+  }
+  .text-ink-subtle {
+    color: var(--color-ink-subtle);
+  }
+  .text-success {
+    color: var(--color-success);
+  }
+  .text-success-ink {
+    color: var(--color-success-ink);
+  }
+  .text-success-ink\/90 {
+    color: color-mix(in srgb, #0b5026 90%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-success-ink) 90%, transparent);
+    }
+  }
+  .text-warning {
+    color: var(--color-warning);
+  }
+  .text-warning-ink {
+    color: var(--color-warning-ink);
+  }
+  .text-warning-ink\/90 {
+    color: color-mix(in srgb, #6b4a0f 90%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-warning-ink) 90%, transparent);
+    }
+  }
+  .text-white {
+    color: var(--color-white);
+  }
+  .uppercase {
+    text-transform: uppercase;
+  }
+  .underline {
+    text-decoration-line: underline;
+  }
+  .underline-offset-2 {
+    text-underline-offset: 2px;
+  }
+  .accent-\[var\(--color-brand\)\] {
+    accent-color: var(--color-brand);
+  }
+  .shadow-sm {
+    --tw-shadow: 0 1px 2px var(--tw-shadow-color, rgba(70,45,25,.06)), 0 1px 1px var(--tw-shadow-color, rgba(70,45,25,.05));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .transition-shadow {
+    transition-property: box-shadow;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .placeholder\:text-ink-muted {
+    &::placeholder {
+      color: var(--color-ink-muted);
+    }
+  }
+  .focus-within\:border-brand {
+    &:focus-within {
+      border-color: var(--color-brand);
+    }
+  }
+  .focus-within\:ring-2 {
+    &:focus-within {
+      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+  .focus-within\:ring-brand\/20 {
+    &:focus-within {
+      --tw-ring-color: color-mix(in srgb, #a8501e 20%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--color-brand) 20%, transparent);
+      }
+    }
+  }
+  .hover\:border-brand {
+    &:hover {
+      @media (hover: hover) {
+        border-color: var(--color-brand);
+      }
+    }
+  }
+  .hover\:border-line-stronger {
+    &:hover {
+      @media (hover: hover) {
+        border-color: var(--color-line-stronger);
+      }
+    }
+  }
+  .hover\:bg-brand-hover {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-brand-hover);
+      }
+    }
+  }
+  .hover\:bg-surface-muted {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-surface-muted);
+      }
+    }
+  }
+  .hover\:text-brand {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-brand);
+      }
+    }
+  }
+  .hover\:shadow-md {
+    &:hover {
+      @media (hover: hover) {
+        --tw-shadow: 0 8px 20px -7px var(--tw-shadow-color, rgba(60,38,20,.15)), 0 2px 6px -3px var(--tw-shadow-color, rgba(60,38,20,.08));
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+      }
+    }
+  }
+  .focus\:border-brand {
+    &:focus {
+      border-color: var(--color-brand);
+    }
+  }
+  .focus\:ring-2 {
+    &:focus {
+      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+  .focus\:ring-brand\/20 {
+    &:focus {
+      --tw-ring-color: color-mix(in srgb, #a8501e 20%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--color-brand) 20%, transparent);
+      }
+    }
+  }
+  .focus\:outline-none {
+    &:focus {
+      --tw-outline-style: none;
+      outline-style: none;
+    }
+  }
+  .sm\:inline-flex {
+    @media (width >= 40rem) {
+      display: inline-flex;
+    }
+  }
+  .sm\:grid-cols-2 {
+    @media (width >= 40rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .md\:grid-cols-2 {
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .md\:grid-cols-\[250px_1fr\] {
+    @media (width >= 48rem) {
+      grid-template-columns: 250px 1fr;
+    }
+  }
+  .md\:p-8 {
+    @media (width >= 48rem) {
+      padding: calc(var(--spacing) * 8);
+    }
+  }
+  .md\:px-8 {
+    @media (width >= 48rem) {
+      padding-inline: calc(var(--spacing) * 8);
+    }
+  }
+}
+*:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-tracking {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-space-y-reverse: 0;
+      --tw-border-style: solid;
+      --tw-leading: initial;
+      --tw-font-weight: initial;
+      --tw-tracking: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+    }
+  }
+}
+
+:root{ --color-brand-dark:#6e3214; }
+body { margin:0; background:#e8e0d4; font-family:"Source Sans 3", ui-sans-serif, system-ui, sans-serif; }
+.page { max-width:1180px; margin:24px auto; border-radius:12px; overflow:hidden; box-shadow:0 24px 60px -22px rgba(60,34,16,.38); }
+.banner { background:#24272a; color:#efe7d8; padding:11px 22px; font-size:12.5px; }
+.banner b { color:#f0a23a; }
+.preview-frame { background:var(--color-canvas); }
+.swatches { display:flex; flex-wrap:wrap; gap:13px; }
+.sw { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--color-ink-secondary); }
+.chip { width:26px; height:26px; border-radius:7px; display:inline-block; box-shadow:inset 0 0 0 1px rgba(40,30,16,.14); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="banner">Static preview &mdash; <b>playful, brand-anchored</b>: real logo, terracotta + Olympic blue, peaks used purposefully. Real Tailwind; no components changed.</div>
+  
+<div class="preview-frame bg-canvas text-ink">
+
+  <div aria-hidden="true" style="height:5px;background:linear-gradient(90deg,#00943a 0 20%,#0074c8 20% 40%,#c61f6e 40% 60%,#ea0d44 60% 80%,#fea30b 80% 100%)"></div>
+
+  <header class="bg-surface border-b border-line">
+    <div class="mx-auto max-w-6xl px-5 md:px-8 py-3.5 flex items-center justify-between gap-4">
+      <img src="data:image/png;base64,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" alt="City of Colorado Springs — Olympic City USA" style="height:48px;width:auto" />
+      <div class="flex items-center gap-2">
+        <button class="hidden sm:inline-flex items-center gap-2 rounded-lg border border-line-stronger bg-surface px-3.5 py-2 text-sm font-semibold text-ink-strong hover:border-brand hover:text-brand min-h-11">Sign in</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="bg-surface border-b border-line">
+    <div class="mx-auto max-w-6xl px-5 md:px-8">
+      <ul class="flex flex-wrap gap-1">
+        <li><a class="inline-flex flex-col px-4 py-3 text-sm border-b-2 -mb-px min-h-11 border-brand text-brand font-semibold">Do something<span class="text-xs font-normal text-ink-muted">File, request, contact</span></a></li>
+        <li><a class="inline-flex flex-col px-4 py-3 text-sm border-b-2 -mb-px min-h-11 border-transparent text-ink-strong hover:text-brand hover:border-line-stronger">Get involved<span class="text-xs font-normal text-ink-muted">Volunteer, serve</span></a></li>
+        <li><a class="inline-flex flex-col px-4 py-3 text-sm border-b-2 -mb-px min-h-11 border-transparent text-ink-strong hover:text-brand hover:border-line-stronger">Right now<span class="text-xs font-normal text-ink-muted">Live alerts</span></a></li>
+        <li><a class="inline-flex flex-col px-4 py-3 text-sm border-b-2 -mb-px min-h-11 border-transparent text-ink-strong hover:text-brand hover:border-line-stronger">How we're doing<span class="text-xs font-normal text-ink-muted">Receipts</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="bg-canvas border-b border-line">
+    <div class="mx-auto max-w-6xl px-5 md:px-8 py-14">
+      <p class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand mb-3">
+        <span class="inline-flex gap-1"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#00943a"></span><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#0074c8"></span><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#fea30b"></span></span> Contact the City
+      </p>
+      <h1 class="font-serif text-[2.7rem] leading-[1.1] font-semibold text-ink max-w-2xl">What do you need to get done today?</h1>
+      <p class="mt-4 text-ink-secondary max-w-xl text-[16px] leading-relaxed">Describe it in your own words. We'll route you to the right department — or show you exactly who to contact.</p>
+      <div class="mt-7 flex items-center gap-2 rounded-xl border border-line-stronger bg-surface px-4 py-3 shadow-sm max-w-xl">
+        <span class="text-ink-muted"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg></span>
+        <input class="flex-1 bg-transparent text-[15px] text-ink placeholder:text-ink-muted focus:outline-none" aria-label="Describe what you need help with" placeholder="e.g. there's a pothole on my street" />
+        <button class="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-hover min-h-11">Find it</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-6xl px-5 md:px-8 py-10 grid gap-10 md:grid-cols-[250px_1fr]">
+
+    <aside class="space-y-1">
+      <p class="text-xs uppercase tracking-[0.14em] text-ink-muted mb-3 px-1">Browse by topic</p>
+      <button class="w-full text-left rounded-lg pl-3 pr-3 py-2.5 text-sm bg-surface-muted text-brand font-semibold min-h-11 border-l-[3px] border-brand">Roads &amp; sidewalks</button>
+      <button class="w-full text-left rounded-lg px-3 py-2.5 text-sm text-ink-strong hover:bg-surface-muted min-h-11">Noise complaint</button>
+      <button class="w-full text-left rounded-lg px-3 py-2.5 text-sm text-ink-strong hover:bg-surface-muted min-h-11">Trees &amp; forestry</button>
+      <button class="w-full text-left rounded-lg px-3 py-2.5 text-sm text-ink-strong hover:bg-surface-muted min-h-11">Water &amp; stormwater</button>
+      <button class="w-full text-left rounded-lg px-3 py-2.5 text-sm text-ink-strong hover:bg-surface-muted min-h-11">Open records (CORA)</button>
+    </aside>
+
+    <main class="space-y-8 max-w-2xl">
+
+      <form class="rounded-2xl border border-line bg-surface shadow-sm p-6 md:p-8 space-y-6">
+        <header class="space-y-2">
+          <div class="flex items-center gap-2 text-xs">
+            <span class="font-semibold uppercase tracking-[0.16em] text-brand">Report a problem</span>
+            <span class="text-ink-subtle">&middot; Classification #61745</span>
+          </div>
+          <h2 class="font-serif text-3xl font-semibold tracking-tight text-ink">Report a pothole</h2>
+          <p class="text-[15px] text-ink-secondary leading-relaxed">Tell us where it is and we'll route it to Public Works.</p>
+        </header>
+
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1.5">Location <span class="text-danger">*</span></label>
+          <div class="flex items-center gap-2 rounded-lg border border-line-stronger bg-surface px-3 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/20">
+            <span class="text-ink-muted"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6-5.2-6-10a6 6 0 1 1 12 0c0 4.8-6 10-6 10Z"/><circle cx="12" cy="11" r="2"/></svg></span>
+            <input class="flex-1 py-2.5 text-sm bg-transparent focus:outline-none" value="1200 block of N Cascade Ave" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1.5">Describe the problem <span class="text-danger">*</span></label>
+          <textarea rows="3" class="w-full rounded-lg border border-line-stronger px-3 py-2.5 text-sm focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none">Large pothole in the right lane, getting worse after rain.</textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1.5">Severity <span class="text-danger">*</span></label>
+          <select class="w-full rounded-lg border border-line-stronger px-3 py-2.5 text-sm bg-surface focus:border-brand focus:outline-none min-h-11"><option>Minor</option><option>Moderate</option><option selected>Hazardous</option></select>
+        </div>
+
+        <label class="flex items-start gap-2.5 text-sm text-ink-strong">
+          <input type="checkbox" class="mt-0.5 h-4 w-4 accent-[var(--color-brand)]" checked /> Notify me when this is resolved
+        </label>
+
+        <div class="flex flex-wrap items-center gap-3 pt-1">
+          <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-hover min-h-11">Submit request <span><svg aria-hidden="true" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></button>
+          <button type="button" class="rounded-lg border border-line-stronger px-4 py-2.5 text-sm font-semibold text-ink-strong hover:bg-surface-muted min-h-11">Clear</button>
+        </div>
+      </form>
+
+      <section class="space-y-3">
+        <h3 class="font-serif text-lg font-semibold text-ink">Related topics</h3>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <button class="text-left rounded-xl border border-line bg-surface p-4 shadow-sm hover:shadow-md hover:border-brand transition-shadow min-h-24">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#0074c8"></span>City</span>
+              <span class="rounded-full border border-line bg-surface-muted px-2.5 py-0.5 text-xs text-ink-muted">Form</span>
+            </div>
+            <p class="font-semibold text-ink">Damaged street sign</p>
+            <p class="text-xs text-ink-muted mt-0.5">Roads &amp; Sidewalks</p>
+          </button>
+          <button class="text-left rounded-xl border border-line bg-surface p-4 shadow-sm hover:shadow-md hover:border-brand transition-shadow min-h-24">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#c61f6e"></span>State</span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 py-0.5 text-xs text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#fea30b"></span>External</span>
+            </div>
+            <p class="font-semibold text-ink">Highway pothole (CDOT)</p>
+            <p class="text-xs text-ink-muted mt-0.5">Colorado Dept. of Transportation</p>
+          </button>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <h3 class="font-serif text-lg font-semibold text-ink">Feedback &amp; status</h3>
+        <div class="flex gap-3 rounded-xl border border-line border-l-4 border-l-success bg-success-surface p-4 shadow-sm">
+          <span class="text-success shrink-0"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg></span>
+          <div><p class="font-semibold text-success-ink">Request received</p><p class="text-sm text-success-ink/90 mt-0.5">Routed to Public Works · Trace ID a1b2c3</p></div>
+        </div>
+        <div class="flex gap-3 rounded-xl border border-line border-l-4 border-l-warning bg-warning-surface p-4 shadow-sm">
+          <span class="text-warning shrink-0"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>
+          <div><p class="font-semibold text-warning-ink">Heads up</p><p class="text-sm text-warning-ink/90 mt-0.5">This routes to an external state system.</p></div>
+        </div>
+        <div class="flex gap-3 rounded-xl border border-line border-l-4 border-l-info bg-surface p-4 shadow-sm">
+          <span class="text-info shrink-0"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></span>
+          <div><p class="font-semibold text-info-ink">Routed by the plain-language matcher</p><p class="text-sm text-ink-secondary mt-0.5">Not right? Browse by department instead.</p></div>
+        </div>
+        <div class="flex gap-3 rounded-xl border border-line border-l-4 border-l-danger bg-danger-surface p-4 shadow-sm">
+          <span class="text-danger shrink-0"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>
+          <div><p class="font-semibold text-danger-ink">1 problem with your submission</p><p class="text-sm text-danger-ink/90 mt-0.5">Please provide a location.</p></div>
+        </div>
+      </section>
+
+      <section class="rounded-xl border border-line bg-surface p-5 shadow-sm">
+        <h3 class="font-serif text-lg font-semibold text-ink mb-1">The peaks, put to work</h3>
+        <p class="text-sm text-ink-secondary mb-3">The logo's colors become the jurisdiction legend — many hues, but each one <em>means</em> something.</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#0074c8"></span>City</span><span class="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#00943a"></span>County</span><span class="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#c61f6e"></span>State</span><span class="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#2f3f8f"></span>Federal</span><span class="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#fea30b"></span>Regional</span><span class="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#0a9aa3"></span>Utility</span><span class="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#ea0d44"></span>Special district</span><span class="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-secondary"><span aria-hidden="true" class="inline-block h-2 w-2 rounded-full" style="background:#7d3aa8"></span>Tribal</span>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="bg-surface border-t border-line">
+    <div class="mx-auto max-w-6xl px-5 md:px-8 py-8 text-sm text-ink-secondary space-y-2">
+      <h2 class="font-serif text-lg font-semibold text-ink">Accessibility &amp; language assistance</h2>
+      <p>The City is committed to equal access under the ADA. Email <a class="text-accent font-semibold underline underline-offset-2" style="color:var(--color-accent-ink)">ada@coloradosprings.gov</a>.</p>
+    </div>
+  </footer>
+  <div aria-hidden="true" style="height:5px;background:linear-gradient(90deg,#00943a 0 20%,#0074c8 20% 40%,#c61f6e 40% 60%,#ea0d44 60% 80%,#fea30b 80% 100%)"></div>
+
+  <div class="bg-surface-muted px-5 md:px-8 py-8">
+    <div class="mx-auto max-w-6xl grid gap-8 md:grid-cols-2">
+      <div>
+        <p class="text-xs uppercase tracking-[0.16em] text-ink-muted mb-3">Type — Source Serif + Source Sans</p>
+        <p class="font-serif text-3xl font-semibold text-ink">Playful, not chaotic</p>
+        <p class="text-[15px] text-ink-secondary leading-relaxed mt-1">Charcoal ink + warm neutrals stay calm; terracotta leads; the logo colors appear only where they carry meaning.</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[0.16em] text-ink-muted mb-3">Palette</p>
+        <div class="swatches">
+          <div class="sw"><span class="chip" style="background:var(--color-brand)"></span>brand (terracotta)</div>
+          <div class="sw"><span class="chip" style="background:var(--color-accent)"></span>Olympic blue</div>
+          <div class="sw"><span class="chip" style="background:var(--color-ink)"></span>ink (charcoal)</div>
+          <div class="sw"><span class="chip" style="background:var(--color-canvas)"></span>canvas</div>
+          <div class="sw"><span class="chip" style="background:#00943a"></span>green</div>
+          <div class="sw"><span class="chip" style="background:#c61f6e"></span>magenta</div>
+          <div class="sw"><span class="chip" style="background:#ea0d44"></span>red</div>
+          <div class="sw"><span class="chip" style="background:#fea30b"></span>orange</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
