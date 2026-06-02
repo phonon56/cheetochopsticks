@@ -1180,11 +1180,6 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 .meta-pill{font-family:var(--mono);font-size:13px;letter-spacing:.06em;padding:3px 10px;
   border-radius:10px;border:1px solid rgba(255,255,255,.25);color:#a8bbd4;}
 .meta-pill.live{border-color:rgba(100,200,100,.5);color:#86efac;}
-.arcgis-btn{margin-left:auto;display:inline-flex;align-items:center;gap:6px;
-  background:rgba(255,255,255,.1);color:#fff;padding:6px 12px;border-radius:4px;
-  text-decoration:none;font-family:var(--mono);font-size:13px;letter-spacing:.06em;
-  border:1px solid rgba(255,255,255,.2);}
-.arcgis-btn:hover{background:rgba(255,255,255,.18);}
 
 /* ===== DISNEY+-STYLE BRAND BAR ===== */
 .brand-bar{
@@ -1253,7 +1248,14 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 
 /* ===== TAB BAR ===== */
 .tab-bar{background:linear-gradient(180deg,#001030 0%,#001440 100%);border-bottom:1px solid #1e3a6e;padding-top:6px;}
-.tab-nav{max-width:1400px;margin:0 auto;display:flex;gap:0;padding:0 16px;position:relative;}
+.tab-nav{max-width:1400px;margin:0 auto;display:flex;align-items:flex-end;gap:12px;padding:0 16px;position:relative;}
+.tab-tablist{display:flex;gap:0;}
+.tab-action{margin-left:auto;margin-bottom:6px;display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.1);color:#fff;padding:7px 14px;border-radius:4px;
+  text-decoration:none;font-family:var(--mono);font-size:13px;letter-spacing:.06em;
+  border:1px solid rgba(255,255,255,.25);white-space:nowrap;transition:background .15s;}
+.tab-action:hover{background:rgba(255,255,255,.18);}
+.tab-action:focus{outline:3px solid var(--gold);outline-offset:2px;box-shadow:0 0 0 5px rgba(0,0,0,.55);}
 .tab-btn{
   padding:11px 22px;font-size:13px;font-weight:500;
   background:rgba(255,255,255,.06);color:#9ab0c8;
@@ -1474,7 +1476,7 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 .verdict.below{background:#ecfdf5;color:var(--green);}
 .verdict.above{background:#fff8f0;color:var(--amber-ink);}
 .verdict.inverse{background:#fef2f2;color:var(--red);}
-.verdict.match{background:#eff6ff;color:var(--blue);}
+.verdict.match{background:#e6f1fb;color:#00528f;}
 .takeaway-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
 @media(max-width:800px){.takeaway-row{grid-template-columns:1fr;}}
 .takeaway-card{background:#fff;border-radius:8px;padding:18px;border:1px solid var(--rule);border-top:3px solid var(--rule);}
@@ -1487,10 +1489,10 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 
 /* ===== SEARCH TAB STYLES (from zipcode tool) ===== */
 .search-panel-wrap{max-width:1100px;margin:0 auto;padding:24px 20px 60px;}
-.callout{background:#eff6ff;border:1px solid #bfdbfe;border-left:4px solid var(--blue);
+.callout{background:#e6f1fb;border:1px solid #c2ddf5;border-left:4px solid #0074c8;
   border-radius:0 3px 3px 0;padding:12px 16px;margin-bottom:16px;font-size:14px;color:var(--ink);line-height:1.7;}
 .callout strong{color:var(--navy);}
-.callout a{color:var(--sky);}
+.callout a{color:#00528f;}
 .callout-amber{background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #d97706;
   border-radius:0 3px 3px 0;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#78350f;line-height:1.7;}
 .callout-amber strong{color:#451a03;}
@@ -1524,22 +1526,24 @@ body{background:#0d1117;color:var(--ink);font-family:var(--sans);}
 .legend{background:var(--off);border:1px solid var(--rule);border-radius:3px;padding:12px 16px;
   margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
 .legend-label{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-right:4px;}
-.sev-badge{display:inline-flex;align-items:center;gap:4px;font-size:13px;padding:2px 8px;border-radius:2px;font-family:var(--mono);}
-.sev-fatal{background:#fecaca;color:#7f1d1d;}
-.sev-serious{background:#fed7aa;color:#7c2d12;}
-.sev-minor{background:#fef08a;color:#713f12;}
-.sev-possible{background:#bbf7d0;color:#14532d;}
-.sev-pdo{background:#e0e7ff;color:#1e1b4b;}
+/* Severity scale — goGov "Warm Civic" status tokens (cos-portal-prototype),
+   each ink-on-surface pairing verified ≥7:1 (WCAG 2.1 AAA). */
+.sev-badge{display:inline-flex;align-items:center;gap:4px;font-size:13px;padding:2px 8px;border-radius:2px;font-family:var(--mono);border:1px solid transparent;}
+.sev-fatal{background:#fcebec;color:#7e1620;border-color:#d12736;}     /* danger  — 9.01:1 */
+.sev-serious{background:#fbefd6;color:#6b4a0f;border-color:#b8791a;}   /* warning — 7.05:1 */
+.sev-minor{background:#fbf0c9;color:#5f4708;border-color:#9a7b12;}     /* caution — 7.70:1 */
+.sev-possible{background:#eaf6ee;color:#0b5026;border-color:#14823f;}  /* success — 8.64:1 */
+.sev-pdo{background:#e6f1fb;color:#00528f;border-color:#0074c8;}       /* info    — 7.05:1 */
 
 .filter-panel{background:#fff;border:1px solid var(--rule);border-radius:3px;padding:20px;margin-bottom:20px;}
 .filter-panel h2{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:16px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;}
-.zip-filter-row{background:#f0f7ff;border:1px solid #bfdbfe;border-radius:4px;padding:14px 16px;
+.zip-filter-row{background:var(--off);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;
   margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
 .zip-filter-row label{font-size:13px;font-weight:600;color:var(--navy);white-space:nowrap;}
 .zip-select{padding:8px 10px;border:2px solid var(--blue);border-radius:3px;font-size:14px;
   color:var(--ink);background:#fff;font-family:inherit;min-width:200px;}
 .zip-select:focus{outline:3px solid #1d4ed8;outline-offset:1px;border-color:transparent;}
-.zip-hint{font-size:13px;color:var(--sky);}
+.zip-hint{font-size:13px;color:#00528f;}
 .filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:16px;}
 .filter-group{display:flex;flex-direction:column;gap:5px;}
 .filter-group label{font-size:13px;font-weight:600;color:var(--muted);}
@@ -1620,6 +1624,9 @@ td.num{text-align:right;font-family:var(--mono);}
   .summary-grid{grid-template-columns:1fr 1fr;}
   .brand-pill{min-width:80px;padding:12px 14px 10px;}
   .brand-pill .bp-name{font-size:13px;}
+  .tab-nav{flex-wrap:wrap;align-items:stretch;}
+  .tab-tablist{overflow-x:auto;}
+  .tab-action{margin-left:0;margin-bottom:8px;}
 }
 
 /* ===== REDUCED MOTION (WCAG 2.3.3) ===== */
@@ -1645,11 +1652,6 @@ td.num{text-align:right;font-family:var(--mono);}
       <span class="meta-pill">9 Years</span>
       <span class="meta-pill">64,434 Crashes</span>
       <span class="meta-pill">El Paso County · City of Colorado Springs</span>
-      <a href="https://www.arcgis.com/apps/dashboards/2d2b29f62bcb466a9b0b193a05a67d42"
-         class="arcgis-btn" target="_blank" rel="noopener noreferrer"
-         aria-label="View interactive map dashboard on ArcGIS (opens in new window)">
-        🗺 View Map Dashboard <span class="sr-only">(opens in new window)</span>
-      </a>
     </div>
   </div>
 </header>
@@ -1706,22 +1708,29 @@ td.num{text-align:right;font-family:var(--mono);}
 
   <!-- Tab bar (City only) -->
   <div class="tab-bar" role="navigation" aria-label="Dashboard navigation">
-    <div class="tab-nav" role="tablist" aria-label="Dashboard sections">
-      <button class="tab-btn active" id="tab-btn-search"
-        onclick="switchTab('search')" aria-selected="true" role="tab" tabindex="0"
-        aria-controls="tab-panel-search">
-        <span aria-hidden="true">🔍</span> Search Records
-      </button>
-      <button class="tab-btn" id="tab-btn-data"
-        onclick="switchTab('data')" aria-selected="false" role="tab" tabindex="-1"
-        aria-controls="tab-panel-data">
-        <span aria-hidden="true">📊</span> Local Dashboard
-      </button>
-      <button class="tab-btn" id="tab-btn-national"
-        onclick="switchTab('national')" aria-selected="false" role="tab" tabindex="-1"
-        aria-controls="tab-panel-national">
-        <span aria-hidden="true">🇺🇸</span> National Averages
-      </button>
+    <div class="tab-nav">
+      <div class="tab-tablist" role="tablist" aria-label="Dashboard sections">
+        <button class="tab-btn active" id="tab-btn-search"
+          onclick="switchTab('search')" aria-selected="true" role="tab" tabindex="0"
+          aria-controls="tab-panel-search">
+          <span aria-hidden="true">🔍</span> Search Records
+        </button>
+        <button class="tab-btn" id="tab-btn-data"
+          onclick="switchTab('data')" aria-selected="false" role="tab" tabindex="-1"
+          aria-controls="tab-panel-data">
+          <span aria-hidden="true">📊</span> Local Dashboard
+        </button>
+        <button class="tab-btn" id="tab-btn-national"
+          onclick="switchTab('national')" aria-selected="false" role="tab" tabindex="-1"
+          aria-controls="tab-panel-national">
+          <span aria-hidden="true">🇺🇸</span> National Averages
+        </button>
+      </div>
+      <a href="https://www.arcgis.com/apps/dashboards/2d2b29f62bcb466a9b0b193a05a67d42"
+         class="tab-action" target="_blank" rel="noopener noreferrer"
+         aria-label="View interactive map dashboard on ArcGIS (opens in new window)">
+        <span aria-hidden="true">🗺</span> View Map Dashboard <span class="sr-only">(opens in new window)</span>
+      </a>
     </div>
   </div>
 
@@ -2670,7 +2679,7 @@ new Chart(document.getElementById("yearChart"),{
 new Chart(document.getElementById("sevChart"),{
   type:"doughnut",
   data:{labels:["Property Damage Only","Possible Injury","Minor Injury","Serious Injury","Fatal"],
-    datasets:[{data:[43335,13558,5282,1884,375],backgroundColor:["#dbeafe","#fef08a","#fed7aa","#fca5a5","#7f1d1d"],borderWidth:2,borderColor:"#fff"}]},
+    datasets:[{data:[43335,13558,5282,1884,375],backgroundColor:["#0074c8","#fef08a","#fed7aa","#fca5a5","#7f1d1d"],borderWidth:2,borderColor:"#fff"}]},
   options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{font:{size:10}}},tooltip:{callbacks:{label:c=>c.label+": "+c.raw.toLocaleString()}}}}
 });
 new Chart(document.getElementById("typeChart"),{
