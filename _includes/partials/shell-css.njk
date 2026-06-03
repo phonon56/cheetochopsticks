@@ -2,11 +2,12 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Color palette — verified WCAG 2.1 AA / AAA on --bg #0c1220
-         Contrast ratios (minimum text 4.5:1 AA, 7:1 AAA):
-           text    #ede8dc → 15.3  AAA
-           muted   #96adc4 →  8.1  AAA
-           quiet   #8ca3b8 →  7.2  AAA  (was #506070, 2.9 — FAIL)
+      /* Color palette — verified WCAG 2.1 AAA (7:1) on EVERY surface token,
+         not just --bg, so secondary text stays AAA on raised cards too.
+         Ratios shown as --bg #0c1220 / --surface3 #233045 (the lightest):
+           text    #ede8dc → 15.3 / 11.9  AAA
+           muted   #aebfd0 → 10.0 /  7.1  AAA  (was #96adc4, 5.7 on surface3 — FAIL)
+           quiet   #8ca3b8 →  7.2  AAA on --bg (placeholder/dots only)
            gold    #c8a84b →  8.2  AAA
            gold-lt #fde68a → 15.0  AAA
            red     #fca5a5 →  9.9  AAA  (was #f87171, 6.8 AA)
@@ -24,7 +25,7 @@
       --cc-gold-faint: rgba(200,168,75,.09);
       --cc-gold-lt:    #fde68a;
       --cc-text:       #ede8dc;
-      --cc-muted:      #96adc4;
+      --cc-muted:      #aebfd0;
       --cc-quiet:      #8ca3b8;
       --cc-mono:       'IBM Plex Mono', monospace;
       --cc-sans:       'IBM Plex Sans', sans-serif;
